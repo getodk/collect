@@ -1865,9 +1865,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 case SAVING:
                     autoSaved = true;
 
-                    if (savingDialog == null || savingDialog.isShowing()) {
-                        showDialog(SAVING_DIALOG);
-                    }
+                    showSavingDialog();
 
                     if (result.getMessage() != null) {
                         onProgressStep(result.getMessage());
@@ -1876,7 +1874,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case SAVED:
-                    dismissDialog(SAVING_DIALOG);
+                    dismissSavingDialog();
                     showShortToast(R.string.data_saved_ok);
 
                     if (exit) {
@@ -1895,7 +1893,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case SAVE_ERROR:
-                    dismissDialog(SAVING_DIALOG);
+                    dismissSavingDialog();
                     String message;
 
                     if (result.getMessage() != null) {
@@ -1909,14 +1907,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case FINALIZE_ERROR:
-                    dismissDialog(SAVING_DIALOG);
+                    dismissSavingDialog();
                     showLongToast(String.format(getString(R.string.encryption_error_message),
                             result.getMessage()));
                     finishReturnInstance();
                     break;
 
                 case CONSTRAINT_ERROR: {
-                    dismissDialog(SAVING_DIALOG);
+                    dismissSavingDialog();
                     refreshCurrentView();
 
                     // get constraint behavior preference value with appropriate default
@@ -1939,6 +1937,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         return true;
+    }
+
+    private void dismissSavingDialog() {
+        try {
+            dismissDialog(SAVING_DIALOG);
+        } catch (IllegalArgumentException ignored) {
+            // For some reason the dialog wasn't shown
+        }
+    }
+
+    private void showSavingDialog() {
+        if (savingDialog == null || savingDialog.isShowing()) {
+            showDialog(SAVING_DIALOG);
+        }
     }
 
     /**

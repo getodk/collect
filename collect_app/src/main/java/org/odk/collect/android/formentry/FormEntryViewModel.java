@@ -107,7 +107,7 @@ public class FormEntryViewModel extends ViewModel {
         saveTask = new SaveTask(saveRequest, formSaver, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
-                saveResult.postValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
+                saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
             }
 
             @Override
