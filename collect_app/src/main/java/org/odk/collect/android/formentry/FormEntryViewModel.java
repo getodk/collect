@@ -17,8 +17,6 @@ import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.tasks.SaveToDiskTaskResult;
 import org.odk.collect.utilities.Clock;
 
-import java.lang.ref.WeakReference;
-
 import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED;
 import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
@@ -240,12 +238,12 @@ public class FormEntryViewModel extends ViewModel {
         private final SaveRequest saveRequest;
         private final FormSaver formSaver;
 
-        private final WeakReference<Listener> listenerRef;
+        private final Listener listener;
 
         SaveTask(SaveRequest saveRequest, FormSaver formSaver, Listener listener) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
-            this.listenerRef = new WeakReference<>(listener);
+            this.listener = listener;
         }
 
         @Override
@@ -261,18 +259,12 @@ public class FormEntryViewModel extends ViewModel {
 
         @Override
         protected void onProgressUpdate(String... values) {
-            Listener listener = listenerRef.get();
-            if (listener != null) {
-                listener.onProgressPublished(values[0]);
-            }
+            listener.onProgressPublished(values[0]);
         }
 
         @Override
         protected void onPostExecute(SaveToDiskTaskResult saveToDiskTaskResult) {
-            Listener listener = listenerRef.get();
-            if (listener != null) {
-                listener.onSaveComplete(saveToDiskTaskResult);
-            }
+            listener.onSaveComplete(saveToDiskTaskResult);
         }
 
         interface Listener {
