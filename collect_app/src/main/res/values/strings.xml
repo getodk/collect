@@ -95,7 +95,7 @@
     <string name="location_accuracy">Accuracy is %1$s m</string>
     <string name="main_menu">Main Menu</string>
     <string name="main_menu_details">Data collection made easier…</string>
-    <string name="manage_files">Delete Saved Form</string>
+    <string name="manage_files">Delete Form</string>
     <string name="mark_finished">Mark form as finalized</string>
     <string name="noselect_error">Sorry, you have not selected any forms!</string>
     <string name="no_connection">No network connection available</string>
