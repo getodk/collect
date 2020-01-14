@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.formentry;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -29,7 +29,6 @@ import org.odk.collect.android.R;
 import timber.log.Timber;
 
 public class FormLoadingDialogFragment extends DialogFragment {
-    public static final String FORM_LOADING_DIALOG_FRAGMENT_TAG = "formLoadingDialogFragmentTag";
 
     public interface FormLoadingDialogFragmentListener {
         void onCancelFormLoading();
@@ -78,7 +77,7 @@ public class FormLoadingDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    public void updateMessage(String message) {
+    public void setMessage(String message) {
         ((ProgressDialog) getDialog()).setMessage(message);
     }
 }

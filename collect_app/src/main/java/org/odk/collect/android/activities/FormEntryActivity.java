@@ -91,6 +91,7 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.FormSaveViewModel;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
@@ -104,7 +105,6 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.FormLoadingDialogFragment;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -853,7 +853,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                ProgressDialogFragment.create(null, getString(R.string.please_wait))
+                ProgressDialogFragment.newInstance(null, getString(R.string.please_wait))
                         .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
                 mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
@@ -2521,7 +2521,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onProgressStep(String stepMessage) {
         FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
         if (formLoadingDialogFragment != null) {
-            formLoadingDialogFragment.updateMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+            formLoadingDialogFragment.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         }
     }
 
@@ -2569,20 +2569,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private FormLoadingDialogFragment getFormLoadingDialogFragment() {
         return (FormLoadingDialogFragment) getSupportFragmentManager()
-                .findFragmentByTag(FormLoadingDialogFragment.FORM_LOADING_DIALOG_FRAGMENT_TAG);
+                .findFragmentByTag(FormLoadingDialogFragment.class.getName());
     }
 
     private void showFormLoadingDialogFragment() {
-        FormLoadingDialogFragment
-                .newInstance()
-                .show(getSupportFragmentManager(), FormLoadingDialogFragment.FORM_LOADING_DIALOG_FRAGMENT_TAG);
+        DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
     }
 
     private void dismissFormLoadingDialogFragment() {
-        FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
-        if (formLoadingDialogFragment != null) {
-            formLoadingDialogFragment.dismiss();
-        }
+        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
     }
 
     @Override

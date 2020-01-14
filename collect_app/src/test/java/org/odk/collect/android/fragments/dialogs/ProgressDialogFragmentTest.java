@@ -31,7 +31,7 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void create_setsTitleAndMessage() {
-        ProgressDialogFragment fragment = ProgressDialogFragment.create("A title", "A message");
+        ProgressDialogFragment fragment = ProgressDialogFragment.newInstance("A title", "A message");
         fragment.show(fragmentManager, "TAG");
 
         ShadowProgressDialog dialog = shadowOf((ProgressDialog) fragment.getDialog());
@@ -41,7 +41,7 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void setMessage_beforeDialogExists_setsMessageWhenDialogShown() {
-        ProgressDialogFragment fragment = ProgressDialogFragment.create("A title", "A message");
+        ProgressDialogFragment fragment = ProgressDialogFragment.newInstance("A title", "A message");
         fragment.setMessage("blah");
 
         fragment.show(fragmentManager, "TAG");

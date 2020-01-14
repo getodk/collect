@@ -22,7 +22,7 @@ public class ProgressDialogFragment extends DialogFragment {
 
     private String message;
 
-    public static ProgressDialogFragment create(@Nullable String title, @Nullable String message) {
+    public static ProgressDialogFragment newInstance(@Nullable String title, @Nullable String message) {
         ProgressDialogFragment dialogFragment = new ProgressDialogFragment();
         dialogFragment.setArguments(title, message);
         return dialogFragment;
