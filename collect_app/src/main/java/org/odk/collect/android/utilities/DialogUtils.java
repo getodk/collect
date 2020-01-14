@@ -129,7 +129,7 @@ public final class DialogUtils {
     /**
      * Creates an error dialog on an activity
      *
-     * @param errorMsg The message to show on the dialog box
+     * @param errorMsg   The message to show on the dialog box
      * @param shouldExit Finish the activity if Ok is clicked
      */
     public static Dialog createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
@@ -157,6 +157,12 @@ public final class DialogUtils {
 
         if (existingDialog == null) {
             newDialog.show(fragmentManager.beginTransaction(), tag);
+
+            // We need to execute this transaction. Otherwise a follow up call to this method
+            // could happen before the Fragment exists in the Fragment Manager and so the
+            // call to findFragmentByTag would return null and result in second dialog being show.
+            fragmentManager.executePendingTransactions();
+
             return newDialog;
         } else {
             return existingDialog;
