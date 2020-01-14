@@ -234,7 +234,7 @@ dependencies {
     }
     implementation "com.karumi:dexter:6.0.1"
     implementation "org.osmdroid:osmdroid-android:5.6.4"
-    implementation("com.google.api-client:google-api-client-android:1.30.7") {
+    implementation("com.google.api-client:google-api-client-android:1.30.5") { //updating would require minSdkVersion >=19
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
