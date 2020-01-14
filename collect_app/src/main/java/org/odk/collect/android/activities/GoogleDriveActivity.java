@@ -460,11 +460,10 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             return;
         }
 
-        myDrive = !myDrive;
         if (myDrive) {
-            rootButton.setText(getString(R.string.go_shared));
-        } else {
             rootButton.setText(getString(R.string.go_drive));
+        } else {
+            rootButton.setText(getString(R.string.go_shared));
         }
 
         if (folderIdStack.empty()) {
@@ -556,6 +555,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.root_button:
                 getResultsFromApi();
+                myDrive = !myDrive;
                 break;
 
             case R.id.back_button:
