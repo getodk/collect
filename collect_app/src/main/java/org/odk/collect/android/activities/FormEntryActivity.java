@@ -2063,15 +2063,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * Dismiss any showing dialogs that we manually manage.
-     */
-    private void dismissDialogs() {
-        if (alertDialog != null && alertDialog.isShowing()) {
-            alertDialog.dismiss();
-        }
-    }
-
-    /**
      * Shows the next or back button, neither or both. Both buttons are displayed unless:
      * - we are at the first question in the form so the back button is hidden
      * - we are at the end screen so the next button is hidden
@@ -2125,7 +2116,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onPause() {
         FormController formController = getFormController();
-        dismissDialogs();
 
         // make sure we're not already saving to disk. if we are, currentPrompt
         // is getting constantly updated
