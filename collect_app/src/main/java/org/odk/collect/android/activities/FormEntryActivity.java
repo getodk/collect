@@ -479,7 +479,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
-                    showFormLoadingDialogFragment();
+                    DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
                 }
                 return;
@@ -614,7 +614,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null);
-        showFormLoadingDialogFragment();
+        DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
         formLoaderTask.execute(formPath);
     }
 
@@ -853,8 +853,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                ProgressDialogFragment.newInstance(null, getString(R.string.please_wait))
-                        .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                ProgressDialogFragment progressDialog = new ProgressDialogFragment();
+                progressDialog.setMessage(getString(R.string.please_wait));
+                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
                 mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
                 break;
@@ -1832,8 +1833,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 case SAVING:
                     autoSaved = true;
 
-                     SaveFormProgressDialogFragment progressDialog = (SaveFormProgressDialogFragment) DialogUtils.showIfNotShowing(
-                            new SaveFormProgressDialogFragment().setArguments(getString(R.string.saving_form), getString(R.string.please_wait)),
+                    SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
+                            new SaveFormProgressDialogFragment(),
                             getSupportFragmentManager()
                     );
 
@@ -2169,7 +2170,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
                     }
                 } else {
-                    dismissFormLoadingDialogFragment();
+                    DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     FormLoaderTask t = formLoaderTask;
                     formLoaderTask = null;
                     t.cancel(true);
@@ -2318,7 +2319,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void loadingComplete(FormLoaderTask task, FormDef formDef, String warningMsg) {
-        dismissFormLoadingDialogFragment();
+        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         final FormController formController = task.getFormController();
         if (formController != null) {
@@ -2499,7 +2500,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void loadingError(String errorMsg) {
-        dismissFormLoadingDialogFragment();
+        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {
             createErrorDialog(errorMsg, EXIT);
@@ -2509,10 +2510,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public void onProgressStep(String stepMessage) {
-        FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
-        if (formLoadingDialogFragment != null) {
-            formLoadingDialogFragment.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
-        }
+        DialogUtils.showIfNotShowing(
+                new FormLoadingDialogFragment(),
+                getSupportFragmentManager()
+        ).setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
     }
 
     public void next() {
@@ -2555,19 +2556,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
         finish();
-    }
-
-    private FormLoadingDialogFragment getFormLoadingDialogFragment() {
-        return (FormLoadingDialogFragment) getSupportFragmentManager()
-                .findFragmentByTag(FormLoadingDialogFragment.class.getName());
-    }
-
-    private void showFormLoadingDialogFragment() {
-        DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
-    }
-
-    private void dismissFormLoadingDialogFragment() {
-        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
     }
 
     @Override

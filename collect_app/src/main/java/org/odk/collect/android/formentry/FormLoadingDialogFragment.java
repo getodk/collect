@@ -16,24 +16,23 @@
 
 package org.odk.collect.android.formentry;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 
-import timber.log.Timber;
-
-public class FormLoadingDialogFragment extends DialogFragment {
+public class FormLoadingDialogFragment extends ProgressDialogFragment {
 
     public interface FormLoadingDialogFragmentListener {
         void onCancelFormLoading();
     }
 
+    /**
+     * Using a listener like this requires an Activity to implement the interface. We could
+     * use a similar approach as that used in {@link SaveFormProgressDialogFragment} and grab
+     * a ViewModel to cancel.
+     */
+    @Deprecated
     private FormLoadingDialogFragmentListener listener;
 
     public static FormLoadingDialogFragment newInstance() {
@@ -43,41 +42,25 @@ public class FormLoadingDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        setTitle(getString(R.string.loading_form));
+        setMessage(getString(R.string.please_wait));
+
         if (context instanceof FormLoadingDialogFragmentListener) {
             listener = (FormLoadingDialogFragmentListener) context;
         }
     }
 
-    /*
-    We keep this just in case to avoid problems if someone tries to show a dialog after
-    the activity’s state have been saved. Basically it shouldn't take place since we should control
-    the activity state if we want to show a dialog (especially after long tasks).
-     */
     @Override
-    public void show(FragmentManager manager, String tag) {
-        try {
-            manager
-                    .beginTransaction()
-                    .add(this, tag)
-                    .commit();
-        } catch (IllegalStateException e) {
-            Timber.w(e);
-        }
+    protected String getCancelButtonText() {
+        return getString(R.string.cancel_loading_form);
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        setCancelable(false);
-
-        ProgressDialog dialog = new ProgressDialog(getActivity(), getTheme());
-        dialog.setTitle(R.string.loading_form);
-        dialog.setMessage(getString(R.string.please_wait));
-        dialog.setButton(getString(R.string.cancel_loading_form), (dialog1, which) -> listener.onCancelFormLoading());
-        return dialog;
-    }
-
-    public void setMessage(String message) {
-        ((ProgressDialog) getDialog()).setMessage(message);
+    protected Cancellable getCancellable() {
+        return () -> {
+            listener.onCancelFormLoading();
+            return true;
+        };
     }
 }

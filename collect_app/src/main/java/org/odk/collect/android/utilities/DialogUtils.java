@@ -151,9 +151,9 @@ public final class DialogUtils {
         return alertDialog;
     }
 
-    public static DialogFragment showIfNotShowing(DialogFragment newDialog, FragmentManager fragmentManager) {
+    public static <T extends DialogFragment> T showIfNotShowing(T newDialog, FragmentManager fragmentManager) {
         String tag = newDialog.getClass().getName();
-        DialogFragment existingDialog = (DialogFragment) fragmentManager.findFragmentByTag(tag);
+        T existingDialog = (T) fragmentManager.findFragmentByTag(tag);
 
         if (existingDialog == null) {
             newDialog.show(fragmentManager.beginTransaction(), tag);
