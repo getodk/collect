@@ -213,10 +213,12 @@ public class Collect extends Application {
      * This deviates from the recommended format as described in https://github.com/opendatakit/collect/issues/3253.
      */
     public String getUserAgentString() {
-        return String.format("%s %s/%s",
-                System.getProperty("http.agent"),
+        String[] httpAgent = System.getProperty("http.agent").split("\\(");
+        return String.format("%s %s/%s %s",
+                httpAgent[0],
                 BuildConfig.APPLICATION_ID,
-                BuildConfig.VERSION_NAME);
+                BuildConfig.VERSION_NAME,
+                "(" + httpAgent[1]);
     }
 
     public boolean isNetworkAvailable() {
