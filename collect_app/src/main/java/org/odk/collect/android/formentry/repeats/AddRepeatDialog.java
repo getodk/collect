@@ -29,7 +29,6 @@ public class AddRepeatDialog {
         };
 
         if (formController.getLastRepeatCount() > 0) {
-            alertDialog.setTitle(context.getString(R.string.leaving_repeat_ask));
             alertDialog.setMessage(context.getString(R.string.add_another_repeat,
                     formController.getLastGroupText()));
             alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.add_another),
@@ -38,7 +37,6 @@ public class AddRepeatDialog {
                     repeatListener);
 
         } else {
-            alertDialog.setTitle(context.getString(R.string.entering_repeat_ask));
             alertDialog.setMessage(context.getString(R.string.add_repeat,
                     formController.getLastGroupText()));
             alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.entering_repeat),

@@ -17,11 +17,11 @@
     <string name="signature_capture">Signature Capture</string>
     <string name="view_video">View Video</string>
     <string name="choose_audio">Choose Audio</string>
-    <string name="add_another">Add Group</string>
+    <string name="add_another">Yes</string>
     <string name="add_another_menu">Add another</string>
-    <string name="add_another_repeat">Add another \"%s\" group?</string>
-    <string name="add_repeat">Add a new \"%s\" group?</string>
-    <string name="add_repeat_no">Do Not Add</string>
+    <string name="add_another_repeat">Add another \"%s\"?</string>
+    <string name="add_repeat">Add a new \"%s\"?</string>
+    <string name="add_repeat_no">No</string>
     <string name="cancel">Cancel</string>
     <string name="cancel_loading_form">Cancel</string>
     <string name="cancel_location">Cancel</string>
@@ -61,7 +61,7 @@
     <string name="do_not_change">Cancel</string>
     <string name="do_not_exit">Cancel</string>
     <string name="do_not_save">Ignore Changes</string>
-    <string name="entering_repeat">Add Group</string>
+    <string name="entering_repeat">Yes</string>
     <string name="entering_repeat_ask">Add New Group?</string>
     <string name="enter_data">Fill Blank Form</string>
     <string name="enter_data_button">Fill Blank Form</string>
@@ -86,7 +86,7 @@
     <string name="jump_to_beginning">Go To Start</string>
     <string name="jump_to_end">Go To End</string>
     <string name="jump_to_previous">Go Up</string>
-    <string name="leave_repeat_yes">Do Not Add</string>
+    <string name="leave_repeat_yes">No</string>
     <string name="leaving_repeat_ask">Add One More Group?</string>
     <string name="list_failed_with_error">Form listing failed. %s.</string>
     <string name="loading_form">Loading Form</string>
