@@ -1,0 +1,19 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml">
+    <h:head>
+        <h:title>Invalid events</h:title>
+        <model>
+            <instance>
+                <data id="invalid-events">
+                    <nested-first-load/>
+                </data>
+            </instance>
+
+            <bind nodeset="/data/nested-first-load" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/nested-first-load">
+            <setvalue event="odk-inftance-first-load my-fake-event" ref="/data/nested-first-load">cheese</setvalue>
+        </input>
+    </h:body>
+</h:html>

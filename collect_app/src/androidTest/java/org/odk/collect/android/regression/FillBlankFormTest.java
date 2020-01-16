@@ -25,6 +25,7 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,7 +70,13 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("Birds-encrypted.xml"))
             .around(new CopyFormRule("validate.xml"))
             .around(new CopyFormRule("event-odk-new-repeat.xml"))
-            .around(new CopyFormRule("multiple-events.xml"));
+            .around(new CopyFormRule("multiple-events.xml"))
+            .around(new CopyFormRule("CalcTest.xml"))
+            .around(new CopyFormRule("3403.xml", Arrays.asList("staff_list.csv", "staff_rights.csv")))
+            .around(new CopyFormRule("CalcTest.xml"))
+            .around(new CopyFormRule("search_and_select.xml"))
+            .around(new CopyFormRule("select_one_external.xml"))
+            .around(new CopyFormRule("fieldlist-updates_nocsv.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -607,6 +614,60 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .checkIsTextDisplayed("more cheese")
                 .swipeToNextQuestion()
                 .checkIsTextDisplayed("5")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void selectedAnswer_shouldBeDisplayed() {
+        //TestCase52
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("CalcTest")
+                .clickOnAddGroup(new FormEntryPage("CalcTest", rule))
+                .clickOnText("Gillnet")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("* 7.2 What is the size of the mesh for the Gillnet ?")
+                .swipeToPreviousQuestion()
+                .clickOnText("Seinenet")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("* 7.2 What is the size of the mesh for the Seinenet ?");
+    }
+
+    @Test
+    public void questions_shouldNotDisappear() {
+        //TestCase54
+        new MainMenuPage(rule)
+                .startBlankForm("3403_ODK Version 1.23.3 Tester")
+                .clickOnText("New Farmer Registration")
+                .scrollToAndClickText("Insemination")
+                .scrollToAndCheckIsDisplayed("New Farmer Registration");
+    }
+
+    @Test
+    public void missingFileMessage_shouldBeDisplayed() {
+        //TestCase55
+        new MainMenuPage(rule)
+                .startBlankForm("search_and_select")
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre.csv is missing.")
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre2.csv is missing.")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+
+                .startBlankForm("cascading select test")
+                .clickOnText("Texas")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .swipeToNextQuestion(4)
+                .clickSaveAndExit()
+
+                .startBlankForm("fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnElementInHierarchy(14)
+                .clickOnText("Source15")
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/fieldlist-updates_nocsv-media/fruits.csv is missing.")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }

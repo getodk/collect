@@ -1,0 +1,34 @@
+staff_code,activity_code,activity_name,activity_type,activity_order,staff_hasright
+4,1,Create Administrative Areas,1,1,1
+4,2,Register Platform Users,1,2,1
+4,3,New Farmer Registration,2,3,1
+4,22,Household Members (No Demographics),2,4,1
+4,23,Household Members (Full Demographics),2,5,1
+4,4,Registration of Animals,2,6,1
+4,10,Synchronization of Animals,5,7,1
+4,11,Insemination,5,8,1
+4,12,Pregnancy Diagnosis,5,9,1
+4,20,Milk Production,6,10,1
+4,7,Pregnancy Observation,6,11,1
+4,21,Calving Registration,6,12,1
+4,8,Calf Growth Monitoring,8,13,1
+4,26,Milk Utilization,9,14,1
+4,27,Farm Extension Services,9,15,1
+4,9,Animal Exits From Herd,9,16,1
+4,13,Feedback To Household,3,17,1
+4,5,Land Ownership and Use,3,18,1
+4,6,Water Sources and Usage,3,19,1
+4,14,Current Household Livestock Details,4,20,1
+4,19,Cooperative / Group Membership,4,21,1
+4,15,Cattle Housing and Structures,4,22,1
+4,16,Current Cattle Breeding Technologies,4,23,1
+4,17,Current Cattle Health Services,4,24,1
+4,18,Cattle Feeding Systems,4,25,1
+4,24,Group Activity / Training,7,26,1
+4,25,Dairy Cooperative/Groups Profile,7,27,1
+4,-995,NONE,5,1000,1
+4,-994,NONE,4,1000,1
+4,-993,NONE,3,1000,1
+4,-992,NONE,2,1000,1
+4,-991,NONE,1,1000,1
+4,-996,NONE,6,1000,1
