@@ -177,7 +177,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOnAddGroup() {
-        clickOnString(R.string.add_another);
+        clickOnString(R.string.add_repeat);
         return this;
     }
 

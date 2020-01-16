@@ -3,7 +3,7 @@
   <string name="show_password">Tunjuk Kata Laluan</string>
   <string name="view_image">Lihat Gambar</string>
   <string name="view_video">Lihat Video</string>
-  <string name="add_another">Tambah Kumpulan</string>
+  <string name="add_repeat">Tambah Kumpulan</string>
   <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
@@ -12,8 +12,7 @@
   <string name="delete_repeat_no">Batal</string>
   <string name="do_not_change">Batal</string>
   <string name="do_not_exit">Batal</string>
-  <string name="entering_repeat">Tambah Kumpulan</string>
-  <string name="forms">Borang Kosong</string>
+    <string name="forms">Borang Kosong</string>
   <string name="get_forms">Minta Borang Kosong</string>
   <string name="password">Kata Laluan</string>
   <string name="view_sent_forms">Lihat Borang DiMuat</string>

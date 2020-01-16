@@ -17,7 +17,7 @@ public class AddNewGroupDialog extends Page<AddNewGroupDialog> {
     }
 
     public FormEntryPage clickOnAddGroup(FormEntryPage destination) {
-        clickOnString(R.string.add_another);
+        clickOnString(R.string.add_repeat);
         return destination;
     }
 

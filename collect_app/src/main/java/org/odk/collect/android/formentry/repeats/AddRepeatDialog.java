@@ -29,21 +29,17 @@ public class AddRepeatDialog {
         };
 
         if (formController.getLastRepeatCount() > 0) {
-            alertDialog.setMessage(context.getString(R.string.add_another_repeat,
+            alertDialog.setMessage(context.getString(R.string.add_another_repeat_question,
                     formController.getLastGroupText()));
-            alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.add_another),
-                    repeatListener);
-            alertDialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.leave_repeat_yes),
-                    repeatListener);
-
         } else {
-            alertDialog.setMessage(context.getString(R.string.add_repeat,
+            alertDialog.setMessage(context.getString(R.string.add_new_repeat_question,
                     formController.getLastGroupText()));
-            alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.entering_repeat),
-                    repeatListener);
-            alertDialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.add_repeat_no),
-                    repeatListener);
         }
+
+        alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.add_repeat),
+                repeatListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.dont_add_repeat),
+                repeatListener);
 
         alertDialog.setCancelable(false);
         alertDialog.show();
