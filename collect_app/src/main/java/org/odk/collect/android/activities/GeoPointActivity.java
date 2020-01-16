@@ -24,7 +24,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.view.Window;
 
@@ -41,6 +40,7 @@ import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
@@ -193,7 +193,11 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     @Override
     public void onClientStop() {
-
+        locationClient.stopLocationUpdates();
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager != null) {
+            locationManager.removeGpsStatusListener(this);
+        }
     }
 
     /**

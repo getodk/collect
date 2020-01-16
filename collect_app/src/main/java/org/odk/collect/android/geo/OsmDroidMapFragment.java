@@ -132,6 +132,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         super.onStop();
     }
 
+    @Override public void onDestroy() {
+        clearFeatures();  // prevent a memory leak due to refs held by markers
+        super.onDestroy();
+    }
+
     @Override public void applyConfig(Bundle config) {
         webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
         String path = config.getString(KEY_REFERENCE_LAYER);

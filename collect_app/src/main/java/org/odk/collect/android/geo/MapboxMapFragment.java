@@ -52,6 +52,7 @@ import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,8 +73,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
 public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.MapFragment
     implements MapFragment, OnMapReadyCallback,
-    MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
-    LocationEngineCallback<LocationEngineResult> {
+    MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener {
 
     private static final long LOCATION_INTERVAL_MILLIS = 1000;
     private static final long LOCATION_MAX_WAIT_MILLIS = 5000;
@@ -107,6 +107,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private String styleUrl = Style.MAPBOX_STREETS;
     private File referenceLayerFile;
     private final List<Source> overlaySources = new ArrayList<>();
+    private final LocationCallback locationCallback = new LocationCallback(this);
     private static String lastLocationProvider;
 
     private TileHttpServer tileServer;
@@ -405,24 +406,36 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return lastLocationFix;
     }
 
-    @Override public void onSuccess(LocationEngineResult result) {
-        Location location = result.getLastLocation();
-        lastLocationFix = fromLocation(location);
-        lastLocationProvider = location != null ? location.getProvider() : null;
-        Timber.i("Received LocationEngineResult: %s", lastLocationFix);
-        if (locationComponent != null) {
-            locationComponent.forceLocationUpdate(location);
-        }
-        for (ReadyListener listener : gpsLocationReadyListeners) {
-            listener.onReady(this);
-        }
-        gpsLocationReadyListeners.clear();
-        if (gpsLocationListener != null) {
-            gpsLocationListener.onPoint(lastLocationFix);
-        }
-    }
+    // See https://docs.mapbox.com/android/core/overview/#requesting-location-updates
+    protected static class LocationCallback implements LocationEngineCallback<LocationEngineResult> {
+        private final WeakReference<MapboxMapFragment> mapRef;
 
-    @Override public void onFailure(@NonNull Exception exception) { }
+        public LocationCallback(MapboxMapFragment map) {
+            mapRef = new WeakReference<>(map);
+        }
+
+        @Override public void onSuccess(LocationEngineResult result) {
+            MapboxMapFragment map = mapRef.get();
+            if (map != null) {
+                Location location = result.getLastLocation();
+                map.lastLocationFix = fromLocation(location);
+                lastLocationProvider = location != null ? location.getProvider() : null;
+                Timber.i("Received location update: %s (%s)", map.lastLocationFix, lastLocationProvider);
+                if (map.locationComponent != null) {
+                    map.locationComponent.forceLocationUpdate(location);
+                }
+                for (ReadyListener listener : map.gpsLocationReadyListeners) {
+                    listener.onReady(map);
+                }
+                map.gpsLocationReadyListeners.clear();
+                if (map.gpsLocationListener != null) {
+                    map.gpsLocationListener.onPoint(map.lastLocationFix);
+                }
+            }
+        }
+
+        @Override public void onFailure(@NonNull Exception exception) { }
+    }
 
     private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
         return new MapPoint(latLng.getLatitude(), latLng.getLongitude());
@@ -686,11 +699,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             LocationEngine engine = locationComponent.getLocationEngine();
             if (enable) {
                 Timber.i("Requesting location updates from %s (to %s)", engine, this);
-                engine.requestLocationUpdates(LOCATION_REQUEST, this, null);
-                engine.getLastLocation(this);
+                engine.requestLocationUpdates(LOCATION_REQUEST, locationCallback, null);
+                engine.getLastLocation(locationCallback);
             } else {
                 Timber.i("Stopping location updates from %s (to %s)", engine, this);
-                engine.removeLocationUpdates(this);
+                engine.removeLocationUpdates(locationCallback);
             }
             Timber.i("setLocationComponentEnabled to %s (for %s)", enable, locationComponent);
             locationComponent.setLocationComponentEnabled(enable);

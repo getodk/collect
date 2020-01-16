@@ -1,10 +1,12 @@
 package org.odk.collect.android.location.client;
 
 import android.location.LocationManager;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.util.List;
 
 /**
  * An abstract base LocationClient class that provides some shared functionality for determining
@@ -14,6 +16,9 @@ abstract class BaseLocationClient implements LocationClient {
 
     @NonNull
     private final LocationManager locationManager;
+
+    @Nullable
+    private WeakReference<LocationClientListener> listenerRef;
 
     @NonNull
     private Priority priority = Priority.PRIORITY_HIGH_ACCURACY;
@@ -103,5 +108,14 @@ abstract class BaseLocationClient implements LocationClient {
     @NonNull
     LocationManager getLocationManager() {
         return locationManager;
+    }
+
+    @Override
+    public void setListener(@Nullable LocationClientListener locationClientListener) {
+        listenerRef = new WeakReference<>(locationClientListener);
+    }
+
+    protected LocationClientListener getListener() {
+        return listenerRef != null ? listenerRef.get() : null;
     }
 }
