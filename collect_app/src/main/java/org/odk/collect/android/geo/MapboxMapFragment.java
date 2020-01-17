@@ -94,6 +94,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @Inject
     MapProvider mapProvider;
     private MapboxMap map;
+    private ReadyListener mapReadyListener;
     private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     private PointListener gpsLocationListener;
     private PointListener clickListener;
@@ -129,6 +130,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         @NonNull FragmentActivity activity, int containerId,
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         Context context = getContext();
+        mapReadyListener = readyListener;
         if (MapboxUtils.initMapbox() == null) {
             MapProvider.getConfigurator().showUnavailableMessage(context);
             if (errorListener != null) {
@@ -190,15 +192,15 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 // If the screen is rotated before the map is ready, this fragment
                 // could already be detached, which makes it unsafe to use.  Only
                 // call the ReadyListener if this fragment is still attached.
-                if (readyListener != null && getActivity() != null) {
-                    readyListener.onReady(this);
+                if (mapReadyListener != null && getActivity() != null) {
+                    mapReadyListener.onReady(this);
                 }
             });
 
             // In Robolectric tests, getMapAsync() never gets around to calling its
             // callback; we have to invoke the ready listener directly.
-            if (testMode && readyListener != null) {
-                readyListener.onReady(this);
+            if (testMode && mapReadyListener != null) {
+                mapReadyListener.onReady(this);
             }
         });
     }
@@ -233,7 +235,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
             map.setStyle(getStyleBuilder(), style -> {
+                // See addTo() above for why we add this placeholder layer.
+                style.addLayer(new BackgroundLayer(PLACEHOLDER_LAYER_ID)
+                    .withProperties(backgroundColor("rgba(0, 0, 0, 0)")));
+                lineManager = createLineManager();
+                symbolManager = createSymbolManager();
+
                 loadReferenceOverlay();
+                initLocationComponent();
+
+                if (mapReadyListener != null && getActivity() != null) {
+                    mapReadyListener.onReady(this);
+                }
             });
         }
     }
