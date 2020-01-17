@@ -8,7 +8,6 @@ import android.webkit.MimeTypeMap;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -22,6 +21,7 @@ import org.odk.collect.android.http.openrosa.okhttp.OkHttpOpenRosaServerClientPr
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -81,7 +81,7 @@ public class AppDependencyModule {
         return new OkHttpConnection(
                 new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
                 new CollectThenSystemContentTypeMapper(mimeTypeMap),
-                Collect.getInstance().getUserAgentString()
+                AndroidUserAgent.getUserAgent()
         );
     }
 

@@ -61,6 +61,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
+import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -212,12 +213,6 @@ public class Collect extends Application {
      *
      * This deviates from the recommended format as described in https://github.com/opendatakit/collect/issues/3253.
      */
-    public String getUserAgentString() {
-        return String.format("%s/%s %s",
-                BuildConfig.APPLICATION_ID,
-                BuildConfig.VERSION_NAME,
-                System.getProperty("http.agent"));
-    }
 
     public boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getInstance()
@@ -292,7 +287,7 @@ public class Collect extends Application {
     }
 
     protected void setupOSMDroid() {
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(getUserAgentString());
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(AndroidUserAgent.getUserAgent());
     }
 
     private void setupDagger() {
