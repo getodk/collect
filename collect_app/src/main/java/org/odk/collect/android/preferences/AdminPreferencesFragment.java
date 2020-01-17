@@ -79,6 +79,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                 final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
                 final EditText passwordEditText = dialogView.findViewById(R.id.pwd_field);
                 final CheckBox passwordCheckBox = dialogView.findViewById(R.id.checkBox2);
+                passwordEditText.requestFocus();
                 passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

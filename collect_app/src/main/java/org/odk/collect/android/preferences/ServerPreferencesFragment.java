@@ -507,4 +507,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             return false;
         });
     }
+    @Override
+    public void onStop() {
+        super.onStop();
+        serverUrlPreference.setOnPreferenceClickListener(null);
+        usernamePreference.setOnPreferenceClickListener(null);
+        passwordPreference.setOnPreferenceClickListener(null);
+    }
 }
