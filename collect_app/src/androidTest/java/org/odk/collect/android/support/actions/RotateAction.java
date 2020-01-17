@@ -3,7 +3,6 @@ package org.odk.collect.android.support.actions;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,12 @@ import org.hamcrest.Matcher;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
 public class RotateAction implements ViewAction {
+
+    private final int screenOrientation;
+
+    public RotateAction(int screenOrientation) {
+        this.screenOrientation = screenOrientation;
+    }
 
     @Override
     public Matcher<View> getConstraints() {
@@ -34,7 +39,7 @@ public class RotateAction implements ViewAction {
         Activity activity = getCurrentActivity(view);
 
         if (activity != null) {
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            activity.setRequestedOrientation(screenOrientation);
         } else {
             throw new IllegalStateException("We don't know how to get the current Activity in this scenario");
         }
