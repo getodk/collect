@@ -1,6 +1,7 @@
 package org.odk.collect.android.support.pages;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
@@ -200,7 +201,18 @@ abstract class Page<T extends Page<T>> {
     }
 
     private static ViewAction rotateToLandscape() {
-        return new RotateAction();
+        return new RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    public <D extends Page<D>> D rotateToPortrait(D destination) {
+        onView(isRoot()).perform(rotateToPortrait());
+        waitForRotationToEnd();
+
+        return destination.assertOnPage();
+    }
+
+    private static ViewAction rotateToPortrait() {
+        return new RotateAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     public T waitForRotationToEnd() {
