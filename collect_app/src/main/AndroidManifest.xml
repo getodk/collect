@@ -190,7 +190,8 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormEntryActivity"
-            android:targetActivity=".activities.FormEntryActivity">
+            android:targetActivity=".activities.FormEntryActivity"
+            tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -204,7 +205,8 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.InstanceChooserList"
-            android:targetActivity=".activities.InstanceChooserList">
+            android:targetActivity=".activities.InstanceChooserList"
+            tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -217,7 +219,8 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormChooserList"
-            android:targetActivity=".activities.FormChooserListActivity">
+            android:targetActivity=".activities.FormChooserListActivity"
+            tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
