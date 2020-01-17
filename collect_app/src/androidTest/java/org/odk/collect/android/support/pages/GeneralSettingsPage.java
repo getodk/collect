@@ -137,4 +137,9 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return this;
     }
 
+    public GeneralSettingsPage clickUseNavigationButtons() {
+        clickOnString(R.string.buttons_navigation);
+        return this;
+    }
+
 }

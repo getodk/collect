@@ -15,6 +15,7 @@ import androidx.test.runner.lifecycle.Stage;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.actions.RotateAction;
+import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 
 import timber.log.Timber;
 
@@ -262,6 +263,11 @@ abstract class Page<T extends Page<T>> {
     public T clickOnElementInHierarchy(int index) {
         onView(withId(R.id.list)).perform(scrollToPosition(index));
         onView(withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).perform(click());
+        return (T) this;
+    }
+
+    public T checkListSizeInHierarchy(int index) {
+        onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(index)));
         return (T) this;
     }
 

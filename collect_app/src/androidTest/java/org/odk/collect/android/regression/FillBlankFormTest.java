@@ -76,7 +76,9 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("CalcTest.xml"))
             .around(new CopyFormRule("search_and_select.xml"))
             .around(new CopyFormRule("select_one_external.xml"))
-            .around(new CopyFormRule("fieldlist-updates_nocsv.xml"));
+            .around(new CopyFormRule("fieldlist-updates_nocsv.xml"))
+            .around(new CopyFormRule("nested-repeats-complex.xml"))
+            .around(new CopyFormRule("repeat_group_form.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -672,4 +674,78 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickSaveAndExit();
     }
 
+    @Test
+    public void changedName_shouldNotDisappearAfterScreenRotation() {
+        //TestCase13
+        new MainMenuPage(rule)
+                .startBlankForm("All widgets")
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .clickOnId(R.id.save_name)
+                .inputText("submission")
+                .closeSoftKeyboard()
+                .rotateToLandscape(new FormEntryPage("All widgets", rule))
+                .checkIsTextDisplayed("submission")
+                .rotateToPortrait(new FormEntryPage("All widgets", rule))
+                .checkIsTextDisplayed("submission");
+    }
+
+    @Test
+    public void backwardButton_shouldNotBeClickable() {
+        //TestCase14
+        new MainMenuPage(rule)
+                .startBlankForm("All widgets")
+                .checkAreNavigationButtonsNotDisplayed()
+                .clickOptionsIcon()
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickNavigation()
+                .clickUseNavigationButtons()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed()
+                .rotateToLandscape(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed()
+                .rotateToPortrait(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed();
+    }
+
+    @Test
+    public void groups_shouldBeVisibleInJumpScreen() {
+        //TestCase28
+        new MainMenuPage(rule)
+                .startBlankForm("nested-repeats-complex")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("La")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("Le")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("Be")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroup()
+                .clickOnAddGroup()
+                .inputText("Bu")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickGoToArrow()
+                .clickOnText("Friends")
+                .checkListSizeInHierarchy(1)
+                .clickOnElementInHierarchy(0)
+                .clickOnText("Pets")
+                .checkListSizeInHierarchy(2)
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("Enemies")
+                .checkListSizeInHierarchy(1);
+    }
 }
