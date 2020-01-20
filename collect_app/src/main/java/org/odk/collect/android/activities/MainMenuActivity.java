@@ -232,8 +232,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     .getVersionedAppName());
         }
 
-        File f = new File(StorageManager.ODK_ROOT + "/collect.settings");
-        File j = new File(StorageManager.ODK_ROOT + "/collect.settings.json");
+        File f = new File(StorageManager.getOdkRoot() + "/collect.settings");
+        File j = new File(StorageManager.getOdkRoot() + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
             boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);

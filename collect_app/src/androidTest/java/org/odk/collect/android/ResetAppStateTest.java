@@ -164,12 +164,12 @@ public class ResetAppStateTest {
 
         assertTrue(new File(StorageManager.SETTINGS).exists() || new File(StorageManager.SETTINGS).mkdir());
         assertTrue(new File(StorageManager.SETTINGS + "/collect.settings").createNewFile());
-        assertTrue(new File(StorageManager.ODK_ROOT + "/collect.settings").createNewFile());
+        assertTrue(new File(StorageManager.getOdkRoot() + "/collect.settings").createNewFile());
     }
 
     private void setupTestFormsDatabase() {
         ContentValues values = new ContentValues();
-        values.put(FormsColumns.JRCACHE_FILE_PATH, StorageManager.ODK_ROOT + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
+        values.put(FormsColumns.JRCACHE_FILE_PATH, StorageManager.getOdkRoot() + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
         values.put(FormsColumns.JR_FORM_ID, "jrFormId");
         values.put(FormsColumns.FORM_MEDIA_PATH, StorageManager.FORMS_PATH + "/testFile1-media");
         values.put(FormsColumns.DATE, "1487077903756");

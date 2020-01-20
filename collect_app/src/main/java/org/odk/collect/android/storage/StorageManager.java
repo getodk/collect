@@ -10,13 +10,12 @@ import java.io.File;
 import timber.log.Timber;
 
 public class StorageManager {
-    public static final String ODK_ROOT = Environment.getExternalStorageDirectory() + File.separator + "odk";
-    public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
-    public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
-    public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
-    public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
-    public static final String INSTANCES_PATH = ODK_ROOT + File.separator + "instances";
-    public static final String FORMS_PATH = ODK_ROOT + File.separator + "forms";
+    public static final String SETTINGS = getOdkRoot() + File.separator + "settings";
+    public static final String OFFLINE_LAYERS = getOdkRoot() + File.separator + "layers";
+    public static final String METADATA_PATH = getOdkRoot() + File.separator + "metadata";
+    public static final String CACHE_PATH = getOdkRoot() + File.separator + ".cache";
+    public static final String INSTANCES_PATH = getOdkRoot() + File.separator + "instances";
+    public static final String FORMS_PATH = getOdkRoot() + File.separator + "forms";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
 
@@ -33,7 +32,7 @@ public class StorageManager {
         }
 
         String[] dirs = {
-                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+                getOdkRoot(), FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
@@ -52,5 +51,9 @@ public class StorageManager {
                 }
             }
         }
+    }
+
+    public static String getOdkRoot() {
+        return Environment.getExternalStorageDirectory() + File.separator + "odk";
     }
 }

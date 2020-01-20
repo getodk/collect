@@ -2,6 +2,8 @@ package org.odk.collect.android.externalintents;
 
 import junit.framework.Assert;
 
+import org.odk.collect.android.storage.StorageManager;
+
 import java.io.File;
 
 import timber.log.Timber;
@@ -16,7 +18,7 @@ import static org.odk.collect.android.storage.StorageManager.OFFLINE_LAYERS;
 class ExportedActivitiesUtils {
 
     private static final String[] DIRS = {
-            ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+            StorageManager.getOdkRoot(), FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
     };
 
     private ExportedActivitiesUtils() {
