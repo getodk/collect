@@ -32,6 +32,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StorageManager;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.osmdroid.config.Configuration;
@@ -163,12 +164,12 @@ public class ResetAppStateTest {
 
         assertTrue(new File(Collect.SETTINGS).exists() || new File(Collect.SETTINGS).mkdir());
         assertTrue(new File(Collect.SETTINGS + "/collect.settings").createNewFile());
-        assertTrue(new File(Collect.ODK_ROOT + "/collect.settings").createNewFile());
+        assertTrue(new File(StorageManager.ODK_ROOT + "/collect.settings").createNewFile());
     }
 
     private void setupTestFormsDatabase() {
         ContentValues values = new ContentValues();
-        values.put(FormsColumns.JRCACHE_FILE_PATH, Collect.ODK_ROOT + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
+        values.put(FormsColumns.JRCACHE_FILE_PATH, StorageManager.ODK_ROOT + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
         values.put(FormsColumns.JR_FORM_ID, "jrFormId");
         values.put(FormsColumns.FORM_MEDIA_PATH, Collect.FORMS_PATH + "/testFile1-media");
         values.put(FormsColumns.DATE, "1487077903756");

@@ -24,6 +24,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.storage.StorageManager;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -80,8 +81,8 @@ public class ResetUtility {
         boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
                 || deleteFolderContents(Collect.SETTINGS);
 
-        boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
-                || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
+        boolean deletedSettingsFile = !new File(StorageManager.ODK_ROOT + "/collect.settings").exists()
+                || (new File(StorageManager.ODK_ROOT + "/collect.settings").delete());
         
         new LocaleHelper().updateLocale(context);
 

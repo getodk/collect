@@ -10,7 +10,7 @@ import static org.odk.collect.android.application.Collect.CACHE_PATH;
 import static org.odk.collect.android.application.Collect.FORMS_PATH;
 import static org.odk.collect.android.application.Collect.INSTANCES_PATH;
 import static org.odk.collect.android.application.Collect.METADATA_PATH;
-import static org.odk.collect.android.application.Collect.ODK_ROOT;
+import static org.odk.collect.android.storage.StorageManager.ODK_ROOT;
 import static org.odk.collect.android.application.Collect.OFFLINE_LAYERS;
 
 class ExportedActivitiesUtils {
