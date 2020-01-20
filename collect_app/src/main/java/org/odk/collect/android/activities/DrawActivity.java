@@ -38,7 +38,6 @@ import com.rarepebble.colorpicker.ColorPickerView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.storage.StorageManager;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -153,7 +152,7 @@ public class DrawActivity extends CollectAbstractActivity {
         if (extras == null) {
             loadOption = OPTION_DRAW;
             refImage = null;
-            savepointImage = new File(Collect.TMPDRAWFILE_PATH);
+            savepointImage = new File(StorageManager.TMPDRAWFILE_PATH);
             savepointImage.delete();
             output = new File(StorageManager.TMPFILE_PATH);
         } else {
@@ -177,7 +176,7 @@ public class DrawActivity extends CollectAbstractActivity {
                     FileUtils.copyFile(refImage, savepointImage);
                 }
             } else {
-                savepointImage = new File(Collect.TMPDRAWFILE_PATH);
+                savepointImage = new File(StorageManager.TMPDRAWFILE_PATH);
                 savepointImage.delete();
                 if (refImage != null && refImage.exists()) {
                     FileUtils.copyFile(refImage, savepointImage);
