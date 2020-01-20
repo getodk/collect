@@ -77,7 +77,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
         try {
             List<String> candidateInstances = new LinkedList<>();
-            File instancesPath = new File(StorageManager.getInstancesPath());
+            File instancesPath = new File(StorageManager.getInstancesDirPath());
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders == null || instanceFolders.length == 0) {

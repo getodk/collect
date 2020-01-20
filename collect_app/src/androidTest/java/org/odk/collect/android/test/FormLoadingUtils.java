@@ -92,13 +92,13 @@ public class FormLoadingUtils {
     }
 
     private static String copyForm(String formFilename) throws IOException {
-        String pathname = StorageManager.getFormsPath() + "/" + formFilename;
+        String pathname = StorageManager.getFormsDirPath() + "/" + formFilename;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }
 
     private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {
-        String mediaPathName = StorageManager.getFormsPath() + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+        String mediaPathName = StorageManager.getFormsDirPath() + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
         for (String mediaFilename : mediaFilenames) {

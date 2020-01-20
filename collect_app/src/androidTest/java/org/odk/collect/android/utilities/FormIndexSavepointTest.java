@@ -45,7 +45,7 @@ public class FormIndexSavepointTest {
         String instanceName = "test.xml";
 
         // for loadFormIndexFromFile
-        File instancePath = new File(StorageManager.getInstancesPath() + File.separator + instanceName);
+        File instancePath = new File(StorageManager.getInstancesDirPath() + File.separator + instanceName);
         when(formController.getInstanceFile()).thenReturn(instancePath);
         Collect.getInstance().setFormController(formController);
 

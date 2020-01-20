@@ -35,7 +35,7 @@ public class FormUtilsTest {
     */
     @Test
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
-        final String formPath = StorageManager.getFormsPath() + File.separator + BASIC_FORM;
+        final String formPath = StorageManager.getFormsDirPath() + File.separator + BASIC_FORM;
         // Load the form in order to populate the ReferenceManager
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         formLoaderTask.execute(formPath).get();

@@ -580,7 +580,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formPath.lastIndexOf('.'))
                         + "_";
                 final String fileSuffix = ".xml.save";
-                File cacheDir = new File(StorageManager.getCachePath());
+                File cacheDir = new File(StorageManager.getCacheDirPath());
                 File[] files = cacheDir.listFiles(pathname -> {
                     String name = pathname.getName();
                     return name.startsWith(filePrefix)
@@ -598,7 +598,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     candidate.getName().length()
                                             - fileSuffix.length());
                     File instanceDir = new File(
-                            StorageManager.getInstancesPath() + File.separator
+                            StorageManager.getInstancesDirPath() + File.separator
                                     + instanceDirName);
                     File instanceFile = new File(instanceDir,
                             instanceDirName + ".xml");
@@ -805,8 +805,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                ImageConverter.execute(StorageManager.getTmpfilePath(), getWidgetWaitingForBinaryData(), this);
-                File fi = new File(StorageManager.getTmpfilePath());
+                ImageConverter.execute(StorageManager.getTmpFilePath(), getWidgetWaitingForBinaryData(), this);
+                File fi = new File(StorageManager.getTmpFilePath());
 
                 String instanceFolder = formController.getInstanceFile()
                         .getParent();
@@ -2549,7 +2549,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Locale.ENGLISH).format(Calendar.getInstance().getTime());
         String file = formPath.substring(formPath.lastIndexOf('/') + 1,
                 formPath.lastIndexOf('.'));
-        String path = StorageManager.getInstancesPath() + File.separator + file + "_"
+        String path = StorageManager.getInstancesDirPath() + File.separator + file + "_"
                 + time;
         if (FileUtils.createFolder(path)) {
             File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");

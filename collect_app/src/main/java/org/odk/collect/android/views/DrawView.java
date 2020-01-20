@@ -60,7 +60,7 @@ public class DrawView extends View {
         bitmapPaint = new Paint(Paint.DITHER_FLAG);
         currentPath = new Path();
         offscreenPath = new Path();
-        backgroundBitmapFile = new File(StorageManager.getTmpdrawfilePath());
+        backgroundBitmapFile = new File(StorageManager.getTmpDrawFilePath());
 
         paint = new Paint();
         paint.setAntiAlias(true);

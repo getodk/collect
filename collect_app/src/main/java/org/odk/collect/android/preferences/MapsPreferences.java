@@ -181,7 +181,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
         referenceLayerPref.setItems(items);
 
-        File layerDir = FileUtils.simplifyPath(new File(StorageManager.getOfflineLayers()));
+        File layerDir = FileUtils.simplifyPath(new File(StorageManager.getOfflineLayersDirPath()));
         referenceLayerPref.setDialogCaption(context.getString(
             items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
             layerDir, context.getString(MapProvider.getSourceLabelId())
@@ -193,7 +193,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Gets the list of layer data files supported by the current MapConfigurator. */
     private static List<File> getSupportedLayerFiles(MapConfigurator cftor) {
         List<File> files = new ArrayList<>();
-        for (File file : FileUtils.walk(new File(StorageManager.getOfflineLayers()))) {
+        for (File file : FileUtils.walk(new File(StorageManager.getOfflineLayersDirPath()))) {
             if (cftor.supportsLayer(file)) {
                 files.add(file);
             }

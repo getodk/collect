@@ -167,7 +167,7 @@ public class ImageWidget extends BaseImageWidget {
             try {
                 Uri uri = FileProvider.getUriForFile(getContext(),
                         BuildConfig.APPLICATION_ID + ".provider",
-                        new File(StorageManager.getTmpfilePath()));
+                        new File(StorageManager.getTmpFilePath()));
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);

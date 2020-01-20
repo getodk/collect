@@ -329,7 +329,7 @@ public class SaveFormToDisk {
      * Return the savepoint file for a given instance.
      */
     static File getSavepointFile(String instanceName) {
-        File tempDir = new File(StorageManager.getCachePath());
+        File tempDir = new File(StorageManager.getCacheDirPath());
         return new File(tempDir, instanceName + ".save");
     }
 
@@ -337,7 +337,7 @@ public class SaveFormToDisk {
      * Return the formIndex file for a given instance.
      */
     public static File getFormIndexFile(String instanceName) {
-        File tempDir = new File(StorageManager.getCachePath());
+        File tempDir = new File(StorageManager.getCacheDirPath());
         return new File(tempDir, instanceName + ".index");
     }
 
