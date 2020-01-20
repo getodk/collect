@@ -43,8 +43,7 @@
   <string name="do_not_change">रद्द करा</string>
   <string name="do_not_exit">रद्द करा</string>
   <string name="do_not_save">बदलांकडे दुर्लक्ष करा</string>
-    <string name="entering_repeat_ask">नवीन गट जोडायचा?</string>
-  <string name="enter_data">रिक्त फॉर्म भरा</string>
+    <string name="enter_data">रिक्त फॉर्म भरा</string>
   <string name="enter_data_button">रिक्त फॉर्म भरा</string>
   <string name="error_occured">त्रुटी झाले</string>
   <string name="error_attaching_binary_file">मिडिया संलग्न करताना त्रुटी आली: 1%s</string>

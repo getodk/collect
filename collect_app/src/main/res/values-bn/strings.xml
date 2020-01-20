@@ -41,8 +41,7 @@
   <string name="do_not_change">বাতিল</string>
   <string name="do_not_exit">প্রস্থান হবেন না?</string>
   <string name="do_not_save">সংরক্ষণ করবেন না?</string>
-    <string name="entering_repeat_ask">নতুন রিপিট যোগ করুন</string>
-  <string name="enter_data">নতুন খালি ফরম পূরণ করুন</string>
+    <string name="enter_data">নতুন খালি ফরম পূরণ করুন</string>
   <string name="enter_data_button">নতুন খালি ফরম পূরণ করুন</string>
   <string name="error_occured">ত্রুটি ঘটেছে</string>
   <string name="error_attaching_binary_file">মিডিয়া \"%s\" সংযুক্ত করার সময় ত্রুটি সংঘটিত হয়েছে</string>

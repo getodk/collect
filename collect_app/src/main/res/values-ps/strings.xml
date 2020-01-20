@@ -48,8 +48,7 @@
   <string name="do_not_change">فسخ کول</string>
   <string name="do_not_exit">فسخ کول</string>
   <string name="do_not_save">بدلون څخه ډد وکړي</string>
-    <string name="entering_repeat_ask">نوي ټولګی زیات کړی؟</string>
-  <string name="enter_data">خالی فورمه ډک کړي</string>
+    <string name="enter_data">خالی فورمه ډک کړي</string>
   <string name="enter_data_button">خالی فورمه ډک کړي</string>
   <string name="error_occured">خطا وشوله</string>
   <string name="forms">سپین فورمي</string>

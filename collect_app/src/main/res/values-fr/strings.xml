@@ -51,8 +51,7 @@
   <string name="do_not_change">Annuler</string>
   <string name="do_not_exit">Annuler</string>
   <string name="do_not_save">Ignorer les changements</string>
-    <string name="entering_repeat_ask">Ajouter un nouveau groupe ?</string>
-  <string name="enter_data">Remplir un formulaire</string>
+    <string name="enter_data">Remplir un formulaire</string>
   <string name="enter_data_button">Remplir un formulaire</string>
   <string name="error_occured">Une erreur s\'est produite</string>
   <string name="error_attaching_binary_file">Erreur pendant l\'attachement du média: %s</string>

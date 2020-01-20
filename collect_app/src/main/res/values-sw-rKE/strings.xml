@@ -40,8 +40,7 @@
   <string name="do_not_change">Futa</string>
   <string name="do_not_exit">Futa</string>
   <string name="do_not_save">Puuza mabadiliko</string>
-    <string name="entering_repeat_ask">Ongeza kikundi kipya?</string>
-  <string name="enter_data">Jaza fomu tupu</string>
+    <string name="enter_data">Jaza fomu tupu</string>
   <string name="enter_data_button">Jaza fomu</string>
   <string name="error_occured">Hitilifau ilitokea</string>
   <string name="file_deleted_error">Samahani, %1$s kati ya fomu() %2$s zilizochaguliwa hazikufutwa!</string>

@@ -38,8 +38,7 @@
   <string name="do_not_change">Atšaukti</string>
   <string name="do_not_exit">Atšaukti</string>
   <string name="do_not_save">Ignoruoti pakeitimus</string>
-    <string name="entering_repeat_ask">Sukurti naują grupę?</string>
-  <string name="enter_data">Pildyti tuščią formą</string>
+    <string name="enter_data">Pildyti tuščią formą</string>
   <string name="enter_data_button">Pildyti tuščią formą</string>
   <string name="error_occured">Įvyko klaida</string>
   <string name="file_deleted_error">Deja, nepavyko ištrinti %1$s iš %2$s parinktų formų!</string>

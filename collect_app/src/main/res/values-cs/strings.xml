@@ -51,8 +51,7 @@
   <string name="do_not_change">Zrušit</string>
   <string name="do_not_exit">Zrušit</string>
   <string name="do_not_save">Ignorovat změny</string>
-    <string name="entering_repeat_ask">Přidat novou skupinu?</string>
-  <string name="enter_data">Vyplnit dotazník</string>
+    <string name="enter_data">Vyplnit dotazník</string>
   <string name="enter_data_button">Vyplnit dotazník</string>
   <string name="error_occured">Vyskytla se chyba</string>
   <string name="error_attaching_binary_file">Při vkládání médií: %s nastala chyba</string>

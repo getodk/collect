@@ -48,8 +48,7 @@
   <string name="do_not_change">रद्द करें</string>
   <string name="do_not_exit">रद्द करें </string>
   <string name="do_not_save">बदलावों पर ध्यान न दें</string>
-    <string name="entering_repeat_ask">नया समूह जोड़ें</string>
-  <string name="enter_data">खाली फॉर्म भरें</string>
+    <string name="enter_data">खाली फॉर्म भरें</string>
   <string name="enter_data_button">खाली फॉर्म भरें</string>
   <string name="error_occured">गलती हुई</string>
   <string name="error_attaching_binary_file">मीडिया को जोड़ते समय एक गलती हुई%s</string>

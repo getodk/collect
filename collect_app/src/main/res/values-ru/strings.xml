@@ -50,8 +50,7 @@
   <string name="do_not_change">Отмена</string>
   <string name="do_not_exit">Отмена</string>
   <string name="do_not_save">Удалить ответы</string>
-    <string name="entering_repeat_ask">Добавить новую группу?</string>
-  <string name="enter_data">Заполнение бланка</string>
+    <string name="enter_data">Заполнение бланка</string>
   <string name="enter_data_button">ЗАПОЛНИТЬ БЛАНК</string>
   <string name="error_occured">Произошла ошибка</string>
   <string name="error_attaching_binary_file">Произошла ошибка при добавлении файла: %s</string>

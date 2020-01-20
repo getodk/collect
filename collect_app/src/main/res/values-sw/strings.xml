@@ -50,8 +50,7 @@
   <string name="do_not_change">Sitisha</string>
   <string name="do_not_exit">Sitisha</string>
   <string name="do_not_save">Puuzia mabadiliko</string>
-    <string name="entering_repeat_ask">Ongeza kikundi kipya?</string>
-  <string name="enter_data">Jaza fomu iliyo tupu</string>
+    <string name="enter_data">Jaza fomu iliyo tupu</string>
   <string name="enter_data_button">Jaza fomu iliyo tupu</string>
   <string name="error_occured">Kosa limetokea</string>
   <string name="error_attaching_binary_file">Hitilafu ilitokea wakati wa kuunganisha midia:%s</string>

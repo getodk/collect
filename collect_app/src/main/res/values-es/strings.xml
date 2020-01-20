@@ -51,8 +51,7 @@
   <string name="do_not_change">Cancelar</string>
   <string name="do_not_exit">Cancelar</string>
   <string name="do_not_save">Ignorar Cambios</string>
-    <string name="entering_repeat_ask">¿Agregar un Nuevo Grupo?</string>
-  <string name="enter_data">Llenar Nuevo Formulario</string>
+    <string name="enter_data">Llenar Nuevo Formulario</string>
   <string name="enter_data_button">Llenar Nuevo Formulario</string>
   <string name="error_occured">Se ha producido un error</string>
   <string name="error_attaching_binary_file">Error detectado al conectar medio: %s</string>

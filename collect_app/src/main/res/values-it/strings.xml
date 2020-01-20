@@ -51,8 +51,7 @@
   <string name="do_not_change">Annulla</string>
   <string name="do_not_exit">Annulla</string>
   <string name="do_not_save">Ignorare i cambiamenti</string>
-    <string name="entering_repeat_ask">Aggiungere un nuovo gruppo ?</string>
-  <string name="enter_data">Compila Modulo Vuoto</string>
+    <string name="enter_data">Compila Modulo Vuoto</string>
   <string name="enter_data_button">Compila Modulo Vuoto</string>
   <string name="error_occured">Si è verificato un errore.</string>
   <string name="error_attaching_binary_file">Si è verificato un errore mentre allegavi: %s</string>

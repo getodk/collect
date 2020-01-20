@@ -37,8 +37,7 @@
   <string name="do_not_change">Vazgeç</string>
   <string name="do_not_exit">Vazgeç</string>
   <string name="do_not_save">Değişiklikleri boşver..</string>
-    <string name="entering_repeat_ask">Yeni Grup ?</string>
-  <string name="enter_data">Boş Form Doldur</string>
+    <string name="enter_data">Boş Form Doldur</string>
   <string name="enter_data_button">Boş Form Doldur</string>
   <string name="error_occured">Hata Oluştu</string>
   <string name="file_deleted_ok">%s Form başarıyla silindi.</string>

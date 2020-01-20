@@ -50,8 +50,7 @@
   <string name="do_not_change">Prekini</string>
   <string name="do_not_exit">Prekini</string>
   <string name="do_not_save">Zavrzi spremembe</string>
-    <string name="entering_repeat_ask">Dodam novo skupino?</string>
-  <string name="enter_data">Izpolni prazen obrazec</string>
+    <string name="enter_data">Izpolni prazen obrazec</string>
   <string name="enter_data_button">Izpolni prazen obrazec</string>
   <string name="error_occured">Nastala je napaka</string>
   <string name="error_attaching_binary_file">Napaka pri dodajanju medijske vsebine: %s</string>

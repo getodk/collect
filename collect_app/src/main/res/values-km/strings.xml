@@ -50,8 +50,7 @@
   <string name="do_not_change">បោះបង់</string>
   <string name="do_not_exit">បោះបង់</string>
   <string name="do_not_save">បោះបង់ការផ្លាស់ប្តូរ</string>
-    <string name="entering_repeat_ask">បន្ថែម​ក្រុម​មួយ​ទៀត?</string>
-  <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
+    <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
   <string name="enter_data_button">បំពេញសំណុំបែបបទទទេ</string>
   <string name="error_occured">មានបញ្ហាបានកើតឡើង</string>
   <string name="error_attaching_binary_file">មានបញ្ហាមួយបានកើតឡើងខណៈដែលភ្ជាប់ឯកសារមេឌៀ: %s</string>

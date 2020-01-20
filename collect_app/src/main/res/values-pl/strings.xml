@@ -51,8 +51,7 @@
   <string name="do_not_change">Anuluj</string>
   <string name="do_not_exit">Anuluj</string>
   <string name="do_not_save">Odrzuć Zmiany</string>
-    <string name="entering_repeat_ask">Czy Dodać Nową Grupę?</string>
-  <string name="enter_data">Wypełnij Pusty Formularz</string>
+    <string name="enter_data">Wypełnij Pusty Formularz</string>
   <string name="enter_data_button">Wypełnij Pusty Formularz</string>
   <string name="error_occured">Wystąpił Błąd</string>
   <string name="error_attaching_binary_file">Wystąpił błąd w momencie dołączania mediów: %s</string>

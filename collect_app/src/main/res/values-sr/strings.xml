@@ -51,8 +51,7 @@
   <string name="do_not_change">Odustani</string>
   <string name="do_not_exit">Odustani</string>
   <string name="do_not_save">Zanemari promjene</string>
-    <string name="entering_repeat_ask">Dodaj novu grupu?</string>
-  <string name="enter_data">Popuni prazan formular</string>
+    <string name="enter_data">Popuni prazan formular</string>
   <string name="enter_data_button">Popuni prazan formular</string>
   <string name="error_occured">Greška</string>
   <string name="error_attaching_binary_file">Došlo je do greške prilikom učitavanja sadržaja: %s</string>

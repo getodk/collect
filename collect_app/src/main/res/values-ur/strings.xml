@@ -50,8 +50,7 @@
   <string name="do_not_change">منسوخ</string>
   <string name="do_not_exit">منسوخ</string>
   <string name="do_not_save">تبدیلیاں نظرانداز کریں</string>
-    <string name="entering_repeat_ask">نیا گروپ شامل کریں</string>
-  <string name="enter_data">خالی فارم پر کریں</string>
+    <string name="enter_data">خالی فارم پر کریں</string>
   <string name="enter_data_button">خالی فارم پر کریں</string>
   <string name="error_occured">غلطی ہوگئ</string>
   <string name="error_attaching_binary_file">میڈیا کو اٹیچ کرتے ہوئے ایک خرابی واقع ہوئی %s</string>

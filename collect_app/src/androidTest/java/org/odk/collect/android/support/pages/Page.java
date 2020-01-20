@@ -157,6 +157,10 @@ abstract class Page<T extends Page<T>> {
         return getCurrentActivity().getString(id);
     }
 
+    String getTranslatedString(Integer id, Object... formatArgs) {
+        return getCurrentActivity().getString(id, formatArgs);
+    }
+
     public T clickOnAreaWithIndex(String clazz, int index) {
         onView(withIndex(withClassName(endsWith(clazz)), index)).perform(click());
         return (T) this;

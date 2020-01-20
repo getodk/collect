@@ -51,8 +51,7 @@
   <string name="do_not_change">Abbrechen</string>
   <string name="do_not_exit">Abbrechen</string>
   <string name="do_not_save">Änderungen nicht speichern</string>
-    <string name="entering_repeat_ask">Neue Gruppe hinzufügen?</string>
-  <string name="enter_data">Leeres Formular ausfüllen</string>
+    <string name="enter_data">Leeres Formular ausfüllen</string>
   <string name="enter_data_button">Leeres Formular ausfüllen</string>
   <string name="error_occured">Fehler</string>
   <string name="error_attaching_binary_file">Fehler beim Anhängen des Mediums: %s</string>

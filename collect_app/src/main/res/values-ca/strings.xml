@@ -43,8 +43,7 @@
   <string name="do_not_change">Cancel·lar</string>
   <string name="do_not_exit">Cancel·lar</string>
   <string name="do_not_save">Ignorar canvis</string>
-    <string name="entering_repeat_ask">Afegir nou grup?</string>
-  <string name="enter_data">Omplir nou formulari</string>
+    <string name="enter_data">Omplir nou formulari</string>
   <string name="enter_data_button">Omplir nou formulari</string>
   <string name="error_occured">S\'ha produït un error</string>
   <string name="error_attaching_binary_file">Error detectat al connectar medi: %s</string>

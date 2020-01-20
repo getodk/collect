@@ -49,8 +49,7 @@
   <string name="do_not_change">Avbryt</string>
   <string name="do_not_exit">Avbryt</string>
   <string name="do_not_save">Ignorera ändringar</string>
-    <string name="entering_repeat_ask">Lägg till en ny grupp?</string>
-  <string name="enter_data">Fyll i tomt formulär</string>
+    <string name="enter_data">Fyll i tomt formulär</string>
   <string name="enter_data_button">Fyll i tomt formulär</string>
   <string name="error_occured">Ett fel inträffade</string>
   <string name="error_attaching_binary_file">Ett fel inträffade vid infogning av mediefil: %s</string>

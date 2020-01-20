@@ -51,8 +51,7 @@
   <string name="do_not_change">రద్దు చేయి</string>
   <string name="do_not_exit">రద్దు చేయి</string>
   <string name="do_not_save">మార్పులు విస్మరించు</string>
-    <string name="entering_repeat_ask">క్రొత్త గ్రూపు ని జోడించండి</string>
-  <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
+    <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
   <string name="enter_data_button">ఖాళీ ఫారం నింపండి</string>
   <string name="error_occured">ఎర్రర్ వచ్చింది</string>
   <string name="error_attaching_binary_file">మీడియాను అటాచ్ చేసేటప్పుడు ఎర్రర్ వచ్చింది:%s</string>

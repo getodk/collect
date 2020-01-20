@@ -39,8 +39,7 @@
   <string name="do_not_change">ຍົກເລີກ</string>
   <string name="do_not_exit">ຍົກເລີກ</string>
   <string name="do_not_save">ຍົກເລີກການປ່ຽນແປງ</string>
-    <string name="entering_repeat_ask">ຕ້ອງການເພີ່ມກຸ່ມໃໝ່ບໍ່?</string>
-  <string name="enter_data">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
+    <string name="enter_data">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
   <string name="enter_data_button">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມ​ໃໝ່</string>
   <string name="error_occured">ມີຄວາມຜິດພາດເກີດຂຶ້ນ</string>
   <string name="error_attaching_binary_file">​ມີ​ບັນ​ຫາ​ເກີດ​ຂື້ນ​ໃນ​ລະ​ຫວ່າງ​ການ​ຄັດຕິດ​​ເອ​ກະ​ສານ​ມີ​ເດຍ: %s</string>

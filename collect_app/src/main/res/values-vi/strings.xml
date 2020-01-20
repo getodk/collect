@@ -41,8 +41,7 @@
   <string name="do_not_change">Huỷ</string>
   <string name="do_not_exit">Huỷ</string>
   <string name="do_not_save">Không lưu thay đổi</string>
-    <string name="entering_repeat_ask">Thêm nhóm mới?</string>
-  <string name="enter_data">Điền biểu mẫu</string>
+    <string name="enter_data">Điền biểu mẫu</string>
   <string name="enter_data_button">Điền biểu mẫu</string>
   <string name="error_occured">Lỗi xuất hiện</string>
   <string name="error_attaching_binary_file">Có lỗi xảy ra khi đính kèm định dạng media: %s</string>

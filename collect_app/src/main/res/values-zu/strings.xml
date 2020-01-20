@@ -38,8 +38,7 @@
   <string name="do_not_change">Khansela</string>
   <string name="do_not_exit">Khansela</string>
   <string name="do_not_save">Ziba izinguquko</string>
-    <string name="entering_repeat_ask">Engeza iqembu elisha?</string>
-  <string name="enter_data"> Gcwalisa ifomu elingagcwalisiwe</string>
+    <string name="enter_data"> Gcwalisa ifomu elingagcwalisiwe</string>
   <string name="enter_data_button"> Gcwalisa ifomu elingagcwalisiwe</string>
   <string name="error_occured">Iphutha lenzekile</string>
   <string name="error_attaching_binary_file">Iphutha lenzekile ngenkathi kunafakwa : %s</string>

@@ -20,8 +20,7 @@
   <string name="delete_repeat_no">longola</string>
   <string name="do_not_change">longola</string>
   <string name="do_not_exit">longola</string>
-    <string name="entering_repeat_ask">bakisa lingomba ya sika</string>
-  <string name="dont_add_repeat">kobakisa té</string>
+    <string name="dont_add_repeat">kobakisa té</string>
   <string name="no_items_display">Eloko ezate yako lakisa</string>
   <string name="play_video">beta video</string>
   <string name="send_selected_data_sms">kotinda</string>

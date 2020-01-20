@@ -47,8 +47,7 @@
   <string name="do_not_change">取消</string>
   <string name="do_not_exit">取消</string>
   <string name="do_not_save">忽略修改</string>
-    <string name="entering_repeat_ask">添加新组?</string>
-  <string name="enter_data">填写空表表格</string>
+    <string name="enter_data">填写空表表格</string>
   <string name="enter_data_button">填写空表表格</string>
   <string name="error_occured">错误</string>
   <string name="error_attaching_binary_file">在访问媒体文件：%s时发生了错误</string>

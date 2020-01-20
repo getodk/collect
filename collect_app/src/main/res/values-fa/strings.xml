@@ -49,8 +49,7 @@
   <string name="do_not_change">انصراف</string>
   <string name="do_not_exit">انصراف</string>
   <string name="do_not_save">نادیده گرفتن تغییرات</string>
-    <string name="entering_repeat_ask">اضافه کردن گروپ جدید</string>
-  <string name="enter_data">فورم خالی را پر کنید</string>
+    <string name="enter_data">فورم خالی را پر کنید</string>
   <string name="enter_data_button">فورم خالی را پر کنید</string>
   <string name="error_occured">خطا اتفاق افتاده است</string>
   <string name="error_attaching_binary_file">در زمان ضمیمه کردن فایل رسانه ای خطا رخ داد: %s</string>

@@ -51,8 +51,7 @@
   <string name="do_not_change">Peruuta</string>
   <string name="do_not_exit">Peruuta</string>
   <string name="do_not_save">Peru muutokset</string>
-    <string name="entering_repeat_ask">Lisätäänkö uusi ryhmä?</string>
-  <string name="enter_data">Täytä tyhjä lomake</string>
+    <string name="enter_data">Täytä tyhjä lomake</string>
   <string name="enter_data_button">Täytä tyhjä lomake</string>
   <string name="error_occured">Virhe</string>
   <string name="error_attaching_binary_file">Virhe liittäessä mediaa %s </string>

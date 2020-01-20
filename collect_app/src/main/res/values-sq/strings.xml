@@ -50,8 +50,7 @@
   <string name="do_not_change">Anullo</string>
   <string name="do_not_exit">Anullo</string>
   <string name="do_not_save">Injoro ndryshimet</string>
-    <string name="entering_repeat_ask">Shto grup të ri?</string>
-  <string name="enter_data">Mbush formular bosh</string>
+    <string name="enter_data">Mbush formular bosh</string>
   <string name="enter_data_button">Mbush formular bosh</string>
   <string name="error_occured">Ndodhi një gabim</string>
   <string name="error_attaching_binary_file">Ndodhi një gabim gjatë lidhjes së medias: %s</string>

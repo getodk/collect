@@ -51,8 +51,7 @@
   <string name="do_not_change">إلغاء</string>
   <string name="do_not_exit">إلغاء</string>
   <string name="do_not_save">تجاهل التعديلات</string>
-    <string name="entering_repeat_ask">إضافة مجموعة جديدة؟</string>
-  <string name="enter_data">ملء استمارة فارغة</string>
+    <string name="enter_data">ملء استمارة فارغة</string>
   <string name="enter_data_button">ملء استمارة فارغة</string>
   <string name="error_occured">حدث خطأ</string>
   <string name="error_attaching_binary_file">حدث خطأ أثناء محاولة ارفاق الملف: %s</string>

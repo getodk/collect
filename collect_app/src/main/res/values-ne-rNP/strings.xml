@@ -51,8 +51,7 @@
   <string name="do_not_change">फिर्ता जानुहोस्</string>
   <string name="do_not_exit">फिर्ता जानुहोस्</string>
   <string name="do_not_save">परिवर्तनहरुलाई संचित नगर्नुहोस्</string>
-    <string name="entering_repeat_ask">नयाँ समूह थप्नुहुन्छ?</string>
-  <string name="enter_data">खाली फारम भर्न</string>
+    <string name="enter_data">खाली फारम भर्न</string>
   <string name="enter_data_button">खाली फारम भर्न</string>
   <string name="error_occured">गल्ती भयो </string>
   <string name="error_attaching_binary_file">मिडिया अट्याच गर्दा  त्रुटि भयो: %s</string>

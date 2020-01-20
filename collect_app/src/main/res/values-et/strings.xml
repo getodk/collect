@@ -41,8 +41,7 @@
   <string name="do_not_change">Tühista</string>
   <string name="do_not_exit">Tühista</string>
   <string name="do_not_save">Eira muudatusi</string>
-    <string name="entering_repeat_ask">Lisa uus grupp?</string>
-  <string name="enter_data">Täida vorm</string>
+    <string name="enter_data">Täida vorm</string>
   <string name="enter_data_button">Täida vorm</string>
   <string name="error_occured">Esines viga</string>
   <string name="error_attaching_binary_file">Meedia %s lisamisel esines viga </string>
