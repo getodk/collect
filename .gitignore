@@ -8,8 +8,6 @@ fieldTask-release/
 fieldTask/fieldTask-release/
 *.sublime-project
 
-*.iml
-
 # emacs backup files
 *.*~
 
