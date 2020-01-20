@@ -93,7 +93,6 @@ public class Collect extends Application {
     public static final String TMPDRAWFILE_PATH = StorageManager.CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final int DEFAULT_FONTSIZE_INT = 21;
-    public static final String SETTINGS = StorageManager.ODK_ROOT + File.separator + "settings";
 
     public static final int CLICK_DEBOUNCE_MS = 1000;
 
