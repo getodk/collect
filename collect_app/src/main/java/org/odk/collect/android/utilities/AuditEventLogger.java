@@ -125,6 +125,7 @@ public class AuditEventLogger {
         if (newAuditEvent.isIntervalAuditEventType()) {
             for (AuditEvent aev : auditEvents) {
                 if (aev.isIntervalAuditEventType()
+                        && aev.getFormIndex() != null   // smap - added to prevent crash TODO invesigate cause of null
                         && newAuditEvent.getAuditEventType().equals(aev.getAuditEventType())
                         && newAuditEvent.getFormIndex().equals(aev.getFormIndex())) {
                     return true;

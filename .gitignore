@@ -8,8 +8,6 @@ fieldTask-release/
 fieldTask/fieldTask-release/
 *.sublime-project
 
-*.iml
-
 # emacs backup files
 *.*~
 
@@ -25,6 +23,8 @@ collect_app/seracis/
 collect_app/src/seracis/
 collect_app/meqa/
 collect_app/src/meqa/
+collect_app/atempi/
+collect_app/src/atempi/
 
 # gradle env props
 secrets.properties
