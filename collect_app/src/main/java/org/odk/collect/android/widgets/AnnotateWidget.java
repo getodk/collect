@@ -173,7 +173,7 @@ public class AnnotateWidget extends BaseImageWidget {
         try {
             Uri uri = FileProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
-                    new File(StorageManager.TMPFILE_PATH));
+                    new File(StorageManager.getTmpfilePath()));
             // if this gets modified, the onActivityResult in
             // FormEntyActivity will also need to be updated.
             intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);

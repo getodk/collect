@@ -70,7 +70,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
     private final Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            CameraUtils.savePhoto(StorageManager.TMPFILE_PATH, data);
+            CameraUtils.savePhoto(StorageManager.getTmpfilePath(), data);
             setResult(RESULT_OK);
             finish();
         }

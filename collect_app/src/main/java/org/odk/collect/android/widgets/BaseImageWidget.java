@@ -262,7 +262,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 File f = new File(getInstanceFolder() + File.separator + binaryName);
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
             }
-            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(StorageManager.TMPFILE_PATH)));
+            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(StorageManager.getTmpfilePath())));
             i = addExtrasToIntent(i);
             launchActivityForResult(i, requestCode, stringResourceId);
         }

@@ -10,7 +10,6 @@ import java.io.File;
 import timber.log.Timber;
 
 public class StorageManager {
-    public static final String TMPFILE_PATH = getCachePath() + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = getCachePath() + File.separator + "tmpDraw.jpg";
 
     /**
@@ -73,5 +72,9 @@ public class StorageManager {
 
     public static String getSETTINGS() {
         return getOdkRoot() + File.separator + "settings";
+    }
+
+    public static String getTmpfilePath() {
+        return getCachePath() + File.separator + "tmp.jpg";
     }
 }
