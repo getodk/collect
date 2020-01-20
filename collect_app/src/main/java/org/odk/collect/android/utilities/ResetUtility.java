@@ -78,8 +78,8 @@ public class ResetUtility {
         GeneralSharedPreferences.getInstance().loadDefaultPreferences();
         AdminSharedPreferences.getInstance().loadDefaultPreferences();
 
-        boolean deletedSettingsFolderContest = !new File(StorageManager.SETTINGS).exists()
-                || deleteFolderContents(StorageManager.SETTINGS);
+        boolean deletedSettingsFolderContest = !new File(StorageManager.getSETTINGS()).exists()
+                || deleteFolderContents(StorageManager.getSETTINGS());
 
         boolean deletedSettingsFile = !new File(StorageManager.getOdkRoot() + "/collect.settings").exists()
                 || (new File(StorageManager.getOdkRoot() + "/collect.settings").delete());

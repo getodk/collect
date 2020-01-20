@@ -162,8 +162,8 @@ public class ResetAppStateTest {
 
         assertFalse(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
 
-        assertTrue(new File(StorageManager.SETTINGS).exists() || new File(StorageManager.SETTINGS).mkdir());
-        assertTrue(new File(StorageManager.SETTINGS + "/collect.settings").createNewFile());
+        assertTrue(new File(StorageManager.getSETTINGS()).exists() || new File(StorageManager.getSETTINGS()).mkdir());
+        assertTrue(new File(StorageManager.getSETTINGS() + "/collect.settings").createNewFile());
         assertTrue(new File(StorageManager.getOdkRoot() + "/collect.settings").createNewFile());
     }
 
