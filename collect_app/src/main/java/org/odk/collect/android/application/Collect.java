@@ -89,7 +89,6 @@ import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
  */
 public class Collect extends Application {
 
-    public static final String METADATA_PATH = StorageManager.ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = StorageManager.CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = StorageManager.CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String DEFAULT_FONTSIZE = "21";
@@ -137,7 +136,7 @@ public class Collect extends Application {
         }
 
         String[] dirs = {
-                StorageManager.ODK_ROOT, StorageManager.FORMS_PATH, StorageManager.INSTANCES_PATH, StorageManager.CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+                StorageManager.ODK_ROOT, StorageManager.FORMS_PATH, StorageManager.INSTANCES_PATH, StorageManager.CACHE_PATH, StorageManager.METADATA_PATH, OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
