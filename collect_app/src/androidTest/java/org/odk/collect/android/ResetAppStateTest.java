@@ -127,7 +127,7 @@ public class ResetAppStateTest {
     public void resetCacheTest() throws IOException {
         saveTestCacheFiles();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_CACHE));
-        assertFolderEmpty(StorageManager.CACHE_PATH);
+        assertFolderEmpty(StorageManager.getCachePath());
     }
 
     @Test
@@ -223,9 +223,9 @@ public class ResetAppStateTest {
     }
 
     private void saveTestCacheFiles() throws IOException {
-        assertTrue(new File(StorageManager.CACHE_PATH + "/testFile1").createNewFile());
-        assertTrue(new File(StorageManager.CACHE_PATH + "/testFile2").createNewFile());
-        assertTrue(new File(StorageManager.CACHE_PATH + "/testFile3").createNewFile());
+        assertTrue(new File(StorageManager.getCachePath() + "/testFile1").createNewFile());
+        assertTrue(new File(StorageManager.getCachePath() + "/testFile2").createNewFile());
+        assertTrue(new File(StorageManager.getCachePath() + "/testFile3").createNewFile());
     }
 
     private void saveTestOSMDroidFiles() throws IOException {

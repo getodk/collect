@@ -12,9 +12,8 @@ import timber.log.Timber;
 public class StorageManager {
     public static final String SETTINGS = getOdkRoot() + File.separator + "settings";
     public static final String OFFLINE_LAYERS = getOdkRoot() + File.separator + "layers";
-    public static final String CACHE_PATH = getOdkRoot() + File.separator + ".cache";
-    public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
-    public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
+    public static final String TMPFILE_PATH = getCachePath() + File.separator + "tmp.jpg";
+    public static final String TMPDRAWFILE_PATH = getCachePath() + File.separator + "tmpDraw.jpg";
 
     /**
      * Creates required directories on the SDCard (or other external storage)
@@ -29,7 +28,7 @@ public class StorageManager {
         }
 
         String[] dirs = {
-                getOdkRoot(), getFormsPath(), getInstancesPath(), CACHE_PATH, getMetadataPath(), OFFLINE_LAYERS
+                getOdkRoot(), getFormsPath(), getInstancesPath(), getCachePath(), getMetadataPath(), OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
@@ -64,5 +63,9 @@ public class StorageManager {
 
     public static String getMetadataPath() {
         return getOdkRoot() + File.separator + "metadata";
+    }
+
+    public static String getCachePath() {
+        return getOdkRoot() + File.separator + ".cache";
     }
 }

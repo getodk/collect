@@ -57,7 +57,7 @@ public class ResetUtility {
                     }
                     break;
                 case ResetAction.RESET_CACHE:
-                    if (deleteFolderContents(StorageManager.CACHE_PATH)) {
+                    if (deleteFolderContents(StorageManager.getCachePath())) {
                         failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_CACHE));
                     }
                     break;

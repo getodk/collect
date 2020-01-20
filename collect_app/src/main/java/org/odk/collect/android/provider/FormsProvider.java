@@ -200,7 +200,7 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.MD5_HASH, md5);
 
             if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-                String cachePath = StorageManager.CACHE_PATH + File.separator + md5
+                String cachePath = StorageManager.getCachePath() + File.separator + md5
                         + ".formdef";
                 values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
             }
@@ -482,7 +482,7 @@ public class FormsProvider extends ContentProvider {
                                         .getMd5Hash(new File(formFile));
                                 values.put(FormsColumns.MD5_HASH, newMd5);
                                 values.put(FormsColumns.JRCACHE_FILE_PATH,
-                                        StorageManager.CACHE_PATH + File.separator + newMd5
+                                        StorageManager.getCachePath() + File.separator + newMd5
                                                 + ".formdef");
                             }
 
