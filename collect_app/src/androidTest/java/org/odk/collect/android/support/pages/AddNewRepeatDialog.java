@@ -3,6 +3,7 @@ package org.odk.collect.android.support.pages;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.FeatureFlags;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -20,7 +21,11 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
 
     @Override
     public AddNewRepeatDialog assertOnPage() {
-        onView(withText(getTranslatedString(R.string.add_new_repeat_question, repeatName))).check(matches(isDisplayed()));
+        if (FeatureFlags.STATIC_ADD_REPEAT_LANGUAGE) {
+            onView(withText(getTranslatedString(R.string.add_repeat_question, repeatName))).check(matches(isDisplayed()));
+        } else {
+            onView(withText(getTranslatedString(R.string.add_new_repeat_question, repeatName))).check(matches(isDisplayed()));
+        }
         return this;
     }
 

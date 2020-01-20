@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.FeatureFlags;
 import org.odk.collect.android.logic.FormController;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -28,12 +29,17 @@ public class AddRepeatDialog {
             }
         };
 
-        if (formController.getLastRepeatCount() > 0) {
-            alertDialog.setMessage(context.getString(R.string.add_another_repeat_question,
+        if (FeatureFlags.STATIC_ADD_REPEAT_LANGUAGE) {
+            alertDialog.setMessage(context.getString(R.string.add_repeat_question,
                     formController.getLastGroupText()));
         } else {
-            alertDialog.setMessage(context.getString(R.string.add_new_repeat_question,
-                    formController.getLastGroupText()));
+            if (formController.getLastRepeatCount() > 0) {
+                alertDialog.setMessage(context.getString(R.string.add_another_repeat_question,
+                        formController.getLastGroupText()));
+            } else {
+                alertDialog.setMessage(context.getString(R.string.add_new_repeat_question,
+                        formController.getLastGroupText()));
+            }
         }
 
         alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.add_repeat),
