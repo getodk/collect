@@ -29,6 +29,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StorageManager;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.UriUtils;
@@ -200,7 +201,7 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.MD5_HASH, md5);
 
             if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-                String cachePath = Collect.CACHE_PATH + File.separator + md5
+                String cachePath = StorageManager.CACHE_PATH + File.separator + md5
                         + ".formdef";
                 values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
             }
@@ -482,7 +483,7 @@ public class FormsProvider extends ContentProvider {
                                         .getMd5Hash(new File(formFile));
                                 values.put(FormsColumns.MD5_HASH, newMd5);
                                 values.put(FormsColumns.JRCACHE_FILE_PATH,
-                                        Collect.CACHE_PATH + File.separator + newMd5
+                                        StorageManager.CACHE_PATH + File.separator + newMd5
                                                 + ".formdef");
                             }
 
