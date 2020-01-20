@@ -152,7 +152,7 @@ public class DrawActivity extends CollectAbstractActivity {
         if (extras == null) {
             loadOption = OPTION_DRAW;
             refImage = null;
-            savepointImage = new File(StorageManager.TMPDRAWFILE_PATH);
+            savepointImage = new File(StorageManager.getTmpdrawfilePath());
             savepointImage.delete();
             output = new File(StorageManager.getTmpfilePath());
         } else {
@@ -176,7 +176,7 @@ public class DrawActivity extends CollectAbstractActivity {
                     FileUtils.copyFile(refImage, savepointImage);
                 }
             } else {
-                savepointImage = new File(StorageManager.TMPDRAWFILE_PATH);
+                savepointImage = new File(StorageManager.getTmpdrawfilePath());
                 savepointImage.delete();
                 if (refImage != null && refImage.exists()) {
                     FileUtils.copyFile(refImage, savepointImage);

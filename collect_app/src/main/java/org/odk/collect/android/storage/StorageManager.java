@@ -10,8 +10,6 @@ import java.io.File;
 import timber.log.Timber;
 
 public class StorageManager {
-    public static final String TMPDRAWFILE_PATH = getCachePath() + File.separator + "tmpDraw.jpg";
-
     /**
      * Creates required directories on the SDCard (or other external storage)
      *
@@ -76,5 +74,9 @@ public class StorageManager {
 
     public static String getTmpfilePath() {
         return getCachePath() + File.separator + "tmp.jpg";
+    }
+
+    public static String getTmpdrawfilePath() {
+        return getCachePath() + File.separator + "tmpDraw.jpg";
     }
 }
