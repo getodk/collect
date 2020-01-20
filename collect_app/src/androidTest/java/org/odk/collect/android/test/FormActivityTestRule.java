@@ -22,7 +22,7 @@ public class FormActivityTestRule extends IntentsTestRule<FormEntryActivity> {
     @Override
     protected Intent getActivityIntent() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), FormEntryActivity.class);
-        intent.putExtra(EXTRA_TESTING_PATH, StorageManager.FORMS_PATH + "/" + formFilename);
+        intent.putExtra(EXTRA_TESTING_PATH, StorageManager.getFormsPath() + "/" + formFilename);
 
         return intent;
     }

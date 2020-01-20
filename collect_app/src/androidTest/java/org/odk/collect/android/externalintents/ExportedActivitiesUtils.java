@@ -18,7 +18,8 @@ import static org.odk.collect.android.storage.StorageManager.OFFLINE_LAYERS;
 class ExportedActivitiesUtils {
 
     private static final String[] DIRS = {
-            StorageManager.getOdkRoot(), FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+            StorageManager.getOdkRoot(),
+            StorageManager.getFormsPath(), INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
     };
 
     private ExportedActivitiesUtils() {

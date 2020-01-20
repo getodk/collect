@@ -15,7 +15,6 @@ public class StorageManager {
     public static final String METADATA_PATH = getOdkRoot() + File.separator + "metadata";
     public static final String CACHE_PATH = getOdkRoot() + File.separator + ".cache";
     public static final String INSTANCES_PATH = getOdkRoot() + File.separator + "instances";
-    public static final String FORMS_PATH = getOdkRoot() + File.separator + "forms";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
 
@@ -32,7 +31,7 @@ public class StorageManager {
         }
 
         String[] dirs = {
-                getOdkRoot(), FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+                getOdkRoot(), getFormsPath(), INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
@@ -55,5 +54,9 @@ public class StorageManager {
 
     public static String getOdkRoot() {
         return Environment.getExternalStorageDirectory() + File.separator + "odk";
+    }
+
+    public static String getFormsPath() {
+        return getOdkRoot() + File.separator + "forms";
     }
 }

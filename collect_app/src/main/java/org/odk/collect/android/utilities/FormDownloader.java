@@ -335,11 +335,11 @@ public class FormDownloader {
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
         // proposed name of xml file...
-        String path = StorageManager.FORMS_PATH + File.separator + rootName + ".xml";
+        String path = StorageManager.getFormsPath() + File.separator + rootName + ".xml";
         int i = 2;
         File f = new File(path);
         while (f.exists()) {
-            path = StorageManager.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
+            path = StorageManager.getFormsPath() + File.separator + rootName + "_" + i + ".xml";
             f = new File(path);
             i++;
         }

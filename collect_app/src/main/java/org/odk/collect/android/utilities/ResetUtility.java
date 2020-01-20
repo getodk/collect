@@ -106,7 +106,7 @@ public class ResetUtility {
 
         File itemsetDbFile = new File(StorageManager.METADATA_PATH + File.separator + ItemsetDbAdapter.DATABASE_NAME);
 
-        if (deleteFolderContents(StorageManager.FORMS_PATH) && (!itemsetDbFile.exists() || itemsetDbFile.delete())) {
+        if (deleteFolderContents(StorageManager.getFormsPath()) && (!itemsetDbFile.exists() || itemsetDbFile.delete())) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_FORMS));
         }
     }
