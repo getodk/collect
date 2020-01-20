@@ -598,7 +598,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     candidate.getName().length()
                                             - fileSuffix.length());
                     File instanceDir = new File(
-                            StorageManager.INSTANCES_PATH + File.separator
+                            StorageManager.getInstancesPath() + File.separator
                                     + instanceDirName);
                     File instanceFile = new File(instanceDir,
                             instanceDirName + ".xml");
@@ -2549,7 +2549,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Locale.ENGLISH).format(Calendar.getInstance().getTime());
         String file = formPath.substring(formPath.lastIndexOf('/') + 1,
                 formPath.lastIndexOf('.'));
-        String path = StorageManager.INSTANCES_PATH + File.separator + file + "_"
+        String path = StorageManager.getInstancesPath() + File.separator + file + "_"
                 + time;
         if (FileUtils.createFolder(path)) {
             File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");

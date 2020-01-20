@@ -19,7 +19,8 @@ class ExportedActivitiesUtils {
 
     private static final String[] DIRS = {
             StorageManager.getOdkRoot(),
-            StorageManager.getFormsPath(), INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+            StorageManager.getFormsPath(),
+            StorageManager.getInstancesPath(), CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
     };
 
     private ExportedActivitiesUtils() {

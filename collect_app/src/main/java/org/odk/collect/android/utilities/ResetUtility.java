@@ -96,7 +96,7 @@ public class ResetUtility {
     private void resetInstances() {
         new InstancesDao().deleteInstancesDatabase();
 
-        if (deleteFolderContents(StorageManager.INSTANCES_PATH)) {
+        if (deleteFolderContents(StorageManager.getInstancesPath())) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_INSTANCES));
         }
     }
