@@ -12,4 +12,5 @@ public class StorageManager {
     public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
     public static final String INSTANCES_PATH = ODK_ROOT + File.separator + "instances";
     public static final String FORMS_PATH = ODK_ROOT + File.separator + "forms";
+    public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
 }

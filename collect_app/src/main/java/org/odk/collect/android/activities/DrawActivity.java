@@ -40,6 +40,7 @@ import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimationUtils;
+import org.odk.collect.android.storage.StorageManager;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
@@ -154,7 +155,7 @@ public class DrawActivity extends CollectAbstractActivity {
             refImage = null;
             savepointImage = new File(Collect.TMPDRAWFILE_PATH);
             savepointImage.delete();
-            output = new File(Collect.TMPFILE_PATH);
+            output = new File(StorageManager.TMPFILE_PATH);
         } else {
             if (extras.getInt(SCREEN_ORIENTATION) == 1) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -186,7 +187,7 @@ public class DrawActivity extends CollectAbstractActivity {
             if (uri != null) {
                 output = new File(uri.getPath());
             } else {
-                output = new File(Collect.TMPFILE_PATH);
+                output = new File(StorageManager.TMPFILE_PATH);
             }
         }
 

@@ -27,9 +27,9 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.storage.StorageManager;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -167,7 +167,7 @@ public class ImageWidget extends BaseImageWidget {
             try {
                 Uri uri = FileProvider.getUriForFile(getContext(),
                         BuildConfig.APPLICATION_ID + ".provider",
-                        new File(Collect.TMPFILE_PATH));
+                        new File(StorageManager.TMPFILE_PATH));
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
