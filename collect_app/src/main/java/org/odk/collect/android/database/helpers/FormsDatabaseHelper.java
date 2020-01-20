@@ -52,7 +52,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
-    public static final String DATABASE_PATH = StorageManager.METADATA_PATH + File.separator + DATABASE_NAME;
+    public static final String DATABASE_PATH = StorageManager.getMetadataPath() + File.separator + DATABASE_NAME;
     public static final String FORMS_TABLE_NAME = "forms";
 
     static final int DATABASE_VERSION = 8;
@@ -76,7 +76,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static boolean isDatabaseBeingMigrated;
 
     public FormsDatabaseHelper() {
-        super(new DatabaseContext(StorageManager.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(StorageManager.getMetadataPath()), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
