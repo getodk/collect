@@ -4,10 +4,13 @@ import android.os.Environment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_USED;
 
 public class StorageManager {
     /**
@@ -85,5 +88,13 @@ public class StorageManager {
 
     public static String getTmpDrawFilePath() {
         return getCacheDirPath() + File.separator + "tmpDraw.jpg";
+    }
+
+    private static boolean isScopedStorageUsed() {
+        return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
+    }
+
+    public static void recordMigrationToScopedStorage() {
+        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
     }
 }

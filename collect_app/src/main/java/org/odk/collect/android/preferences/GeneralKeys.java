@@ -80,6 +80,7 @@ public final class GeneralKeys {
     // other keys
     public static final String KEY_LAST_VERSION             = "lastVersion";
     public static final String KEY_FIRST_RUN                = "firstRun";
+    public static final String KEY_SCOPED_STORAGE_USED      = "scoped_storage_used";
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
     static final String KEY_AUTOSEND_WIFI                   = "autosend_wifi";
@@ -144,7 +145,8 @@ public final class GeneralKeys {
             KEY_FIRST_RUN,
             KEY_METADATA_MIGRATED,
             KEY_AUTOSEND_WIFI,
-            KEY_AUTOSEND_NETWORK
+            KEY_AUTOSEND_NETWORK,
+            KEY_SCOPED_STORAGE_USED
     );
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
