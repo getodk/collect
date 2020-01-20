@@ -22,7 +22,8 @@ class ExportedActivitiesUtils {
             StorageManager.getFormsPath(),
             StorageManager.getInstancesPath(),
             StorageManager.getCachePath(),
-            StorageManager.getMetadataPath(), OFFLINE_LAYERS
+            StorageManager.getMetadataPath(),
+            StorageManager.getOfflineLayers()
     };
 
     private ExportedActivitiesUtils() {

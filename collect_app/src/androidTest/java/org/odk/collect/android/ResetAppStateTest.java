@@ -120,7 +120,7 @@ public class ResetAppStateTest {
     public void resetLayersTest() throws IOException {
         saveTestLayerFiles();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_LAYERS));
-        assertFolderEmpty(StorageManager.OFFLINE_LAYERS);
+        assertFolderEmpty(StorageManager.getOfflineLayers());
     }
 
     @Test
@@ -216,10 +216,10 @@ public class ResetAppStateTest {
     }
 
     private void saveTestLayerFiles() throws IOException {
-        assertTrue(new File(StorageManager.OFFLINE_LAYERS + "/testFile1").createNewFile());
-        assertTrue(new File(StorageManager.OFFLINE_LAYERS + "/testFile2").createNewFile());
-        assertTrue(new File(StorageManager.OFFLINE_LAYERS + "/testFile3").createNewFile());
-        assertTrue(new File(StorageManager.OFFLINE_LAYERS + "/testFile4").createNewFile());
+        assertTrue(new File(StorageManager.getOfflineLayers() + "/testFile1").createNewFile());
+        assertTrue(new File(StorageManager.getOfflineLayers() + "/testFile2").createNewFile());
+        assertTrue(new File(StorageManager.getOfflineLayers() + "/testFile3").createNewFile());
+        assertTrue(new File(StorageManager.getOfflineLayers() + "/testFile4").createNewFile());
     }
 
     private void saveTestCacheFiles() throws IOException {

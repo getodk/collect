@@ -11,7 +11,6 @@ import timber.log.Timber;
 
 public class StorageManager {
     public static final String SETTINGS = getOdkRoot() + File.separator + "settings";
-    public static final String OFFLINE_LAYERS = getOdkRoot() + File.separator + "layers";
     public static final String TMPFILE_PATH = getCachePath() + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = getCachePath() + File.separator + "tmpDraw.jpg";
 
@@ -28,7 +27,7 @@ public class StorageManager {
         }
 
         String[] dirs = {
-                getOdkRoot(), getFormsPath(), getInstancesPath(), getCachePath(), getMetadataPath(), OFFLINE_LAYERS
+                getOdkRoot(), getFormsPath(), getInstancesPath(), getCachePath(), getMetadataPath(), getOfflineLayers()
         };
 
         for (String dirName : dirs) {
@@ -67,5 +66,9 @@ public class StorageManager {
 
     public static String getCachePath() {
         return getOdkRoot() + File.separator + ".cache";
+    }
+
+    public static String getOfflineLayers() {
+        return getOdkRoot() + File.separator + "layers";
     }
 }
