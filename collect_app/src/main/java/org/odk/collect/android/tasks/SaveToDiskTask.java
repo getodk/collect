@@ -334,7 +334,7 @@ public class SaveToDiskTask {
      */
     static File getSavepointFile(String instanceName) {
         File tempDir = new File(Collect.CACHE_PATH);
-        return new File(tempDir, instanceName + ".saveAndExit");
+        return new File(tempDir, instanceName + ".save");
     }
 
     /**
