@@ -748,4 +748,32 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Enemies")
                 .checkListSizeInHierarchy(1);
     }
+
+    @Test
+    public void hierachyView_shouldNoChangeAfterScreenRotation() {
+        //TestCase29
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("Repeat Group")
+                .clickOnDoNotAddGroup(new FormEntryPage("Repeat Group", rule))
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToLandscape(new FormEntryPage("Repeat Group", rule))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToPortrait(new FormEntryPage("Repeat Group", rule))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
+
+    @Test
+    public void hierarchyView_shouldBeDisplayed() {
+        //TestCase30
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("Repeat Group")
+                .clickOnDoNotAddGroup(new FormEntryPage("Repeat Group", rule))
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .checkIsStringDisplayed(R.string.quit_entry)
+                .clickGoToArrow()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
 }

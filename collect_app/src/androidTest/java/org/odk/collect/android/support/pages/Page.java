@@ -271,6 +271,10 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T checkIfElementInHierarchyMatchesToText(String text, int index) {
+        onView(withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).check(matches(withText(text)));
+        return (T) this;
+    }
 }
 
 
