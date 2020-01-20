@@ -374,7 +374,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    Collect.createODKDirs();
+                    StorageManager.createODKDirs();
                     setupFields(savedInstanceState);
                     loadForm();
 
