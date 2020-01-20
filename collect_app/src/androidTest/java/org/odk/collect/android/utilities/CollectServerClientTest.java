@@ -26,16 +26,16 @@ public class CollectServerClientTest extends MockedServerTest {
         collectServerClient = new CollectServerClient(Collect.getInstance().getComponent().openRosaHttpInterface(), new WebCredentialsUtils());
     }
 
-        @Test
-        public void httpRequests_shouldHaveUseragentHeader() throws Exception {
-            // when
-            doRequest(url("/some-path"));
+    @Test
+    public void httpRequests_shouldHaveUseragentHeader() throws Exception {
+        // when
+        doRequest(url("/some-path"));
 
-            // then
-            RecordedRequest r = nextRequest();
-            assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
-            assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
-        }
+        // then
+        RecordedRequest r = nextRequest();
+        assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
+        assertTrue(r.getHeader("User-Agent").matches("org.odk.collect.android/.* Dalvik/.*"));
+    }
 
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
@@ -45,7 +45,7 @@ public class CollectServerClientTest extends MockedServerTest {
         // then
         String header = nextRequest().getHeader("User-Agent");
 
-        assertMatches("Dalvik/.* org.odk.collect.android/.*", header);
+        assertMatches("org.odk.collect.android/.* Dalvik/.*", header);
     }
 
     @Test
