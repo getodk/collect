@@ -10,21 +10,12 @@ import timber.log.Timber;
 
 class ExportedActivitiesUtils {
 
-    private static final String[] DIRS = {
-            StorageManager.getOdkRoot(),
-            StorageManager.getFormsPath(),
-            StorageManager.getInstancesPath(),
-            StorageManager.getCachePath(),
-            StorageManager.getMetadataPath(),
-            StorageManager.getOfflineLayers()
-    };
-
     private ExportedActivitiesUtils() {
 
     }
 
     static void clearDirectories() {
-        for (String dirName : DIRS) {
+        for (String dirName : StorageManager.getODKDirs()) {
             File dir = new File(dirName);
             if (dir.exists()) {
                 if (dir.delete()) {
@@ -36,7 +27,7 @@ class ExportedActivitiesUtils {
     }
 
     static void testDirectories() {
-        for (String dirName : DIRS) {
+        for (String dirName : StorageManager.getODKDirs()) {
             File dir = new File(dirName);
             Assert.assertTrue("File " + dirName + "does not exist", dir.exists());
             Assert.assertTrue("File" + dirName + "does not exist", dir.isDirectory());

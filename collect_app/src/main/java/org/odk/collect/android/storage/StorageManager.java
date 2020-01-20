@@ -22,11 +22,7 @@ public class StorageManager {
                     Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
         }
 
-        String[] dirs = {
-                getOdkRoot(), getFormsPath(), getInstancesPath(), getCachePath(), getMetadataPath(), getOfflineLayers()
-        };
-
-        for (String dirName : dirs) {
+        for (String dirName : getODKDirs()) {
             File dir = new File(dirName);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
@@ -42,6 +38,17 @@ public class StorageManager {
                 }
             }
         }
+    }
+
+    public static String[] getODKDirs() {
+        return new String[]{
+                getOdkRoot(),
+                getFormsPath(),
+                getInstancesPath(),
+                getCachePath(),
+                getMetadataPath(),
+                getOfflineLayers()
+            };
     }
 
     public static String getOdkRoot() {
