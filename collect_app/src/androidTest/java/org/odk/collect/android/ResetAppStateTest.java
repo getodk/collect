@@ -113,7 +113,7 @@ public class ResetAppStateTest {
         saveTestInstanceFiles();
         setupTestInstancesDatabase();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_INSTANCES));
-        assertFolderEmpty(Collect.INSTANCES_PATH);
+        assertFolderEmpty(StorageManager.INSTANCES_PATH);
     }
 
     @Test
@@ -183,7 +183,7 @@ public class ResetAppStateTest {
 
     private void setupTestInstancesDatabase() {
         ContentValues values = new ContentValues();
-        values.put(InstanceColumns.INSTANCE_FILE_PATH, Collect.INSTANCES_PATH + "/testDir1/testFile1");
+        values.put(InstanceColumns.INSTANCE_FILE_PATH, StorageManager.INSTANCES_PATH + "/testDir1/testFile1");
         values.put(InstanceColumns.SUBMISSION_URI, "submissionUri");
         values.put(InstanceColumns.DISPLAY_NAME, "displayName");
         values.put(InstanceColumns.DISPLAY_NAME, "formName");
@@ -210,9 +210,9 @@ public class ResetAppStateTest {
     }
 
     private void saveTestInstanceFiles() {
-        assertTrue(new File(Collect.INSTANCES_PATH + "/testDir1/testFile1.xml").mkdirs());
-        assertTrue(new File(Collect.INSTANCES_PATH + "/testDir2/testFile2.xml").mkdirs());
-        assertTrue(new File(Collect.INSTANCES_PATH + "/testDir3").mkdirs());
+        assertTrue(new File(StorageManager.INSTANCES_PATH + "/testDir1/testFile1.xml").mkdirs());
+        assertTrue(new File(StorageManager.INSTANCES_PATH + "/testDir2/testFile2.xml").mkdirs());
+        assertTrue(new File(StorageManager.INSTANCES_PATH + "/testDir3").mkdirs());
     }
 
     private void saveTestLayerFiles() throws IOException {

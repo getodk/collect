@@ -9,10 +9,10 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.storage.StorageManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class InstanceUploaderUtilsTest {
             long time = System.currentTimeMillis();
             Instance instance = new Instance.Builder()
                     .displayName("InstanceTest")
-                    .instanceFilePath(Collect.INSTANCES_PATH + "/InstanceTest_" + time + "/InstanceTest_" + time + ".xml")
+                    .instanceFilePath(StorageManager.INSTANCES_PATH + "/InstanceTest_" + time + "/InstanceTest_" + time + ".xml")
                     .jrFormId("instanceTest")
                     .status(InstanceProviderAPI.STATUS_COMPLETE)
                     .lastStatusChangeDate(time)

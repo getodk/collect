@@ -127,6 +127,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StorageManager;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -597,7 +598,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     candidate.getName().length()
                                             - fileSuffix.length());
                     File instanceDir = new File(
-                            Collect.INSTANCES_PATH + File.separator
+                            StorageManager.INSTANCES_PATH + File.separator
                                     + instanceDirName);
                     File instanceFile = new File(instanceDir,
                             instanceDirName + ".xml");
@@ -2548,7 +2549,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Locale.ENGLISH).format(Calendar.getInstance().getTime());
         String file = formPath.substring(formPath.lastIndexOf('/') + 1,
                 formPath.lastIndexOf('.'));
-        String path = Collect.INSTANCES_PATH + File.separator + file + "_"
+        String path = StorageManager.INSTANCES_PATH + File.separator + file + "_"
                 + time;
         if (FileUtils.createFolder(path)) {
             File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");

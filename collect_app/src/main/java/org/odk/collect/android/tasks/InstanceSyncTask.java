@@ -32,6 +32,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.storage.StorageManager;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -76,7 +77,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
         try {
             List<String> candidateInstances = new LinkedList<>();
-            File instancesPath = new File(Collect.INSTANCES_PATH);
+            File instancesPath = new File(StorageManager.INSTANCES_PATH);
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders == null || instanceFolders.length == 0) {
