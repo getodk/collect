@@ -31,6 +31,7 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StorageManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -334,11 +335,11 @@ public class FormDownloader {
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
         // proposed name of xml file...
-        String path = Collect.FORMS_PATH + File.separator + rootName + ".xml";
+        String path = StorageManager.FORMS_PATH + File.separator + rootName + ".xml";
         int i = 2;
         File f = new File(path);
         while (f.exists()) {
-            path = Collect.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
+            path = StorageManager.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
             f = new File(path);
             i++;
         }

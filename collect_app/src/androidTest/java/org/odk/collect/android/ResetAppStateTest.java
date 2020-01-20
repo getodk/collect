@@ -104,7 +104,7 @@ public class ResetAppStateTest {
         setupTestFormsDatabase();
         createTestItemsetsDatabaseFile();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_FORMS));
-        assertFolderEmpty(Collect.FORMS_PATH);
+        assertFolderEmpty(StorageManager.FORMS_PATH);
         assertFalse(new File(Collect.METADATA_PATH + "/itemsets.db").exists());
     }
 
@@ -171,10 +171,10 @@ public class ResetAppStateTest {
         ContentValues values = new ContentValues();
         values.put(FormsColumns.JRCACHE_FILE_PATH, StorageManager.ODK_ROOT + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
         values.put(FormsColumns.JR_FORM_ID, "jrFormId");
-        values.put(FormsColumns.FORM_MEDIA_PATH, Collect.FORMS_PATH + "/testFile1-media");
+        values.put(FormsColumns.FORM_MEDIA_PATH, StorageManager.FORMS_PATH + "/testFile1-media");
         values.put(FormsColumns.DATE, "1487077903756");
         values.put(FormsColumns.DISPLAY_NAME, "displayName");
-        values.put(FormsColumns.FORM_FILE_PATH, Collect.FORMS_PATH + "/testFile1.xml");
+        values.put(FormsColumns.FORM_FILE_PATH, StorageManager.FORMS_PATH + "/testFile1.xml");
         Collect.getInstance().getContentResolver()
                 .insert(FormsColumns.CONTENT_URI, values);
 
@@ -200,13 +200,13 @@ public class ResetAppStateTest {
     }
 
     private void saveTestFormFiles() throws IOException {
-        assertTrue(new File(Collect.FORMS_PATH + "/testFile1.xml").createNewFile());
-        assertTrue(new File(Collect.FORMS_PATH + "/testFile2.xml").createNewFile());
-        assertTrue(new File(Collect.FORMS_PATH + "/testFile3.xml").createNewFile());
+        assertTrue(new File(StorageManager.FORMS_PATH + "/testFile1.xml").createNewFile());
+        assertTrue(new File(StorageManager.FORMS_PATH + "/testFile2.xml").createNewFile());
+        assertTrue(new File(StorageManager.FORMS_PATH + "/testFile3.xml").createNewFile());
 
-        assertTrue(new File(Collect.FORMS_PATH + "/testDir1/testFile1-media").mkdirs());
-        assertTrue(new File(Collect.FORMS_PATH + "/testDir2/testFile2-media").mkdirs());
-        assertTrue(new File(Collect.FORMS_PATH + "/testDir3/testFile3-media/testFile.csv").mkdirs());
+        assertTrue(new File(StorageManager.FORMS_PATH + "/testDir1/testFile1-media").mkdirs());
+        assertTrue(new File(StorageManager.FORMS_PATH + "/testDir2/testFile2-media").mkdirs());
+        assertTrue(new File(StorageManager.FORMS_PATH + "/testDir3/testFile3-media/testFile.csv").mkdirs());
     }
 
     private void saveTestInstanceFiles() {

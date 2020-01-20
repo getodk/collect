@@ -7,7 +7,7 @@ import java.io.File;
 import timber.log.Timber;
 
 import static org.odk.collect.android.application.Collect.CACHE_PATH;
-import static org.odk.collect.android.application.Collect.FORMS_PATH;
+import static org.odk.collect.android.storage.StorageManager.FORMS_PATH;
 import static org.odk.collect.android.application.Collect.INSTANCES_PATH;
 import static org.odk.collect.android.application.Collect.METADATA_PATH;
 import static org.odk.collect.android.storage.StorageManager.ODK_ROOT;

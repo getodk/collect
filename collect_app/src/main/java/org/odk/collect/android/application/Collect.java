@@ -89,7 +89,6 @@ import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
  */
 public class Collect extends Application {
 
-    public static final String FORMS_PATH = StorageManager.ODK_ROOT + File.separator + "forms";
     public static final String INSTANCES_PATH = StorageManager.ODK_ROOT + File.separator + "instances";
     public static final String CACHE_PATH = StorageManager.ODK_ROOT + File.separator + ".cache";
     public static final String METADATA_PATH = StorageManager.ODK_ROOT + File.separator + "metadata";
@@ -140,7 +139,7 @@ public class Collect extends Application {
         }
 
         String[] dirs = {
-                StorageManager.ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
+                StorageManager.ODK_ROOT, StorageManager.FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
         };
 
         for (String dirName : dirs) {
