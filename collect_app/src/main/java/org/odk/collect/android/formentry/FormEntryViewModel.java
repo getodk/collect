@@ -13,12 +13,12 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
-import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskTaskResult;
 import org.odk.collect.utilities.Clock;
 
-import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED;
-import static org.odk.collect.android.tasks.SaveToDiskTask.SAVED_AND_EXIT;
+import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
+import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormEntryViewModel extends ViewModel {
@@ -134,7 +134,7 @@ public class FormEntryViewModel extends ViewModel {
                 break;
             }
 
-            case SaveToDiskTask.SAVE_ERROR: {
+            case SaveFormToDisk.SAVE_ERROR: {
                 if (auditEventLogger != null) {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.getCurrentTime());
                 }
@@ -143,7 +143,7 @@ public class FormEntryViewModel extends ViewModel {
                 break;
             }
 
-            case SaveToDiskTask.ENCRYPTION_ERROR: {
+            case SaveFormToDisk.ENCRYPTION_ERROR: {
                 if (auditEventLogger != null) {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.getCurrentTime());
                 }

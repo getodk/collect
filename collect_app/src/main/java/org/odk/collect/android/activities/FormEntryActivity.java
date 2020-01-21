@@ -129,8 +129,8 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
+import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SavePointTask;
-import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
@@ -1991,7 +1991,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
 
         if (formController != null && formController.getInstanceFile() != null) {
-            SaveToDiskTask.removeSavepointFiles(formController.getInstanceFile().getName());
+            SaveFormToDisk.removeSavepointFiles(formController.getInstanceFile().getName());
 
             // if it's not already saved, erase everything
             if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
@@ -2127,7 +2127,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void cancelSaveToDiskTask() {
         if (formEntryViewModel.isSaving()) {
             boolean cancelled = formEntryViewModel.cancelSaving();
-            Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
+            Timber.w("Cancelled form saving! (%s)", cancelled);
         }
     }
 

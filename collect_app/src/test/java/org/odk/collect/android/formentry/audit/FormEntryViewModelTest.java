@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormSaver;
+import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskTaskResult;
-import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -94,7 +94,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_saved_setsSaveResultState_toSaved() {
         LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
         assertThat(saveResult.getValue().getState(), equalTo(SAVED));
     }
 
@@ -102,7 +102,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_saved_logsFormSavedAuditEvent() {
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, CURRENT_TIME);
     }
 
@@ -110,7 +110,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_whenViewExiting_logsFormExitAuditEvent() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", true);
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, CURRENT_TIME);
     }
 
@@ -118,7 +118,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEvents() {
         viewModel.saveForm(Uri.parse("file://form"), true, "", true);
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, CURRENT_TIME);
         verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, CURRENT_TIME);
     }
@@ -127,7 +127,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_savedAndExit_setsSaveResultState_toSaved() {
         LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVED_AND_EXIT);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED_AND_EXIT);
         assertThat(saveResult.getValue().getState(), equalTo(SAVED));
     }
 
@@ -135,7 +135,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_saveError_setSaveResultState_toSaveErrorWithMessage() {
         LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVE_ERROR, "OH NO");
+        whenFormSaverFinishes(SaveFormToDisk.SAVE_ERROR, "OH NO");
         assertThat(saveResult.getValue().getState(), equalTo(SAVE_ERROR));
         assertThat(saveResult.getValue().getMessage(), equalTo("OH NO"));
     }
@@ -144,7 +144,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_saveError_logsSaveErrorAuditEvent() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVE_ERROR);
+        whenFormSaverFinishes(SaveFormToDisk.SAVE_ERROR);
         verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, CURRENT_TIME);
     }
 
@@ -152,7 +152,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_encryptionError_setSaveResultState_toFinalizeErrorWithMessage() {
         LiveData<FormEntryViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenFormSaverFinishes(SaveToDiskTask.ENCRYPTION_ERROR, "OH NO");
+        whenFormSaverFinishes(SaveFormToDisk.ENCRYPTION_ERROR, "OH NO");
         assertThat(saveResult.getValue().getState(), equalTo(FINALIZE_ERROR));
         assertThat(saveResult.getValue().getMessage(), equalTo("OH NO"));
     }
@@ -161,7 +161,7 @@ public class FormEntryViewModelTest {
     public void whenFormSaverFinishes_encryptionError_logsFinalizeErrorAuditEvent() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
-        whenFormSaverFinishes(SaveToDiskTask.ENCRYPTION_ERROR);
+        whenFormSaverFinishes(SaveFormToDisk.ENCRYPTION_ERROR);
         verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, CURRENT_TIME);
     }
 
@@ -199,7 +199,7 @@ public class FormEntryViewModelTest {
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
         assertThat(viewModel.isSaving(), equalTo(true));
 
-        whenFormSaverFinishes(SaveToDiskTask.SAVED);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
         assertThat(viewModel.isSaving(), equalTo(false));
     }
 

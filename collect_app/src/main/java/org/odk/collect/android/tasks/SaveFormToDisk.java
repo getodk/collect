@@ -69,7 +69,7 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SaveToDiskTask {
+public class SaveFormToDisk {
 
     private final boolean saveAndExit;
     private final boolean shouldFinalize;
@@ -81,7 +81,7 @@ public class SaveToDiskTask {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-    public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean shouldFinalize, String updatedName) {
+    public SaveFormToDisk(Uri uri, boolean saveAndExit, boolean shouldFinalize, String updatedName) {
         this.uri = uri;
         this.saveAndExit = saveAndExit;
         this.shouldFinalize = shouldFinalize;
