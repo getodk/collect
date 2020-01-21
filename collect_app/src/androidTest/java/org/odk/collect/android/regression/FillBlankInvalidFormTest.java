@@ -25,19 +25,19 @@ public class FillBlankInvalidFormTest extends BaseRegressionTest {
             )
             .around(new ResetStateRule())
             .around(new CopyFormRule("invalid-events.xml"))
-            .around(new CopyFormRule("asasas.xml"))
+            .around(new CopyFormRule("invalid-form.xml"))
             .around(new CopyFormRule("setlocation-and-audit-location.xml"))
             .around(new CopyFormRule("setlocation-action-instance-load.xml"));
 
 
     @Test
-    public void forms_shouldNotBeVisibleOnFormList() {
+    public void brokenForms_shouldNotBeVisibleOnFOrmList() {
         //TestCase53
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .checkIsSnackbarErrorVisible()
                 .checkIfTextDoesNotExist("Invalid events")
-                .checkIfTextDoesNotExist("asasas")
+                .checkIfTextDoesNotExist("invalid-form")
                 .checkIfTextDoesNotExist("setlocation-and-audit-location")
                 .checkIfTextDoesNotExist("setlocation-action-instance-load");
     }

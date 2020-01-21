@@ -217,4 +217,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withId(R.id.form_back_button)).check(matches(not(isDisplayed())));
         return this;
     }
+
+    public FormEntryPage checkIsFormEndScreenVisible() {
+        onView(withText(R.string.quit_entry)).check(matches(isDisplayed()));
+        return this;
+    }
 }

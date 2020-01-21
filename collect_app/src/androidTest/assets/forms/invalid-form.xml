@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <h:head>
-      <h:title>asasas</h:title>
+      <h:title>invalid-form</h:title>
       <model>
          <itext>
             <translation lang="English">

@@ -621,7 +621,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void selectedAnswer_shouldBeDisplayed() {
+    public void when_chooseAnswer_should_beVisibleInNextQuestion() {
         //TestCase52
         new MainMenuPage(rule)
                 .startBlankFormWithRepeatGroup("CalcTest")
@@ -636,7 +636,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void questions_shouldNotDisappear() {
+    public void when_scrollQuestionsList_should_questionsNotDisappear() {
         //TestCase54
         new MainMenuPage(rule)
                 .startBlankForm("3403_ODK Version 1.23.3 Tester")
@@ -646,7 +646,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void missingFileMessage_shouldBeDisplayed() {
+    public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
         //TestCase55
         new MainMenuPage(rule)
                 .startBlankForm("search_and_select")
@@ -691,7 +691,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void backwardButton_shouldNotBeClickable() {
+    public void backwardButton_shouldNotBeClickableOnTheFirstFormPage() {
         //TestCase14
         new MainMenuPage(rule)
                 .startBlankForm("All widgets")
@@ -714,7 +714,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void groups_shouldBeVisibleInJumpScreen() {
+    public void groups_shouldBeVisibleInHierarchyView() {
         //TestCase28
         new MainMenuPage(rule)
                 .startBlankForm("nested-repeats-complex")
@@ -750,7 +750,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void hierachyView_shouldNoChangeAfterScreenRotation() {
+    public void hierachyView_shouldNotChangeAfterScreenRotation() {
         //TestCase29
         new MainMenuPage(rule)
                 .startBlankFormWithRepeatGroup("Repeat Group")
@@ -765,14 +765,14 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void hierarchyView_shouldBeDisplayed() {
+    public void when_openHierarchyViewFromLastPage_should_mainGroupViewBeVisible() {
         //TestCase30
         new MainMenuPage(rule)
                 .startBlankFormWithRepeatGroup("Repeat Group")
                 .clickOnDoNotAddGroup(new FormEntryPage("Repeat Group", rule))
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .checkIsStringDisplayed(R.string.quit_entry)
+                .checkIsFormEndScreenVisible()
                 .clickGoToArrow()
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }
