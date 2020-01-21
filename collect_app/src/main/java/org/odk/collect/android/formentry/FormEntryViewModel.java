@@ -97,10 +97,6 @@ public class FormEntryViewModel extends ViewModel {
         return reason;
     }
 
-    private void setSaveRequestState(SaveToDiskTaskResult saveToDiskTaskResult, SaveResult.State state, SaveRequest request) {
-        this.saveResult.setValue(new SaveResult(state, request, saveToDiskTaskResult.getSaveErrorMessage()));
-    }
-
     private void saveToDisk(SaveRequest saveRequest) {
         saveTask = new SaveTask(saveRequest, formSaver, new SaveTask.Listener() {
             @Override
@@ -134,7 +130,7 @@ public class FormEntryViewModel extends ViewModel {
                     }
                 }
 
-                setSaveRequestState(taskResult, SaveResult.State.SAVED, saveResult.request);
+                this.saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveResult.request, taskResult.getSaveErrorMessage()));
                 break;
             }
 
@@ -143,7 +139,7 @@ public class FormEntryViewModel extends ViewModel {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.getCurrentTime());
                 }
 
-                setSaveRequestState(taskResult, SaveResult.State.SAVE_ERROR, saveResult.request);
+                this.saveResult.setValue(new SaveResult(SaveResult.State.SAVE_ERROR, saveResult.request, taskResult.getSaveErrorMessage()));
                 break;
             }
 
@@ -152,7 +148,7 @@ public class FormEntryViewModel extends ViewModel {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.getCurrentTime());
                 }
 
-                setSaveRequestState(taskResult, SaveResult.State.FINALIZE_ERROR, saveResult.request);
+                this.saveResult.setValue(new SaveResult(SaveResult.State.FINALIZE_ERROR, saveResult.request, taskResult.getSaveErrorMessage()));
                 break;
             }
 
@@ -163,7 +159,7 @@ public class FormEntryViewModel extends ViewModel {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
                 }
 
-                setSaveRequestState(taskResult, SaveResult.State.CONSTRAINT_ERROR, saveResult.request);
+                this.saveResult.setValue(new SaveResult(SaveResult.State.CONSTRAINT_ERROR, saveResult.request, taskResult.getSaveErrorMessage()));
                 break;
             }
         }
