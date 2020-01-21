@@ -39,7 +39,8 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
             .around(new CopyFormRule("form9.xml"))
             .around(new CopyFormRule("RepeatGroupAndGroup.xml"))
             .around(new CopyFormRule("basic.xml"))
-            .around(new CopyFormRule("repeat_group_form.xml"));
+            .around(new CopyFormRule("repeat_group_form.xml"))
+            .around(new CopyFormRule("repeat_group_new.xml"));
 
     @Test
     public void whenNoRepeatGroupAdded_ShouldNotDoubleLastQuestion() {
@@ -159,6 +160,41 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .clickOnDoNotAddGroup()
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void whenPageBehindRepeatGroupWithRegularGroupInsideIsVisible_ShouldBeAbleToSwipeBack  () {
+
+        //TestCase7
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("RepeatGroupNew")
+                .clickOnAddGroup(new FormEntryPage("RepeatGroupNew", rule))
+                .inputText("A")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("1")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("B")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("2")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("C")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("3")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .swipeToPreviousQuestion()
+                .checkIsTextDisplayed("3")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
                 .clickSaveAndExit();
     }
 

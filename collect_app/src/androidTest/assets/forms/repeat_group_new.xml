@@ -1,0 +1,51 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>RepeatGroupNew</h:title>
+    <model>
+      <instance>
+        <data id="build_Untitled-Form_150757354889">
+          <meta>
+            <instanceID/>
+          </meta>
+          <RepeatGroup jr:template="">
+            <Name/>
+            <Age/>
+          </RepeatGroup>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/RepeatGroup:label">
+            <value>RepeatGroup</value>
+          </text>
+          <text id="/data/RepeatGroup/Name:label">
+            <value>Name</value>
+          </text>
+          <text id="/data/RepeatGroup/Age:label">
+            <value>Age</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/RepeatGroup/Name" type="string"/>
+      <bind nodeset="/data/RepeatGroup/Age" type="int"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label>People</label>
+      <repeat nodeset="/data/RepeatGroup">
+	<group>
+        <label>Person: <output value="/data/RepeatGroup/Name"/></label>
+        <input ref="/data/RepeatGroup/Name">
+          <label ref="jr:itext('/data/RepeatGroup/Name:label')"/>
+        </input>
+        <input ref="/data/RepeatGroup/Age">
+          <label ref="jr:itext('/data/RepeatGroup/Age:label')"/>
+        </input>
+	</group>
+      </repeat>
+    </group>
+
+  </h:body>
+</h:html>
