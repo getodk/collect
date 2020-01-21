@@ -89,8 +89,8 @@ public class SaveFormToDisk {
     }
 
     @Nullable
-    public SaveToDiskTaskResult saveForm(FormSaver.ProgressListener progressListener) {
-        SaveToDiskTaskResult saveToDiskTaskResult = new SaveToDiskTaskResult();
+    public SaveToDiskResult saveForm(FormSaver.ProgressListener progressListener) {
+        SaveToDiskResult saveToDiskResult = new SaveToDiskResult();
 
         FormController formController = Collect.getInstance().getFormController();
         progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_validating_message));
@@ -99,8 +99,8 @@ public class SaveFormToDisk {
             int validateStatus = formController.validateAnswers(shouldFinalize);
             if (validateStatus != FormEntryController.ANSWER_OK) {
                 // validation failed, pass specific failure
-                saveToDiskTaskResult.setSaveResult(validateStatus, shouldFinalize);
-                return saveToDiskTaskResult;
+                saveToDiskResult.setSaveResult(validateStatus, shouldFinalize);
+                return saveToDiskResult;
             }
         } catch (Exception e) {
             Timber.e(e);
@@ -108,9 +108,9 @@ public class SaveFormToDisk {
             // SCTO-825
             // that means that we have a bad design
             // save the exception to be used in the error dialog.
-            saveToDiskTaskResult.setSaveErrorMessage(e.getMessage());
-            saveToDiskTaskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
-            return saveToDiskTaskResult;
+            saveToDiskResult.setSaveErrorMessage(e.getMessage());
+            saveToDiskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
+            return saveToDiskResult;
         }
 
         if (shouldFinalize) {
@@ -134,18 +134,18 @@ public class SaveFormToDisk {
                 removeSavepointFiles(formController.getInstanceFile().getName());
             }
 
-            saveToDiskTaskResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, shouldFinalize);
+            saveToDiskResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, shouldFinalize);
         } catch (EncryptionException e) {
-            saveToDiskTaskResult.setSaveErrorMessage(e.getMessage());
-            saveToDiskTaskResult.setSaveResult(ENCRYPTION_ERROR, shouldFinalize);
+            saveToDiskResult.setSaveErrorMessage(e.getMessage());
+            saveToDiskResult.setSaveResult(ENCRYPTION_ERROR, shouldFinalize);
         } catch (Exception e) {
             Timber.e(e);
 
-            saveToDiskTaskResult.setSaveErrorMessage(e.getMessage());
-            saveToDiskTaskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
+            saveToDiskResult.setSaveErrorMessage(e.getMessage());
+            saveToDiskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
         }
 
-        return saveToDiskTaskResult;
+        return saveToDiskResult;
     }
 
     /**

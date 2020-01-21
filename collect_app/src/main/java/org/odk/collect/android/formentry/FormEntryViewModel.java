@@ -14,7 +14,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.tasks.SaveFormToDisk;
-import org.odk.collect.android.tasks.SaveToDiskTaskResult;
+import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.utilities.Clock;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
@@ -105,13 +105,13 @@ public class FormEntryViewModel extends ViewModel {
             }
 
             @Override
-            public void onSaveComplete(SaveToDiskTaskResult saveToDiskTaskResult) {
-                handleTaskResult(saveToDiskTaskResult);
+            public void onComplete(SaveToDiskResult saveToDiskResult) {
+                handleTaskResult(saveToDiskResult);
             }
         }).execute();
     }
 
-    private void handleTaskResult(SaveToDiskTaskResult taskResult) {
+    private void handleTaskResult(SaveToDiskResult taskResult) {
         SaveResult saveResult = this.saveResult.getValue();
 
         switch (taskResult.getSaveResult()) {
@@ -229,7 +229,7 @@ public class FormEntryViewModel extends ViewModel {
         }
     }
 
-    private static class SaveTask extends AsyncTask<Void, String, SaveToDiskTaskResult> {
+    private static class SaveTask extends AsyncTask<Void, String, SaveToDiskResult> {
 
         private final SaveRequest saveRequest;
         private final FormSaver formSaver;
@@ -243,7 +243,7 @@ public class FormEntryViewModel extends ViewModel {
         }
 
         @Override
-        protected SaveToDiskTaskResult doInBackground(Void... voids) {
+        protected SaveToDiskResult doInBackground(Void... voids) {
             return formSaver.save(
                     saveRequest.uri,
                     saveRequest.shouldFinalize,
@@ -259,14 +259,14 @@ public class FormEntryViewModel extends ViewModel {
         }
 
         @Override
-        protected void onPostExecute(SaveToDiskTaskResult saveToDiskTaskResult) {
-            listener.onSaveComplete(saveToDiskTaskResult);
+        protected void onPostExecute(SaveToDiskResult saveToDiskResult) {
+            listener.onComplete(saveToDiskResult);
         }
 
         interface Listener {
             void onProgressPublished(String progress);
 
-            void onSaveComplete(SaveToDiskTaskResult saveToDiskTaskResult);
+            void onComplete(SaveToDiskResult saveToDiskResult);
         }
     }
 
