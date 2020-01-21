@@ -21,7 +21,7 @@ import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
-public class FormEntryViewModel extends ViewModel {
+public class FormSaveViewModel extends ViewModel {
 
     private final Clock clock;
     private final FormSaver formSaver;
@@ -35,7 +35,7 @@ public class FormEntryViewModel extends ViewModel {
     @Nullable
     private AsyncTask saveTask;
 
-    public FormEntryViewModel(Clock clock, FormSaver formSaver) {
+    public FormSaveViewModel(Clock clock, FormSaver formSaver) {
         this.clock = clock;
         this.formSaver = formSaver;
     }
@@ -275,7 +275,7 @@ public class FormEntryViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(System::currentTimeMillis, new DiskFormSaver());
+            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver());
         }
     }
 }

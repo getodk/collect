@@ -16,15 +16,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormSaveViewModel;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
     private static final String ARG_FORM_NAME = "ArgFormName";
-    private FormEntryViewModel viewModel;
+    private FormSaveViewModel viewModel;
 
-    public ViewModelProvider.Factory viewModelFactory = new FormEntryViewModel.Factory();
+    public ViewModelProvider.Factory viewModelFactory = new FormSaveViewModel.Factory();
 
     public static ChangesReasonPromptDialogFragment create(String formName) {
         ChangesReasonPromptDialogFragment fragment = new ChangesReasonPromptDialogFragment();
@@ -81,7 +81,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(FormSaveViewModel.class);
     }
 
     @Override
