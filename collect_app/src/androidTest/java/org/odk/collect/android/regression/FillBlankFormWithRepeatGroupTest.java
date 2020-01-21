@@ -39,7 +39,9 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
             .around(new CopyFormRule("form9.xml"))
             .around(new CopyFormRule("RepeatGroupAndGroup.xml"))
             .around(new CopyFormRule("basic.xml"))
-            .around(new CopyFormRule("repeat_group_form.xml"));
+            .around(new CopyFormRule("repeat_group_form.xml"))
+            .around(new CopyFormRule("repeat_group_new.xml"))
+            .around(new CopyFormRule("RepeatTitles_1648.xml"));
 
     @Test
     public void whenNoRepeatGroupAdded_ShouldNotDoubleLastQuestion() {
@@ -58,6 +60,40 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .clickOnDoNotAddGroup()
                 .clickOnDoNotAddGroup()
                 .clickForwardButton()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void dynamicGroupLabel_should_beCalculatedProperly() {
+
+        //TestCase3
+        new MainMenuPage(rule)
+                .startBlankForm("Repeat titles 1648")
+                .inputText("test")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("FirstPerson")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("25")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("gr1 > 1 > Person: 25")
+                .clickGoToArrow()
+                .checkIsTextDisplayed("gr1 > 1 > Person: 25")
+                .clickOnText("Photo")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .inputText("SecondPart")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("Part1 > 1 > Xxx: SecondPart")
+                .clickGoToArrow()
+                .checkIsTextDisplayed("Part1 > 1 > Xxx: SecondPart")
+                .clickOnText("Date")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
                 .clickSaveAndExit();
     }
 
@@ -159,6 +195,74 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .clickOnDoNotAddGroup()
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void when_pageBehindRepeatGroupWithRegularGroupInsideIsVisible_should_swipeBackWork() {
+
+        //TestCase7
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("RepeatGroupNew")
+                .clickOnAddGroup(new FormEntryPage("RepeatGroupNew", rule))
+                .inputText("A")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("1")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("B")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("2")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("C")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("3")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .swipeToPreviousQuestion()
+                .checkIsTextDisplayed("3")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void when_navigateOnHierarchyView_should_breadcrumbPathBeVisible() {
+
+        //TestCase8
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("RepeatGroupNew")
+                .clickOnAddGroup(new FormEntryPage("RepeatGroupNew", rule))
+                .inputText("A")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("1")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("B")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("2")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("C")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("3")
+                .clickGoToArrow()
+                .checkIsTextDisplayed("People > 3 > Person: C")
+                .clickGoUpIcon()
+                .checkIsTextDisplayed("3.\u200E Person: C")
+                .clickJumpEndButton()
                 .clickSaveAndExit();
     }
 
