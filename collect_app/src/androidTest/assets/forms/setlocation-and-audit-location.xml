@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+  xmlns:h="http://www.w3.org/1999/xhtml" 
+  xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>setlocation-and-audit-location</h:title>
+    <model>
+      <instance>
+        <setlocation-and-audit-location id="setlocation-and-audit-location">
+          <location/>
+
+          <question1/>
+          <question2/>
+          <question3/>
+
+          <meta>
+            <audit/>
+            <instanceID/>
+          </meta>
+        </setlocation-and-audit-location>
+      </instance>
+      <bind nodeset="/setlocation-and-audit-location/question1" type="string"/>
+      <bind nodeset="/setlocation-and-audit-location/question2" type="int"/>
+      <bind nodeset="/setlocation-and-audit-location/question3" type="string"/>
+      <bind nodeset="/setlocation-and-audit-location/location" type="geopoint"/>
+      <bind nodeset="/setlocation-and-audit-location/meta/audit" odk:location-max-age="120" odk:location-min-interval="60" odk:location-priority="balanced" type="binary"/>
+
+      <odk:setlocation ref="/setlocation-and-audit-location/location" event="odk-instance-first-load" />
+
+      <bind calculate="concat('uuid:', uuid())" nodeset="/setlocation-and-audit-location/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/setlocation-and-audit-location/question1">
+      <label>Question 1</label>
+    </input>
+    <input ref="/setlocation-and-audit-location/question2">
+      <label>Question 2</label>
+    </input>
+    <input ref="/setlocation-and-audit-location/question3">
+      <label>Question 3</label>
+    </input>
+  </h:body>
+</h:html>

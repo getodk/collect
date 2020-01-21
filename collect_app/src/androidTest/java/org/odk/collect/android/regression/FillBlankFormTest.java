@@ -25,6 +25,7 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,7 +70,15 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("Birds-encrypted.xml"))
             .around(new CopyFormRule("validate.xml"))
             .around(new CopyFormRule("event-odk-new-repeat.xml"))
-            .around(new CopyFormRule("multiple-events.xml"));
+            .around(new CopyFormRule("multiple-events.xml"))
+            .around(new CopyFormRule("CalcTest.xml"))
+            .around(new CopyFormRule("3403.xml", Arrays.asList("staff_list.csv", "staff_rights.csv")))
+            .around(new CopyFormRule("CalcTest.xml"))
+            .around(new CopyFormRule("search_and_select.xml"))
+            .around(new CopyFormRule("select_one_external.xml"))
+            .around(new CopyFormRule("fieldlist-updates_nocsv.xml"))
+            .around(new CopyFormRule("nested-repeats-complex.xml"))
+            .around(new CopyFormRule("repeat_group_form.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -611,4 +620,160 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickSaveAndExit();
     }
 
+    @Test
+    public void when_chooseAnswer_should_beVisibleInNextQuestion() {
+        //TestCase52
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("CalcTest")
+                .clickOnAddGroup(new FormEntryPage("CalcTest", rule))
+                .clickOnText("Gillnet")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("* 7.2 What is the size of the mesh for the Gillnet ?")
+                .swipeToPreviousQuestion()
+                .clickOnText("Seinenet")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("* 7.2 What is the size of the mesh for the Seinenet ?");
+    }
+
+    @Test
+    public void when_scrollQuestionsList_should_questionsNotDisappear() {
+        //TestCase54
+        new MainMenuPage(rule)
+                .startBlankForm("3403_ODK Version 1.23.3 Tester")
+                .clickOnText("New Farmer Registration")
+                .scrollToAndClickText("Insemination")
+                .scrollToAndCheckIsDisplayed("New Farmer Registration");
+    }
+
+    @Test
+    public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
+        //TestCase55
+        new MainMenuPage(rule)
+                .startBlankForm("search_and_select")
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre.csv is missing.")
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre2.csv is missing.")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+
+                .startBlankForm("cascading select test")
+                .clickOnText("Texas")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .swipeToNextQuestion()
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .swipeToNextQuestion(4)
+                .clickSaveAndExit()
+
+                .startBlankForm("fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnElementInHierarchy(14)
+                .clickOnText("Source15")
+                .checkIsTextDisplayed("File: /storage/emulated/0/odk/forms/fieldlist-updates_nocsv-media/fruits.csv is missing.")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void changedName_shouldNotDisappearAfterScreenRotation() {
+        //TestCase13
+        new MainMenuPage(rule)
+                .startBlankForm("All widgets")
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .clickOnId(R.id.save_name)
+                .inputText("submission")
+                .closeSoftKeyboard()
+                .rotateToLandscape(new FormEntryPage("All widgets", rule))
+                .checkIsTextDisplayed("submission")
+                .rotateToPortrait(new FormEntryPage("All widgets", rule))
+                .checkIsTextDisplayed("submission");
+    }
+
+    @Test
+    public void backwardButton_shouldNotBeClickableOnTheFirstFormPage() {
+        //TestCase14
+        new MainMenuPage(rule)
+                .startBlankForm("All widgets")
+                .checkAreNavigationButtonsNotDisplayed()
+                .clickOptionsIcon()
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickNavigation()
+                .clickUseNavigationButtons()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed()
+                .rotateToLandscape(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed()
+                .rotateToPortrait(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed();
+    }
+
+    @Test
+    public void groups_shouldBeVisibleInHierarchyView() {
+        //TestCase28
+        new MainMenuPage(rule)
+                .startBlankForm("nested-repeats-complex")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("La")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("Le")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("Be")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroup()
+                .clickOnAddGroup()
+                .inputText("Bu")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickGoToArrow()
+                .clickOnText("Friends")
+                .checkListSizeInHierarchy(1)
+                .clickOnElementInHierarchy(0)
+                .clickOnText("Pets")
+                .checkListSizeInHierarchy(2)
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("Enemies")
+                .checkListSizeInHierarchy(1);
+    }
+
+    @Test
+    public void hierachyView_shouldNotChangeAfterScreenRotation() {
+        //TestCase29
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("Repeat Group")
+                .clickOnDoNotAddGroup(new FormEntryPage("Repeat Group", rule))
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToLandscape(new FormEntryPage("Repeat Group", rule))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToPortrait(new FormEntryPage("Repeat Group", rule))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
+
+    @Test
+    public void when_openHierarchyViewFromLastPage_should_mainGroupViewBeVisible() {
+        //TestCase30
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("Repeat Group")
+                .clickOnDoNotAddGroup(new FormEntryPage("Repeat Group", rule))
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .checkIsFormEndScreenVisible()
+                .clickGoToArrow()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
 }

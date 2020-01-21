@@ -1,0 +1,2 @@
+staff_code,staff_userid,staff_name,staff_password,stafftype_code,stafftype_name,country_code,country_name,does_admin_activities, does_registration_activities,does_farmextra_activities,does_cattlemgmt_activities,does_breeding_activities,does_monitoring_activities,does_group_activities,does_calfmonitoring_activities,does_farmmonitoring_activities
+4,hnjamba,Harrison Njamba,111a222B,1,Data Manager,0,All Countries,1,1,1,1,1,1,1,1,1
