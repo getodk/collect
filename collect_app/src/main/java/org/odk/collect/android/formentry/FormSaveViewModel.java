@@ -50,8 +50,8 @@ public class FormSaveViewModel extends ViewModel {
         }
     }
 
-    public LiveData<SaveResult> saveForm(Uri uri, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
-        SaveRequest saveRequest = new SaveRequest(shouldFinalize, viewExiting, updatedSaveName, uri);
+    public LiveData<SaveResult> saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
+        SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
 
         if (!requiresReasonToSave()) {
             saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
@@ -213,11 +213,11 @@ public class FormSaveViewModel extends ViewModel {
         private final String updatedSaveName;
         private final Uri uri;
 
-        SaveRequest(boolean shouldFinalize, boolean viewExiting, String updatedSaveName, Uri uri) {
+        SaveRequest(Uri instanceContentURI, boolean viewExiting, String updatedSaveName, boolean shouldFinalize) {
             this.shouldFinalize = shouldFinalize;
             this.viewExiting = viewExiting;
             this.updatedSaveName = updatedSaveName;
-            this.uri = uri;
+            this.uri = instanceContentURI;
         }
 
         boolean shouldFinalize() {
