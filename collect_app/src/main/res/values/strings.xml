@@ -308,6 +308,20 @@
     <string name="tell_your_friends_msg">Are your colleagues still collecting data on paper? Share ODK Collect with them.</string>
     <string name="leave_a_review">Leave a Play Store review</string>
     <string name="leave_a_review_msg">Your (hopefully positive) review increases the visibility of the App in the Play Store.</string>
+    <!-- Fix labels for Google Maps with reference layer -->
+    <string name="google_map_labels_switch">
+                  [
+                    {
+                      \"featureType\": \"all\",
+                      \"elementType\": \"labels\",
+                      \"stylers\": [
+                        {
+                          \"visibility\": \"%s\"
+                        }
+                      ]
+                    }
+                  ]
+    </string>
     <!-- Geo string added in feature-geofeatures branch-->
 
     <string name="maps">Maps</string>
