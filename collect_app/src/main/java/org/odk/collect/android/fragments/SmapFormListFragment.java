@@ -14,9 +14,11 @@
 
 package org.odk.collect.android.fragments;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -35,11 +37,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.FormChooserListActivity;
 import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
@@ -48,6 +52,8 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -503,9 +509,18 @@ public class SmapFormListFragment extends ListFragment {
             i.putExtra("id", task.id);
 
             startActivity(i);
+        } else {
+            final Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, task.id);
+            final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, getActivity(), FormMapActivity.class);
+            new PermissionUtils().requestLocationPermissions(getActivity(), new PermissionListener() {
+                @Override public void granted() {
+                    startActivity(intent);
+                }
+
+                @Override public void denied() { }
+            });
         }
         return true;
     }
-
 
 }

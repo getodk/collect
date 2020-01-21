@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath 'com.google.gms:google-services:4.3.2'
         classpath 'org.ow2.asm:asm:7.2' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.5'
