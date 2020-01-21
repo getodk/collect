@@ -106,9 +106,13 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 icon.setImageDrawable(d);
             }
     	}
-    	
-    	
-    	TextView taskNameText = (TextView) view.findViewById(R.id.toptext);
+
+    	// mqp
+        String xpath = "x"; // TODO
+        View mapIconView = view.findViewById(R.id.map_view);
+        mapIconView.setVisibility(xpath != null ? View.VISIBLE : View.GONE);
+
+    	TextView taskNameText = view.findViewById(R.id.toptext);
     	if (taskNameText != null) {
             taskNameText.setText(item.name + " (v:" + item.formVersion + ")");
         }

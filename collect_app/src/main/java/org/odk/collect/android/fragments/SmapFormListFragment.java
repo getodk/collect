@@ -121,17 +121,7 @@ public class SmapFormListFragment extends ListFragment {
         rootView = inflater.inflate(R.layout.smap_task_layout, container, false);
 
         setHasOptionsMenu(true);
-        /*
-        if(getUserVisibleHint()) { // fragment is visible
-            SmapMain main = (SmapMain) getActivity();
-            if (main != null) {
-                MapEntry data = main.getData();
-                if (data != null) {
-                    setData(data);
-                }
-            }
-        }
-        */
+
         return rootView;
     }
 
@@ -223,21 +213,6 @@ public class SmapFormListFragment extends ListFragment {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        /*
-        if (isVisibleToUser) {
-            SmapMain main = (SmapMain) getActivity();
-            if(main != null) {
-                MapEntry data = main.getData();
-                if (data != null) {
-                    setData(data);
-                }
-            }
-        }
-        */
     }
 
     protected String getSortingOrderKey() {
