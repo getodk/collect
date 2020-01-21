@@ -164,7 +164,7 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
     }
 
     @Test
-    public void whenPageBehindRepeatGroupWithRegularGroupInsideIsVisible_ShouldBeAbleToSwipeBack  () {
+    public void when_pageBehindRepeatGroupWithRegularGroupInsideIsVisible_should_swipeBackWork() {
 
         //TestCase7
         new MainMenuPage(rule)
@@ -195,6 +195,39 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
                 .checkIsTextDisplayed("3")
                 .swipeToNextQuestion()
                 .clickOnDoNotAddGroup()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void when_navigateOnHierarchyView_should_breadcrumbPathBeVisible() {
+
+        //TestCase8
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("RepeatGroupNew")
+                .clickOnAddGroup(new FormEntryPage("RepeatGroupNew", rule))
+                .inputText("A")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("1")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("B")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("2")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("C")
+                .closeSoftKeyboard()
+                .swipeToNextQuestion()
+                .inputText("3")
+                .clickGoToArrow()
+                .checkIsTextDisplayed("People > 3 > Person: C")
+                .clickGoUpIcon()
+                .checkIsTextDisplayed("3.\u200E Person: C")
+                .clickJumpEndButton()
                 .clickSaveAndExit();
     }
 
