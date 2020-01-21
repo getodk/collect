@@ -72,7 +72,7 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 public class SaveToDiskTask {
 
     private final boolean saveAndExit;
-    private final boolean markCompleted;
+    private final boolean shouldFinalize;
     private Uri uri;
     private String instanceName;
 
@@ -81,10 +81,10 @@ public class SaveToDiskTask {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-    public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName) {
+    public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean shouldFinalize, String updatedName) {
         this.uri = uri;
         this.saveAndExit = saveAndExit;
-        this.markCompleted = markCompleted;
+        this.shouldFinalize = shouldFinalize;
         instanceName = updatedName;
     }
 
@@ -93,14 +93,13 @@ public class SaveToDiskTask {
         SaveToDiskTaskResult saveToDiskTaskResult = new SaveToDiskTaskResult();
 
         FormController formController = Collect.getInstance().getFormController();
-
         progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_validating_message));
 
         try {
-            int validateStatus = formController.validateAnswers(markCompleted);
+            int validateStatus = formController.validateAnswers(shouldFinalize);
             if (validateStatus != FormEntryController.ANSWER_OK) {
                 // validation failed, pass specific failure
-                saveToDiskTaskResult.setSaveResult(validateStatus, markCompleted);
+                saveToDiskTaskResult.setSaveResult(validateStatus, shouldFinalize);
                 return saveToDiskTaskResult;
             }
         } catch (Exception e) {
@@ -110,11 +109,11 @@ public class SaveToDiskTask {
             // that means that we have a bad design
             // save the exception to be used in the error dialog.
             saveToDiskTaskResult.setSaveErrorMessage(e.getMessage());
-            saveToDiskTaskResult.setSaveResult(SAVE_ERROR, markCompleted);
+            saveToDiskTaskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
             return saveToDiskTaskResult;
         }
 
-        if (markCompleted) {
+        if (shouldFinalize) {
             formController.postProcessInstance();
         }
 
@@ -129,21 +128,21 @@ public class SaveToDiskTask {
         }
 
         try {
-            exportData(markCompleted, progressListener);
+            exportData(shouldFinalize, progressListener);
 
             if (formController.getInstanceFile() != null) {
                 removeSavepointFiles(formController.getInstanceFile().getName());
             }
 
-            saveToDiskTaskResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, markCompleted);
+            saveToDiskTaskResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, shouldFinalize);
         } catch (EncryptionException e) {
             saveToDiskTaskResult.setSaveErrorMessage(e.getMessage());
-            saveToDiskTaskResult.setSaveResult(ENCRYPTION_ERROR, markCompleted);
+            saveToDiskTaskResult.setSaveResult(ENCRYPTION_ERROR, shouldFinalize);
         } catch (Exception e) {
             Timber.e(e);
 
             saveToDiskTaskResult.setSaveErrorMessage(e.getMessage());
-            saveToDiskTaskResult.setSaveResult(SAVE_ERROR, markCompleted);
+            saveToDiskTaskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
         }
 
         return saveToDiskTaskResult;
@@ -165,7 +164,7 @@ public class SaveToDiskTask {
         if (instanceName != null) {
             values.put(InstanceColumns.DISPLAY_NAME, instanceName);
         }
-        if (incomplete || !markCompleted) {
+        if (incomplete || !shouldFinalize) {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         } else {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);

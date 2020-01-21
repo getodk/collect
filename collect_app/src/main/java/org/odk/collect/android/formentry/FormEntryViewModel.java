@@ -50,8 +50,8 @@ public class FormEntryViewModel extends ViewModel {
         }
     }
 
-    public LiveData<SaveResult> saveForm(Uri uri, boolean complete, String updatedSaveName, boolean viewExiting) {
-        SaveRequest saveRequest = new SaveRequest(complete, viewExiting, updatedSaveName, uri);
+    public LiveData<SaveResult> saveForm(Uri uri, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
+        SaveRequest saveRequest = new SaveRequest(shouldFinalize, viewExiting, updatedSaveName, uri);
 
         if (!requiresReasonToSave()) {
             saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
@@ -125,7 +125,7 @@ public class FormEntryViewModel extends ViewModel {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, clock.getCurrentTime());
 
                     if (saveResult.request.isViewExiting()) {
-                        if (saveResult.request.isFormComplete()) {
+                        if (saveResult.request.shouldFinalize()) {
                             auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.getCurrentTime());
                             auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.getCurrentTime());
                         } else {
@@ -212,20 +212,20 @@ public class FormEntryViewModel extends ViewModel {
 
     private static class SaveRequest {
 
-        private final boolean formComplete;
+        private final boolean shouldFinalize;
         private final boolean viewExiting;
         private final String updatedSaveName;
         private final Uri uri;
 
-        SaveRequest(boolean formComplete, boolean viewExiting, String updatedSaveName, Uri uri) {
-            this.formComplete = formComplete;
+        SaveRequest(boolean shouldFinalize, boolean viewExiting, String updatedSaveName, Uri uri) {
+            this.shouldFinalize = shouldFinalize;
             this.viewExiting = viewExiting;
             this.updatedSaveName = updatedSaveName;
             this.uri = uri;
         }
 
-        boolean isFormComplete() {
-            return formComplete;
+        boolean shouldFinalize() {
+            return shouldFinalize;
         }
 
         boolean isViewExiting() {
@@ -250,7 +250,7 @@ public class FormEntryViewModel extends ViewModel {
         protected SaveToDiskTaskResult doInBackground(Void... voids) {
             return formSaver.save(
                     saveRequest.uri,
-                    saveRequest.formComplete,
+                    saveRequest.shouldFinalize,
                     saveRequest.updatedSaveName,
                     saveRequest.viewExiting,
                     this::publishProgress
