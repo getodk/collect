@@ -104,10 +104,6 @@ public class SaveFormToDisk {
             }
         } catch (Exception e) {
             Timber.e(e);
-
-            // SCTO-825
-            // that means that we have a bad design
-            // save the exception to be used in the error dialog.
             saveToDiskResult.setSaveErrorMessage(e.getMessage());
             saveToDiskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
             return saveToDiskResult;
