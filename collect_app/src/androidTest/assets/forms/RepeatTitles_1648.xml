@@ -1,0 +1,138 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>Repeat titles 1648</h:title>
+    <model>
+      <instance>
+        <data id="build_1648_1511357420">
+          <meta>
+            <instanceID/>
+          </meta>
+          <Text/>
+          <gr1>
+            <gr2>
+              <name/>
+              <age/>
+              <photo/>
+            </gr2>
+          </gr1>
+          <part1>
+            <part2>
+              <partText/>
+              <date/>
+              <multi/>
+            </part2>
+          </part1>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/Text:label">
+            <value>Text</value>
+          </text>
+          <text id="/data/gr1:label">
+            <value>gr1</value>
+          </text>
+          <text id="/data/gr1/gr2:label">
+            <value>gr2</value>
+          </text>
+          <text id="/data/gr1/gr2/name:label">
+            <value>Name</value>
+          </text>
+          <text id="/data/gr1/gr2/age:label">
+            <value>Age</value>
+          </text>
+          <text id="/data/gr1/gr2/photo:label">
+            <value>Photo</value>
+          </text>
+          <text id="/data/part1:label">
+            <value>Part1</value>
+          </text>
+          <text id="/data/part1/part2:label">
+            <value>Part2</value>
+          </text>
+          <text id="/data/part1/part2/partText:label">
+            <value>Part text</value>
+          </text>
+          <text id="/data/part1/part2/date:label">
+            <value>Date</value>
+          </text>
+          <text id="/data/part1/part2/multi:label">
+            <value>Multi Select</value>
+          </text>
+          <text id="/data/part1/part2/multi:hint">
+            <value></value>
+          </text>
+          <text id="/data/part1/part2/multi:option0">
+            <value>a</value>
+          </text>
+          <text id="/data/part1/part2/multi:option1">
+            <value>b</value>
+          </text>
+          <text id="/data/part1/part2/multi:option2">
+            <value>c</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/Text" type="string"/>
+      <bind nodeset="/data/gr1/gr2/name" type="string"/>
+      <bind nodeset="/data/gr1/gr2/age" type="int"/>
+      <bind nodeset="/data/gr1/gr2/photo" type="binary"/>
+      <bind nodeset="/data/part1/part2/partText" type="string"/>
+      <bind nodeset="/data/part1/part2/date" type="date"/>
+      <bind nodeset="/data/part1/part2/multi" type="select"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/Text">
+      <label ref="jr:itext('/data/Text:label')"/>
+    </input>
+    <group>
+      <label ref="jr:itext('/data/gr1:label')"/>
+      <repeat nodeset="/data/gr1">
+      <group ref="/data/gr1/gr2">
+        <label> Person: <output value="/data/gr1/gr2/age"/></label>
+        <input ref="/data/gr1/gr2/name">
+          <label ref="jr:itext('/data/gr1/gr2/name:label')"/>
+        </input>
+        <input ref="/data/gr1/gr2/age">
+          <label ref="jr:itext('/data/gr1/gr2/age:label')"/>
+        </input>
+        <upload ref="/data/gr1/gr2/photo" mediatype="image/*">
+          <label ref="jr:itext('/data/gr1/gr2/photo:label')"/>
+        </upload>
+      </group>
+     </repeat>
+    </group>
+    <group>
+      <label ref="jr:itext('/data/part1:label')"/>
+      <repeat nodeset="/data/part1">
+      <group ref="/data/part1/part2">
+        <label> Xxx: <output value="/data/part1/part2/partText"/></label>
+        <input ref="/data/part1/part2/partText">
+          <label ref="jr:itext('/data/part1/part2/partText:label')"/>
+        </input>
+        <input ref="/data/part1/part2/date">
+          <label ref="jr:itext('/data/part1/part2/date:label')"/>
+        </input>
+        <select ref="/data/part1/part2/multi">
+          <label ref="jr:itext('/data/part1/part2/multi:label')"/>
+          <hint ref="jr:itext('/data/part1/part2/multi:hint')"/>
+          <item>
+            <label ref="jr:itext('/data/part1/part2/multi:option0')"/>
+            <value>a</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/data/part1/part2/multi:option1')"/>
+            <value>b</value>
+          </item>
+          <item>
+            <label ref="jr:itext('/data/part1/part2/multi:option2')"/>
+            <value>c</value>
+          </item>
+        </select>
+      </group>
+     </repeat>
+    </group>
+  </h:body>
+</h:html>
