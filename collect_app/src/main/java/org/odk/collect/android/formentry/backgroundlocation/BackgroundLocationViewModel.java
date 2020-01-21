@@ -37,10 +37,6 @@ public class BackgroundLocationViewModel extends ViewModel {
         return locationManager.isPendingPermissionCheck();
     }
 
-    public boolean isStateSetGeoPointOnly() {
-        return locationManager.isStateSetGeoPointOnly();
-    }
-
     public BackgroundLocationManager.BackgroundLocationMessage locationPermissionsGranted() {
         return locationManager.locationPermissionGranted();
     }
