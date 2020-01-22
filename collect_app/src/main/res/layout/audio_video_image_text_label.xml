@@ -29,7 +29,6 @@
                 android:layout_marginTop="@dimen/margin_extra_small"
                 android:layout_marginRight="@dimen/margin_standard"
                 android:orientation="vertical"
-                android:textStyle="bold"
                 tools:text="This is a question?" />
 
         </FrameLayout>
