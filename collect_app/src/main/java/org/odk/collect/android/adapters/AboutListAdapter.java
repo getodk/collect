@@ -45,7 +45,9 @@ public class AboutListAdapter extends RecyclerView.Adapter<AboutListAdapter.View
 
     @Override
     public void onBindViewHolder(AboutListAdapter.ViewHolder holder, int position) {
-        holder.imageView.setImageResource(items[position][0]);
+        int iconId = items[position][0];
+        holder.imageView.setImageResource(iconId);
+        holder.imageView.setTag(iconId);
         holder.title.setText(context.getString(items[position][1]));
         holder.setSummary(items[position][2]);
     }
