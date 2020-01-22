@@ -70,5 +70,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withId(R.id.review_data)).perform(click());
         return new EditSavedFormPage(rule).assertOnPage();
     }
+
+    public AboutPage clickAbout() {
+        clickOnString(R.string.about_preferences);
+        return new AboutPage(rule).assertOnPage();
+    }
 }
 

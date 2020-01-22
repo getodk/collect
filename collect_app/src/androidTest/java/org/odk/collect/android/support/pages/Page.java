@@ -275,6 +275,11 @@ abstract class Page<T extends Page<T>> {
         onView(withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).check(matches(withText(text)));
         return (T) this;
     }
+
+    public T checkIfWebViewActivityIsDisplayed() {
+        onView(withClassName(endsWith("WebView"))).check(matches(isDisplayed()));
+        return (T) this;
+    }
 }
 
 
