@@ -88,6 +88,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     LinearLayout mediaButtonsContainer;
 
     private String videoURI;
+    private int originalTextColor;
     private int playTextColor = Color.BLUE;
     private CharSequence questionText;
     private String bigImageURI;
@@ -300,11 +301,13 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
         LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, new Clip(clipID, audioURI));
+
+        originalTextColor = labelTextView.getTextColors().getDefaultColor();
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
                 labelTextView.setTextColor(playTextColor);
             } else {
-                labelTextView.setTextColor(getThemeUtils().getColorOnSurface());
+                labelTextView.setTextColor(originalTextColor);
                 // then set the text to our original (brings back any html formatting)
                 labelTextView.setText(questionText);
             }

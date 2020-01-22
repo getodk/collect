@@ -4,7 +4,6 @@ import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 
-import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,9 +31,6 @@ public class AudioVideoImageTextLabelTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
-
-    @Mock
-    public ReferenceManager referenceManager;
 
     @Mock
     public AudioHelper audioHelper;
