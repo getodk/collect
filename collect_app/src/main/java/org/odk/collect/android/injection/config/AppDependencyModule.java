@@ -25,6 +25,7 @@ import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.utilities.UserAgentProvider;
 
 import javax.inject.Singleton;
 
@@ -77,11 +78,17 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
+    public UserAgentProvider providesUserAgent() {
+        return new AndroidUserAgent();
+    }
+
+    @Provides
+    @Singleton
+    OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
         return new OkHttpConnection(
                 new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
                 new CollectThenSystemContentTypeMapper(mimeTypeMap),
-                AndroidUserAgent.getUserAgent()
+                userAgentProvider.getUserAgent()
         );
     }
 
