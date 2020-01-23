@@ -52,7 +52,7 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.DownloadFormListUtils;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -69,8 +69,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
-import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -123,7 +123,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     WebCredentialsUtils webCredentialsUtils;
 
     @Inject
-    DownloadFormListUtils downloadFormListUtils;
+    FormListDownloader formListDownloader;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -324,7 +324,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadFormListTask = null;
             }
 
-            downloadFormListTask = new DownloadFormListTask(downloadFormListUtils);
+            downloadFormListTask = new DownloadFormListTask(formListDownloader);
             downloadFormListTask.setDownloaderListener(this);
 
             if (viewModel.isDownloadOnlyMode()) {

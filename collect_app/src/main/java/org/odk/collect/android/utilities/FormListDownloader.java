@@ -42,7 +42,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class DownloadFormListUtils {
+public class FormListDownloader {
 
     // used to store error message if one occurs
     public static final String DL_ERROR_MSG = "dlerrormessage";
@@ -56,7 +56,7 @@ public class DownloadFormListUtils {
     private final Application application;
     private final FormsDao formsDao;
 
-    public DownloadFormListUtils(
+    public FormListDownloader(
             Application application,
             CollectServerClient collectServerClient,
             WebCredentialsUtils webCredentialsUtils,

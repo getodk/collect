@@ -22,7 +22,7 @@ import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AndroidUserAgent;
-import org.odk.collect.android.utilities.DownloadFormListUtils;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -93,7 +93,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new CollectServerClient(httpInterface, webCredentialsUtils);
     }
 
@@ -103,12 +103,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    DownloadFormListUtils provideDownloadFormListUtils(
+    FormListDownloader provideDownloadFormListUtils(
             Application application,
             CollectServerClient collectServerClient,
             WebCredentialsUtils webCredentialsUtils,
             FormsDao formsDao) {
-        return new DownloadFormListUtils(
+        return new FormListDownloader(
                 application,
                 collectServerClient,
                 webCredentialsUtils,
