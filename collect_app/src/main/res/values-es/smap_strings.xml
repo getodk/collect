@@ -100,4 +100,6 @@
   <string name="smap_warning">Advertencia</string>
   <string name="smap_time_difference">Verifique la hora establecida en este dispositivo. Hay una diferencia de %s minutos con la hora del servidor. </string>
   <string name="smap_disable_prevent_background_location_enabled">Este formulario registra la ubicación GPS</string>
+  <string name="smap_sort_by_project_asc">Ascendente por Proyecto, A-Z</string>
+  <string name="smap_sort_by_project_desc">Descendente por Proyecto, Z-A</string>
 </resources>
