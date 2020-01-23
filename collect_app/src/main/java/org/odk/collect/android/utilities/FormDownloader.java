@@ -158,7 +158,7 @@ public class FormDownloader {
             // do not download additional forms.
             throw e;
         } catch (Exception e) {
-            message += getExceptionMessage(e);
+            return message + getExceptionMessage(e);
         }
 
         if (stateListener != null && stateListener.isTaskCanceled()) {
@@ -181,7 +181,7 @@ public class FormDownloader {
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
-                message += e.getMessage();
+                return message + e.getMessage();
             }
         }
 
