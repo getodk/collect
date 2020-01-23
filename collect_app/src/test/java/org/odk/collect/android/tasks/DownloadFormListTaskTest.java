@@ -3,16 +3,18 @@ package org.odk.collect.android.tasks;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.http.support.MockWebServerRule;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,11 +31,15 @@ import static org.odk.collect.android.support.RobolectricHelpers.overrideAppDepe
 @RunWith(RobolectricTestRunner.class)
 public class DownloadFormListTaskTest {
 
+    @Rule
+    public MockWebServerRule mockWebServerRule = new MockWebServerRule();
+
     protected MockWebServer server;
 
     @Before
     public void http_setUp() throws Exception {
-        server = mockWebServer();
+        server = mockWebServerRule.start();
+        configAppFor(server);
 
         overrideAppDependencyModule(new AppDependencyModule() {
 
@@ -44,68 +50,13 @@ public class DownloadFormListTaskTest {
         });
     }
 
-    @After
-    public void http_tearDown() throws Exception {
-        if (server != null) {
-            server.shutdown();
-        }
-    }
-
-    protected void willRespondWith(String... rawResponses) {
-        for (String rawResponse : rawResponses) {
-            MockResponse response = new MockResponse();
-
-            String[] parts = rawResponse.split("\r\n\r\n", 2);
-
-            String[] headerLines = parts[0].split("\r\n");
-
-            response.setStatus(headerLines[0]);
-
-            for (int i = 1; i < headerLines.length; ++i) {
-                String[] headerParts = headerLines[i].split(": ", 2);
-                response.addHeader(headerParts[0], headerParts[1]);
-            }
-
-            response.setBody(parts[1]);
-
-            server.enqueue(response);
-        }
-    }
-
-    protected RecordedRequest nextRequest() throws Exception {
-        return server.takeRequest(1, TimeUnit.MILLISECONDS);
-    }
-
-    protected static String join(String... strings) {
-        StringBuilder bob = new StringBuilder();
-        for (String s : strings) {
-            bob.append(s).append('\n');
-        }
-        return bob.toString();
-    }
-
-    private static MockWebServer mockWebServer() throws Exception {
-        MockWebServer server = new MockWebServer();
-        server.start();
-        configAppFor(server);
-        return server;
-    }
-
-    private static void configAppFor(MockWebServer server) {
-        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext()).edit();
-        prefs.putString(GeneralKeys.KEY_SERVER_URL, server.url("/").toString());
-        if (!prefs.commit()) {
-            throw new RuntimeException("Failed to set up SharedPreferences for MockWebServer");
-        }
-    }
-
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {
         // given
         willRespondWith(RESPONSE);
 
         // when
-        Collect application = Collect.getInstance();
+        Collect application = (Collect) RuntimeEnvironment.application;
         DownloadFormListTask task = new DownloadFormListTask(application.getComponent().downloadFormListUtils());
         final Map<String, FormDetails> fetched = task.doInBackground();
 
@@ -127,7 +78,7 @@ public class DownloadFormListTaskTest {
         assertEquals("https://example.com/formXml?formId=one", f1.getDownloadUrl());
         assertNull(f1.getManifestUrl());
         assertEquals("one", f1.getFormId());
-        assertNull(f1.getFormVersion());
+            assertNull(f1.getFormVersion());
         assertFalse(f1.isNewerFormVersionAvailable());
         assertFalse(f1.areNewerMediaFilesAvailable());
 
@@ -143,20 +94,43 @@ public class DownloadFormListTaskTest {
         assertFalse(f1.areNewerMediaFilesAvailable());
     }
 
-    public static void assertMatches(String expectedPattern, Object actual) {
-        if (!testMatches(expectedPattern, actual)) {
-            throw new AssertionError(String.format("Expected <%s> to match <%s>.", actual, expectedPattern));
+    private void willRespondWith(String... rawResponses) {
+        for (String rawResponse : rawResponses) {
+            MockResponse response = new MockResponse();
+
+            String[] parts = rawResponse.split("\r\n\r\n", 2);
+            String[] headerLines = parts[0].split("\r\n");
+            response.setStatus(headerLines[0]);
+
+            for (int i = 1; i < headerLines.length; ++i) {
+                String[] headerParts = headerLines[i].split(": ", 2);
+                response.addHeader(headerParts[0], headerParts[1]);
+            }
+
+            response.setBody(parts[1]);
+
+            server.enqueue(response);
         }
     }
 
-    private static boolean testMatches(String expectedPattern, Object actual) {
-        if (expectedPattern == null) {
-            throw new IllegalArgumentException("No pattern provided.");
+    private RecordedRequest nextRequest() throws Exception {
+        return server.takeRequest(1, TimeUnit.MILLISECONDS);
+    }
+
+    private static String join(String... strings) {
+        StringBuilder bob = new StringBuilder();
+        for (String s : strings) {
+            bob.append(s).append('\n');
         }
-        if (actual == null) {
-            return false;
+        return bob.toString();
+    }
+
+    private static void configAppFor(MockWebServer server) {
+        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext()).edit();
+        prefs.putString(GeneralKeys.KEY_SERVER_URL, server.url("/").toString());
+        if (!prefs.commit()) {
+            throw new RuntimeException("Failed to set up SharedPreferences for MockWebServer");
         }
-        return actual.toString().matches(expectedPattern);
     }
 
     private static final String RESPONSE = join(
