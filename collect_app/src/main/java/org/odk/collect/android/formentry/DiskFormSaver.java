@@ -9,7 +9,7 @@ public class DiskFormSaver implements FormSaver {
 
     @Override
     public SaveToDiskResult save(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean exitAfter, ProgressListener progressListener) {
-        SaveFormToDisk saveFormToDisk = new SaveFormToDisk(instanceContentURI, shouldFinalize, exitAfter, updatedSaveName);
+        SaveFormToDisk saveFormToDisk = new SaveFormToDisk(instanceContentURI, exitAfter, shouldFinalize, updatedSaveName);
         return saveFormToDisk.saveForm(progressListener);
     }
 }
