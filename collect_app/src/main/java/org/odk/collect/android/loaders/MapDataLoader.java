@@ -42,7 +42,8 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 	private MapEntry mData = null;
 	private MapDataObserver mMapDataObserver;	// Monitor changes to task data
 
-    private String sortOrder = "BY_NAME_ASC";
+    private String formSortOrder = "BY_NAME_ASC";
+    private String taskSortOrder = "BY_NAME_ASC";
     private CharSequence filter = "";
 
 	public MapDataLoader(Context ctx) {
@@ -64,7 +65,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
         data.tasks = new ArrayList<TaskEntry> (10);
         TraceUtilities.getPoints(data.points, 500, true);
         getForms(data.tasks);
-        Utilities.getTasks(data.tasks, false, sortOrder, filter.toString(), false, true);
+        Utilities.getTasks(data.tasks, false, taskSortOrder, filter.toString(), false, true);
 
 		return data;
 	}
@@ -200,7 +201,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
         }
 
         final ContentResolver resolver = Collect.getInstance().getContentResolver();
-        Cursor formListCursor = resolver.query(FormsProviderAPI.FormsColumns.CONTENT_URI, proj, selectClause, selectArgs, getSortOrderExpr(sortOrder));
+        Cursor formListCursor = resolver.query(FormsProviderAPI.FormsColumns.CONTENT_URI, proj, selectClause, selectArgs, getFormSortOrderExpr(formSortOrder));
 
 
         if(formListCursor != null) {
@@ -230,8 +231,11 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
     /*
      * Change sort order
      */
-    public void updateSortOrder(String sortOrder) {
-        this.sortOrder = sortOrder;
+    public void updateFormSortOrder(String sortOrder) {
+        this.formSortOrder = sortOrder;
+    }
+    public void updateTaskSortOrder(String sortOrder) {
+        this.taskSortOrder = sortOrder;
     }
 
     /*
@@ -241,7 +245,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
         this.filter = filter;
     }
 
-    private String getSortOrderExpr(String sortOrder) {
+    private String getFormSortOrderExpr(String sortOrder) {
 
         String sortOrderExpr = "";
 
@@ -253,6 +257,10 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
             sortOrderExpr = FormsProviderAPI.FormsColumns.DATE + " ASC, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " ASC";
         } else if(sortOrder.equals("BY_DATE_DESC")) {
             sortOrderExpr = FormsProviderAPI.FormsColumns.DATE + " DESC, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " DESC";
+        } else if(sortOrder.equals("BY_PROJECT_ASC")) {
+            sortOrderExpr = FormsProviderAPI.FormsColumns.PROJECT + " COLLATE NOCASE ASC, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " DESC";
+        } else if(sortOrder.equals("BY_PROJECT_DESC")) {
+            sortOrderExpr = FormsProviderAPI.FormsColumns.PROJECT + " COLLATE NOCASE DESC, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + FormsProviderAPI.FormsColumns.JR_VERSION + " DESC";
         }
         return sortOrderExpr;
     }

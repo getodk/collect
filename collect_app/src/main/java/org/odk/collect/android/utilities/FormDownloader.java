@@ -227,7 +227,10 @@ public class FormDownloader {
             FormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
         UriResult uriResult = null;
         try {
-            uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, STFileUtils.getSource(fd.getDownloadUrl()), fd.getTasksOnly());  // smap add source and tasks_only
+            uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields,
+                    STFileUtils.getSource(fd.getDownloadUrl()),
+                    fd.getTasksOnly(),
+                    fd.getProject());  // smap add source, tasks_only, project
             Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
 
             // move the media files in the media folder
@@ -320,7 +323,8 @@ public class FormDownloader {
      * @param formInfo certain fields extracted from the parsed XML form, such as title and form ID
      * @return a {@link UriResult} object
      */
-    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo, String source, boolean tasks_only) {   // smap add source as a parameter
+    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo,
+                                                 String source, boolean tasks_only, String project) {   // smap add source, tasks_only, project
         final Uri uri;
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
@@ -336,7 +340,7 @@ public class FormDownloader {
             isNew = cursor.getCount() <= 0;
 
             if (isNew) {
-                uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, source);       // smap add tasks_only and source
+                uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, source, project);       // smap add tasks_only and source
             } else {
                 cursor.moveToFirst();
                 uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
@@ -349,14 +353,14 @@ public class FormDownloader {
     }
 
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath,
-                            boolean tasks_only, String source) {    // smap add tasks_only and source
+                            boolean tasks_only, String source, String project) {    // smap add tasks_only, source project
         final ContentValues v = new ContentValues();
         v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
         v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
         v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
         v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
         v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
-        v.put(FormsColumns.PROJECT,                 formInfo.get(FileUtils.PROJECT));      // smap
+        v.put(FormsColumns.PROJECT,                 project);      // smap
         v.put(FormsColumns.TASKS_ONLY,              tasks_only ? "yes" : "no");            // smap
         v.put(FormsColumns.SOURCE,                  source);                               // smap
         v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));

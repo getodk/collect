@@ -116,4 +116,6 @@
     <string name="smap_warning">Warning</string>
     <string name="smap_time_difference">The server has a time difference of %s minutes compared to this device</string>
     <string name="smap_disable_prevent_background_location_enabled">This form tracks your location.</string>
+    <string name="smap_sort_by_project_asc">Project, A-Z</string>
+    <string name="smap_sort_by_project_desc">Project, Z-A</string>
 </resources>

@@ -71,6 +71,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_DESC;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
@@ -164,7 +166,8 @@ public class SmapTaskListFragment extends ListFragment
 
         sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                R.string.sort_by_date_asc, R.string.sort_by_date_desc
+                R.string.sort_by_date_asc, R.string.sort_by_date_desc,
+                R.string.sort_by_status_asc, R.string.sort_by_status_desc
         };
 
         super.onViewCreated(view, savedInstanceState);
@@ -470,6 +473,11 @@ public class SmapTaskListFragment extends ListFragment
                 break;
             case BY_DATE_DESC:
                 sortOrder = "BY_DATE_DESC";
+            case BY_STATUS_PROJECT_ASC:
+                sortOrder = "BY_STATUS_ASC";
+                break;
+            case BY_STATUS_PROJECT_DESC:
+                sortOrder = "BY_STATUS_DESC";
                 break;
         }
         return sortOrder;
@@ -504,7 +512,7 @@ public class SmapTaskListFragment extends ListFragment
     protected void updateAdapter() {
         MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();
         if(taskLoader != null) {
-            taskLoader.updateSortOrder(getSortingOrder());
+            taskLoader.updateTaskSortOrder(getSortingOrder());
             taskLoader.updateFilter(getFilterText());
             taskLoader.forceLoad();
         }

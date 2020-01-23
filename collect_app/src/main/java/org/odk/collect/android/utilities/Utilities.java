@@ -974,6 +974,10 @@ public class Utilities {
             sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " ASC";
         } else if (sortOrder.equals("BY_DATE_DESC")) {
             sortOrderExpr = InstanceColumns.T_SCHED_START + " DESC, " + InstanceColumns.T_TITLE + " DESC";
+        } else if (sortOrder.equals("BY_STATUS_ASC")) {
+            sortOrderExpr = T_TASK_STATUS + " ASC, " + InstanceColumns.T_TITLE + " ASC";
+        } else if (sortOrder.equals("BY_STATUS_DESC")) {
+            sortOrderExpr = InstanceColumns.T_TASK_STATUS + " DESC, " + InstanceColumns.T_TITLE + " DESC";
         }
         return sortOrderExpr;
     }

@@ -72,6 +72,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_DESC;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
@@ -158,7 +160,8 @@ public class SmapFormListFragment extends ListFragment {
 
         sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                R.string.sort_by_date_asc, R.string.sort_by_date_desc
+                R.string.sort_by_date_asc, R.string.sort_by_date_desc,
+                R.string.smap_sort_by_project_asc, R.string.smap_sort_by_project_desc
         };
 
         super.onViewCreated(view, savedInstanceState);
@@ -416,7 +419,7 @@ public class SmapFormListFragment extends ListFragment {
         super.onConfigurationChanged(newConfig);
     }
 
-    protected String getSortingOrder() {
+    protected String getFormSortingOrder() {
         String sortOrder = "BY_NAME_ASC";
         switch (getSelectedSortingOrder()) {
 
@@ -431,6 +434,12 @@ public class SmapFormListFragment extends ListFragment {
                 break;
             case BY_DATE_DESC:
                 sortOrder = "BY_DATE_DESC";
+                break;
+            case BY_STATUS_PROJECT_ASC:
+                sortOrder = "BY_PROJECT_ASC";
+                break;
+            case BY_STATUS_PROJECT_DESC:
+                sortOrder = "BY_PROJECT_DESC";
                 break;
         }
         return sortOrder;
@@ -465,7 +474,7 @@ public class SmapFormListFragment extends ListFragment {
     protected void updateAdapter() {
         MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();
         if(taskLoader != null) {
-            taskLoader.updateSortOrder(getSortingOrder());
+            taskLoader.updateFormSortOrder(getFormSortingOrder());
             taskLoader.updateFilter(getFilterText());
             taskLoader.forceLoad();
         }

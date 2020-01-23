@@ -43,6 +43,8 @@ public class ApplicationConstants {
         hashMap.put(R.string.sort_by_date_desc, R.drawable.ic_access_time);
         hashMap.put(R.string.sort_by_status_asc, R.drawable.ic_assignment_turned_in);
         hashMap.put(R.string.sort_by_status_desc, R.drawable.ic_assignment_late);
+        hashMap.put(R.string.smap_sort_by_project_asc, R.drawable.ic_sort_by_alpha);     // smap
+        hashMap.put(R.string.smap_sort_by_project_desc, R.drawable.ic_sort_by_alpha);    // smap
         return hashMap;
     }
 
@@ -69,8 +71,8 @@ public class ApplicationConstants {
         public static final int BY_NAME_DESC = 1;
         public static final int BY_DATE_DESC = 2;
         public static final int BY_DATE_ASC = 3;
-        public static final int BY_STATUS_ASC = 4;
-        public static final int BY_STATUS_DESC = 5;
+        public static final int BY_STATUS_PROJECT_ASC = 4;  // smap by status on tasks screen, project on forms tab
+        public static final int BY_STATUS_PROJECT_DESC = 5; // smap
     }
 
     public abstract static class RequestCodes {
