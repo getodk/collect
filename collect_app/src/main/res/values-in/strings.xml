@@ -9,10 +9,7 @@
   <string name="choose_audio">Pilih suara</string>
   <string name="add_repeat">Tambah grup</string>
   <string name="add_another_menu">Tambah lainnya</string>
-  <string name="add_another_repeat_question">Tambah grup \"%s\" lainnya?</string>
-  <string name="add_new_repeat_question">Tambah grup \"%s\" baru?</string>
-  <string name="add_repeat_no">Tidak usah ditambahkan</string>
-  <string name="cancel">Batal</string>
+    <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
   <string name="canceling">Membatalkan</string>

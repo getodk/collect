@@ -8,10 +8,7 @@
   <string name="view_video">Onesha video</string>
   <string name="choose_audio">Chagua sauti</string>
   <string name="add_repeat">Ongeza kikundi</string>
-  <string name="add_another_repeat_question">Ongeza  kikundi \"%s\" kingine?</string>
-  <string name="add_new_repeat_question">Ongeza kikundi \"%s\" kipya?</string>
-  <string name="add_repeat_no">Usiongeze</string>
-  <string name="cancel">Sitisha</string>
+    <string name="cancel">Sitisha</string>
   <string name="cancel_loading_form">Sitisha</string>
   <string name="cancel_location">Sitisha</string>
   <string name="canceling">Inasitishwa</string>

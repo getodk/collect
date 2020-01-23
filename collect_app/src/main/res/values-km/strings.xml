@@ -8,10 +8,7 @@
   <string name="view_video">បង្ហាញវីដេអូ</string>
   <string name="choose_audio">ជ្រើសរើសសម្លេង</string>
   <string name="add_repeat">បន្ថែម​ក្រុម</string>
-  <string name="add_another_repeat_question">បន្ថែម​ក្រុម \"%s\" មួយ​ទៀត?</string>
-  <string name="add_new_repeat_question">បន្ថែម​ក្រុម \"%s\" ថ្មី​មួយ?</string>
-  <string name="add_repeat_no">កុំ​បន្ថែម</string>
-  <string name="cancel">បោះបង់</string>
+    <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
   <string name="canceling">កំពុង​បោះបង់</string>

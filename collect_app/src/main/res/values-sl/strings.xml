@@ -8,10 +8,7 @@
   <string name="view_video">Poglej video</string>
   <string name="choose_audio">Izberi audio</string>
   <string name="add_repeat">Dodaj skupino</string>
-  <string name="add_another_repeat_question">Dodam še eno \"%s\" skupino?</string>
-  <string name="add_new_repeat_question">Dodam novo \"%s\" skupino?</string>
-  <string name="add_repeat_no">Ne dodaj</string>
-  <string name="cancel">Prekini</string>
+    <string name="cancel">Prekini</string>
   <string name="cancel_loading_form">Prekini</string>
   <string name="cancel_location">Prekini</string>
   <string name="canceling">Prekinjam</string>

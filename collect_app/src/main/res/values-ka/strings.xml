@@ -9,10 +9,7 @@
   <string name="choose_audio">აუდიოჩანაწერის არჩევა</string>
   <string name="add_repeat">ჯგუფის დამატება</string>
   <string name="add_another_menu">დამატება</string>
-  <string name="add_another_repeat_question">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
-  <string name="add_new_repeat_question">დავამატოთ ახალი \"%s\" ჯგუფი?</string>
-  <string name="add_repeat_no">არ დაამატო</string>
-  <string name="cancel">გაუქმება</string>
+    <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
   <string name="canceling">მიმდინარეობს გაუქმება</string>

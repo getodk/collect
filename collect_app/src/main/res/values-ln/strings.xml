@@ -5,9 +5,7 @@
   <string name="view_video">lakisa video</string>
   <string name="choose_audio">pona elili</string>
   <string name="add_repeat">bakisa lingomba</string>
-  <string name="add_another_repeat_question">%sbakisa na lisanga</string>
-  <string name="add_repeat_no">kobakisa té</string>
-  <string name="cancel">longola</string>
+    <string name="cancel">longola</string>
   <string name="cancel_loading_form">longola</string>
   <string name="cancel_location">longola</string>
   <string name="capture_image">kanga elili</string>

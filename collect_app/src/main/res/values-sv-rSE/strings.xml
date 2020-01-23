@@ -7,10 +7,7 @@
   <string name="view_video">Visa video</string>
   <string name="choose_audio">Välj ljud</string>
   <string name="add_repeat">Lägg till grupp</string>
-  <string name="add_another_repeat_question">Lägga till ytterligare en \"%s\" grupp?</string>
-  <string name="add_new_repeat_question">Lägga till en ny \"%s\" grupp?</string>
-  <string name="add_repeat_no">Lägg inte till</string>
-  <string name="cancel">Avbryt</string>
+    <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
   <string name="canceling">Avbryter</string>

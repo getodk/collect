@@ -2,9 +2,6 @@
 <resources>
   <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
   <string name="add_repeat">Mag-dagdag ng Pangkat</string>
-  <string name="add_another_repeat_question">I-dagdag ang \"%s\" sa pangkat?</string>
-  <string name="add_new_repeat_question">Magdagdag ng bagong \"%s\" sa pangkat?</string>
-  <string name="add_repeat_no">Huwag Mag-dagdag</string>
     <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>

@@ -8,10 +8,7 @@
   <string name="choose_audio">Audio kiezen</string>
   <string name="add_repeat">Groep toevoegen</string>
   <string name="add_another_menu">Voeg toe</string>
-  <string name="add_another_repeat_question">Nog een \"%s\" groep toevoegen?</string>
-  <string name="add_new_repeat_question">Een nieuwe \"%s\" groep toevoegen?</string>
-  <string name="add_repeat_no">Niet toevoegen</string>
-  <string name="cancel">Terug</string>
+    <string name="cancel">Terug</string>
   <string name="cancel_loading_form">Terug</string>
   <string name="cancel_location">Terug</string>
   <string name="canceling">Wordt geannuleerd</string>

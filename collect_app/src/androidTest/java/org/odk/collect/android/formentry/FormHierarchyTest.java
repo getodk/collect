@@ -111,8 +111,8 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickOnString(R.string.add_repeat)
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat_no)
-                .clickOnString(R.string.add_repeat_no)
+                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroup()
                 .clickGoToArrow();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
@@ -141,8 +141,8 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickOnString(R.string.add_repeat)
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat_no)
-                .clickOnString(R.string.add_repeat_no)
+                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroup()
                 .clickGoToArrow()
                 .clickOnText("Repeat Group 1")
                 .clickOnText("Repeat Group 1 > 1")

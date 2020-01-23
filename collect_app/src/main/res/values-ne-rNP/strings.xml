@@ -9,10 +9,7 @@
   <string name="choose_audio">अडियो रोज्नुहोस्।</string>
   <string name="add_repeat">समूह थप्नुहोस् </string>
   <string name="add_another_menu">अर्को थप्नुहोस्</string>
-  <string name="add_another_repeat_question">के अर्को \"%s\" समूह थप्नु हुन्छ ?</string>
-  <string name="add_new_repeat_question">नयाँ \"%s\" समूह थप्न चाहनु हुन्छ ?</string>
-  <string name="add_repeat_no">नथप्नु होला !</string>
-  <string name="cancel">फिर्ता जानुहोस्</string>
+    <string name="cancel">फिर्ता जानुहोस्</string>
   <string name="cancel_loading_form">फिर्ता जानुहोस्</string>
   <string name="cancel_location">फिर्ता जानुहोस्</string>
   <string name="canceling">फिर्ता हुँदै</string>

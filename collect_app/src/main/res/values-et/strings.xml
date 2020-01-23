@@ -2,10 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">%s teostamiseks ei leidu toimingut</string>
   <string name="add_repeat">Lisa grupp</string>
-  <string name="add_another_repeat_question">Lisa veel üks \"%s\" grupp?</string>
-  <string name="add_new_repeat_question">Lisa uus \"%s\" grupp?</string>
-  <string name="add_repeat_no">Ei lisa</string>
-  <string name="cancel">Tühista</string>
+    <string name="cancel">Tühista</string>
   <string name="cancel_loading_form">Tühista</string>
   <string name="cancel_location">Tühista</string>
   <string name="capture_audio">Heli salvestamine</string>

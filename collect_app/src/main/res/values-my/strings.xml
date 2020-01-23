@@ -9,10 +9,7 @@
   <string name="choose_audio">အသံရွေးရန်</string>
   <string name="add_repeat">အုပ်စုထည့်ပါ</string>
   <string name="add_another_menu">နောက်တစ်ခုထည့်ရန်</string>
-  <string name="add_another_repeat_question">\"%s\" အုပ်စုနောက်တစ်ခု ထည့်မည်လား?</string>
-  <string name="add_new_repeat_question">\"%s\" အုပ်စုအသစ် ထည့်မည်လား?</string>
-  <string name="add_repeat_no">မထည့်ပါနှင့်</string>
-  <string name="cancel">ပယ်ဖျက်ပါ</string>
+    <string name="cancel">ပယ်ဖျက်ပါ</string>
   <string name="cancel_loading_form">ပယ်ဖျက်ပါ</string>
   <string name="cancel_location">ပယ်ဖျက်ပါ</string>
   <string name="canceling">ပယ်ဖျက်နေသည်</string>

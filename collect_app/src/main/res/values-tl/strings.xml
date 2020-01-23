@@ -5,10 +5,7 @@
   <string name="choose_audio">Pumili ng audio</string>
   <string name="add_repeat">Mag-dagdag ng Pangkat</string>
   <string name="add_another_menu">Magdagdag pa</string>
-  <string name="add_another_repeat_question">I-dagdag ang \"%s\" sa pangkat?</string>
-  <string name="add_new_repeat_question">Magdagdag ng bagong \"%s\" sa pangkat?</string>
-  <string name="add_repeat_no">Huwag Mag-dagdag</string>
-  <string name="cancel">Urong</string>
+    <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>
   <string name="capture_audio">Mag-tala ng Tunog</string>

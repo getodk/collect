@@ -9,10 +9,7 @@
   <string name="choose_audio">Обрати Аудіо</string>
   <string name="add_repeat">Додати групу</string>
   <string name="add_another_menu">Додати</string>
-  <string name="add_another_repeat_question">Додати ще \"%s\" групу?</string>
-  <string name="add_new_repeat_question">Додати нову \"%s\" групу?</string>
-  <string name="add_repeat_no">Не додавати</string>
-  <string name="cancel">Скасувати</string>
+    <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
   <string name="canceling">Скасування</string>

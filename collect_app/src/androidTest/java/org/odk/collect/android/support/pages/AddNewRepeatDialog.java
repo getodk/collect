@@ -30,7 +30,7 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
     }
 
     public FormEntryPage clickOnDoNotAddGroup(FormEntryPage destination) {
-        clickOnString(R.string.add_repeat_no);
+        clickOnString(R.string.dont_add_repeat);
         return destination;
     }
 

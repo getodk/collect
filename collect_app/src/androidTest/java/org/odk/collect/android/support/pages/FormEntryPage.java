@@ -172,7 +172,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOnDoNotAddGroup() {
-        clickOnString(R.string.add_repeat_no);
+        clickOnString(R.string.dont_add_repeat);
         return this;
     }
 
