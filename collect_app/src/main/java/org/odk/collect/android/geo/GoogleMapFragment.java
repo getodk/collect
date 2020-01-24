@@ -463,14 +463,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
             referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
                 new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
             ));
-            switch_google_map_labels("off");
+            setLabelsVisibility("off");
         } else {
-            switch_google_map_labels("on");
+            setLabelsVisibility("on");
         }
     }
 
-    // Turns off google map labels for offline layers to work correctly
-    private void switch_google_map_labels(String state) {
+    private void setLabelsVisibility(String state) {
         String style = String.format(" [ { featureType: all, elementType: labels, stylers: [ { visibility: %s } ] } ]", state);
         map.setMapStyle(new MapStyleOptions(style));
     }
