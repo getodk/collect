@@ -131,7 +131,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         maskPasswordSummary(passwordPreference.getText());
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
-
+        serverUrlPreference.setOnPreferenceClickListener(preference -> {
+            serverUrlPreference.getEditText().requestFocus();
+            return true;
+        });
+        usernamePreference.setOnPreferenceClickListener(preference -> {
+            usernamePreference.getEditText().requestFocus();
+            return true;
+        });
+        passwordPreference.setOnPreferenceClickListener(preference -> {
+            passwordPreference.getEditText().requestFocus();
+            return true;
+        });
         //setupTransportPreferences();
         getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
         getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
@@ -206,6 +217,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
                 new ControlCharacterFilter(), new WhitespaceFilter()
         });
+
+        googleSheetsUrlPreference.setOnPreferenceClickListener(preference -> {
+            googleSheetsUrlPreference.getEditText().requestFocus();
+            return true;
+        });
+
         initAccountPreferences();
         //setupTransportPreferences();
         getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
@@ -226,10 +243,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         formListUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         formListUrlPreference.setSummary(formListUrlPreference.getText());
         formListUrlPreference.getEditText().setFilters(filters);
+        formListUrlPreference.setOnPreferenceClickListener(preference -> {
+            formListUrlPreference.getEditText().requestFocus();
+            return true;
+        });
 
         submissionUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         submissionUrlPreference.setSummary(submissionUrlPreference.getText());
         submissionUrlPreference.getEditText().setFilters(filters);
+        submissionUrlPreference.setOnPreferenceClickListener(preference -> {
+            submissionUrlPreference.getEditText().requestFocus();
+            return true;
+        });
     }
 
     public void initAccountPreferences() {
@@ -491,27 +516,4 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         runGoogleAccountValidation();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        serverUrlPreference.setOnPreferenceClickListener(preference -> {
-            serverUrlPreference.getEditText().requestFocus();
-            return false;
-        });
-        usernamePreference.setOnPreferenceClickListener(preference -> {
-            usernamePreference.getEditText().requestFocus();
-            return false;
-        });
-        passwordPreference.setOnPreferenceClickListener(preference -> {
-            passwordPreference.getEditText().requestFocus();
-            return false;
-        });
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-        serverUrlPreference.setOnPreferenceClickListener(null);
-        usernamePreference.setOnPreferenceClickListener(null);
-        passwordPreference.setOnPreferenceClickListener(null);
-    }
 }
