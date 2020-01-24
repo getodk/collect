@@ -1,12 +1,10 @@
-package org.odk.collect.android.http;
+package org.odk.collect.android.http.openrosa;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
-import org.odk.collect.android.http.openrosa.HttpGetResult;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -23,15 +21,15 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class CollectServerClient {
+public class OpenRosaAPIClient {
 
-    public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+    private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    protected OpenRosaHttpInterface httpInterface;
+    private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
 
     @Inject
-    public CollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public OpenRosaAPIClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
     }
@@ -42,17 +40,17 @@ public class CollectServerClient {
      * @param urlString - url of the XML document
      * @return DocumentFetchResult - an object that contains the results of the "get" operation
      */
-    public DocumentFetchResult getXmlDocument(String urlString) {
+    public DocumentFetchResult getXML(String urlString) {
 
         // parse response
         Document doc;
         HttpGetResult inputStreamResult;
 
         try {
-            inputStreamResult = getHttpInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
+            inputStreamResult = fetch(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
 
             if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
-                String error = "getXmlDocument failed while accessing "
+                String error = "getXML failed while accessing "
                         + urlString + " with status code: " + inputStreamResult.getStatusCode();
                 Timber.e(error);
                 return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
@@ -76,6 +74,10 @@ public class CollectServerClient {
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
+    public InputStream getFile(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
+        return fetch(downloadUrl, contentType).getInputStream();
+    }
+
     /**
      * Creates a Http connection and input stream
      *
@@ -84,8 +86,9 @@ public class CollectServerClient {
      * @return HttpGetResult - An object containing the Stream, Hash and Headers
      * @throws Exception - Can throw a multitude of Exceptions, such as MalformedURLException or IOException
      */
-    public @NonNull
-    HttpGetResult getHttpInputStream(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
+
+    @NonNull
+    private HttpGetResult fetch(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly

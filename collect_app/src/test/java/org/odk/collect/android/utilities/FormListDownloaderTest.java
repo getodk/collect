@@ -9,7 +9,7 @@ import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.robolectric.RobolectricTestRunner;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class FormListDownloaderTest {
 
-    private final CollectServerClient serverClient = mock(CollectServerClient.class);
+    private final OpenRosaAPIClient serverClient = mock(OpenRosaAPIClient.class);
 
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {
@@ -41,7 +41,7 @@ public class FormListDownloaderTest {
         doc.parse(parser);
 
         configAppFor("http://example.com");
-        when(serverClient.getXmlDocument("http://example.com/formList"))
+        when(serverClient.getXML("http://example.com/formList"))
                 .thenReturn(new DocumentFetchResult(doc, true, "blah"));
 
         FormListDownloader downloader = new FormListDownloader(
@@ -77,7 +77,7 @@ public class FormListDownloaderTest {
 
     @Test
     public void removesTrailingSlashesFromUrl() {
-        when(serverClient.getXmlDocument(any())).thenReturn(new DocumentFetchResult("blah", 200));
+        when(serverClient.getXML(any())).thenReturn(new DocumentFetchResult("blah", 200));
 
         FormListDownloader formListDownloader = new FormListDownloader(
                 RuntimeEnvironment.application,
@@ -87,7 +87,7 @@ public class FormListDownloaderTest {
         );
 
         formListDownloader.downloadFormList("http://blah.com///", "user", "password", false);
-        verify(serverClient).getXmlDocument("http://blah.com/formList");
+        verify(serverClient).getXML("http://blah.com/formList");
     }
 
     private static void configAppFor(String url) {

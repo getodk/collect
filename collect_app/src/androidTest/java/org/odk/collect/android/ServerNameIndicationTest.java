@@ -5,7 +5,7 @@ import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.http.openrosa.HttpGetResult;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -37,7 +37,7 @@ public class ServerNameIndicationTest {
     @Test
     public void testThatHttpClientSupportsSNI() throws Exception {
         OpenRosaHttpInterface openRosaHttpInterface = getAppDependencyComponent().openRosaHttpInterface();
-        CollectServerClient serverClient = new CollectServerClient(openRosaHttpInterface, new WebCredentialsUtils());
+        OpenRosaAPIClient serverClient = new OpenRosaAPIClient(openRosaHttpInterface, new WebCredentialsUtils());
 
         HttpGetResult inputStreamResult = serverClient.getHttpInputStream(SNI_URI, null);
         assertHttpSuccess(inputStreamResult.getStatusCode());

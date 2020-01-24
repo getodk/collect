@@ -14,7 +14,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.fragments.DataManagerList;
-import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
@@ -93,7 +93,7 @@ public interface AppDependencyComponent {
 
     void inject(InstanceServerUploaderTask uploader);
 
-    void inject(CollectServerClient collectClient);
+    void inject(OpenRosaAPIClient collectClient);
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
 

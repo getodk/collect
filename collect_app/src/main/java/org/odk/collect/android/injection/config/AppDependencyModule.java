@@ -13,7 +13,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
-import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.http.openrosa.okhttp.OkHttpConnection;
@@ -93,8 +93,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
-        return new CollectServerClient(httpInterface, webCredentialsUtils);
+    public OpenRosaAPIClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+        return new OpenRosaAPIClient(httpInterface, webCredentialsUtils);
     }
 
     @Provides
@@ -105,12 +105,12 @@ public class AppDependencyModule {
     @Provides
     FormListDownloader provideDownloadFormListDownloader(
             Application application,
-            CollectServerClient collectServerClient,
+            OpenRosaAPIClient openRosaAPIClient,
             WebCredentialsUtils webCredentialsUtils,
             FormsDao formsDao) {
         return new FormListDownloader(
                 application,
-                collectServerClient,
+                openRosaAPIClient,
                 webCredentialsUtils,
                 formsDao
         );
