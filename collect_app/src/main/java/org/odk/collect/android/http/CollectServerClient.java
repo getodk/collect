@@ -103,9 +103,4 @@ public class CollectServerClient {
 
         return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
     }
-
-    public static String getPlainTextMimeType() {
-        return "text/plain";
-    }
-
 }
