@@ -25,9 +25,9 @@ public class FormSaveViewModel extends ViewModel {
 
     private final Clock clock;
     private final FormSaver formSaver;
-    private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
 
     private String reason = "";
+    private MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
 
     @Nullable
     private AuditEventLogger auditEventLogger;
@@ -51,16 +51,21 @@ public class FormSaveViewModel extends ViewModel {
     }
 
     public LiveData<SaveResult> saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
-        SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
-
-        if (!requiresReasonToSave()) {
-            saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
-            saveToDisk(saveRequest);
-        } else {
-            saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
+        if (isSaving()) {
+            return new MutableLiveData<>(new SaveResult(SaveResult.State.ALREADY_SAVING, null));
         }
 
-        return saveResult;
+        SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
+        this.saveResult = new MutableLiveData<>(null);
+
+        if (!requiresReasonToSave()) {
+            this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
+            saveToDisk(saveRequest);
+        } else {
+            this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
+        }
+
+        return this.saveResult;
     }
 
     public boolean isSaving() {
@@ -106,22 +111,20 @@ public class FormSaveViewModel extends ViewModel {
 
             @Override
             public void onComplete(SaveToDiskResult saveToDiskResult) {
-                handleTaskResult(saveToDiskResult);
+                handleTaskResult(saveToDiskResult, saveRequest);
             }
         }).execute();
     }
 
-    private void handleTaskResult(SaveToDiskResult taskResult) {
-        SaveResult saveResult = this.saveResult.getValue();
-
+    private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
         switch (taskResult.getSaveResult()) {
             case SAVED:
             case SAVED_AND_EXIT: {
                 if (auditEventLogger != null) {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, clock.getCurrentTime());
 
-                    if (saveResult.request.isViewExiting()) {
-                        if (saveResult.request.shouldFinalize()) {
+                    if (saveRequest.viewExiting) {
+                        if (saveRequest.shouldFinalize) {
                             auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.getCurrentTime());
                             auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.getCurrentTime());
                         } else {
@@ -130,7 +133,7 @@ public class FormSaveViewModel extends ViewModel {
                     }
                 }
 
-                this.saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveResult.request, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
 
@@ -139,7 +142,7 @@ public class FormSaveViewModel extends ViewModel {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.getCurrentTime());
                 }
 
-                this.saveResult.setValue(new SaveResult(SaveResult.State.SAVE_ERROR, saveResult.request, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.SAVE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
 
@@ -148,7 +151,7 @@ public class FormSaveViewModel extends ViewModel {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.getCurrentTime());
                 }
 
-                this.saveResult.setValue(new SaveResult(SaveResult.State.FINALIZE_ERROR, saveResult.request, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.FINALIZE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
 
@@ -159,7 +162,7 @@ public class FormSaveViewModel extends ViewModel {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
                 }
 
-                this.saveResult.setValue(new SaveResult(SaveResult.State.CONSTRAINT_ERROR, saveResult.request, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.CONSTRAINT_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
         }
@@ -202,7 +205,12 @@ public class FormSaveViewModel extends ViewModel {
             SAVED,
             SAVE_ERROR,
             FINALIZE_ERROR,
-            CONSTRAINT_ERROR
+            CONSTRAINT_ERROR,
+            ALREADY_SAVING
+        }
+
+        public SaveRequest getRequest() {
+            return request;
         }
     }
 
@@ -218,14 +226,6 @@ public class FormSaveViewModel extends ViewModel {
             this.viewExiting = viewExiting;
             this.updatedSaveName = updatedSaveName;
             this.uri = instanceContentURI;
-        }
-
-        boolean shouldFinalize() {
-            return shouldFinalize;
-        }
-
-        boolean isViewExiting() {
-            return viewExiting;
         }
     }
 

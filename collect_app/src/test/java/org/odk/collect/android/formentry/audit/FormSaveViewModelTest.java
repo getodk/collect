@@ -18,12 +18,14 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.ALREADY_SAVING;
 import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
 import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
 import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
@@ -34,7 +36,7 @@ import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.Sta
 @RunWith(RobolectricTestRunner.class)
 public class FormSaveViewModelTest {
 
-    public static final long CURRENT_TIME = 123L;
+    private static final long CURRENT_TIME = 123L;
     private AuditEventLogger logger;
     private FormSaveViewModel viewModel;
     private FormSaver formSaver;
@@ -77,9 +79,26 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void saveForm_returnsSaveResult_inSavingState() {
-        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        assertThat(saveResult.getValue().getState(), equalTo(SAVING));
+    public void saveForm_returnsNewSaveResult_inSavingState() {
+        LiveData<FormSaveViewModel.SaveResult> saveResult1 = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        assertThat(saveResult1.getValue().getState(), equalTo(SAVING));
+
+        LiveData<FormSaveViewModel.SaveResult> saveResult2 = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        assertThat(saveResult2, not(equalTo(saveResult1)));
+    }
+
+    @Test
+    public void saveForm_wontRunMultipleSavesAtOnce() {
+        LiveData<FormSaveViewModel.SaveResult> saveResult1 = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        LiveData<FormSaveViewModel.SaveResult> saveResult2 = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+
+        assertThat(saveResult1.getValue().getState(), equalTo(SAVING));
+        assertThat(saveResult2.getValue().getState(), equalTo(ALREADY_SAVING));
+        assertThat(Robolectric.getBackgroundThreadScheduler().size(), equalTo(1));
+
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
+        assertThat(saveResult1.getValue().getState(), equalTo(SAVED));
+        assertThat(saveResult2.getValue().getState(), equalTo(ALREADY_SAVING));
     }
 
     @Test
@@ -229,6 +248,6 @@ public class FormSaveViewModelTest {
         saveToDiskResult.setSaveErrorMessage(message);
 
         when(formSaver.save(any(), anyBoolean(), any(), anyBoolean(), any())).thenReturn(saveToDiskResult);
-        Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable();
+        Robolectric.getBackgroundThreadScheduler().runOneTask();
     }
 }
