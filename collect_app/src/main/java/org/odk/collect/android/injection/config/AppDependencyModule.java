@@ -103,7 +103,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    FormListDownloader provideDownloadFormListUtils(
+    FormListDownloader provideDownloadFormListDownloader(
             Application application,
             CollectServerClient collectServerClient,
             WebCredentialsUtils webCredentialsUtils,
