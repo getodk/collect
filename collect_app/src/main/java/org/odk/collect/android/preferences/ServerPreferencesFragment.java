@@ -34,7 +34,7 @@ import android.widget.ListPopupWindow;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;

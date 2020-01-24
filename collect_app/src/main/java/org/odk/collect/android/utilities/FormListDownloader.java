@@ -28,7 +28,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.http.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
