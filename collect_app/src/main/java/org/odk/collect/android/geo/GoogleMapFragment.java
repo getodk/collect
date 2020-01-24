@@ -463,10 +463,16 @@ public class GoogleMapFragment extends SupportMapFragment implements
             referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
                 new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
             ));
-            map.setMapStyle(new MapStyleOptions(getResources().getString(R.string.google_map_labels_switch, "off")));
+            switch_google_map_labels("off");
         } else {
-            map.setMapStyle(new MapStyleOptions(getResources().getString(R.string.google_map_labels_switch, "on")));
+            switch_google_map_labels("on");
         }
+    }
+
+    // Turns off google map labels for offline layers to work correctly
+    private void switch_google_map_labels(String state) {
+        String style = String.format(" [ { featureType: all, elementType: labels, stylers: [ { visibility: %s } ] } ]", state);
+        map.setMapStyle(new MapStyleOptions(style));
     }
 
     private LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
