@@ -16,11 +16,10 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.widget.RadioButton;
+
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.res.Resources;
-import android.widget.RadioButton;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
@@ -28,7 +27,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -38,9 +36,6 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
-import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -104,11 +99,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
             recyclerView.setAdapter(adapter);
             answerLayout.addView(recyclerView);
             adjustRecyclerViewSize(adapter, recyclerView);
-
-            Resources resources = context.getResources();
-            int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
-            int margin = marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
-            addAnswerView(answerLayout, margin);
+            addAnswerView(answerLayout);
         }
     }
 
