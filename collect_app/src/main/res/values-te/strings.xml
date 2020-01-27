@@ -7,12 +7,9 @@
   <string name="signature_capture">సంతకం పెట్టండి</string>
   <string name="view_video">వీడియోని చూడండి</string>
   <string name="choose_audio">ఆడియోని ఎంచుకోండి</string>
-  <string name="add_another">గ్రూపుని జోడించండి</string>
+  <string name="add_repeat">గ్రూపుని జోడించండి</string>
   <string name="add_another_menu">మరొకదాన్ని జోడించండి</string>
-  <string name="add_another_repeat">\"%s\" గ్రూపును జోడించాలా?</string>
-  <string name="add_repeat">\"%s\" కొత్త గ్రూపుని జోడించాలా?</string>
-  <string name="add_repeat_no">జోడించవద్దు</string>
-  <string name="cancel">రద్దు చేయి</string>
+    <string name="cancel">రద్దు చేయి</string>
   <string name="cancel_loading_form">రద్దు చేయి</string>
   <string name="cancel_location">రద్దు చేయి</string>
   <string name="canceling">రద్దు చేయబడుతుంది </string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">రద్దు చేయి</string>
   <string name="do_not_exit">రద్దు చేయి</string>
   <string name="do_not_save">మార్పులు విస్మరించు</string>
-  <string name="entering_repeat">గ్రూపు ని జోడించండి</string>
-  <string name="entering_repeat_ask">క్రొత్త గ్రూపు ని జోడించండి</string>
-  <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
+    <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
   <string name="enter_data_button">ఖాళీ ఫారం నింపండి</string>
   <string name="error_occured">ఎర్రర్ వచ్చింది</string>
   <string name="error_attaching_binary_file">మీడియాను అటాచ్ చేసేటప్పుడు ఎర్రర్ వచ్చింది:%s</string>
@@ -76,9 +71,8 @@
   <string name="jump_to_beginning">మొదటికి వెళ్లు </string>
   <string name="jump_to_end">చివరికి వెళ్లు </string>
   <string name="jump_to_previous">పైకి వెళ్లు </string>
-  <string name="leave_repeat_yes">జోడించవద్దు</string>
-  <string name="leaving_repeat_ask">ఇంకో గ్రూపుని జోడించాలా?</string>
-  <string name="list_failed_with_error">ఫారం జాబితా విఫలమైంది.%s</string>
+  <string name="dont_add_repeat">జోడించవద్దు</string>
+    <string name="list_failed_with_error">ఫారం జాబితా విఫలమైంది.%s</string>
   <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
   <string name="load_remote_form_error">ఫారం జాబితాను పొందడంలో లోపం జరిగింది </string>
   <string name="location_provider_accuracy">%1$s ఉపయోగించబడుతోంది. దీని ఖచ్చితత్వం %2$s m.</string>

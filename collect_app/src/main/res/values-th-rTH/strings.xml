@@ -2,11 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
-  <string name="add_another">เพิ่มกลุ่ม</string>
-  <string name="add_another_repeat">เพิ่มกลุ่ม \"%s\" อีกหรือไม่</string>
-  <string name="add_repeat">เพิ่มกลุ่ม \"%s\" ใหม่หรือไม่</string>
-  <string name="add_repeat_no">ไม่เพิ่ม</string>
-  <string name="cancel">ยกเลิก</string>
+  <string name="add_repeat">เพิ่มกลุ่ม</string>
+    <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>
   <string name="capture_audio">บันทึกเสียง</string>
@@ -41,9 +38,7 @@
   <string name="do_not_change">ยกเลิก</string>
   <string name="do_not_exit">ยกเลิก</string>
   <string name="do_not_save">ยกเลิกการเปลี่ยนแปลง</string>
-  <string name="entering_repeat">เพิ่มกลุ่ม</string>
-  <string name="entering_repeat_ask">เพิ่มกลุ่มใหม่</string>
-  <string name="enter_data">กรอกแบบสำรวจใหม่</string>
+    <string name="enter_data">กรอกแบบสำรวจใหม่</string>
   <string name="enter_data_button">กรอกแบบสำรวจใหม่</string>
   <string name="error_occured">มีข้อผิดพลาดเกิดขึ้น</string>
   <string name="error_attaching_binary_file">เกิดข้อผิดพลาดระหว่างแนบไฟล์มีเดีย: %s</string>
@@ -63,9 +58,8 @@
   <string name="jump_to_beginning">ไปที่จุดเริ่มต้น</string>
   <string name="jump_to_end">ไปที่จุดสิ้นสุด</string>
   <string name="jump_to_previous">เลื่อนขึ้น</string>
-  <string name="leave_repeat_yes">ไม่เพิ่ม</string>
-  <string name="leaving_repeat_ask">เพิ่มอีกกลุ่ม</string>
-  <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
+  <string name="dont_add_repeat">ไม่เพิ่ม</string>
+    <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
   <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
   <string name="load_remote_form_error">มีข้อผิดพลาด ไม่สามารถแสดงรายการแบบสำรวจได้</string>
   <string name="location_provider_accuracy">รับพิกัดผ่าน %1$s ค่าความแม่นยำที่ %2$s เมตร</string>

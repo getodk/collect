@@ -7,12 +7,9 @@
   <string name="signature_capture">Сфотографувати Підпис</string>
   <string name="view_video">Переглянути Відео</string>
   <string name="choose_audio">Обрати Аудіо</string>
-  <string name="add_another">Додати групу</string>
+  <string name="add_repeat">Додати групу</string>
   <string name="add_another_menu">Додати</string>
-  <string name="add_another_repeat">Додати ще \"%s\" групу?</string>
-  <string name="add_repeat">Додати нову \"%s\" групу?</string>
-  <string name="add_repeat_no">Не додавати</string>
-  <string name="cancel">Скасувати</string>
+    <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
   <string name="canceling">Скасування</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">Скасувати</string>
   <string name="do_not_exit">Скасувати</string>
   <string name="do_not_save">Не зберігати</string>
-  <string name="entering_repeat">Додати групу</string>
-  <string name="entering_repeat_ask">Додати нову групу?</string>
-  <string name="enter_data">Заповнити анкету</string>
+    <string name="enter_data">Заповнити анкету</string>
   <string name="enter_data_button">Заповнити анкету</string>
   <string name="error_occured">Сталась помилка</string>
   <string name="error_attaching_binary_file">При додаванні медіафайлу: %s сталась помилка</string>
@@ -76,9 +71,8 @@
   <string name="jump_to_beginning">Перейти на початок</string>
   <string name="jump_to_end">Перейти в кінець</string>
   <string name="jump_to_previous">Перейти назад</string>
-  <string name="leave_repeat_yes">Не додавати</string>
-  <string name="leaving_repeat_ask">Додати ще одну групу?</string>
-  <string name="list_failed_with_error">Складання списку не вдалося. %s.</string>
+  <string name="dont_add_repeat">Не додавати</string>
+    <string name="list_failed_with_error">Складання списку не вдалося. %s.</string>
   <string name="loading_form">Завантаження анкети</string>
   <string name="load_remote_form_error">Помилка отримання списку анкет</string>
   <string name="location_provider_accuracy">Використання %1$s. Точність %2$s м.</string>

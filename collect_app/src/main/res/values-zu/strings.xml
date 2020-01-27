@@ -1,9 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Awukho umsebenzi otholakalayo ukusingatha: %s</string>
-  <string name="add_another">Engeza Iqembu</string>
-  <string name="add_repeat_no">Musa Ukwengeza</string>
-  <string name="cancel">Khansela</string>
+  <string name="add_repeat">Engeza Iqembu</string>
+    <string name="cancel">Khansela</string>
   <string name="cancel_loading_form">Khansela</string>
   <string name="cancel_location">Khansela</string>
   <string name="capture_audio">Qopha umsindo</string>
@@ -38,9 +37,7 @@
   <string name="do_not_change">Khansela</string>
   <string name="do_not_exit">Khansela</string>
   <string name="do_not_save">Ziba izinguquko</string>
-  <string name="entering_repeat">Engeza iqembu</string>
-  <string name="entering_repeat_ask">Engeza iqembu elisha?</string>
-  <string name="enter_data"> Gcwalisa ifomu elingagcwalisiwe</string>
+    <string name="enter_data"> Gcwalisa ifomu elingagcwalisiwe</string>
   <string name="enter_data_button"> Gcwalisa ifomu elingagcwalisiwe</string>
   <string name="error_occured">Iphutha lenzekile</string>
   <string name="error_attaching_binary_file">Iphutha lenzekile ngenkathi kunafakwa : %s</string>
@@ -61,8 +58,7 @@
   <string name="jump_to_beginning">Yana ekuqaleni</string>
   <string name="jump_to_end">Yana ekugcineni</string>
   <string name="jump_to_previous">Iya phezulu</string>
-  <string name="leave_repeat_yes">Ungengezi</string>
-  <string name="leaving_repeat_ask">Engeza elinye iqembu elilodwa</string>
+  <string name="dont_add_repeat">Ungengezi</string>
   <string name="list_failed_with_error">Ukukleliswa kwamafomu akuphumelelanga. %s.</string>
   <string name="loading_form">Kufakwa ifomu</string>
   <string name="load_remote_form_error">Iphutha ekutholeni uhlu lwamafomu</string>

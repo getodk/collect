@@ -7,12 +7,9 @@
   <string name="signature_capture">Zachycení podpisu</string>
   <string name="view_video">Zobrazit video</string>
   <string name="choose_audio">Vybrat zvuk</string>
-  <string name="add_another">Přidat skupinu</string>
+  <string name="add_repeat">Přidat skupinu</string>
   <string name="add_another_menu">Přidat další</string>
-  <string name="add_another_repeat">Přidat další \"%s\" skupinu?</string>
-  <string name="add_repeat">Pridat další \"%s\" skupinu?</string>
-  <string name="add_repeat_no">Nepřidávat</string>
-  <string name="cancel">Zrušit</string>
+    <string name="cancel">Zrušit</string>
   <string name="cancel_loading_form">Zrušit</string>
   <string name="cancel_location">Zrušit</string>
   <string name="canceling">Zrušení</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">Zrušit</string>
   <string name="do_not_exit">Zrušit</string>
   <string name="do_not_save">Ignorovat změny</string>
-  <string name="entering_repeat">Přidat skupinu</string>
-  <string name="entering_repeat_ask">Přidat novou skupinu?</string>
-  <string name="enter_data">Vyplnit dotazník</string>
+    <string name="enter_data">Vyplnit dotazník</string>
   <string name="enter_data_button">Vyplnit dotazník</string>
   <string name="error_occured">Vyskytla se chyba</string>
   <string name="error_attaching_binary_file">Při vkládání médií: %s nastala chyba</string>
@@ -76,9 +71,8 @@
   <string name="jump_to_beginning">Přejít na začátek</string>
   <string name="jump_to_end">Přejít na konec</string>
   <string name="jump_to_previous">Přejít nahoru</string>
-  <string name="leave_repeat_yes">Nepřidávat</string>
-  <string name="leaving_repeat_ask">Přidat další skupinu?</string>
-  <string name="list_failed_with_error">Výpis dotazníku selhal. %s.</string>
+  <string name="dont_add_repeat">Nepřidávat</string>
+    <string name="list_failed_with_error">Výpis dotazníku selhal. %s.</string>
   <string name="loading_form">Načítám dotazník</string>
   <string name="load_remote_form_error">Chyba při načítání seznamu dotazníků</string>
   <string name="location_provider_accuracy">Používám %1$s. Přesnost: %2$s m.</string>

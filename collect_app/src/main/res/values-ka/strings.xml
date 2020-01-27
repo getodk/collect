@@ -7,12 +7,9 @@
   <string name="signature_capture">ხელმოწერა</string>
   <string name="view_video">ვიდეოს ნახვა</string>
   <string name="choose_audio">აუდიოჩანაწერის არჩევა</string>
-  <string name="add_another">ჯგუფის დამატება</string>
+  <string name="add_repeat">ჯგუფის დამატება</string>
   <string name="add_another_menu">დამატება</string>
-  <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
-  <string name="add_repeat">დავამატოთ ახალი \"%s\" ჯგუფი?</string>
-  <string name="add_repeat_no">არ დაამატო</string>
-  <string name="cancel">გაუქმება</string>
+    <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
   <string name="canceling">მიმდინარეობს გაუქმება</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">გაუქმება</string>
   <string name="do_not_exit">გაუქმება</string>
   <string name="do_not_save">ცვლილებების გაუქმება</string>
-  <string name="entering_repeat">ჯგუფის დამატება</string>
-  <string name="entering_repeat_ask">დავამატოთ ახალი ჯგუფი?</string>
-  <string name="enter_data">ცარიელი ფორმის შევსება</string>
+    <string name="enter_data">ცარიელი ფორმის შევსება</string>
   <string name="enter_data_button">შეავსეთ ცარიელი ფორმა</string>
   <string name="error_occured">მოხდა შეცდომა</string>
   <string name="error_attaching_binary_file">შეცდომა მოხდა მედიაფაილის მიმაგრებისას: %s</string>
@@ -75,9 +70,8 @@
   <string name="jump_to_beginning">დასაწყისში გადასვლა</string>
   <string name="jump_to_end">ბოლოში გადასვლა</string>
   <string name="jump_to_previous">ზევით ასვლა</string>
-  <string name="leave_repeat_yes">არ დაამატო</string>
-  <string name="leaving_repeat_ask">დავამატოთ ახალი ჯგუფი?</string>
-  <string name="list_failed_with_error">ფორმების ჩამონათვალის ჩვენება ვერ მოხერხდა. %s.</string>
+  <string name="dont_add_repeat">არ დაამატო</string>
+    <string name="list_failed_with_error">ფორმების ჩამონათვალის ჩვენება ვერ მოხერხდა. %s.</string>
   <string name="loading_form">ფორმის ჩატვირთვა</string>
   <string name="load_remote_form_error">შეცდომა ფორმების ჩამონათვლის ჩვენებისას</string>
   <string name="location_provider_accuracy">მდებარეობის მიღება %1$s-ით. აკურატულობა შეადგენს %2$s მეტრს.</string>

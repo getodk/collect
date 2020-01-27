@@ -7,12 +7,9 @@
   <string name="signature_capture">Ambil tanda tangan</string>
   <string name="view_video">Lihat video</string>
   <string name="choose_audio">Pilih suara</string>
-  <string name="add_another">Tambah grup</string>
+  <string name="add_repeat">Tambah grup</string>
   <string name="add_another_menu">Tambah lainnya</string>
-  <string name="add_another_repeat">Tambah grup \"%s\" lainnya?</string>
-  <string name="add_repeat">Tambah grup \"%s\" baru?</string>
-  <string name="add_repeat_no">Tidak usah ditambahkan</string>
-  <string name="cancel">Batal</string>
+    <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
   <string name="canceling">Membatalkan</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">Batal</string>
   <string name="do_not_exit">Batal</string>
   <string name="do_not_save">Abaikan perubahan</string>
-  <string name="entering_repeat">Tambah grup</string>
-  <string name="entering_repeat_ask">Tambah grup baru?</string>
-  <string name="enter_data">Isi formulir kosong</string>
+    <string name="enter_data">Isi formulir kosong</string>
   <string name="enter_data_button">Isi formulir kosong</string>
   <string name="error_occured">Terjadi kesalahan</string>
   <string name="error_attaching_binary_file">Terjadi kesalahan saat memasukkan berkas media: %s</string>
@@ -76,8 +71,7 @@
   <string name="jump_to_beginning">Awal</string>
   <string name="jump_to_end">Akhir</string>
   <string name="jump_to_previous">Atas</string>
-  <string name="leave_repeat_yes">Batal</string>
-  <string name="leaving_repeat_ask">Tambahkan grup lagi?</string>
+  <string name="dont_add_repeat">Batal</string>
   <string name="list_failed_with_error">Pendataan formulir gagal. %s.</string>
   <string name="loading_form">Sedang memuat formulir</string>
   <string name="load_remote_form_error">Terjadi kesalahan saat mengambil daftar fromulir</string>

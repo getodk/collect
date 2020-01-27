@@ -7,11 +7,8 @@
   <string name="signature_capture">ថតហត្ថលេខា</string>
   <string name="view_video">បង្ហាញវីដេអូ</string>
   <string name="choose_audio">ជ្រើសរើសសម្លេង</string>
-  <string name="add_another">បន្ថែម​ក្រុម</string>
-  <string name="add_another_repeat">បន្ថែម​ក្រុម \"%s\" មួយ​ទៀត?</string>
-  <string name="add_repeat">បន្ថែម​ក្រុម \"%s\" ថ្មី​មួយ?</string>
-  <string name="add_repeat_no">កុំ​បន្ថែម</string>
-  <string name="cancel">បោះបង់</string>
+  <string name="add_repeat">បន្ថែម​ក្រុម</string>
+    <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
   <string name="canceling">កំពុង​បោះបង់</string>
@@ -50,9 +47,7 @@
   <string name="do_not_change">បោះបង់</string>
   <string name="do_not_exit">បោះបង់</string>
   <string name="do_not_save">បោះបង់ការផ្លាស់ប្តូរ</string>
-  <string name="entering_repeat">បន្ថែម​ក្រុម</string>
-  <string name="entering_repeat_ask">បន្ថែម​ក្រុម​មួយ​ទៀត?</string>
-  <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
+    <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
   <string name="enter_data_button">បំពេញសំណុំបែបបទទទេ</string>
   <string name="error_occured">មានបញ្ហាបានកើតឡើង</string>
   <string name="error_attaching_binary_file">មានបញ្ហាមួយបានកើតឡើងខណៈដែលភ្ជាប់ឯកសារមេឌៀ: %s</string>
@@ -75,9 +70,8 @@
   <string name="jump_to_beginning">ទៅកន្លែងចាប់ផ្តើម</string>
   <string name="jump_to_end">ទៅកន្លែងបញ្ចប់</string>
   <string name="jump_to_previous">ទៅឡើង</string>
-  <string name="leave_repeat_yes">កុំ​បន្ថែម</string>
-  <string name="leaving_repeat_ask">បន្ថែមក្នុងក្រុមមួយទៀត?</string>
-  <string name="list_failed_with_error">ការធ្វើបញ្ជីសំណុំបែបបទបរាជ័យ %s ។</string>
+  <string name="dont_add_repeat">កុំ​បន្ថែម</string>
+    <string name="list_failed_with_error">ការធ្វើបញ្ជីសំណុំបែបបទបរាជ័យ %s ។</string>
   <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
   <string name="load_remote_form_error">បញ្ហានៃការទាញបញ្ជីសំណុំបែបបទ</string>
   <string name="location_provider_accuracy">កំពុងប្រើប្រាស់ %1$s. ភាពត្រឹមត្រូវគឺ %2$s ម៉ែត្រ.</string>

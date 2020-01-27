@@ -4,10 +4,8 @@
   <string name="view_image">lakisa bilili</string>
   <string name="view_video">lakisa video</string>
   <string name="choose_audio">pona elili</string>
-  <string name="add_another">bakisa lingomba</string>
-  <string name="add_another_repeat">%sbakisa na lisanga</string>
-  <string name="add_repeat_no">kobakisa té</string>
-  <string name="cancel">longola</string>
+  <string name="add_repeat">bakisa lingomba</string>
+    <string name="cancel">longola</string>
   <string name="cancel_loading_form">longola</string>
   <string name="cancel_location">longola</string>
   <string name="capture_image">kanga elili</string>
@@ -20,9 +18,7 @@
   <string name="delete_repeat_no">longola</string>
   <string name="do_not_change">longola</string>
   <string name="do_not_exit">longola</string>
-  <string name="entering_repeat">bakisa lingomba</string>
-  <string name="entering_repeat_ask">bakisa lingomba ya sika</string>
-  <string name="leave_repeat_yes">kobakisa té</string>
+    <string name="dont_add_repeat">kobakisa té</string>
   <string name="no_items_display">Eloko ezate yako lakisa</string>
   <string name="play_video">beta video</string>
   <string name="send_selected_data_sms">kotinda</string>

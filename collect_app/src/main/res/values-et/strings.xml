@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">%s teostamiseks ei leidu toimingut</string>
-  <string name="add_another">Lisa grupp</string>
-  <string name="add_another_repeat">Lisa veel üks \"%s\" grupp?</string>
-  <string name="add_repeat">Lisa uus \"%s\" grupp?</string>
-  <string name="add_repeat_no">Ei lisa</string>
-  <string name="cancel">Tühista</string>
+  <string name="add_repeat">Lisa grupp</string>
+    <string name="cancel">Tühista</string>
   <string name="cancel_loading_form">Tühista</string>
   <string name="cancel_location">Tühista</string>
   <string name="capture_audio">Heli salvestamine</string>
@@ -41,9 +38,7 @@
   <string name="do_not_change">Tühista</string>
   <string name="do_not_exit">Tühista</string>
   <string name="do_not_save">Eira muudatusi</string>
-  <string name="entering_repeat">Lisa grupp</string>
-  <string name="entering_repeat_ask">Lisa uus grupp?</string>
-  <string name="enter_data">Täida vorm</string>
+    <string name="enter_data">Täida vorm</string>
   <string name="enter_data_button">Täida vorm</string>
   <string name="error_occured">Esines viga</string>
   <string name="error_attaching_binary_file">Meedia %s lisamisel esines viga </string>
@@ -65,9 +60,8 @@
   <string name="jump_to_beginning">Liigu algusesse</string>
   <string name="jump_to_end">Liigu lõppu</string>
   <string name="jump_to_previous">Liigu üles</string>
-  <string name="leave_repeat_yes">Ei lisa</string>
-  <string name="leaving_repeat_ask">Lisa veel üks grupp?</string>
-  <string name="list_failed_with_error">Vormide kuvamine ebaõnnestus. %s</string>
+  <string name="dont_add_repeat">Ei lisa</string>
+    <string name="list_failed_with_error">Vormide kuvamine ebaõnnestus. %s</string>
   <string name="loading_form">Vormide laadimine</string>
   <string name="load_remote_form_error">Vormide nimekirja laadimisel esines viga</string>
   <string name="location_provider_accuracy">Kasutades %1$s. Täpsusasteks on %2$s m.</string>
