@@ -61,17 +61,16 @@ public class MyanmarDateUtils {
     }
 
     public static String[] getMyanmarMonthsArray(int myanmarYear) {
+        return MyanmarDateKernel
+                .getMyanmarMonth(myanmarYear, 1)
+                .getMonthNameList(getLanguageCatalog())
+                .toArray(new String[0]);
+    }
+
+    public static LanguageCatalog getLanguageCatalog() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return MyanmarDateKernel
-                    .getMyanmarMonth(myanmarYear, 1)
-                    .getMonthNameList(new LanguageCatalog(Language.MYANMAR))
-                    .toArray(new String[0]);
-        } else {
-            return MyanmarDateKernel
-                    .getMyanmarMonth(myanmarYear, 1)
-                    .getMonthNameList(new LanguageCatalog(Language.ENGLISH))
-                    .toArray(new String[0]);
-        }
+            return new LanguageCatalog(Language.MYANMAR);
+        } else return new LanguageCatalog(Language.ENGLISH);
     }
 
     public static int getFirstMonthDay(MyanmarDate myanmarDate) {
