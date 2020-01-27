@@ -61,13 +61,12 @@ public class MyanmarDateUtils {
     }
 
     public static String[] getMyanmarMonthsArray(int myanmarYear) {
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return MyanmarDateKernel
                     .getMyanmarMonth(myanmarYear, 1)
                     .getMonthNameList(new LanguageCatalog(Language.MYANMAR))
                     .toArray(new String[0]);
-        }
-        else {
+        } else {
             return MyanmarDateKernel
                     .getMyanmarMonth(myanmarYear, 1)
                     .getMonthNameList(new LanguageCatalog(Language.ENGLISH))
