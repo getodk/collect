@@ -27,8 +27,8 @@ public class AboutPage extends Page<AboutPage> {
         return this;
     }
 
-    public AboutPage clickOnOpenSourceLibrariesLicenses() {
+    public OpenSourceLicensesPage clickOnOpenSourceLibrariesLicenses() {
         onView(withText(R.string.all_open_source_licenses)).perform(click());
-        return this;
+        return new OpenSourceLicensesPage(rule);
     }
 }

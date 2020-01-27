@@ -284,6 +284,23 @@ abstract class Page<T extends Page<T>> {
         onView(withClassName(endsWith("WebView"))).check(matches(isDisplayed()));
         return (T) this;
     }
+
+    void waitForText(String text) {
+        while (true) {
+            try {
+                checkIsTextDisplayed(text);
+                break;
+            } catch (NoMatchingViewException ignored) {
+                // ignored
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+                // ignored
+            }
+        }
+    }
 }
 
 
