@@ -2,11 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostra clau d\'accés</string>
   <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
-  <string name="add_another">Afegir grup</string>
-  <string name="add_another_repeat">Afegir un altre grup \"%s\"?</string>
-  <string name="add_repeat">Afegir un nou grup \"%s\"?</string>
-  <string name="add_repeat_no">No afegir</string>
-  <string name="cancel">Cancel·lar</string>
+  <string name="add_repeat">Afegir grup</string>
+    <string name="cancel">Cancel·lar</string>
   <string name="cancel_loading_form">Cancel·lar</string>
   <string name="cancel_location">Cancel·lar</string>
   <string name="cannot_edit_completed_form">No es pot editar un formulari un cop finalitzat.  Pot estar encriptat.</string>
@@ -43,9 +40,7 @@
   <string name="do_not_change">Cancel·lar</string>
   <string name="do_not_exit">Cancel·lar</string>
   <string name="do_not_save">Ignorar canvis</string>
-  <string name="entering_repeat">Afegir grup</string>
-  <string name="entering_repeat_ask">Afegir nou grup?</string>
-  <string name="enter_data">Omplir nou formulari</string>
+    <string name="enter_data">Omplir nou formulari</string>
   <string name="enter_data_button">Omplir nou formulari</string>
   <string name="error_occured">S\'ha produït un error</string>
   <string name="error_attaching_binary_file">Error detectat al connectar medi: %s</string>
@@ -66,9 +61,8 @@
   <string name="jump_to_beginning">Anar a l\'inici</string>
   <string name="jump_to_end">Anar al final</string>
   <string name="jump_to_previous">Ves enrera</string>
-  <string name="leave_repeat_yes">No afegir</string>
-  <string name="leaving_repeat_ask">Afegir un altre grup?</string>
-  <string name="list_failed_with_error">Error al llistar formularis. %s.</string>
+  <string name="dont_add_repeat">No afegir</string>
+    <string name="list_failed_with_error">Error al llistar formularis. %s.</string>
   <string name="loading_form">Carregant formulari</string>
   <string name="load_remote_form_error">Error al demanar la llista de formularis</string>
   <string name="location_provider_accuracy">Usant %1$s. Precisió de %2$s m.</string>

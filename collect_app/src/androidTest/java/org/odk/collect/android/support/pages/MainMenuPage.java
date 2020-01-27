@@ -38,10 +38,9 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new FormEntryPage(formName, rule).assertOnPage();
     }
 
-    public AddNewGroupDialog startBlankFormWithRepeatGroup(String formName) {
+    public AddNewRepeatDialog startBlankFormWithRepeatGroup(String formName, String repeatName) {
         goToBlankForm(formName);
-
-        return new AddNewGroupDialog(rule).assertOnPage();
+        return new AddNewRepeatDialog(repeatName, rule).assertOnPage();
     }
 
     public ErrorDialog startBlankFormWithError(String formName) {

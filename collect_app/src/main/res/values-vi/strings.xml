@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Không có hành động phù hợp với: %s</string>
-  <string name="add_another">Thêm nhóm</string>
-  <string name="add_another_repeat">Thêm 1 \"%s\" khác?</string>
-  <string name="add_repeat">Thêm 1 \"%s\" mới?</string>
-  <string name="add_repeat_no">Không được thêm</string>
-  <string name="cancel">Huỷ</string>
+  <string name="add_repeat">Thêm nhóm</string>
+    <string name="cancel">Huỷ</string>
   <string name="cancel_loading_form">Huỷ</string>
   <string name="cancel_location">Huỷ</string>
   <string name="capture_audio">Ghi âm</string>
@@ -41,9 +38,7 @@
   <string name="do_not_change">Huỷ</string>
   <string name="do_not_exit">Huỷ</string>
   <string name="do_not_save">Không lưu thay đổi</string>
-  <string name="entering_repeat">Thêm nhóm</string>
-  <string name="entering_repeat_ask">Thêm nhóm mới?</string>
-  <string name="enter_data">Điền biểu mẫu</string>
+    <string name="enter_data">Điền biểu mẫu</string>
   <string name="enter_data_button">Điền biểu mẫu</string>
   <string name="error_occured">Lỗi xuất hiện</string>
   <string name="error_attaching_binary_file">Có lỗi xảy ra khi đính kèm định dạng media: %s</string>
@@ -64,9 +59,8 @@
   <string name="jump_to_beginning">Về đầu tiên</string>
   <string name="jump_to_end">Đến cuối cùng</string>
   <string name="jump_to_previous">Về trước</string>
-  <string name="leave_repeat_yes">Không thêm</string>
-  <string name="leaving_repeat_ask">Thêm một nhóm nữa?</string>
-  <string name="list_failed_with_error">Lỗi hiển thị biểu mẫu. %s.</string>
+  <string name="dont_add_repeat">Không thêm</string>
+    <string name="list_failed_with_error">Lỗi hiển thị biểu mẫu. %s.</string>
   <string name="loading_form">Tải biểu mẫu</string>
   <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
   <string name="location_provider_accuracy">Sử dụng %1$s. Độ chính xác là %2$s m.</string>

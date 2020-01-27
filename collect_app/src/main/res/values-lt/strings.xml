@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Nerasta, kas galėtų valdyti: %s</string>
-  <string name="add_another">Sukurti grupę</string>
-  <string name="add_another_repeat">Sukurti kitą \"%s\" grupę?</string>
-  <string name="add_repeat">Sukurti naują \"%s\" grupę?</string>
-  <string name="add_repeat_no">Nekurti</string>
-  <string name="cancel">Atšaukti</string>
+  <string name="add_repeat">Sukurti grupę</string>
+    <string name="cancel">Atšaukti</string>
   <string name="cancel_loading_form">Atšaukti</string>
   <string name="cancel_location">Atšaukti</string>
   <string name="capture_audio">Įrašyti garsą</string>
@@ -38,9 +35,7 @@
   <string name="do_not_change">Atšaukti</string>
   <string name="do_not_exit">Atšaukti</string>
   <string name="do_not_save">Ignoruoti pakeitimus</string>
-  <string name="entering_repeat">Sukurti grupę</string>
-  <string name="entering_repeat_ask">Sukurti naują grupę?</string>
-  <string name="enter_data">Pildyti tuščią formą</string>
+    <string name="enter_data">Pildyti tuščią formą</string>
   <string name="enter_data_button">Pildyti tuščią formą</string>
   <string name="error_occured">Įvyko klaida</string>
   <string name="file_deleted_error">Deja, nepavyko ištrinti %1$s iš %2$s parinktų formų!</string>
@@ -59,9 +54,8 @@
   <string name="jump_to_beginning">Eiti į pradžią</string>
   <string name="jump_to_end">Eiti į pabaigą</string>
   <string name="jump_to_previous">Eiti į viršų</string>
-  <string name="leave_repeat_yes">Nesukurti</string>
-  <string name="leaving_repeat_ask">Sukurti dar vieną grupę?</string>
-  <string name="list_failed_with_error">Nepavyko gauti formų sąrašo. %s.</string>
+  <string name="dont_add_repeat">Nesukurti</string>
+    <string name="list_failed_with_error">Nepavyko gauti formų sąrašo. %s.</string>
   <string name="loading_form">Įkeliama forma</string>
   <string name="load_remote_form_error">Klaida nuskaitant formų sąrašą</string>
   <string name="location_provider_accuracy">Naudojama %1$s. Tikslumas yra %2$s m.</string>

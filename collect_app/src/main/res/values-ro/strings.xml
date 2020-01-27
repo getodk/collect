@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Nu s-a găsit nicio activitate care să se ocupe de : %s</string>
-  <string name="add_another">Adăugați grup</string>
-  <string name="add_another_repeat">Adăugați încă un grup \"%s\"?</string>
-  <string name="add_repeat">Adăugați un nou grup \"%s\"?</string>
-  <string name="add_repeat_no">Nu adăugați</string>
-  <string name="cancel">Anulează</string>
+  <string name="add_repeat">Adăugați grup</string>
+    <string name="cancel">Anulează</string>
   <string name="cancel_loading_form">Anulează</string>
   <string name="cancel_location">Anulează</string>
   <string name="capture_audio">Înregistrează sunet</string>
@@ -41,9 +38,7 @@
   <string name="do_not_change">Anulați</string>
   <string name="do_not_exit">Anulați</string>
   <string name="do_not_save">Ignorați modificările</string>
-  <string name="entering_repeat">Adăugați un grup</string>
-  <string name="entering_repeat_ask">Adăugați un grup nou?</string>
-  <string name="enter_data">Completați formular necompletat</string>
+    <string name="enter_data">Completați formular necompletat</string>
   <string name="enter_data_button">Completați formular necompletat</string>
   <string name="error_occured">Eroare</string>
   <string name="error_attaching_binary_file">A intervenit o eroare în timpul atașării fișierului media: %s</string>
@@ -64,9 +59,8 @@
   <string name="jump_to_beginning">Mergeți la început</string>
   <string name="jump_to_end">Mergeți la sfârșit</string>
   <string name="jump_to_previous">Mergeți sus</string>
-  <string name="leave_repeat_yes">Nu adăugați</string>
-  <string name="leaving_repeat_ask">Adăugați încă un grup?</string>
-  <string name="list_failed_with_error">Afișarea formularului a eșuat. %s.</string>
+  <string name="dont_add_repeat">Nu adăugați</string>
+    <string name="list_failed_with_error">Afișarea formularului a eșuat. %s.</string>
   <string name="loading_form">Încărcare formular</string>
   <string name="load_remote_form_error">Eroare la preluarea listei de formulare</string>
   <string name="location_provider_accuracy">Utilizat %1$s. Precizie de %2$s m.</string>

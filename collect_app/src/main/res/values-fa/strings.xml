@@ -7,12 +7,9 @@
   <string name="signature_capture">ثبت امضا</string>
   <string name="view_video">نشان دادن ویدیو</string>
   <string name="choose_audio">انتخاب صدا </string>
-  <string name="add_another">اضافه کردن گروپ</string>
+  <string name="add_repeat">اضافه کردن گروپ</string>
   <string name="add_another_menu">اضافه کردن دیگر</string>
-  <string name="add_another_repeat">گروپی دیگری از \"%s\" را اضافه میکنید؟</string>
-  <string name="add_repeat">گروپی جدیدی از \"%s\" را اضافه میکنید؟</string>
-  <string name="add_repeat_no">اضافه نکنید</string>
-  <string name="cancel">لغو </string>
+    <string name="cancel">لغو </string>
   <string name="cancel_loading_form">لغو</string>
   <string name="cancel_location">لغو</string>
   <string name="canceling">لغو کردن</string>
@@ -49,9 +46,7 @@
   <string name="do_not_change">انصراف</string>
   <string name="do_not_exit">انصراف</string>
   <string name="do_not_save">نادیده گرفتن تغییرات</string>
-  <string name="entering_repeat">اضافه کردن گروه</string>
-  <string name="entering_repeat_ask">اضافه کردن گروپ جدید</string>
-  <string name="enter_data">فورم خالی را پر کنید</string>
+    <string name="enter_data">فورم خالی را پر کنید</string>
   <string name="enter_data_button">فورم خالی را پر کنید</string>
   <string name="error_occured">خطا اتفاق افتاده است</string>
   <string name="error_attaching_binary_file">در زمان ضمیمه کردن فایل رسانه ای خطا رخ داد: %s</string>
@@ -70,7 +65,7 @@
   <string name="jump_to_beginning">به شروع برو</string>
   <string name="jump_to_end">به آخر برو</string>
   <string name="jump_to_previous">بالا برو</string>
-  <string name="leave_repeat_yes">اضافه نکنید</string>
+  <string name="dont_add_repeat">اضافه نکنید</string>
   <string name="loading_form">در حال آماده سازی فورم</string>
   <string name="main_menu">منوی اصلی</string>
   <string name="manage_files">حذف فورم ذخیره شده</string>

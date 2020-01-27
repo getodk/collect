@@ -1,10 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Geen aktiwiteit om te hanteer nie: %s</string>
-  <string name="add_another">Voeg Groep by</string>
-  <string name="add_another_repeat">Voeg nog \'n \"%s\" groep by?</string>
-  <string name="add_repeat">Voeg \'n nuwe \"%s\" groep by?</string>
-  <string name="add_repeat_no">Moenie byvoeg nie</string>
+  <string name="add_repeat">Voeg Groep by</string>
   <string name="cancel">Kanselleer</string>
   <string name="cancel_loading_form">Kanselleer</string>
   <string name="cancel_location">Kanselleer</string>
@@ -41,9 +38,7 @@
   <string name="do_not_change">Kanselleer</string>
   <string name="do_not_exit">Kanselleer</string>
   <string name="do_not_save">Ignoreer Veranderinge</string>
-  <string name="entering_repeat">Voeg Groep by</string>
-  <string name="entering_repeat_ask">Voeg Nuwe Groep By?</string>
-  <string name="enter_data">Vul Leë Vorm In</string>
+    <string name="enter_data">Vul Leë Vorm In</string>
   <string name="enter_data_button">Vul Leë Vorm In</string>
   <string name="error_occured">Daar was \'n fout</string>
   <string name="error_attaching_binary_file">\'n Fout het gebeur tydens aanheg van media: %s</string>
@@ -64,9 +59,8 @@
   <string name="jump_to_beginning">Gaan na Begin</string>
   <string name="jump_to_end">Gaan na Einde</string>
   <string name="jump_to_previous">Gaan op</string>
-  <string name="leave_repeat_yes">Moenie byvoeg nie</string>
-  <string name="leaving_repeat_ask">Voeg nog een groep by?</string>
-  <string name="list_failed_with_error">Opstel van vormlys het misluk. %s.</string>
+  <string name="dont_add_repeat">Moenie byvoeg nie</string>
+    <string name="list_failed_with_error">Opstel van vormlys het misluk. %s.</string>
   <string name="loading_form">Besig om vorm te laai</string>
   <string name="load_remote_form_error">Fout tydens haal van vormlys</string>
   <string name="location_provider_accuracy">Gebruik tans %1$s. Akkuraatheid is %2$s m.</string>

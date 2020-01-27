@@ -7,12 +7,9 @@
   <string name="signature_capture">Подпись</string>
   <string name="view_video">Просмотреть видео</string>
   <string name="choose_audio">Выбрать аудиозапись</string>
-  <string name="add_another">Добавить группу</string>
+  <string name="add_repeat">Добавить группу</string>
   <string name="add_another_menu">Добавить другое</string>
-  <string name="add_another_repeat">Добавить другую группу \"%s\"?</string>
-  <string name="add_repeat">Добавить новую группу \"%s\"?</string>
-  <string name="add_repeat_no">Не добавлять</string>
-  <string name="cancel">Отмена</string>
+    <string name="cancel">Отмена</string>
   <string name="cancel_loading_form">Отмена</string>
   <string name="cancel_location">Отмена</string>
   <string name="canceling">Отменяю</string>
@@ -50,9 +47,7 @@
   <string name="do_not_change">Отмена</string>
   <string name="do_not_exit">Отмена</string>
   <string name="do_not_save">Удалить ответы</string>
-  <string name="entering_repeat">Добавить группу</string>
-  <string name="entering_repeat_ask">Добавить новую группу?</string>
-  <string name="enter_data">Заполнение бланка</string>
+    <string name="enter_data">Заполнение бланка</string>
   <string name="enter_data_button">ЗАПОЛНИТЬ БЛАНК</string>
   <string name="error_occured">Произошла ошибка</string>
   <string name="error_attaching_binary_file">Произошла ошибка при добавлении файла: %s</string>
@@ -75,9 +70,8 @@
   <string name="jump_to_beginning">В начало</string>
   <string name="jump_to_end">В конец</string>
   <string name="jump_to_previous">Назад</string>
-  <string name="leave_repeat_yes">Не добавлять</string>
-  <string name="leaving_repeat_ask">Добавить ещё одну группу?</string>
-  <string name="list_failed_with_error">Не удалось вывести список бланков опросников: %s шт.</string>
+  <string name="dont_add_repeat">Не добавлять</string>
+    <string name="list_failed_with_error">Не удалось вывести список бланков опросников: %s шт.</string>
   <string name="loading_form">Загрузка бланка опросника…</string>
   <string name="load_remote_form_error">Не удалось получить список бланков</string>
   <string name="location_provider_accuracy">Использую %1$s. Точность %2$s м.</string>

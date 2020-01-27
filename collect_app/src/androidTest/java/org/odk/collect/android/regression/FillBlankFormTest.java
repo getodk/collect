@@ -160,8 +160,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         //TestCase41
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("formulaire_adherent")
-                .clickOnAddGroup(new FormEntryPage("formulaire_adherent", rule))
+                .startBlankFormWithRepeatGroup("formulaire_adherent", "Ajouté une observation")
+                .clickOnAdd(new FormEntryPage("formulaire_adherent", rule))
                 .clickOnText("Plante")
                 .inputText("Abi")
                 .swipeToNextQuestion()

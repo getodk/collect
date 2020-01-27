@@ -95,6 +95,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSaveViewModel;
+import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -1700,89 +1701,69 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        alertDialog = new AlertDialog.Builder(this).create();
-        DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                shownAlertDialogIsGroupRepeat = false;
-                FormController formController = getFormController();
-                switch (i) {
-                    case BUTTON_POSITIVE: // yes, repeat
-                        try {
-                            formController.newRepeat();
-                        } catch (Exception e) {
-                            FormEntryActivity.this.createErrorDialog(
-                                    e.getMessage(), DO_NOT_EXIT);
-                            return;
-                        }
-                        if (!formController.indexIsInFieldList()) {
-                            // we are at a REPEAT event that does not have a
-                            // field-list appearance
-                            // step to the next visible field...
-                            // which could be the start of a new repeat group...
-                            showNextView();
-                        } else {
-                            // we are at a REPEAT event that has a field-list
-                            // appearance
-                            // just display this REPEAT event's group.
-                            refreshCurrentView();
-                        }
-                        break;
-                    case BUTTON_NEGATIVE: // no, no repeat
-                        //
-                        // Make sure the error dialog will not disappear.
-                        //
-                        // When showNextView() popups an error dialog (because of a
-                        // JavaRosaException)
-                        // the issue is that the "add new repeat dialog" is referenced by
-                        // alertDialog
-                        // like the error dialog. When the "no repeat" is clicked, the error dialog
-                        // is shown. Android by default dismisses the dialogs when a button is
-                        // clicked,
-                        // so instead of closing the first dialog, it closes the second.
-                        new Thread() {
-
-                            @Override
-                            public void run() {
-                                FormEntryActivity.this.runOnUiThread(() -> {
-                                    try {
-                                        Thread.sleep(500);
-                                    } catch (InterruptedException e) {
-                                        //This is rare
-                                        Timber.e(e);
-                                    }
-                                    showNextView();
-                                });
-                            }
-                        }.start();
-
-                        break;
-                }
-            }
-        };
-        FormController formController = getFormController();
-        if (formController.getLastRepeatCount() > 0) {
-            alertDialog.setTitle(getString(R.string.leaving_repeat_ask));
-            alertDialog.setMessage(getString(R.string.add_another_repeat,
-                    formController.getLastGroupText()));
-            alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.add_another),
-                    repeatListener);
-            alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.leave_repeat_yes),
-                    repeatListener);
-
-        } else {
-            alertDialog.setTitle(getString(R.string.entering_repeat_ask));
-            alertDialog.setMessage(getString(R.string.add_repeat,
-                    formController.getLastGroupText()));
-            alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.entering_repeat),
-                    repeatListener);
-            alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.add_repeat_no),
-                    repeatListener);
-        }
-        alertDialog.setCancelable(false);
         beenSwiped = false;
         shownAlertDialogIsGroupRepeat = true;
-        alertDialog.show();
+
+        AddRepeatDialog.show(this, getFormController(), new AddRepeatDialog.Listener() {
+            @Override
+            public void onAddRepeatClicked() {
+                shownAlertDialogIsGroupRepeat = false;
+
+                FormController formController = getFormController();
+
+                try {
+                    formController.newRepeat();
+                } catch (Exception e) {
+                    FormEntryActivity.this.createErrorDialog(
+                            e.getMessage(), DO_NOT_EXIT);
+                    return;
+                }
+                if (!formController.indexIsInFieldList()) {
+                    // we are at a REPEAT event that does not have a
+                    // field-list appearance
+                    // step to the next visible field...
+                    // which could be the start of a new repeat group...
+                    showNextView();
+                } else {
+                    // we are at a REPEAT event that has a field-list
+                    // appearance
+                    // just display this REPEAT event's group.
+                    refreshCurrentView();
+                }
+            }
+
+            @Override
+            public void onCancelClicked() {
+                shownAlertDialogIsGroupRepeat = false;
+
+                //
+                // Make sure the error dialog will not disappear.
+                //
+                // When showNextView() popups an error dialog (because of a
+                // JavaRosaException)
+                // the issue is that the "add new repeat dialog" is referenced by
+                // alertDialog
+                // like the error dialog. When the "no repeat" is clicked, the error dialog
+                // is shown. Android by default dismisses the dialogs when a button is
+                // clicked,
+                // so instead of closing the first dialog, it closes the second.
+                new Thread() {
+
+                    @Override
+                    public void run() {
+                        FormEntryActivity.this.runOnUiThread(() -> {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                //This is rare
+                                Timber.e(e);
+                            }
+                            showNextView();
+                        });
+                    }
+                }.start();
+            }
+        });
     }
 
     /**
