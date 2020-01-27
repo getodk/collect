@@ -203,8 +203,8 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
 
         //TestCase7
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("RepeatGroupNew")
-                .clickOnAddGroup(new FormEntryPage("RepeatGroupNew", rule))
+                .startBlankFormWithRepeatGroup("RepeatGroupNew", "People")
+                .clickOnAdd(new FormEntryPage("RepeatGroupNew", rule))
                 .inputText("A")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
@@ -238,8 +238,8 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
 
         //TestCase8
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("RepeatGroupNew")
-                .clickOnAddGroup(new FormEntryPage("RepeatGroupNew", rule))
+                .startBlankFormWithRepeatGroup("RepeatGroupNew", "People")
+                .clickOnAdd(new FormEntryPage("RepeatGroupNew", rule))
                 .inputText("A")
                 .closeSoftKeyboard()
                 .swipeToNextQuestion()
