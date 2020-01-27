@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import android.os.Build;
+
 import org.joda.time.LocalDateTime;
 
 import mmcalendar.Language;
@@ -59,10 +61,18 @@ public class MyanmarDateUtils {
     }
 
     public static String[] getMyanmarMonthsArray(int myanmarYear) {
-        return MyanmarDateKernel
-                .getMyanmarMonth(myanmarYear, 1)
-                .getMonthNameList(new LanguageCatalog(Language.MYANMAR))
-                .toArray(new String[0]);
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return MyanmarDateKernel
+                    .getMyanmarMonth(myanmarYear, 1)
+                    .getMonthNameList(new LanguageCatalog(Language.MYANMAR))
+                    .toArray(new String[0]);
+        }
+        else {
+            return MyanmarDateKernel
+                    .getMyanmarMonth(myanmarYear, 1)
+                    .getMonthNameList(new LanguageCatalog(Language.ENGLISH))
+                    .toArray(new String[0]);
+        }
     }
 
     public static int getFirstMonthDay(MyanmarDate myanmarDate) {
