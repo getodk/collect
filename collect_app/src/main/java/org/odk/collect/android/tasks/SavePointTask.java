@@ -59,7 +59,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
 
             try {
                 FormController formController = Collect.getInstance().getFormController();
-                File temp = SaveToDiskTask.getSavepointFile(formController.getInstanceFile().getName());
+                File temp = SaveFormToDisk.getSavepointFile(formController.getInstanceFile().getName());
                 ByteArrayPayload payload = formController.getFilledInFormXml();
 
                 if (priority < lastPriorityUsed) {
@@ -68,7 +68,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
                 }
 
                 // write out xml
-                SaveToDiskTask.writeFile(payload, temp.getAbsolutePath());
+                SaveFormToDisk.writeFile(payload, temp.getAbsolutePath());
 
                 long end = System.currentTimeMillis();
                 Timber.i("Savepoint ms: %s to %s", Long.toString(end - start), temp.toString());

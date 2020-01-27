@@ -17,7 +17,6 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 
@@ -33,6 +32,7 @@ import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,10 +41,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
+import org.odk.collect.android.formentry.FormSaver;
 import org.odk.collect.android.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -69,65 +69,47 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
+public class SaveFormToDisk {
 
-    private FormSavedListener savedListener;
-    private final boolean save;
-    private final boolean markCompleted;
+    private final boolean saveAndExit;
+    private final boolean shouldFinalize;
     private Uri uri;
     private String instanceName;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
-    public static final int VALIDATE_ERROR = 502;
-    public static final int VALIDATED = 503;
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-    public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName) {
+    public SaveFormToDisk(Uri uri, boolean saveAndExit, boolean shouldFinalize, String updatedName) {
         this.uri = uri;
-        save = saveAndExit;
-        this.markCompleted = markCompleted;
+        this.saveAndExit = saveAndExit;
+        this.shouldFinalize = shouldFinalize;
         instanceName = updatedName;
     }
 
-    /**
-     * Initialize {@link FormEntryController} with {@link org.javarosa.core.model.FormDef} from binary or from XML. If
-     * given
-     * an instance, it will be used to fill the {@link org.javarosa.core.model.FormDef}.
-     */
-    @Override
-    protected SaveResult doInBackground(Void... nothing) {
-        SaveResult saveResult = new SaveResult();
+    @Nullable
+    public SaveToDiskResult saveForm(FormSaver.ProgressListener progressListener) {
+        SaveToDiskResult saveToDiskResult = new SaveToDiskResult();
 
         FormController formController = Collect.getInstance().getFormController();
-
-        publishProgress(Collect.getInstance().getString(R.string.survey_saving_validating_message));
+        progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_validating_message));
 
         try {
-            int validateStatus = formController.validateAnswers(markCompleted);
+            int validateStatus = formController.validateAnswers(shouldFinalize);
             if (validateStatus != FormEntryController.ANSWER_OK) {
                 // validation failed, pass specific failure
-                saveResult.setSaveResult(validateStatus, markCompleted);
-                return saveResult;
+                saveToDiskResult.setSaveResult(validateStatus, shouldFinalize);
+                return saveToDiskResult;
             }
         } catch (Exception e) {
             Timber.e(e);
-
-            // SCTO-825
-            // that means that we have a bad design
-            // save the exception to be used in the error dialog.
-            saveResult.setSaveErrorMessage(e.getMessage());
-            saveResult.setSaveResult(SAVE_ERROR, markCompleted);
-            return saveResult;
+            saveToDiskResult.setSaveErrorMessage(e.getMessage());
+            saveToDiskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
+            return saveToDiskResult;
         }
 
-        // check if the "Cancel" was hit and exit.
-        if (isCancelled()) {
-            return null;
-        }
-
-        if (markCompleted) {
+        if (shouldFinalize) {
             formController.postProcessInstance();
         }
 
@@ -142,24 +124,24 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         }
 
         try {
-            exportData(markCompleted);
+            exportData(shouldFinalize, progressListener);
 
             if (formController.getInstanceFile() != null) {
                 removeSavepointFiles(formController.getInstanceFile().getName());
             }
 
-            saveResult.setSaveResult(save ? SAVED_AND_EXIT : SAVED, markCompleted);
+            saveToDiskResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, shouldFinalize);
         } catch (EncryptionException e) {
-            saveResult.setSaveErrorMessage(e.getMessage());
-            saveResult.setSaveResult(ENCRYPTION_ERROR, markCompleted);
+            saveToDiskResult.setSaveErrorMessage(e.getMessage());
+            saveToDiskResult.setSaveResult(ENCRYPTION_ERROR, shouldFinalize);
         } catch (Exception e) {
             Timber.e(e);
 
-            saveResult.setSaveErrorMessage(e.getMessage());
-            saveResult.setSaveResult(SAVE_ERROR, markCompleted);
+            saveToDiskResult.setSaveErrorMessage(e.getMessage());
+            saveToDiskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
         }
 
-        return saveResult;
+        return saveToDiskResult;
     }
 
     /**
@@ -178,7 +160,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         if (instanceName != null) {
             values.put(InstanceColumns.DISPLAY_NAME, instanceName);
         }
-        if (incomplete || !markCompleted) {
+        if (incomplete || !shouldFinalize) {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         } else {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
@@ -272,8 +254,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     /**
      * Extracts geometry information from the given xpath path in the given instance.
      *
-     * Returns a ContentValues object with values set for {@link InstanceColumns.GEOMETRY} and
-     * {@link InstanceColumns.GEOMETRY_TYPE}. Those value are null if anything goes wrong with
+     * Returns a ContentValues object with values set for InstanceColumns.GEOMETRY and
+     * InstanceColumns.GEOMETRY_TYPE. Those value are null if anything goes wrong with
      * parsing the geometry and converting it to GeoJSON.
      *
      * Returns null if the given XPath path is null.
@@ -370,10 +352,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
      * In theory we don't have to write to disk, and this is where you'd add
      * other methods.
      */
-    private void exportData(boolean markCompleted) throws IOException, EncryptionException {
+    private void exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
         FormController formController = Collect.getInstance().getFormController();
 
-        publishProgress(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
+        progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
@@ -381,7 +363,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         MediaManager.INSTANCE.saveChanges();
 
-        publishProgress(Collect.getInstance().getString(R.string.survey_saving_saving_message));
+        progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_saving_message));
 
         writeFile(payload, instancePath);
 
@@ -416,7 +398,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
             // write out submission.xml -- the data to actually submit to aggregate
 
-            publishProgress(
+            progressListener.onProgressUpdate(
                     Collect.getInstance().getString(R.string.survey_saving_finalizing_message));
 
             writeFile(payload, submissionXml.getAbsolutePath());
@@ -429,7 +411,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 canEditAfterCompleted = false;
                 // and encrypt the submission (this is a one-way operation)...
 
-                publishProgress(
+                progressListener.onProgressUpdate(
                         Collect.getInstance().getString(R.string.survey_saving_encrypting_message));
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
@@ -566,32 +548,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     }
                 }
             }
-        }
-    }
-
-    @Override
-    protected void onProgressUpdate(String... values) {
-        super.onProgressUpdate(values);
-
-        if (savedListener != null && values != null) {
-            if (values.length == 1) {
-                savedListener.onProgressStep(values[0]);
-            }
-        }
-    }
-
-    @Override
-    protected void onPostExecute(SaveResult result) {
-        synchronized (this) {
-            if (savedListener != null && result != null) {
-                savedListener.savingComplete(result);
-            }
-        }
-    }
-
-    public void setFormSavedListener(FormSavedListener fsl) {
-        synchronized (this) {
-            savedListener = fsl;
         }
     }
 }

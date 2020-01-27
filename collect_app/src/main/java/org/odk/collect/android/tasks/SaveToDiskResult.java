@@ -23,7 +23,7 @@ package org.odk.collect.android.tasks;
  * Date: 15/3/2013
  * Time: 2:53 μμ
  */
-public class SaveResult {
+public class SaveToDiskResult {
 
     private int saveResult;
     private boolean complete;

@@ -264,7 +264,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 values.put(InstanceColumns.GEOMETRY, (String) null);
                 instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
 
-                SaveToDiskTask.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
+                SaveFormToDisk.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
                 }

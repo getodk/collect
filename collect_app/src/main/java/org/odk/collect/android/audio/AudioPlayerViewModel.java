@@ -9,7 +9,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.Scheduler;
+import org.odk.collect.utilities.Scheduler;
 
 import java.io.File;
 import java.io.IOException;

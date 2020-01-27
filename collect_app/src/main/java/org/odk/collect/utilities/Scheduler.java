@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.utilities;
 
 /**
  * An object that schedules tasks to run in the background repeatedly with a fixed interval
