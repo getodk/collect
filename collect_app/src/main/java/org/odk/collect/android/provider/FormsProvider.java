@@ -117,7 +117,6 @@ public class FormsProvider extends ContentProvider {
                 FormsColumns.AUTO_SEND,
                 FormsColumns.AUTO_DELETE,
                 FormsColumns.LAST_DETECTED_FORM_VERSION_HASH,
-                FormsColumns.GEOMETRY_XPATH,
                 FormsColumns.PROJECT,        // smap
                 FormsColumns.TASKS_ONLY,     // smap
                 FormsColumns.SOURCE          // smap
