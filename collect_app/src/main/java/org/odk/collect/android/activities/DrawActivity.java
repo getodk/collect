@@ -39,7 +39,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.AnimateUtils;
+import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
@@ -118,12 +118,12 @@ public class DrawActivity extends CollectAbstractActivity {
                     fabActions.animate().rotation(45).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    AnimateUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
 
                     fabSetColor.show();
                     cardViewSetColor.setVisibility(View.VISIBLE);

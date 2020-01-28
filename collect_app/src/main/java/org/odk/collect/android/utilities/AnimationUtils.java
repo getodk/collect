@@ -1,6 +1,9 @@
 package org.odk.collect.android.utilities;
 
 import androidx.core.view.animation.PathInterpolatorCompat;
+
+import android.content.Context;
+import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -13,11 +16,11 @@ import org.odk.collect.android.listeners.Result;
 /**
  * Created by Ing. Oscar G. Medina Cruz on 18/06/2016.
  */
-public class AnimateUtils {
+public class AnimationUtils {
 
     private static final Interpolator EASE_IN_OUT_QUART = PathInterpolatorCompat.create(0.77f, 0f, 0.175f, 1f);
 
-    private AnimateUtils() {
+    private AnimationUtils() {
 
     }
 
@@ -151,5 +154,16 @@ public class AnimateUtils {
     private static int computeDurationFromHeight(View view) {
         // 1dp/ms * multiplier
         return (int) (view.getMeasuredHeight() / view.getContext().getResources().getDisplayMetrics().density);
+    }
+
+    public static boolean areAnimationsEnabled(Context context) {
+        float duration = Settings.System.getFloat(
+                context.getContentResolver(),
+                Settings.System.ANIMATOR_DURATION_SCALE, 1);
+        float transition = Settings.System.getFloat(
+                context.getContentResolver(),
+                Settings.System.TRANSITION_ANIMATION_SCALE, 1);
+
+        return duration != 0 && transition != 0;
     }
 }

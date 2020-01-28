@@ -45,7 +45,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -95,7 +94,6 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSaveViewModel;
-import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -104,6 +102,7 @@ import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
+import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FormLoadingDialogFragment;
@@ -175,8 +174,10 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
@@ -299,8 +300,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean showNavigationButtons;
 
     private Bundle state;
-
-    private boolean shouldOverrideAnimations;
 
     @Inject
     RxEventBus eventBus;
@@ -1565,24 +1564,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // by createView()
         switch (from) {
             case RIGHT:
-                inAnimation = AnimationUtils.loadAnimation(this,
+                inAnimation = loadAnimation(this,
                         R.anim.push_left_in);
-                outAnimation = AnimationUtils.loadAnimation(this,
+                outAnimation = loadAnimation(this,
                         R.anim.push_left_out);
                 // if animation is left or right then it was a swipe, and we want to re-save on
                 // entry
                 autoSaved = false;
                 break;
             case LEFT:
-                inAnimation = AnimationUtils.loadAnimation(this,
+                inAnimation = loadAnimation(this,
                         R.anim.push_right_in);
-                outAnimation = AnimationUtils.loadAnimation(this,
+                outAnimation = loadAnimation(this,
                         R.anim.push_right_out);
                 autoSaved = false;
                 break;
             case FADE:
-                inAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-                outAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+                inAnimation = loadAnimation(this, R.anim.fade_in);
+                outAnimation = loadAnimation(this, R.anim.fade_out);
                 break;
         }
 
@@ -1590,7 +1589,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         inAnimation.setAnimationListener(this);
         outAnimation.setAnimationListener(this);
 
-        if (shouldOverrideAnimations) {
+        if (!areAnimationsEnabled(this)) {
             inAnimation.setDuration(0);
             outAnimation.setDuration(0);
         }
@@ -2792,10 +2791,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return (ODKView) currentView;
         }
         return null;
-    }
-
-    public void setShouldOverrideAnimations(boolean shouldOverrideAnimations) {
-        this.shouldOverrideAnimations = shouldOverrideAnimations;
     }
 
     /**

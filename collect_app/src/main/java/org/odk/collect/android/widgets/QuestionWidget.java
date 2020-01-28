@@ -53,7 +53,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.utilities.AnimateUtils;
+import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -188,17 +188,17 @@ public abstract class QuestionWidget
              */
             icon.setOnClickListener(v -> {
                 if (!expanded.get()) {
-                    AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
+                    AnimationUtils.expand(guidanceTextLayout, result -> expanded.set(true));
                 } else {
-                    AnimateUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
+                    AnimationUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
                 }
             });
 
             getHelpTextView().setOnClickListener(v -> {
                 if (!expanded.get()) {
-                    AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
+                    AnimationUtils.expand(guidanceTextLayout, result -> expanded.set(true));
                 } else {
-                    AnimateUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
+                    AnimationUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
                 }
             });
         }
