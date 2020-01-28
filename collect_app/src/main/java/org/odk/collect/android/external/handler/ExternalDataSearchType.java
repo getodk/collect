@@ -68,6 +68,13 @@ enum ExternalDataSearchType {
         protected String getSingleLikeArgument(String queriedValue) {
             return queriedValue;
         }
+    },
+
+    WITHIN("within") {              // smap
+        @Override
+        protected String getSingleLikeArgument(String queriedValue) {
+            return queriedValue;
+        }
     };
 
     private final String keyword;
