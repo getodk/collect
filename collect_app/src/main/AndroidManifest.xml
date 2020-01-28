@@ -96,6 +96,7 @@ the specific language governing permissions and limitations under the License.
         android:largeHeap="true"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
+        <!--
         <provider
             android:name=".provider.FormsProvider"
             android:authorities="org.odk.collect.android.provider.odk.forms.smap"
@@ -104,6 +105,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".provider.InstanceProvider"
             android:authorities="org.odk.collect.android.provider.odk.instances.smap"
             android:exported="false" />
+        -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -154,8 +156,9 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
-        <!-- smap InstanceChooserList renamed as History -->
+        <!-- smap add History -->
         <activity android:name=".activities.HistoryActivity" />
+        <activity android:name=".activities.InstanceChooserList" />
         <activity android:name=".activities.FormChooserListActivity" />
         <activity android:name=".activities.FormDownloadList" />
         <activity
@@ -291,65 +294,63 @@ the specific language governing permissions and limitations under the License.
              **************************************************************************************
          -->
 
-        <!-- smap
         <provider
             android:name=".provider.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:authorities="org.odk.collect.android.provider.odk.forms.smap"
             android:exported="true" />
         <provider
             android:name=".provider.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:authorities="org.odk.collect.android.provider.odk.instances.smap"
             android:exported="true" />
 
         <activity-alias
             android:name=".activities.FormEntryActivity"
             android:targetActivity=".activities.FormEntryActivity">
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.smap.form" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.smap.instance" />
             </intent-filter>
         </activity-alias>
 
         <activity-alias
             android:name=".activities.InstanceChooserList"
             android:targetActivity=".activities.InstanceChooserList">
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.smap.instance" />
             </intent-filter>
         </activity-alias>
 
         <activity-alias
             android:name=".activities.FormChooserList"
             android:targetActivity=".activities.FormChooserListActivity">
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="android.intent.action.PICK" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.smap.form" />
             </intent-filter>
         </activity-alias>
 
--->
         <activity-alias
             android:name=".activities.FormDownloadList"
             android:targetActivity=".activities.FormDownloadList">
             <intent-filter>
                 <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.smap.form" />
             </intent-filter>
         </activity-alias>
 
@@ -370,7 +371,7 @@ the specific language governing permissions and limitations under the License.
             <intent-filter>
                 <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.smap.instance" />
             </intent-filter>
         </activity-alias>
 
