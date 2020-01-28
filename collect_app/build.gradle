@@ -82,6 +82,10 @@ android {
             applicationId "org.smap.smapTask.android.atempi"
             versionName "6.60-atempi"
         }
+        pop {
+            applicationId "org.smap.smapTask.android.pop"
+            versionName "6.60-pop"
+        }
     }
 
     buildTypes {
