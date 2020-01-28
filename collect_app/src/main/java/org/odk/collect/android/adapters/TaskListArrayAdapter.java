@@ -109,7 +109,8 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 
     	// mqp
         View mapIconView = view.findViewById(R.id.map_view);
-        mapIconView.setVisibility(item.geometryXPath != null ? View.VISIBLE : View.GONE);
+        //mapIconView.setVisibility(item.geometryXPath != null ? View.VISIBLE : View.GONE);  disable
+        mapIconView.setVisibility(View.GONE);       // disable
 
     	TextView taskNameText = view.findViewById(R.id.toptext);
     	if (taskNameText != null) {
