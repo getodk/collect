@@ -149,4 +149,35 @@ public class StorageManager {
                 ? filePath.substring(getInstancesDirPath().length() + 1)
                 : filePath;
     }
+
+    public static String getFormDbPath(String path) {
+        String absolutePath;
+        String relativePath;
+        if (path.startsWith(getFormsDirPath())) {
+            absolutePath = path;
+            relativePath = getRelativeFormFilePath(path);
+        } else {
+            relativePath = path;
+            absolutePath = getAbsoluteFormFilePath(path);
+        }
+
+        return isScopedStorageUsed()
+                ? relativePath
+                : absolutePath;
+    }
+
+    public static String getRelativeFormFilePath(String filePath) {
+        return filePath.startsWith(getFormsDirPath())
+                ? filePath.substring(getFormsDirPath().length() + 1)
+                : filePath;
+    }
+
+    public static String getAbsoluteFormFilePath(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        return filePath.startsWith(getFormsDirPath())
+                ? filePath
+                : getFormsDirPath() + File.separator + filePath;
+    }
 }

@@ -93,8 +93,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                     while (cursor.moveToNext()) {
                         // For each element in the provider, see if the file already exists
                         String sqlFilename =
-                                cursor.getString(
-                                        cursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                                StorageManager.getAbsoluteFormFilePath(cursor.getString(
+                                        cursor.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                         String md5 = cursor.getString(
                                 cursor.getColumnIndex(FormsColumns.MD5_HASH));
                         File sqlFile = new File(sqlFilename);
@@ -324,7 +324,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
-        updateValues.put(FormsColumns.FORM_FILE_PATH, formDefFile.getAbsolutePath());
+        updateValues.put(FormsColumns.FORM_FILE_PATH, StorageManager.getFormDbPath(formDefFile.getAbsolutePath()));
 
         return updateValues;
     }

@@ -312,7 +312,7 @@ public class FormDownloader {
 
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
         final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
+        v.put(FormsColumns.FORM_FILE_PATH,          StorageManager.getFormDbPath(formFile.getAbsolutePath()));
         v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
         v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
         v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
@@ -365,7 +365,7 @@ public class FormDownloader {
                 FileUtils.deleteAndReport(f);
 
                 // set the file returned to the file we already had
-                String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                String existingPath = StorageManager.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                 f = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }

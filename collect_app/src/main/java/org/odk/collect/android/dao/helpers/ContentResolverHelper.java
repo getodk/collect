@@ -67,7 +67,7 @@ public final class ContentResolverHelper {
         try (Cursor c = getContentResolver().query(uri, null, null, null, null)) {
             if (c != null && c.getCount() == 1) {
                 c.moveToFirst();
-                formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                formPath = StorageManager.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
             }
         }
         return formPath;

@@ -174,7 +174,7 @@ public class ResetAppStateTest {
         values.put(FormsColumns.FORM_MEDIA_PATH, StorageManager.getFormsDirPath() + "/testFile1-media");
         values.put(FormsColumns.DATE, "1487077903756");
         values.put(FormsColumns.DISPLAY_NAME, "displayName");
-        values.put(FormsColumns.FORM_FILE_PATH, StorageManager.getFormsDirPath() + "/testFile1.xml");
+        values.put(FormsColumns.FORM_FILE_PATH, StorageManager.getFormDbPath("/testFile1.xml"));
         Collect.getInstance().getContentResolver()
                 .insert(FormsColumns.CONTENT_URI, values);
 
