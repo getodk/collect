@@ -24,17 +24,17 @@ public class StorageManager {
                     Collect.getInstance().getString(R.string.sdcard_unmounted, Environment.getExternalStorageState()));
         }
 
-        for (String dirName : getODKDirPaths()) {
-            File dir = new File(dirName);
+        for (String dirPath : getODKDirPaths()) {
+            File dir = new File(dirPath);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
-                    String message = Collect.getInstance().getString(R.string.cannot_create_directory, dirName);
+                    String message = Collect.getInstance().getString(R.string.cannot_create_directory, dirPath);
                     Timber.w(message);
                     throw new RuntimeException(message);
                 }
             } else {
                 if (!dir.isDirectory()) {
-                    String message = Collect.getInstance().getString(R.string.not_a_directory, dirName);
+                    String message = Collect.getInstance().getString(R.string.not_a_directory, dirPath);
                     Timber.w(message);
                     throw new RuntimeException(message);
                 }
