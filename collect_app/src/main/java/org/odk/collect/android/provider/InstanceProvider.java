@@ -32,6 +32,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -59,7 +60,7 @@ public class InstanceProvider extends ContentProvider {
     private synchronized InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
-            new StoragePathProvider().createODKDirs();
+            new StorageInitializer().createODKDirs();
         } catch (RuntimeException e) {
             return null;
         }

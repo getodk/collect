@@ -24,6 +24,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
@@ -49,7 +50,7 @@ public class FormLoadingUtils {
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToSdCard(String formFilename, List<String> mediaFilenames, boolean copyToDatabase) throws IOException {
-        new StoragePathProvider().createODKDirs();
+        new StorageInitializer().createODKDirs();
 
         String pathname = copyForm(formFilename);
         if (mediaFilenames != null) {

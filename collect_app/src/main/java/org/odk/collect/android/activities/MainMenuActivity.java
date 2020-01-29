@@ -53,6 +53,7 @@ import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -219,7 +220,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         // external intent
         Timber.i("Starting up, creating directories");
         try {
-            new StoragePathProvider().createODKDirs();
+            new StorageInitializer().createODKDirs();
         } catch (RuntimeException e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;

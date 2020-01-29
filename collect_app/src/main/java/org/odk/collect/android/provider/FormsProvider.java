@@ -28,6 +28,7 @@ import android.text.TextUtils;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -58,7 +59,7 @@ public class FormsProvider extends ContentProvider {
     private synchronized FormsDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
-            new StoragePathProvider().createODKDirs();
+            new StorageInitializer().createODKDirs();
         } catch (RuntimeException e) {
             return null;
         }
