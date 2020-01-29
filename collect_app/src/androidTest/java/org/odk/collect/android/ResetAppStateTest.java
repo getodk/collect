@@ -169,7 +169,7 @@ public class ResetAppStateTest {
 
     private void setupTestFormsDatabase() {
         ContentValues values = new ContentValues();
-        values.put(FormsColumns.JRCACHE_FILE_PATH, StorageManager.getMainODKDirPath() + "/.cache/3a76a386464925b6f3e53422673dfe3c.formdef");
+        values.put(FormsColumns.JRCACHE_FILE_PATH, StorageManager.getCacheDbPath("3a76a386464925b6f3e53422673dfe3c.formdef"));
         values.put(FormsColumns.JR_FORM_ID, "jrFormId");
         values.put(FormsColumns.FORM_MEDIA_PATH, StorageManager.getFormDbPath("/testFile1-media"));
         values.put(FormsColumns.DATE, "1487077903756");

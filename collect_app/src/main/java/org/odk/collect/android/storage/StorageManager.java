@@ -180,4 +180,35 @@ public class StorageManager {
                 ? filePath
                 : getFormsDirPath() + File.separator + filePath;
     }
+
+    public static String getCacheDbPath(String path) {
+        String absolutePath;
+        String relativePath;
+        if (path.startsWith(getCacheDirPath())) {
+            absolutePath = path;
+            relativePath = getRelativeCacheFilePath(path);
+        } else {
+            relativePath = path;
+            absolutePath = getAbsoluteCacheFilePath(path);
+        }
+
+        return isScopedStorageUsed()
+                ? relativePath
+                : absolutePath;
+    }
+
+    public static String getAbsoluteCacheFilePath(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        return filePath.startsWith(getCacheDirPath())
+                ? filePath
+                : getCacheDirPath() + File.separator + filePath;
+    }
+
+    public static String getRelativeCacheFilePath(String filePath) {
+        return filePath.startsWith(getCacheDirPath())
+                ? filePath.substring(getCacheDirPath().length() + 1)
+                : filePath;
+    }
 }
