@@ -7,6 +7,17 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 
 public class StoragePathProvider {
+
+    private StorageStateProvider storageStateProvider;
+
+    public StoragePathProvider() {
+        this(new StorageStateProvider());
+    }
+
+    public StoragePathProvider(StorageStateProvider storageStateProvider) {
+        this.storageStateProvider = storageStateProvider;
+    }
+
     public String[] getODKDirPaths() {
         return new String[]{
                 getMainODKDirPath(),
@@ -19,12 +30,12 @@ public class StoragePathProvider {
     }
 
     private String getStoragePath() {
-        return new StorageStateProvider().isScopedStorageUsed()
+        return storageStateProvider.isScopedStorageUsed()
                 ? getScopedExternalFilesDirPath()
                 : getUnscopedExternalFilesDirPath();
     }
 
-    private String getScopedExternalFilesDirPath() {
+    String getScopedExternalFilesDirPath() {
         File primaryStorageFile = Collect.getInstance().getExternalFilesDir(null);
         if (primaryStorageFile != null) {
             return primaryStorageFile.getAbsolutePath();
@@ -32,7 +43,7 @@ public class StoragePathProvider {
         return "";
     }
 
-    private String getUnscopedExternalFilesDirPath() {
+    String getUnscopedExternalFilesDirPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
@@ -53,27 +64,27 @@ public class StoragePathProvider {
     }
 
     public String getInstanceDbPath(String path) {
-        return getDbPath(StorageSubdirectory.INSTANCES.getDirectoryName(), path);
+        return getDbPath(getDirPath(StorageSubdirectory.INSTANCES), path);
     }
 
     public String getAbsoluteInstanceFilePath(String path) {
-        return getAbsoluteFilePath(StorageSubdirectory.INSTANCES.getDirectoryName(), path);
+        return getAbsoluteFilePath(getDirPath(StorageSubdirectory.INSTANCES), path);
     }
 
     public String getFormDbPath(String path) {
-        return getDbPath(StorageSubdirectory.FORMS.getDirectoryName(), path);
+        return getDbPath(getDirPath(StorageSubdirectory.FORMS), path);
     }
 
     public String getAbsoluteFormFilePath(String path) {
-        return getAbsoluteFilePath(StorageSubdirectory.FORMS.getDirectoryName(), path);
+        return getAbsoluteFilePath(getDirPath(StorageSubdirectory.FORMS), path);
     }
 
     public String getCacheDbPath(String path) {
-        return getDbPath(StorageSubdirectory.CACHE.getDirectoryName(), path);
+        return getDbPath(getDirPath(StorageSubdirectory.CACHE), path);
     }
 
     public String getAbsoluteCacheFilePath(String path) {
-        return getAbsoluteFilePath(StorageSubdirectory.CACHE.getDirectoryName(), path);
+        return getAbsoluteFilePath(getDirPath(StorageSubdirectory.CACHE), path);
     }
 
     private String getDbPath(String dirPath, String path) {
@@ -87,7 +98,7 @@ public class StoragePathProvider {
             absolutePath = getAbsoluteFilePath(dirPath, path);
         }
 
-        return new StorageStateProvider().isScopedStorageUsed()
+        return storageStateProvider.isScopedStorageUsed()
                 ? relativePath
                 : absolutePath;
     }
