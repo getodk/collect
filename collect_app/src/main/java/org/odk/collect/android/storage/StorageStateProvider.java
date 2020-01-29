@@ -15,7 +15,7 @@ public class StorageStateProvider {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
     }
 
-    public boolean isStorageAvailable() {
+    boolean isStorageMounted() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 }

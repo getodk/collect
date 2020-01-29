@@ -15,7 +15,7 @@ class ExportedActivitiesUtils {
     }
 
     static void clearDirectories() {
-        for (String dirName : new StoragePathProvider().getODKDirPaths()) {
+        for (String dirName : new StoragePathProvider().getOdkDirPaths()) {
             File dir = new File(dirName);
             if (dir.exists()) {
                 if (dir.delete()) {
@@ -27,7 +27,7 @@ class ExportedActivitiesUtils {
     }
 
     static void testDirectories() {
-        for (String dirName : new StoragePathProvider().getODKDirPaths()) {
+        for (String dirName : new StoragePathProvider().getOdkDirPaths()) {
             File dir = new File(dirName);
             Assert.assertTrue("File " + dirName + "does not exist", dir.exists());
             Assert.assertTrue("File" + dirName + "does not exist", dir.isDirectory());

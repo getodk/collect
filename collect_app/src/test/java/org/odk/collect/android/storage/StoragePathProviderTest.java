@@ -122,7 +122,7 @@ public class StoragePathProviderTest {
     public void getODKDirPathsWithUnscopedStorageTest() {
         mockUsingUnscopedStorage();
 
-        String[] storageSubdirectories = storagePathProvider.getODKDirPaths();
+        String[] storageSubdirectories = storagePathProvider.getOdkDirPaths();
         assertThat(storageSubdirectories, arrayWithSize(6));
 
         assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/odk"));
@@ -137,7 +137,7 @@ public class StoragePathProviderTest {
     public void getODKDirPathsWithScopedStorageTest() {
         mockUsingScopedStorage();
 
-        String[] storageSubdirectories = storagePathProvider.getODKDirPaths();
+        String[] storageSubdirectories = storagePathProvider.getOdkDirPaths();
         assertThat(storageSubdirectories, arrayWithSize(6));
 
         assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/Android/data/org.odk.collect.android/files/odk"));

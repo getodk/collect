@@ -16,12 +16,12 @@ public class StorageInitializer {
      * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
      */
     public void createODKDirs() throws RuntimeException {
-        if (!new StorageStateProvider().isStorageAvailable()) {
+        if (!new StorageStateProvider().isStorageMounted()) {
             throw new RuntimeException(
                     Collect.getInstance().getString(R.string.sdcard_unmounted, Environment.getExternalStorageState()));
         }
 
-        for (String dirPath : new StoragePathProvider().getODKDirPaths()) {
+        for (String dirPath : new StoragePathProvider().getOdkDirPaths()) {
             File dir = new File(dirPath);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
