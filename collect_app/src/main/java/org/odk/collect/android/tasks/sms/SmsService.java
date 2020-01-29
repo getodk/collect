@@ -109,8 +109,9 @@ public class SmsService {
         try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs)) {
             if (results.getCount() > 0) {
                 results.moveToPosition(-1);
+                StorageManager storageManager = new StorageManager();
                 while (results.moveToNext()) {
-                    String filePath = StorageManager.getAbsoluteInstanceFilePath(results.getString(results
+                    String filePath = storageManager.getAbsoluteInstanceFilePath(results.getString(results
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                     String instanceId = results.getString(results.getColumnIndex(InstanceColumns._ID));
                     String displayName = results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));

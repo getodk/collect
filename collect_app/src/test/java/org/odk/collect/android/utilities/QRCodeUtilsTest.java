@@ -78,7 +78,7 @@ public class QRCodeUtilsTest {
         String expectedData = "{\"general\":{},\"admin\":{}}";
 
         // stubbing cache and bitmap files
-        new File(StorageManager.getSettingsDirPath()).mkdirs();
+        new File(new StorageManager().getSettingsDirPath()).mkdirs();
         FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QR_CODE_FILEPATH);
         FileUtils.write(md5File, getDigest(expectedData.getBytes()));
 

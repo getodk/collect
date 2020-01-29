@@ -72,7 +72,7 @@ public class FormChooserListActivity extends FormListActivity implements
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    StorageManager.createODKDirs();
+                    new StorageManager().createODKDirs();
                     init();
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);

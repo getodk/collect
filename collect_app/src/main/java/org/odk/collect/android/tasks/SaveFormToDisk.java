@@ -211,7 +211,7 @@ public class SaveFormToDisk {
             }
 
             String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            int updated = new InstancesDao().updateInstance(values, where, new String[] {StorageManager.getInstanceDbPath(instancePath)});
+            int updated = new InstancesDao().updateInstance(values, where, new String[] {new StorageManager().getInstanceDbPath(instancePath)});
             if (updated > 1) {
                 Timber.w("Updated more than one entry, that's not good: %s", instancePath);
             } else if (updated == 1) {
@@ -229,7 +229,7 @@ public class SaveFormToDisk {
                     }
 
                     // add missing fields into values
-                    values.put(InstanceColumns.INSTANCE_FILE_PATH, StorageManager.getInstanceDbPath(instancePath));
+                    values.put(InstanceColumns.INSTANCE_FILE_PATH, new StorageManager().getInstanceDbPath(instancePath));
                     values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
                     if (instanceName != null) {
                         values.put(InstanceColumns.DISPLAY_NAME, instanceName);
@@ -329,7 +329,7 @@ public class SaveFormToDisk {
      * Return the savepoint file for a given instance.
      */
     static File getSavepointFile(String instanceName) {
-        File tempDir = new File(StorageManager.getCacheDirPath());
+        File tempDir = new File(new StorageManager().getCacheDirPath());
         return new File(tempDir, instanceName + ".save");
     }
 
@@ -337,7 +337,7 @@ public class SaveFormToDisk {
      * Return the formIndex file for a given instance.
      */
     public static File getFormIndexFile(String instanceName) {
-        File tempDir = new File(StorageManager.getCacheDirPath());
+        File tempDir = new File(new StorageManager().getCacheDirPath());
         return new File(tempDir, instanceName + ".index");
     }
 

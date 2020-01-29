@@ -55,7 +55,7 @@ public class InstanceUploaderUtilsTest {
             long time = System.currentTimeMillis();
             Instance instance = new Instance.Builder()
                     .displayName("InstanceTest")
-                    .instanceFilePath(StorageManager.getInstancesDirPath() + "/InstanceTest_" + time + "/InstanceTest_" + time + ".xml")
+                    .instanceFilePath(new StorageManager().getInstancesDirPath() + "/InstanceTest_" + time + "/InstanceTest_" + time + ".xml")
                     .jrFormId("instanceTest")
                     .status(InstanceProviderAPI.STATUS_COMPLETE)
                     .lastStatusChangeDate(time)

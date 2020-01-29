@@ -42,7 +42,7 @@ public final class FormsDaoHelper {
         try (Cursor c = formsDao.getFormsCursor(selection, selectionArgs)) {
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                formPath = StorageManager.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                formPath = new StorageManager().getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
             }
         }
         return formPath;

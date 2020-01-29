@@ -128,8 +128,9 @@ public class Collect extends Application {
          * could be in use by ODK Tables.
          */
         String dirPath = directory.getAbsolutePath();
-        if (dirPath.startsWith(StorageManager.getMainODKDirPath())) {
-            dirPath = dirPath.substring(StorageManager.getMainODKDirPath().length());
+        StorageManager storageManager = new StorageManager();
+        if (dirPath.startsWith(storageManager.getMainODKDirPath())) {
+            dirPath = dirPath.substring(storageManager.getMainODKDirPath().length());
             String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {

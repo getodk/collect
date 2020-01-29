@@ -32,7 +32,7 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class CustomSQLiteQueryBuilderTestCase {
 
-    private static final String DATABASE_PATH = StorageManager.getMetadataDirPath() + "/test.db";
+    private static final String DATABASE_PATH = new StorageManager().getMetadataDirPath() + "/test.db";
     private static final String TEST_TABLE_NAME = "testTable";
     private static final String TEST_TABLE_NAME_2 = "testTable2";
 

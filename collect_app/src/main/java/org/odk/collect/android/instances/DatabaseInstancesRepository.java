@@ -34,7 +34,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public Instance getByPath(String instancePath) {
         Cursor c = dao.getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?",
-                new String[] {StorageManager.getInstanceDbPath(instancePath)});
+                new String[] {new StorageManager().getInstanceDbPath(instancePath)});
         List<Instance> instances = dao.getInstancesFromCursor(c);
         if (instances.size() == 1) {
             return instances.get(0);

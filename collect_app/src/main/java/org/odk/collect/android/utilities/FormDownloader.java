@@ -140,7 +140,7 @@ public class FormDownloader {
 
             if (fd.getManifestUrl() != null) {
                 // use a temporary media path until everything is ok.
-                tempMediaPath = new File(StorageManager.getCacheDirPath(),
+                tempMediaPath = new File(new StorageManager().getCacheDirPath(),
                         String.valueOf(System.currentTimeMillis())).getAbsolutePath();
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
@@ -303,7 +303,7 @@ public class FormDownloader {
                 cursor.moveToFirst();
                 uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
                         cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
-                mediaPath = StorageManager.getAbsoluteFormFilePath(cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                mediaPath = new StorageManager().getAbsoluteFormFilePath(cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
             }
         }
 
@@ -312,8 +312,8 @@ public class FormDownloader {
 
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
         final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH,          StorageManager.getFormDbPath(formFile.getAbsolutePath()));
-        v.put(FormsColumns.FORM_MEDIA_PATH,         StorageManager.getFormDbPath(mediaPath));
+        v.put(FormsColumns.FORM_FILE_PATH,          new StorageManager().getFormDbPath(formFile.getAbsolutePath()));
+        v.put(FormsColumns.FORM_MEDIA_PATH,         new StorageManager().getFormDbPath(mediaPath));
         v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
         v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
         v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
@@ -335,11 +335,12 @@ public class FormDownloader {
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
         // proposed name of xml file...
-        String path = StorageManager.getFormsDirPath() + File.separator + rootName + ".xml";
+        StorageManager storageManager = new StorageManager();
+        String path = storageManager.getFormsDirPath() + File.separator + rootName + ".xml";
         int i = 2;
         File f = new File(path);
         while (f.exists()) {
-            path = StorageManager.getFormsDirPath() + File.separator + rootName + "_" + i + ".xml";
+            path = storageManager.getFormsDirPath() + File.separator + rootName + "_" + i + ".xml";
             f = new File(path);
             i++;
         }
@@ -365,7 +366,7 @@ public class FormDownloader {
                 FileUtils.deleteAndReport(f);
 
                 // set the file returned to the file we already had
-                String existingPath = StorageManager.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                String existingPath = storageManager.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                 f = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }
@@ -391,7 +392,7 @@ public class FormDownloader {
     private void downloadFile(File file, String downloadUrl)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
-                new File(StorageManager.getCacheDirPath()));
+                new File(new StorageManager().getCacheDirPath()));
 
         // WiFi network connections can be renegotiated during a large form download sequence.
         // This will cause intermittent download failures.  Silently retry once after each

@@ -30,7 +30,7 @@ public class FormLoaderTaskTest {
 
     @Test
     public void loadFormWithSecondaryCSV() throws Exception {
-        final String formPath = StorageManager.getFormsDirPath() + File.separator + EXTERNAL_CSV_FORM;
+        final String formPath = new StorageManager().getFormsDirPath() + File.separator + EXTERNAL_CSV_FORM;
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
         Assert.assertNotNull(wrapper);

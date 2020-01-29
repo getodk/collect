@@ -18,7 +18,7 @@ public class StorageManager {
      *
      * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
      */
-    public static void createODKDirs() throws RuntimeException {
+    public void createODKDirs() throws RuntimeException {
         if (!isStorageAvailable()) {
             throw new RuntimeException(
                     Collect.getInstance().getString(R.string.sdcard_unmounted, Environment.getExternalStorageState()));
@@ -42,11 +42,11 @@ public class StorageManager {
         }
     }
 
-    private static boolean isStorageAvailable() {
+    private boolean isStorageAvailable() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    public static String[] getODKDirPaths() {
+    public String[] getODKDirPaths() {
         return new String[]{
                 getMainODKDirPath(),
                 getFormsDirPath(),
@@ -57,13 +57,13 @@ public class StorageManager {
             };
     }
 
-    private static String getStoragePath() {
+    private String getStoragePath() {
         return isScopedStorageUsed()
                 ? getScopedExternalFilesDirPath()
                 : getUnscopedExternalFilesDirPath();
     }
 
-    private static String getScopedExternalFilesDirPath() {
+    private String getScopedExternalFilesDirPath() {
         File primaryStorageFile = Collect.getInstance().getExternalFilesDir(null);
         if (primaryStorageFile != null) {
             return primaryStorageFile.getAbsolutePath();
@@ -71,55 +71,55 @@ public class StorageManager {
         return "";
     }
 
-    private static String getUnscopedExternalFilesDirPath() {
+    private String getUnscopedExternalFilesDirPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
-    public static String getMainODKDirPath() {
+    public String getMainODKDirPath() {
         return getStoragePath() + File.separator + "odk";
     }
 
-    public static String getFormsDirPath() {
+    public String getFormsDirPath() {
         return getMainODKDirPath() + File.separator + "forms";
     }
 
-    public static String getInstancesDirPath() {
+    public String getInstancesDirPath() {
         return getMainODKDirPath() + File.separator + "instances";
     }
 
-    public static String getMetadataDirPath() {
+    public String getMetadataDirPath() {
         return getMainODKDirPath() + File.separator + "metadata";
     }
 
-    public static String getCacheDirPath() {
+    public String getCacheDirPath() {
         return getMainODKDirPath() + File.separator + ".cache";
     }
 
-    public static String getOfflineLayersDirPath() {
+    public String getOfflineLayersDirPath() {
         return getMainODKDirPath() + File.separator + "layers";
     }
 
-    public static String getSettingsDirPath() {
+    public String getSettingsDirPath() {
         return getMainODKDirPath() + File.separator + "settings";
     }
 
-    public static String getTmpFilePath() {
+    public String getTmpFilePath() {
         return getCacheDirPath() + File.separator + "tmp.jpg";
     }
 
-    public static String getTmpDrawFilePath() {
+    public String getTmpDrawFilePath() {
         return getCacheDirPath() + File.separator + "tmpDraw.jpg";
     }
 
-    private static boolean isScopedStorageUsed() {
+    private boolean isScopedStorageUsed() {
         return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
     }
 
-    public static void recordMigrationToScopedStorage() {
+    public void recordMigrationToScopedStorage() {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
     }
 
-    public static String getInstanceDbPath(String path) {
+    public String getInstanceDbPath(String path) {
         String absolutePath;
         String relativePath;
         if (path.startsWith(getInstancesDirPath())) {
@@ -135,7 +135,7 @@ public class StorageManager {
                 : absolutePath;
     }
 
-    public static String getAbsoluteInstanceFilePath(String filePath) {
+    public String getAbsoluteInstanceFilePath(String filePath) {
         if (filePath == null) {
             return null;
         }
@@ -144,13 +144,13 @@ public class StorageManager {
                 : getInstancesDirPath() + File.separator + filePath;
     }
 
-    public static String getRelativeInstanceFilePath(String filePath) {
+    public String getRelativeInstanceFilePath(String filePath) {
         return filePath.startsWith(getInstancesDirPath())
                 ? filePath.substring(getInstancesDirPath().length() + 1)
                 : filePath;
     }
 
-    public static String getFormDbPath(String path) {
+    public String getFormDbPath(String path) {
         String absolutePath;
         String relativePath;
         if (path.startsWith(getFormsDirPath())) {
@@ -166,13 +166,13 @@ public class StorageManager {
                 : absolutePath;
     }
 
-    public static String getRelativeFormFilePath(String filePath) {
+    public String getRelativeFormFilePath(String filePath) {
         return filePath.startsWith(getFormsDirPath())
                 ? filePath.substring(getFormsDirPath().length() + 1)
                 : filePath;
     }
 
-    public static String getAbsoluteFormFilePath(String filePath) {
+    public String getAbsoluteFormFilePath(String filePath) {
         if (filePath == null) {
             return null;
         }
@@ -181,7 +181,7 @@ public class StorageManager {
                 : getFormsDirPath() + File.separator + filePath;
     }
 
-    public static String getCacheDbPath(String path) {
+    public String getCacheDbPath(String path) {
         String absolutePath;
         String relativePath;
         if (path.startsWith(getCacheDirPath())) {
@@ -197,7 +197,7 @@ public class StorageManager {
                 : absolutePath;
     }
 
-    public static String getAbsoluteCacheFilePath(String filePath) {
+    public String getAbsoluteCacheFilePath(String filePath) {
         if (filePath == null) {
             return null;
         }
@@ -206,7 +206,7 @@ public class StorageManager {
                 : getCacheDirPath() + File.separator + filePath;
     }
 
-    public static String getRelativeCacheFilePath(String filePath) {
+    public String getRelativeCacheFilePath(String filePath) {
         return filePath.startsWith(getCacheDirPath())
                 ? filePath.substring(getCacheDirPath().length() + 1)
                 : filePath;

@@ -23,7 +23,7 @@ public class FormUtils {
         // This should get moved to the Application Class
         if (referenceManager.getFactories().length == 0) {
             // this is /sdcard/odk
-            referenceManager.addReferenceFactory(new FileReferenceFactory(StorageManager.getMainODKDirPath()));
+            referenceManager.addReferenceFactory(new FileReferenceFactory(new StorageManager().getMainODKDirPath()));
         }
 
         addSessionRootTranslators(referenceManager,

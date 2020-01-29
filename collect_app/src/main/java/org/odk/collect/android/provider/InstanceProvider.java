@@ -59,7 +59,7 @@ public class InstanceProvider extends ContentProvider {
     private synchronized InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
-            StorageManager.createODKDirs();
+            new StorageManager().createODKDirs();
         } catch (RuntimeException e) {
             return null;
         }
@@ -260,7 +260,7 @@ public class InstanceProvider extends ContentProvider {
                         if (del != null && del.getCount() > 0) {
                             del.moveToFirst();
                             do {
-                                String instanceFile = StorageManager.getAbsoluteInstanceFilePath(del.getString(
+                                String instanceFile = new StorageManager().getAbsoluteInstanceFilePath(del.getString(
                                         del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
@@ -285,7 +285,7 @@ public class InstanceProvider extends ContentProvider {
                             c.moveToFirst();
                             status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                             do {
-                                String instanceFile = StorageManager.getAbsoluteInstanceFilePath(c.getString(
+                                String instanceFile = new StorageManager().getAbsoluteInstanceFilePath(c.getString(
                                         c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);

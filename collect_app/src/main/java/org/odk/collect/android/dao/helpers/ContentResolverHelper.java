@@ -43,7 +43,7 @@ public final class ContentResolverHelper {
         try (Cursor instanceCursor = getContentResolver().query(uri, null, null, null, null)) {
             if (instanceCursor != null && instanceCursor.getCount() > 0) {
                 instanceCursor.moveToFirst();
-                String instancePath = StorageManager.getAbsoluteInstanceFilePath(instanceCursor
+                String instancePath = new StorageManager().getAbsoluteInstanceFilePath(instanceCursor
                         .getString(instanceCursor
                                 .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
 
@@ -67,7 +67,7 @@ public final class ContentResolverHelper {
         try (Cursor c = getContentResolver().query(uri, null, null, null, null)) {
             if (c != null && c.getCount() == 1) {
                 c.moveToFirst();
-                formPath = StorageManager.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                formPath = new StorageManager().getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
             }
         }
         return formPath;

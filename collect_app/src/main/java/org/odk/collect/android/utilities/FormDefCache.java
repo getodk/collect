@@ -32,7 +32,7 @@ public class FormDefCache {
         final long formSaveStart = System.currentTimeMillis();
         File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
         final File tempCacheFile = File.createTempFile("cache", null,
-                new File(StorageManager.getCacheDirPath()));
+                new File(new StorageManager().getCacheDirPath()));
         Timber.i("Started saving %s to the cache via temp file %s",
                 formDef.getTitle(), tempCacheFile.getName());
 
@@ -103,7 +103,7 @@ public class FormDefCache {
      * @return a File object
      */
     private static File getCacheFile(File formXml) {
-        return new File(StorageManager.getCacheDirPath() + File.separator +
+        return new File(new StorageManager().getCacheDirPath() + File.separator +
                 FileUtils.getMd5Hash(formXml) + ".formdef");
     }
 

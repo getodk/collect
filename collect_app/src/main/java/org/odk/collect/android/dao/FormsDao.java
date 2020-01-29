@@ -161,7 +161,7 @@ public class FormsDao {
             try {
                 if (cursor.moveToFirst()) {
                     int formMediaPathColumnIndex = cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH);
-                    formMediaPath = StorageManager.getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex));
+                    formMediaPath = new StorageManager().getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex));
                 }
             } finally {
                 cursor.close();
@@ -172,7 +172,7 @@ public class FormsDao {
 
     public Cursor getFormsCursorForFormFilePath(String formFilePath) {
         String selection = FormsColumns.FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {StorageManager.getFormDbPath(formFilePath)};
+        String[] selectionArgs = {new StorageManager().getFormDbPath(formFilePath)};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }
