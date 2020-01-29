@@ -118,4 +118,35 @@ public class StorageManager {
     public static void recordMigrationToScopedStorage() {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
     }
+
+    public static String getInstanceDbPath(String path) {
+        String absolutePath;
+        String relativePath;
+        if (path.startsWith(getInstancesDirPath())) {
+            absolutePath = path;
+            relativePath = getRelativeInstanceFilePath(path);
+        } else {
+            relativePath = path;
+            absolutePath = getAbsoluteInstanceFilePath(path);
+        }
+
+        return isScopedStorageUsed()
+                ? relativePath
+                : absolutePath;
+    }
+
+    public static String getAbsoluteInstanceFilePath(String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        return filePath.startsWith(getInstancesDirPath())
+                ? filePath
+                : getInstancesDirPath() + File.separator + filePath;
+    }
+
+    public static String getRelativeInstanceFilePath(String filePath) {
+        return filePath.startsWith(getInstancesDirPath())
+                ? filePath.substring(getInstancesDirPath().length() + 1)
+                : filePath;
+    }
 }

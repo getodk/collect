@@ -211,7 +211,7 @@ public class SaveFormToDisk {
             }
 
             String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-            int updated = new InstancesDao().updateInstance(values, where, new String[] {instancePath});
+            int updated = new InstancesDao().updateInstance(values, where, new String[] {StorageManager.getInstanceDbPath(instancePath)});
             if (updated > 1) {
                 Timber.w("Updated more than one entry, that's not good: %s", instancePath);
             } else if (updated == 1) {
@@ -229,7 +229,7 @@ public class SaveFormToDisk {
                     }
 
                     // add missing fields into values
-                    values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
+                    values.put(InstanceColumns.INSTANCE_FILE_PATH, StorageManager.getInstanceDbPath(instancePath));
                     values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
                     if (instanceName != null) {
                         values.put(InstanceColumns.DISPLAY_NAME, instanceName);

@@ -120,8 +120,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     instanceCursor.moveToPosition(-1);
 
                     while (instanceCursor.moveToNext()) {
-                        String instanceFilename = instanceCursor.getString(
-                                instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                        String instanceFilename = StorageManager.getAbsoluteInstanceFilePath(instanceCursor.getString(
+                                instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                         String instanceStatus = instanceCursor.getString(
                                 instanceCursor.getColumnIndex(InstanceColumns.STATUS));
                         if (candidateInstances.contains(instanceFilename) || instanceStatus.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
@@ -168,7 +168,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                                 // add missing fields into content values
                                 ContentValues values = new ContentValues();
-                                values.put(InstanceColumns.INSTANCE_FILE_PATH, candidateInstance);
+                                values.put(InstanceColumns.INSTANCE_FILE_PATH, StorageManager.getInstanceDbPath(candidateInstance));
                                 values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
@@ -263,7 +263,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
                 values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
                 values.put(InstanceColumns.GEOMETRY, (String) null);
-                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
+                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{StorageManager.getInstanceDbPath(candidateInstance)});
 
                 SaveFormToDisk.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {
