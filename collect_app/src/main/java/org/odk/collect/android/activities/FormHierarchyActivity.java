@@ -17,16 +17,17 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -296,7 +297,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     void configureButtons(FormController formController) {
         jumpBeginningButton.setOnClickListener(v -> {
-            formController.getAuditEventLogger().exitView();
+            formController.getAuditEventLogger().flush();
             formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
             setResult(RESULT_OK);
@@ -304,7 +305,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         });
 
         jumpEndButton.setOnClickListener(v -> {
-            formController.getAuditEventLogger().exitView();
+            formController.getAuditEventLogger().flush();
             formController.jumpToIndex(FormIndex.createEndOfFormIndex());
 
             setResult(RESULT_OK);
@@ -782,7 +783,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     public void onBackPressed() {
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null) {
-            formController.getAuditEventLogger().exitView();
+            formController.getAuditEventLogger().flush();
             formController.jumpToIndex(startIndex);
         }
 

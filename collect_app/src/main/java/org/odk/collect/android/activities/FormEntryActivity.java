@@ -1035,7 +1035,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (formController != null) {
-                    formController.getAuditEventLogger().exitView();
+                    formController.getAuditEventLogger().flush();
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                 }
 
@@ -1467,7 +1467,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            formController.getAuditEventLogger().exitView();    // Close events waiting for an end time
+            formController.getAuditEventLogger().flush();    // Close events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1532,7 +1532,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             // create savepoint
                             nonblockingCreateSavePointData();
                         }
-                        formController.getAuditEventLogger().exitView();    // Close events
+                        formController.getAuditEventLogger().flush();    // Close events
                         View next = createView(event, false);
                         showView(next, AnimationType.LEFT);
                     } else {
@@ -1826,7 +1826,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        getFormController().getAuditEventLogger().exitView();
         formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit).observe(this, result -> {
             switch (result.getState()) {
                 case CHANGE_REASON_REQUIRED:

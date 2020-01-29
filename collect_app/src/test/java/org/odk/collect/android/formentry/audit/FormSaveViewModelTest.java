@@ -56,29 +56,6 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void saveReason_logsChangeReasonAuditEvent() {
-        viewModel.setReason("Blah");
-        viewModel.saveReason();
-
-        verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
-    }
-
-    @Test
-    public void saveReason_whenReasonIsValid_returnsTrue() {
-        viewModel.setReason("Blah");
-        assertThat(viewModel.saveReason(), equalTo(true));
-    }
-
-    @Test
-    public void saveReason_whenReasonIsNotValid_returnsFalse() {
-        viewModel.setReason("");
-        assertThat(viewModel.saveReason(), equalTo(false));
-
-        viewModel.setReason("  ");
-        assertThat(viewModel.saveReason(), equalTo(false));
-    }
-
-    @Test
     public void saveForm_returnsNewSaveResult_inSavingState() {
         LiveData<FormSaveViewModel.SaveResult> saveResult1 = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         assertThat(saveResult1.getValue().getState(), equalTo(SAVING));
@@ -107,6 +84,12 @@ public class FormSaveViewModelTest {
 
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+    }
+
+    @Test
+    public void saveForm_flushesAuditEventLogger() {
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        verify(logger).flush();
     }
 
     @Test
@@ -199,7 +182,7 @@ public class FormSaveViewModelTest {
         whenFormSaverFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED);
 
         InOrder verifier = inOrder(logger);
-        verifier.verify(logger).exitView();
+        verifier.verify(logger).flush();
         verifier.verify(logger).logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, CURRENT_TIME);
     }
 
@@ -230,6 +213,29 @@ public class FormSaveViewModelTest {
         viewModel.setReason("blah");
         viewModel.saveReason();
         assertThat(saveResult.getValue().getState(), equalTo(SAVING));
+    }
+
+    @Test
+    public void saveReason_logsChangeReasonAuditEvent() {
+        viewModel.setReason("Blah");
+        viewModel.saveReason();
+
+        verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
+    }
+
+    @Test
+    public void saveReason_whenReasonIsValid_returnsTrue() {
+        viewModel.setReason("Blah");
+        assertThat(viewModel.saveReason(), equalTo(true));
+    }
+
+    @Test
+    public void saveReason_whenReasonIsNotValid_returnsFalse() {
+        viewModel.setReason("");
+        assertThat(viewModel.saveReason(), equalTo(false));
+
+        viewModel.setReason("  ");
+        assertThat(viewModel.saveReason(), equalTo(false));
     }
 
     private void whenReasonRequiredToSave() {

@@ -56,6 +56,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return new MutableLiveData<>(new SaveResult(SaveResult.State.ALREADY_SAVING, null));
         }
 
+        if (auditEventLogger != null) {
+            auditEventLogger.flush();
+        }
+
         SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
         this.saveResult = new MutableLiveData<>(null);
 
@@ -160,7 +164,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY: {
                 if (auditEventLogger != null) {
-                    auditEventLogger.exitView();
+                    auditEventLogger.flush();
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
                 }
 
