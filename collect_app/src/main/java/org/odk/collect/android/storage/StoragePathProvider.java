@@ -20,7 +20,7 @@ public class StoragePathProvider {
 
     public String[] getODKDirPaths() {
         return new String[]{
-                getMainODKDirPath(),
+                getDirPath(StorageSubdirectory.ODK),
                 getDirPath(StorageSubdirectory.FORMS),
                 getDirPath(StorageSubdirectory.INSTANCES),
                 getDirPath(StorageSubdirectory.CACHE),
@@ -47,12 +47,8 @@ public class StoragePathProvider {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
-    public String getMainODKDirPath() {
-        return getStoragePath() + File.separator + "odk";
-    }
-
     public String getDirPath(StorageSubdirectory subdirectory) {
-        return getMainODKDirPath() + File.separator + subdirectory.getDirectoryName();
+        return getStoragePath() + File.separator + subdirectory.getDirectoryName();
     }
 
     public String getTmpFilePath() {

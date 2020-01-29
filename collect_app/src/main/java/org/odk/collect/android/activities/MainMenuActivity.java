@@ -55,6 +55,7 @@ import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -234,8 +235,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
         }
 
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        File f = new File(storagePathProvider.getMainODKDirPath() + "/collect.settings");
-        File j = new File(storagePathProvider.getMainODKDirPath() + "/collect.settings.json");
+        File f = new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK) + "/collect.settings");
+        File j = new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK) + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
             boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
