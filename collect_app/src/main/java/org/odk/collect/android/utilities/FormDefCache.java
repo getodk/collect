@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.util.externalizable.ExtUtil;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -32,7 +32,7 @@ public class FormDefCache {
         final long formSaveStart = System.currentTimeMillis();
         File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
         final File tempCacheFile = File.createTempFile("cache", null,
-                new File(new StorageManager().getCacheDirPath()));
+                new File(new StoragePathProvider().getCacheDirPath()));
         Timber.i("Started saving %s to the cache via temp file %s",
                 formDef.getTitle(), tempCacheFile.getName());
 
@@ -103,7 +103,7 @@ public class FormDefCache {
      * @return a File object
      */
     private static File getCacheFile(File formXml) {
-        return new File(new StorageManager().getCacheDirPath() + File.separator +
+        return new File(new StoragePathProvider().getCacheDirPath() + File.separator +
                 FileUtils.getMd5Hash(formXml) + ".formdef");
     }
 

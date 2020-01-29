@@ -3,7 +3,7 @@ package org.odk.collect.android.forms;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class FormUtils {
         // This should get moved to the Application Class
         if (referenceManager.getFactories().length == 0) {
             // this is /sdcard/odk
-            referenceManager.addReferenceFactory(new FileReferenceFactory(new StorageManager().getMainODKDirPath()));
+            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getMainODKDirPath()));
         }
 
         addSessionRootTranslators(referenceManager,

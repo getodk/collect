@@ -52,7 +52,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -305,7 +305,7 @@ public class ShowQRCodeFragment extends Fragment {
                 }
                 return true;
             case R.id.menu_save_preferences:
-                File writeDir = new File(new StorageManager().getSettingsDirPath());
+                File writeDir = new File(new StoragePathProvider().getSettingsDirPath());
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
                         ToastUtils.showShortToast("Error creating directory "

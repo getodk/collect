@@ -50,7 +50,7 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -817,7 +817,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                         List<com.google.api.services.drive.model.File> mediaFileList;
                         mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
 
-                        FileUtils.createFolder(new StorageManager().getFormsDirPath() + File.separator + mediaDirName);
+                        FileUtils.createFolder(new StoragePathProvider().getFormsDirPath() + File.separator + mediaDirName);
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                             String filePath = mediaDirName + File.separator + mediaFile.getName();
@@ -835,7 +835,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         }
 
         private void downloadFile(@NonNull String fileId, String fileName) throws IOException {
-            File file = new File(new StorageManager().getFormsDirPath() + File.separator + fileName);
+            File file = new File(new StoragePathProvider().getFormsDirPath() + File.separator + fileName);
             driveHelper.downloadFile(fileId, file);
         }
 

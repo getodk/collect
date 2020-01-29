@@ -58,7 +58,7 @@ import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.AndroidUserAgent;
@@ -128,9 +128,9 @@ public class Collect extends Application {
          * could be in use by ODK Tables.
          */
         String dirPath = directory.getAbsolutePath();
-        StorageManager storageManager = new StorageManager();
-        if (dirPath.startsWith(storageManager.getMainODKDirPath())) {
-            dirPath = dirPath.substring(storageManager.getMainODKDirPath().length());
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        if (dirPath.startsWith(storagePathProvider.getMainODKDirPath())) {
+            dirPath = dirPath.substring(storagePathProvider.getMainODKDirPath().length());
             String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {

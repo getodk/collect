@@ -32,7 +32,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -74,10 +74,10 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     protected String doInBackground(Void... params) {
         int instance = ++counter;
         Timber.i("[%d] doInBackground begins!", instance);
-        StorageManager storageManager = new StorageManager();
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
         try {
             List<String> candidateInstances = new LinkedList<>();
-            File instancesPath = new File(storageManager.getInstancesDirPath());
+            File instancesPath = new File(storagePathProvider.getInstancesDirPath());
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders == null || instanceFolders.length == 0) {
@@ -120,7 +120,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     instanceCursor.moveToPosition(-1);
 
                     while (instanceCursor.moveToNext()) {
-                        String instanceFilename = storageManager.getAbsoluteInstanceFilePath(instanceCursor.getString(
+                        String instanceFilename = storagePathProvider.getAbsoluteInstanceFilePath(instanceCursor.getString(
                                 instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                         String instanceStatus = instanceCursor.getString(
                                 instanceCursor.getColumnIndex(InstanceColumns.STATUS));
@@ -168,7 +168,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                                 // add missing fields into content values
                                 ContentValues values = new ContentValues();
-                                values.put(InstanceColumns.INSTANCE_FILE_PATH, storageManager.getInstanceDbPath(candidateInstance));
+                                values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getInstanceDbPath(candidateInstance));
                                 values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
@@ -263,7 +263,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
                 values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
                 values.put(InstanceColumns.GEOMETRY, (String) null);
-                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StorageManager().getInstanceDbPath(candidateInstance)});
+                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getInstanceDbPath(candidateInstance)});
 
                 SaveFormToDisk.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {

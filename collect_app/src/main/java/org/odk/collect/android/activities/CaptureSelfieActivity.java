@@ -24,7 +24,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.CameraPreview;
@@ -70,7 +70,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
     private final Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            CameraUtils.savePhoto(new StorageManager().getTmpFilePath(), data);
+            CameraUtils.savePhoto(new StoragePathProvider().getTmpFilePath(), data);
             setResult(RESULT_OK);
             finish();
         }

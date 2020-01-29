@@ -25,7 +25,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 public final class ContentResolverHelper {
 
@@ -43,7 +43,7 @@ public final class ContentResolverHelper {
         try (Cursor instanceCursor = getContentResolver().query(uri, null, null, null, null)) {
             if (instanceCursor != null && instanceCursor.getCount() > 0) {
                 instanceCursor.moveToFirst();
-                String instancePath = new StorageManager().getAbsoluteInstanceFilePath(instanceCursor
+                String instancePath = new StoragePathProvider().getAbsoluteInstanceFilePath(instanceCursor
                         .getString(instanceCursor
                                 .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
 
@@ -67,7 +67,7 @@ public final class ContentResolverHelper {
         try (Cursor c = getContentResolver().query(uri, null, null, null, null)) {
             if (c != null && c.getCount() == 1) {
                 c.moveToFirst();
-                formPath = new StorageManager().getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                formPath = new StoragePathProvider().getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
             }
         }
         return formPath;

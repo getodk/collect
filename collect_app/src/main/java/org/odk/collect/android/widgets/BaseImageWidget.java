@@ -40,7 +40,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
@@ -262,7 +262,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 File f = new File(getInstanceFolder() + File.separator + binaryName);
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
             }
-            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(new StorageManager().getTmpFilePath())));
+            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(new StoragePathProvider().getTmpFilePath())));
             i = addExtrasToIntent(i);
             launchActivityForResult(i, requestCode, stringResourceId);
         }

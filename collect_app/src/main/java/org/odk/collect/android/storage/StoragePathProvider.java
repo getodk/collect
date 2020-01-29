@@ -12,7 +12,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_USED;
 
-public class StorageManager {
+public class StoragePathProvider {
     /**
      * Creates required directories on the SDCard (or other external storage)
      *

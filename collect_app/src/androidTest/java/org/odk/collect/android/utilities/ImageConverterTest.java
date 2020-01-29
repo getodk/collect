@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.widgets.ImageWidget;
 
 import java.io.File;
@@ -45,12 +45,12 @@ import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.
 
 @RunWith(AndroidJUnit4.class)
 public class ImageConverterTest {
-    private static final String TEST_DIR = new StorageManager().getInstancesDirPath() + File.separator + "testForm_2017-10-12_19-36-15" + File.separator;
+    private static final String TEST_DIR = new StoragePathProvider().getInstancesDirPath() + File.separator + "testForm_2017-10-12_19-36-15" + File.separator;
     private static final String TEST_IMAGE_PATH = TEST_DIR + "testImage.jpg";
 
     @Before
     public void setUp() {
-        File wallpaperDirectory = new File(new StorageManager().getInstancesDirPath() + File.separator + "testForm_2017-10-12_19-36-15" + File.separator);
+        File wallpaperDirectory = new File(new StoragePathProvider().getInstancesDirPath() + File.separator + "testForm_2017-10-12_19-36-15" + File.separator);
         wallpaperDirectory.mkdirs();
     }
 

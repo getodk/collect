@@ -23,7 +23,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
@@ -109,9 +109,9 @@ public class SmsService {
         try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs)) {
             if (results.getCount() > 0) {
                 results.moveToPosition(-1);
-                StorageManager storageManager = new StorageManager();
+                StoragePathProvider storagePathProvider = new StoragePathProvider();
                 while (results.moveToNext()) {
-                    String filePath = storageManager.getAbsoluteInstanceFilePath(results.getString(results
+                    String filePath = storagePathProvider.getAbsoluteInstanceFilePath(results.getString(results
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                     String instanceId = results.getString(results.getColumnIndex(InstanceColumns._ID));
                     String displayName = results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));

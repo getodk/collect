@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ResetUtility;
 
 import java.io.File;
@@ -45,7 +45,7 @@ import static org.junit.Assert.assertTrue;
 public class FormsDaoTest {
 
     private FormsDao formsDao;
-    private final StorageManager storageManager = new StorageManager();
+    private final StoragePathProvider storagePathProvider = new StoragePathProvider();
 
     // sample forms
     private Form biggestNOfSetForm;
@@ -127,7 +127,7 @@ public class FormsDaoTest {
 
     @Test
     public void getFormsCursorForFormFilePathTest() {
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(storageManager.getFormsDirPath() + "/Miramare.xml");
+        Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getFormsDirPath() + "/Miramare.xml");
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
@@ -136,7 +136,7 @@ public class FormsDaoTest {
 
     @Test
     public void updateInstanceTest() {
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(storageManager.getFormsDirPath() + "/Widgets.xml");
+        Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getFormsDirPath() + "/Widgets.xml");
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
 
         assertEquals(1, forms.size());
@@ -147,16 +147,16 @@ public class FormsDaoTest {
                 .jrFormId("Widgets2")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1487782554846L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/Widgets-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/Widgets.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/Widgets-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/Widgets.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
         String where = FormsColumns.DISPLAY_NAME + "=?";
         String[] whereArgs = {"Widgets"};
         assertEquals(formsDao.updateForm(formsDao.getValuesFromFormObject(widgetsForm), where, whereArgs), 1);
 
-        cursor = formsDao.getFormsCursorForFormFilePath(storageManager.getFormsDirPath() + "/Widgets.xml");
+        cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getFormsDirPath() + "/Widgets.xml");
         forms = formsDao.getFormsFromCursor(cursor);
 
         assertEquals(1, forms.size());
@@ -166,99 +166,99 @@ public class FormsDaoTest {
     @Test
     public void getFormMediaPathTest() {
         String mediaPath = formsDao.getFormMediaPath("Birds", "4");
-        assertEquals(storageManager.getFormsDirPath() + "/Birds_4-media", mediaPath);
+        assertEquals(storagePathProvider.getFormsDirPath() + "/Birds_4-media", mediaPath);
     }
 
     private void setUpSampleForms() throws IOException {
-        assertTrue(new File(storageManager.getFormsDirPath() + "/Biggest N of Set.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getFormsDirPath() + "/Biggest N of Set.xml").createNewFile());
         biggestNOfSetForm = new Form.Builder()
                 .displayName("Biggest N of Set")
                 .jrFormId("N_Biggest")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1487773315435L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/Biggest N of Set-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/Biggest N of Set.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/ccce6015dd1b8f935f5f3058e81eeb43.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/Biggest N of Set-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/Biggest N of Set.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/ccce6015dd1b8f935f5f3058e81eeb43.formdef")
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(biggestNOfSetForm));
 
-        assertTrue(new File(storageManager.getFormsDirPath() + "/Birds.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getFormsDirPath() + "/Birds.xml").createNewFile());
         birdsForm = new Form.Builder()
                 .displayName("Birds")
                 .jrFormId("Birds")
                 .jrVersion("3")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1487782404899L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/Birds-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/Birds.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/4cd980d50f884362afba842cbff3a798.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/Birds-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/Birds.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/4cd980d50f884362afba842cbff3a798.formdef")
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(birdsForm));
 
-        assertTrue(new File(storageManager.getFormsDirPath() + "/Miramare.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getFormsDirPath() + "/Miramare.xml").createNewFile());
         miramareForm = new Form.Builder()
                 .displayName("Miramare")
                 .jrFormId("Miramare")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1487782545945L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/Miramare-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/Miramare.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/e733627cdbf220929bf9c4899cb983ea.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/Miramare-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/Miramare.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/e733627cdbf220929bf9c4899cb983ea.formdef")
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(miramareForm));
 
-        assertTrue(new File(storageManager.getFormsDirPath() + "/Geo Tagger v2.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getFormsDirPath() + "/Geo Tagger v2.xml").createNewFile());
         geoTaggerV2Form = new Form.Builder()
                 .displayName("Geo Tagger v2")
                 .jrFormId("geo_tagger_v2")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1487782428992L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/Geo Tagger v2-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/Geo Tagger v2.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/1d5e9109298c8ef02bc523b17d7c0451.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/Geo Tagger v2-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/Geo Tagger v2.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/1d5e9109298c8ef02bc523b17d7c0451.formdef")
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(geoTaggerV2Form));
 
-        assertTrue(new File(storageManager.getFormsDirPath() + "/Widgets.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getFormsDirPath() + "/Widgets.xml").createNewFile());
         widgetsForm = new Form.Builder()
                 .displayName("Widgets")
                 .jrFormId("Widgets")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1487782554846L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/Widgets-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/Widgets.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/Widgets-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/Widgets.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(widgetsForm));
 
-        assertTrue(new File(storageManager.getFormsDirPath() + "/sample.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getFormsDirPath() + "/sample.xml").createNewFile());
         sampleForm = new Form.Builder()
                 .displayName("sample")
                 .jrFormId("sample")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1487782555840L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/sample-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/sample.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/4f495fddd1f2544f65444ea83d25f425.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/sample-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/sample.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/4f495fddd1f2544f65444ea83d25f425.formdef")
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(sampleForm));
 
-        assertTrue(new File(storageManager.getFormsDirPath() + "/Birds_4.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getFormsDirPath() + "/Birds_4.xml").createNewFile());
         birds2Form = new Form.Builder()
                 .displayName("Birds")
                 .jrFormId("Birds")
                 .jrVersion("4")
                 .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
                 .date(1512390303610L)
-                .formMediaPath(storageManager.getFormsDirPath() + "/Birds_4-media")
-                .formFilePath(storageManager.getFormsDirPath() + "/Birds_4.xml")
-                .jrCacheFilePath(storageManager.getMainODKDirPath() + "/.cache/4cd980d50f884362afba842cbff3a775.formdef")
+                .formMediaPath(storagePathProvider.getFormsDirPath() + "/Birds_4-media")
+                .formFilePath(storagePathProvider.getFormsDirPath() + "/Birds_4.xml")
+                .jrCacheFilePath(storagePathProvider.getMainODKDirPath() + "/.cache/4cd980d50f884362afba842cbff3a775.formdef")
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(birds2Form));

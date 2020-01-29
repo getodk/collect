@@ -26,7 +26,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
@@ -168,7 +168,7 @@ public class InstancesDao {
 
     public Cursor getInstancesCursorForFilePath(String path) {
         String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] selectionArgs = {new StorageManager().getInstanceDbPath(path)};
+        String[] selectionArgs = {new StoragePathProvider().getInstanceDbPath(path)};
 
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
@@ -276,7 +276,7 @@ public class InstancesDao {
             selection.append(InstanceColumns.INSTANCE_FILE_PATH + " IN (");
             int j = 0;
             while (j < selectionArgs.length) {
-                selectionArgs[j] = new StorageManager().getInstanceDbPath(instanceFilePaths.get(
+                selectionArgs[j] = new StoragePathProvider().getInstanceDbPath(instanceFilePaths.get(
                         counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j));
                 selection.append('?');
 

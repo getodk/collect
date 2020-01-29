@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-import org.odk.collect.android.storage.StorageManager;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -50,7 +50,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  */
 public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "instances.db";
-    public static final String DATABASE_PATH = new StorageManager().getMetadataDirPath() + File.separator + DATABASE_NAME;
+    public static final String DATABASE_PATH = new StoragePathProvider().getMetadataDirPath() + File.separator + DATABASE_NAME;
     public static final String INSTANCES_TABLE_NAME = "instances";
 
     static final int DATABASE_VERSION = 6;
@@ -67,7 +67,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static boolean isDatabaseBeingMigrated;
 
     public InstancesDatabaseHelper() {
-        super(new DatabaseContext(new StorageManager().getMetadataDirPath()), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(new StoragePathProvider().getMetadataDirPath()), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
