@@ -10,11 +10,11 @@ public class StoragePathProvider {
     public String[] getODKDirPaths() {
         return new String[]{
                 getMainODKDirPath(),
-                getFormsDirPath(),
-                getInstancesDirPath(),
-                getCacheDirPath(),
-                getMetadataDirPath(),
-                getOfflineLayersDirPath()
+                getDirPath(StorageSubdirectory.FORMS),
+                getDirPath(StorageSubdirectory.INSTANCES),
+                getDirPath(StorageSubdirectory.CACHE),
+                getDirPath(StorageSubdirectory.METADATA),
+                getDirPath(StorageSubdirectory.LAYERS)
             };
     }
 
@@ -40,109 +40,51 @@ public class StoragePathProvider {
         return getStoragePath() + File.separator + "odk";
     }
 
-    public String getFormsDirPath() {
-        return getMainODKDirPath() + File.separator + "forms";
-    }
-
-    public String getInstancesDirPath() {
-        return getMainODKDirPath() + File.separator + "instances";
-    }
-
-    public String getMetadataDirPath() {
-        return getMainODKDirPath() + File.separator + "metadata";
-    }
-
-    public String getCacheDirPath() {
-        return getMainODKDirPath() + File.separator + ".cache";
-    }
-
-    public String getOfflineLayersDirPath() {
-        return getMainODKDirPath() + File.separator + "layers";
-    }
-
-    public String getSettingsDirPath() {
-        return getMainODKDirPath() + File.separator + "settings";
+    public String getDirPath(StorageSubdirectory subdirectory) {
+        return getMainODKDirPath() + File.separator + subdirectory.getDirectoryName();
     }
 
     public String getTmpFilePath() {
-        return getCacheDirPath() + File.separator + "tmp.jpg";
+        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg";
     }
 
     public String getTmpDrawFilePath() {
-        return getCacheDirPath() + File.separator + "tmpDraw.jpg";
+        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmpDraw.jpg";
     }
 
     public String getInstanceDbPath(String path) {
-        String absolutePath;
-        String relativePath;
-        if (path.startsWith(getInstancesDirPath())) {
-            absolutePath = path;
-            relativePath = getRelativeInstanceFilePath(path);
-        } else {
-            relativePath = path;
-            absolutePath = getAbsoluteInstanceFilePath(path);
-        }
-
-        return new StorageStateProvider().isScopedStorageUsed()
-                ? relativePath
-                : absolutePath;
+        return getDbPath(StorageSubdirectory.INSTANCES.getDirectoryName(), path);
     }
 
-    public String getAbsoluteInstanceFilePath(String filePath) {
-        if (filePath == null) {
-            return null;
-        }
-        return filePath.startsWith(getInstancesDirPath())
-                ? filePath
-                : getInstancesDirPath() + File.separator + filePath;
-    }
-
-    public String getRelativeInstanceFilePath(String filePath) {
-        return filePath.startsWith(getInstancesDirPath())
-                ? filePath.substring(getInstancesDirPath().length() + 1)
-                : filePath;
+    public String getAbsoluteInstanceFilePath(String path) {
+        return getAbsoluteFilePath(StorageSubdirectory.INSTANCES.getDirectoryName(), path);
     }
 
     public String getFormDbPath(String path) {
-        String absolutePath;
-        String relativePath;
-        if (path.startsWith(getFormsDirPath())) {
-            absolutePath = path;
-            relativePath = getRelativeFormFilePath(path);
-        } else {
-            relativePath = path;
-            absolutePath = getAbsoluteFormFilePath(path);
-        }
-
-        return new StorageStateProvider().isScopedStorageUsed()
-                ? relativePath
-                : absolutePath;
+        return getDbPath(StorageSubdirectory.FORMS.getDirectoryName(), path);
     }
 
-    public String getRelativeFormFilePath(String filePath) {
-        return filePath.startsWith(getFormsDirPath())
-                ? filePath.substring(getFormsDirPath().length() + 1)
-                : filePath;
-    }
-
-    public String getAbsoluteFormFilePath(String filePath) {
-        if (filePath == null) {
-            return null;
-        }
-        return filePath.startsWith(getFormsDirPath())
-                ? filePath
-                : getFormsDirPath() + File.separator + filePath;
+    public String getAbsoluteFormFilePath(String path) {
+        return getAbsoluteFilePath(StorageSubdirectory.FORMS.getDirectoryName(), path);
     }
 
     public String getCacheDbPath(String path) {
+        return getDbPath(StorageSubdirectory.CACHE.getDirectoryName(), path);
+    }
+
+    public String getAbsoluteCacheFilePath(String path) {
+        return getAbsoluteFilePath(StorageSubdirectory.CACHE.getDirectoryName(), path);
+    }
+
+    private String getDbPath(String dirPath, String path) {
         String absolutePath;
         String relativePath;
-        if (path.startsWith(getCacheDirPath())) {
+        if (path.startsWith(dirPath)) {
             absolutePath = path;
-            relativePath = getRelativeCacheFilePath(path);
+            relativePath = getRelativeFilePath(dirPath, path);
         } else {
             relativePath = path;
-            absolutePath = getAbsoluteCacheFilePath(path);
+            absolutePath = getAbsoluteFilePath(dirPath, path);
         }
 
         return new StorageStateProvider().isScopedStorageUsed()
@@ -150,18 +92,18 @@ public class StoragePathProvider {
                 : absolutePath;
     }
 
-    public String getAbsoluteCacheFilePath(String filePath) {
+    private String getAbsoluteFilePath(String dirPath, String filePath) {
         if (filePath == null) {
             return null;
         }
-        return filePath.startsWith(getCacheDirPath())
+        return filePath.startsWith(dirPath)
                 ? filePath
-                : getCacheDirPath() + File.separator + filePath;
+                : dirPath + File.separator + filePath;
     }
 
-    public String getRelativeCacheFilePath(String filePath) {
-        return filePath.startsWith(getCacheDirPath())
-                ? filePath.substring(getCacheDirPath().length() + 1)
+    private String getRelativeFilePath(String dirPath, String filePath) {
+        return filePath.startsWith(dirPath)
+                ? filePath.substring(dirPath.length() + 1)
                 : filePath;
     }
 }

@@ -32,6 +32,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -140,7 +141,7 @@ public class FormDownloader {
 
             if (fd.getManifestUrl() != null) {
                 // use a temporary media path until everything is ok.
-                tempMediaPath = new File(new StoragePathProvider().getCacheDirPath(),
+                tempMediaPath = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE),
                         String.valueOf(System.currentTimeMillis())).getAbsolutePath();
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
@@ -336,11 +337,11 @@ public class FormDownloader {
 
         // proposed name of xml file...
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        String path = storagePathProvider.getFormsDirPath() + File.separator + rootName + ".xml";
+        String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
         int i = 2;
         File f = new File(path);
         while (f.exists()) {
-            path = storagePathProvider.getFormsDirPath() + File.separator + rootName + "_" + i + ".xml";
+            path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + "_" + i + ".xml";
             f = new File(path);
             i++;
         }
@@ -392,7 +393,7 @@ public class FormDownloader {
     private void downloadFile(File file, String downloadUrl)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
-                new File(new StoragePathProvider().getCacheDirPath()));
+                new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));
 
         // WiFi network connections can be renegotiated during a large form download sequence.
         // This will cause intermittent download failures.  Silently retry once after each
