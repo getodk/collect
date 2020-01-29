@@ -3,11 +3,8 @@ package org.odk.collect.android.storage;
 import android.os.Environment;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.io.File;
-
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_USED;
 
 public class StoragePathProvider {
     public String[] getODKDirPaths() {
@@ -22,7 +19,7 @@ public class StoragePathProvider {
     }
 
     private String getStoragePath() {
-        return isScopedStorageUsed()
+        return new StorageStateProvider().isScopedStorageUsed()
                 ? getScopedExternalFilesDirPath()
                 : getUnscopedExternalFilesDirPath();
     }
@@ -75,14 +72,6 @@ public class StoragePathProvider {
         return getCacheDirPath() + File.separator + "tmpDraw.jpg";
     }
 
-    private boolean isScopedStorageUsed() {
-        return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
-    }
-
-    public void recordMigrationToScopedStorage() {
-        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
-    }
-
     public String getInstanceDbPath(String path) {
         String absolutePath;
         String relativePath;
@@ -94,7 +83,7 @@ public class StoragePathProvider {
             absolutePath = getAbsoluteInstanceFilePath(path);
         }
 
-        return isScopedStorageUsed()
+        return new StorageStateProvider().isScopedStorageUsed()
                 ? relativePath
                 : absolutePath;
     }
@@ -125,7 +114,7 @@ public class StoragePathProvider {
             absolutePath = getAbsoluteFormFilePath(path);
         }
 
-        return isScopedStorageUsed()
+        return new StorageStateProvider().isScopedStorageUsed()
                 ? relativePath
                 : absolutePath;
     }
@@ -156,7 +145,7 @@ public class StoragePathProvider {
             absolutePath = getAbsoluteCacheFilePath(path);
         }
 
-        return isScopedStorageUsed()
+        return new StorageStateProvider().isScopedStorageUsed()
                 ? relativePath
                 : absolutePath;
     }
