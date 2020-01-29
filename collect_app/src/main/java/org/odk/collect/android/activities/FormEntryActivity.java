@@ -312,6 +312,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * detection of location permissions changes while the activity is in the background.
      */
     private boolean locationPermissionsPreviouslyGranted;
+    private int questionFontSize;
 
     private BackgroundLocationViewModel backgroundLocationViewModel;
     private IdentityPromptViewModel identityPromptViewModel;
@@ -358,6 +359,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showPreviousView();
         });
+
+        questionFontSize = Collect.getQuestionFontsize();
 
         if (savedInstanceState == null) {
             mediaLoadingFragment = new MediaLoadingFragment();
@@ -2139,6 +2142,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         nextButton.setVisibility(formController.getEvent() != FormEntryController.EVENT_END_OF_FORM ? View.VISIBLE : View.GONE);
     }
 
+    private void adjustFontSize() {
+        if (questionFontSize != Collect.getQuestionFontsize()) {
+            questionFontSize = Collect.getQuestionFontsize();
+            refreshCurrentView();
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -2190,6 +2200,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             onResumeWasCalledWithoutPermissions = true;
             return;
         }
+        adjustFontSize();
 
         String navigation = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);
