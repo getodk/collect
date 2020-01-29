@@ -26,10 +26,4 @@ public class FormActivityTestRule extends IntentsTestRule<FormEntryActivity> {
 
         return intent;
     }
-
-    @Override
-    protected void afterActivityLaunched() {
-        this.getActivity().setShouldOverrideAnimations(true);
-        super.afterActivityLaunched();
-    }
 }
