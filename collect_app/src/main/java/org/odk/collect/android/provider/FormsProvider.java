@@ -205,7 +205,7 @@ public class FormsProvider extends ContentProvider {
                 values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
             }
             if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
-                values.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.constructMediaPath(filePath));
+                values.put(FormsColumns.FORM_MEDIA_PATH, StorageManager.getFormDbPath(FileUtils.constructMediaPath(filePath)));
             }
 
             SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
@@ -303,8 +303,8 @@ public class FormsProvider extends ContentProvider {
                                 String formFilePath = StorageManager.getAbsoluteFormFilePath(del.getString(del
                                         .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                                 deleteFileOrDir(formFilePath);
-                                deleteFileOrDir(del.getString(del
-                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                                deleteFileOrDir(StorageManager.getAbsoluteFormFilePath(del.getString(del
+                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
                             } while (del.moveToNext());
                         }
                     } finally {
@@ -330,15 +330,15 @@ public class FormsProvider extends ContentProvider {
                                 String formFilePath = StorageManager.getAbsoluteFormFilePath(c.getString(c
                                         .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                                 deleteFileOrDir(formFilePath);
-                                deleteFileOrDir(c.getString(c
-                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                                deleteFileOrDir(StorageManager.getAbsoluteFormFilePath(c.getString(c
+                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
 
                                 try {
                                     // get rid of the old tables
                                     ItemsetDbAdapter ida = new ItemsetDbAdapter();
                                     ida.open();
-                                    ida.delete(c.getString(c
-                                            .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
+                                    ida.delete(StorageManager.getAbsoluteFormFilePath(c.getString(c
+                                            .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)))
                                             + "/itemsets.csv");
                                     ida.close();
                                 } catch (Exception e) {
