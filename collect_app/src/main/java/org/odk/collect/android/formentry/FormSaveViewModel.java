@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.formentry.audit.AuditUtils;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
@@ -34,6 +36,9 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private AuditEventLogger auditEventLogger;
 
     @Nullable
+    private FormController formController;
+
+    @Nullable
     private AsyncTask saveTask;
 
     public FormSaveViewModel(Clock clock, FormSaver formSaver) {
@@ -41,8 +46,9 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         this.formSaver = formSaver;
     }
 
-    public void setAuditEventLogger(@Nullable AuditEventLogger auditEventLogger) {
-        this.auditEventLogger = auditEventLogger;
+    public void setFormController(FormController formController) {
+        this.formController = formController;
+        this.auditEventLogger = formController.getAuditEventLogger();
     }
 
     public void editingForm() {
@@ -109,7 +115,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private void saveToDisk(SaveRequest saveRequest) {
-        saveTask = new SaveTask(saveRequest, formSaver, new SaveTask.Listener() {
+        saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
@@ -136,6 +142,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                         } else {
                             auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.getCurrentTime());
                         }
+                    } else {
+                        AuditUtils.logCurrentEvent(formController, auditEventLogger, clock.getCurrentTime());
                     }
                 }
 
@@ -241,22 +249,23 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         private final FormSaver formSaver;
 
         private final Listener listener;
+        private final FormController formController;
 
-        SaveTask(SaveRequest saveRequest, FormSaver formSaver, Listener listener) {
+        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
+            this.formController = formController;
         }
 
         @Override
         protected SaveToDiskResult doInBackground(Void... voids) {
-            return formSaver.save(
-                    saveRequest.uri,
+            return formSaver.save(formController,
                     saveRequest.shouldFinalize,
                     saveRequest.updatedSaveName,
                     saveRequest.viewExiting,
-                    this::publishProgress
-            );
+                    this::publishProgress,
+                    saveRequest.uri);
         }
 
         @Override

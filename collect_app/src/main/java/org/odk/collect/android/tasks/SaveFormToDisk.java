@@ -75,6 +75,7 @@ public class SaveFormToDisk {
 
     private final boolean saveAndExit;
     private final boolean shouldFinalize;
+    private final FormController formController;
     private Uri uri;
     private String instanceName;
 
@@ -83,18 +84,18 @@ public class SaveFormToDisk {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-    public SaveFormToDisk(Uri uri, boolean saveAndExit, boolean shouldFinalize, String updatedName) {
+    public SaveFormToDisk(FormController formController, boolean saveAndExit, boolean shouldFinalize, String updatedName, Uri uri) {
+        this.formController = formController;
         this.uri = uri;
         this.saveAndExit = saveAndExit;
         this.shouldFinalize = shouldFinalize;
-        instanceName = updatedName;
+        this.instanceName = updatedName;
     }
 
     @Nullable
     public SaveToDiskResult saveForm(FormSaver.ProgressListener progressListener) {
         SaveToDiskResult saveToDiskResult = new SaveToDiskResult();
 
-        FormController formController = Collect.getInstance().getFormController();
         progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_validating_message));
 
         try {
