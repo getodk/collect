@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -462,7 +463,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
             referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
                 new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
             ));
+            setLabelsVisibility("off");
+        } else {
+            setLabelsVisibility("on");
         }
+    }
+
+    private void setLabelsVisibility(String state) {
+        String style = String.format(" [ { featureType: all, elementType: labels, stylers: [ { visibility: %s } ] } ]", state);
+        map.setMapStyle(new MapStyleOptions(style));
     }
 
     private LatLngBounds expandBounds(LatLngBounds bounds, double factor) {
