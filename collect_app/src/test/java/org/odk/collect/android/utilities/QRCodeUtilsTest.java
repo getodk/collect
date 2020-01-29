@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;

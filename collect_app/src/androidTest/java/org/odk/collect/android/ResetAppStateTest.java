@@ -33,6 +33,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.osmdroid.config.Configuration;

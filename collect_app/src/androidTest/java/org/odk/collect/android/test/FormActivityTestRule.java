@@ -7,6 +7,7 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 

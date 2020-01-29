@@ -48,7 +48,6 @@ import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;

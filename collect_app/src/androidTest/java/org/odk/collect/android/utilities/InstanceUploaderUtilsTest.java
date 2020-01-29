@@ -13,6 +13,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.util.HashMap;
 import java.util.Map;
