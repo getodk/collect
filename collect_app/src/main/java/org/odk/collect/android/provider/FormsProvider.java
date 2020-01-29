@@ -30,7 +30,6 @@ import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.UriUtils;
@@ -203,9 +202,7 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.MD5_HASH, md5);
 
             if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-                String cachePath = storagePathProvider.getDirPath(StorageSubdirectory.CACHE) + File.separator + md5
-                        + ".formdef";
-                values.put(FormsColumns.JRCACHE_FILE_PATH, storagePathProvider.getCacheDbPath(cachePath));
+                values.put(FormsColumns.JRCACHE_FILE_PATH, storagePathProvider.getCacheDbPath(md5 + ".formdef"));
             }
             if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
                 values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(FileUtils.constructMediaPath(filePath)));
@@ -341,8 +338,8 @@ public class FormsProvider extends ContentProvider {
                                     // get rid of the old tables
                                     ItemsetDbAdapter ida = new ItemsetDbAdapter();
                                     ida.open();
-                                    ida.delete(storagePathProvider.getAbsoluteFormFilePath(c.getString(c
-                                            .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)))
+                                    ida.delete(c.getString(c
+                                            .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
                                             + "/itemsets.csv");
                                     ida.close();
                                 } catch (Exception e) {

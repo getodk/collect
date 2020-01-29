@@ -173,10 +173,10 @@ public class ResetAppStateTest {
         ContentValues values = new ContentValues();
         values.put(FormsColumns.JRCACHE_FILE_PATH, storagePathProvider.getCacheDbPath("3a76a386464925b6f3e53422673dfe3c.formdef"));
         values.put(FormsColumns.JR_FORM_ID, "jrFormId");
-        values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getFormDbPath("/testFile1-media"));
+        values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getFormDbPath("testFile1-media"));
         values.put(FormsColumns.DATE, "1487077903756");
         values.put(FormsColumns.DISPLAY_NAME, "displayName");
-        values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getFormDbPath("/testFile1.xml"));
+        values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getFormDbPath("testFile1.xml"));
         Collect.getInstance().getContentResolver()
                 .insert(FormsColumns.CONTENT_URI, values);
 
@@ -185,7 +185,7 @@ public class ResetAppStateTest {
 
     private void setupTestInstancesDatabase() {
         ContentValues values = new ContentValues();
-        values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getInstanceDbPath("/testDir1/testFile1"));
+        values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getInstanceDbPath("testDir1/testFile1"));
         values.put(InstanceColumns.SUBMISSION_URI, "submissionUri");
         values.put(InstanceColumns.DISPLAY_NAME, "displayName");
         values.put(InstanceColumns.DISPLAY_NAME, "formName");
