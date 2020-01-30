@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.os.Build;
-
 import org.joda.time.LocalDateTime;
 
 import mmcalendar.Language;
