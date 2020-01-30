@@ -68,7 +68,7 @@ public class MyanmarDateUtils {
     }
 
     public static LanguageCatalog getLanguageCatalog() {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= 4.4) {
             return new LanguageCatalog(Language.MYANMAR);
         } else {
             return new LanguageCatalog(Language.ENGLISH);
