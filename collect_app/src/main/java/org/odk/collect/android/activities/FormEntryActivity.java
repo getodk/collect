@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -93,8 +91,10 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.FormSaveViewModel;
 import org.odk.collect.android.formentry.QuitFormDialog;
+import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
@@ -105,7 +105,6 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.FormLoadingDialogFragment;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -241,8 +240,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String EXTRA_TESTING_PATH = "testingPath";
     public static final String KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED = "readPhoneStatePermissionRequestNeeded";
 
-    private static final int SAVING_DIALOG = 2;
-
     private boolean autoSaved;
     private boolean allowMovingBackwards;
 
@@ -262,7 +259,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private View currentView;
 
     private AlertDialog alertDialog;
-    private ProgressDialog savingDialog;
     private String errorMessage;
     private boolean shownAlertDialogIsGroupRepeat;
 
@@ -483,7 +479,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
-                    showFormLoadingDialogFragment();
+                    DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
                 }
                 return;
@@ -618,7 +614,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null);
-        showFormLoadingDialogFragment();
+        DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
         formLoaderTask.execute(formPath);
     }
 
@@ -857,8 +853,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                ProgressDialogFragment.newInstance(getString(R.string.please_wait))
-                        .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                ProgressDialogFragment progressDialog = new ProgressDialogFragment();
+                progressDialog.setMessage(getString(R.string.please_wait));
+                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
                 mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
                 break;
@@ -1642,18 +1639,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    // Hopefully someday we can use managed dialogs when the bugs are fixed
-    /*
-     * Ideally, we'd like to use Android to manage dialogs with onCreateDialog()
-     * and onPrepareDialog(), but dialogs with dynamic content are broken in 1.5
-     * (cupcake). We do use managed dialogs for our static loading
-     * ProgressDialog. The main issue we noticed and are waiting to see fixed
-     * is: onPrepareDialog() is not called after a screen orientation change.
-     * http://code.google.com/p/android/issues/detail?id=1639
-     */
-
-    //
-
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
@@ -1848,16 +1833,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 case SAVING:
                     autoSaved = true;
 
-                    showSavingDialog();
+                    SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
+                            new SaveFormProgressDialogFragment(),
+                            getSupportFragmentManager()
+                    );
 
                     if (result.getMessage() != null) {
-                        onProgressStep(result.getMessage());
+                        progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
                     }
 
                     break;
 
                 case SAVED:
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     showShortToast(R.string.data_saved_ok);
 
                     if (exit) {
@@ -1876,7 +1864,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case SAVE_ERROR:
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     String message;
 
                     if (result.getMessage() != null) {
@@ -1890,14 +1878,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     break;
 
                 case FINALIZE_ERROR:
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     showLongToast(String.format(getString(R.string.encryption_error_message),
                             result.getMessage()));
                     finishReturnInstance();
                     break;
 
                 case CONSTRAINT_ERROR: {
-                    dismissSavingDialog();
+                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     refreshCurrentView();
 
                     // get constraint behavior preference value with appropriate default
@@ -1920,20 +1908,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         return true;
-    }
-
-    private void dismissSavingDialog() {
-        try {
-            dismissDialog(SAVING_DIALOG);
-        } catch (IllegalArgumentException ignored) {
-            // For some reason the dialog wasn't shown
-        }
-    }
-
-    private void showSavingDialog() {
-        if (savingDialog == null || savingDialog.isShowing()) {
-            showDialog(SAVING_DIALOG);
-        }
     }
 
     /**
@@ -2090,40 +2064,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * We use Android's dialog management for loading/saving progress dialogs
-     */
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case SAVING_DIALOG:
-                savingDialog = new ProgressDialog(this);
-                savingDialog.setTitle(getString(R.string.saving_form));
-                savingDialog.setMessage(getString(R.string.please_wait));
-                savingDialog.setIndeterminate(true);
-                savingDialog.setOnDismissListener(dialog -> cancelSaveToDiskTask());
-                return savingDialog;
-
-        }
-        return null;
-    }
-
-    private void cancelSaveToDiskTask() {
-        if (formSaveViewModel.isSaving()) {
-            boolean cancelled = formSaveViewModel.cancelSaving();
-            Timber.w("Cancelled form saving! (%s)", cancelled);
-        }
-    }
-
-    /**
-     * Dismiss any showing dialogs that we manually manage.
-     */
-    private void dismissDialogs() {
-        if (alertDialog != null && alertDialog.isShowing()) {
-            alertDialog.dismiss();
-        }
-    }
-
-    /**
      * Shows the next or back button, neither or both. Both buttons are displayed unless:
      * - we are at the first question in the form so the back button is hidden
      * - we are at the end screen so the next button is hidden
@@ -2177,7 +2117,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onPause() {
         FormController formController = getFormController();
-        dismissDialogs();
 
         // make sure we're not already saving to disk. if we are, currentPrompt
         // is getting constantly updated
@@ -2231,7 +2170,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
                     }
                 } else {
-                    dismissFormLoadingDialogFragment();
+                    DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     FormLoaderTask t = formLoaderTask;
                     formLoaderTask = null;
                     t.cancel(true);
@@ -2380,7 +2319,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void loadingComplete(FormLoaderTask task, FormDef formDef, String warningMsg) {
-        dismissFormLoadingDialogFragment();
+        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         final FormController formController = task.getFormController();
         if (formController != null) {
@@ -2561,7 +2500,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void loadingError(String errorMsg) {
-        dismissFormLoadingDialogFragment();
+        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {
             createErrorDialog(errorMsg, EXIT);
@@ -2571,14 +2510,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public void onProgressStep(String stepMessage) {
-        if (savingDialog != null) {
-            savingDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
-        } else {
-            FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
-            if (formLoadingDialogFragment != null) {
-                formLoadingDialogFragment.updateMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
-            }
-        }
+        DialogUtils.showIfNotShowing(
+                new FormLoadingDialogFragment(),
+                getSupportFragmentManager()
+        ).setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
     }
 
     public void next() {
@@ -2621,24 +2556,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
         finish();
-    }
-
-    private FormLoadingDialogFragment getFormLoadingDialogFragment() {
-        return (FormLoadingDialogFragment) getSupportFragmentManager()
-                .findFragmentByTag(FormLoadingDialogFragment.FORM_LOADING_DIALOG_FRAGMENT_TAG);
-    }
-
-    private void showFormLoadingDialogFragment() {
-        FormLoadingDialogFragment
-                .newInstance()
-                .show(getSupportFragmentManager(), FormLoadingDialogFragment.FORM_LOADING_DIALOG_FRAGMENT_TAG);
-    }
-
-    private void dismissFormLoadingDialogFragment() {
-        FormLoadingDialogFragment formLoadingDialogFragment = getFormLoadingDialogFragment();
-        if (formLoadingDialogFragment != null) {
-            formLoadingDialogFragment.dismiss();
-        }
     }
 
     @Override

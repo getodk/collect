@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.utilities.Clock;
@@ -21,7 +22,7 @@ import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
-public class FormSaveViewModel extends ViewModel {
+public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable {
 
     private final Clock clock;
     private final FormSaver formSaver;
@@ -72,7 +73,8 @@ public class FormSaveViewModel extends ViewModel {
         return saveResult.getValue() != null && saveResult.getValue().getState().equals(SaveResult.State.SAVING);
     }
 
-    public boolean cancelSaving() {
+    @Override
+    public boolean cancel() {
         return saveTask.cancel(true);
     }
 

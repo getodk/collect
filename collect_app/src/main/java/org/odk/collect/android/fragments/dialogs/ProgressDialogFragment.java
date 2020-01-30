@@ -2,27 +2,55 @@ package org.odk.collect.android.fragments.dialogs;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import android.view.Window;
 
-import org.odk.collect.android.R;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import timber.log.Timber;
 
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+
 public class ProgressDialogFragment extends DialogFragment {
+
     public static final String COLLECT_PROGRESS_DIALOG_TAG = "collectProgressDialogTag";
 
+    private static final String TITLE = "title";
     private static final String MESSAGE = "message";
 
-    public static ProgressDialogFragment newInstance(String message) {
-        Bundle bundle = new Bundle();
-        bundle.putString(MESSAGE, message);
+    /**
+     * Override to have something cancelled when the ProgressDialog's cancel button is pressed
+     */
+    protected Cancellable getCancellable() {
+        return null;
+    }
 
-        ProgressDialogFragment dialogFragment = new ProgressDialogFragment();
-        dialogFragment.setArguments(bundle);
-        return dialogFragment;
+    /**
+     * Override to show cancel button with returned text
+     */
+    protected String getCancelButtonText() {
+        return null;
+    }
+
+    public void setTitle(String title) {
+        setArgument(title, TITLE);
+
+        ProgressDialog dialog = (ProgressDialog) getDialog();
+        if (dialog != null) {
+            setupView(dialog);
+        }
+    }
+
+    public void setMessage(String message) {
+        setArgument(message, MESSAGE);
+
+        ProgressDialog dialog = (ProgressDialog) getDialog();
+        if (dialog != null) {
+            setupView(dialog);
+        }
     }
 
     /*
@@ -48,15 +76,22 @@ public class ProgressDialogFragment extends DialogFragment {
 
         setRetainInstance(true);
 
-        setCancelable(false);
-
         ProgressDialog dialog = new ProgressDialog(getActivity(), getTheme());
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setMessage(getString(R.string.please_wait));
-        dialog.setCancelable(false);
+
         dialog.setIndeterminate(true);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        setupView(dialog);
         return dialog;
+    }
+
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
+        Cancellable cancellable = getCancellable();
+        if (cancellable != null) {
+            cancellable.cancel();
+        }
     }
 
     @Override
@@ -66,5 +101,34 @@ public class ProgressDialogFragment extends DialogFragment {
             dialog.setDismissMessage(null);
         }
         super.onDestroyView();
+    }
+
+    private void setupView(@NonNull ProgressDialog dialog) {
+        if (getArguments() != null && getArguments().getString(TITLE) != null) {
+            dialog.setTitle(getArguments().getString(TITLE));
+        }
+
+        if (getArguments() != null && getArguments().getString(MESSAGE) != null) {
+            dialog.setMessage(getArguments().getString(MESSAGE));
+        }
+
+        if (getCancelButtonText() != null) {
+            dialog.setButton(BUTTON_NEGATIVE, getCancelButtonText(), (dialog1, which) -> {
+                dismiss();
+                getCancellable().cancel();
+            });
+        }
+    }
+
+    private void setArgument(String title, String title2) {
+        if (getArguments() == null) {
+            setArguments(new Bundle());
+        }
+
+        getArguments().putString(title2, title);
+    }
+
+    public interface Cancellable {
+        boolean cancel();
     }
 }
