@@ -1,4 +1,4 @@
-package org.odk.collect.android.regression.formfilling;
+package org.odk.collect.android.regression;
 
 import android.Manifest;
 
@@ -9,16 +9,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.util.Collections;
 
-// Issue number NODK-377
+// Issue number NODK-207
 @RunWith(AndroidJUnit4.class)
-public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
+public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -27,31 +26,23 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("internal_select_10.xml"))
-            .around(new CopyFormRule("external_select_10.xml", Collections.singletonList("external_data_10.xml")));
+            .around(new CopyFormRule("numberInCSV.xml", Collections.singletonList("itemSets.csv")));
 
     @Test
-    public void external_ShouldFillTheForm() {
+    public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
 
-        //TestCase1
         new MainMenuPage(rule)
-                .startBlankForm("external select 10")
-                .clickOnText("b")
+                .startBlankForm("numberInCSV")
                 .swipeToNextQuestion()
-                .clickOnText("ba")
+                .clickOnText("Venda de animais")
+                .assertText("1a")
                 .swipeToNextQuestion()
-                .clickSaveAndExit();
-    }
-
-    @Test
-    public void internal_ShouldFillTheForm() {
-
-        //TestCase2
-        new MainMenuPage(rule)
-                .startBlankForm("internal select 10")
-                .clickOnText("c")
+                .clickOnText("Vendas agrícolas")
+                .assertText("2a")
                 .swipeToNextQuestion()
-                .clickOnText("ca")
+                .clickOnText("Pensão")
+                .assertText("3a")
+                .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }
