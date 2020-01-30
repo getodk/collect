@@ -172,7 +172,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY: {
                 if (auditEventLogger != null) {
-                    auditEventLogger.flush();
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
                 }
 

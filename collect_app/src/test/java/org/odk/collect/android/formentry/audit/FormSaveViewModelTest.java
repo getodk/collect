@@ -98,12 +98,6 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void saveForm_flushesAuditEventLogger() {
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        verify(logger).flush();
-    }
-
-    @Test
     public void whenFormSaverFinishes_saved_setsSaveResultState_toSaved() {
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
@@ -199,20 +193,36 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_whenViewExiting_logsFormExitAuditEvent() {
+    public void whenFormSaverFinishes_whenViewExiting_logsFormSaveAndFormExitAuditEventAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", true);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.FORM_SAVE,
+                false,
+                CURRENT_TIME
+        );
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, CURRENT_TIME);
     }
 
     @Test
-    public void whenFormSaverFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEvents() {
+    public void whenFormSaverFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEventsAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), true, "", true);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, CURRENT_TIME);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.FORM_SAVE,
+                false,
+                CURRENT_TIME
+        );
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, CURRENT_TIME);
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, CURRENT_TIME);
     }
 
     @Test
@@ -233,11 +243,14 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saveError_logsSaveErrorAuditEvent() {
+    public void whenFormSaverFinishes_saveError_logsSaveErrorAuditEvenAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVE_ERROR);
-        verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, CURRENT_TIME);
     }
 
     @Test
@@ -250,11 +263,14 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_encryptionError_logsFinalizeErrorAuditEvent() {
+    public void whenFormSaverFinishes_encryptionError_logsFinalizeErrorAuditEventAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
         whenFormSaverFinishes(SaveFormToDisk.ENCRYPTION_ERROR);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, CURRENT_TIME);
     }
 
     @Test
