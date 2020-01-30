@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 
 public class SaveFormProgressDialogFragment extends ProgressDialogFragment {

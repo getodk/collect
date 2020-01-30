@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.FormSaveViewModel;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {

@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.odk.collect.android.formentry.FormSaveViewModel;
-import org.odk.collect.android.formentry.FormSaver;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -33,13 +33,13 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.ALREADY_SAVING;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.SAVED;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.SAVING;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.ALREADY_SAVING;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVED;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormSaveViewModelTest {

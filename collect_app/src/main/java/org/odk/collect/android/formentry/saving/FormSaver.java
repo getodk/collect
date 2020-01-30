@@ -1,4 +1,4 @@
-package org.odk.collect.android.formentry;
+package org.odk.collect.android.formentry.saving;
 
 import android.net.Uri;
 
