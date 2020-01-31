@@ -29,6 +29,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 /**
  * <p>Use the ODK Sensors framework to print data to a connected printer.</p>
  * <p>
@@ -121,7 +123,7 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
-        launchIntentButton = getSimpleButton(buttonText);
+        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), buttonText, getAnswerFontSize(), this);
 
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());

@@ -31,6 +31,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -80,7 +81,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileName = questionDetails.getPrompt().getAnswerText();
 
         // Setup Launch OpenMapKit Button
-        launchOpenMapKitButton = getSimpleButton(R.id.simple_button);
+        launchOpenMapKitButton = createSimpleButton(getContext(), R.id.simple_button, getFormEntryPrompt().isReadOnly(), getAnswerFontSize(), this);
 
         // Button Styling
         if (osmFileName != null) {

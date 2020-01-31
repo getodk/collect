@@ -13,6 +13,7 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
@@ -28,7 +29,6 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 

@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin_standard"
+    android:paddingRight="@dimen/margin_standard">
 
     <RelativeLayout
         android:id="@+id/text_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small">
 
         <ImageView
             android:id="@+id/help_icon"
@@ -18,7 +21,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginRight="@dimen/margin_standard"
             android:visibility="gone"
             app:srcCompat="@drawable/information_outline"
@@ -26,38 +29,40 @@
 
         <TextView
             android:id="@+id/help_text_view"
+            style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/margin_standard"
-            android:paddingRight="@dimen/margin_standard"
             android:layout_toEndOf="@id/help_icon"
             android:layout_toRightOf="@id/help_icon"
-            tools:text="Testing this out." />
+            tools:text="Help text" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/guidance_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_standard"
-        android:layout_marginRight="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/guidance_text_view"
+            style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="This is also a very long guidance that will accompany the longest hint because we are about going the extra mile." />
+            tools:text="Guidance text" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/warning_text"
+        style="@style/TextAppearance.Collect.Subtitle1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_standard"
-        android:layout_marginRight="@dimen/margin_standard"
-        android:textColor="?attr/warningColor"
-        android:visibility="gone" />
+        android:layout_marginTop="@dimen/margin_small"
+        android:textColor="?attr/colorError"
+        android:visibility="gone"
+        tools:text="A warning"
+        tools:visibility="visible" />
 </LinearLayout>

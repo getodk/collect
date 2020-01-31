@@ -51,6 +51,8 @@ import java.io.File;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
+
 public abstract class BaseImageWidget extends QuestionWidget implements FileWidget {
     @Nullable
     protected ImageView imageView;
@@ -163,7 +165,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 }
             }
 
-            imageView = getAnswerImageView(bmp);
+            imageView = createAnswerImageView(getContext(), bmp);
             imageView.setOnClickListener(new View.OnClickListener() {
 
                 @Override

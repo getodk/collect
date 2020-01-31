@@ -44,12 +44,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.SelectWidget;
 
 import java.io.File;
@@ -59,8 +59,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClipID;
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.widgets.QuestionWidget.isRTL;
 
 public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<AbstractSelectListAdapter.ViewHolder>
@@ -257,7 +257,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             SelectChoice item = items.get(index);
 
             audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
-            audioVideoImageTextLabel.setText(textView);
+            audioVideoImageTextLabel.setTextView(textView);
 
             String imageURI = getImageURI(index, items);
             String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");

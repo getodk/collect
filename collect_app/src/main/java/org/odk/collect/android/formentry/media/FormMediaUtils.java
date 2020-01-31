@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry.media;
 
+import android.graphics.Color;
+
 import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.SelectChoice;
@@ -8,12 +10,13 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import timber.log.Timber;
 
-public final class FormMediaHelpers {
+public final class FormMediaUtils {
 
-    private FormMediaHelpers() {
+    private FormMediaUtils() {
 
     }
 
@@ -63,5 +66,20 @@ public final class FormMediaHelpers {
             Timber.e(e);
             return null;
         }
+    }
+
+    public static int getPlayColor(FormEntryPrompt prompt, ThemeUtils themeUtils) {
+        int playColor = themeUtils.getAccentColor();
+
+        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
+        if (playColorString != null) {
+            try {
+                playColor = Color.parseColor(playColorString);
+            } catch (IllegalArgumentException e) {
+                Timber.e(e, "Argument %s is incorrect", playColorString);
+            }
+        }
+
+        return playColor;
     }
 }

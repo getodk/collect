@@ -24,6 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -47,7 +48,7 @@ public class DrawWidget extends BaseImageWidget {
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        drawButton = getSimpleButton(getContext().getString(R.string.draw_image));
+        drawButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.draw_image), getAnswerFontSize(), this);
 
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);

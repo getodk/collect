@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.views;
+package org.odk.collect.android.formentry;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -40,7 +39,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -95,7 +93,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ODKView extends FrameLayout implements OnLongClickListener, WidgetValueChangedListener {
 
-    private final LinearLayout view;
+    private final LinearLayout widgetsList;
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
     private final AudioHelper audioHelper;
@@ -126,20 +124,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         getComponent(context).inject(this);
         this.audioHelper = audioHelperFactory.create(context);
 
-        inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
+        inflate(getContext(), R.layout.odk_view, this); // keep in an xml file to enable the vertical scrollbar
 
         widgets = new ArrayList<>();
-
-        view = new LinearLayout(getContext());
-        view.setOrientation(LinearLayout.VERTICAL);
-        view.setGravity(Gravity.TOP);
-        view.setPadding(0, 7, 0, 0);
+        widgetsList = findViewById(R.id.widgets);
 
         layout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
         // display which group you are in as well as the question
-        addGroupText(groups);
+        setGroupText(groups);
 
         // when the grouped fields are populated by an external app, this will get true.
         boolean readOnlyOverride = false;
@@ -159,8 +153,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         for (FormEntryPrompt question : questionPrompts) {
             addWidgetForQuestion(question, readOnlyOverride);
         }
-
-        ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
@@ -234,9 +226,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         widgets.add(qw);
 
         if (widgets.size() > 1) {
-            view.addView(getDividerView());
+            widgetsList.addView(getDividerView());
         }
-        view.addView(qw, layout);
+        widgetsList.addView(qw, layout);
     }
 
     /**
@@ -256,15 +248,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         widgets.add(index, qw);
 
         int indexAccountingForDividers = index * 2;
-        // There may be a first TextView to display the group path. See addGroupText(FormEntryCaption[])
-        if (view.getChildCount() > 0 && view.getChildAt(0) instanceof TextView) {
-            indexAccountingForDividers += 1;
+        if (index > 0) {
+            widgetsList.addView(getDividerView(), indexAccountingForDividers - 1);
         }
 
-        if (index > 0) {
-            view.addView(getDividerView(), indexAccountingForDividers - 1);
-        }
-        view.addView(qw, indexAccountingForDividers, layout);
+        widgetsList.addView(qw, indexAccountingForDividers, layout);
     }
 
     /**
@@ -304,7 +292,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     public void recycleDrawables() {
         this.destroyDrawingCache();
-        view.destroyDrawingCache();
+        widgetsList.destroyDrawingCache();
         for (QuestionWidget q : widgets) {
             q.recycleDrawables();
         }
@@ -330,17 +318,17 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     /**
      * Add a TextView containing the hierarchy of groups to which the question belongs.
      */
-    private void addGroupText(FormEntryCaption[] groups) {
+    private void setGroupText(FormEntryCaption[] groups) {
         String path = getGroupsPath(groups);
 
-        // build view
         if (!path.isEmpty()) {
-            TextView tv = new TextView(getContext());
+            TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
-            tv.setPadding(getResources().getDimensionPixelSize(R.dimen.margin_standard),
-                    getResources().getDimensionPixelSize(R.dimen.margin_small), 0, 0);
-            view.addView(tv, layout);
+
+            QuestionTextSizeHelper textSizeHelper = new QuestionTextSizeHelper();
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSizeHelper.getSubtitle1());
+
+            tv.setVisibility(VISIBLE);
         }
     }
 
@@ -454,9 +442,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             }
         });
 
-        view.addView(getDividerView());
-
-        view.addView(launchIntentButton, layout);
+        widgetsList.addView(getDividerView());
+        widgetsList.addView(launchIntentButton, layout);
     }
 
     public void setFocus(Context context) {
@@ -668,13 +655,13 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         int indexAccountingForDividers = index * 2;
 
         // There may be a first TextView to display the group path. See addGroupText(FormEntryCaption[])
-        if (view.getChildCount() > 0 && view.getChildAt(0) instanceof TextView) {
+        if (widgetsList.getChildCount() > 0 && widgetsList.getChildAt(0) instanceof TextView) {
             indexAccountingForDividers += 1;
         }
-        view.removeViewAt(indexAccountingForDividers);
+        widgetsList.removeViewAt(indexAccountingForDividers);
 
         if (index > 0) {
-            view.removeViewAt(indexAccountingForDividers - 1);
+            widgetsList.removeViewAt(indexAccountingForDividers - 1);
         }
 
         widgets.remove(index);

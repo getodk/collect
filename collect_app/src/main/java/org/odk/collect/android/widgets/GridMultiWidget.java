@@ -31,7 +31,7 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClip;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getClip;
 
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends BaseGridWidget {

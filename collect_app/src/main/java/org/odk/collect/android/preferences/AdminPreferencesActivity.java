@@ -84,7 +84,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, new AdminPreferencesFragment(), TAG)
+                    .add(R.id.preferences_fragment_container, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
     }

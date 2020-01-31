@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -17,12 +17,10 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import androidx.appcompat.widget.AppCompatCheckBox;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -30,6 +28,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -65,7 +65,6 @@ import timber.log.Timber;
 public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
 
     final ArrayList<CheckBox> checkBoxes;
-    private View center;
 
     @SuppressWarnings("unchecked")
     public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel) {
@@ -74,7 +73,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
         checkBoxes = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
-        LinearLayout buttonLayout = new LinearLayout(context);
+        LinearLayout buttonLayout = findViewById(R.id.list_items);
 
         List<Selection> ve = new ArrayList<>();
         if (questionDetails.getPrompt().getAnswerValue() != null) {
@@ -236,15 +235,6 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                 buttonLayout.addView(answer, answerParams);
             }
         }
-
-        // Align the buttons so that they appear horizonally and are right justified
-        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
-        addView(buttonLayout, params);
-
     }
 
     @Override
@@ -292,20 +282,6 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
     }
 
     @Override
-    protected void addQuestionLabel(View v) {
-        center = new View(getContext());
-        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
-        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(ViewIds.generateViewId());
-        addView(center, centerParams);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.LEFT_OF, center.getId());
-        addView(v, params);
-    }
-
-    @Override
     public int getChoiceCount() {
         return checkBoxes.size();
     }
@@ -315,4 +291,8 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
         checkBoxes.get(choiceIndex).setChecked(isSelected);
     }
 
+    @Override
+    protected int getLayout() {
+        return R.layout.label_widget;
+    }
 }
