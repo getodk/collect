@@ -278,6 +278,10 @@ public class Collect extends Application {
         setupRemoteAnalytics();
         setupLeakCanary();
         setupOSMDroid();
+
+        // Force inclusion of scoped storage strings so they can be translated
+        Timber.i("%s %s", getString(R.string.scoped_storage_banner_text),
+                                   getString(R.string.scoped_storage_learn_more));
     }
 
     private void setupRemoteAnalytics() {

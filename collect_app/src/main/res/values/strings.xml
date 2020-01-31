@@ -722,4 +722,7 @@
     <string name="reason">Reason</string>
     <string name="save">Save</string>
     <string name="reason_for_changes_description">You need to explain the reason for changes to this form</string>
+
+    <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage by August 2020 to comply with Android requirements.</string>
+    <string name="scoped_storage_learn_more">Learn more and migrate</string>
 </resources>
