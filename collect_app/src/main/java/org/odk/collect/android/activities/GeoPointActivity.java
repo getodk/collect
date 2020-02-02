@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -26,6 +27,9 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.view.Window;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.location.LocationListener;
 
@@ -40,7 +44,6 @@ import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
@@ -71,6 +74,8 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     private String dialogMessage;
 
     private Timer timer;
+
+    private GpsStatusListener gpsStatusListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,9 +178,9 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     public void onClientStart() {
         locationClient.requestLocationUpdates(this);
 
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         if (locationManager != null) {
-            locationManager.addGpsStatusListener(this);
+            gpsStatusListener = new GpsStatusListener(locationManager, this);
         }
 
         if (locationClient.isLocationAvailable()) {
@@ -194,16 +199,15 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     @Override
     public void onClientStop() {
         locationClient.stopLocationUpdates();
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         if (locationManager != null) {
-            locationManager.removeGpsStatusListener(this);
+            gpsStatusListener.removeListener(locationManager);
         }
     }
 
     /**
      * Sets up the look and actions for the progress dialog while the GPS is searching.
      */
-    @SuppressWarnings("deprecation")
     private void setupLocationDialog() {
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
@@ -340,5 +344,27 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         String timeElapsed = DateUtils.formatElapsedTime((System.currentTimeMillis() - startTime) / 1000);
         String locationMetadata = getString(R.string.location_metadata, numberOfAvailableSatellites, timeElapsed);
         runOnUiThread(() -> locationDialog.setMessage(dialogMessage + "\n\n" + locationMetadata));
+    }
+
+    static class GpsStatusListener implements GpsStatus.Listener {
+        private GpsStatus.Listener listener;
+
+        @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        GpsStatusListener(LocationManager locationManager, final GpsStatus.Listener listener) {
+            this.listener = listener;
+            locationManager.addGpsStatusListener(this);
+        }
+
+        @Override
+        public void onGpsStatusChanged(int event) {
+            if (listener != null) {
+                listener.onGpsStatusChanged(event);
+            }
+        }
+
+        void removeListener(LocationManager locationManager) {
+            locationManager.removeGpsStatusListener(this);
+            listener = null;
+        }
     }
 }

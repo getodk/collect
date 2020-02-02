@@ -38,7 +38,7 @@ class AndroidLocationClient
      * @param context The Context where the AndroidLocationClient will be running.
      */
     AndroidLocationClient(@NonNull Context context) {
-        this((LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
+        this((LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE));
     }
 
     /**
