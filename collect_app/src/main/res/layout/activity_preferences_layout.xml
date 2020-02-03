@@ -12,7 +12,7 @@
         android:layout_height="wrap_content" />
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/preferences_fragment_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

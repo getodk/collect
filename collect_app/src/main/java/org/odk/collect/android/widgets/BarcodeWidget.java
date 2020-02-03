@@ -35,6 +35,9 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
+
 /**
  * Widget that allows user to scan barcodes and add them to the form.
  *
@@ -47,9 +50,9 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     public BarcodeWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        getBarcodeButton = getSimpleButton(getContext().getString(R.string.get_barcode));
+        getBarcodeButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.get_barcode), getAnswerFontSize(), this);
 
-        stringAnswer = getCenteredAnswerTextView();
+        stringAnswer = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
 
         String s = questionDetails.getPrompt().getAnswerText();
         if (s != null) {

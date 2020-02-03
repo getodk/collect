@@ -36,6 +36,8 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
+
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
  *

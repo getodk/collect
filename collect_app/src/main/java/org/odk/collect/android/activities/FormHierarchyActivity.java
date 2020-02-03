@@ -39,11 +39,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.views.ODKView;
 
 import java.util.ArrayList;
 import java.util.List;

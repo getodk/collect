@@ -1,5 +1,8 @@
 package org.odk.collect.android.regression;
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -14,8 +17,11 @@ import org.odk.collect.android.support.ResetStateRule;
 public class ServerOtherTest extends BaseRegressionTest {
 
     @Rule
-    public RuleChain ruleChain = RuleChain
-            .outerRule(new ResetStateRule());
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_PHONE_STATE)
+            )
+            .around(new ResetStateRule());
 
     @Test
     public void formListPath_ShouldBeUpdated() {

@@ -25,7 +25,7 @@ import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getClip;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getClip;
 
 @SuppressLint("ViewConstructor")
 public class GridWidget extends BaseGridWidget {

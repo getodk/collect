@@ -127,32 +127,9 @@ public final class DialogUtils {
     }
 
     /**
-     * Ensures that a dialog is dismissed safely and doesn't causes a crash. Useful in the event
-     * of a screen rotation, async operations or activity navigation.
-     *
-     * @param dialog   that needs to be shown
-     * @param activity that has the dialog
-     */
-    public static void dismissDialog(Dialog dialog, Activity activity) {
-
-        if (activity == null || activity.isFinishing()) {
-            return;
-        }
-        if (dialog == null || !dialog.isShowing()) {
-            return;
-        }
-
-        try {
-            dialog.dismiss();
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    /**
      * Creates an error dialog on an activity
      *
-     * @param errorMsg The message to show on the dialog box
+     * @param errorMsg   The message to show on the dialog box
      * @param shouldExit Finish the activity if Ok is clicked
      */
     public static Dialog createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
@@ -174,11 +151,28 @@ public final class DialogUtils {
         return alertDialog;
     }
 
-    public static void showIfNotShowing(DialogFragment dialog, FragmentManager fragmentManager) {
-        String tag = dialog.getClass().getName();
+    public static <T extends DialogFragment> T showIfNotShowing(T newDialog, FragmentManager fragmentManager) {
+        String tag = newDialog.getClass().getName();
+        T existingDialog = (T) fragmentManager.findFragmentByTag(tag);
 
-        if (fragmentManager.findFragmentByTag(tag) == null) {
-            dialog.show(fragmentManager.beginTransaction(), tag);
+        if (existingDialog == null) {
+            newDialog.show(fragmentManager.beginTransaction(), tag);
+
+            // We need to execute this transaction. Otherwise a follow up call to this method
+            // could happen before the Fragment exists in the Fragment Manager and so the
+            // call to findFragmentByTag would return null and result in second dialog being show.
+            fragmentManager.executePendingTransactions();
+
+            return newDialog;
+        } else {
+            return existingDialog;
+        }
+    }
+
+    public static void dismissDialog(Class dialogClazz, FragmentManager fragmentManager) {
+        DialogFragment existingDialog = (DialogFragment) fragmentManager.findFragmentByTag(dialogClazz.getName());
+        if (existingDialog != null) {
+            existingDialog.dismiss();
         }
     }
 }

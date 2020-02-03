@@ -62,15 +62,17 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
-import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PRNGFixes;
+import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -104,6 +106,9 @@ public class Collect extends Application {
     private ExternalDataManager externalDataManager;
     private FirebaseAnalytics firebaseAnalytics;
     private AppDependencyComponent applicationComponent;
+
+    @Inject
+    UserAgentProvider userAgentProvider;
 
     public static Collect getInstance() {
         return singleton;
@@ -235,6 +240,10 @@ public class Collect extends Application {
         setupRemoteAnalytics();
         setupLeakCanary();
         setupOSMDroid();
+
+        // Force inclusion of scoped storage strings so they can be translated
+        Timber.i("%s %s", getString(R.string.scoped_storage_banner_text),
+                                   getString(R.string.scoped_storage_learn_more));
     }
 
     private void setupRemoteAnalytics() {
@@ -244,7 +253,7 @@ public class Collect extends Application {
     }
 
     protected void setupOSMDroid() {
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(AndroidUserAgent.getUserAgent());
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
     }
 
     private void setupDagger() {

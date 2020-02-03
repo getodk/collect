@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="TextAppearance.Collect.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
-
+        <item name="android:textColor">@color/color_on_surface_high_emphasis</item>
     </style>
 
     <style name="TextAppearance.Collect.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/color_on_surface_high_emphasis</item>
+    </style>
 
+    <style name="TextAppearance.Collect.Subtitle1.MediumEmphasis" parent="TextAppearance.Collect.Subtitle1">
+        <item name="android:textColor">@color/color_on_surface_medium_emphasis</item>
     </style>
 
     <style name="TextAppearance.Collect.Body1" parent="TextAppearance.MaterialComponents.Body1">
-
+        <item name="android:textColor">@color/color_on_surface_high_emphasis</item>
     </style>
 
     <style name="TextAppearance.Collect.Body2" parent="TextAppearance.MaterialComponents.Body2">
-
+        <item name="android:textColor">@color/color_on_surface_high_emphasis</item>
     </style>
 
-    <style name="TextAppearance.Collect.Body2.MediumEmphasis" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="TextAppearance.Collect.Body2.MediumEmphasis" parent="TextAppearance.Collect.Body2">
         <item name="android:textColor">@color/color_on_surface_medium_emphasis</item>
     </style>
 </resources>

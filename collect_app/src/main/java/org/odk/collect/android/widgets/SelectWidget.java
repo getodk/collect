@@ -37,7 +37,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
-import static org.odk.collect.android.formentry.media.FormMediaHelpers.getPlayableAudioURI;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 public abstract class SelectWidget extends ItemsWidget {
 
