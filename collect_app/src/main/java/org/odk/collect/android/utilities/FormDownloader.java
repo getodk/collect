@@ -26,7 +26,7 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
@@ -58,7 +58,8 @@ public class FormDownloader {
 
     private FormsDao formsDao;
 
-    @Inject CollectServerClient collectServerClient;
+    @Inject
+    OpenRosaAPIClient openRosaAPIClient;
 
     public FormDownloader() {
         Collect.getInstance().getComponent().inject(this);
@@ -409,7 +410,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = collectServerClient.getHttpInputStream(downloadUrl, null).getInputStream();
+                    is = openRosaAPIClient.getFile(downloadUrl, null);
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
@@ -538,7 +539,7 @@ public class FormDownloader {
 
         List<MediaFile> files = new ArrayList<>();
 
-        DocumentFetchResult result = collectServerClient.getXmlDocument(fd.getManifestUrl());
+        DocumentFetchResult result = openRosaAPIClient.getXML(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;
