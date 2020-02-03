@@ -12,6 +12,7 @@ import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -25,6 +26,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
@@ -201,6 +203,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage checkIfImageViewIsDisplayed() {
         onView(withTagValue(is("ImageView"))).check(matches(isDisplayed()));
+        return this;
+    }
+
+    public FormEntryPage checkIfImageViewIsNotDisplayed() {
+        onView(withTagValue(is("ImageView"))).check(doesNotExist());
         return this;
     }
 

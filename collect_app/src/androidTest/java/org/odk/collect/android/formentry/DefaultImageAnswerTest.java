@@ -14,7 +14,7 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.test.FormLoadingUtils;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class DefaultImageAnswerTest {
 
@@ -28,7 +28,7 @@ public class DefaultImageAnswerTest {
                     )
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(TEST_FORM, Collections.singletonList("doc.png")));
+            .around(new CopyFormRule(TEST_FORM, Arrays.asList("apple.png", "doc.png")));
 
     @Rule
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
@@ -42,6 +42,6 @@ public class DefaultImageAnswerTest {
                 .swipeToNextQuestion()
                 .checkIfImageViewIsDisplayed()
                 .swipeToNextQuestion()
-                .checkIfImageViewIsDisplayed();
+                .checkIfImageViewIsNotDisplayed();
     }
 }
