@@ -42,7 +42,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
@@ -328,20 +327,12 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     private String getDefaultFilePath() {
-        String defaultFilePath = null;
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            if (binaryName.startsWith("jr://images/")) {
-                try {
-                    defaultFilePath = referenceManager.deriveReference(binaryName).getLocalURI();
-                } catch (InvalidReferenceException e) {
-                    Timber.w(e);
-                }
-            } else {
-                defaultFilePath = formController.getMediaFolder() + File.separator + binaryName;
-            }
+        try {
+            return referenceManager.deriveReference(binaryName).getLocalURI();
+        } catch (InvalidReferenceException e) {
+            Timber.w(e);
         }
 
-        return defaultFilePath;
+        return "";
     }
 }
