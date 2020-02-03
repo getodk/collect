@@ -52,6 +52,7 @@ public class WidgetViewUtils {
     public static ImageView createAnswerImageView(Context context, Bitmap bitmap) {
         final ImageView imageView = new ImageView(context);
         imageView.setId(ViewIds.generateViewId());
+        imageView.setTag("ImageView");
         imageView.setPadding(10, 10, 10, 10);
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
