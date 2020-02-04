@@ -7,8 +7,8 @@
                 <defaultImage id="defaultImage">
                     <annotate_image_widget>jr://images/apple.png</annotate_image_widget>
                     <signature_widget>jr://images/doc.png</signature_widget>
+                    <draw_widget>jr://file/doc.png</draw_widget>
                     <image_widget>jr://file/doc.png</image_widget>
-                    <image_widget_2>doc.png</image_widget_2>
                     <meta>
                         <instanceID />
                     </meta>
@@ -16,27 +16,27 @@
             </instance>
             <bind nodeset="/defaultImage/annotate_image_widget" type="binary" />
             <bind nodeset="/defaultImage/signature_widget" type="binary" />
+            <bind nodeset="/defaultImage/draw_widget" type="binary" />
             <bind nodeset="/defaultImage/image_widget" type="binary" />
-            <bind nodeset="/defaultImage/image_widget_2" type="binary" />
             <bind jr:preload="uid" nodeset="/defaultImage/meta/instanceID" readonly="true()" type="string" />
         </model>
     </h:head>
     <h:body>
         <upload appearance="annotate" mediatype="image/*" ref="/defaultImage/annotate_image_widget">
             <label>Annotate widget</label>
-            <hint>default: jr://images/apple.png</hint>
+            <hint>default: jr://images/doc.png</hint>
         </upload>
         <upload appearance="signature" mediatype="image/*" ref="/defaultImage/signature_widget">
             <label>Signature widget</label>
             <hint>default: jr://images/doc.png</hint>
         </upload>
+        <upload appearance="draw" mediatype="image/*" ref="/defaultImage/draw_widget">
+            <label>Draw widget</label>
+            <hint>default: jr://file/doc.png</hint>
+        </upload>
         <upload mediatype="image/*" ref="/defaultImage/image_widget">
             <label>Image widget</label>
             <hint>default: jr://file/doc.png</hint>
-        </upload>
-        <upload mediatype="image/*" ref="/defaultImage/image_widget_2">
-            <label>Image widget</label>
-            <hint>default: doc.png</hint>
         </upload>
     </h:body>
 </h:html>
