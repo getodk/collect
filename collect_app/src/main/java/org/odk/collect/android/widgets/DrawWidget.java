@@ -62,7 +62,7 @@ public class DrawWidget extends BaseImageWidget {
     }
 
     @Override
-    protected boolean supportDefaultValues() {
+    protected boolean doesSupportDefaultValues() {
         return true;
     }
 

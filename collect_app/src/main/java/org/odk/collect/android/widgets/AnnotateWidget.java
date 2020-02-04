@@ -96,7 +96,7 @@ public class AnnotateWidget extends BaseImageWidget {
     }
 
     @Override
-    protected boolean supportDefaultValues() {
+    protected boolean doesSupportDefaultValues() {
         return true;
     }
 

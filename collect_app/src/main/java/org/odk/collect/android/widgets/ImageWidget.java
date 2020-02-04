@@ -98,7 +98,7 @@ public class ImageWidget extends BaseImageWidget {
     }
 
     @Override
-    protected boolean supportDefaultValues() {
+    protected boolean doesSupportDefaultValues() {
         return false;
     }
 

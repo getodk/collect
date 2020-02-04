@@ -311,7 +311,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     private File getFile() {
         File file = new File(getInstanceFolder() + File.separator + binaryName);
-        if (!file.exists() && supportDefaultValues()) {
+        if (!file.exists() && doesSupportDefaultValues()) {
             file = new File(getDefaultFilePath());
         }
 
@@ -328,5 +328,5 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         return "";
     }
 
-    protected abstract boolean supportDefaultValues();
+    protected abstract boolean doesSupportDefaultValues();
 }
