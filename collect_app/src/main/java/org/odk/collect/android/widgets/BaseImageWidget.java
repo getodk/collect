@@ -34,7 +34,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.io.FilenameUtils;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -157,11 +156,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
-            File f = new File(getInstanceFolder() + File.separator + binaryName);
-            if (!f.exists()) {
-                f = addDefaultImageIfExists(f);
-            }
-
+            File f = getFile();
             if (f.exists()) {
                 Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
@@ -260,8 +255,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             i.putExtra(DrawActivity.OPTION, drawOption);
             // copy...
             if (binaryName != null) {
-                File f = new File(getInstanceFolder() + File.separator + binaryName);
-                i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
+                i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(getFile()));
             }
             i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
             i = addExtrasToIntent(i);
@@ -316,14 +310,13 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
     }
 
-    private File addDefaultImageIfExists(File f) {
-        File defaultFile = new File(getDefaultFilePath());
-        if (defaultFile.exists()) {
-            binaryName = System.currentTimeMillis() + "." + FilenameUtils.getExtension(defaultFile.getName());
-            FileUtils.copyFile(defaultFile, new File(getInstanceFolder() + File.separator + binaryName));
-            f = new File(getInstanceFolder() + File.separator + binaryName);
+    private File getFile() {
+        File file = new File(getInstanceFolder() + File.separator + binaryName);
+        if (!file.exists() && supportDefaultValues()) {
+            file = new File(getDefaultFilePath());
         }
-        return f;
+
+        return file;
     }
 
     private String getDefaultFilePath() {
@@ -335,4 +328,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         return "";
     }
+
+    protected abstract boolean supportDefaultValues();
 }

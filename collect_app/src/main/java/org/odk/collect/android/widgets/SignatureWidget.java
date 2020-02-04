@@ -60,6 +60,11 @@ public class SignatureWidget extends BaseImageWidget {
     }
 
     @Override
+    protected boolean supportDefaultValues() {
+        return true;
+    }
+
+    @Override
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons

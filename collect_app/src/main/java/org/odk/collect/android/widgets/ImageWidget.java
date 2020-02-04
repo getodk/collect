@@ -98,6 +98,11 @@ public class ImageWidget extends BaseImageWidget {
     }
 
     @Override
+    protected boolean supportDefaultValues() {
+        return false;
+    }
+
+    @Override
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons
