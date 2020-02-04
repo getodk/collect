@@ -1,12 +1,13 @@
 package org.odk.collect.android.test;
 
-import android.os.Environment;
 import android.view.View;
 
 import org.hamcrest.Matcher;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.Closeable;
 import java.io.File;
@@ -76,7 +77,7 @@ public final class TestUtils {
     }
 
     private static File tempFileDirectory() {
-        return new File(Environment.getExternalStorageDirectory(), "test-tmp");
+        return new File(new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES), "test-tmp");
     }
 
     public static void closeSafely(Closeable c) {

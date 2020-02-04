@@ -33,6 +33,8 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.widgets.ImageWidget;
 
@@ -51,7 +53,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.
 @RunWith(AndroidJUnit4.class)
 public class ImageConverterTest {
 
-    private static final String TEST_DIR = Collect.INSTANCES_PATH + File.separator + "testForm_2017-10-12_19-36-15" + File.separator;
+    private static final String TEST_DIR = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator;
     private static final String TEST_IMAGE_PATH = TEST_DIR + "testImage.jpg";
 
     @Rule
@@ -64,7 +66,7 @@ public class ImageConverterTest {
 
     @Before
     public void setUp() {
-        File wallpaperDirectory = new File(Collect.INSTANCES_PATH + File.separator + "testForm_2017-10-12_19-36-15" + File.separator);
+        File wallpaperDirectory = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator);
         wallpaperDirectory.mkdirs();
     }
 

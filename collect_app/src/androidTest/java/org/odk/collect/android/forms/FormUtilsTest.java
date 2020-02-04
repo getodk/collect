@@ -9,7 +9,8 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -35,7 +36,7 @@ public class FormUtilsTest {
     */
     @Test
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
-        final String formPath = Collect.FORMS_PATH + File.separator + BASIC_FORM;
+        final String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
         // Load the form in order to populate the ReferenceManager
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         formLoaderTask.execute(formPath).get();

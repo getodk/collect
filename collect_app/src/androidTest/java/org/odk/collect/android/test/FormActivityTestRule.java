@@ -6,7 +6,8 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
@@ -22,7 +23,7 @@ public class FormActivityTestRule extends IntentsTestRule<FormEntryActivity> {
     @Override
     protected Intent getActivityIntent() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), FormEntryActivity.class);
-        intent.putExtra(EXTRA_TESTING_PATH, Collect.FORMS_PATH + "/" + formFilename);
+        intent.putExtra(EXTRA_TESTING_PATH, new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename);
 
         return intent;
     }

@@ -22,10 +22,11 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.CaptionedListPreference.Item;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
@@ -181,7 +182,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
         referenceLayerPref.setItems(items);
 
-        File layerDir = FileUtils.simplifyPath(new File(Collect.OFFLINE_LAYERS));
+        File layerDir = FileUtils.simplifyPath(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.LAYERS)));
         referenceLayerPref.setDialogCaption(context.getString(
             items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
             layerDir, context.getString(MapProvider.getSourceLabelId())
@@ -193,7 +194,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Gets the list of layer data files supported by the current MapConfigurator. */
     private static List<File> getSupportedLayerFiles(MapConfigurator cftor) {
         List<File> files = new ArrayList<>();
-        for (File file : FileUtils.walk(new File(Collect.OFFLINE_LAYERS))) {
+        for (File file : FileUtils.walk(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.LAYERS)))) {
             if (cftor.supportsLayer(file)) {
                 files.add(file);
             }

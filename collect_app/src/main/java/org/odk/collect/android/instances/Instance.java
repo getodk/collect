@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.instances;
 
+import org.odk.collect.android.storage.StoragePathProvider;
+
 /**
  * A filled form stored on the device.
  *
@@ -83,7 +85,7 @@ public final class Instance {
         }
 
         public Builder instanceFilePath(String instanceFilePath) {
-            this.instanceFilePath = instanceFilePath;
+            this.instanceFilePath = new StoragePathProvider().getInstanceDbPath(instanceFilePath);
             return this;
         }
 
@@ -146,6 +148,10 @@ public final class Instance {
 
     public String getInstanceFilePath() {
         return instanceFilePath;
+    }
+
+    public String getAbsoluteInstanceFilePath() {
+        return new StoragePathProvider().getAbsoluteInstanceFilePath(instanceFilePath);
     }
 
     public String getJrFormId() {
