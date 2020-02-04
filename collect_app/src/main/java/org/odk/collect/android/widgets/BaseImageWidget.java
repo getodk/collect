@@ -253,7 +253,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             errorTextView.setVisibility(View.GONE);
             Intent i = new Intent(getContext(), DrawActivity.class);
             i.putExtra(DrawActivity.OPTION, drawOption);
-            // copy...
             if (binaryName != null) {
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(getFile()));
             }
