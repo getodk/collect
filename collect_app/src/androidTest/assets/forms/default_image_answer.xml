@@ -5,7 +5,7 @@
         <model>
             <instance>
                 <defaultImage id="defaultImage">
-                    <annotate_image_widget>jr://images/apple.png</annotate_image_widget>
+                    <annotate_image_widget>jr://images/doc.png</annotate_image_widget>
                     <signature_widget>jr://images/doc.png</signature_widget>
                     <draw_widget>jr://file/doc.png</draw_widget>
                     <image_widget>jr://file/doc.png</image_widget>
