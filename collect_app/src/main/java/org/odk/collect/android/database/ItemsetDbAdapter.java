@@ -25,8 +25,8 @@ public class ItemsetDbAdapter {
     private static final int DATABASE_VERSION = 2;
 
     private static final String ITEMSET_TABLE = "itemsets";
-    private static final String KEY_ITEMSET_HASH = "hash";
-    private static final String KEY_PATH = "path";
+    public static final String KEY_ITEMSET_HASH = "hash";
+    public static final String KEY_PATH = "path";
 
     private static final String CREATE_ITEMSET_TABLE =
             "CREATE TABLE IF NOT EXISTS " + ITEMSET_TABLE + " (_id integer primary key autoincrement, "
@@ -185,6 +185,14 @@ public class ItemsetDbAdapter {
                 new StoragePathProvider().getFormDbPath(path)
         };
         return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
+    }
+
+    public Cursor getItemsets() {
+        return db.query(ITEMSET_TABLE, null, null, null, null, null, null);
+    }
+
+    public void update(ContentValues values, String where, String[] whereArgs) {
+        db.update(ITEMSET_TABLE, values, where, whereArgs);
     }
 
     public void delete(String path) {

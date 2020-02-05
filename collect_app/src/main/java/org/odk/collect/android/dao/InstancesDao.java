@@ -233,6 +233,10 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
 
+    public Cursor getInstancesCursor() {
+        return getInstancesCursor(null, null, null, null);
+    }
+
     public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver()
                 .query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);

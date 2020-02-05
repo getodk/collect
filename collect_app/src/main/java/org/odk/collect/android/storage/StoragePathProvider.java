@@ -29,12 +29,6 @@ public class StoragePathProvider {
             };
     }
 
-    private String getStorageDirPath() {
-        return storageStateProvider.isScopedStorageUsed()
-                ? getScopedExternalFilesDirPath()
-                : getUnscopedExternalFilesDirPath();
-    }
-
     String getScopedExternalFilesDirPath() {
         File scopedExternalFilesDirPath = Collect.getInstance().getExternalFilesDir(null);
         return scopedExternalFilesDirPath != null
@@ -46,8 +40,18 @@ public class StoragePathProvider {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
+    String getUnscopedStorageDirPath(StorageSubdirectory subdirectory) {
+        return getUnscopedExternalFilesDirPath() + File.separator + subdirectory.getDirectoryName();
+    }
+
+    String getScopedStorageDirPath(StorageSubdirectory subdirectory) {
+        return getScopedExternalFilesDirPath() + File.separator + subdirectory.getDirectoryName();
+    }
+
     public String getDirPath(StorageSubdirectory subdirectory) {
-        return getStorageDirPath() + File.separator + subdirectory.getDirectoryName();
+        return storageStateProvider.isScopedStorageUsed()
+                ? getScopedStorageDirPath(subdirectory)
+                : getUnscopedStorageDirPath(subdirectory);
     }
 
     public String getTmpFilePath() {
@@ -107,7 +111,7 @@ public class StoragePathProvider {
                 : dirPath + File.separator + filePath;
     }
 
-    private String getRelativeFilePath(String dirPath, String filePath) {
+    String getRelativeFilePath(String dirPath, String filePath) {
         return filePath.startsWith(dirPath)
                 ? filePath.substring(dirPath.length() + 1)
                 : filePath;

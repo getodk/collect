@@ -66,6 +66,8 @@ public class ServerPollingJob extends Job {
 
     public static final String TAG = "serverPollingJob";
 
+    private static boolean isDownloadingRunning;
+
     @Inject
     FormListDownloader formListDownloader;
 
@@ -100,8 +102,10 @@ public class ServerPollingJob extends Job {
 
             if (!newDetectedForms.isEmpty()) {
                 if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                    isDownloadingRunning = true;
                     final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
                     informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
+                    isDownloadingRunning = false;
                 } else {
                     for (FormDetails formDetails : newDetectedForms) {
                         String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
@@ -122,6 +126,10 @@ public class ServerPollingJob extends Job {
         } else {
             return Result.FAILURE;
         }
+    }
+
+    public static boolean isIsDownloadingForms() {
+        return isDownloadingRunning;
     }
 
     public static void schedulePeriodicJob(String selectedOption) {

@@ -17,8 +17,12 @@ public class StorageStateProvider {
         return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
     }
 
-    public void recordMigrationToScopedStorage() {
+    public void enableUsingScopedStorage() {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
+    }
+
+    public void disableUsingScopedStorage() {
+        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, false);
     }
 
     boolean isStorageMounted() {
@@ -69,5 +73,23 @@ public class StorageStateProvider {
             }
         }
         return length;
+    }
+
+    void clearOdkDirOnScopedStorage() {
+        deleteDirectory(new File(new StoragePathProvider().getScopedStorageDirPath(StorageSubdirectory.ODK)));
+    }
+
+    void deleteOdkDirFromUnscopedStorage() {
+        deleteDirectory(new File(new StoragePathProvider().getUnscopedStorageDirPath(StorageSubdirectory.ODK)));
+    }
+
+    private void deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        directoryToBeDeleted.delete();
     }
 }

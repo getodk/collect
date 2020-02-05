@@ -16,15 +16,23 @@
 
 package org.odk.collect.android.dao;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.itemsets.Itemset;
 import org.odk.collect.android.utilities.FileUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
+
+import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.ItemsetDbAdapter.KEY_ITEMSET_HASH;
+import static org.odk.collect.android.database.ItemsetDbAdapter.KEY_PATH;
 
 public class ItemsetDao {
 
@@ -67,5 +75,45 @@ public class ItemsetDao {
         }
 
         return itemLabel;
+    }
+
+    public void update(ContentValues values, String where, String[] whereArgs) {
+        ItemsetDbAdapter adapter = new ItemsetDbAdapter();
+        adapter.open();
+        adapter.update(values, where, whereArgs);
+        adapter.close();
+    }
+
+    public List<Itemset> getItemsetsFromCursor(Cursor cursor) {
+        List<Itemset> instances = new ArrayList<>();
+        if (cursor != null) {
+            try {
+                cursor.moveToPosition(-1);
+                while (cursor.moveToNext()) {
+                    int idColumnIndex = cursor.getColumnIndex(_ID);
+                    int hashColumnIndex = cursor.getColumnIndex(KEY_ITEMSET_HASH);
+                    int pathColumnIndex = cursor.getColumnIndex(KEY_PATH);
+
+                    Itemset instance = new Itemset.Builder()
+                            .id(cursor.getInt(idColumnIndex))
+                            .hash(cursor.getString(hashColumnIndex))
+                            .path(cursor.getString(pathColumnIndex))
+                            .build();
+
+                    instances.add(instance);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return instances;
+    }
+
+    public ContentValues getValuesFromFormObject(Itemset itemset) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_ITEMSET_HASH, itemset.getHash());
+        values.put(KEY_PATH, itemset.getPath());
+
+        return values;
     }
 }
