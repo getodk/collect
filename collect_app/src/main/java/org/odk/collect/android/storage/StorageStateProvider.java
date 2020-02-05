@@ -12,16 +12,27 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_USED;
 
-public class StorageStateProvider {
+class StorageStateProvider {
+
+    private StoragePathProvider storagePathProvider;
+
+    StorageStateProvider() {
+        this(new StoragePathProvider());
+    }
+
+    private StorageStateProvider(StoragePathProvider storagePathProvider) {
+        this.storagePathProvider = storagePathProvider;
+    }
+
     boolean isScopedStorageUsed() {
         return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
     }
 
-    public void enableUsingScopedStorage() {
+    void enableUsingScopedStorage() {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
     }
 
-    public void disableUsingScopedStorage() {
+    void disableUsingScopedStorage() {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, false);
     }
 
@@ -29,7 +40,7 @@ public class StorageStateProvider {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    public boolean isEnoughSpaceToPerformMigartion() {
+    boolean isEnoughSpaceToPerformMigartion() {
         try {
             return getAvailableScopedStorageSize() > getOdkDirSize();
         } catch (Exception | Error e) {
@@ -39,7 +50,7 @@ public class StorageStateProvider {
     }
 
     private long getAvailableScopedStorageSize() {
-        String scopedStoragePath = new StoragePathProvider().getScopedExternalFilesDirPath();
+        String scopedStoragePath = storagePathProvider.getScopedExternalFilesDirPath();
         if (scopedStoragePath.isEmpty()) {
             return 0;
         }
@@ -58,7 +69,7 @@ public class StorageStateProvider {
     }
 
     private long getOdkDirSize() {
-        return getFolderSize(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.ODK)));
+        return getFolderSize(new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK)));
     }
 
     private long getFolderSize(File directory) {
@@ -73,23 +84,5 @@ public class StorageStateProvider {
             }
         }
         return length;
-    }
-
-    void clearOdkDirOnScopedStorage() {
-        deleteDirectory(new File(new StoragePathProvider().getScopedStorageDirPath(StorageSubdirectory.ODK)));
-    }
-
-    void deleteOdkDirFromUnscopedStorage() {
-        deleteDirectory(new File(new StoragePathProvider().getUnscopedStorageDirPath(StorageSubdirectory.ODK)));
-    }
-
-    private void deleteDirectory(File directoryToBeDeleted) {
-        File[] allContents = directoryToBeDeleted.listFiles();
-        if (allContents != null) {
-            for (File file : allContents) {
-                deleteDirectory(file);
-            }
-        }
-        directoryToBeDeleted.delete();
     }
 }

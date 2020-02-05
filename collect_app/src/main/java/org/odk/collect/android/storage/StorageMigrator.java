@@ -36,18 +36,20 @@ public class StorageMigrator {
 
     private StoragePathProvider storagePathProvider;
     private StorageStateProvider storageStateProvider;
+    private StorageEraser storageEraser;
 
     public StorageMigrator() {
-        this(new StoragePathProvider(), new StorageStateProvider());
+        this(new StoragePathProvider(), new StorageStateProvider(), new StorageEraser());
     }
 
-    public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider) {
+    private StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser) {
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
+        this.storageEraser = storageEraser;
     }
 
     StorageMigrationResult performStorageMigration() {
-        storageStateProvider.clearOdkDirOnScopedStorage();
+        storageEraser.clearOdkDirOnScopedStorage(storagePathProvider);
 
         if (isFormUploaderRunning()) {
             return StorageMigrationResult.FORM_UPLOADER_IS_RUNNING;
@@ -70,7 +72,7 @@ public class StorageMigrator {
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
 
-        storageStateProvider.deleteOdkDirFromUnscopedStorage();
+        storageEraser.deleteOdkDirFromUnscopedStorage(storagePathProvider);
 
         return StorageMigrationResult.SUCCESS;
     }
