@@ -68,10 +68,14 @@ public class FormsProvider extends ContentProvider {
             if (databaseNeedsUpgrade) {
                 FormsDatabaseHelper.databaseMigrationStarted();
             }
-            dbHelper = new FormsDatabaseHelper();
+            recreateDatabaseHelper();
         }
 
         return dbHelper;
+    }
+
+    public static void recreateDatabaseHelper() {
+        dbHelper = new FormsDatabaseHelper();
     }
 
     @Override

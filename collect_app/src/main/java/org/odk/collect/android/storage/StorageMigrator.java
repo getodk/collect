@@ -15,6 +15,8 @@ import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.itemsets.Itemset;
+import org.odk.collect.android.provider.FormsProvider;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
 
@@ -59,9 +61,12 @@ public class StorageMigrator {
         if (moveAppDataToInternalStorage() != StorageMigrationResult.MOVING_FILES_SUCCEEDED) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
+
         storageStateProvider.enableUsingScopedStorage();
+        reopenDatabases();
         if (migrateDatabasePaths() != StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED) {
             storageStateProvider.disableUsingScopedStorage();
+            reopenDatabases();
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
 
@@ -109,6 +114,11 @@ public class StorageMigrator {
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
         return StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED;
+    }
+
+    private void reopenDatabases() {
+        FormsProvider.recreateDatabaseHelper();
+        InstanceProvider.recreateDatabaseHelper();
     }
 
     private void migrateInstancesDatabase() {

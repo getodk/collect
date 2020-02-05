@@ -70,10 +70,14 @@ public class InstanceProvider extends ContentProvider {
             if (databaseNeedsUpgrade) {
                 InstancesDatabaseHelper.databaseMigrationStarted();
             }
-            dbHelper = new InstancesDatabaseHelper();
+            recreateDatabaseHelper();
         }
 
         return dbHelper;
+    }
+
+    public static void recreateDatabaseHelper() {
+        dbHelper = new InstancesDatabaseHelper();
     }
 
     @Override
