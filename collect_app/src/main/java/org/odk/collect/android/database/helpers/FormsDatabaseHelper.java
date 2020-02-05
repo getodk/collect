@@ -53,7 +53,6 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
-    public static final String DATABASE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
     public static final String FORMS_TABLE_NAME = "forms";
 
     static final int DATABASE_VERSION = 8;
@@ -78,6 +77,10 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     public FormsDatabaseHelper() {
         super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static String getDatabasePath() {
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
     }
 
     @Override
@@ -351,7 +354,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     public static boolean databaseNeedsUpgrade() {
         boolean isDatabaseHelperOutOfDate = false;
         try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
             isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
             db.close();
         } catch (SQLException e) {
