@@ -723,5 +723,7 @@
     <string name="reason_for_changes">Reason for changes</string>
     <string name="reason">Reason</string>
     <string name="save">Save</string>
+    <string name="save_legacy_settings">Save legacy .settings file to disk</string>
+    <string name="save_legacy_settings_warning">Will be removed in a future version. Please use the QR code above.</string>
     <string name="reason_for_changes_description">You need to explain the reason for changes to this form</string>
 </resources>

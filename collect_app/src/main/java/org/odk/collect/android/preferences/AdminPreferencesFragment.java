@@ -17,23 +17,34 @@ package org.odk.collect.android.preferences;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import java.io.File;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
@@ -46,6 +57,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.preferences.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
+import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -63,6 +75,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
+        findPreference("save_legacy_settings").setOnPreferenceClickListener(this);
     }
 
     @Override
@@ -129,7 +142,25 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             case KEY_IMPORT_SETTINGS:
                 fragment = new ShowQRCodeFragment();
                 break;
+            case "save_legacy_settings":
+                File writeDir = new File(Collect.SETTINGS);
+                if (!writeDir.exists()) {
+                    if (!writeDir.mkdirs()) {
+                        ToastUtils.showShortToast("Error creating directory "
+                                + writeDir.getAbsolutePath());
+                        return false;
+                    }
+                }
 
+                File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
+                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
+                if (success) {
+                    ToastUtils.showLongToast("Settings successfully written to "
+                            + dst.getAbsolutePath());
+                } else {
+                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
+                }
+                break;
             case "main_menu":
                 fragment = new MainMenuAccessPreferences();
                 break;

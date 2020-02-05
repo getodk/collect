@@ -303,25 +303,6 @@ public class ShowQRCodeFragment extends Fragment {
                     startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
                 }
                 return true;
-            case R.id.menu_save_preferences:
-                File writeDir = new File(Collect.SETTINGS);
-                if (!writeDir.exists()) {
-                    if (!writeDir.mkdirs()) {
-                        ToastUtils.showShortToast("Error creating directory "
-                                + writeDir.getAbsolutePath());
-                        return false;
-                    }
-                }
-
-                File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
-                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
-                if (success) {
-                    ToastUtils.showLongToast("Settings successfully written to "
-                            + dst.getAbsolutePath());
-                } else {
-                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
-                }
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
