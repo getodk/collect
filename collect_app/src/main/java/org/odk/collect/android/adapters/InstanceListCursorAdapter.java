@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -173,6 +175,8 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
                 return R.drawable.form_state_submission_failed;
         }
 
+        Crashlytics.log("Unknown InstanceProviderAPI status: " + formStatus);
+        
         return -1;
     }
 }
