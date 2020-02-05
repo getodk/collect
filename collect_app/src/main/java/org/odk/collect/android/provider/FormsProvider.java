@@ -36,7 +36,10 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -48,7 +51,7 @@ public class FormsProvider extends ContentProvider {
     private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 12;    // smap must be greater than 8 (the odk version)
+    private static final int DATABASE_VERSION = 13;    // smap must be greater than 8 (the odk version)
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -78,19 +81,19 @@ public class FormsProvider extends ContentProvider {
         }
 
         private void onCreateNamed(SQLiteDatabase db) {
-            createFormsTableV12(db);
+            createFormsTableV13(db);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             int initialVersion = oldVersion;
 
-            if (oldVersion < 12) {
+            if (oldVersion < 13) {
                 try {
-                    upgradeToVersion12(db);
+                    upgradeToVersion13(db);
                 } catch (Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to forms database version 12");
+                    Timber.w("Error in upgrading to forms database version 13");
                     e.printStackTrace();
                 }
             }
@@ -98,29 +101,9 @@ public class FormsProvider extends ContentProvider {
     }
 
     // smap
-    private static void upgradeToVersion12(SQLiteDatabase db) {
+    private static void upgradeToVersion13(SQLiteDatabase db) {
         String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        String[] formsTableColumnsInV11 = new String[] {
-                FormsColumns._ID,
-                FormsColumns.DISPLAY_NAME,
-                FormsColumns.DESCRIPTION,
-                FormsColumns.JR_FORM_ID,
-                FormsColumns.JR_VERSION,
-                FormsColumns.MD5_HASH,
-                FormsColumns.DATE,
-                FormsColumns.FORM_MEDIA_PATH,
-                FormsColumns.FORM_FILE_PATH,
-                FormsColumns.LANGUAGE,
-                FormsColumns.SUBMISSION_URI,
-                FormsColumns.BASE64_RSA_PUBLIC_KEY,
-                FormsColumns.JRCACHE_FILE_PATH,
-                FormsColumns.AUTO_SEND,
-                FormsColumns.AUTO_DELETE,
-                FormsColumns.LAST_DETECTED_FORM_VERSION_HASH,
-                FormsColumns.PROJECT,        // smap
-                FormsColumns.TASKS_ONLY,     // smap
-                FormsColumns.SOURCE          // smap
-        };
+        List<String> columnNamesPrev = getFormColumnNames(db);
 
         CustomSQLiteQueryBuilder
                 .begin(db)
@@ -128,14 +111,14 @@ public class FormsProvider extends ContentProvider {
                 .to(temporaryTable)
                 .end();
 
-        createFormsTableV12(db);
+        createFormsTableV13(db);
 
         CustomSQLiteQueryBuilder
                 .begin(db)
                 .insertInto(FORMS_TABLE_NAME)
-                .columnsForInsert(formsTableColumnsInV11)
+                .columnsForInsert(columnNamesPrev.toArray(new String[0]))
                 .select()
-                .columnsForSelect(formsTableColumnsInV11)
+                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
                 .from(temporaryTable)
                 .end();
 
@@ -145,7 +128,7 @@ public class FormsProvider extends ContentProvider {
                 .end();
     }
 
-    private static void createFormsTableV12(SQLiteDatabase db) {
+    private static void createFormsTableV13(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + FormsColumns._ID + " integer primary key, "
                 + FormsColumns.DISPLAY_NAME + " text not null, "
@@ -657,5 +640,15 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
         sFormsProjectionMap.put(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH, FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
         sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);
+    }
+
+    static List<String> getFormColumnNames(SQLiteDatabase db) {
+        String[] columnNames;
+        try (Cursor c = db.query(FORMS_TABLE_NAME, null, null, null, null, null, null)) {
+            columnNames = c.getColumnNames();
+        }
+
+        // Build a full-featured ArrayList rather than the limited array-backed List from asList
+        return new ArrayList<>(Arrays.asList(columnNames));
     }
 }
