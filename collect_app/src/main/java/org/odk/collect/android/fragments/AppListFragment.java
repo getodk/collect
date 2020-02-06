@@ -15,7 +15,6 @@ limitations under the License.
 package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;

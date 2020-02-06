@@ -17,8 +17,6 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
-import android.os.Build;
-import androidx.core.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

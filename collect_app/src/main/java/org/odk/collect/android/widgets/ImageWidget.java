@@ -18,14 +18,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import androidx.core.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;

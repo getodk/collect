@@ -2,7 +2,6 @@ package org.odk.collect.android.activities;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
 

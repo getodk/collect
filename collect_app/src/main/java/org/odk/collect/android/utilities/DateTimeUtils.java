@@ -1,7 +1,6 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.os.Build;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

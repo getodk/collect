@@ -1,7 +1,6 @@
 package org.odk.collect.android.material;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;

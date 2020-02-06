@@ -22,11 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
-import java.security.SecureRandom;
 import java.security.SecureRandomSpi;
-import java.security.Security;
 
 import timber.log.Timber;
 
