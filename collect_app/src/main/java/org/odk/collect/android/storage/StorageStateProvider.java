@@ -14,16 +14,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE
 
 class StorageStateProvider {
 
-    private StoragePathProvider storagePathProvider;
-
-    StorageStateProvider() {
-        this(new StoragePathProvider());
-    }
-
-    private StorageStateProvider(StoragePathProvider storagePathProvider) {
-        this.storagePathProvider = storagePathProvider;
-    }
-
     boolean isScopedStorageUsed() {
         return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
     }
@@ -40,16 +30,16 @@ class StorageStateProvider {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    boolean isEnoughSpaceToPerformMigartion() {
+    boolean isEnoughSpaceToPerformMigartion(StoragePathProvider storagePathProvider) {
         try {
-            return getAvailableScopedStorageSize() > getOdkDirSize();
+            return getAvailableScopedStorageSize(storagePathProvider) > getOdkDirSize(storagePathProvider);
         } catch (Exception | Error e) {
             Timber.w(e);
             return false;
         }
     }
 
-    private long getAvailableScopedStorageSize() {
+    private long getAvailableScopedStorageSize(StoragePathProvider storagePathProvider) {
         String scopedStoragePath = storagePathProvider.getScopedExternalFilesDirPath();
         if (scopedStoragePath.isEmpty()) {
             return 0;
@@ -68,7 +58,7 @@ class StorageStateProvider {
         return availableBlocks * blockSize;
     }
 
-    private long getOdkDirSize() {
+    private long getOdkDirSize(StoragePathProvider storagePathProvider) {
         return getFolderSize(new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK)));
     }
 

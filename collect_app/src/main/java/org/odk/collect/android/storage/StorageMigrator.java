@@ -57,10 +57,10 @@ public class StorageMigrator {
         if (isFormDownloaderRunning()) {
             return StorageMigrationResult.FORM_DOWNLOADER_IS_RUNNING;
         }
-        if (!storageStateProvider.isEnoughSpaceToPerformMigartion()) {
+        if (!storageStateProvider.isEnoughSpaceToPerformMigartion(storagePathProvider)) {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
-        if (moveAppDataToInternalStorage() != StorageMigrationResult.MOVING_FILES_SUCCEEDED) {
+        if (moveAppDataToScopedStorage() != StorageMigrationResult.MOVING_FILES_SUCCEEDED) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
 
@@ -94,7 +94,7 @@ public class StorageMigrator {
         return ServerPollingJob.isIsDownloadingForms();
     }
 
-    private StorageMigrationResult moveAppDataToInternalStorage() {
+    private StorageMigrationResult moveAppDataToScopedStorage() {
         try {
             File odkDirOnUnscopedStorage = new File(storagePathProvider.getUnscopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
             File odkDirOnScopedStorage = new File(storagePathProvider.getScopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
