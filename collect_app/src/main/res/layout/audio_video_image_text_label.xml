@@ -18,29 +18,44 @@
         <FrameLayout
             android:id="@+id/text_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_label"
+                style="@style/TextAppearance.Collect.Headline6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:layout_marginRight="@dimen/margin_standard"
+                android:orientation="vertical"
+                tools:text="This is a question?" />
+
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard"
             android:paddingStart="@dimen/margin_standard"
             android:paddingLeft="@dimen/margin_standard"
-            android:paddingRight="@dimen/margin_standard"
             android:paddingEnd="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
             android:paddingBottom="@dimen/margin_standard"
             android:scaleType="fitStart"
             android:visibility="gone" />
 
         <TextView
             android:id="@+id/missingImage"
+            style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard"
             android:paddingStart="@dimen/margin_standard"
             android:paddingLeft="@dimen/margin_standard"
-            android:paddingRight="@dimen/margin_standard"
             android:paddingEnd="@dimen/margin_standard"
-            android:paddingBottom="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
             android:visibility="gone"
             tools:text="media missing"
             tools:visibility="visible" />
@@ -55,9 +70,9 @@
         android:layout_alignParentRight="true"
         android:gravity="end"
         android:orientation="vertical"
-        android:paddingRight="@dimen/margin_standard"
-        android:paddingEnd="@dimen/margin_standard"
         android:paddingTop="@dimen/margin_extra_small"
+        android:paddingEnd="@dimen/margin_standard"
+        android:paddingRight="@dimen/margin_standard"
         android:paddingBottom="@dimen/margin_extra_small"
         android:visibility="gone"
         tools:visibility="visible">
@@ -68,6 +83,7 @@
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
             android:visibility="gone"
+            app:iconTint="?colorOnSurface"
             tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton

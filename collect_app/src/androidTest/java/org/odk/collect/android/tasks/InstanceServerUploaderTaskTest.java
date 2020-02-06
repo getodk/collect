@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.http.openrosa.OpenRosaConstants;
+import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.test.MockedServerTest;

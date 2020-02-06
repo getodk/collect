@@ -7,12 +7,9 @@
   <string name="signature_capture">署名キャプチャ</string>
   <string name="view_video">ビデオを表示</string>
   <string name="choose_audio">音声を選択</string>
-  <string name="add_another">グループを追加</string>
+  <string name="add_repeat">グループを追加</string>
   <string name="add_another_menu">別の追加…</string>
-  <string name="add_another_repeat">別の \"%s\" グループを追加しますか?</string>
-  <string name="add_repeat">新しい \"%s\" グループを追加しますか?</string>
-  <string name="add_repeat_no">追加しない</string>
-  <string name="cancel">キャンセル</string>
+    <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
   <string name="canceling">キャンセル中</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">キャンセル</string>
   <string name="do_not_exit">キャンセル</string>
   <string name="do_not_save">変更を無視する</string>
-  <string name="entering_repeat">グループを追加</string>
-  <string name="entering_repeat_ask">新しいグループを追加しますか?</string>
-  <string name="enter_data">空のフォームに入力してください</string>
+    <string name="enter_data">空のフォームに入力してください</string>
   <string name="enter_data_button">空のフォームに入力する</string>
   <string name="error_occured">エラーが発生しました</string>
   <string name="error_attaching_binary_file">メディアの添付中にエラーが発生しました: %s</string>
@@ -76,9 +71,8 @@
   <string name="jump_to_beginning">最初に移動</string>
   <string name="jump_to_end">最後に移動</string>
   <string name="jump_to_previous">上に移動</string>
-  <string name="leave_repeat_yes">追加しない</string>
-  <string name="leaving_repeat_ask">さらにグループを追加しますか?</string>
-  <string name="list_failed_with_error">フォームが一覧できませんでした。 %s。</string>
+  <string name="dont_add_repeat">追加しない</string>
+    <string name="list_failed_with_error">フォームが一覧できませんでした。 %s。</string>
   <string name="loading_form">フォームのロード中</string>
   <string name="load_remote_form_error">フォーム一覧の取得中にエラー</string>
   <string name="location_provider_accuracy">%1$s を使用しています。精度は %2$s mです。</string>

@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Hakuna shughuli iliyopatikana kushughulikia: %s</string>
-  <string name="add_another">Ongeza Kikundi</string>
-  <string name="add_another_repeat">Ongeza Kikundi \"%s\" kingine </string>
-  <string name="add_repeat">Ongeza kikundi \"%s\" kipya?</string>
-  <string name="add_repeat_no">Usiongeze</string>
-  <string name="cancel">Tamatisha</string>
+  <string name="add_repeat">Ongeza Kikundi</string>
+    <string name="cancel">Tamatisha</string>
   <string name="cancel_loading_form">Tamatisha</string>
   <string name="cancel_location">Tamatisha</string>
   <string name="capture_audio">Rekodi Sauti</string>
@@ -40,9 +37,7 @@
   <string name="do_not_change">Futa</string>
   <string name="do_not_exit">Futa</string>
   <string name="do_not_save">Puuza mabadiliko</string>
-  <string name="entering_repeat">Ongeza kikundi</string>
-  <string name="entering_repeat_ask">Ongeza kikundi kipya?</string>
-  <string name="enter_data">Jaza fomu tupu</string>
+    <string name="enter_data">Jaza fomu tupu</string>
   <string name="enter_data_button">Jaza fomu</string>
   <string name="error_occured">Hitilifau ilitokea</string>
   <string name="file_deleted_error">Samahani, %1$s kati ya fomu() %2$s zilizochaguliwa hazikufutwa!</string>
@@ -61,9 +56,8 @@
   <string name="jump_to_beginning">Enda Mwanzo</string>
   <string name="jump_to_end">Enda Mwisho</string>
   <string name="jump_to_previous">Enda Juu</string>
-  <string name="leave_repeat_yes">Usiongeze</string>
-  <string name="leaving_repeat_ask">Ongeza kundi lingine moja!</string>
-  <string name="list_failed_with_error">Uanishaji wa fomu haukufaulu. %s.</string>
+  <string name="dont_add_repeat">Usiongeze</string>
+    <string name="list_failed_with_error">Uanishaji wa fomu haukufaulu. %s.</string>
   <string name="loading_form">Fomu inawekwa</string>
   <string name="load_remote_form_error">Tatizo katika kuchukua fomu!</string>
   <string name="location_provider_accuracy">Ukitumia %1$s. Usahihi ni %2$s m.</string>

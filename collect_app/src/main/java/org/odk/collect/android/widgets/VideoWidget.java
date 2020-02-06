@@ -61,6 +61,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static android.os.Build.MODEL;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -107,11 +108,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
+        captureButton = createSimpleButton(getContext(), R.id.capture_video, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_video), getAnswerFontSize(), this);
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_video, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_video), getAnswerFontSize(), this);
 
-        playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
+        playButton = createSimpleButton(getContext(), R.id.play_video, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.play_video), getAnswerFontSize(), this);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui

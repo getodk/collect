@@ -44,3 +44,4 @@ and update this document as the code evolves.
 * Trying to remove technical debt flagged with `@Deprecated`
 * Favoring domain objects (instance, form) with related logic where possible to more explicitly link data and logic
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code
+* Refactoring towards an OpenRosa abstraction (`OpenRosaAPIClient`) closer to its [documented API](https://docs.opendatakit.org/openrosa/) and takes care of all interactions with Aggregate, Central etc (currently some high level work interacts with `OpenRosaHttpInterface` directly)

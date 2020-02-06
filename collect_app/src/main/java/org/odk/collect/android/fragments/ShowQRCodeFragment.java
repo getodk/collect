@@ -52,6 +52,8 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -166,7 +168,7 @@ public class ShowQRCodeFragment extends Fragment {
                 IntentIntegrator.forFragment(ShowQRCodeFragment.this)
                         .setCaptureActivity(ScannerWithFlashlightActivity.class)
                         .setBeepEnabled(true)
-                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
                         .setOrientationLocked(false)
                         .setPrompt(getString(R.string.qrcode_scanner_prompt))
                         .initiateScan();
@@ -304,7 +306,7 @@ public class ShowQRCodeFragment extends Fragment {
                 }
                 return true;
             case R.id.menu_save_preferences:
-                File writeDir = new File(Collect.SETTINGS);
+                File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
                         ToastUtils.showShortToast("Error creating directory "

@@ -20,8 +20,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -52,7 +53,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
-    public static final String DATABASE_PATH = Collect.METADATA_PATH + File.separator + DATABASE_NAME;
+    public static final String DATABASE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
     public static final String FORMS_TABLE_NAME = "forms";
 
     static final int DATABASE_VERSION = 8;
@@ -76,7 +77,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static boolean isDatabaseBeingMigrated;
 
     public FormsDatabaseHelper() {
-        super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

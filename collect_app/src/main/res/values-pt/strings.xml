@@ -3,11 +3,8 @@
   <string name="show_password">Mostra a senha</string>
   <string name="activity_not_found">Não foi encontrada nenhuma atividade por ser tratada: %s</string>
   <string name="view_image">Ver Imagem</string>
-  <string name="add_another">Adicionar Grupo</string>
-  <string name="add_another_repeat">Adicionar outro grupo \"%s\"?</string>
-  <string name="add_repeat">Adicionar um novo grupo \"%s\"?</string>
-  <string name="add_repeat_no">Não adicionar</string>
-  <string name="cancel">Cancelar</string>
+  <string name="add_repeat">Adicionar Grupo</string>
+    <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
   <string name="canceling">Cancelando</string>
@@ -44,9 +41,7 @@
   <string name="do_not_change">Cancelar</string>
   <string name="do_not_exit">Cancelar</string>
   <string name="do_not_save">Ignorar Alterações</string>
-  <string name="entering_repeat">Adicionar Grupo</string>
-  <string name="entering_repeat_ask">Adicionar Novo Grupo?</string>
-  <string name="enter_data">Formulário em Branco</string>
+    <string name="enter_data">Formulário em Branco</string>
   <string name="enter_data_button">Formulário em Branco</string>
   <string name="error_occured">Ocorreu um erro</string>
   <string name="error_attaching_binary_file">Um erro ocorreu ao anexar o arquivo: %s</string>
@@ -69,9 +64,8 @@
   <string name="jump_to_beginning">Ir para o Início</string>
   <string name="jump_to_end">Ir para o Fim</string>
   <string name="jump_to_previous">Subir</string>
-  <string name="leave_repeat_yes">Não adicionar</string>
-  <string name="leaving_repeat_ask">Adicionar um ou mais grupos?</string>
-  <string name="list_failed_with_error">Listagem de formulários falhou. %s.</string>
+  <string name="dont_add_repeat">Não adicionar</string>
+    <string name="list_failed_with_error">Listagem de formulários falhou. %s.</string>
   <string name="loading_form">Carregando Formulário</string>
   <string name="load_remote_form_error">Erro na Listagem de Formulários</string>
   <string name="location_provider_accuracy">Usando %1$s. Precisão de %2$s m.</string>

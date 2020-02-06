@@ -36,6 +36,9 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 /**
  * SpinnerMultiWidget, like SelectMultiWidget handles multiple selection fields using checkboxes,
  * but the user clicks a button to see the checkboxes. The goal is to be more compact. If images,
@@ -74,7 +77,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         answerItems = new String[items.size()];
         styledAnswerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
-        button = getSimpleButton(context.getString(R.string.select_answer));
+        button = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), context.getString(R.string.select_answer), getAnswerFontSize(), this);
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
@@ -82,7 +85,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
             styledAnswerItems[i] = StringUtils.textToHtml(answerItems[i]);
         }
 
-        selectionText = getAnswerTextView();
+        selectionText = createAnswerTextView(getContext(), getAnswerFontSize());
         selectionText.setVisibility(View.GONE);
 
         // Fill in previous answers

@@ -22,9 +22,11 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -49,7 +51,7 @@ public class FormLoadingUtils {
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToSdCard(String formFilename, List<String> mediaFilenames, boolean copyToDatabase) throws IOException {
-        Collect.createODKDirs();
+        new StorageInitializer().createODKDirs();
 
         String pathname = copyForm(formFilename);
         if (mediaFilenames != null) {
@@ -73,8 +75,8 @@ public class FormLoadingUtils {
     private static void saveFormToDatabase(File outFile) {
         Map<String, String> formInfo = FileUtils.getMetadataFromFormDefinition(outFile);
         final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH, outFile.getAbsolutePath());
-        v.put(FormsColumns.FORM_MEDIA_PATH, FileUtils.constructMediaPath(outFile.getAbsolutePath()));
+        v.put(FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(outFile.getAbsolutePath()));
+        v.put(FormsColumns.FORM_MEDIA_PATH, new StoragePathProvider().getFormDbPath(FileUtils.constructMediaPath(outFile.getAbsolutePath())));
         v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
         v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
         v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
@@ -92,13 +94,13 @@ public class FormLoadingUtils {
     }
 
     private static String copyForm(String formFilename) throws IOException {
-        String pathname = Collect.FORMS_PATH + "/" + formFilename;
+        String pathname = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }
 
     private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {
-        String mediaPathName = Collect.FORMS_PATH + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+        String mediaPathName = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
         for (String mediaFilename : mediaFilenames) {

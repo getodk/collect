@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public Instance getByPath(String instancePath) {
         Cursor c = dao.getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?",
-                new String[] {instancePath});
+                new String[] {new StoragePathProvider().getInstanceDbPath(instancePath)});
         List<Instance> instances = dao.getInstancesFromCursor(c);
         if (instances.size() == 1) {
             return instances.get(0);

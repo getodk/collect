@@ -7,11 +7,8 @@
   <string name="signature_capture">Zajem podpisa</string>
   <string name="view_video">Poglej video</string>
   <string name="choose_audio">Izberi audio</string>
-  <string name="add_another">Dodaj skupino</string>
-  <string name="add_another_repeat">Dodam še eno \"%s\" skupino?</string>
-  <string name="add_repeat">Dodam novo \"%s\" skupino?</string>
-  <string name="add_repeat_no">Ne dodaj</string>
-  <string name="cancel">Prekini</string>
+  <string name="add_repeat">Dodaj skupino</string>
+    <string name="cancel">Prekini</string>
   <string name="cancel_loading_form">Prekini</string>
   <string name="cancel_location">Prekini</string>
   <string name="canceling">Prekinjam</string>
@@ -50,9 +47,7 @@
   <string name="do_not_change">Prekini</string>
   <string name="do_not_exit">Prekini</string>
   <string name="do_not_save">Zavrzi spremembe</string>
-  <string name="entering_repeat">Dodaj skupino</string>
-  <string name="entering_repeat_ask">Dodam novo skupino?</string>
-  <string name="enter_data">Izpolni prazen obrazec</string>
+    <string name="enter_data">Izpolni prazen obrazec</string>
   <string name="enter_data_button">Izpolni prazen obrazec</string>
   <string name="error_occured">Nastala je napaka</string>
   <string name="error_attaching_binary_file">Napaka pri dodajanju medijske vsebine: %s</string>
@@ -75,9 +70,8 @@
   <string name="jump_to_beginning">Pojdi na začetek</string>
   <string name="jump_to_end">Pojdi na konec</string>
   <string name="jump_to_previous">Pojdi gor</string>
-  <string name="leave_repeat_yes">Ne dodaj</string>
-  <string name="leaving_repeat_ask">Dodam skupino?</string>
-  <string name="list_failed_with_error">Kreiranje seznama obrazcev ni uspelo. %s.</string>
+  <string name="dont_add_repeat">Ne dodaj</string>
+    <string name="list_failed_with_error">Kreiranje seznama obrazcev ni uspelo. %s.</string>
   <string name="loading_form">Nalagam obrazec</string>
   <string name="load_remote_form_error">Napaka pri pridobivanju seznama obrazcev</string>
   <string name="location_provider_accuracy">Uporabljam %1$s. Natančnost je %2$s m.</string>

@@ -6,12 +6,9 @@
   <string name="annotate_image">Aantekening maken bij afbeelding</string>
   <string name="view_video">Video bekijken</string>
   <string name="choose_audio">Audio kiezen</string>
-  <string name="add_another">Groep toevoegen</string>
+  <string name="add_repeat">Groep toevoegen</string>
   <string name="add_another_menu">Voeg toe</string>
-  <string name="add_another_repeat">Nog een \"%s\" groep toevoegen?</string>
-  <string name="add_repeat">Een nieuwe \"%s\" groep toevoegen?</string>
-  <string name="add_repeat_no">Niet toevoegen</string>
-  <string name="cancel">Terug</string>
+    <string name="cancel">Terug</string>
   <string name="cancel_loading_form">Terug</string>
   <string name="cancel_location">Terug</string>
   <string name="canceling">Wordt geannuleerd</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">Annuleer</string>
   <string name="do_not_exit">Annuleer</string>
   <string name="do_not_save">Wijzigingen niet opslaan</string>
-  <string name="entering_repeat">Groep toevoegen</string>
-  <string name="entering_repeat_ask">Nieuwe groep toevoegen?</string>
-  <string name="enter_data">Nieuw formulier invullen</string>
+    <string name="enter_data">Nieuw formulier invullen</string>
   <string name="enter_data_button">Nieuw formulier</string>
   <string name="error_occured">Fout opgetreden</string>
   <string name="error_attaching_binary_file">Er is een fout opgetreden bij het koppelen van media: %s</string>
@@ -75,9 +70,8 @@
   <string name="jump_to_beginning">Naar begin</string>
   <string name="jump_to_end">Naar einde</string>
   <string name="jump_to_previous">Ga terug</string>
-  <string name="leave_repeat_yes">Do Not Add</string>
-  <string name="leaving_repeat_ask">Nog een groep toevoegen?</string>
-  <string name="list_failed_with_error">Laden formulieren mislukt. %s.</string>
+  <string name="dont_add_repeat">Do Not Add</string>
+    <string name="list_failed_with_error">Laden formulieren mislukt. %s.</string>
   <string name="loading_form">Formulier laden</string>
   <string name="load_remote_form_error">Fout bij laden formulieren</string>
   <string name="location_provider_accuracy">Gebruikt %1$s. Nauwkeurigheid is %2$s m.</string>

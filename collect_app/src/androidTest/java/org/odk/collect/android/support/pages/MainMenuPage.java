@@ -10,8 +10,11 @@ import androidx.test.rule.ActivityTestRule;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
@@ -35,10 +38,9 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new FormEntryPage(formName, rule).assertOnPage();
     }
 
-    public AddNewGroupDialog startBlankFormWithRepeatGroup(String formName) {
+    public AddNewRepeatDialog startBlankFormWithRepeatGroup(String formName, String repeatName) {
         goToBlankForm(formName);
-
-        return new AddNewGroupDialog(rule).assertOnPage();
+        return new AddNewRepeatDialog(repeatName, rule).assertOnPage();
     }
 
     public ErrorDialog startBlankFormWithError(String formName) {
@@ -74,6 +76,15 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public AboutPage clickAbout() {
         clickOnString(R.string.about_preferences);
         return new AboutPage(rule).assertOnPage();
+    }
+
+    public MainMenuPage assertNumberOfFinalizedForms(int number) {
+        if (number == 0) {
+            onView(withText(getTranslatedString(R.string.send_data))).check(matches(isDisplayed()));
+        } else {
+            onView(withText(getTranslatedString(R.string.send_data_button, String.valueOf(number)))).check(matches(isDisplayed()));
+        }
+        return this;
     }
 }
 

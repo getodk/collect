@@ -7,12 +7,9 @@
   <string name="signature_capture">Allekirjoituksen kuvankaappaus</string>
   <string name="view_video">Katso video</string>
   <string name="choose_audio">Valitse ääni</string>
-  <string name="add_another">Lisää ryhmä</string>
+  <string name="add_repeat">Lisää ryhmä</string>
   <string name="add_another_menu">Lisää toinen</string>
-  <string name="add_another_repeat">Lisätäänkö toinen ryhmä \"%s\"?</string>
-  <string name="add_repeat">Lisätäänkö uusi ryhmä \"%s\"?</string>
-  <string name="add_repeat_no">Älä lisää</string>
-  <string name="cancel">Peruuta</string>
+    <string name="cancel">Peruuta</string>
   <string name="cancel_loading_form">Peruuta</string>
   <string name="cancel_location">Peruuta</string>
   <string name="canceling">Perutaan</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">Peruuta</string>
   <string name="do_not_exit">Peruuta</string>
   <string name="do_not_save">Peru muutokset</string>
-  <string name="entering_repeat">Lisää ryhmä</string>
-  <string name="entering_repeat_ask">Lisätäänkö uusi ryhmä?</string>
-  <string name="enter_data">Täytä tyhjä lomake</string>
+    <string name="enter_data">Täytä tyhjä lomake</string>
   <string name="enter_data_button">Täytä tyhjä lomake</string>
   <string name="error_occured">Virhe</string>
   <string name="error_attaching_binary_file">Virhe liittäessä mediaa %s </string>
@@ -76,9 +71,8 @@
   <string name="jump_to_beginning">Alkuun</string>
   <string name="jump_to_end">Loppuun</string>
   <string name="jump_to_previous">Ylös</string>
-  <string name="leave_repeat_yes">Älä lisää</string>
-  <string name="leaving_repeat_ask">Lisätäänkö vielä yksi ryhmä?</string>
-  <string name="list_failed_with_error">Lomakkeiden luetteleminen epäonnistui. %s.</string>
+  <string name="dont_add_repeat">Älä lisää</string>
+    <string name="list_failed_with_error">Lomakkeiden luetteleminen epäonnistui. %s.</string>
   <string name="loading_form">Ladataan lomaketta</string>
   <string name="load_remote_form_error">Virhe lomakelistaa hakiessa.</string>
   <string name="location_provider_accuracy">%1$s käytössä. Tarkkuus %2$s m.</string>

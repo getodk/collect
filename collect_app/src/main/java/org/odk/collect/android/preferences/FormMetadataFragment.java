@@ -76,6 +76,10 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         String propVal = propertyManager.getSingularProperty(propMgrName);
         String prefKey = differentPrefKey == null ? propMgrName : differentPrefKey;
         EditTextPreference textPref = (EditTextPreference) findPreference(prefKey);
+        textPref.setOnPreferenceClickListener(preference -> {
+            textPref.getEditText().requestFocus();
+            return true;
+        });
         if (propVal != null) {
             textPref.setSummary(propVal);
             textPref.setText(propVal);

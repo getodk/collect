@@ -1,9 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Muuji erayga Sirta</string>
-  <string name="add_another">Ku dar kooxda</string>
-  <string name="add_repeat_no">Ha ku darin</string>
-  <string name="cancel">Jooji</string>
+  <string name="add_repeat">Ku dar kooxda</string>
+    <string name="cancel">Jooji</string>
   <string name="cancel_loading_form">Jooji</string>
   <string name="cancel_location">Jooji</string>
   <string name="change_language">Luuqada beddel</string>
@@ -17,9 +16,7 @@
   <string name="discard_group">Ka saar kooxda</string>
   <string name="do_not_change">Jooji</string>
   <string name="do_not_exit">Jooji</string>
-  <string name="entering_repeat">Ku dar kooxda</string>
-  <string name="entering_repeat_ask">Kudar koox cusub</string>
-  <string name="enter_data">Buuxi foomka bannaan</string>
+    <string name="enter_data">Buuxi foomka bannaan</string>
   <string name="enter_data_button">Buuxi foomka bannaan</string>
   <string name="error_occured">Cilad ku timi</string>
   <string name="forms">Foomamka Banaan</string>
@@ -28,7 +25,7 @@
   <string name="jump_to_beginning">Tag bilowga </string>
   <string name="jump_to_end">Ku laabo dhamaadka</string>
   <string name="jump_to_previous">Kor u soco</string>
-  <string name="leave_repeat_yes">Ha ku darin</string>
+  <string name="dont_add_repeat">Ha ku darin</string>
   <string name="loading_form">La soo deg foomka</string>
   <string name="main_menu">Liiska asalka ah</string>
   <string name="main_menu_details">Xog ururintu wax bay sahashaa</string>

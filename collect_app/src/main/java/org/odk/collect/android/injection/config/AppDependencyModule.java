@@ -13,18 +13,19 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
-import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.http.openrosa.okhttp.OkHttpConnection;
-import org.odk.collect.android.http.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
+import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AndroidUserAgent;
-import org.odk.collect.android.utilities.DownloadFormListUtils;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.utilities.UserAgentProvider;
 
 import javax.inject.Singleton;
 
@@ -77,17 +78,23 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap) {
+    public UserAgentProvider providesUserAgent() {
+        return new AndroidUserAgent();
+    }
+
+    @Provides
+    @Singleton
+    OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
         return new OkHttpConnection(
                 new OkHttpOpenRosaServerClientProvider(new OkHttpClient()),
                 new CollectThenSystemContentTypeMapper(mimeTypeMap),
-                AndroidUserAgent.getUserAgent()
+                userAgentProvider.getUserAgent()
         );
     }
 
     @Provides
-    CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
-        return new CollectServerClient(httpInterface, webCredentialsUtils);
+    public OpenRosaAPIClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+        return new OpenRosaAPIClient(httpInterface, webCredentialsUtils);
     }
 
     @Provides
@@ -96,14 +103,14 @@ public class AppDependencyModule {
     }
 
     @Provides
-    DownloadFormListUtils provideDownloadFormListUtils(
+    FormListDownloader provideDownloadFormListDownloader(
             Application application,
-            CollectServerClient collectServerClient,
+            OpenRosaAPIClient openRosaAPIClient,
             WebCredentialsUtils webCredentialsUtils,
             FormsDao formsDao) {
-        return new DownloadFormListUtils(
+        return new FormListDownloader(
                 application,
-                collectServerClient,
+                openRosaAPIClient,
                 webCredentialsUtils,
                 formsDao
         );

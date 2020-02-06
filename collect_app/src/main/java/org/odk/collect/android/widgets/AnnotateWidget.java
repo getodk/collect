@@ -28,9 +28,9 @@ import android.widget.Button;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
@@ -41,6 +41,7 @@ import timber.log.Timber;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -69,11 +70,11 @@ public class AnnotateWidget extends BaseImageWidget {
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_image), getAnswerFontSize(), this);
 
-        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image), R.id.markup_image);
+        annotateButton = createSimpleButton(getContext(), R.id.markup_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.markup_image), getAnswerFontSize(), this);
         if (binaryName == null) {
             annotateButton.setEnabled(false);
         }
@@ -173,7 +174,7 @@ public class AnnotateWidget extends BaseImageWidget {
         try {
             Uri uri = FileProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
-                    new File(Collect.TMPFILE_PATH));
+                    new File(new StoragePathProvider().getTmpFilePath()));
             // if this gets modified, the onActivityResult in
             // FormEntyActivity will also need to be updated.
             intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);

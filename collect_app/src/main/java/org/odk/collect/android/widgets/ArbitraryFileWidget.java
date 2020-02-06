@@ -49,6 +49,9 @@ import java.io.File;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
 
     @NonNull
@@ -151,7 +154,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
         LinearLayout widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
 
-        chooseFileButton = getSimpleButton(getContext().getString(R.string.choose_file));
+        chooseFileButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_file), getAnswerFontSize(), this);
         chooseFileButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         answerLayout = new LinearLayout(getContext());
@@ -160,7 +163,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
 
         ImageView attachmentImg = new ImageView(getContext());
         attachmentImg.setImageResource(R.drawable.ic_attachment);
-        chosenFileNameTextView = getAnswerTextView(binaryName);
+        chosenFileNameTextView = createAnswerTextView(getContext(), binaryName, getAnswerFontSize());
         chosenFileNameTextView.setGravity(Gravity.CENTER);
 
         answerLayout.addView(attachmentImg);

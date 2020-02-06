@@ -1,8 +1,13 @@
 package org.odk.collect.android.regression;
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.pages.AboutPage;
@@ -17,6 +22,13 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
 //Issue NODK-234
 @RunWith(AndroidJUnit4.class)
 public class AboutPageTest extends BaseRegressionTest {
+
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE));
 
     @Test
     public void when_rotateScreenOnAboutPage_should_notCrash() {
@@ -104,8 +116,6 @@ public class AboutPageTest extends BaseRegressionTest {
         new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickAbout()
-                .clickOnOpenSourceLibrariesLicenses()
-                .checkIsTextDisplayed("Open Source Licenses")
-                .checkIfWebViewActivityIsDisplayed();
+                .clickOnOpenSourceLibrariesLicenses();
     }
 }

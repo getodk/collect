@@ -22,7 +22,6 @@ import org.javarosa.core.model.osm.OSMTagItem;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -31,6 +30,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -80,7 +80,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileName = questionDetails.getPrompt().getAnswerText();
 
         // Setup Launch OpenMapKit Button
-        launchOpenMapKitButton = getSimpleButton(R.id.simple_button);
+        launchOpenMapKitButton = createSimpleButton(getContext(), R.id.simple_button, getFormEntryPrompt().isReadOnly(), getAnswerFontSize(), this);
 
         // Button Styling
         if (osmFileName != null) {
@@ -132,7 +132,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         try {
             //launch with intent that sends plain text
             Intent launchIntent = new Intent(Intent.ACTION_SEND);
-            launchIntent.setType(CollectServerClient.getPlainTextMimeType());
+            launchIntent.setType("text/plain");
 
             //send form id
             launchIntent.putExtra("FORM_ID", String.valueOf(formId));

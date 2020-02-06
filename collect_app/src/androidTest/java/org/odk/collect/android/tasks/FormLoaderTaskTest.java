@@ -8,7 +8,8 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -30,7 +31,7 @@ public class FormLoaderTaskTest {
 
     @Test
     public void loadFormWithSecondaryCSV() throws Exception {
-        final String formPath = Collect.FORMS_PATH + File.separator + EXTERNAL_CSV_FORM;
+        final String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + EXTERNAL_CSV_FORM;
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
         Assert.assertNotNull(wrapper);

@@ -157,7 +157,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .checkIfMarkFinishedIsNotSelected()
+                .assertMarkFinishedIsNotSelected()
                 .clickSaveAndExit()
                 .clickOnMenu()
                 .clickAdminSettings()
@@ -175,7 +175,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .checkIfMarkFinishedIsSelected()
+                .assertMarkFinishedIsSelected()
                 .clickSaveAndExit();
     }
 

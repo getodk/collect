@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -45,7 +46,7 @@ public class SignatureWidget extends BaseImageWidget {
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        signButton = getSimpleButton(getContext().getString(R.string.sign_button));
+        signButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.sign_button), getAnswerFontSize(), this);
 
         answerLayout.addView(signButton);
         answerLayout.addView(errorTextView);

@@ -7,12 +7,9 @@
   <string name="signature_capture">Unterschrift erfassen</string>
   <string name="view_video">Video anzeigen</string>
   <string name="choose_audio">Audio auswählen</string>
-  <string name="add_another">Gruppe hinzufügen</string>
+  <string name="add_repeat">Gruppe hinzufügen</string>
   <string name="add_another_menu">Weitere hinzufügen</string>
-  <string name="add_another_repeat">Weitere \"%s\"-Gruppe hinzufügen?</string>
-  <string name="add_repeat">Neue Gruppe \"%s\" hinzufügen?</string>
-  <string name="add_repeat_no">Nicht hinzufügen</string>
-  <string name="cancel">Abbrechen</string>
+    <string name="cancel">Abbrechen</string>
   <string name="cancel_loading_form">Abbrechen</string>
   <string name="cancel_location">Abbrechen</string>
   <string name="canceling">Abbrechen</string>
@@ -51,9 +48,7 @@
   <string name="do_not_change">Abbrechen</string>
   <string name="do_not_exit">Abbrechen</string>
   <string name="do_not_save">Änderungen nicht speichern</string>
-  <string name="entering_repeat">Gruppe hinzufügen</string>
-  <string name="entering_repeat_ask">Neue Gruppe hinzufügen?</string>
-  <string name="enter_data">Leeres Formular ausfüllen</string>
+    <string name="enter_data">Leeres Formular ausfüllen</string>
   <string name="enter_data_button">Leeres Formular ausfüllen</string>
   <string name="error_occured">Fehler</string>
   <string name="error_attaching_binary_file">Fehler beim Anhängen des Mediums: %s</string>
@@ -76,9 +71,8 @@
   <string name="jump_to_beginning">Zum Start</string>
   <string name="jump_to_end">Zum Ende</string>
   <string name="jump_to_previous">Zurück</string>
-  <string name="leave_repeat_yes">Nicht hinzufügen</string>
-  <string name="leaving_repeat_ask">Weiteres Gruppenelement hinzufügen?</string>
-  <string name="list_failed_with_error">Formularauflistung gescheitert. %s.</string>
+  <string name="dont_add_repeat">Nicht hinzufügen</string>
+    <string name="list_failed_with_error">Formularauflistung gescheitert. %s.</string>
   <string name="loading_form">Formular wird geladen</string>
   <string name="load_remote_form_error">Fehler bei der Formularauflistung</string>
   <string name="location_provider_accuracy">Verwendung von %1$s. Genauigkeit beträgt %2$s m.</string>

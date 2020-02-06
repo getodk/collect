@@ -2,11 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">የይለፍ ቃሉን አሳይ</string>
   <string name="activity_not_found">የሚስተናገዱ ምንም እንቅስቃሴዎች አልተገኙም: 1 %s</string>
-  <string name="add_another">ቡድን ጨምር</string>
-  <string name="add_another_repeat">ተጨማሪ \" 1 %s \" ቡድን ጨምር?</string>
-  <string name="add_repeat">አዲስ \" %s \" ቡድን ጨምር?</string>
-  <string name="add_repeat_no">አትጨምር</string>
-  <string name="cancel">ሰርዝ</string>
+  <string name="add_repeat">ቡድን ጨምር</string>
+    <string name="cancel">ሰርዝ</string>
   <string name="cancel_loading_form">ሰርዝ</string>
   <string name="cancel_location">ሰርዝ</string>
   <string name="cannot_edit_completed_form">ይህ ቅጽ እንደተጠናቀቀ ምልክት ከተደረገ በኋላ አርትዕ ሊደረግ አይችልም. ቅፁ ምናልባት የተመሳጠረ ሊሆን ይችላል፡፡</string>
@@ -40,8 +37,6 @@
   <string name="do_not_change">ሰርዝ</string>
   <string name="do_not_exit">ሰርዝ</string>
   <string name="do_not_save">ለውጦቹን ችላ በል</string>
-  <string name="entering_repeat">ቡድን ጨምር</string>
-  <string name="entering_repeat_ask">አዲስ ቡድን ይጨመር?</string>
   <string name="enter_data">ባዶዉን ቅጽ ሙላ</string>
   <string name="enter_data_button">ባዶ ቅጽ መሙላት</string>
   <string name="error_occured">ስህተት ተከስቷል</string>
@@ -62,9 +57,8 @@
   <string name="jump_to_beginning">ወደ መጀመሪያ ይሂዱ</string>
   <string name="jump_to_end">ወደ መጨረሻ ይሂዱ</string>
   <string name="jump_to_previous">ወደ ላይ ውጣ</string>
-  <string name="leave_repeat_yes">አትጨምር</string>
-  <string name="leaving_repeat_ask">አንድ ተጨማሪ ቡድን ይጨመር?</string>
-  <string name="list_failed_with_error">የቅፅ ዝርዝሩ አልተሳካም፡፡ 1 %s</string>
+  <string name="dont_add_repeat">አትጨምር</string>
+    <string name="list_failed_with_error">የቅፅ ዝርዝሩ አልተሳካም፡፡ 1 %s</string>
   <string name="loading_form">ቅጽ በመጫን ላይ</string>
   <string name="load_remote_form_error">የቅጽ ዝርዝር ማግኘት ላይ ስህተት ተከስቷል</string>
   <string name="main_menu">ዋና ምናሌ</string>

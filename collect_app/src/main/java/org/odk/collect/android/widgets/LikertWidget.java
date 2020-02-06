@@ -34,18 +34,23 @@ import org.odk.collect.android.utilities.ViewIds;
 
 import timber.log.Timber;
 
+import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
+import static android.widget.RelativeLayout.CENTER_IN_PARENT;
+import static android.widget.RelativeLayout.TRUE;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
 
     LinearLayout view;
     private RadioButton checkedButton;
     private final LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
-    private final LayoutParams textViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    private final LayoutParams imageViewParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    private final LayoutParams radioButtonsParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    private final LayoutParams buttonViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    private final LayoutParams leftLineViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
-    private final LayoutParams rightLineViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+    private final RelativeLayout.LayoutParams textViewParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private final RelativeLayout.LayoutParams imageViewParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private final RelativeLayout.LayoutParams radioButtonsParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    private final RelativeLayout.LayoutParams buttonViewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private final RelativeLayout.LayoutParams leftLineViewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+    private final RelativeLayout.LayoutParams rightLineViewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
     HashMap<RadioButton, String> buttonsToName;
 
@@ -57,7 +62,7 @@ public class LikertWidget extends ItemsWidget {
 
         setButtonListener();
         setSavedButton();
-        addAnswerView(view);
+        addAnswerView(view, dpFromPx(context, 10));
 
         analytics.logEvent("Likert", questionDetails.getFormAnalyticsID());
     }
@@ -101,21 +106,6 @@ public class LikertWidget extends ItemsWidget {
             SelectChoice sc = items.get(selectedIndex);
             return new SelectOneData(new Selection(sc));
         }
-    }
-
-    @Override
-    protected void addAnswerView(View v) {
-        if (v == null) {
-            Timber.e("cannot add a null view as an answerView");
-            return;
-        }
-        // default place to add answer
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
-        params.setMargins(10, 0, 10, 0);
-        addView(v, params);
     }
 
     public void setStructures() {

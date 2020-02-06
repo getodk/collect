@@ -79,6 +79,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                 final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
                 final EditText passwordEditText = dialogView.findViewById(R.id.pwd_field);
                 final CheckBox passwordCheckBox = dialogView.findViewById(R.id.checkBox2);
+                passwordEditText.requestFocus();
                 passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -143,7 +144,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         if (fragment != null) {
             getActivity().getFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragment)
+                    .replace(R.id.preferences_fragment_container, fragment)
                     .addToBackStack(null)
                     .commit();
         }
@@ -220,7 +221,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     }
 
     public void preventOtherWaysOfEditingForm() {
-        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(R.id.container);
+        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(R.id.preferences_fragment_container);
         fragment.preventOtherWaysOfEditingForm();
     }
 }
