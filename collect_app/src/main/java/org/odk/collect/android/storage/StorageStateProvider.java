@@ -12,9 +12,9 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_USED;
 
-class StorageStateProvider {
+public class StorageStateProvider {
 
-    boolean isScopedStorageUsed() {
+    public boolean isScopedStorageUsed() {
         return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
     }
 

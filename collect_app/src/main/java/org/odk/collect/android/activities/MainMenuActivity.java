@@ -55,6 +55,7 @@ import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -283,6 +284,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 contentObserver);
 
         setButtonsVisibility();
+        setStorageMigrationBannerVisibility();
     }
 
     private void setButtonsVisibility() {
@@ -639,5 +641,15 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     .create()
                     .show();
         }
+    }
+
+    private void setStorageMigrationBannerVisibility() {
+        if (!new StorageStateProvider().isScopedStorageUsed()) {
+            findViewById(R.id.storage_migration_banner).setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void learnMoreAndMigrate(View view) {
+
     }
 }
