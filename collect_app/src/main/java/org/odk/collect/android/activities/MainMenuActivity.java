@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,6 +57,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StorageMigrationViewModel;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -101,6 +105,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
+    private StorageMigrationViewModel storageMigrationViewModel;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -115,7 +120,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         initToolbar();
-
+        setupViewModels();
         disableSmsIfNeeded();
 
         // enter data button. expects a result.
@@ -266,6 +271,10 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+    }
+
+    private void setupViewModels() {
+        storageMigrationViewModel = ViewModelProviders.of(this).get(StorageMigrationViewModel.class);
     }
 
     private void initToolbar() {
@@ -650,6 +659,40 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     public void learnMoreAndMigrate(View view) {
+        ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(getString(R.string.files_migration));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
+        storageMigrationViewModel.performMigration().observe(this, result -> {
+            String message = null;
+            switch (result) {
+                case SUCCESS:
+                    message = getString(R.string.files_migration_completed);
+                    hideStorageMigrationBanner();
+                    break;
+                case NOT_ENOUGH_SPACE:
+                    message = getString(R.string.files_migration_not_enough_space);
+                    break;
+                case FORM_UPLOADER_IS_RUNNING:
+                    message = getString(R.string.files_migration_form_uploader_is_running);
+                    break;
+                case FORM_DOWNLOADER_IS_RUNNING:
+                    message = getString(R.string.files_migration_form_downloader_is_running);
+                    break;
+                case MOVING_FILES_FAILED:
+                case MIGRATING_DATABASE_PATHS_FAILED:
+                    message = getString(R.string.files_migration_failed);
+                    break;
+            }
+            progressDialog.dismiss();
+            ToastUtils.showLongToast(message);
+        });
+    }
+
+    private void hideStorageMigrationBanner() {
+        findViewById(R.id.storage_migration_banner).setVisibility(View.GONE);
     }
 }
