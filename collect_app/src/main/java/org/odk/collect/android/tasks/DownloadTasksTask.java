@@ -302,13 +302,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 HashMap<String, String> headers = new HashMap<String, String> ();
                 // Send location with request (if available)  TODO check a parameter to see if this is turned on otherwise don't do it
-                String lat = null;
-                String lon = null;
                 try {
                     Location locn = Collect.getInstance().getLocation();
                     if (locn != null) {
-                        lat = String.valueOf(locn.getLatitude());
-                        lon = String.valueOf(locn.getLongitude());
+                        String lat = String.valueOf(locn.getLatitude());
+                        String lon = String.valueOf(locn.getLongitude());
                         headers.put("lat", lat);
                         headers.put("lon", lon);
                     }

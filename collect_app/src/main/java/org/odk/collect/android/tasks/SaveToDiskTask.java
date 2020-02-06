@@ -57,6 +57,7 @@ import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
+import org.odk.collect.android.utilities.Utilities;
 
 import android.content.Intent;
 import android.location.Location;
@@ -318,7 +319,12 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 	                }
 
                     // Smap Start
-                    values.put(InstanceColumns.SOURCE, formInfo.source);     // smap get source from form detail
+                    if(formInfo != null) {
+                        values.put(InstanceColumns.SOURCE, formInfo.source);     // smap get source from form detail
+                    } else {
+                        Timber.i("+++++ formInfo was null");
+                        values.put(InstanceColumns.SOURCE, Utilities.getSource());  // Maybe we should not use formInfo and just use this?
+                    }
                     if (instanceName != null) {
                         values.put(InstanceColumns.T_TITLE, instanceName);
                     } else {
@@ -344,9 +350,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     /**
      * Extracts geometry information from the given xpath path in the given instance.
      *
-     * Returns a ContentValues object with values set for {@link InstanceColumns.GEOMETRY} and
-     * {@link InstanceColumns.GEOMETRY_TYPE}. Those value are null if anything goes wrong with
-     * parsing the geometry and converting it to GeoJSON.
+    * parsing the geometry and converting it to GeoJSON.
      *
      * Returns null if the given XPath path is null.
      */

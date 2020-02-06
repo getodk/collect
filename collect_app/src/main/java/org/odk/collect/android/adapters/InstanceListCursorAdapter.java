@@ -176,7 +176,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         }
 
         Crashlytics.log("Unknown InstanceProviderAPI status: " + formStatus);
-        
+
         return -1;
     }
 }
