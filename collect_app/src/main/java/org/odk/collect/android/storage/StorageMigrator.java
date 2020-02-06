@@ -38,6 +38,8 @@ public class StorageMigrator {
     private StorageStateProvider storageStateProvider;
     private StorageEraser storageEraser;
 
+    public static boolean isMigrationBeingPerformed;
+
     public StorageMigrator() {
         this(new StoragePathProvider(), new StorageStateProvider(), new StorageEraser());
     }
