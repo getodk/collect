@@ -62,6 +62,7 @@ public class ImageWidget extends BaseImageWidget {
         addAnswerView(answerLayout);
     }
 
+
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
