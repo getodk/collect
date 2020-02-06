@@ -7,8 +7,8 @@
   <string name="signature_capture">د امضا ثبت کول</string>
   <string name="view_video">ویډیو ښودل</string>
   <string name="choose_audio">غږیږ وټاکی</string>
-  <string name="add_repeat">ټولګی زیات کړی</string>
-    <string name="cancel">فسخ کول</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="cancel">فسخ کول</string>
   <string name="cancel_loading_form">فسخ کول</string>
   <string name="cancel_location">فسخ کول</string>
   <string name="canceling">فسخ کولو کی قرار لری</string>
@@ -45,7 +45,7 @@
   <string name="do_not_change">فسخ کول</string>
   <string name="do_not_exit">فسخ کول</string>
   <string name="do_not_save">بدلون څخه ډد وکړي</string>
-    <string name="enter_data">خالی فورمه ډک کړي</string>
+  <string name="enter_data">خالی فورمه ډک کړي</string>
   <string name="enter_data_button">خالی فورمه ډک کړي</string>
   <string name="error_occured">خطا وشوله</string>
   <string name="forms">سپین فورمي</string>
@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">اولي برخي ته لاړ شی</string>
   <string name="jump_to_end">اخرني برخي ته لاړ شی</string>
   <string name="jump_to_previous">پورته لاړ شی</string>
-  <string name="dont_add_repeat">مه یی زیاتوي</string>
-    <string name="main_menu">اصلی مینو</string>
+  <string name="main_menu">اصلی مینو</string>
   <string name="main_menu_details">د معلوماتو راغونډول اسانه کړل …</string>
   <string name="manage_files">ثبت شوی فورمه لري کړی</string>
   <string name="mark_finished">د وروستي بڼه په توګه نښه کړئ</string>
