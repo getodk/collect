@@ -104,12 +104,10 @@ abstract class AppListFragment extends ListFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Use the nicer-looking drawable with Material Design insets.
-            ListView listView = getListView();
-            listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
-            listView.setDividerHeight(1);
-        }
+        // Use the nicer-looking drawable with Material Design insets.
+        ListView listView = getListView();
+        listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
+        listView.setDividerHeight(1);
     }
 
     @Override

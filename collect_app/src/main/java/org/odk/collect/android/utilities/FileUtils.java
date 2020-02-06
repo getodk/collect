@@ -587,20 +587,6 @@ public class FileUtils {
     public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
-        // bug report: https://issuetracker.google.com/issues/37005552
-        // workaround: https://stackoverflow.com/a/18332000/137744
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager()
-                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-
-            for (ResolveInfo resolveInfo : resInfoList) {
-                String packageName = resolveInfo.activityInfo.packageName;
-                context.grantUriPermission(packageName, uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            }
-        }
     }
 
     /**
@@ -610,19 +596,6 @@ public class FileUtils {
      */
     public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
-        // bug report: https://issuetracker.google.com/issues/37005552
-        // workaround: https://stackoverflow.com/a/18332000/137744
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager()
-                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-
-            for (ResolveInfo resolveInfo : resInfoList) {
-                String packageName = resolveInfo.activityInfo.packageName;
-                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-        }
     }
 
     /** Uses the /sdcard symlink to shorten a path, if it's valid to do so. */

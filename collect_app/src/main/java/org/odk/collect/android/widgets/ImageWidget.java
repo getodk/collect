@@ -149,11 +149,7 @@ public class ImageWidget extends BaseImageWidget {
         errorTextView.setVisibility(View.GONE);
         Intent intent;
         if (selfie) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                intent = new Intent(getContext(), CaptureSelfieActivityNewApi.class);
-            } else {
-                intent = new Intent(getContext(), CaptureSelfieActivity.class);
-            }
+            intent = new Intent(getContext(), CaptureSelfieActivityNewApi.class);
         } else {
             intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             // We give the camera an absolute filename/path where to put the

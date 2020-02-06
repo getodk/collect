@@ -129,11 +129,9 @@ abstract class AppListActivity extends CollectAbstractActivity {
         progressBar = findViewById(R.id.progressBar);
         llParent = findViewById(R.id.llParent);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Use the nicer-looking drawable with Material Design insets.
-            listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getTheme()));
-            listView.setDividerHeight(1);
-        }
+        // Use the nicer-looking drawable with Material Design insets.
+        listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getTheme()));
+        listView.setDividerHeight(1);
 
         setSupportActionBar(findViewById(R.id.toolbar));
     }

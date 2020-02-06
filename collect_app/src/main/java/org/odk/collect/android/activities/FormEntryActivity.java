@@ -2917,11 +2917,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // double space where the placeholder is in the text resource. Collapse those spaces.
         // See https://github.com/opendatakit/collect/pull/2864
         if (backgroundLocationMessage.isMenuCharacterNeeded()) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
-            } else {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "").replace("  ", " ");
-            }
+            snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
         } else {
             snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
         }

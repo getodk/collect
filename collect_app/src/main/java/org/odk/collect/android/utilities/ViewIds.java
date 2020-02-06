@@ -16,11 +16,7 @@ public class ViewIds {
      * @return A unique integer ID.
      */
     public static int generateViewId() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return View.generateViewId();
-        } else {
-            return generateViewIdPre17();
-        }
+        return View.generateViewId();
     }
 
     /**

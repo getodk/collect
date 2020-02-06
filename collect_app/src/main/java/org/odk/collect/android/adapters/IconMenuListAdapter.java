@@ -73,14 +73,6 @@ public class IconMenuListAdapter extends BaseAdapter {
 
     private void refreshView(IconMenuItem item, TextView convertView) {
         convertView.setText(item.getTextResId());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            convertView.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getImageResId(), 0, 0, 0);
-        } else {
-            if (ViewCompat.getLayoutDirection(convertView) == ViewCompat.LAYOUT_DIRECTION_LTR) {
-                convertView.setCompoundDrawablesWithIntrinsicBounds(item.getImageResId(), 0, 0, 0);
-            } else {
-                convertView.setCompoundDrawablesWithIntrinsicBounds(0, 0, item.getImageResId(), 0);
-            }
-        }
+        convertView.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getImageResId(), 0, 0, 0);
     }
 }

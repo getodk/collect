@@ -112,11 +112,7 @@ public class PermissionUtils {
     }
 
     public static void finishAllActivities(Activity activity) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.finishAndRemoveTask();
-        } else {
-            activity.finishAffinity();
-        }
+        activity.finishAndRemoveTask();
     }
 
     /**

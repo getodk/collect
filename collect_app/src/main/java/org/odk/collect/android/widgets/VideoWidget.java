@@ -273,13 +273,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // Need to have this ugly code to account for
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
         // of the intent - uri in this case is a file
-        if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-            if (object instanceof File) {
-                File fileToDelete = (File) object;
-                int delCount = fileToDelete.delete() ? 1 : 0;
-                Timber.i("Deleting original capture of file: %s count: %d", binaryName, delCount);
-            }
-        }
 
         widgetValueChanged();
         playButton.setEnabled(binaryName != null);
@@ -351,26 +344,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     private void captureVideo() {
         Intent i;
         if (selfie) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                i = new Intent(getContext(), CaptureSelfieVideoActivityNewApi.class);
-            } else {
-                i = new Intent(getContext(), CaptureSelfieVideoActivity.class);
-            }
+            i = new Intent(getContext(), CaptureSelfieVideoActivityNewApi.class);
         } else {
             i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-            // Need to have this ugly code to account for
-            // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
-            // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
-            // Have it saving to an intermediate location instead of final destination
-            // to allow the current location to catch issues with the intermediate file
-            Timber.i("The build of this device is %s", MODEL);
-            if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-                nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
-            } else {
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                        Video.Media.EXTERNAL_CONTENT_URI.toString());
-            }
+            i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    Video.Media.EXTERNAL_CONTENT_URI.toString());
         }
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
