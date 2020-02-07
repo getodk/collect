@@ -7,11 +7,17 @@ import java.io.File;
 
 class StorageEraser {
 
-    void clearOdkDirOnScopedStorage(StoragePathProvider storagePathProvider) {
+    private final StoragePathProvider storagePathProvider;
+
+    StorageEraser(StoragePathProvider storagePathProvider) {
+        this.storagePathProvider = storagePathProvider;
+    }
+
+    void clearOdkDirOnScopedStorage() {
         deleteDirectory(new File(storagePathProvider.getScopedStorageDirPath(StorageSubdirectory.ODK)));
     }
 
-    void deleteOdkDirFromUnscopedStorage(StoragePathProvider storagePathProvider) {
+    void deleteOdkDirFromUnscopedStorage() {
         deleteDirectory(new File(storagePathProvider.getUnscopedStorageDirPath(StorageSubdirectory.ODK)));
     }
 

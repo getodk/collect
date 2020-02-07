@@ -2,6 +2,9 @@ package org.odk.collect.android.storage.migration;
 
 import android.os.AsyncTask;
 
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
+
 public class StorageMigratorTask extends AsyncTask<Void, Void, StorageMigrationResult> {
 
     interface Listener {
@@ -17,7 +20,12 @@ public class StorageMigratorTask extends AsyncTask<Void, Void, StorageMigrationR
     @Override
     protected StorageMigrationResult doInBackground(Void... voids) {
         StorageMigrator.isMigrationBeingPerformed = true;
-        return new StorageMigrator().performStorageMigration();
+
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        StorageStateProvider storageStateProvider = new StorageStateProvider();
+        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
+
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser).performStorageMigration();
     }
 
     @Override

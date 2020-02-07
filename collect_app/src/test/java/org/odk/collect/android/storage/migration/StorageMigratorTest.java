@@ -17,16 +17,18 @@ import static org.mockito.Mockito.verify;
 public class StorageMigratorTest {
 
     private StorageMigrator storageMigrator;
-    private final StorageEraser storageEraser = spy(StorageEraser.class);
+    private StorageEraser storageEraser;
     private final StoragePathProvider storagePathProvider = spy(StoragePathProvider.class);
     private final StorageStateProvider storageStateProvider = mock(StorageStateProvider.class);
 
     @Before
     public void setup() {
+        storageEraser = spy(new StorageEraser(storagePathProvider));
         storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser));
+
         doNothing().when(storageMigrator).reopenDatabases();
-        doNothing().when(storageEraser).clearOdkDirOnScopedStorage(storagePathProvider);
-        doNothing().when(storageEraser).deleteOdkDirFromUnscopedStorage(storagePathProvider);
+        doNothing().when(storageEraser).clearOdkDirOnScopedStorage();
+        doNothing().when(storageEraser).deleteOdkDirFromUnscopedStorage();
     }
 
     @Test
@@ -91,7 +93,7 @@ public class StorageMigratorTest {
 
         storageMigrator.performStorageMigration();
 
-        verify(storageEraser).clearOdkDirOnScopedStorage(storagePathProvider);
+        verify(storageEraser).clearOdkDirOnScopedStorage();
     }
 
     @Test
@@ -156,6 +158,6 @@ public class StorageMigratorTest {
 
         storageMigrator.performStorageMigration();
 
-        verify(storageEraser).deleteOdkDirFromUnscopedStorage(storagePathProvider);
+        verify(storageEraser).deleteOdkDirFromUnscopedStorage();
     }
 }

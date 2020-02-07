@@ -37,15 +37,11 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 
 public class StorageMigrator {
 
-    private StoragePathProvider storagePathProvider;
-    private StorageStateProvider storageStateProvider;
-    private StorageEraser storageEraser;
+    private final StoragePathProvider storagePathProvider;
+    private final StorageStateProvider storageStateProvider;
+    private final StorageEraser storageEraser;
 
     public static boolean isMigrationBeingPerformed;
-
-    public StorageMigrator() {
-        this(new StoragePathProvider(), new StorageStateProvider(), new StorageEraser());
-    }
 
     StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser) {
         this.storagePathProvider = storagePathProvider;
@@ -54,7 +50,7 @@ public class StorageMigrator {
     }
 
     StorageMigrationResult performStorageMigration() {
-        storageEraser.clearOdkDirOnScopedStorage(storagePathProvider);
+        storageEraser.clearOdkDirOnScopedStorage();
 
         if (isFormUploaderRunning()) {
             return StorageMigrationResult.FORM_UPLOADER_IS_RUNNING;
@@ -77,7 +73,7 @@ public class StorageMigrator {
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
 
-        storageEraser.deleteOdkDirFromUnscopedStorage(storagePathProvider);
+        storageEraser.deleteOdkDirFromUnscopedStorage();
 
         return StorageMigrationResult.SUCCESS;
     }
