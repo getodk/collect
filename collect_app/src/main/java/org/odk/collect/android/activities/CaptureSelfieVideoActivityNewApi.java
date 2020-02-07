@@ -17,9 +17,7 @@ package org.odk.collect.android.activities;
  * limitations under the License.
  */
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
@@ -28,7 +26,6 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areCameraAndRecordAudioPermissionsGranted;
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class CaptureSelfieVideoActivityNewApi extends Activity {
 
     @Override

@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,7 +26,6 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import static org.odk.collect.android.utilities.PermissionUtils.isCameraPermissionGranted;
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class CaptureSelfieActivityNewApi extends CollectAbstractActivity {
 
     @Override
