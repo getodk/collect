@@ -47,7 +47,7 @@ public class StorageMigrator {
         this(new StoragePathProvider(), new StorageStateProvider(), new StorageEraser());
     }
 
-    private StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser) {
+    StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser) {
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
         this.storageEraser = storageEraser;
@@ -82,7 +82,7 @@ public class StorageMigrator {
         return StorageMigrationResult.SUCCESS;
     }
 
-    private boolean isFormUploaderRunning() {
+    boolean isFormUploaderRunning() {
         LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.class.getName());
 
         if (statuses.getValue() != null) {
@@ -95,11 +95,11 @@ public class StorageMigrator {
         return false;
     }
 
-    private boolean isFormDownloaderRunning() {
+    boolean isFormDownloaderRunning() {
         return ServerPollingJob.isIsDownloadingForms();
     }
 
-    private StorageMigrationResult moveAppDataToScopedStorage() {
+    StorageMigrationResult moveAppDataToScopedStorage() {
         try {
             File odkDirOnUnscopedStorage = new File(storagePathProvider.getUnscopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
             File odkDirOnScopedStorage = new File(storagePathProvider.getScopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
@@ -111,7 +111,7 @@ public class StorageMigrator {
         return StorageMigrationResult.MOVING_FILES_SUCCEEDED;
     }
 
-    private StorageMigrationResult migrateDatabasePaths() {
+    StorageMigrationResult migrateDatabasePaths() {
         try {
             migrateFormsDatabase();
             migrateInstancesDatabase();
@@ -123,7 +123,7 @@ public class StorageMigrator {
         return StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED;
     }
 
-    private void reopenDatabases() {
+    void reopenDatabases() {
         FormsProvider.recreateDatabaseHelper();
         InstanceProvider.recreateDatabaseHelper();
     }
