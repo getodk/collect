@@ -2,6 +2,7 @@ package org.odk.collect.android.settings;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -13,11 +14,14 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
+
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataTest {
@@ -67,7 +71,8 @@ public class FormMetadataTest {
                 .clickFormMetadata()
                 .assertText(getTelephonyManager().getDeviceId())
                 .assertText(getTelephonyManager().getSubscriberId())
-                .assertText(getTelephonyManager().getSimSerialNumber());
+                .assertText(getTelephonyManager().getSimSerialNumber())
+                .assertText(getInstallID());
     }
 
     @Test
@@ -77,6 +82,11 @@ public class FormMetadataTest {
                 .assertText(getTelephonyManager().getDeviceId())
                 .assertText(getTelephonyManager().getSubscriberId())
                 .assertText(getTelephonyManager().getSimSerialNumber());
+    }
+
+    private String getInstallID() {
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(rule.getActivity());
+        return new SharedPreferencesInstallIDProvider(sharedPreferences).getInstallID();
     }
 
     private TelephonyManager getTelephonyManager() {

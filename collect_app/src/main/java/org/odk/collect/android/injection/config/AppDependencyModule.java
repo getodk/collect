@@ -2,6 +2,8 @@ package org.odk.collect.android.injection.config;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.webkit.MimeTypeMap;
 
@@ -13,8 +15,10 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.metadata.InstallIDProvider;
+import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
@@ -153,5 +157,11 @@ public class AppDependencyModule {
     @Provides
     public ActivityAvailability providesActivityAvailability(Context context) {
         return new ActivityAvailability(context);
+    }
+
+    @Provides
+    InstallIDProvider providesInstallIDProvider(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return new SharedPreferencesInstallIDProvider(preferences);
     }
 }

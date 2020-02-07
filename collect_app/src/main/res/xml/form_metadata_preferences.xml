@@ -32,5 +32,10 @@
             android:selectable="false"
             android:key="simserial"
             android:title="@string/sim_serial_id" />
+
+        <EditTextPreference
+            android:selectable="false"
+            android:key="installID"
+            android:title="@string/install_id" />
     </PreferenceCategory>
 </PreferenceScreen>

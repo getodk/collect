@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -7,11 +8,15 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_EMAIL;
@@ -24,9 +29,18 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONE
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
 
 public class FormMetadataFragment extends BasePreferenceFragment {
+
+    @Inject
+    public InstallIDProvider installIDProvider;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        DaggerUtils.getComponent(activity).inject(this);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.form_metadata_preferences);
 
@@ -60,6 +74,8 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         initPrefFromProp(pm, prefs, PROPMGR_DEVICE_ID, PROPMGR_DEVICE_ID);
         initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID, PROPMGR_SUBSCRIBER_ID);
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, PROPMGR_SIM_SERIAL);
+
+        findPreference("installID").setSummary(installIDProvider.getInstallID());
     }
 
     /**
