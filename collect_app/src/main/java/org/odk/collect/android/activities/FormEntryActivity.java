@@ -2017,7 +2017,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             String surveyNotes = getFormController().getSurveyNotes();   // Smap
 
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
-                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, formInfo, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
+                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             if(!this.isFinishing()) {   // smap

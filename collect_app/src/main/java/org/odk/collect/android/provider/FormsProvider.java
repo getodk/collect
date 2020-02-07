@@ -51,7 +51,7 @@ public class FormsProvider extends ContentProvider {
     private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 13;    // smap must be greater than 8 (the odk version)
+    private static final int DATABASE_VERSION = 15;    // smap must be greater than 8 (the odk version)
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -81,16 +81,16 @@ public class FormsProvider extends ContentProvider {
         }
 
         private void onCreateNamed(SQLiteDatabase db) {
-            createFormsTableV13(db);
+            createFormsTableLatest(db);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             int initialVersion = oldVersion;
 
-            if (oldVersion < 13) {
+            if (oldVersion < DATABASE_VERSION) {
                 try {
-                    upgradeToVersion13(db);
+                    upgradeToVersionLatest(db);
                 } catch (Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to forms database version 13");
@@ -101,7 +101,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     // smap
-    private static void upgradeToVersion13(SQLiteDatabase db) {
+    private static void upgradeToVersionLatest(SQLiteDatabase db) {
         String temporaryTable = FORMS_TABLE_NAME + "_tmp";
         List<String> columnNamesPrev = getFormColumnNames(db);
 
@@ -111,7 +111,7 @@ public class FormsProvider extends ContentProvider {
                 .to(temporaryTable)
                 .end();
 
-        createFormsTableV13(db);
+        createFormsTableLatest(db);
 
         CustomSQLiteQueryBuilder
                 .begin(db)
@@ -128,7 +128,7 @@ public class FormsProvider extends ContentProvider {
                 .end();
     }
 
-    private static void createFormsTableV13(SQLiteDatabase db) {
+    private static void createFormsTableLatest(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + FormsColumns._ID + " integer primary key, "
                 + FormsColumns.DISPLAY_NAME + " text not null, "

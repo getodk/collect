@@ -886,7 +886,7 @@ public class Utilities {
             if (msg.contains("Unauthorized")) {
                 out = Collect.getInstance().getString(R.string.smap_unauth);
             } else if(msg.contains("Unable to resolve host")) {
-                out = Collect.getInstance().getString(R.string.no_connection);
+                out = msg + ". " + Collect.getInstance().getString(R.string.no_connection);
             } else {
                 if(e != null) {
                     out = e.getLocalizedMessage();

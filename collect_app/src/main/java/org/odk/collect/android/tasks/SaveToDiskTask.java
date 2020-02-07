@@ -89,7 +89,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     private String mFormPath;	    // ---------- smap
     private String mSurveyNotes;	// ---------- smap
     private boolean canUpdate = true;  // smap
-    private FormInfo formInfo;  // smap
     private boolean saveMessage;    // smap
 
     public static final int SAVED = 500;
@@ -100,9 +99,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName,
-        long taskId, String formPath, String surveyNotes, boolean canUpdate, FormInfo formInfo, boolean saveMessage) {		// smap added assignment_id, formPath, formDetail
+        long taskId, String formPath, String surveyNotes, boolean canUpdate, boolean saveMessage) {		// smap added assignment_id, formPath, formDetail
         this.uri = uri;
-        this.formInfo = formInfo;  // smap
         save = saveAndExit;
         this.markCompleted = markCompleted;
         instanceName = updatedName;
@@ -319,12 +317,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 	                }
 
                     // Smap Start
-                    if(formInfo != null) {
-                        values.put(InstanceColumns.SOURCE, formInfo.source);     // smap get source from form detail
-                    } else {
-                        Timber.i("+++++ formInfo was null");
-                        values.put(InstanceColumns.SOURCE, Utilities.getSource());  // Maybe we should not use formInfo and just use this?
-                    }
+                    values.put(InstanceColumns.SOURCE, Utilities.getSource());
+
                     if (instanceName != null) {
                         values.put(InstanceColumns.T_TITLE, instanceName);
                     } else {
