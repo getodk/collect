@@ -1,6 +1,8 @@
 package org.odk.collect.android.settings;
 
 import android.Manifest;
+import android.content.Context;
+import android.telephony.TelephonyManager;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -34,9 +36,7 @@ public class FormMetadataTest {
     public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Test
-    public void settingMetadata_includesMetadataInForm() {
-
-        //TestCase3
+    public void settingMetadata_letsThemBeIncludedInForm() {
         new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
@@ -56,5 +56,31 @@ public class FormMetadataTest {
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("Metadata")
                 .assertText("Chino", "chino@whitepony.com", "664615");
+    }
+
+    @Test
+    public void deviceIdentifiersAreDisplayedInSettings() {
+        new MainMenuPage(rule)
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickUserAndDeviceIdentity()
+                .clickFormMetadata()
+                .assertText(getTelephonyManager().getDeviceId())
+                .assertText(getTelephonyManager().getSubscriberId())
+                .assertText(getTelephonyManager().getSimSerialNumber());
+    }
+
+    @Test
+    public void deviceIdentifiersCanBeIncludedInForm() {
+        new MainMenuPage(rule)
+                .startBlankForm("Metadata")
+                .assertText(getTelephonyManager().getDeviceId())
+                .assertText(getTelephonyManager().getSubscriberId())
+                .assertText(getTelephonyManager().getSimSerialNumber());
+    }
+
+    private TelephonyManager getTelephonyManager() {
+        Context context = rule.getActivity();
+        return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
 }

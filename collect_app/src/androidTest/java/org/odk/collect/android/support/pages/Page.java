@@ -82,13 +82,13 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T assertText(String text) {
-        onView(withText(text)).check(matches(isDisplayed()));
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()));
         return (T) this;
     }
 
     public T assertText(String...  text) {
-        for (String s : text) {
-            onView(withText(s)).check(matches(isDisplayed()));
+        for (String t : text) {
+            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()));
         }
         return (T) this;
     }

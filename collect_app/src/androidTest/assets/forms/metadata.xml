@@ -8,6 +8,9 @@
           <username/>
           <email/>
           <phonenumber/>
+          <deviceID/>
+          <subscriberID/>
+          <simSerial/>
           <meta>
             <instanceID/>
           </meta>
@@ -16,6 +19,9 @@
       <bind nodeset="/preload/username" type="string" jr:preload="property" jr:preloadParams="username" readonly="true()"/>
       <bind nodeset="/preload/email" type="string" jr:preload="property" jr:preloadParams="email" readonly="true()"/>
       <bind nodeset="/preload/phonenumber" type="string" jr:preload="property" jr:preloadParams="phonenumber" readonly="true()"/>
+      <bind nodeset="/preload/deviceID" type="string" jr:preload="property" jr:preloadParams="deviceID" readonly="true()"/>
+      <bind nodeset="/preload/subscriberID" type="string" jr:preload="property" jr:preloadParams="subscriberID" readonly="true()"/>
+      <bind nodeset="/preload/simSerial" type="string" jr:preload="property" jr:preloadParams="simSerial" readonly="true()"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/preload/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -29,6 +35,15 @@
       </input>
       <input ref="/preload/phonenumber">
         <label>Phone number</label>
+      </input>
+      <input ref="/preload/deviceID">
+        <label>Device ID</label>
+      </input>
+      <input ref="/preload/subscriberID">
+        <label>Subscriber ID</label>
+      </input>
+      <input ref="/preload/simSerial">
+        <label>SIM serial number</label>
       </input>
     </group>
   </h:body>

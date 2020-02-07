@@ -57,9 +57,9 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         PropertyManager pm = new PropertyManager(getActivity());
         initPrefFromProp(pm, prefs, PROPMGR_PHONE_NUMBER, KEY_METADATA_PHONENUMBER);
-        initPrefFromProp(pm, prefs, PROPMGR_DEVICE_ID, null);
-        initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID, null);
-        initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, null);
+        initPrefFromProp(pm, prefs, PROPMGR_DEVICE_ID, PROPMGR_DEVICE_ID);
+        initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID, PROPMGR_SUBSCRIBER_ID);
+        initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, PROPMGR_SIM_SERIAL);
     }
 
     /**
@@ -68,22 +68,25 @@ public class FormMetadataFragment extends BasePreferenceFragment {
      * @param propertyManager   a PropertyManager
      * @param sharedPreferences shared preferences
      * @param propMgrName       the PropertyManager property name
-     * @param differentPrefKey  the EditTextPreference key, null if the same as the propMgrName
+     * @param prefKey           the EditTextPreference key
      */
     private void initPrefFromProp(PropertyManager propertyManager,
-                                  SharedPreferences sharedPreferences, String propMgrName,
-                                  String differentPrefKey) {
+                                  SharedPreferences sharedPreferences,
+                                  String propMgrName,
+                                  String prefKey) {
         String propVal = propertyManager.getSingularProperty(propMgrName);
-        String prefKey = differentPrefKey == null ? propMgrName : differentPrefKey;
         EditTextPreference textPref = (EditTextPreference) findPreference(prefKey);
+
         textPref.setOnPreferenceClickListener(preference -> {
             textPref.getEditText().requestFocus();
             return true;
         });
+
         if (propVal != null) {
             textPref.setSummary(propVal);
             textPref.setText(propVal);
         }
+
         if (textPref.isSelectable()) {
             textPref.setOnPreferenceChangeListener(createChangeListener(sharedPreferences, prefKey));
         }
