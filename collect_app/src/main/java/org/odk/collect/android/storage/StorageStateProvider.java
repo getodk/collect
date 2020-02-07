@@ -18,11 +18,11 @@ public class StorageStateProvider {
         return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
     }
 
-    void enableUsingScopedStorage() {
+    public void enableUsingScopedStorage() {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
     }
 
-    void disableUsingScopedStorage() {
+    public void disableUsingScopedStorage() {
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, false);
     }
 
@@ -30,7 +30,7 @@ public class StorageStateProvider {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    boolean isEnoughSpaceToPerformMigartion(StoragePathProvider storagePathProvider) {
+    public boolean isEnoughSpaceToPerformMigartion(StoragePathProvider storagePathProvider) {
         try {
             return getAvailableScopedStorageSize(storagePathProvider) > getOdkDirSize(storagePathProvider);
         } catch (Exception | Error e) {

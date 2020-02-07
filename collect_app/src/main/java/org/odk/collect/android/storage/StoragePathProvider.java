@@ -29,22 +29,22 @@ public class StoragePathProvider {
             };
     }
 
-    String getScopedExternalFilesDirPath() {
+    public String getScopedExternalFilesDirPath() {
         File scopedExternalFilesDirPath = Collect.getInstance().getExternalFilesDir(null);
         return scopedExternalFilesDirPath != null
                 ? scopedExternalFilesDirPath.getAbsolutePath()
                 : "";
     }
 
-    String getUnscopedExternalFilesDirPath() {
+    public String getUnscopedExternalFilesDirPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
-    String getUnscopedStorageDirPath(StorageSubdirectory subdirectory) {
+    public String getUnscopedStorageDirPath(StorageSubdirectory subdirectory) {
         return getUnscopedExternalFilesDirPath() + File.separator + subdirectory.getDirectoryName();
     }
 
-    String getScopedStorageDirPath(StorageSubdirectory subdirectory) {
+    public String getScopedStorageDirPath(StorageSubdirectory subdirectory) {
         return getScopedExternalFilesDirPath() + File.separator + subdirectory.getDirectoryName();
     }
 
@@ -111,7 +111,7 @@ public class StoragePathProvider {
                 : dirPath + File.separator + filePath;
     }
 
-    String getRelativeFilePath(String dirPath, String filePath) {
+    public String getRelativeFilePath(String dirPath, String filePath) {
         return filePath.startsWith(dirPath)
                 ? filePath.substring(dirPath.length() + 1)
                 : filePath;

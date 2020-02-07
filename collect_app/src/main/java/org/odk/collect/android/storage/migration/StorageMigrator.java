@@ -1,4 +1,4 @@
-package org.odk.collect.android.storage;
+package org.odk.collect.android.storage.migration;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -17,6 +17,9 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.itemsets.Itemset;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
 

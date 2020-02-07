@@ -1,4 +1,7 @@
-package org.odk.collect.android.storage;
+package org.odk.collect.android.storage.migration;
+
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 
