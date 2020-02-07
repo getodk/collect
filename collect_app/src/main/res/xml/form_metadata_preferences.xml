@@ -35,7 +35,7 @@
 
         <EditTextPreference
             android:selectable="false"
-            android:key="installID"
+            android:key="metadata_installid"
             android:title="@string/install_id" />
     </PreferenceCategory>
 </PreferenceScreen>

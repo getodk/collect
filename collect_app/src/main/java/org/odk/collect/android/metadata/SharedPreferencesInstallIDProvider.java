@@ -1,12 +1,13 @@
 package org.odk.collect.android.metadata;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 
 import static org.odk.collect.utilities.RandomString.randomString;
 
 public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 
-    private static final String PREFERENCES_KEY = "installID";
+    private static final String PREFERENCES_KEY = "installid";
 
     private final SharedPreferences sharedPreferences;
 
@@ -20,13 +21,14 @@ public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
             generateInstallID();
         }
 
-        return sharedPreferences.getString("installID", null);
+        return sharedPreferences.getString(PREFERENCES_KEY, null);
     }
 
+    @SuppressLint("ApplySharedPref")
     private void generateInstallID() {
         sharedPreferences
                 .edit()
                 .putString(PREFERENCES_KEY, "collect:" + randomString(16))
-                .apply();
+                .commit();
     }
 }

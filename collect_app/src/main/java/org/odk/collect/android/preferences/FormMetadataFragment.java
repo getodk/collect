@@ -24,6 +24,7 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
@@ -75,7 +76,7 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID, PROPMGR_SUBSCRIBER_ID);
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, PROPMGR_SIM_SERIAL);
 
-        findPreference("installID").setSummary(installIDProvider.getInstallID());
+        findPreference(KEY_INSTALL_ID).setSummary(installIDProvider.getInstallID());
     }
 
     /**
