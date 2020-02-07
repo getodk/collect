@@ -81,12 +81,12 @@ abstract class Page<T extends Page<T>> {
         return destination.assertOnPage();
     }
 
-    public T checkIsTextDisplayed(String text) {
+    public T assertText(String text) {
         onView(withText(text)).check(matches(isDisplayed()));
         return (T) this;
     }
 
-    public T checkIsTextDisplayed(String...  text) {
+    public T assertText(String...  text) {
         for (String s : text) {
             onView(withText(s)).check(matches(isDisplayed()));
         }
@@ -119,7 +119,7 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T checkIsStringDisplayed(int stringID) {
-        checkIsTextDisplayed(getTranslatedString(stringID));
+        assertText(getTranslatedString(stringID));
         return (T) this;
     }
 
@@ -288,7 +288,7 @@ abstract class Page<T extends Page<T>> {
     void waitForText(String text) {
         while (true) {
             try {
-                checkIsTextDisplayed(text);
+                assertText(text);
                 break;
             } catch (NoMatchingViewException ignored) {
                 // ignored

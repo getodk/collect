@@ -65,7 +65,7 @@ public class FormMapTest {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnMapIconForForm("Single geopoint")
-                .checkIsTextDisplayed("Single geopoint");
+                .assertText("Single geopoint");
     }
 
     @Test public void fillingBlankForm_addsInstanceToMap() {
@@ -80,6 +80,6 @@ public class FormMapTest {
                 .clickWidgetButton()
                 .swipeToNextQuestion()
                 .clickSaveAndExitBackToMap()
-                .checkIsTextDisplayed(oneInstanceString);
+                .assertText(oneInstanceString);
     }
 }

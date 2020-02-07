@@ -28,7 +28,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                     Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("Test.xml"));
+            .around(new CopyFormRule("metadata.xml"));
 
     @Test
     public void setEmail_validatesEmail() {
@@ -38,43 +38,14 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
-                .clickMetadataEmail()
+                .clickEmail()
                 .inputText("aabb")
                 .clickOKOnDialog()
                 .checkIsToastWithMessageDisplayed(R.string.invalid_email_address)
-                .clickMetadataEmail().inputText("aa@bb")
+                .clickEmail()
+                .inputText("aa@bb")
                 .clickOKOnDialog()
-                .checkIsTextDisplayed("aa@bb");
-    }
-
-    @Test
-    public void emptyUsername_ShouldNotDisplayUsernameInForm() {
-
-        //TestCase2
-        new MainMenuPage(rule)
-                .startBlankForm("Test")
-                .swipeOnText("")
-                .clickSaveAndExit();
-    }
-
-    @Test
-    public void setMetadataUsername_ShouldDisplayMetadataUsernameInForm() {
-
-        //TestCase3
-        new MainMenuPage(rule)
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickUserAndDeviceIdentity()
-                .clickFormMetadata()
-                .clickMetadataUsername()
-                .inputText("AAA")
-                .clickOKOnDialog()
-                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-                .startBlankForm("Test")
-                .swipeOnText("AAA")
-                .clickSaveAndExit();
+                .assertText("aa@bb");
     }
 
     @Test
@@ -85,7 +56,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
-                .clickMetadataUsername()
+                .clickUsername()
                 .inputText("")
                 .clickOKOnDialog()
                 .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
@@ -101,9 +72,8 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickOKOnDialog()
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
-                .startBlankForm("Test")
-                .swipeOnText("BBB")
-                .clickSaveAndExit();
+                .startBlankForm("Metadata")
+                .assertText("BBB");
     }
 
     @Test
@@ -114,7 +84,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
-                .clickMetadataUsername()
+                .clickUsername()
                 .inputText("CCC")
                 .clickOKOnDialog()
                 .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
@@ -130,8 +100,7 @@ public class UserAndDeviceIdentityTest extends BaseRegressionTest {
                 .clickOKOnDialog()
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
-                .startBlankForm("Test")
-                .swipeOnText("CCC")
-                .clickSaveAndExit();
+                .startBlankForm("Metadata")
+                .assertText("CCC");
     }
 }

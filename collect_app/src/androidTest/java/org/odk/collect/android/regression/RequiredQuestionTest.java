@@ -35,7 +35,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
         //TestCase1
         new MainMenuPage(rule)
                 .startBlankForm("required")
-                .checkIsTextDisplayed("* Foo")
+                .assertText("* Foo")
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage(rule), rule))
                 .clickIgnoreChanges();
