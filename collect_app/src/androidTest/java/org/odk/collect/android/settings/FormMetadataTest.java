@@ -22,6 +22,7 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataTest {
@@ -86,7 +87,7 @@ public class FormMetadataTest {
 
     private String getInstallID() {
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(rule.getActivity());
-        return new SharedPreferencesInstallIDProvider(sharedPreferences).getInstallID();
+        return new SharedPreferencesInstallIDProvider(sharedPreferences, KEY_INSTALL_ID).getInstallID();
     }
 
     private TelephonyManager getTelephonyManager() {

@@ -7,28 +7,28 @@ import static org.odk.collect.utilities.RandomString.randomString;
 
 public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 
-    private static final String PREFERENCES_KEY = "installid";
-
     private final SharedPreferences sharedPreferences;
+    private final String preferencesKey;
 
-    public SharedPreferencesInstallIDProvider(SharedPreferences sharedPreferences) {
+    public SharedPreferencesInstallIDProvider(SharedPreferences sharedPreferences, String preferencesKey) {
         this.sharedPreferences = sharedPreferences;
+        this.preferencesKey = preferencesKey;
     }
 
     @Override
     public String getInstallID() {
-        if (!sharedPreferences.contains(PREFERENCES_KEY)) {
+        if (!sharedPreferences.contains(preferencesKey)) {
             generateInstallID();
         }
 
-        return sharedPreferences.getString(PREFERENCES_KEY, null);
+        return sharedPreferences.getString(preferencesKey, null);
     }
 
     @SuppressLint("ApplySharedPref")
     private void generateInstallID() {
         sharedPreferences
                 .edit()
-                .putString(PREFERENCES_KEY, "collect:" + randomString(16))
+                .putString(preferencesKey, "collect:" + randomString(16))
                 .commit();
     }
 }

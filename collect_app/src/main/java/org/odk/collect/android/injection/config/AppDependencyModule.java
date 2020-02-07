@@ -37,6 +37,8 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
+
 /**
  * Add dependency providers here (annotated with @Provides)
  * for objects you need to inject
@@ -162,6 +164,6 @@ public class AppDependencyModule {
     @Provides
     InstallIDProvider providesInstallIDProvider(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return new SharedPreferencesInstallIDProvider(preferences);
+        return new SharedPreferencesInstallIDProvider(preferences, KEY_INSTALL_ID);
     }
 }

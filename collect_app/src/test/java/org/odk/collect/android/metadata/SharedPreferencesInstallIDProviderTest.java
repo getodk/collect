@@ -24,7 +24,7 @@ public class SharedPreferencesInstallIDProviderTest {
     @Before
     public void setup() {
         sharedPreferences = getDefaultSharedPreferences(RuntimeEnvironment.application);
-        provider = new SharedPreferencesInstallIDProvider(sharedPreferences);
+        provider = new SharedPreferencesInstallIDProvider(sharedPreferences, "blah");
     }
 
     @Test
