@@ -20,12 +20,9 @@ import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -54,13 +51,15 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class LabelWidget extends ItemsWidget {
 
-    View center;
-
     public LabelWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        addItems(context, questionDetails);
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
+    }
 
+    private void addItems(Context context, QuestionDetails questionDetails) {
         // Layout holds the horizontal list of buttons
-        LinearLayout buttonLayout = new LinearLayout(context);
+        LinearLayout listItems = findViewById(R.id.list_items);
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
@@ -170,19 +169,14 @@ public class LabelWidget extends ItemsWidget {
                         new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                                 LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
-
-                buttonLayout.addView(answer, answerParams);
+                listItems.addView(answer, answerParams);
             }
         }
+    }
 
-        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
-        addView(buttonLayout, params);
-
-        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
+    @Override
+    protected int getLayout() {
+        return R.layout.label_widget;
     }
 
     @Override
@@ -193,20 +187,6 @@ public class LabelWidget extends ItemsWidget {
     @Override
     public IAnswerData getAnswer() {
         return null;
-    }
-
-    @Override
-    protected void addQuestionLabel(View v) {
-        center = new View(getContext());
-        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
-        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(ViewIds.generateViewId());
-        addView(center, centerParams);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.LEFT_OF, center.getId());
-        addView(v, params);
     }
 
     @Override

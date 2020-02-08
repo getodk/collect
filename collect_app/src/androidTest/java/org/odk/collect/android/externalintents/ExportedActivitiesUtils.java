@@ -2,29 +2,20 @@ package org.odk.collect.android.externalintents;
 
 import junit.framework.Assert;
 
+import org.odk.collect.android.storage.StoragePathProvider;
+
 import java.io.File;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.application.Collect.CACHE_PATH;
-import static org.odk.collect.android.application.Collect.FORMS_PATH;
-import static org.odk.collect.android.application.Collect.INSTANCES_PATH;
-import static org.odk.collect.android.application.Collect.METADATA_PATH;
-import static org.odk.collect.android.application.Collect.ODK_ROOT;
-import static org.odk.collect.android.application.Collect.OFFLINE_LAYERS;
-
 class ExportedActivitiesUtils {
-
-    private static final String[] DIRS = {
-            ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
-    };
 
     private ExportedActivitiesUtils() {
 
     }
 
     static void clearDirectories() {
-        for (String dirName : DIRS) {
+        for (String dirName : new StoragePathProvider().getOdkDirPaths()) {
             File dir = new File(dirName);
             if (dir.exists()) {
                 if (dir.delete()) {
@@ -36,7 +27,7 @@ class ExportedActivitiesUtils {
     }
 
     static void testDirectories() {
-        for (String dirName : DIRS) {
+        for (String dirName : new StoragePathProvider().getOdkDirPaths()) {
             File dir = new File(dirName);
             Assert.assertTrue("File " + dirName + "does not exist", dir.exists());
             Assert.assertTrue("File" + dirName + "does not exist", dir.isDirectory());

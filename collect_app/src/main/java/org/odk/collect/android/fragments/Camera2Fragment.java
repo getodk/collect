@@ -53,8 +53,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.CameraUtils;
 
 import java.io.File;
@@ -858,7 +858,7 @@ public class Camera2Fragment extends Fragment
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
 
-            CameraUtils.savePhoto(Collect.TMPFILE_PATH, bytes);
+            CameraUtils.savePhoto(new StoragePathProvider().getTmpFilePath(), bytes);
         }
     }
 

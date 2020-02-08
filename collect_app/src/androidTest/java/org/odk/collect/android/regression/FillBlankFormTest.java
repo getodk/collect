@@ -40,12 +40,12 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
 public class FillBlankFormTest extends BaseRegressionTest {
-    @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE)
+        @Rule
+        public RuleChain copyFormChain = RuleChain
+                .outerRule(GrantPermissionRule.grant(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
             .around(new CopyFormRule("All_widgets.xml"))
@@ -160,8 +160,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         //TestCase41
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("formulaire_adherent")
-                .clickOnAddGroup(new FormEntryPage("formulaire_adherent", rule))
+                .startBlankFormWithRepeatGroup("formulaire_adherent", "Ajouté une observation")
+                .clickOnAdd(new FormEntryPage("formulaire_adherent", rule))
                 .clickOnText("Plante")
                 .inputText("Abi")
                 .swipeToNextQuestion()
@@ -624,8 +624,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void when_chooseAnswer_should_beVisibleInNextQuestion() {
         //TestCase52
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("CalcTest")
-                .clickOnAddGroup(new FormEntryPage("CalcTest", rule))
+                .startBlankFormWithRepeatGroup("CalcTest", "Fishing gear type")
+                .clickOnAdd(new FormEntryPage("CalcTest", rule))
                 .clickOnText("Gillnet")
                 .swipeToNextQuestion()
                 .checkIsTextDisplayed("* 7.2 What is the size of the mesh for the Gillnet ?")
@@ -753,8 +753,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void hierachyView_shouldNotChangeAfterScreenRotation() {
         //TestCase29
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("Repeat Group")
-                .clickOnDoNotAddGroup(new FormEntryPage("Repeat Group", rule))
+                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group", rule))
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0)
@@ -768,8 +768,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
     public void when_openHierarchyViewFromLastPage_should_mainGroupViewBeVisible() {
         //TestCase30
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("Repeat Group")
-                .clickOnDoNotAddGroup(new FormEntryPage("Repeat Group", rule))
+                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group", rule))
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .checkIsFormEndScreenVisible()

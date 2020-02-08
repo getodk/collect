@@ -17,34 +17,27 @@ package org.odk.collect.android.preferences;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
-
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
@@ -92,6 +85,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                 final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
                 final EditText passwordEditText = dialogView.findViewById(R.id.pwd_field);
                 final CheckBox passwordCheckBox = dialogView.findViewById(R.id.checkBox2);
+                passwordEditText.requestFocus();
                 passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -143,7 +137,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                 fragment = new ShowQRCodeFragment();
                 break;
             case "save_legacy_settings":
-                File writeDir = new File(Collect.SETTINGS);
+                File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
                         ToastUtils.showShortToast("Error creating directory "
@@ -160,7 +154,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                 } else {
                     ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
                 }
-                break;
+                return true;
             case "main_menu":
                 fragment = new MainMenuAccessPreferences();
                 break;
@@ -174,7 +168,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         if (fragment != null) {
             getActivity().getFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragment)
+                    .replace(R.id.preferences_fragment_container, fragment)
                     .addToBackStack(null)
                     .commit();
         }
@@ -251,7 +245,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     }
 
     public void preventOtherWaysOfEditingForm() {
-        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(R.id.container);
+        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(R.id.preferences_fragment_container);
         fragment.preventOtherWaysOfEditingForm();
     }
 }

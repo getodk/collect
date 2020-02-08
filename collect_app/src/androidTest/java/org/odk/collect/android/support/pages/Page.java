@@ -165,6 +165,10 @@ abstract class Page<T extends Page<T>> {
         return getCurrentActivity().getString(id);
     }
 
+    String getTranslatedString(Integer id, Object... formatArgs) {
+        return getCurrentActivity().getString(id, formatArgs);
+    }
+
     public T clickOnAreaWithIndex(String clazz, int index) {
         onView(withIndex(withClassName(endsWith(clazz)), index)).perform(click());
         return (T) this;
@@ -279,6 +283,23 @@ abstract class Page<T extends Page<T>> {
     public T checkIfWebViewActivityIsDisplayed() {
         onView(withClassName(endsWith("WebView"))).check(matches(isDisplayed()));
         return (T) this;
+    }
+
+    void waitForText(String text) {
+        while (true) {
+            try {
+                checkIsTextDisplayed(text);
+                break;
+            } catch (NoMatchingViewException ignored) {
+                // ignored
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+                // ignored
+            }
+        }
     }
 }
 

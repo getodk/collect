@@ -48,6 +48,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static android.content.Intent.ACTION_SENDTO;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -110,7 +111,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
     @Override
     protected void setUpLayout(Context context) {
         answerText.setText(getFormEntryPrompt().getAnswerText());
-        launchIntentButton = getSimpleButton(getButtonText());
+        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), getAnswerFontSize(), this);
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);

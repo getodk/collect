@@ -16,11 +16,11 @@
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
         <item name="colorSurface">#303030</item>
-        <item name="colorOnPrimary">#DEFFFFFF</item>
-        <item name="colorOnSecondary">#DEFFFFFF</item>
-        <item name="colorOnBackground">#DEFFFFFF</item>
-        <item name="colorOnError">#DEFFFFFF</item>
-        <item name="colorOnSurface">#DEFFFFFF</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorOnBackground">#FFFFFF</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorOnSurface">#FFFFFF</item>
         <item name="scrimBackground">@color/mtrl_scrim_color</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
@@ -51,11 +51,10 @@
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="searchViewStyle">@style/Widget.Collect.SearchView.Dark</item>
-        <item name="iconColor">#deffffff</item>
+        <item name="iconColor">#ffffff</item>
         <item name="dividerColor">#1effffff</item>
         <item name="rankItemColor">@android:color/black</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
-        <item name="warningColor">@color/red_500</item>
         <item name="dividerCompat">@android:drawable/divider_horizontal_dark</item>
         <item name="spinnerItemBackgroundColor">#3f3f3f</item>
         <!--

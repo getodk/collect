@@ -12,7 +12,7 @@ This is a living document. If you see something that could be improved, edit thi
 ## Submitting a pull request
 To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project. Generally, a pull request is submitted when a unit of work is considered complete but it can sometimes be helpful to share ideas through a work in progress (WIP) pull request ([learn more](#work-in-progress-pull-requests)).
 
-1. Read our ["state of the union"](STATE.md) to get a quick understanding of the codebase and its history.
+1. Read our ["state of the union"](STATE.md) to get a quick understanding of the codebase and its history. The "Where we're going" section may suggest efforts you can get involved in if you are having a hard time finding ways to contribute.
 
 1. Read our [code style guidelines](CODE-GUIDELINES.md). 
 

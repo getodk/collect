@@ -17,21 +17,20 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatRadioButton;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -72,7 +71,6 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
     private final boolean autoAdvance;
 
     ArrayList<RadioButton> buttons;
-    View center;
 
     public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance) {
         super(context, questionDetails);
@@ -85,7 +83,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
         buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
-        LinearLayout buttonLayout = new LinearLayout(context);
+        LinearLayout buttonLayout = findViewById(R.id.list_items);
 
         String s = null;
         if (questionDetails.getPrompt().getAnswerValue() != null) {
@@ -224,13 +222,6 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
                 buttonLayout.addView(answer, answerParams);
             }
         }
-
-        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
-        addView(buttonLayout, params);
     }
 
     @Override
@@ -301,20 +292,6 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
     }
 
     @Override
-    protected void addQuestionLabel(View v) {
-        center = new View(getContext());
-        RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
-        centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(ViewIds.generateViewId());
-        addView(center, centerParams);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.LEFT_OF, center.getId());
-        addView(v, params);
-    }
-
-    @Override
     public int getChoiceCount() {
         return buttons.size();
     }
@@ -325,5 +302,10 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
         button.setChecked(true);
 
         onCheckedChanged(button, true);
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.label_widget;
     }
 }

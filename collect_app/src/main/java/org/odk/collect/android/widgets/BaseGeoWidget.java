@@ -10,6 +10,9 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.widgets.interfaces.GeoWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
+
 public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
     public Button startGeoButton;
     public TextView answerDisplay;
@@ -17,8 +20,8 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
 
     public BaseGeoWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        answerDisplay = getCenteredAnswerTextView();
-        startGeoButton = getSimpleButton(getDefaultButtonLabel());
+        answerDisplay = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
+        startGeoButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getDefaultButtonLabel(), getAnswerFontSize(), this);
         readOnly = questionDetails.getPrompt().isReadOnly();
         setUpLayout(questionDetails.getPrompt().getAnswerText());
     }

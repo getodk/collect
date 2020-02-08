@@ -24,7 +24,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -59,17 +58,21 @@ import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
-import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PRNGFixes;
+import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -88,19 +91,8 @@ import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
  */
 public class Collect extends Application {
 
-    // Storage paths
-    public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
-            + File.separator + "odk";
-    public static final String FORMS_PATH = ODK_ROOT + File.separator + "forms";
-    public static final String INSTANCES_PATH = ODK_ROOT + File.separator + "instances";
-    public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
-    public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
-    public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
-    public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final int DEFAULT_FONTSIZE_INT = 21;
-    public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
-    public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
 
     public static final int CLICK_DEBOUNCE_MS = 1000;
 
@@ -114,6 +106,9 @@ public class Collect extends Application {
     private ExternalDataManager externalDataManager;
     private FirebaseAnalytics firebaseAnalytics;
     private AppDependencyComponent applicationComponent;
+
+    @Inject
+    UserAgentProvider userAgentProvider;
 
     public static Collect getInstance() {
         return singleton;
@@ -130,40 +125,6 @@ public class Collect extends Application {
     }
 
     /**
-     * Creates required directories on the SDCard (or other external storage)
-     *
-     * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
-     */
-    public static void createODKDirs() throws RuntimeException {
-        String cardstatus = Environment.getExternalStorageState();
-        if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
-            throw new RuntimeException(
-                    Collect.getInstance().getString(R.string.sdcard_unmounted, cardstatus));
-        }
-
-        String[] dirs = {
-                ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
-        };
-
-        for (String dirName : dirs) {
-            File dir = new File(dirName);
-            if (!dir.exists()) {
-                if (!dir.mkdirs()) {
-                    String message = getInstance().getString(R.string.cannot_create_directory, dirName);
-                    Timber.w(message);
-                    throw new RuntimeException(message);
-                }
-            } else {
-                if (!dir.isDirectory()) {
-                    String message = getInstance().getString(R.string.not_a_directory, dirName);
-                    Timber.w(message);
-                    throw new RuntimeException(message);
-                }
-            }
-        }
-    }
-
-    /**
      * Predicate that tests whether a directory path might refer to an
      * ODK Tables instance data directory (e.g., for media attachments).
      */
@@ -173,8 +134,9 @@ public class Collect extends Application {
          * could be in use by ODK Tables.
          */
         String dirPath = directory.getAbsolutePath();
-        if (dirPath.startsWith(Collect.ODK_ROOT)) {
-            dirPath = dirPath.substring(Collect.ODK_ROOT.length());
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        if (dirPath.startsWith(storagePathProvider.getDirPath(StorageSubdirectory.ODK))) {
+            dirPath = dirPath.substring(storagePathProvider.getDirPath(StorageSubdirectory.ODK).length());
             String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {
@@ -278,6 +240,10 @@ public class Collect extends Application {
         setupRemoteAnalytics();
         setupLeakCanary();
         setupOSMDroid();
+
+        // Force inclusion of scoped storage strings so they can be translated
+        Timber.i("%s %s", getString(R.string.scoped_storage_banner_text),
+                                   getString(R.string.scoped_storage_learn_more));
     }
 
     private void setupRemoteAnalytics() {
@@ -287,7 +253,7 @@ public class Collect extends Application {
     }
 
     protected void setupOSMDroid() {
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(AndroidUserAgent.getUserAgent());
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
     }
 
     private void setupDagger() {

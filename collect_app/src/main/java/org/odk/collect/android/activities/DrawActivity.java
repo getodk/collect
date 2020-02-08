@@ -38,8 +38,8 @@ import com.rarepebble.colorpicker.ColorPickerView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.AnimateUtils;
+import org.odk.collect.android.utilities.AnimationUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
@@ -118,12 +118,12 @@ public class DrawActivity extends CollectAbstractActivity {
                     fabActions.animate().rotation(45).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    AnimateUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimationUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
 
                     fabSetColor.show();
                     cardViewSetColor.setVisibility(View.VISIBLE);
@@ -148,13 +148,13 @@ public class DrawActivity extends CollectAbstractActivity {
         });
 
         Bundle extras = getIntent().getExtras();
-
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
         if (extras == null) {
             loadOption = OPTION_DRAW;
             refImage = null;
-            savepointImage = new File(Collect.TMPDRAWFILE_PATH);
+            savepointImage = new File(storagePathProvider.getTmpDrawFilePath());
             savepointImage.delete();
-            output = new File(Collect.TMPFILE_PATH);
+            output = new File(storagePathProvider.getTmpFilePath());
         } else {
             if (extras.getInt(SCREEN_ORIENTATION) == 1) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -176,7 +176,7 @@ public class DrawActivity extends CollectAbstractActivity {
                     FileUtils.copyFile(refImage, savepointImage);
                 }
             } else {
-                savepointImage = new File(Collect.TMPDRAWFILE_PATH);
+                savepointImage = new File(storagePathProvider.getTmpDrawFilePath());
                 savepointImage.delete();
                 if (refImage != null && refImage.exists()) {
                     FileUtils.copyFile(refImage, savepointImage);
@@ -186,7 +186,7 @@ public class DrawActivity extends CollectAbstractActivity {
             if (uri != null) {
                 output = new File(uri.getPath());
             } else {
-                output = new File(Collect.TMPFILE_PATH);
+                output = new File(storagePathProvider.getTmpFilePath());
             }
         }
 

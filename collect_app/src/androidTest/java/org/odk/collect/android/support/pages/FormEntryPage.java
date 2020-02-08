@@ -173,22 +173,27 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOnDoNotAddGroup() {
-        clickOnString(R.string.add_repeat_no);
+        clickOnString(R.string.dont_add_repeat);
         return this;
     }
 
     public FormEntryPage clickOnAddGroup() {
-        clickOnString(R.string.add_another);
+        clickOnString(R.string.add_repeat);
         return this;
     }
 
-    public FormEntryPage checkIfMarkFinishedIsSelected() {
+    public FormEntryPage assertMarkFinishedIsSelected() {
         onView(withId(R.id.mark_finished)).check(matches(isChecked()));
         return this;
     }
 
-    public FormEntryPage checkIfMarkFinishedIsNotSelected() {
+    public FormEntryPage assertMarkFinishedIsNotSelected() {
         onView(withId(R.id.mark_finished)).check(matches(isNotChecked()));
+        return this;
+    }
+
+    public FormEntryPage clickMarkAsFinalized() {
+        onView(withId(R.id.mark_finished)).perform(click());
         return this;
     }
 

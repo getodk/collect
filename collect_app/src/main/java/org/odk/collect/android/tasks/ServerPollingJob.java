@@ -36,7 +36,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.DownloadFormListUtils;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.NotificationUtils;
 
@@ -53,8 +53,8 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
-import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
-import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
 
 public class ServerPollingJob extends Job {
@@ -67,7 +67,7 @@ public class ServerPollingJob extends Job {
     public static final String TAG = "serverPollingJob";
 
     @Inject
-    DownloadFormListUtils downloadFormListUtils;
+    FormListDownloader formListDownloader;
 
     public ServerPollingJob() {
         Collect.getInstance().getComponent().inject(this);
@@ -80,11 +80,11 @@ public class ServerPollingJob extends Job {
             return Result.FAILURE;
         }
 
-        HashMap<String, FormDetails> formList = downloadFormListUtils.downloadFormList(true);
+        HashMap<String, FormDetails> formList = formListDownloader.downloadFormList(true);
 
         if (!formList.containsKey(DL_ERROR_MSG)) {
             if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                formList = downloadFormListUtils.downloadFormList(true);
+                formList = formListDownloader.downloadFormList(true);
 
                 if (formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                     return Result.FAILURE;
