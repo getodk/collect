@@ -8,14 +8,6 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="Widget.Collect.ImageButton.Custom.Light" parent="Widget.AppCompat.ImageButton">
-        <item name="android:tint">@color/light_theme_tint_list</item>
-    </style>
-
-    <style name="Widget.Collect.ImageButton.Custom.Dark" parent="Widget.AppCompat.ImageButton">
-        <item name="android:tint">@color/dark_theme_tint_list</item>
-    </style>
-
     <style name="Widget.Collect.TextView.Empty" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
