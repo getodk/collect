@@ -32,7 +32,6 @@ limitations under the License.
         android:layout_alignTop="@id/imageView"
         android:layout_marginStart="@dimen/margin_extra_large"
         android:layout_toEndOf="@id/imageView"
-        android:layout_toRightOf="@id/imageView"
         android:orientation="vertical">
 
         <TextView
