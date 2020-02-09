@@ -159,26 +159,37 @@ jobs:
     steps:
       - *attach_debug_workspace
       - run:
-          name: Authorize gcloud
+          name: Prepare wget
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              gcloud config set project api-project-322300403941
-              echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
-              gcloud auth activate-service-account --key-file client-secret.json
-            fi
+            apt-get update
+            apt install python2.7 python-pip -y
+            apt-get install wget
+      - run:
+          name: Authorize service account
+          command: |
+            mkdir -p $HOME/.config/gcloud/
+            echo $GCLOUD_KEY | base64 -di > $HOME/.config/gcloud/application_default_credentials.json
       - run:
           name: Run integration tests
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              echo "y" | gcloud firebase test android run \
-              --type instrumentation \
-              --app collect_app/build/outputs/apk/debug/*.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
-              --device model=Pixel2,version=27,locale=en,orientation=portrait \
-              --results-bucket opendatakit-collect-test-results \
-              --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
-              --directories-to-pull /sdcard --timeout 30m
-            fi
+            wget --quiet https://github.com/TestArmada/flank/releases/download/v8.1.0/flank.jar -O ./flank.jar
+            cat <<- 'EOF' > ./flank.yml
+            gcloud:
+              timeout: 30m
+              num-flaky-test-attempts: 1
+              app: collect_app/build/outputs/apk/debug/*.apk
+              test: collect_app/build/outputs/apk/androidTest/debug/*.apk
+              device:
+                - model: Pixel2
+                  version: 27
+                  locale: en
+                  orientation: portrait
+            flank:
+              max-test-shards: 5
+              num-test-runs: 1
+              project: propane-analogy-263606
+            EOF
+            java -jar ./flank.jar android run
           no_output_timeout: 60m
       - run:
           name: Copy integration test results
