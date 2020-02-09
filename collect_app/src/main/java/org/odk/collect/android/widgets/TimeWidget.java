@@ -34,6 +34,7 @@ import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.lang.reflect.Constructor;
@@ -115,7 +116,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(timeButton);
         linearLayout.addView(timeTextView);
-        addAnswerView(linearLayout);
+        addAnswerView(linearLayout, WidgetViewUtils.getStandardMargin(getContext()));
     }
 
     public void setTimeLabel() {

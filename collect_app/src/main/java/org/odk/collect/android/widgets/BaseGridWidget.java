@@ -41,6 +41,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -81,7 +82,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         itemViews = new View[items.size()];
 
         setUpItems();
-        setUpGridView();
+        setUpGridView(context);
         fillInAnswer();
 
         logAnalytics(questionDetails);
@@ -179,7 +180,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         return item;
     }
 
-    private void setUpGridView() {
+    private void setUpGridView(Context context) {
         ExpandedHeightGridView gridView = new ExpandedHeightGridView(getContext());
         gridView.setNumColumns(GridView.AUTO_FIT);
         gridView.setColumnWidth(maxColumnWidth);
@@ -192,7 +193,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         gridView.setAdapter(new ImageAdapter());
         int paddingStartEnd = getContext().getResources().getDimensionPixelSize(R.dimen.margin_standard);
         gridView.setPadding(paddingStartEnd, 0, paddingStartEnd, 0);
-        addAnswerView(gridView);
+        addAnswerView(gridView, WidgetViewUtils.getStandardMargin(context));
     }
 
     void selectItem(int index) {

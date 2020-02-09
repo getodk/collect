@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry.questions;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,11 +20,20 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import static android.view.View.GONE;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 public class WidgetViewUtils {
 
     private WidgetViewUtils() {
 
+    }
+
+    public static int getStandardMargin(Context context) {
+        Resources resources = context.getResources();
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+
+        return (marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER);
     }
 
     public static TextView getCenteredAnswerTextView(Context context, int answerFontSize) {

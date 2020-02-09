@@ -26,6 +26,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
@@ -63,7 +64,7 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(openUrlButton);
         answerLayout.addView(stringAnswer);
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
 
         customTabHelper = new CustomTabHelper();
     }

@@ -36,6 +36,7 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
@@ -77,14 +78,14 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     public DateWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        createWidget();
+        createWidget(context);
     }
 
-    protected void createWidget() {
+    protected void createWidget(Context context) {
         datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
         dateButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_date), getAnswerFontSize(), this);
         dateTextView = createAnswerTextView(getContext(), getAnswerFontSize());
-        addViews();
+        addViews(context);
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
             setDateToCurrent();
@@ -149,12 +150,12 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         return isNullAnswer;
     }
 
-    private void addViews() {
+    private void addViews(Context context) {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(dateButton);
         linearLayout.addView(dateTextView);
-        addAnswerView(linearLayout);
+        addAnswerView(linearLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     protected void setDateToCurrent() {
