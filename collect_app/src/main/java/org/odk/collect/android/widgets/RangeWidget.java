@@ -170,11 +170,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         seekBar.setOnSeekBarChangeListener(this);
         if (isRTL()) {
             float rotate = seekBar.getRotation();
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-                seekBar.setRotation(180 - rotate);
-            } else {
-                seekBar.setRotation(360 - rotate);
-            }
+            seekBar.setRotation(360 - rotate);
         }
 
         seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
