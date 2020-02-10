@@ -24,7 +24,7 @@ import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 
 public class WidgetViewUtils {
 
-    public static final int WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER = 4;
+    private static final int WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER = 4;
 
     private WidgetViewUtils() {
 
