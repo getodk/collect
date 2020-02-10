@@ -20,23 +20,8 @@ public class UserAndDeviceIdentitySettingsPage extends Page<UserAndDeviceIdentit
         return this;
     }
 
-    public UserAndDeviceIdentitySettingsPage clickFormMetadata() {
+    public FormMetadataPage clickFormMetadata() {
         onData(PreferenceMatchers.withKey("form_metadata")).perform(click());
-        return this;
-    }
-
-    public UserAndDeviceIdentitySettingsPage clickEmail() {
-        onData(PreferenceMatchers.withKey("metadata_email")).perform(click());
-        return this;
-    }
-
-    public UserAndDeviceIdentitySettingsPage clickUsername() {
-        onData(PreferenceMatchers.withKey("metadata_username")).perform(click());
-        return this;
-    }
-
-    public UserAndDeviceIdentitySettingsPage clickPhoneNumber() {
-        onData(PreferenceMatchers.withKey("metadata_phonenumber")).perform(click());
-        return this;
+        return new FormMetadataPage(rule);
     }
 }

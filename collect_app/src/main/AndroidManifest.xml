@@ -285,5 +285,6 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".preferences.FormMetadataPreferencesActivity" />
     </application>
 </manifest>
