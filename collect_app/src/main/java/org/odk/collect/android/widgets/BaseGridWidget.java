@@ -81,7 +81,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         itemViews = new View[items.size()];
 
         setUpItems();
-        setUpGridView(context);
+        setUpGridView();
         fillInAnswer();
 
         logAnalytics(questionDetails);
@@ -179,7 +179,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         return item;
     }
 
-    private void setUpGridView(Context context) {
+    private void setUpGridView() {
         ExpandedHeightGridView gridView = new ExpandedHeightGridView(getContext());
         gridView.setNumColumns(GridView.AUTO_FIT);
         gridView.setColumnWidth(maxColumnWidth);
