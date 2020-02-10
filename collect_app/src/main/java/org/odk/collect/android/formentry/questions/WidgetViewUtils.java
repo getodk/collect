@@ -33,7 +33,7 @@ public class WidgetViewUtils {
         Resources resources = context.getResources();
         int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
 
-        return (marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER);
+        return marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
     }
 
     public static TextView getCenteredAnswerTextView(Context context, int answerFontSize) {
