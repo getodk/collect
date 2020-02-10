@@ -47,6 +47,7 @@
             android:selectable="false"
             android:title="@string/install_id"
             app:enableCopying="true"
+            app:persistent="false"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>

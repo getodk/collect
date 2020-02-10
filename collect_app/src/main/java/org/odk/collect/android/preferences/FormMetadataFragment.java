@@ -22,6 +22,7 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 
@@ -38,8 +39,6 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        installIDProvider.getInstallID();
-
         setPreferencesFromResource(R.xml.form_metadata_preferences, rootKey);
         ((CollectAbstractActivity) getActivity()).initToolbar(getPreferenceScreen().getTitle());
     }
@@ -73,6 +72,8 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
 
             return true;
         });
+
+        findPreference(KEY_INSTALL_ID).setSummaryProvider(preference -> installIDProvider.getInstallID());
     }
 
     private void initDangerousPrefs() {
