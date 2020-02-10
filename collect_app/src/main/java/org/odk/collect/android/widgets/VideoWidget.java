@@ -35,7 +35,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
+import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -285,7 +285,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     private void captureVideo() {
         Intent i;
         if (selfie) {
-            i = new Intent(getContext(), CaptureSelfieVideoActivityNewApi.class);
+            i = new Intent(getContext(), CaptureSelfieVideoActivity.class);
         } else {
             i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
             i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,

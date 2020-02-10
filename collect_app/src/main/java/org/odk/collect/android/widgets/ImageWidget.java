@@ -24,7 +24,7 @@ import android.widget.Button;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
+import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -61,7 +61,6 @@ public class ImageWidget extends BaseImageWidget {
         addCurrentImageToLayout();
         addAnswerView(answerLayout);
     }
-
 
     @Override
     protected void setUpLayout() {
@@ -149,7 +148,7 @@ public class ImageWidget extends BaseImageWidget {
         errorTextView.setVisibility(View.GONE);
         Intent intent;
         if (selfie) {
-            intent = new Intent(getContext(), CaptureSelfieActivityNewApi.class);
+            intent = new Intent(getContext(), CaptureSelfieActivity.class);
         } else {
             intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             // We give the camera an absolute filename/path where to put the

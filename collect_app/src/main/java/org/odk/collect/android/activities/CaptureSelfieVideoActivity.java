@@ -1,11 +1,14 @@
+
+package org.odk.collect.android.activities;
+
 /*
- * Copyright 2017 Nafundi
+ * Copyright 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,38 +17,32 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.activities;
-
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.Camera2Fragment;
+import org.odk.collect.android.fragments.Camera2VideoFragment;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import static org.odk.collect.android.utilities.PermissionUtils.isCameraPermissionGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.areCameraAndRecordAudioPermissionsGranted;
 
-public class CaptureSelfieActivityNewApi extends CollectAbstractActivity {
+public class CaptureSelfieVideoActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!isCameraPermissionGranted(this)) {
+        if (!areCameraAndRecordAudioPermissionsGranted(this)) {
             finish();
             return;
         }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager
-                .LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_capture_selfie_new_api);
+        setContentView(R.layout.activity_capture_selfie_video_new_api);
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2Fragment.newInstance())
+                    .replace(R.id.container, Camera2VideoFragment.newInstance())
                     .commit();
         }
-        ToastUtils.showLongToast(R.string.take_picture_instruction);
+        ToastUtils.showLongToast(getString(R.string.start_video_capture_instruction));
     }
 }
