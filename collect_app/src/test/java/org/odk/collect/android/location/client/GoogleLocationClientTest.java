@@ -126,7 +126,7 @@ public class GoogleLocationClientTest {
         // Should still be second:
         assertSame(secondLocation, firstListener.getLastLocation());
 
-        // Call requestLocationUpdates again with new Listener:
+        // Call requestLocationUpdates again with new OnMigrationCompleteListener:
         TestLocationListener secondListener = new TestLocationListener();
         googleLocationClient.requestLocationUpdates(secondListener);
 
@@ -143,7 +143,7 @@ public class GoogleLocationClientTest {
         Location fifthLocation = newMockLocation();
         googleLocationClient.onLocationChanged(fifthLocation);
 
-        // Listener should still have fourth location:
+        // OnMigrationCompleteListener should still have fourth location:
         assertSame(fourthLocation, secondListener.getLastLocation());
     }
 

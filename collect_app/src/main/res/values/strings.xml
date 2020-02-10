@@ -727,14 +727,16 @@
 
     <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage by August 2020 to comply with Android requirements.</string>
     <string name="scoped_storage_learn_more">Learn more and migrate</string>
-    <string name="install_id">Install ID - will replace Device ID in August 2020</string>
-    <string name="preference_not_available">Not available</string>
     <string name="files_migration">Files migration in progress</string>
     <string name="files_migration_completed">Files migration completed</string>
     <string name="files_migration_not_enough_space">You have not enough available space on your internal storage to finish data migration. Please free up some space and try again later.</string>
     <string name="files_migration_form_uploader_is_running">Background form uploader is running. Please try again later.</string>
     <string name="files_migration_form_downloader_is_running">Background form downloader is running. Please try again later.</string>
     <string name="files_migration_failed">Data migration failed. Please try again later.</string>
+    <string name="migration_dialog_title">Storage migration</string>
+    <string name="migration_dialog_message">Android requirements have changed and files used by Collect must be migrated by August 2020.</string>
+    <string name="migration_in_progress">Migration in progress…</string>
+    <string name="migrate">Migrate</string>
 
     <string name="install_id">Install ID - will replace Device ID in August 2020</string>
     <string name="preference_not_available">Not available</string>

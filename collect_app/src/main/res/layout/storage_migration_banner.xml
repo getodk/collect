@@ -33,7 +33,7 @@
             android:paddingBottom="@dimen/margin_small"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:onClick="learnMoreAndMigrate"/>
+            android:onClick="onStorageMigrationBannerClick"/>
 
     </LinearLayout>
 
