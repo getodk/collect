@@ -1,6 +1,5 @@
 package org.odk.collect.android.metadata;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 
 import static org.odk.collect.utilities.RandomString.randomString;
@@ -17,18 +16,20 @@ public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 
     @Override
     public String getInstallID() {
-        if (!sharedPreferences.contains(preferencesKey)) {
-            generateInstallID();
+        if (sharedPreferences.contains(preferencesKey)) {
+            return sharedPreferences.getString(preferencesKey, null);
+        } else {
+            return generateAndStoreInstallID();
         }
-
-        return sharedPreferences.getString(preferencesKey, null);
     }
 
-    @SuppressLint("ApplySharedPref")
-    private void generateInstallID() {
+    private String generateAndStoreInstallID() {
+        String installID = "collect:" + randomString(16);
         sharedPreferences
                 .edit()
-                .putString(preferencesKey, "collect:" + randomString(16))
-                .commit();
+                .putString(preferencesKey, installID)
+                .apply();
+
+        return installID;
     }
 }
