@@ -44,10 +44,6 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {
 
-    // This modifies our standard margin to account for weird extra padding in the
-    // EditText used in the answer view
-    public static final int FIELD_HORIZONTAL_MARGIN_MODIFIER = 4;
-
     boolean readOnly;
     public final EditText answerText;
 

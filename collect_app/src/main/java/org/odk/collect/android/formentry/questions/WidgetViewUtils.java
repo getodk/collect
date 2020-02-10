@@ -21,9 +21,10 @@ import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import static android.view.View.GONE;
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
-import static org.odk.collect.android.widgets.StringWidget.FIELD_HORIZONTAL_MARGIN_MODIFIER;
 
 public class WidgetViewUtils {
+
+    public static final int WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER = 4;
 
     private WidgetViewUtils() {
 
@@ -33,7 +34,7 @@ public class WidgetViewUtils {
         Resources resources = context.getResources();
         int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
 
-        return marginStandard - FIELD_HORIZONTAL_MARGIN_MODIFIER;
+        return marginStandard - WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER;
     }
 
     public static TextView getCenteredAnswerTextView(Context context, int answerFontSize) {
