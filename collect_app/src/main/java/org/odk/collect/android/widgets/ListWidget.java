@@ -44,7 +44,6 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
@@ -93,7 +92,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
                 AppCompatRadioButton r = new AppCompatRadioButton(getContext());
-                r.setId(ViewIds.generateViewId());
+                r.setId(View.generateViewId());
                 r.setTag(i);
                 r.setEnabled(!questionDetails.getPrompt().isReadOnly());
                 r.setFocusable(!questionDetails.getPrompt().isReadOnly());
@@ -117,7 +116,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = ViewIds.generateViewId();
+                final int labelId = View.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;

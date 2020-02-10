@@ -22,12 +22,12 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ViewIds;
 
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
@@ -56,7 +56,7 @@ public abstract class SelectTextWidget extends SelectWidget {
 
     protected void setUpSearchBox(Context context) {
         searchStr = new EditText(getContext());
-        searchStr.setId(ViewIds.generateViewId());
+        searchStr.setId(View.generateViewId());
         searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
 
         Resources resources = context.getResources();

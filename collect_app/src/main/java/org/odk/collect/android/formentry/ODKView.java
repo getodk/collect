@@ -63,7 +63,6 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -263,7 +262,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
-        qw.setId(ViewIds.generateViewId());
+        qw.setId(View.generateViewId());
 
         return qw;
     }
@@ -390,7 +389,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         // set button formatting
         Button launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(ViewIds.generateViewId());
+        launchIntentButton.setId(View.generateViewId());
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
                 Collect.getQuestionFontsize() + 2);

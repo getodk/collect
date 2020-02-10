@@ -52,7 +52,6 @@ import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -112,7 +111,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         this.questionText = questionText.getText();
 
         this.labelTextView = questionText;
-        this.labelTextView.setId(ViewIds.generateViewId());
+        this.labelTextView.setId(View.generateViewId());
 
         textContainer.removeAllViews();
         textContainer.addView(this.labelTextView);

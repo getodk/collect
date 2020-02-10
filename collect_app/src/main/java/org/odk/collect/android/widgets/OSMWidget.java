@@ -24,7 +24,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         formId = formController.getFormDef().getID();
 
         errorTextView = new TextView(context);
-        errorTextView.setId(ViewIds.generateViewId());
+        errorTextView.setId(View.generateViewId());
         errorTextView.setText(R.string.invalid_osm_data);
 
         // Determine the tags required
@@ -96,7 +95,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         }
 
         osmFileNameHeaderTextView = new TextView(context);
-        osmFileNameHeaderTextView.setId(ViewIds.generateViewId());
+        osmFileNameHeaderTextView.setId(View.generateViewId());
         osmFileNameHeaderTextView.setTextSize(20);
         osmFileNameHeaderTextView.setTypeface(null, Typeface.BOLD);
         osmFileNameHeaderTextView.setPadding(10, 0, 0, 10);
@@ -104,7 +103,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
         // text view showing the resulting OSM file name
         osmFileNameTextView = new TextView(context);
-        osmFileNameTextView.setId(ViewIds.generateViewId());
+        osmFileNameTextView.setId(View.generateViewId());
         osmFileNameTextView.setTextSize(18);
         osmFileNameTextView.setTypeface(null, Typeface.ITALIC);
         if (osmFileName != null) {
