@@ -211,7 +211,6 @@
   <string name="autosend">Automaattinen lähetys</string>
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
-  <string name="save_preferences">Tallenna asetukset</string>
   <string name="form_forward">Seuraava</string>
   <string name="form_backward">Takaisin</string>
   <string name="navigation">Navigointi</string>

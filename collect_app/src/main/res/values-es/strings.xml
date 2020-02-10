@@ -212,7 +212,6 @@
   <string name="autosend">Envío Automático</string>
   <string name="found_in_main">Desmarque para ocultar del Menú Principal</string>
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
-  <string name="save_preferences">Guardar configuración en disco</string>
   <string name="form_forward">Sig.</string>
   <string name="form_backward">Retroceder</string>
   <string name="navigation">Navegación</string>

@@ -154,7 +154,6 @@
   <string name="admin_password_disabled">پسورد Admin غیر فعال گردید</string>
   <string name="admin_password_incorrect">ببخشید، پسورد نادرست است</string>
   <string name="autosend">ارسال خودکار</string>
-  <string name="save_preferences">ذخیره تغییرات روی دیسک</string>
   <string name="form_forward">بعدی</string>
   <string name="form_backward">قبلی</string>
   <string name="navigation">جهت یابی</string>

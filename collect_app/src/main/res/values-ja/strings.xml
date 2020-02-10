@@ -208,7 +208,6 @@
   <string name="autosend">自動送信</string>
   <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
-  <string name="save_preferences">設定をディスクに保存する</string>
   <string name="form_forward">次へ</string>
   <string name="form_backward">戻る</string>
   <string name="navigation">ナビゲーション</string>

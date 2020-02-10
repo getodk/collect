@@ -204,7 +204,6 @@
   <string name="autosend">स्वत: प्रेषण</string>
   <string name="found_in_main">मूल मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
   <string name="found_in_settings">जेनेरल सेटिंगमा नदेखाउनको लागि ठीक चिन्ह हटाउनुहोस् </string>
-  <string name="save_preferences">सेटिङ्सलाई डिस्कमा सेभ गर्नुहोस्</string>
   <string name="form_forward">अघि</string>
   <string name="form_backward">पछाडि</string>
   <string name="navigation">संचालन</string>

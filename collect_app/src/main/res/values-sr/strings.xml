@@ -208,7 +208,6 @@
   <string name="autosend">Automatski otpremi</string>
   <string name="found_in_main">Uklonite oznaku da biste isključili iz glavnog menija</string>
   <string name="found_in_settings">Uklonite oznaku da biste isključili iz opštih podešavanja</string>
-  <string name="save_preferences">Sačuvajte podešavanja na disk</string>
   <string name="form_forward">Sledeće</string>
   <string name="form_backward">Nazad</string>
   <string name="navigation">Navigacija</string>

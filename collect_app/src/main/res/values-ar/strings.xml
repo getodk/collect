@@ -211,7 +211,6 @@
   <string name="autosend">الإرسال التلقائي</string>
   <string name="found_in_main">الغاء القفل للاخفاء من القائمة الرئيسية</string>
   <string name="found_in_settings">الغاء القفل للاخفاء من الاعدادات الرئيسية</string>
-  <string name="save_preferences">حفظ الاعدادات في القرص</string>
   <string name="form_forward">التالي</string>
   <string name="form_backward">رجوع</string>
   <string name="navigation">التنقل</string>

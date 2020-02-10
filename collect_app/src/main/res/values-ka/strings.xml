@@ -205,7 +205,6 @@
   <string name="change_admin_password">ადმინისტრატორის პაროლის შეცვლა</string>
   <string name="found_in_main">გამორთეთ მთავარი მენიუდან დასამალად</string>
   <string name="found_in_settings">გამორთეთ ძირითადი პარამეტრებიდან დასამალად</string>
-  <string name="save_preferences">პარამეტრების დისკზე შენახვა</string>
   <string name="form_forward">შემდეგი</string>
   <string name="navigation">ნავიგაცია</string>
   <string name="swipe_navigation">ჰორიზონტალური გასრიალების გამოყენება</string>
