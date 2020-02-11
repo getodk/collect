@@ -44,6 +44,7 @@ public class StorageMigrationDialog extends DialogFragment {
         statusTextView = view.findViewById(R.id.status);
         Button cancel = view.findViewById(R.id.cancel);
         Button migrate = view.findViewById(R.id.migrate);
+        TextView message = view.findViewById(R.id.message);
 
         cancel.setOnClickListener(view1 -> dismiss());
         migrate.setOnClickListener(v -> {
@@ -51,6 +52,7 @@ public class StorageMigrationDialog extends DialogFragment {
             cancel.setAlpha(.4f);
             migrate.setEnabled(false);
             migrate.setAlpha(.4f);
+            message.setAlpha(.4f);
 
             view.findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
 
