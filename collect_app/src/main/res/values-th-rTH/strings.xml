@@ -2,8 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
-  <string name="add_repeat">เพิ่มกลุ่ม</string>
-    <string name="cancel">ยกเลิก</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>
   <string name="capture_audio">บันทึกเสียง</string>
@@ -38,7 +38,7 @@
   <string name="do_not_change">ยกเลิก</string>
   <string name="do_not_exit">ยกเลิก</string>
   <string name="do_not_save">ยกเลิกการเปลี่ยนแปลง</string>
-    <string name="enter_data">กรอกแบบสำรวจใหม่</string>
+  <string name="enter_data">กรอกแบบสำรวจใหม่</string>
   <string name="enter_data_button">กรอกแบบสำรวจใหม่</string>
   <string name="error_occured">มีข้อผิดพลาดเกิดขึ้น</string>
   <string name="error_attaching_binary_file">เกิดข้อผิดพลาดระหว่างแนบไฟล์มีเดีย: %s</string>
@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">ไปที่จุดเริ่มต้น</string>
   <string name="jump_to_end">ไปที่จุดสิ้นสุด</string>
   <string name="jump_to_previous">เลื่อนขึ้น</string>
-  <string name="dont_add_repeat">ไม่เพิ่ม</string>
-    <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
+  <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
   <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
   <string name="load_remote_form_error">มีข้อผิดพลาด ไม่สามารถแสดงรายการแบบสำรวจได้</string>
   <string name="location_provider_accuracy">รับพิกัดผ่าน %1$s ค่าความแม่นยำที่ %2$s เมตร</string>
@@ -185,7 +184,6 @@
   <string name="change_admin_password">เปลี่ยนรหัสผ่านของผู้ดูแลระบบ</string>
   <string name="found_in_main">ปล่อยว่างเพื่อซ่อนจากเมนูหลัก</string>
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
-  <string name="save_preferences">บันทึกการตั้งค่า</string>
   <string name="form_forward">ต่อไป</string>
   <string name="navigation">ค้นหา</string>
   <string name="swipe_navigation">ใช้การเลื่อนหน้าจอไปด้านข้าง</string>

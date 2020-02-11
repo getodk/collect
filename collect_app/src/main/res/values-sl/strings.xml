@@ -7,8 +7,8 @@
   <string name="signature_capture">Zajem podpisa</string>
   <string name="view_video">Poglej video</string>
   <string name="choose_audio">Izberi audio</string>
-  <string name="add_repeat">Dodaj skupino</string>
-    <string name="cancel">Prekini</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="cancel">Prekini</string>
   <string name="cancel_loading_form">Prekini</string>
   <string name="cancel_location">Prekini</string>
   <string name="canceling">Prekinjam</string>
@@ -47,7 +47,7 @@
   <string name="do_not_change">Prekini</string>
   <string name="do_not_exit">Prekini</string>
   <string name="do_not_save">Zavrzi spremembe</string>
-    <string name="enter_data">Izpolni prazen obrazec</string>
+  <string name="enter_data">Izpolni prazen obrazec</string>
   <string name="enter_data_button">Izpolni prazen obrazec</string>
   <string name="error_occured">Nastala je napaka</string>
   <string name="error_attaching_binary_file">Napaka pri dodajanju medijske vsebine: %s</string>
@@ -70,8 +70,7 @@
   <string name="jump_to_beginning">Pojdi na začetek</string>
   <string name="jump_to_end">Pojdi na konec</string>
   <string name="jump_to_previous">Pojdi gor</string>
-  <string name="dont_add_repeat">Ne dodaj</string>
-    <string name="list_failed_with_error">Kreiranje seznama obrazcev ni uspelo. %s.</string>
+  <string name="list_failed_with_error">Kreiranje seznama obrazcev ni uspelo. %s.</string>
   <string name="loading_form">Nalagam obrazec</string>
   <string name="load_remote_form_error">Napaka pri pridobivanju seznama obrazcev</string>
   <string name="location_provider_accuracy">Uporabljam %1$s. Natančnost je %2$s m.</string>
@@ -203,7 +202,6 @@
   <string name="autosend">Samodejno pošlji</string>
   <string name="found_in_main">Ne izberi da ne prikaže v Glavnem meniju</string>
   <string name="found_in_settings">Ne izberi da ne prikaže v Splošne nastavitve</string>
-  <string name="save_preferences">Shrani nastavitve</string>
   <string name="form_forward">Naprej</string>
   <string name="navigation">Navigacija</string>
   <string name="swipe_navigation">Uporabi horizontalne potege</string>

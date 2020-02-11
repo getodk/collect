@@ -26,6 +26,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 
 public class RatingWidget extends QuestionWidget {
 
@@ -56,7 +57,7 @@ public class RatingWidget extends QuestionWidget {
             }
         }
 
-        addAnswerView(gridLayout);
+        addAnswerView(gridLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     private void renderGrid(Context context, int numberOfStars, int columns, int rows) {

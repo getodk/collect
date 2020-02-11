@@ -67,7 +67,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage clickFormEntrySettings() {
-        clickOnString(R.string.form_entry_setting);
+        onData(PreferenceMatchers.withKey("form_entry")).perform(click());
         return this;
     }
 

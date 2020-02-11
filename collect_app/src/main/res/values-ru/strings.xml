@@ -7,9 +7,12 @@
   <string name="signature_capture">Подпись</string>
   <string name="view_video">Просмотреть видео</string>
   <string name="choose_audio">Выбрать аудиозапись</string>
-  <string name="add_repeat">Добавить группу</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Добавить \"%s\"?</string>
+  <string name="add_repeat">Добавить</string>
+  <string name="dont_add_repeat">Не добавлять</string>
   <string name="add_another_menu">Добавить другое</string>
-    <string name="cancel">Отмена</string>
+  <string name="cancel">Отмена</string>
   <string name="cancel_loading_form">Отмена</string>
   <string name="cancel_location">Отмена</string>
   <string name="canceling">Отменяю</string>
@@ -25,7 +28,7 @@
   <string name="clear_answer">Удалить ответ</string>
   <string name="clear_answer_ask">Удалить этот ответ?</string>
   <string name="clear_answer_no">Отмена</string>
-  <string name="data">ОПРОСЫ</string>
+  <string name="data">Сохраненные формы</string>
   <string name="data_saved_error">Не удалось сохранить ответы</string>
   <string name="data_saved_ok">Ответы успешно сохранены</string>
   <string name="save_point_error">Ошибка сохранения точки восстановления: %s</string>
@@ -46,9 +49,9 @@
   <string name="downloading_data">Подключение к серверу…</string>
   <string name="do_not_change">Отмена</string>
   <string name="do_not_exit">Отмена</string>
-  <string name="do_not_save">Удалить ответы</string>
-    <string name="enter_data">Заполнение бланка</string>
-  <string name="enter_data_button">ЗАПОЛНИТЬ БЛАНК</string>
+  <string name="do_not_save">Игнорировать изменения</string>
+  <string name="enter_data">Заполнить пустую форму</string>
+  <string name="enter_data_button">Заполнить пустую форму</string>
   <string name="error_occured">Произошла ошибка</string>
   <string name="error_attaching_binary_file">Произошла ошибка при добавлении файла: %s</string>
   <string name="fetching_file">Загружаю %1$s.\n\nБланк опросника %2$s из %3$s.</string>
@@ -70,8 +73,7 @@
   <string name="jump_to_beginning">В начало</string>
   <string name="jump_to_end">В конец</string>
   <string name="jump_to_previous">Назад</string>
-  <string name="dont_add_repeat">Не добавлять</string>
-    <string name="list_failed_with_error">Не удалось вывести список бланков опросников: %s шт.</string>
+  <string name="list_failed_with_error">Не удалось вывести список бланков опросников: %s шт.</string>
   <string name="loading_form">Загрузка бланка опросника…</string>
   <string name="load_remote_form_error">Не удалось получить список бланков</string>
   <string name="location_provider_accuracy">Использую %1$s. Точность %2$s м.</string>
@@ -180,6 +182,7 @@
   <string name="sending_failed_on_date_at_time">\'Не удалось выгрузить\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Удалено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
+  <string name="submission_deleted">Выгрузка удалена</string>
   <string name="version">Версия:</string>
   <string name="parent_form_not_present">Не удалось отредактировть сохранённый опрос, потому что соответствующий бланк опросника отсутствует или был удалён.\n\nID опросника: %1$s</string>
   <string name="launch_app">Запуск</string>
@@ -205,8 +208,8 @@
   <string name="autosend">Авто-выгрузка</string>
   <string name="found_in_main">Снимите галочку, чтобы скрыть пункт в главном меню</string>
   <string name="found_in_settings">Снимите галочку, чтобы скрыть пункт в настройках</string>
-  <string name="save_preferences">Сохранить настройки</string>
   <string name="form_forward">Далее</string>
+  <string name="form_backward">Назад</string>
   <string name="navigation">Навигация</string>
   <string name="swipe_navigation">Горизонтальные свайпы</string>
   <string name="buttons_navigation">Кнопки вперёд/назад</string>
@@ -278,9 +281,10 @@
   <string name="delete_after_send_summary">Удаляет финализированные опросники и их медиа после отправки данных на сервер</string>
   <string name="change_server_url">Адрес сервера</string>
   <string name="google_search_browse">Поиск опросников. Или выберите \'Мой диск\' ниже для просмотра.</string>
-  <string name="google_sheets_url">Резервный URL-отправки</string>
+  <string name="google_sheets_url">Резервный URL для выгрузки</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
   <string name="invalid_sheet_id">Неверный идентификатор листа: %1$s</string>
+  <string name="missing_submission_url">Отсутствует URL для выгрузки</string>
   <string name="google_sheets_access_denied">Доступ запрещен. Пожалуйста, удостоверьтесь, что владелец таблицы выдал вам разрешение на редактирование.</string>
   <string name="google_sheets_missing_columns">Таблица не содержит следующие столбцы: %1$s</string>
   <string name="password_error_whitespace">Не допускается использовать пробелы в начале и конце пароля</string>
@@ -292,6 +296,7 @@
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">Карты</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -301,10 +306,13 @@
   <string name="openmap_stamen_terrain">Stamen ландшафт</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Тёмная материя</string>
   <string name="basemap">Подложка</string>
+  <string name="basemap_source">Источник</string>
   <string name="streets">Улицы</string>
   <string name="terrain">Ландшафт</string>
   <string name="hybrid">Гибридная</string>
   <string name="satellite">Спутник</string>
+  <string name="light">Светлая</string>
+  <string name="dark">Тёмная</string>
   <string name="save_point">Сохранить местоположение</string>
   <string name="get_point">Определить местоположение</string>
   <string name="geopoint_view_read_only">Просмотреть геоточку</string>
@@ -589,4 +597,5 @@
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
   <string name="sms_invalid_phone_number_description">Введите номер телефона для выгрузки или измените способ доставки.</string>
+  <string name="sms_feature_disabled_dialog_message">Выгрузка через SMS была отключена из-за ограничений Google Play Store.\n\nПожалуйста, убедитесь, что человек, настроивший это устройство, прочитает подробности ниже и примет меры.</string>
 </resources>

@@ -7,9 +7,12 @@
   <string name="signature_capture">صورة التوقيع</string>
   <string name="view_video">عرض الفيديو</string>
   <string name="choose_audio">إختر تسجيل صوتي</string>
-  <string name="add_repeat">إضافة مجموعة</string>
-  <string name="add_another_menu">أضف واحد آخر</string>
-    <string name="cancel">إلغاء</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">أضف \"%s\"؟</string>
+  <string name="add_repeat">أضف</string>
+  <string name="dont_add_repeat">لا تقم بالإضافة</string>
+  <string name="add_another_menu">إضافة أخرى</string>
+  <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
   <string name="canceling">جاري الإلغاء</string>
@@ -48,7 +51,7 @@
   <string name="do_not_change">إلغاء</string>
   <string name="do_not_exit">إلغاء</string>
   <string name="do_not_save">تجاهل التعديلات</string>
-    <string name="enter_data">ملء استمارة فارغة</string>
+  <string name="enter_data">ملء استمارة فارغة</string>
   <string name="enter_data_button">ملء استمارة فارغة</string>
   <string name="error_occured">حدث خطأ</string>
   <string name="error_attaching_binary_file">حدث خطأ أثناء محاولة ارفاق الملف: %s</string>
@@ -71,8 +74,7 @@
   <string name="jump_to_beginning">الذهاب إلى البداية</string>
   <string name="jump_to_end">الذهاب إلى النهاية</string>
   <string name="jump_to_previous">الذهاب صعودًا</string>
-  <string name="dont_add_repeat">عدم الإضافة</string>
-    <string name="list_failed_with_error">فشلت لائحة عرض النماذج. %s</string>
+  <string name="list_failed_with_error">فشلت لائحة عرض النماذج. %s</string>
   <string name="loading_form">تحميل الاستمارة</string>
   <string name="load_remote_form_error">خطأ في جلب لائحة النماذج.</string>
   <string name="location_provider_accuracy">استخدام %1$s. الدقة هي %2$s متر.</string>
@@ -209,7 +211,6 @@
   <string name="autosend">الإرسال التلقائي</string>
   <string name="found_in_main">الغاء القفل للاخفاء من القائمة الرئيسية</string>
   <string name="found_in_settings">الغاء القفل للاخفاء من الاعدادات الرئيسية</string>
-  <string name="save_preferences">حفظ الاعدادات في القرص</string>
   <string name="form_forward">التالي</string>
   <string name="form_backward">رجوع</string>
   <string name="navigation">التنقل</string>
@@ -315,26 +316,30 @@
   <string name="terrain">التضاريس</string>
   <string name="hybrid">الكل</string>
   <string name="satellite">اقمار اصطناعية</string>
+  <string name="light">ضوء</string>
   <string name="dark">داكن</string>
-  <string name="outdoors">عراء</string>
+  <string name="outdoors">في الخارج</string>
   <string name="topographic">طبوغرافي</string>
   <string name="carto_map_style_positron">بوزيترون</string>
   <string name="carto_map_style_dark_matter">المادة المظلمة</string>
-  <string name="save_point">حفظ GeoPint</string>
-  <string name="get_point">تشغيل GeoPoint</string>
+  <string name="reference_layer">الطبقة المرجعية</string>
+  <string name="layer_data_file">ملف بيانات الطبقة</string>
+  <string name="save_point">حفظ النقطة</string>
+  <string name="get_point">البدء بتحديد النقطة</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
-  <string name="get_shape">تشغيل ٍShape</string>
-  <string name="get_trace">تشغيل Trace</string>
-  <string name="geoshape_title">عنوان Shape</string>
+  <string name="get_shape">البدء بتحديد مضلع</string>
+  <string name="get_trace">البدء بتتبع الأثر</string>
+  <string name="geoshape_title">مضلع</string>
   <string name="input_method">طريقة الإدخال</string>
-  <string name="start">أبداء</string>
+  <string name="start">إبدأ</string>
   <string name="enable_gps">تفعيل ال GPS</string>
-  <string name="geotrace_title">Trace</string>
+  <string name="geotrace_title">تتبع الأثر</string>
+  <string name="gps_enable_message">GPS غير مفعلة على جهازك. هل تريد تفعيلها؟</string>
   <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
-  <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
-  <string name="polyline_validator">يجب توفر 2 نقاط لانشاء إحداث Polyline</string>
-  <string name="clear">الغاء</string>
+  <string name="polygon_validator">يجب توفر 3 نقاط لانشاء مضلع</string>
+  <string name="polyline_validator">يجب توفر نقطتين لانشاء خط</string>
+  <string name="clear">إلغاء</string>
   <string name="placement_mode">التنسيب عن طريق النقر</string>
   <string name="manual_mode">تسجيل يدوي للموقع</string>
   <string name="automatic_mode">تسجيل تلقائي للموقع</string>
@@ -366,6 +371,8 @@
     <item quantity="other">%dمتر </item>
   </plurals>
   <string name="location_status_searching">جارٍ البحث عن موقع GPS ، يرجى الانتظار …</string>
+  <string name="location_status_accuracy">دقة GPS للموقع: %.2f متر</string>
+  <string name="location_status_acceptable">دقة GPS للموقع: %.2f متر (مقبولة)</string>
   <string name="collection_status_paused">النقاط التي تم إدخالها: %d</string>
   <string name="collection_status_placement">النقاط التي تم إدخالها: %d (انقر لوضع نقاط)</string>
   <string name="collection_status_manual">النقاط التي تم إدخالها: %d (التسجيل اليدوي)</string>
@@ -439,7 +446,7 @@
   <string name="reset_settings_button_reset">مسح واستعادة الإعدادات الافتراضية…</string>
   <string name="reset_in_progress">جاري عملية المسح والاستعادة</string>
   <string name="reset_app_state_result">نتائج عملية المسح والاستعادة</string>
-  <string name="reset_app_state_warning">تحذير… سيتم حذف البيانات المحددة. ولا امكانية للتراجع</string>
+  <string name="reset_app_state_warning">سيتم حذف البيانات المحددة نهائيا. لا إمكانية للتراجع</string>
   <string name="reset_settings_result">كل الاعدادات :: %s</string>
   <string name="reset_saved_forms_result">الاستمارات الحفوظة  :: %s</string>
   <string name="reset_blank_forms_result">الاستمارات الفارغة  :: %s</string>
@@ -692,4 +699,8 @@
   <string name="identity">هوية</string>
   <string name="enter_identity_description">هذا الاستمار يتطلب منك تحديد هويتك</string>
   <string name="close">أغلق</string>
+  <string name="reason_for_changes">سبب التغيير</string>
+  <string name="reason">السبب</string>
+  <string name="save">حفظ</string>
+  <string name="reason_for_changes_description">أنت بحاجة إلى توضيح سبب التغييرات في هذه الاستمارة</string>
 </resources>
