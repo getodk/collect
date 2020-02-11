@@ -179,7 +179,6 @@
   <string name="enter_admin_password">Enter Admin Password</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
   <string name="navigation">Navigation</string>
   <string name="swipe_navigation">Use horizontal swipes</string>

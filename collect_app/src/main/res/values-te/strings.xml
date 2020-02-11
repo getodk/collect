@@ -208,7 +208,6 @@
   <string name="autosend">ఆటోమేటిక్ గ పంపు </string>
   <string name="found_in_main">ప్రధాన మెనూ నుండి దాచడానికి ఎంపిక చేయకండి</string>
   <string name="found_in_settings">సాధారణ సెట్టింగ్‌ల నుండి దాచడానికి సెలెక్ట్  చేయవద్దు</string>
-  <string name="save_preferences">సెట్టింగులను సేవ్ చేయండి</string>
   <string name="form_forward">తరువాత</string>
   <string name="form_backward">వెనుకకు </string>
   <string name="navigation">నావిగేషన్</string>

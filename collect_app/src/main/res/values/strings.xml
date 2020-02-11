@@ -218,7 +218,6 @@
     <string name="autosend">Auto send</string>
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
-    <string name="save_preferences">Save Settings to Disk</string>
     <string name="form_forward">Next</string>
     <string name="form_backward">Back</string>
     <string name="navigation">Navigation</string>
@@ -494,8 +493,8 @@
     <string name="select_time">Select time</string>
     <string name="no_date_selected">No date selected</string>
     <string name="no_time_selected">No time selected</string>
-    <string name="import_settings">Import/Export settings</string>
-    <string name="qr_code">QR code</string>
+    <string name="import_settings">Configure via QR Code</string>
+    <string name="qr_code">QR code configuration</string>
     <string name="scan_qrcode">Scan code from other device</string>
     <string name="successfully_imported_settings">Settings imported successfully</string>
     <string name="encoding_max_limit">Maximum characters limit reached: QR code can\'t be generated for all settings</string>
@@ -507,7 +506,7 @@
     <string name="qrcode_without_passwords">This QR code does not contain your admin or server passwords. \n(Tap to add the passwords)</string>
     <string name="qrcode_with_admin_password">This QR code includes your admin password. Please treat it carefully. \n(Tap to remove the password)</string>
     <string name="qrcode_with_server_password">This QR code includes your server password. \n(Tap to remove the passwords)</string>
-    <string name="import_export_settings">Import/Export Settings</string>
+    <string name="import_export_settings">Configure via QR Code</string>
     <string name="qrcode_scanner_prompt">Place the QR code inside the rectangle</string>
     <string name="barcode_scanner_prompt">Place the barcode inside the rectangle</string>
     <string name="server_password">Server Password</string>
@@ -525,6 +524,7 @@
     <string name="user_setting_summary">Tap to manage general settings items</string>
     <string name="main_menu_settings">Main Menu Settings</string>
     <string name="main_menu_settings_summary">Tap to manage main menu items</string>
+    <string name="app_configuration">App Configuration</string>
     <string name="user_access_control">User Access Control</string>
     <string name="autosend_selector_title">Auto send</string>
     <string name="off">Off</string>
@@ -721,6 +721,8 @@
     <string name="reason_for_changes">Reason for changes</string>
     <string name="reason">Reason</string>
     <string name="save">Save</string>
+    <string name="save_legacy_settings">Save legacy .settings file to disk</string>
+    <string name="save_legacy_settings_warning">Will be removed in a future version. Please use the QR code above.</string>
     <string name="reason_for_changes_description">You need to explain the reason for changes to this form</string>
 
     <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage by August 2020 to comply with Android requirements.</string>

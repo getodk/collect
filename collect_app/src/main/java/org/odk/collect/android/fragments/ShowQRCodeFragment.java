@@ -48,12 +48,9 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -303,25 +300,6 @@ public class ShowQRCodeFragment extends Fragment {
             case R.id.menu_item_share:
                 if (shareIntent != null) {
                     startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
-                }
-                return true;
-            case R.id.menu_save_preferences:
-                File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
-                if (!writeDir.exists()) {
-                    if (!writeDir.mkdirs()) {
-                        ToastUtils.showShortToast("Error creating directory "
-                                + writeDir.getAbsolutePath());
-                        return false;
-                    }
-                }
-
-                File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
-                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
-                if (success) {
-                    ToastUtils.showLongToast("Settings successfully written to "
-                            + dst.getAbsolutePath());
-                } else {
-                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
                 }
                 return true;
         }

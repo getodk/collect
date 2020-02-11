@@ -186,7 +186,6 @@
   <string name="change_admin_password">Muuda administraatori salasõna</string>
   <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
-  <string name="save_preferences">Salvesta seaded mäluseadmele</string>
   <string name="form_forward">Järgmine</string>
   <string name="navigation">Rakenduses liikumine</string>
   <string name="swipe_navigation">Liikumiseks kasuta libistamist (swipe) käeliigutust</string>
