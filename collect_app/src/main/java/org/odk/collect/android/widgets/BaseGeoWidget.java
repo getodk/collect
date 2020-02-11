@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.widgets.interfaces.GeoWidget;
 
@@ -23,7 +24,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
         answerDisplay = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
         startGeoButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getDefaultButtonLabel(), getAnswerFontSize(), this);
         readOnly = questionDetails.getPrompt().isReadOnly();
-        setUpLayout(questionDetails.getPrompt().getAnswerText());
+        setUpLayout(context, questionDetails.getPrompt().getAnswerText());
     }
 
     @Override
@@ -68,12 +69,12 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
         });
     }
 
-    protected void setUpLayout(String answerText) {
+    protected void setUpLayout(Context context, String answerText) {
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(startGeoButton);
         answerLayout.addView(answerDisplay);
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
 
         boolean dataAvailable = false;
         if (answerText != null && !answerText.isEmpty()) {

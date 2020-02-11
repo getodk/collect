@@ -33,6 +33,7 @@ import org.javarosa.core.model.RangeQuestion;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
@@ -83,7 +84,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
             seekBar.setEnabled(false);
         }
 
-        addAnswerView(view);
+        addAnswerView(view, WidgetViewUtils.getStandardMargin(context));
     }
 
     @Override
