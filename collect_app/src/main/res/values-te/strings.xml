@@ -7,9 +7,9 @@
   <string name="signature_capture">సంతకం పెట్టండి</string>
   <string name="view_video">వీడియోని చూడండి</string>
   <string name="choose_audio">ఆడియోని ఎంచుకోండి</string>
-  <string name="add_repeat">గ్రూపుని జోడించండి</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_another_menu">మరొకదాన్ని జోడించండి</string>
-    <string name="cancel">రద్దు చేయి</string>
+  <string name="cancel">రద్దు చేయి</string>
   <string name="cancel_loading_form">రద్దు చేయి</string>
   <string name="cancel_location">రద్దు చేయి</string>
   <string name="canceling">రద్దు చేయబడుతుంది </string>
@@ -48,7 +48,7 @@
   <string name="do_not_change">రద్దు చేయి</string>
   <string name="do_not_exit">రద్దు చేయి</string>
   <string name="do_not_save">మార్పులు విస్మరించు</string>
-    <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
+  <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
   <string name="enter_data_button">ఖాళీ ఫారం నింపండి</string>
   <string name="error_occured">ఎర్రర్ వచ్చింది</string>
   <string name="error_attaching_binary_file">మీడియాను అటాచ్ చేసేటప్పుడు ఎర్రర్ వచ్చింది:%s</string>
@@ -71,8 +71,7 @@
   <string name="jump_to_beginning">మొదటికి వెళ్లు </string>
   <string name="jump_to_end">చివరికి వెళ్లు </string>
   <string name="jump_to_previous">పైకి వెళ్లు </string>
-  <string name="dont_add_repeat">జోడించవద్దు</string>
-    <string name="list_failed_with_error">ఫారం జాబితా విఫలమైంది.%s</string>
+  <string name="list_failed_with_error">ఫారం జాబితా విఫలమైంది.%s</string>
   <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
   <string name="load_remote_form_error">ఫారం జాబితాను పొందడంలో లోపం జరిగింది </string>
   <string name="location_provider_accuracy">%1$s ఉపయోగించబడుతోంది. దీని ఖచ్చితత్వం %2$s m.</string>
@@ -209,7 +208,6 @@
   <string name="autosend">ఆటోమేటిక్ గ పంపు </string>
   <string name="found_in_main">ప్రధాన మెనూ నుండి దాచడానికి ఎంపిక చేయకండి</string>
   <string name="found_in_settings">సాధారణ సెట్టింగ్‌ల నుండి దాచడానికి సెలెక్ట్  చేయవద్దు</string>
-  <string name="save_preferences">సెట్టింగులను సేవ్ చేయండి</string>
   <string name="form_forward">తరువాత</string>
   <string name="form_backward">వెనుకకు </string>
   <string name="navigation">నావిగేషన్</string>

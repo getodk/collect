@@ -33,7 +33,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import java.io.File;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
@@ -63,6 +67,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
+        findPreference("save_legacy_settings").setOnPreferenceClickListener(this);
     }
 
     @Override
@@ -130,7 +135,25 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             case KEY_IMPORT_SETTINGS:
                 fragment = new ShowQRCodeFragment();
                 break;
+            case "save_legacy_settings":
+                File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
+                if (!writeDir.exists()) {
+                    if (!writeDir.mkdirs()) {
+                        ToastUtils.showShortToast("Error creating directory "
+                                + writeDir.getAbsolutePath());
+                        return false;
+                    }
+                }
 
+                File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
+                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
+                if (success) {
+                    ToastUtils.showLongToast("Settings successfully written to "
+                            + dst.getAbsolutePath());
+                } else {
+                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
+                }
+                return true;
             case "main_menu":
                 fragment = new MainMenuAccessPreferences();
                 break;

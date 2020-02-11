@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
@@ -129,7 +130,7 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
         printLayout.addView(launchIntentButton);
-        addAnswerView(printLayout);
+        addAnswerView(printLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {

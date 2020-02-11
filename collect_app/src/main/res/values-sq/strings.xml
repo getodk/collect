@@ -6,9 +6,9 @@
   <string name="signature_capture">Firmos</string>
   <string name="view_video">Shih videon</string>
   <string name="choose_audio">Përzgjidh audio</string>
-  <string name="add_repeat">Shto grup</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_another_menu">Shto një tjetër</string>
-    <string name="cancel">Anullo</string>
+  <string name="cancel">Anullo</string>
   <string name="cancel_loading_form">Anullo</string>
   <string name="cancel_location">Anullo</string>
   <string name="canceling">Duke anuluar</string>
@@ -47,7 +47,7 @@
   <string name="do_not_change">Anullo</string>
   <string name="do_not_exit">Anullo</string>
   <string name="do_not_save">Injoro ndryshimet</string>
-    <string name="enter_data">Mbush formular bosh</string>
+  <string name="enter_data">Mbush formular bosh</string>
   <string name="enter_data_button">Mbush formular bosh</string>
   <string name="error_occured">Ndodhi një gabim</string>
   <string name="error_attaching_binary_file">Ndodhi një gabim gjatë lidhjes së medias: %s</string>
@@ -66,8 +66,7 @@
   <string name="jump_to_beginning">Shko në fillim</string>
   <string name="jump_to_end">Shko në fund</string>
   <string name="jump_to_previous">Shko sipër</string>
-  <string name="dont_add_repeat">Mos shto</string>
-    <string name="list_failed_with_error">Listimi i formularit dështoi. 1%s</string>
+  <string name="list_failed_with_error">Listimi i formularit dështoi. 1%s</string>
   <string name="loading_form">Duke ngarkuar formularin</string>
   <string name="load_remote_form_error">Gabim në ngarkimin e listës së formularëve</string>
   <string name="location_provider_accuracy">Duke përdorur %1$s. Saktësia është %2$s m.</string>
@@ -196,7 +195,6 @@
   <string name="autosend">Dërgo automatikisht</string>
   <string name="found_in_main">Hiq përzgjedhjen për ta fshehur nga Menuja Kryesore</string>
   <string name="found_in_settings">Hiq përzgjedhjen për ta fshehur nga Parametrat e Përgjithshëm</string>
-  <string name="save_preferences">Ruaj parametrat në disk</string>
   <string name="form_forward">Tjetra</string>
   <string name="navigation">Navigim</string>
   <string name="swipe_navigation">Përdor prekjen horizontale në ekran</string>

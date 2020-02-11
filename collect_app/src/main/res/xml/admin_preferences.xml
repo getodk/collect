@@ -20,16 +20,23 @@
         android:key="admin_password"
         android:title="@string/admin_password" />
 
-    <org.odk.collect.android.preferences.ResetDialogPreference
-        android:dialogTitle="@string/reset_settings_dialog_title"
-        android:key="reset_settings"
-        android:negativeButtonText="@string/cancel"
-        android:positiveButtonText="@string/reset_settings_button_reset"
-        android:title="@string/reset_settings_dialog" />
+    <PreferenceCategory android:title="@string/app_configuration">
+        <org.odk.collect.android.preferences.ResetDialogPreference
+            android:dialogTitle="@string/reset_settings_dialog_title"
+            android:key="reset_settings"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/reset_settings_button_reset"
+            android:title="@string/reset_settings_dialog" />
 
-    <PreferenceScreen
-        android:key="import_settings"
-        android:title="@string/import_settings" />
+        <PreferenceScreen
+            android:key="import_settings"
+            android:title="@string/import_settings" />
+
+        <PreferenceScreen
+            android:key="save_legacy_settings"
+            android:title="@string/save_legacy_settings"
+            android:summary="@string/save_legacy_settings_warning"/>
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/user_access_control">
 

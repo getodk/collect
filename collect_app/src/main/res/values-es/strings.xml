@@ -7,14 +7,17 @@
   <string name="signature_capture">Firma</string>
   <string name="view_video">Ver Video</string>
   <string name="choose_audio">Seleccionar Audio</string>
-  <string name="add_repeat">Agregar Grupo</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Agregar \"%s\"?</string>
+  <string name="add_repeat">Agregar</string>
+  <string name="dont_add_repeat">No agregar</string>
   <string name="add_another_menu">Agregar otro</string>
-    <string name="cancel">Cancelar</string>
+  <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
   <string name="canceling">Cancelando</string>
-  <string name="cannot_edit_completed_form">Este formulario no puede ser editado una vez que ha sido marcado como finalizado. Puede estar encriptado</string>
-  <string name="capture_audio">Grabar el Sonido</string>
+  <string name="cannot_edit_completed_form">Este formulario no puede ser editado una vez que ha sido marcado como finalizado. Puede estar encriptado.</string>
+  <string name="capture_audio">Grabar sonido</string>
   <string name="capture_image">Tomar la Foto</string>
   <string name="capture_osm">Iniciar OpenMapKit</string>
   <string name="recapture_osm">Rehacer OSM Tagging</string>
@@ -48,7 +51,7 @@
   <string name="do_not_change">Cancelar</string>
   <string name="do_not_exit">Cancelar</string>
   <string name="do_not_save">Ignorar Cambios</string>
-    <string name="enter_data">Llenar Nuevo Formulario</string>
+  <string name="enter_data">Llenar Nuevo Formulario</string>
   <string name="enter_data_button">Llenar Nuevo Formulario</string>
   <string name="error_occured">Se ha producido un error</string>
   <string name="error_attaching_binary_file">Error detectado al conectar medio: %s</string>
@@ -71,8 +74,7 @@
   <string name="jump_to_beginning">Ir al Inicio</string>
   <string name="jump_to_end">Ir al Final</string>
   <string name="jump_to_previous">Subir</string>
-  <string name="dont_add_repeat">No Agregar</string>
-    <string name="list_failed_with_error">Error al listar formularios. %s.</string>
+  <string name="list_failed_with_error">Error al listar formularios. %s.</string>
   <string name="loading_form">Cargando Formulario</string>
   <string name="load_remote_form_error">Error Obteniendo Listado de Formularios</string>
   <string name="location_provider_accuracy">Usando %1$s. Precision es de %2$s m.</string>
@@ -210,7 +212,6 @@
   <string name="autosend">Envío Automático</string>
   <string name="found_in_main">Desmarque para ocultar del Menú Principal</string>
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
-  <string name="save_preferences">Guardar configuración en disco</string>
   <string name="form_forward">Sig.</string>
   <string name="form_backward">Retroceder</string>
   <string name="navigation">Navegación</string>
@@ -291,14 +292,14 @@
   <string name="missing_submission_url">Falta URL para envío </string>
   <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>
   <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
-  <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
-  <string name="username_error_whitespace">No se permites espacios en nombre de usuario</string>
-  <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Hay el servicio instalado?</string>
+  <string name="password_error_whitespace">Los espacios al inicio o al final no están permitidos en las contraseñas</string>
+  <string name="username_error_whitespace">No se permiten espacios al inicio o al final en el nombre de usuario.</string>
+  <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Están los servicios de Google Play instalados?</string>
   <string name="about_preferences">Acerca de</string>
   <string name="tell_your_friends">Compartir ODK Collect</string>
   <string name="tell_your_friends_msg">Sus colegas aún recogen datos en papel? Comparte con ellos la aplicación</string>
   <string name="leave_a_review">Ir a Play Store - Comentar y/o Actualizar</string>
-  <string name="leave_a_review_msg">Su comentario (ojalá positivo) incrementa la visibilidad de la App en Play Store</string>
+  <string name="leave_a_review_msg">Su reseña (ojalá positiva) incrementa la visibilidad de la aplicación en Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">Mapas</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
@@ -647,7 +648,7 @@
   <string name="hide_old_form_versions_setting_summary">Sólo la versión mas nueva aparecerá en Llenar Nuevo Formulario</string>
   <string name="sms_pref_dialog_title">Teléfono de destino</string>
   <string name="sms_pref_title">Teléfono de destino</string>
-  <string name="sms_invalid_phone_number">Número de teléfono inválido!</string>
+  <string name="sms_invalid_phone_number">¡Número de teléfono inválido!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a no recepción\'</string>
   <string name="sms_no_number">\'Fallo en\' EEE, MMM dd, yyyy \'at\' HH:mm \': Falta número telefónico\'</string>
@@ -700,4 +701,6 @@
   <string name="reason">Motivo</string>
   <string name="save">Guardar</string>
   <string name="reason_for_changes_description">Favor explicar el motivo de los cambios para este formulario</string>
+  <string name="scoped_storage_banner_text">Se debe migrar los formularios a un almacenamiento privado antes de Agosto 2020 para dar cumplimiento a los nuevos requisitos de Android. </string>
+  <string name="scoped_storage_learn_more">Conocer más y migrar</string>
 </resources>

@@ -6,8 +6,12 @@
   <string name="annotate_image">Lägg till text på bild</string>
   <string name="view_video">Visa video</string>
   <string name="choose_audio">Välj ljud</string>
-  <string name="add_repeat">Lägg till grupp</string>
-    <string name="cancel">Avbryt</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Vill du lägga till \"%s\"?</string>
+  <string name="add_repeat">Lägg till</string>
+  <string name="dont_add_repeat">Lägg inte till</string>
+  <string name="add_another_menu">Lägg till ytterligare en</string>
+  <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
   <string name="canceling">Avbryter</string>
@@ -46,7 +50,7 @@
   <string name="do_not_change">Avbryt</string>
   <string name="do_not_exit">Avbryt</string>
   <string name="do_not_save">Ignorera ändringar</string>
-    <string name="enter_data">Fyll i tomt formulär</string>
+  <string name="enter_data">Fyll i tomt formulär</string>
   <string name="enter_data_button">Fyll i tomt formulär</string>
   <string name="error_occured">Ett fel inträffade</string>
   <string name="error_attaching_binary_file">Ett fel inträffade vid infogning av mediefil: %s</string>
@@ -69,8 +73,7 @@
   <string name="jump_to_beginning">Gå till början</string>
   <string name="jump_to_end">Gå till slutet</string>
   <string name="jump_to_previous">Flytta upp</string>
-  <string name="dont_add_repeat">Lägg inte till</string>
-    <string name="list_failed_with_error">Listning av formulär misslyckades. %s.</string>
+  <string name="list_failed_with_error">Listning av formulär misslyckades. %s.</string>
   <string name="loading_form">Laddar formulär.</string>
   <string name="load_remote_form_error">Ett fel inträffade vid listning av formulär</string>
   <string name="location_provider_accuracy">Använder %1$s. Noggrannheten är %2$s m.</string>
@@ -96,6 +99,7 @@
   <string name="quit_application">Avsluta %s</string>
   <string name="quit_entry">Spara formulär och avsluta</string>
   <string name="refresh">Uppdatera</string>
+  <string name="group_label">Gruppera</string>
   <string name="repeatable_group_label">Repeterande grupp</string>
   <string name="replace_barcode">Ersätt streckkod</string>
   <string name="required_answer_error">Tyvärr, detta svar är obligatoriskt!</string>
@@ -180,6 +184,7 @@
   <string name="sending_failed_on_date_at_time">\'Sändning misslyckades\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Raderad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
+  <string name="submission_deleted">Skickat formulär har tagits bort</string>
   <string name="version">Version:</string>
   <string name="parent_form_not_present">Det är inte möjligt att redigera detta sparade formulär eftersom motsvarande tomt formulär inte finns eller har tagits bort.\n\nForm ID: %1$s</string>
   <string name="launch_app">Starta</string>
@@ -205,8 +210,8 @@
   <string name="autosend">Skicka automatiskt</string>
   <string name="found_in_main">Avmarkera för att dölja i huvudmenyn</string>
   <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
-  <string name="save_preferences">Spara inställningar till disk</string>
   <string name="form_forward">Nästa</string>
+  <string name="form_backward">Tillbaka</string>
   <string name="navigation">Navigering</string>
   <string name="swipe_navigation">Använd horisontella svepningar</string>
   <string name="buttons_navigation">Använd framåt/bakåt knappar</string>
@@ -260,7 +265,9 @@
   <string name="go_shared">Delat med mig</string>
   <string name="modified_on_date_at_time">\'Ändrad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
   <string name="aggregate_preferences">ODK Aggregate inställningar</string>
-  <string name="sms_submission_preferences">Inställningar för att skicka SMS</string>
+  <string name="sms_submission_preferences">Inställningar för att skicka formulär med SMS</string>
+  <string name="submission_transport">Transport för uppladdning (avancerat)</string>
+  <string name="submission_transport_types_title">Skicka formulär via</string>
   <string name="other_preferences">Övriga plattformsinställningar</string>
   <string name="google_preferences">Google Sheets inställningar</string>
   <string name="google_sheets_url_hint">Formulären måste ange en uppladdnings-URL. Om dem inte gör det används denna URL.</string>
@@ -268,6 +275,7 @@
   <string name="no_google_account">Inget Google-konto valt!</string>
   <string name="google_set_account">Du har valt Google Sheets som din server, vänligen välj motsvarande Google-konto under allmänna inställningar innan du fortsätter</string>
   <string name="media_upload_error">Fel vid uppladdning av mediafil som inte finns: %1$s</string>
+  <string name="odk_permissions_fail">ODK auto inskickningsfel, kontrollera att du har beviljat nödvändiga rättigheter</string>
   <string name="notification_error">Fel vid visning av notifikationstext</string>
   <string name="delete_after_send">Radera efter sändning</string>
   <string name="delete_after_send_summary">Raderar avslutade formulär och media efter dessa sänts till servern</string>
@@ -276,6 +284,7 @@
   <string name="google_sheets_url">Reserv-URL för uppladdning</string>
   <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
   <string name="invalid_sheet_id">Ogiltigt ID för ark: %1$s</string>
+  <string name="missing_submission_url">URL för inskickning saknas</string>
   <string name="google_sheets_access_denied">Åtkomst nekad. Vänligen se till att kalkylarkets ägare har gett dig åtkomsträttigheter.</string>
   <string name="google_sheets_missing_columns">Kalkylarket saknar följande kolumner: %1$s</string>
   <string name="password_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i lösenord</string>
@@ -288,6 +297,7 @@ Dela ODK Collect med dem.</string>
   <string name="leave_a_review">Lämna ett omdöme på Play Store</string>
   <string name="leave_a_review_msg">Din (förhoppningsvis positiva) recension ökar synligheten av Appen i Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">Kartor</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -298,24 +308,41 @@ Dela ODK Collect med dem.</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Grundkarta</string>
+  <string name="basemap_source">Källa</string>
+  <string name="map_style_label">%s kartstil</string>
   <string name="streets">Streets</string>
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
+  <string name="light">Ljus</string>
+  <string name="dark">Mörk</string>
+  <string name="outdoors">Utomhus</string>
+  <string name="topographic">Topografisk</string>
+  <string name="carto_map_style_positron">Positron</string>
+  <string name="carto_map_style_dark_matter">Mörk materia</string>
+  <string name="reference_layer">Referenslager</string>
   <string name="save_point">Spara GeoPoint</string>
   <string name="get_point">Starta GeoPoint</string>
   <string name="geopoint_view_read_only">Visa GeoPoint</string>
   <string name="get_shape">Starta GeoShape</string>
   <string name="get_trace">Starta GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">Inmatningsmetod</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
   <string name="geotrace_title">GeoTrace</string>
+  <string name="gps_enable_message">GPS är inte aktiverad på din enhet. Vill du aktivera den?</string>
   <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
   <string name="polyline_validator">Det behövs minst 2 punkter för att skapa en polyline</string>
   <string name="clear">Rensa</string>
+  <string name="accuracy_requirement">Krav på noggrannhet:</string>
+  <string name="none">Ingen</string>
+  <string name="location_status_searching">Söker GPS-position, vänta…</string>
+  <string name="location_status_accuracy">GPS positionens noggrannhet: %.2f m </string>
+  <string name="location_status_acceptable">GPS positionens noggrannhet: %.2f m (acceptabel)</string>
+  <string name="location_status_unacceptable">GPS positionens noggrannhet: %.2f m (ej acceptabel)</string>
   <string name="geopoint_instruction">Lång tryckning för att placera markör eller knacka på knappen \'lägg till markör\'</string>
   <string name="geopoint_no_draggable_instruction">Knacka på knappen \'lägg till markör\'.</string>
   <string name="discard">Ignorera</string>
@@ -458,7 +485,7 @@ Dela ODK Collect med dem.</string>
   <string name="cellular_autosend">Endast mobilt nätverk</string>
   <string name="wifi_cellular_autosend">WiFi eller mobilt nätverk</string>
   <string name="form_management_preferences">Formulärhantering</string>
-  <string name="form_submission_category">Formulärinskickning</string>
+  <string name="form_submission_category">Skicka in formulär</string>
   <string name="form_filling_category">Formulärifyllnad</string>
   <string name="high_resolution_title">Högupplöst video</string>
   <string name="image_size_title">Bildstorlek</string>
@@ -537,22 +564,54 @@ Dela ODK Collect med dem.</string>
   <string name="moving_backwards_enabled_message">Du vill kanske se över dessa inställningar:\n\n\u2022 Redigera sparat formulär\n\u2022 Spara formulär\n\u2022 Gå till post\n\u2022 Hantering av restriktioner</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
+  <string name="newer_version_of_a_form_info">Detta är en uppdatering av ett befintligt formulär</string>
   <string name="svg_file_does_not_exist">SVG-fil finns inte!</string>
+  <string name="start_video_capture_instruction">Tryck på skärmen för att starta inspelning</string>
+  <string name="stop_video_capture_instruction">Inspelning startad. Tryck igen för att stoppa.</string>
+  <string name="no_columns_to_upload">Inga kolumner hittades i formuläret som ska laddas upp</string>
+  <string name="storage_runtime_permission_denied_title">Lagringsbehörigheter</string>
+  <string name="location_runtime_permissions_denied_title">Platsbehörigheter</string>
   <string name="camera_runtime_permission_denied_title">Kamerabehörigheter</string>
   <string name="record_audio_runtime_permission_denied_title">Behörigheter för att spela in ljud</string>
   <string name="send_sms_runtime_permission_denied_title">Behörigheter för att skicka SMS</string>
   <string name="read_phone_state_runtime_permission_denied_title">Behörigheter för att läsa telefonstatus</string>
   <string name="form_update_category">Uppdatera formulär</string>
+  <string name="periodic_form_updates_check_title">Periodisk kontroll av uppdaterade formulär</string>
+  <string name="never">Aldrig</string>
+  <string name="every_fifteen_minutes">Varje femtonde minut</string>
+  <string name="every_one_hour">Varje timme</string>
+  <string name="every_six_hours">Varje sjätte timme</string>
+  <string name="every_24_hours">Varje dygn</string>
+  <string name="form_updates_available">Uppdaterade formulär är tillgängliga</string>
+  <string name="automatic_download">Automatisk nedladdning</string>
+  <string name="automatic_download_summary">Ladda ner uppdaterade formulär automatiskt</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Ljust tema</string>
   <string name="theme_dark">Mörkt tema</string>
+  <string name="cannot_create_directory">Kan inte skapa mappen: %s</string>
+  <string name="hide_old_form_versions_setting_title">Göm gamla versioner av formulären</string>
+  <string name="hide_old_form_versions_setting_summary">Endast den senaste versionen kommer att synas vid ifyllning av tomma formulär</string>
   <string name="sms_invalid_phone_number">Ogiltigt telefonnummer!</string>
   <!--Sms submission-->
   <string name="sms_no_message">Detta formulär saknar frågor med SMS-taggar.</string>
   <string name="sms_encrypted_message">Krypterade formulär kan inte skickas in med SMS.</string>
   <string name="sms_sent_on_date_at_time">Skickat som SMS\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <string name="sms_submission_queued">Köad för uppladdning</string>
+  <string name="sms_submissions_notif_title">Skicka med SMS</string>
+  <string name="sms_submissions_notif_description">Flera formulär håller just nu på att laddas upp</string>
+  <string name="transport_type_internet">WiFi/Mobildata (rekommenderas)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="loading_form_failed">Ett fel uppstod vid laddning av formuläret. Var vänlig och försök igen.</string>
   <string name="missing_google_account_dialog_title">Google-konto är inte inställt</string>
   <string name="notification_channel_name">Allmäna notifieringar</string>
+  <string name="open_file">Öppna fil</string>
+  <string name="sms_feature_disabled_dialog_title">Uppladdning via SMS är ej aktiverat</string>
+  <string name="read_details">Läs detaljerna</string>
+  <string name="reading_files">Läser filer</string>
+  <string name="qr_code_not_found">Ingen QR-kod kunde hittas i vald bild</string>
+  <string name="identity">Identitet</string>
+  <string name="close">Stäng</string>
+  <string name="reason_for_changes">Anledning till ändringarna</string>
+  <string name="reason">Anledning</string>
+  <string name="save">Spara</string>
 </resources>

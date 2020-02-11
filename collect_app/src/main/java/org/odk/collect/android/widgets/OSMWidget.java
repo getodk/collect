@@ -22,6 +22,7 @@ import org.javarosa.core.model.osm.OSMTagItem;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -123,7 +124,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(errorTextView);
         answerLayout.addView(osmFileNameHeaderTextView);
         answerLayout.addView(osmFileNameTextView);
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
 
         errorTextView.setVisibility(View.GONE);
     }

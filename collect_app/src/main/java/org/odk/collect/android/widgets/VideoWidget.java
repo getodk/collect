@@ -41,6 +41,7 @@ import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -125,7 +126,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
         answerLayout.addView(playButton);
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
 
         hideButtonsIfNeeded();
 

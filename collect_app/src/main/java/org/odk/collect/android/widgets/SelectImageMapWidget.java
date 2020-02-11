@@ -32,6 +32,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.views.CustomWebView;
 import org.w3c.dom.Document;
@@ -86,7 +87,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             Timber.w(e);
         }
 
-        createLayout();
+        createLayout(context);
     }
 
     private static String convertDocumentToString(Document doc) {
@@ -117,7 +118,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         return webView.suppressFlingGesture();
     }
 
-    private void createLayout() {
+    private void createLayout(Context context) {
         webView = new CustomWebView(getContext());
 
         selectedAreasLabel = createAnswerTextView(getContext(), getAnswerFontSize());
@@ -131,7 +132,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         int paddingInPx = (int) (paddingInDp * scale + 0.5f);
         answerLayout.setPadding(0, 0, paddingInPx, 0);
 
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
         setUpWebView();
     }
 
