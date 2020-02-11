@@ -258,7 +258,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T scrollToAndCheckIsDisplayed(String text) {
+    public T scrollToAndAssertText(String text) {
         onView(withText(text)).perform(nestedScrollTo());
         onView(withText(text)).check(matches(isDisplayed()));
         return (T) this;

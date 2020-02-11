@@ -1,10 +1,12 @@
 package org.odk.collect.android.injection.config;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
 import org.javarosa.core.reference.ReferenceManager;
@@ -26,6 +28,7 @@ import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AndroidUserAgent;
+import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -165,5 +168,37 @@ public class AppDependencyModule {
     InstallIDProvider providesInstallIDProvider(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return new SharedPreferencesInstallIDProvider(preferences, KEY_INSTALL_ID);
+    }
+
+    @Provides
+    public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
+        TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
+        return new DeviceDetailsProvider() {
+
+            @Override
+            @SuppressLint("MissingPermission")
+            public String getDeviceId() {
+                return telMgr.getDeviceId();
+            }
+
+            @Override
+            @SuppressLint("MissingPermission")
+            public String getLine1Number() {
+                return telMgr.getLine1Number();
+            }
+
+            @Override
+            @SuppressLint("MissingPermission")
+            public String getSubscriberId() {
+                return telMgr.getSubscriberId();
+            }
+
+            @Override
+            @SuppressLint("MissingPermission")
+            public String getSimSerialNumber() {
+                return telMgr.getSimSerialNumber();
+            }
+        };
     }
 }

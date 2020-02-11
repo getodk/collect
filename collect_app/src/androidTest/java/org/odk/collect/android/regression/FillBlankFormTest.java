@@ -642,7 +642,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .startBlankForm("3403_ODK Version 1.23.3 Tester")
                 .clickOnText("New Farmer Registration")
                 .scrollToAndClickText("Insemination")
-                .scrollToAndCheckIsDisplayed("New Farmer Registration");
+                .scrollToAndAssertText("New Farmer Registration");
     }
 
     @Test

@@ -3,7 +3,6 @@ package org.odk.collect.android.settings;
 import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.telephony.TelephonyManager;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -14,18 +13,23 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
+import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataTest {
+
+    private final DeviceDetailsProvider deviceDetailsProvider = new FakeDeviceDetailsProvider();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -38,7 +42,19 @@ public class FormMetadataTest {
             .around(new CopyFormRule("metadata.xml"));
 
     @Rule
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<MainMenuActivity>(MainMenuActivity.class) {
+        @Override
+        protected void beforeActivityLaunched() {
+            super.beforeActivityLaunched();
+
+            CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+                @Override
+                public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
+                    return deviceDetailsProvider;
+                }
+            });
+        }
+    };
 
     @Test
     public void settingMetadata_letsThemBeIncludedInForm() {
@@ -70,9 +86,9 @@ public class FormMetadataTest {
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
-                .assertText(getTelephonyManager().getDeviceId())
-                .assertText(getTelephonyManager().getSubscriberId())
-                .assertText(getTelephonyManager().getSimSerialNumber())
+                .assertText(deviceDetailsProvider.getDeviceId())
+                .assertText(deviceDetailsProvider.getSubscriberId())
+                .assertText(deviceDetailsProvider.getSimSerialNumber())
                 .assertText(getInstallID());
     }
 
@@ -80,9 +96,9 @@ public class FormMetadataTest {
     public void deviceIdentifiersCanBeIncludedInForm() {
         new MainMenuPage(rule)
                 .startBlankForm("Metadata")
-                .assertText(getTelephonyManager().getDeviceId())
-                .assertText(getTelephonyManager().getSubscriberId())
-                .assertText(getTelephonyManager().getSimSerialNumber());
+                .scrollToAndAssertText(deviceDetailsProvider.getDeviceId())
+                .scrollToAndAssertText(deviceDetailsProvider.getSubscriberId())
+                .scrollToAndAssertText(deviceDetailsProvider.getSimSerialNumber());
     }
 
     private String getInstallID() {
@@ -90,8 +106,26 @@ public class FormMetadataTest {
         return new SharedPreferencesInstallIDProvider(sharedPreferences, KEY_INSTALL_ID).getInstallID();
     }
 
-    private TelephonyManager getTelephonyManager() {
-        Context context = rule.getActivity();
-        return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    class FakeDeviceDetailsProvider implements DeviceDetailsProvider {
+
+        @Override
+        public String getDeviceId() {
+            return "deviceID";
+        }
+
+        @Override
+        public String getLine1Number() {
+            return "line1Number";
+        }
+
+        @Override
+        public String getSubscriberId() {
+            return "subscriberID";
+        }
+
+        @Override
+        public String getSimSerialNumber() {
+            return "simSerialNumber";
+        }
     }
 }
