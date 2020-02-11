@@ -90,6 +90,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_folder);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.GONE);
+                formUpdateAlert.setVisibility(View.GONE);
             }
 
             formTitle.setText(item.getName());
