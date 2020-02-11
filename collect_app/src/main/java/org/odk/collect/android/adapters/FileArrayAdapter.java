@@ -47,8 +47,6 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
     private final List<DriveListItem> items;
 
-    private FormsDao formsDao;
-
     public FileArrayAdapter(Context context, List<DriveListItem> filteredDriveList) {
         super(context, R.layout.form_chooser_list_item_multiple_choice, filteredDriveList);
         items = filteredDriveList;
@@ -85,7 +83,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.VISIBLE);
-                if(isNewVersion(item)) {
+                if (isNewVersion(item)) {
                     formUpdateAlert.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -117,9 +115,9 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     }
 
     private boolean isNewVersion(DriveListItem item) {
-        formsDao = new FormsDao();
+        FormsDao formsDao = new FormsDao();
         Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + File.separator + item.getName());
-        if(cursor != null && cursor.getCount() > 0){
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToNext();
             Long savedTime = cursor.getLong(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DATE));
             Long modifiedTime = item.getDate().getValue();
