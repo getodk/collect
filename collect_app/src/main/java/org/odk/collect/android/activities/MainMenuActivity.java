@@ -17,8 +17,11 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -27,6 +30,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -56,10 +60,12 @@ import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
-import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.storage.migration.StorageMigrationResult;
+import org.odk.collect.android.storage.migration.StorageMigrationService;
+import org.odk.collect.android.storage.migration.StorageMigrationStatus;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -84,7 +90,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements StorageMigrationDialog.OnMigrationCompleteListener {
+public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -288,6 +294,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements Storage
 
         setButtonsVisibility();
         setStorageMigrationBannerVisibility();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(storageMigrationStatusReceiver, new IntentFilter(StorageMigrationService.STORAGE_MIGRATION_STATUS_INTENT));
+        LocalBroadcastManager.getInstance(this).registerReceiver(storageMigrationResultReceiver, new IntentFilter(StorageMigrationService.STORAGE_MIGRATION_RESULT_INTENT));
     }
 
     private void setButtonsVisibility() {
@@ -357,6 +366,13 @@ public class MainMenuActivity extends CollectAbstractActivity implements Storage
             alertDialog.dismiss();
         }
         getContentResolver().unregisterContentObserver(contentObserver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(storageMigrationStatusReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(storageMigrationResultReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -656,15 +672,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements Storage
         DialogUtils.showIfNotShowing(StorageMigrationDialog.create(), getSupportFragmentManager());
     }
 
-    @Override
-    public void onMigrationComplete(StorageMigrationResult result) {
-        dismissStorageMigrationDialog();
-        if (result == StorageMigrationResult.SUCCESS) {
-            hideStorageMigrationBanner();
-        }
-        ToastUtils.showLongToast(StorageMigrationResult.getResultMessage(result, this));
-    }
-
     private void hideStorageMigrationBanner() {
         findViewById(R.id.storage_migration_banner).setVisibility(View.GONE);
     }
@@ -672,4 +679,26 @@ public class MainMenuActivity extends CollectAbstractActivity implements Storage
     private void dismissStorageMigrationDialog() {
         DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
     }
+
+    private final BroadcastReceiver storageMigrationStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            StorageMigrationStatus status = (StorageMigrationStatus) intent.getSerializableExtra(StorageMigrationService.STORAGE_MIGRATION_STATUS);
+
+            StorageMigrationDialog dialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
+            dialog.setStatus(StorageMigrationStatus.getStatusMessage(status, MainMenuActivity.this));
+        }
+    };
+
+    private final BroadcastReceiver storageMigrationResultReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            hideStorageMigrationBanner();
+
+            StorageMigrationResult result = (StorageMigrationResult) intent.getSerializableExtra(StorageMigrationService.STORAGE_MIGRATION_RESULT);
+            ToastUtils.showLongToast(StorageMigrationResult.getResultMessage(result, MainMenuActivity.this));
+
+            dismissStorageMigrationDialog();
+        }
+    };
 }

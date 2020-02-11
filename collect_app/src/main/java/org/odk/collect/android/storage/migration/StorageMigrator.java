@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
@@ -43,6 +44,8 @@ public class StorageMigrator {
 
     public static boolean isMigrationBeingPerformed;
 
+    private final MutableLiveData<StorageMigrationStatus> status = new MutableLiveData<>();
+
     StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser) {
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
@@ -50,8 +53,10 @@ public class StorageMigrator {
     }
 
     StorageMigrationResult performStorageMigration() {
+        status.postValue(StorageMigrationStatus.PREPARING_SCOPED_STORAGE);
         storageEraser.clearOdkDirOnScopedStorage();
 
+        status.postValue(StorageMigrationStatus.CHECKING_APP_STATE);
         if (isFormUploaderRunning()) {
             return StorageMigrationResult.FORM_UPLOADER_IS_RUNNING;
         }
@@ -61,10 +66,13 @@ public class StorageMigrator {
         if (!storageStateProvider.isEnoughSpaceToPerformMigartion(storagePathProvider)) {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
+
+        status.postValue(StorageMigrationStatus.MOVING_FILES);
         if (moveAppDataToScopedStorage() != StorageMigrationResult.MOVING_FILES_SUCCEEDED) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
 
+        status.postValue(StorageMigrationStatus.MIGRATING_DATABASES);
         storageStateProvider.enableUsingScopedStorage();
         reopenDatabases();
         if (migrateDatabasePaths() != StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED) {
@@ -72,6 +80,7 @@ public class StorageMigrator {
             reopenDatabases();
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
+        storageStateProvider.disableUsingScopedStorage();
 
         storageEraser.deleteOdkDirFromUnscopedStorage();
 
@@ -196,5 +205,9 @@ public class StorageMigrator {
 
     private String getRelativeCacheDbPath(String path) {
         return storagePathProvider.getRelativeFilePath(storagePathProvider.getUnscopedStorageDirPath(StorageSubdirectory.CACHE), path);
+    }
+
+    public MutableLiveData<StorageMigrationStatus> getStatus() {
+        return status;
     }
 }

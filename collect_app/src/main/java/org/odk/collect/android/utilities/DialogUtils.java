@@ -172,7 +172,11 @@ public final class DialogUtils {
     public static void dismissDialog(Class dialogClazz, FragmentManager fragmentManager) {
         DialogFragment existingDialog = (DialogFragment) fragmentManager.findFragmentByTag(dialogClazz.getName());
         if (existingDialog != null) {
-            existingDialog.dismiss();
+            existingDialog.dismissAllowingStateLoss();
         }
+    }
+
+    public static DialogFragment getDialogFragment(Class dialogClazz, FragmentManager fragmentManager) {
+        return (DialogFragment) fragmentManager.findFragmentByTag(dialogClazz.getName());
     }
 }

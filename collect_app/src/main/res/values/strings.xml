@@ -737,6 +737,10 @@
     <string name="migration_dialog_message">Android requirements have changed and files used by Collect must be migrated by August 2020.</string>
     <string name="migration_in_progress">Migration in progress…</string>
     <string name="migrate">Migrate</string>
+    <string name="storage_migration_status_1">1/4 Preparing storage…</string>
+    <string name="storage_migration_status_2">2/4 Checking app state…</string>
+    <string name="storage_migration_status_3">3/4 Moving files…</string>
+    <string name="storage_migration_status_4">4/4 Migrating databases…</string>
 
     <string name="install_id">Install ID - will replace Device ID in August 2020</string>
     <string name="preference_not_available">Not available</string>
