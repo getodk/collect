@@ -86,7 +86,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new CollectServerClient(httpInterface, webCredentialsUtils);
     }
 
