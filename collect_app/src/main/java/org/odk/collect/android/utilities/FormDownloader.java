@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
@@ -184,6 +185,7 @@ public class FormDownloader {
                 write(tmpLastSaved, STUB_XML.getBytes(Charset.forName("UTF-8")));
                 ReferenceManager.instance().reset();
                 ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(tempMediaPath));
+                ReferenceManager.instance().addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
 
                 parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
                 ReferenceManager.instance().reset();

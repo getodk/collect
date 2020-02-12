@@ -51,7 +51,8 @@ public class FormDownloaderTest {
                public OpenRosaAPIClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
                    return openRosaAPIClient;
                }
-        });}
+        });
+    }
 
     /**
      * Verifies that a form without media can successfully go through the download process. Regression
@@ -169,7 +170,7 @@ public class FormDownloaderTest {
      * See https://github.com/opendatakit/collect/issues/3635
      */
     @Test
-    public void downloadingFormWithExternalSecondaryInstance_Succeeds() throws Exception {
+    public void downloadingFormWithXmlExternalSecondaryInstance_Succeeds() throws Exception {
         String basicLastSaved = "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\" >\n" +
                 "    <h:head>\n" +
                 "        <h:title>basic-external-xml-instance</h:title>\n" +
@@ -202,11 +203,62 @@ public class FormDownloaderTest {
 
         when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("external-data.xml"));
         when(openRosaAPIClient.getFile("https://testserver/external-data.xml",
-                null)).thenReturn(buildExternalInstanceFetchResult());
+                null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
         FormDownloader downloader = spy(new FormDownloader());
         FormDetails test1 = new FormDetails("basic-external-xml-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-xml-instance", "20200101",
+                "hash", "manifestHash", false, false);
+        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl());
+        doReturn(true).when(downloader).installEverything(any(), any(), any());
+
+        List<FormDetails> forms = new ArrayList<>();
+        forms.add(test1);
+
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        assertThat(messages.get(test1), is("Success"));
+    }
+
+    @Test
+    public void downloadingFormWithCsvExternalSecondaryInstance_Succeeds() throws Exception {
+        String basicLastSaved = "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\" >\n" +
+                "    <h:head>\n" +
+                "        <h:title>basic-external-csv-instance</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"basic-external-csv-instance\">\n" +
+                "                    <first/>\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "            <instance id=\"external-csv\" src=\"jr://file-csv/external-data.csv\" />\n" +
+                "            <bind nodeset=\"/data/first\" type=\"select1\"/>\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "        <select1 ref=\"/data/first\">\n" +
+                "            <label>First</label>\n" +
+                "            <itemset nodeset=\"instance('external-csv')/root/item[first='']\">\n" +
+                "                <value ref=\"name\"/>\n" +
+                "                <label ref=\"label\"/>\n" +
+                "            </itemset>\n" +
+                "        </select1>\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+        File formXml = File.createTempFile("basicExternalCsvInstance", ".xml");
+        formXml.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(formXml));
+        out.write(basicLastSaved);
+        out.close();
+
+        when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("external-data.csv"));
+        when(openRosaAPIClient.getFile("https://testserver/external-data.csv",
+                null)).thenReturn(buildCsvExternalInstanceFetchResult());
+
+        FormDownloader downloader = spy(new FormDownloader());
+        FormDetails test1 = new FormDetails("basic-external-csv-instance", "https://testserver/form.xml",
+                "https://testserver/manifest.xml", "basic-external-csv-instance", "20200101",
                 "hash", "manifestHash", false, false);
         FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl());
@@ -316,7 +368,7 @@ public class FormDownloaderTest {
 
         when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("last-saved.xml"));
         when(openRosaAPIClient.getFile("https://testserver/last-saved.xml",
-                null)).thenReturn(buildExternalInstanceFetchResult());
+                null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
         FormDownloader downloader = spy(new FormDownloader());
         FormDetails formDetails = new FormDetails("last-saved-attached", "https://testserver/form.xml",
@@ -340,7 +392,7 @@ public class FormDownloaderTest {
                 "  <downloadUrl>https://testserver/" + filename + "</downloadUrl>\n" +
                 " </mediaFile>\n" +
                 "</manifest>";
-        org.kxml2.kdom.Document doc = new Document();
+        Document doc = new Document();
         KXmlParser parser = new KXmlParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         parser.setInput(new InputStreamReader(new ByteArrayInputStream(manifest.getBytes())));
@@ -348,7 +400,7 @@ public class FormDownloaderTest {
         return new DocumentFetchResult(doc, true, "hash");
     }
 
-    public static InputStream buildExternalInstanceFetchResult() {
+    private static InputStream buildXmlExternalInstanceFetchResult() {
         String externalInstance = "<root>\n" +
                 "    <item>\n" +
                 "        <label>A</label>\n" +
@@ -363,6 +415,14 @@ public class FormDownloaderTest {
                 "        <name>c</name>\n" +
                 "    </item>\n" +
                 " </root>";
+        return new ByteArrayInputStream(externalInstance.getBytes());
+    }
+
+    private static InputStream buildCsvExternalInstanceFetchResult() {
+        String externalInstance = "label,name\n" +
+                "A, a\n" +
+                "B, b\n" +
+                "C, c\n";
         return new ByteArrayInputStream(externalInstance.getBytes());
     }
 }
