@@ -227,7 +227,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private void openImage() {
         try {
-            File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
+            File bigImage = new File(referenceManager.deriveReference(bigImageURI).getLocalURI());
             Intent intent = new Intent("android.intent.action.VIEW");
             Uri uri =
                     FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);

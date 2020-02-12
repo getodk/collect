@@ -178,6 +178,8 @@ public class FormDownloader {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
 
+                // Add a stub last-saved instance to the tmp media directory so it will be resolved
+                // when parsing a form definition with last-saved reference
                 File tmpLastSaved = new File(tempMediaPath, LAST_SAVED_FILENAME);
                 write(tmpLastSaved, STUB_XML.getBytes(Charset.forName("UTF-8")));
                 ReferenceManager.instance().reset();
