@@ -3,7 +3,6 @@ package org.odk.collect.android.preferences;
 import android.app.Activity;
 import android.os.Bundle;
 
-import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import org.odk.collect.android.R;
@@ -48,18 +47,16 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
         super.onCreate(savedInstanceState);
         initNormalPrefs();
 
-        if (savedInstanceState == null) {
-            new PermissionUtils().requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
-                @Override
-                public void granted() {
-                    initDangerousPrefs();
-                }
+        new PermissionUtils().requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
+            @Override
+            public void granted() {
+                initDangerousPrefs();
+            }
 
-                @Override
-                public void denied() {
-                }
-            });
-        }
+            @Override
+            public void denied() {
+            }
+        });
     }
 
     private void initNormalPrefs() {
@@ -77,28 +74,10 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     }
 
     private void initDangerousPrefs() {
-        PropertyManager pm = new PropertyManager(getActivity());
-        initPrefFromProp(pm, PROPMGR_PHONE_NUMBER, KEY_METADATA_PHONENUMBER);
-        initPrefFromProp(pm, PROPMGR_DEVICE_ID, PROPMGR_DEVICE_ID);
-        initPrefFromProp(pm, PROPMGR_SUBSCRIBER_ID, PROPMGR_SUBSCRIBER_ID);
-        initPrefFromProp(pm, PROPMGR_SIM_SERIAL, PROPMGR_SIM_SERIAL);
+        PropertyManager propertyManager = new PropertyManager(getActivity());
+        findPreference(PROPMGR_DEVICE_ID).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_DEVICE_ID));
+        findPreference(PROPMGR_SIM_SERIAL).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_SIM_SERIAL));
+        findPreference(PROPMGR_SUBSCRIBER_ID).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_SUBSCRIBER_ID));
+        findPreference(KEY_METADATA_PHONENUMBER).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_PHONE_NUMBER));
     }
-
-    /**
-     * Initializes an EditTextPreference from a property.
-     *  @param propertyManager   a PropertyManager
-     * @param propMgrName       the PropertyManager property name
-     * @param prefKey           the EditTextPreference key
-     */
-    private void initPrefFromProp(PropertyManager propertyManager,
-                                  String propMgrName,
-                                  String prefKey) {
-        String propVal = propertyManager.getSingularProperty(propMgrName);
-        EditTextPreference textPref = findPreference(prefKey);
-
-        if (propVal != null) {
-            textPref.setText(propVal);
-        }
-    }
-
 }

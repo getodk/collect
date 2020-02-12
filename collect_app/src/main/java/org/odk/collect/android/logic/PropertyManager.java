@@ -92,6 +92,10 @@ public class PropertyManager implements IPropertyManager {
         Timber.i("calling constructor");
 
         Collect.getInstance().getComponent().inject(this);
+        reload(context);
+    }
+
+    public PropertyManager reload(Context context) {
         try {
             // Device-defined properties
             IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
@@ -108,6 +112,8 @@ public class PropertyManager implements IPropertyManager {
         initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
         initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
         initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
+
+        return this;
     }
 
     // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
