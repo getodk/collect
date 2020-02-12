@@ -80,4 +80,13 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
         assertThat(getWidget().annotateButton.getVisibility(), is(View.GONE));
     }
+
+    @Test
+    public void defaultValuesShouldBeSupported() {
+        when(formEntryPrompt.getAnswerText()).thenReturn("jr://images/doc.png");
+        when(getWidget().getDefaultFilePath()).thenReturn("/samplePath/doc.png");
+
+        assertThat(getWidget().doesSupportDefaultValues(), is(true));
+        assertThat(getWidget().getFile().getPath(), is("/samplePath/doc.png"));
+    }
 }

@@ -89,4 +89,12 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
         assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
     }
+
+    @Test
+    public void defaultValuesShouldNotBeSupported() {
+        when(formEntryPrompt.getAnswerText()).thenReturn("jr://images/doc.png");
+
+        assertThat(getWidget().doesSupportDefaultValues(), is(false));
+        assertThat(getWidget().getFile().getPath(), is("/jr:/images/doc.png"));
+    }
 }
