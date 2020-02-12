@@ -9,6 +9,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -22,6 +23,8 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.storage.migration.StorageMigrationDialog;
+import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -120,6 +123,12 @@ public interface AppDependencyComponent {
     void inject(ODKView odkView);
 
     void inject(FormMetadataFragment formMetadataFragment);
+
+    void inject(MainMenuActivity mainMenuActivity);
+
+    void inject(StorageMigrationDialog storageMigrationDialog);
+
+    void inject(StorageMigrationService storageMigrationService);
 
     SmsManager smsManager();
 

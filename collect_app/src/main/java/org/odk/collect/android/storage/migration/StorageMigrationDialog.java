@@ -11,14 +11,25 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
+
+import javax.inject.Inject;
 
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private TextView statusTextView;
 
+    @Inject
+    StorageMigrationRepository storageMigrationRepository;
+
     public static StorageMigrationDialog create() {
         return new StorageMigrationDialog();
+    }
+
+    private StorageMigrationDialog() {
+        Collect.getInstance().getComponent().inject(this);
+        storageMigrationRepository.getStatus().observe(this, this::setStatus);
     }
 
     @Override
@@ -67,7 +78,7 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         return false;
     }
 
-    public void setStatus(String status) {
-        statusTextView.setText(status);
+    public void setStatus(StorageMigrationStatus status) {
+        statusTextView.setText(StorageMigrationStatus.getStatusMessage(status, getContext()));
     }
 }

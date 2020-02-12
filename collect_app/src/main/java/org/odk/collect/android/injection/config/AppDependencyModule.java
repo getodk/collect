@@ -26,6 +26,11 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.migration.StorageEraser;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.storage.migration.StorageMigrator;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -215,5 +220,19 @@ public class AppDependencyModule {
     @Singleton
     AdminSharedPreferences providesAdminSharedPreferences(Context context) {
         return new AdminSharedPreferences(context);
+    }
+
+    @Singleton
+    public StorageMigrationRepository providesStorageMigrationRepository() {
+        return new StorageMigrationRepository();
+    }
+
+    @Provides
+    public StorageMigrator storageMigrator(StorageMigrationRepository storageMigrationRepository) {
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        StorageStateProvider storageStateProvider = new StorageStateProvider();
+        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
+
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository);
     }
 }

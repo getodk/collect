@@ -1,35 +1,33 @@
 package org.odk.collect.android.storage.migration;
 
+import android.app.Service;
 import android.content.Intent;
+import android.os.IBinder;
 
-import androidx.lifecycle.LifecycleService;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.application.Collect;
 
-public class StorageMigrationService extends LifecycleService {
-    public static final String STORAGE_MIGRATION_STATUS_INTENT = "storageMigrationStatusIntent";
-    public static final String STORAGE_MIGRATION_STATUS = "storageMigrationStatus";
+import javax.inject.Inject;
 
-    public static final String STORAGE_MIGRATION_RESULT_INTENT = "storageMigrationResultIntent";
-    public static final String STORAGE_MIGRATION_RESULT = "storageMigrationResult";
+public class StorageMigrationService extends Service {
+    @Inject
+    StorageMigrator storageMigrator;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Collect.getInstance().getComponent().inject(this);
+    }
 
     @Override
     public int onStartCommand(@NotNull Intent intent, int flags, int startId) {
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-        StorageStateProvider storageStateProvider = new StorageStateProvider();
-        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
-
-        StorageMigrator storageMigrator = new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser);
-        storageMigrator.getStatus().observe(this, this::sendStatus);
-
         new Thread() {
             @Override
             public void run() {
                 StorageMigrator.isMigrationBeingPerformed = true;
-                sendResult(storageMigrator.performStorageMigration());
+                storageMigrator.performStorageMigration();
                 StorageMigrator.isMigrationBeingPerformed = false;
             }
         }.start();
@@ -37,15 +35,9 @@ public class StorageMigrationService extends LifecycleService {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void sendStatus(StorageMigrationStatus status) {
-        Intent intent = new Intent(STORAGE_MIGRATION_STATUS_INTENT);
-        intent.putExtra(STORAGE_MIGRATION_STATUS, status);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
-    private void sendResult(StorageMigrationResult result) {
-        Intent intent = new Intent(STORAGE_MIGRATION_RESULT_INTENT);
-        intent.putExtra(STORAGE_MIGRATION_RESULT, result);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }

@@ -17,11 +17,8 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -30,7 +27,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import androidx.appcompat.widget.Toolbar;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -59,13 +55,12 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
-import org.odk.collect.android.storage.migration.StorageMigrationService;
-import org.odk.collect.android.storage.migration.StorageMigrationStatus;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -78,6 +73,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -114,6 +111,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     // private static boolean DO_NOT_EXIT = false;
 
+    @Inject
+    StorageMigrationRepository storageMigrationRepository;
+
     public static void startActivityAndCloseAllOthers(Activity activity) {
         activity.startActivity(new Intent(activity, MainMenuActivity.class));
         activity.overridePendingTransition(0, 0);
@@ -123,9 +123,12 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Collect.getInstance().getComponent().inject(this);
+
         setContentView(R.layout.main_menu);
         initToolbar();
         disableSmsIfNeeded();
+        storageMigrationRepository.getResult().observe(this, this::handleMigrationResult);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -294,9 +297,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         setButtonsVisibility();
         setStorageMigrationBannerVisibility();
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(storageMigrationStatusReceiver, new IntentFilter(StorageMigrationService.STORAGE_MIGRATION_STATUS_INTENT));
-        LocalBroadcastManager.getInstance(this).registerReceiver(storageMigrationResultReceiver, new IntentFilter(StorageMigrationService.STORAGE_MIGRATION_RESULT_INTENT));
     }
 
     private void setButtonsVisibility() {
@@ -366,13 +366,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             alertDialog.dismiss();
         }
         getContentResolver().unregisterContentObserver(contentObserver);
-    }
-
-    @Override
-    protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(storageMigrationStatusReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(storageMigrationResultReceiver);
-        super.onDestroy();
     }
 
     @Override
@@ -672,33 +665,11 @@ public class MainMenuActivity extends CollectAbstractActivity {
         DialogUtils.showIfNotShowing(StorageMigrationDialog.create(), getSupportFragmentManager());
     }
 
-    private void hideStorageMigrationBanner() {
-        findViewById(R.id.storage_migration_banner).setVisibility(View.GONE);
-    }
+    private void handleMigrationResult(StorageMigrationResult result) {
+        //findViewById(R.id.storage_migration_banner).setVisibility(View.GONE);
 
-    private void dismissStorageMigrationDialog() {
         DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
+
+        ToastUtils.showLongToast(StorageMigrationResult.getResultMessage(result, this));
     }
-
-    private final BroadcastReceiver storageMigrationStatusReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            StorageMigrationStatus status = (StorageMigrationStatus) intent.getSerializableExtra(StorageMigrationService.STORAGE_MIGRATION_STATUS);
-
-            StorageMigrationDialog dialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
-            dialog.setStatus(StorageMigrationStatus.getStatusMessage(status, MainMenuActivity.this));
-        }
-    };
-
-    private final BroadcastReceiver storageMigrationResultReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            hideStorageMigrationBanner();
-
-            StorageMigrationResult result = (StorageMigrationResult) intent.getSerializableExtra(StorageMigrationService.STORAGE_MIGRATION_RESULT);
-            ToastUtils.showLongToast(StorageMigrationResult.getResultMessage(result, MainMenuActivity.this));
-
-            dismissStorageMigrationDialog();
-        }
-    };
 }

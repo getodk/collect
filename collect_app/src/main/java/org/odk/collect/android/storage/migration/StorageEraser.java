@@ -5,11 +5,11 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 
-class StorageEraser {
+public class StorageEraser {
 
     private final StoragePathProvider storagePathProvider;
 
-    StorageEraser(StoragePathProvider storagePathProvider) {
+    public StorageEraser(StoragePathProvider storagePathProvider) {
         this.storagePathProvider = storagePathProvider;
     }
 

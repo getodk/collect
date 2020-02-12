@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
@@ -42,21 +41,26 @@ public class StorageMigrator {
     private final StorageStateProvider storageStateProvider;
     private final StorageEraser storageEraser;
 
+    private final StorageMigrationRepository storageMigrationRepository;
+
     public static boolean isMigrationBeingPerformed;
 
-    private final MutableLiveData<StorageMigrationStatus> status = new MutableLiveData<>();
-
-    StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser) {
+    public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository) {
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
         this.storageEraser = storageEraser;
+        this.storageMigrationRepository = storageMigrationRepository;
     }
 
-    StorageMigrationResult performStorageMigration() {
-        status.postValue(StorageMigrationStatus.PREPARING_SCOPED_STORAGE);
+    void performStorageMigration() {
+        storageMigrationRepository.setResult(migrate());
+    }
+
+    StorageMigrationResult migrate() {
+        storageMigrationRepository.setStatus(StorageMigrationStatus.PREPARING_SCOPED_STORAGE);
         storageEraser.clearOdkDirOnScopedStorage();
 
-        status.postValue(StorageMigrationStatus.CHECKING_APP_STATE);
+        storageMigrationRepository.setStatus(StorageMigrationStatus.CHECKING_APP_STATE);
         if (isFormUploaderRunning()) {
             return StorageMigrationResult.FORM_UPLOADER_IS_RUNNING;
         }
@@ -67,12 +71,12 @@ public class StorageMigrator {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
 
-        status.postValue(StorageMigrationStatus.MOVING_FILES);
+        storageMigrationRepository.setStatus(StorageMigrationStatus.MOVING_FILES);
         if (moveAppDataToScopedStorage() != StorageMigrationResult.MOVING_FILES_SUCCEEDED) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
 
-        status.postValue(StorageMigrationStatus.MIGRATING_DATABASES);
+        storageMigrationRepository.setStatus(StorageMigrationStatus.MIGRATING_DATABASES);
         storageStateProvider.enableUsingScopedStorage();
         reopenDatabases();
         if (migrateDatabasePaths() != StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED) {
@@ -80,8 +84,6 @@ public class StorageMigrator {
             reopenDatabases();
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
-        storageStateProvider.disableUsingScopedStorage();
-
         storageEraser.deleteOdkDirFromUnscopedStorage();
 
         return StorageMigrationResult.SUCCESS;
@@ -205,9 +207,5 @@ public class StorageMigrator {
 
     private String getRelativeCacheDbPath(String path) {
         return storagePathProvider.getRelativeFilePath(storagePathProvider.getUnscopedStorageDirPath(StorageSubdirectory.CACHE), path);
-    }
-
-    public MutableLiveData<StorageMigrationStatus> getStatus() {
-        return status;
     }
 }
