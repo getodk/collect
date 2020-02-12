@@ -13,6 +13,7 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -67,6 +68,8 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
+            HashMap<String, String> headers = new HashMap<String, String> ();
+
             if(imagePath != null) {
                 FormDownloader fd = new FormDownloader();
                 File f = new File(imagePath);
@@ -75,7 +78,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
                 }
                 item.data = imageName;
             } else {
-                item.data = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri), null);
+                item.data = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
             }
 
         } catch (Exception e) {
