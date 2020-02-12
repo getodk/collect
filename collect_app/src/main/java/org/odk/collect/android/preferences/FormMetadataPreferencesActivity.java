@@ -12,7 +12,7 @@ public class FormMetadataPreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_preferences_activity);
+        setContentView(R.layout.androidx_preferences_activity);
 
         getSupportFragmentManager()
                 .beginTransaction()
