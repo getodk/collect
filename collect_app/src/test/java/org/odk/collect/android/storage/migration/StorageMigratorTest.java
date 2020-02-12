@@ -17,13 +17,12 @@ import static org.mockito.Mockito.verify;
 public class StorageMigratorTest {
 
     private StorageMigrator storageMigrator;
-    private StorageEraser storageEraser;
-    private final StoragePathProvider storagePathProvider = spy(StoragePathProvider.class);
+    private final StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);
     private final StorageStateProvider storageStateProvider = mock(StorageStateProvider.class);
+    private final StorageEraser storageEraser = mock(StorageEraser.class);
 
     @Before
     public void setup() {
-        storageEraser = spy(new StorageEraser(storagePathProvider));
         storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser));
 
         doNothing().when(storageMigrator).reopenDatabases();
