@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -199,7 +200,7 @@ public class FormDownloaderTest {
         out.write(basicLastSaved);
         out.close();
 
-        when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult());
+        when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("external-data.xml"));
         when(openRosaAPIClient.getFile("https://testserver/external-data.xml",
                 null)).thenReturn(buildExternalInstanceFetchResult());
 
@@ -267,12 +268,76 @@ public class FormDownloaderTest {
         assertThat(messages.get(test1), is("Success"));
     }
 
-    public static DocumentFetchResult buildManifestFetchResult() throws Exception {
+    /**
+     * Edge case: a form could have an attachment with filename last-saved.xml. This will get
+     * replaced immediately on download and this test documents that behavior. We could let it go
+     * through but let's replace it immediately to help a user who tries this troubleshoot.
+     * Otherwise it would only be replaced when an instance is saved so a user could think everything
+     * is ok if they only try launching the form once.
+     *
+     * This is an unfortunate side effect of using the form media folder to store the contents that
+     * jr://instance/last-saved resolves to.
+     *
+     * Additionally, immediately replacing a secondary instance with name last-saved.xml avoid users
+     * exploiting this current implementation quirk as a feature to preload defaults for the first
+     * instance.
+     * */
+    @Test
+    public void downloadingFormWithExternalSecondaryInstanceNamedLastSavedXml_Succeeds() throws Exception {
+        String basicLastSaved = "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\" >\n" +
+                "    <h:head>\n" +
+                "        <h:title>last-saved-attached</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"last-saved-attached\">\n" +
+                "                    <first/>\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "            <instance id=\"external-xml\" src=\"jr://file/last-saved.xml\" />\n" +
+                "            <bind nodeset=\"/data/first\" type=\"select1\"/>\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "        <select1 ref=\"/data/first\">\n" +
+                "            <label>First</label>\n" +
+                "            <itemset nodeset=\"instance('external-xml')/root/item[first='']\">\n" +
+                "                <value ref=\"name\"/>\n" +
+                "                <label ref=\"label\"/>\n" +
+                "            </itemset>\n" +
+                "        </select1>\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+        File formXml = File.createTempFile("lastSavedAttached", ".xml");
+        formXml.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(formXml));
+        out.write(basicLastSaved);
+        out.close();
+
+        when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("last-saved.xml"));
+        when(openRosaAPIClient.getFile("https://testserver/last-saved.xml",
+                null)).thenReturn(buildExternalInstanceFetchResult());
+
+        FormDownloader downloader = spy(new FormDownloader());
+        FormDetails formDetails = new FormDetails("last-saved-attached", "https://testserver/form.xml",
+                "https://testserver/manifest.xml", "last-saved-attached", "20200101",
+                "hash", "manifestHash", false, false);
+        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl());
+
+        List<FormDetails> forms = new ArrayList<>();
+        forms.add(formDetails);
+
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        assertThat(messages.get(formDetails), containsString("<label> node for itemset doesn't exist!"));
+    }
+
+    public static DocumentFetchResult buildManifestFetchResult(String filename) throws Exception {
         String manifest = "<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">\n" +
                 " <mediaFile>\n" +
-                "  <filename>external-data.xml</filename>\n" +
+                "  <filename>" + filename + "</filename>\n" +
                 "  <hash>hash</hash>\n" +
-                "  <downloadUrl>https://testserver/external-data.xml</downloadUrl>\n" +
+                "  <downloadUrl>https://testserver/" + filename + "</downloadUrl>\n" +
                 " </mediaFile>\n" +
                 "</manifest>";
         org.kxml2.kdom.Document doc = new Document();
