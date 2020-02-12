@@ -9,26 +9,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
-
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
-public class StorageMigrationDialog extends DialogFragment {
+public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private TextView statusTextView;
 
     public static StorageMigrationDialog create() {
         return new StorageMigrationDialog();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setCancelable(false);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_Collect_Dialog_FullScreen);
     }
 
     @Override
@@ -39,7 +29,8 @@ public class StorageMigrationDialog extends DialogFragment {
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((Toolbar) view.findViewById(R.id.toolbar)).setTitle(R.string.migration_dialog_title);
+        getToolbar().setTitle(R.string.migration_dialog_title);
+        getToolbar().setNavigationIcon(null);
 
         statusTextView = view.findViewById(R.id.status);
         Button cancel = view.findViewById(R.id.cancel);
@@ -61,6 +52,19 @@ public class StorageMigrationDialog extends DialogFragment {
                 activity.startService(new Intent(activity, StorageMigrationService.class));
             }
         });
+    }
+
+    @Override
+    protected void onCloseClicked() {
+    }
+
+    @Override
+    protected void onBackPressed() {
+    }
+
+    @Override
+    protected boolean shouldShowSoftKeyboard() {
+        return false;
     }
 
     public void setStatus(String status) {
