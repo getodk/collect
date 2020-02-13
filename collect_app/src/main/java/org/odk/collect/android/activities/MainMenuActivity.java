@@ -666,7 +666,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     private void handleMigrationResult(StorageMigrationResult result) {
-        //findViewById(R.id.storage_migration_banner).setVisibility(View.GONE);
+        findViewById(R.id.storage_migration_banner).setVisibility(View.GONE);
 
         DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
 
