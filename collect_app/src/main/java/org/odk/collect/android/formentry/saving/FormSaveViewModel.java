@@ -143,7 +143,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                             auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.getCurrentTime());
                         }
                     } else {
-                        AuditUtils.logCurrentEvent(formController, auditEventLogger, clock.getCurrentTime());
+                        AuditUtils.logCurrentScreen(formController, auditEventLogger, clock.getCurrentTime());
                     }
                 }
 
@@ -259,12 +259,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         @Override
         protected SaveToDiskResult doInBackground(Void... voids) {
-            return formSaver.save(formController,
+            return formSaver.save(saveRequest.uri, formController,
                     saveRequest.shouldFinalize,
-                    saveRequest.updatedSaveName,
-                    saveRequest.viewExiting,
-                    this::publishProgress,
-                    saveRequest.uri);
+                    saveRequest.viewExiting, saveRequest.updatedSaveName,
+                    this::publishProgress
+            );
         }
 
         @Override

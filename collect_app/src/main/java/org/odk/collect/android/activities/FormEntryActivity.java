@@ -1200,7 +1200,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case FormEntryController.EVENT_REPEAT:
                 // should only be a group here if the event_group is a field-list
                 try {
-                    AuditUtils.logCurrentEvent(formController, formController.getAuditEventLogger(), System.currentTimeMillis());
+                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), System.currentTimeMillis());
 
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();

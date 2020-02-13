@@ -359,7 +359,7 @@ public class FormSaveViewModelTest {
         saveToDiskResult.setSaveResult(result, true);
         saveToDiskResult.setSaveErrorMessage(message);
 
-        when(formSaver.save(any(), anyBoolean(), any(), anyBoolean(), any(), any())).thenReturn(saveToDiskResult);
+        when(formSaver.save(any(), any(), anyBoolean(), anyBoolean(), any(), any())).thenReturn(saveToDiskResult);
         Robolectric.getBackgroundThreadScheduler().runOneTask();
     }
 }

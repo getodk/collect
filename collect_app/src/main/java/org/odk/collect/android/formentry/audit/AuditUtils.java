@@ -13,7 +13,7 @@ public class AuditUtils {
 
     }
 
-    public static void logCurrentEvent(FormController formController, AuditEventLogger auditEventLogger, long currentTime) {
+    public static void logCurrentScreen(FormController formController, AuditEventLogger auditEventLogger, long currentTime) {
         if (formController.getEvent() == EVENT_QUESTION
                 || formController.getEvent() == EVENT_GROUP
                 || formController.getEvent() == EVENT_REPEAT) {

@@ -6,7 +6,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 
 public interface FormSaver {
-    SaveToDiskResult save(FormController formController, boolean shouldFinalize, String updatedSaveName, boolean exitAfter, ProgressListener progressListener, Uri instanceContentURI);
+    SaveToDiskResult save(Uri instanceContentURI, FormController formController, boolean shouldFinalize, boolean exitAfter, String updatedSaveName, ProgressListener progressListener);
 
     interface ProgressListener {
         void onProgressUpdate(String message);
