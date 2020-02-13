@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences;
 import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import org.odk.collect.android.R;
@@ -30,6 +31,9 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     @Inject
     InstallIDProvider installIDProvider;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -39,7 +43,11 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.form_metadata_preferences, rootKey);
-        ((CollectAbstractActivity) getActivity()).initToolbar(getPreferenceScreen().getTitle());
+
+        FragmentActivity activity = getActivity();
+        if (activity instanceof CollectAbstractActivity) {
+            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
+        }
     }
 
     @Override
@@ -47,16 +55,20 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
         super.onCreate(savedInstanceState);
         initNormalPrefs();
 
-        new PermissionUtils().requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
-            @Override
-            public void granted() {
-                initDangerousPrefs();
-            }
+        if (savedInstanceState == null) {
+            permissionUtils.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
+                @Override
+                public void granted() {
+                    initDangerousPrefs();
+                }
 
-            @Override
-            public void denied() {
-            }
-        });
+                @Override
+                public void denied() {
+                }
+            });
+        } else if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
+            initDangerousPrefs();
+        }
     }
 
     private void initNormalPrefs() {
