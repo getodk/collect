@@ -79,7 +79,7 @@ public class ServerPollingJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
-        if (!isDeviceOnline() || StorageMigrator.isMigrationBeingPerformed) {
+        if (!isDeviceOnline() || StorageMigrator.isIsMigrationBeingPerformed()) {
             return Result.FAILURE;
         }
 
@@ -129,7 +129,7 @@ public class ServerPollingJob extends Job {
         }
     }
 
-    public static boolean isIsDownloadingForms() {
+    public static boolean isDownloadingFormsRunning() {
         return isDownloadingRunning;
     }
 

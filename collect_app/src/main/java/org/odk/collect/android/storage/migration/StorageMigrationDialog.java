@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,9 +17,25 @@ import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
-    private TextView statusTextView;
+    @BindView(R.id.cancel)
+    Button cancelButton;
+
+    @BindView(R.id.migrate)
+    Button migrateButton;
+
+    @BindView(R.id.message)
+    TextView messageText;
+
+    @BindView(R.id.status)
+    TextView statusText;
+
+    @BindView(R.id.progress_bar)
+    LinearLayout progressBar;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
@@ -29,7 +46,7 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private StorageMigrationDialog() {
         Collect.getInstance().getComponent().inject(this);
-        storageMigrationRepository.getStatus().observe(this, this::setStatus);
+        storageMigrationRepository.getStatus().observe(this, this::updateStatus);
     }
 
     @Override
@@ -40,28 +57,15 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getToolbar().setTitle(R.string.migration_dialog_title);
-        getToolbar().setNavigationIcon(null);
+        ButterKnife.bind(this, view);
 
-        statusTextView = view.findViewById(R.id.status);
-        Button cancel = view.findViewById(R.id.cancel);
-        Button migrate = view.findViewById(R.id.migrate);
-        TextView message = view.findViewById(R.id.message);
+        updateToolbar();
 
-        cancel.setOnClickListener(view1 -> dismiss());
-        migrate.setOnClickListener(v -> {
-            cancel.setEnabled(false);
-            cancel.setAlpha(.4f);
-            migrate.setEnabled(false);
-            migrate.setAlpha(.4f);
-            message.setAlpha(.4f);
-
-            view.findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
-
-            Activity activity = getActivity();
-            if (activity != null) {
-                activity.startService(new Intent(activity, StorageMigrationService.class));
-            }
+        cancelButton.setOnClickListener(v -> dismiss());
+        migrateButton.setOnClickListener(v -> {
+            disableDialog();
+            showProgressBar();
+            startStorageMigrationService();
         });
     }
 
@@ -73,7 +77,32 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     protected void onBackPressed() {
     }
 
-    public void setStatus(StorageMigrationStatus status) {
-        statusTextView.setText(StorageMigrationStatus.getStatusMessage(status, getContext()));
+    private void updateStatus(StorageMigrationStatus status) {
+        statusText.setText(StorageMigrationStatus.getStatusMessage(status, getContext()));
+    }
+
+    private void updateToolbar() {
+        getToolbar().setTitle(R.string.migration_dialog_title);
+        getToolbar().setNavigationIcon(null);
+    }
+
+    private void disableDialog() {
+        cancelButton.setEnabled(false);
+        cancelButton.setAlpha(.4f);
+        migrateButton.setEnabled(false);
+        migrateButton.setAlpha(.4f);
+        messageText.setAlpha(.4f);
+    }
+
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void startStorageMigrationService() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            Intent intent = new Intent(activity, StorageMigrationService.class);
+            activity.startService(intent);
+        }
     }
 }

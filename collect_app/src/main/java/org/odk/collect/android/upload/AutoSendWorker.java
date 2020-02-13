@@ -81,7 +81,7 @@ public class AutoSendWorker extends Worker {
     @Override
     @SuppressLint("WrongThread")
     public Result doWork() {
-        if (StorageMigrator.isMigrationBeingPerformed) {
+        if (StorageMigrator.isIsMigrationBeingPerformed()) {
             return Result.failure();
         }
 
