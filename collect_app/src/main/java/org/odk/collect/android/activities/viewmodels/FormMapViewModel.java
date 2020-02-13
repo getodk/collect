@@ -54,14 +54,6 @@ public class FormMapViewModel extends ViewModel {
         return totalInstanceCount;
     }
 
-    /**
-     * Returns a list of filled instances of this form that can be mapped.
-     */
-    public List<MappableFormInstance> getMappableFormInstances() {
-        initializeFormInstances();
-        return mappableFormInstances;
-    }
-
     private void initializeFormInstances() {
         List<Instance> instances = instancesRepository.getAllBy(form.getJrFormId());
 
@@ -72,6 +64,14 @@ public class FormMapViewModel extends ViewModel {
             totalInstanceCount = instances.size();
             mappableFormInstances = getMappableFormInstances(instances);
         }
+    }
+
+    /**
+     * Returns a list of filled instances of this form that can be mapped.
+     */
+    public List<MappableFormInstance> getMappableFormInstances() {
+        initializeFormInstances();
+        return mappableFormInstances;
     }
 
     private List<MappableFormInstance> getMappableFormInstances(List<Instance> allInstances) {

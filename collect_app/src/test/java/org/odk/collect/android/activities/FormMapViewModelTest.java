@@ -31,22 +31,22 @@ public class FormMapViewModelTest {
     }
 
     @Test public void getFormTitle_returnsFormTitle() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         assertThat(viewModel.getFormTitle(), is("Form with ID 1"));
     }
 
     @Test public void getFormId_returnsFormId() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         assertThat(viewModel.getFormId(), is("formId1"));
     }
 
     @Test public void getTotalInstanceCount_returnsCountOfAllInstances() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         assertThat(viewModel.getTotalInstanceCount(), is(7));
     }
 
     @Test public void getMappableInstances_excludesInstancesWithoutGeometry() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> mappableFormInstances = viewModel.getMappableFormInstances();
 
         assertThat(mappableFormInstances.size(), is(6));
@@ -54,42 +54,42 @@ public class FormMapViewModelTest {
     }
 
     @Test public void getMappableInstances_excludesInstancesWithCorruptGeometry() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm2, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_2, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> mappableFormInstances = viewModel.getMappableFormInstances();
 
         assertThat(mappableFormInstances.size(), is(0));
     }
 
     @Test public void getDeletedDateOf_returnsDeletedDate() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
 
         assertThat(viewModel.getDeletedDateOf(0L), is(1487782554846L));
     }
 
     // Should not actually be possible from UI because geometry is deleted on sent instance delete
     @Test public void deletedInstance_hasDeletedClickAction() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
 
         assertThat(instances.get(0).getClickAction(), is(FormMapViewModel.ClickAction.DELETED_TOAST));
     }
 
     @Test public void finalizedInstance_thatCanBeEdited_hasEditableClickAction() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
 
         assertThat(instances.get(1).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
     }
 
     @Test public void unfinalizedInstance_hasEditableStatus() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
 
         assertThat(instances.get(2).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
     }
 
     @Test public void instanceThatFailedToSend_thatCanBeEdited_hasEditableStatus() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
 
         assertThat(instances.get(3).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
@@ -97,21 +97,21 @@ public class FormMapViewModelTest {
 
     // Sent instances should never be editable.
     @Test public void submittedInstance_thatCanBeEdited_returnsViewableStatus() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
 
         assertThat(instances.get(4).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_READ_ONLY));
     }
 
     @Test public void instanceThatFailedToSend_thatCantBeEdited_returnsNotViewableStatus() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
 
         assertThat(instances.get(5).getClickAction(), is(FormMapViewModel.ClickAction.NOT_VIEWABLE_TOAST));
     }
 
     @Test public void addingAnInstance_isReflectedInInstanceCountsAndList() {
-        FormMapViewModel viewModel = new FormMapViewModel(testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
 
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
         assertThat(viewModel.getTotalInstanceCount(), is(7));
@@ -133,14 +133,14 @@ public class FormMapViewModelTest {
         assertThat(instances.get(6).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
     }
 
-    static final Form testForm1 = new Form.Builder().id(0L)
+    static final Form TEST_FORM_1 = new Form.Builder().id(0L)
             .jrFormId("formId1")
             .jrVersion("2019103104")
             .displayName("Form with ID 1")
             .geometryXpath("/data/my-point")
             .build();
 
-    private final Form testForm2 = new Form.Builder().id(0L)
+    private static final Form TEST_FORM_2 = new Form.Builder().id(0L)
             .jrFormId("formId2")
             .jrVersion("2019103103")
             .displayName("Form with ID 2")

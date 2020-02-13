@@ -45,18 +45,18 @@ public class FormMapActivityTest {
     private ActivityController activityController;
     private FormMapActivity activity;
 
-    private List<MapPoint> expectedPoints = Arrays.asList(new MapPoint(10.0, 125.6),
+    private final List<MapPoint> expectedPoints = Arrays.asList(new MapPoint(10.0, 125.6),
             new MapPoint(10.1, 125.6), new MapPoint(10.1, 126.6),
             new MapPoint(10.3, 125.6), new MapPoint(10.3, 125.7),
             new MapPoint(10.4, 125.6));
-    private MapPoint currentLocation = new MapPoint(5, 5);
+    private final MapPoint currentLocation = new MapPoint(5, 5);
 
     @Before public void setUpActivity() {
         activityController = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         activity = (FormMapActivity) activityController.get();
 
         TestInstancesRepository testInstancesRepository = new TestInstancesRepository(Arrays.asList(testInstances));
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         activity.map = new TestMapFragment();
@@ -78,7 +78,7 @@ public class FormMapActivityTest {
         FormMapActivity activity = (FormMapActivity) controller.get();
 
         TestInstancesRepository testInstancesRepository = new TestInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
         activity.map = new TestMapFragment();
 
@@ -93,7 +93,7 @@ public class FormMapActivityTest {
         FormMapActivity activity = (FormMapActivity) controller.get();
 
         TestInstancesRepository testInstancesRepository = new TestInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.testForm1, testInstancesRepository);
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
         activity.map = new TestMapFragment();
 

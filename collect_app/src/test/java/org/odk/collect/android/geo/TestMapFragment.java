@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TestMapFragment implements MapFragment {
-    private int zoomCount = 0;
+    private int zoomCount;
 
     private boolean animate;
     private MapPoint zoomPoint;
@@ -20,8 +20,8 @@ public class TestMapFragment implements MapFragment {
     private double zoomLevel;
     private PointListener locationListener;
 
-    private int lastFeatureId = 0;
-    private Map<MapPoint, Integer> mappedPoints = new HashMap<>();
+    private int lastFeatureId;
+    private final Map<MapPoint, Integer> mappedPoints = new HashMap<>();
 
     public int getZoomCount() {
         return zoomCount;
