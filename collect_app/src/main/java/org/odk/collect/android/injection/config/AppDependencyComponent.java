@@ -15,9 +15,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
@@ -27,8 +28,8 @@ import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -116,6 +117,8 @@ public interface AppDependencyComponent {
     void inject(ExStringWidget exStringWidget);
 
     void inject(ODKView odkView);
+
+    void inject(FormMetadataFragment formMetadataFragment);
 
     SmsManager smsManager();
 

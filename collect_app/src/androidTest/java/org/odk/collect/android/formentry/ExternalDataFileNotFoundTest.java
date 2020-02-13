@@ -33,8 +33,8 @@ public class ExternalDataFileNotFoundTest {
     @Test
     public void questionsThatUseExternalFiles_ShouldDisplayFriendlyMessageWhenFilesAreMissing() {
         new FormEntryPage("externalDataQuestions", activityTestRule)
-                .checkIsTextDisplayed(activityTestRule.getActivity().getString(R.string.file_missing, "/storage/emulated/0/odk/forms/external_data_questions-media/fruits.csv"))
+                .assertText(activityTestRule.getActivity().getString(R.string.file_missing, "/storage/emulated/0/odk/forms/external_data_questions-media/fruits.csv"))
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed(activityTestRule.getActivity().getString(R.string.file_missing, "/storage/emulated/0/odk/forms/external_data_questions-media/itemsets.csv"));
+                .assertText(activityTestRule.getActivity().getString(R.string.file_missing, "/storage/emulated/0/odk/forms/external_data_questions-media/itemsets.csv"));
     }
 }

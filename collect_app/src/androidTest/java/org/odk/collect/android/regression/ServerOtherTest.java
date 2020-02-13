@@ -35,7 +35,7 @@ public class ServerOtherTest extends BaseRegressionTest {
                 .clickFormListPath()
                 .addText("/formList", "/sialala")
                 .clickOKOnDialog()
-                .checkIsTextDisplayed("/formList/sialala");
+                .assertText("/formList/sialala");
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ServerOtherTest extends BaseRegressionTest {
                 .clickSubmissionPath()
                 .addText("/submission", "/blabla")
                 .clickOKOnDialog()
-                .checkIsTextDisplayed("/submission/blabla");
+                .assertText("/submission/blabla");
     }
 
 }

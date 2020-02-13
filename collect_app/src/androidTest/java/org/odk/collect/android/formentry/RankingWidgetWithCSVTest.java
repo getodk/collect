@@ -37,6 +37,6 @@ public class RankingWidgetWithCSVTest {
     public void rankingWidget_shouldDisplayItemsFromSearchFunc() {
         new FormEntryPage("ranking_widget", activityTestRule)
                 .clickRankingButton()
-                .checkIsTextDisplayed("Mango", "Oranges", "Strawberries");
+                .assertText("Mango", "Oranges", "Strawberries");
     }
 }

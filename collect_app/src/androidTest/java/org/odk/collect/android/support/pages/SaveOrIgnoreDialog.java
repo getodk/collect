@@ -18,7 +18,7 @@ public class SaveOrIgnoreDialog<D extends Page<D>> extends Page<SaveOrIgnoreDial
     @Override
     public SaveOrIgnoreDialog assertOnPage() {
         String title = getTranslatedString(R.string.exit) + " " + formName;
-        checkIsTextDisplayed(title);
+        assertText(title);
         return this;
     }
 
