@@ -8,7 +8,8 @@ public enum StorageMigrationStatus {
     PREPARING_SCOPED_STORAGE,
     CHECKING_APP_STATE,
     MOVING_FILES,
-    MIGRATING_DATABASES;
+    MIGRATING_DATABASES,
+    CLEARING_OLD_DATA;
 
     public static String getStatusMessage(StorageMigrationStatus status, Context context) {
         String message = null;
@@ -24,6 +25,9 @@ public enum StorageMigrationStatus {
                 break;
             case MIGRATING_DATABASES:
                 message = context.getString(R.string.storage_migration_status_4);
+                break;
+            case CLEARING_OLD_DATA:
+                message = context.getString(R.string.storage_migration_status_5);
                 break;
         }
         return message;

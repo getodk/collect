@@ -84,6 +84,8 @@ public class StorageMigrator {
             reopenDatabases();
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
+
+        storageMigrationRepository.setStatus(StorageMigrationStatus.CLEARING_OLD_DATA);
         storageEraser.deleteOdkDirFromUnscopedStorage();
 
         return StorageMigrationResult.SUCCESS;
