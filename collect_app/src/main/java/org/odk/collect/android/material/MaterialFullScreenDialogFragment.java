@@ -74,6 +74,6 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
     }
 
     protected boolean shouldShowSoftKeyboard() {
-        return true;
+        return false;
     }
 }

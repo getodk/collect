@@ -73,11 +73,6 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     protected void onBackPressed() {
     }
 
-    @Override
-    protected boolean shouldShowSoftKeyboard() {
-        return false;
-    }
-
     public void setStatus(StorageMigrationStatus status) {
         statusTextView.setText(StorageMigrationStatus.getStatusMessage(status, getContext()));
     }
