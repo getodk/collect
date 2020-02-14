@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -35,7 +36,7 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     PermissionUtils permissionUtils;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
     }
