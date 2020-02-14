@@ -1,6 +1,6 @@
 package org.odk.collect.android.preferences;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
@@ -35,9 +35,9 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     PermissionUtils permissionUtils;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        DaggerUtils.getComponent(activity).inject(this);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -55,7 +55,9 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
         super.onCreate(savedInstanceState);
         initNormalPrefs();
 
-        if (savedInstanceState == null) {
+        if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
+            initDangerousPrefs();
+        } else if (savedInstanceState == null) {
             permissionUtils.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
                 @Override
                 public void granted() {
@@ -66,8 +68,6 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
                 public void denied() {
                 }
             });
-        } else if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
-            initDangerousPrefs();
         }
     }
 
