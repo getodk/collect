@@ -81,14 +81,14 @@ abstract class Page<T extends Page<T>> {
         return destination.assertOnPage();
     }
 
-    public T checkIsTextDisplayed(String text) {
-        onView(withText(text)).check(matches(isDisplayed()));
+    public T assertText(String text) {
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()));
         return (T) this;
     }
 
-    public T checkIsTextDisplayed(String...  text) {
-        for (String s : text) {
-            onView(withText(s)).check(matches(isDisplayed()));
+    public T assertText(String...  text) {
+        for (String t : text) {
+            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()));
         }
         return (T) this;
     }
@@ -119,7 +119,7 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T checkIsStringDisplayed(int stringID) {
-        checkIsTextDisplayed(getTranslatedString(stringID));
+        assertText(getTranslatedString(stringID));
         return (T) this;
     }
 
@@ -258,7 +258,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T scrollToAndCheckIsDisplayed(String text) {
+    public T scrollToAndAssertText(String text) {
         onView(withText(text)).perform(nestedScrollTo());
         onView(withText(text)).check(matches(isDisplayed()));
         return (T) this;
@@ -288,7 +288,7 @@ abstract class Page<T extends Page<T>> {
     void waitForText(String text) {
         while (true) {
             try {
-                checkIsTextDisplayed(text);
+                assertText(text);
                 break;
             } catch (NoMatchingViewException ignored) {
                 // ignored

@@ -16,9 +16,9 @@ import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.util.Collections;
 
-public class RankingWidgetWithCSVTest {
+public class DefaultImageAnswerTest {
 
-    private static final String TEST_FORM = "ranking_widget.xml";
+    private static final String TEST_FORM = "default_image_answer.xml";
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -28,15 +28,20 @@ public class RankingWidgetWithCSVTest {
                     )
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(TEST_FORM, Collections.singletonList("fruits.csv")));
+            .around(new CopyFormRule(TEST_FORM, Collections.singletonList("doc.png")));
 
     @Rule
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
 
     @Test
-    public void rankingWidget_shouldDisplayItemsFromSearchFunc() {
-        new FormEntryPage("ranking_widget", activityTestRule)
-                .clickRankingButton()
-                .assertText("Mango", "Oranges", "Strawberries");
+    public void imageViewWithDefaultAnswer_shouldBeDisplayed() {
+        new FormEntryPage("defaultImageAnswer", activityTestRule)
+                .checkIfImageViewIsDisplayed()
+                .swipeToNextQuestion()
+                .checkIfImageViewIsDisplayed()
+                .swipeToNextQuestion()
+                .checkIfImageViewIsDisplayed()
+                .swipeToNextQuestion()
+                .checkIfImageViewIsNotDisplayed();
     }
 }

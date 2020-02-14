@@ -64,7 +64,7 @@ public class FormManagementTest extends BaseRegressionTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("hints textq")
-                .checkIsTextDisplayed("1 very very very very very very very very very very long text")
+                .assertText("1 very very very very very very very very very very long text")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }
@@ -83,7 +83,7 @@ public class FormManagementTest extends BaseRegressionTest {
                 .startBlankForm("hints textq")
                 .checkIsIdDisplayed(R.id.help_icon)
                 .clickOnText("Hint 1")
-                .checkIsTextDisplayed("1 very very very very very very very very very very long text")
+                .assertText("1 very very very very very very very very very very long text")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }

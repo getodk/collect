@@ -16,7 +16,7 @@ public class ExitFormDialog extends Page<ExitFormDialog> {
     @Override
     public ExitFormDialog assertOnPage() {
         String title = getTranslatedString(R.string.exit) + " " + formName;
-        checkIsTextDisplayed(title);
+        assertText(title);
         return this;
     }
 }

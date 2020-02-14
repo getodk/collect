@@ -63,6 +63,11 @@ public class DrawWidget extends BaseImageWidget {
     }
 
     @Override
+    protected boolean doesSupportDefaultValues() {
+        return true;
+    }
+
+    @Override
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons

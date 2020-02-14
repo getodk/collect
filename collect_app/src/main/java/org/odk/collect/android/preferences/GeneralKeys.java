@@ -32,6 +32,7 @@ public final class GeneralKeys {
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
     public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
+    public static final String KEY_INSTALL_ID               = "metadata_installid";
 
     // google_preferences.xml
     public static final String KEY_SELECTED_GOOGLE_ACCOUNT  = "selected_google_account";

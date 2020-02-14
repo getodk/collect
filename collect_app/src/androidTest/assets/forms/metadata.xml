@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Metadata</h:title>
+    <model>
+      <instance>
+        <preload id="preload" version="2017061601">
+          <username/>
+          <email/>
+          <phonenumber/>
+          <deviceID/>
+          <subscriberID/>
+          <simSerial/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </preload>
+      </instance>
+      <bind nodeset="/preload/username" type="string" jr:preload="property" jr:preloadParams="username" readonly="true()"/>
+      <bind nodeset="/preload/email" type="string" jr:preload="property" jr:preloadParams="email" readonly="true()"/>
+      <bind nodeset="/preload/phonenumber" type="string" jr:preload="property" jr:preloadParams="phonenumber" readonly="true()"/>
+      <bind nodeset="/preload/deviceID" type="string" jr:preload="property" jr:preloadParams="deviceID" readonly="true()"/>
+      <bind nodeset="/preload/subscriberID" type="string" jr:preload="property" jr:preloadParams="subscriberID" readonly="true()"/>
+      <bind nodeset="/preload/simSerial" type="string" jr:preload="property" jr:preloadParams="simSerial" readonly="true()"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/preload/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group appearance="field-list">
+      <input ref="/preload/username">
+        <label>Username</label>
+      </input>
+      <input ref="/preload/email">
+        <label>Email</label>
+      </input>
+      <input ref="/preload/phonenumber">
+        <label>Phone number</label>
+      </input>
+      <input ref="/preload/deviceID">
+        <label>Device ID</label>
+      </input>
+      <input ref="/preload/subscriberID">
+        <label>Subscriber ID</label>
+      </input>
+      <input ref="/preload/simSerial">
+        <label>SIM serial number</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>

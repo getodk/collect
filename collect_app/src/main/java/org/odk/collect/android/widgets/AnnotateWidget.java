@@ -97,6 +97,11 @@ public class AnnotateWidget extends BaseImageWidget {
     }
 
     @Override
+    protected boolean doesSupportDefaultValues() {
+        return true;
+    }
+
+    @Override
     public void clearAnswer() {
         super.clearAnswer();
         annotateButton.setEnabled(false);
