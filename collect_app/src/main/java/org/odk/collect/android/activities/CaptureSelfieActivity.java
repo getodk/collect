@@ -40,7 +40,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager
                 .LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_capture_selfie_new_api);
+        setContentView(R.layout.activity_capture_selfie);
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, Camera2Fragment.newInstance())

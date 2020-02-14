@@ -108,7 +108,6 @@ public class CameraUtils {
         }
     }
 
-    @SuppressLint("NewApi")
     public static boolean isFrontCameraAvailable() {
         try {
             //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html

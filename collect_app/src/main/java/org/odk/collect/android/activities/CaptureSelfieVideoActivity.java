@@ -37,7 +37,7 @@ public class CaptureSelfieVideoActivity extends Activity {
             return;
         }
 
-        setContentView(R.layout.activity_capture_selfie_video_new_api);
+        setContentView(R.layout.activity_capture_selfie_video);
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, Camera2VideoFragment.newInstance())

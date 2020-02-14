@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -416,12 +415,10 @@ public class MediaUtils {
      * media prompts. Beginning with KitKat, the responses use a different
      * mechanism and needs a lot of special handling.
      */
-    @SuppressLint("NewApi")
     public static String getPathFromUri(Context ctxt, Uri uri, String pathKey) {
         return getPath(ctxt, uri);
     }
 
-    @SuppressLint("NewApi")
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
