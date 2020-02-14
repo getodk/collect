@@ -12,10 +12,7 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,22 +28,11 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     @BindView(R.id.message)
     TextView messageText;
 
-    @BindView(R.id.status)
-    TextView statusText;
-
     @BindView(R.id.progress_bar)
     LinearLayout progressBar;
 
-    @Inject
-    StorageMigrationRepository storageMigrationRepository;
-
     public static StorageMigrationDialog create() {
         return new StorageMigrationDialog();
-    }
-
-    private StorageMigrationDialog() {
-        Collect.getInstance().getComponent().inject(this);
-        storageMigrationRepository.getStatus().observe(this, this::updateStatus);
     }
 
     @Override
@@ -75,10 +61,6 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     @Override
     protected void onBackPressed() {
-    }
-
-    private void updateStatus(StorageMigrationStatus status) {
-        statusText.setText(StorageMigrationStatus.getStatusMessage(status, getContext()));
     }
 
     private void updateToolbar() {

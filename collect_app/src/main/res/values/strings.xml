@@ -740,6 +740,7 @@
     <string name="storage_migration_status_3">3/5 Moving files…</string>
     <string name="storage_migration_status_4">4/5 Migrating databases…</string>
     <string name="storage_migration_status_5">5/5 Clearing old data…</string>
+    <string name="migration_progress_msg">Migration in progress.\nThis may take a few seconds…</string>
 
     <string name="install_id">Install ID - will replace Device ID in August 2020</string>
     <string name="preference_not_available">Not available</string>

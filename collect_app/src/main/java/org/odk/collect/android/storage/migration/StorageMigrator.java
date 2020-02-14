@@ -59,10 +59,8 @@ public class StorageMigrator {
     }
 
     StorageMigrationResult migrate() {
-        storageMigrationRepository.setStatus(StorageMigrationStatus.PREPARING_SCOPED_STORAGE);
         storageEraser.clearOdkDirOnScopedStorage();
 
-        storageMigrationRepository.setStatus(StorageMigrationStatus.CHECKING_APP_STATE);
         if (isFormUploaderRunning()) {
             return StorageMigrationResult.FORM_UPLOADER_IS_RUNNING;
         }
@@ -73,12 +71,10 @@ public class StorageMigrator {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
 
-        storageMigrationRepository.setStatus(StorageMigrationStatus.MOVING_FILES);
         if (moveAppDataToScopedStorage() != StorageMigrationResult.MOVING_FILES_SUCCEEDED) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
 
-        storageMigrationRepository.setStatus(StorageMigrationStatus.MIGRATING_DATABASES);
         storageStateProvider.enableUsingScopedStorage();
         reopenDatabases();
         if (migrateDatabasePaths() != StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED) {
@@ -87,7 +83,6 @@ public class StorageMigrator {
             return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
         }
 
-        storageMigrationRepository.setStatus(StorageMigrationStatus.CLEARING_OLD_DATA);
         storageEraser.deleteOdkDirFromUnscopedStorage();
 
         return StorageMigrationResult.SUCCESS;
