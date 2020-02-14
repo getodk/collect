@@ -29,7 +29,7 @@ import java.util.Map;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
+import static org.odk.collect.android.preferences.GeneralKeys.DEFAULTS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SERVER_URL;
 
 public class PreferenceSaver {
@@ -48,7 +48,7 @@ public class PreferenceSaver {
             Map<String, Object> generalPrefs = convertJSONToMap(settingsJson.getJSONObject("general"));
             Map<String, Object> adminPrefsJson = convertJSONToMap(settingsJson.getJSONObject("admin"));
 
-            if (!(new PreferenceValidator(GENERAL_KEYS).isValid(generalPrefs))) {
+            if (!(new PreferenceValidator(DEFAULTS).isValid(generalPrefs))) {
                 if (listener != null) {
                     listener.onFailure(new GeneralSharedPreferences.ValidationException());
                 }
@@ -109,7 +109,7 @@ public class PreferenceSaver {
     }
 
     private static Collection<String> getAllGeneralKeys() {
-        return new HashSet<>(GENERAL_KEYS.keySet());
+        return new HashSet<>(DEFAULTS.keySet());
     }
 
     private static Collection<String> getAllAdminKeys() {

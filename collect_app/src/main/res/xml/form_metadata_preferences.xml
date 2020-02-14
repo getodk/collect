@@ -6,7 +6,7 @@
     <PreferenceCategory
         android:title="@string/user_defined"
         app:iconSpaceReserved="false">
-        
+
         <EditTextPreference
             android:inputType="textNoSuggestions"
             android:key="metadata_username"

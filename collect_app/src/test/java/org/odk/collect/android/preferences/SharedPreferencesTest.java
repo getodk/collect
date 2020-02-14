@@ -1,29 +1,9 @@
-/*
- * Copyright 2017 Nafundi
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package org.odk.collect.android;
-
-import androidx.test.runner.AndroidJUnit4;
+package org.odk.collect.android.preferences;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
 
@@ -32,13 +12,13 @@ import static junit.framework.Assert.assertFalse;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_COMPLETED_DEFAULT;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesTest {
 
     @Test
-    public void generalDefaultSharedPreferencesTest() {
+    public void generalSharedPreferences_loadDefaultPreferences_loadsDefaults() {
         GeneralSharedPreferences.getInstance().loadDefaultPreferences();
-        HashMap<String, Object> defaultValues = GeneralKeys.GENERAL_KEYS;
+        HashMap<String, Object> defaultValues = GeneralKeys.DEFAULTS;
 
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
@@ -47,7 +27,7 @@ public class SharedPreferencesTest {
     }
 
     @Test
-    public void adminDefaultSharedPreferencesTest() {
+    public void adminSharedPreferences_loadDefaultPreferences_loadsDefaults() {
         AdminSharedPreferences.getInstance().loadDefaultPreferences();
 
         AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
@@ -61,7 +41,7 @@ public class SharedPreferencesTest {
         GeneralSharedPreferences.getInstance().save(KEY_COMPLETED_DEFAULT, false);
 
         GeneralSharedPreferences.getInstance().reloadPreferences();
-        HashMap<String, Object> defaultValues = GeneralKeys.GENERAL_KEYS;
+        HashMap<String, Object> defaultValues = GeneralKeys.DEFAULTS;
 
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {

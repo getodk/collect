@@ -26,7 +26,7 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
+import static org.odk.collect.android.preferences.GeneralKeys.DEFAULTS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 public class GeneralSharedPreferences {
@@ -54,7 +54,7 @@ public class GeneralSharedPreferences {
         Object value = null;
 
         try {
-            defaultValue = GENERAL_KEYS.get(key);
+            defaultValue = DEFAULTS.get(key);
         } catch (Exception e) {
             Timber.e("Default for %s not found", key);
         }
@@ -75,7 +75,7 @@ public class GeneralSharedPreferences {
     }
 
     public void reset(String key) {
-        Object defaultValue = GENERAL_KEYS.get(key);
+        Object defaultValue = DEFAULTS.get(key);
         save(key, defaultValue);
     }
 
@@ -127,7 +127,7 @@ public class GeneralSharedPreferences {
     }
 
     public void reloadPreferences() {
-        for (Map.Entry<String, Object> keyValuePair : GeneralKeys.GENERAL_KEYS.entrySet()) {
+        for (Map.Entry<String, Object> keyValuePair : GeneralKeys.DEFAULTS.entrySet()) {
             save(keyValuePair.getKey(), get(keyValuePair.getKey()));
         }
     }

@@ -24,7 +24,6 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 
 @RunWith(AndroidJUnit4.class)
@@ -106,7 +105,7 @@ public class FormMetadataTest {
     }
 
     private String getInstallID() {
-        SharedPreferences sharedPreferences = getDefaultSharedPreferences(rule.getActivity());
+        SharedPreferences sharedPreferences = rule.getActivity().getSharedPreferences("meta", Context.MODE_PRIVATE);
         return new SharedPreferencesInstallIDProvider(sharedPreferences, KEY_INSTALL_ID).getInstallID();
     }
 

@@ -55,6 +55,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ResetAppStateTest {
+
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
 
     @Rule

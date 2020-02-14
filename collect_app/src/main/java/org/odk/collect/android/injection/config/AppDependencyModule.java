@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
@@ -166,7 +165,7 @@ public class AppDependencyModule {
 
     @Provides
     InstallIDProvider providesInstallIDProvider(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences preferences = context.getSharedPreferences("meta", Context.MODE_PRIVATE);
         return new SharedPreferencesInstallIDProvider(preferences, KEY_INSTALL_ID);
     }
 
