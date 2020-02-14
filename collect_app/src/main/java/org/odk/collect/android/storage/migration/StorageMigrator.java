@@ -43,8 +43,6 @@ public class StorageMigrator {
 
     private final StorageMigrationRepository storageMigrationRepository;
 
-    private static boolean isMigrationBeingPerformed;
-
     public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository) {
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
@@ -53,9 +51,9 @@ public class StorageMigrator {
     }
 
     void performStorageMigration() {
-        isMigrationBeingPerformed = true;
+        storageMigrationRepository.markMigrationStart();
         storageMigrationRepository.setResult(migrate());
-        isMigrationBeingPerformed = false;
+        storageMigrationRepository.markMigrationEnd();
     }
 
     StorageMigrationResult migrate() {
@@ -67,7 +65,7 @@ public class StorageMigrator {
         if (isFormDownloaderRunning()) {
             return StorageMigrationResult.FORM_DOWNLOADER_IS_RUNNING;
         }
-        if (!storageStateProvider.isEnoughSpaceToPerformMigartion(storagePathProvider)) {
+        if (!storageStateProvider.isEnoughSpaceToPerformMigration(storagePathProvider)) {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
 
@@ -206,9 +204,5 @@ public class StorageMigrator {
 
     private String getRelativeCacheDbPath(String path) {
         return storagePathProvider.getRelativeFilePath(storagePathProvider.getUnscopedStorageDirPath(StorageSubdirectory.CACHE), path);
-    }
-
-    public static boolean isIsMigrationBeingPerformed() {
-        return isMigrationBeingPerformed;
     }
 }

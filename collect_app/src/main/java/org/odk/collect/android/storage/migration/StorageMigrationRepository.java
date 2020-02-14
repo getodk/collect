@@ -6,11 +6,25 @@ import androidx.lifecycle.MutableLiveData;
 public class StorageMigrationRepository {
     private final MutableLiveData<StorageMigrationResult> migrationResult = new MutableLiveData<>();
 
+    private boolean isMigrationBeingPerformed;
+
     public LiveData<StorageMigrationResult> getResult() {
         return migrationResult;
     }
 
     public void setResult(StorageMigrationResult storageMigrationResult) {
         migrationResult.postValue(storageMigrationResult);
+    }
+
+    public boolean isMigrationBeingPerformed() {
+        return isMigrationBeingPerformed;
+    }
+
+    void markMigrationStart() {
+        isMigrationBeingPerformed = true;
+    }
+
+    void markMigrationEnd() {
+        isMigrationBeingPerformed = false;
     }
 }

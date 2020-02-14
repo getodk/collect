@@ -30,7 +30,7 @@ public class StorageStateProvider {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    public boolean isEnoughSpaceToPerformMigartion(StoragePathProvider storagePathProvider) {
+    public boolean isEnoughSpaceToPerformMigration(StoragePathProvider storagePathProvider) {
         try {
             return getAvailableScopedStorageSize(storagePathProvider) > getOdkDirSize(storagePathProvider);
         } catch (Exception | Error e) {

@@ -19,16 +19,16 @@ import butterknife.ButterKnife;
 
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
-    @BindView(R.id.cancel)
+    @BindView(R.id.cancelButton)
     Button cancelButton;
 
-    @BindView(R.id.migrate)
+    @BindView(R.id.migrateButton)
     Button migrateButton;
 
-    @BindView(R.id.message)
+    @BindView(R.id.messageText)
     TextView messageText;
 
-    @BindView(R.id.progress_bar)
+    @BindView(R.id.progressBar)
     LinearLayout progressBar;
 
     public static StorageMigrationDialog create() {
@@ -64,16 +64,16 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     }
 
     private void updateToolbar() {
-        getToolbar().setTitle(R.string.migration_dialog_title);
+        getToolbar().setTitle(R.string.storage_migration_dialog_title);
         getToolbar().setNavigationIcon(null);
     }
 
     private void disableDialog() {
         cancelButton.setEnabled(false);
-        cancelButton.setAlpha(.4f);
+        cancelButton.setAlpha(.5f);
         migrateButton.setEnabled(false);
-        migrateButton.setAlpha(.4f);
-        messageText.setAlpha(.4f);
+        migrateButton.setAlpha(.5f);
+        messageText.setAlpha(.5f);
     }
 
     private void showProgressBar() {

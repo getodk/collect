@@ -50,7 +50,7 @@ public class StorageMigratorTest {
     public void when_thereIsNoEnoughSpaceToPerformMigration_should_appropriateResultBeReturned() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(false).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(false).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
 
         assertThat(storageMigrator.migrate(), is(StorageMigrationResult.NOT_ENOUGH_SPACE));
     }
@@ -59,7 +59,7 @@ public class StorageMigratorTest {
     public void when_anyExceptionIsThrownDuringMovingFiles_should_appropriateResultBeReturned() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_FAILED).when(storageMigrator).moveAppDataToScopedStorage();
 
         assertThat(storageMigrator.migrate(), is(StorageMigrationResult.MOVING_FILES_FAILED));
@@ -69,7 +69,7 @@ public class StorageMigratorTest {
     public void when_anyExceptionIsThrownDuringMigratingDatabases_should_appropriateResultBeReturned() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_SUCCEEDED).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED).when(storageMigrator).migrateDatabasePaths();
 
@@ -80,7 +80,7 @@ public class StorageMigratorTest {
     public void when_migrationFinishedWithSuccess_should_appropriateResultBeReturned() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_SUCCEEDED).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED).when(storageMigrator).migrateDatabasePaths();
 
@@ -100,7 +100,7 @@ public class StorageMigratorTest {
     public void when_movingFilesIsFinished_should_scopedStorageBeEnabled() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_SUCCEEDED).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED).when(storageMigrator).migrateDatabasePaths();
 
@@ -113,7 +113,7 @@ public class StorageMigratorTest {
     public void when_movingFilesIsFinished_should_databasesBeReopened() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_SUCCEEDED).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED).when(storageMigrator).migrateDatabasePaths();
 
@@ -126,7 +126,7 @@ public class StorageMigratorTest {
     public void when_movingFilesFailed_should_databasesBeReopenedAgain() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_SUCCEEDED).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED).when(storageMigrator).migrateDatabasePaths();
 
@@ -139,7 +139,7 @@ public class StorageMigratorTest {
     public void when_movingFilesFailed_should_scopedStorageBeDisabled() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_SUCCEEDED).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED).when(storageMigrator).migrateDatabasePaths();
 
@@ -152,7 +152,7 @@ public class StorageMigratorTest {
     public void when_migrationFinished_should_oldOdkDirBeRemoved() {
         doReturn(false).when(storageMigrator).isFormUploaderRunning();
         doReturn(false).when(storageMigrator).isFormDownloaderRunning();
-        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigartion(storagePathProvider);
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(StorageMigrationResult.MOVING_FILES_SUCCEEDED).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED).when(storageMigrator).migrateDatabasePaths();
 
