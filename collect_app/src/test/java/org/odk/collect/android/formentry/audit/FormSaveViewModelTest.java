@@ -5,33 +5,41 @@ import android.net.Uri;
 import androidx.lifecycle.LiveData;
 
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.odk.collect.android.formentry.FormSaveViewModel;
-import org.odk.collect.android.formentry.FormSaver;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.formentry.saving.FormSaver;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Arrays;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
+import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
+import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
+import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.ALREADY_SAVING;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.SAVED;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
-import static org.odk.collect.android.formentry.FormSaveViewModel.SaveResult.State.SAVING;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.ALREADY_SAVING;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVED;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormSaveViewModelTest {
@@ -40,42 +48,22 @@ public class FormSaveViewModelTest {
     private AuditEventLogger logger;
     private FormSaveViewModel viewModel;
     private FormSaver formSaver;
+    private FormController formController;
 
     @Before
     public void setup() {
         // Useful given some methods will execute AsyncTasks
         Robolectric.getBackgroundThreadScheduler().pause();
 
+        formController = mock(FormController.class);
         logger = mock(AuditEventLogger.class);
         formSaver = mock(FormSaver.class);
 
+        when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
         viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver);
-        viewModel.setAuditEventLogger(logger);
-    }
-
-    @Test
-    public void saveReason_logsChangeReasonAuditEvent() {
-        viewModel.setReason("Blah");
-        viewModel.saveReason();
-
-        verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
-    }
-
-    @Test
-    public void saveReason_whenReasonIsValid_returnsTrue() {
-        viewModel.setReason("Blah");
-        assertThat(viewModel.saveReason(), equalTo(true));
-    }
-
-    @Test
-    public void saveReason_whenReasonIsNotValid_returnsFalse() {
-        viewModel.setReason("");
-        assertThat(viewModel.saveReason(), equalTo(false));
-
-        viewModel.setReason("  ");
-        assertThat(viewModel.saveReason(), equalTo(false));
+        viewModel.setFormController(formController);
     }
 
     @Test
@@ -118,28 +106,123 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saved_logsFormSavedAuditEvent() {
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnQuestion_logsSaveAndQuestionAuditEventsAfterFlush() {
+        when(formController.getEvent()).thenReturn(EVENT_QUESTION);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("index1")
+                .withAnswerDisplayText("answer")
+                .build();
+        when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
 
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.FORM_SAVE,
+                false,
+                CURRENT_TIME
+        );
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.QUESTION,
+                prompt.getIndex(),
+                true,
+                prompt.getAnswerValue().getDisplayText(),
+                CURRENT_TIME,
+                null
+        );
     }
 
     @Test
-    public void whenFormSaverFinishes_whenViewExiting_logsFormExitAuditEvent() {
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnGroup_logsSaveAndQuestionAuditEventsAfterFlush() {
+        when(formController.getEvent()).thenReturn(EVENT_GROUP);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("index1")
+                .withAnswerDisplayText("answer")
+                .build();
+        when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
+
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.FORM_SAVE,
+                false,
+                CURRENT_TIME
+        );
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.QUESTION,
+                prompt.getIndex(),
+                true,
+                prompt.getAnswerValue().getDisplayText(),
+                CURRENT_TIME,
+                null
+        );
+    }
+
+    @Test
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnRepeat_logsSaveAndQuestionAuditEventsAfterFlush() {
+        when(formController.getEvent()).thenReturn(EVENT_REPEAT);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withIndex("index1")
+                .withAnswerDisplayText("answer")
+                .build();
+        when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
+
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.FORM_SAVE,
+                false,
+                CURRENT_TIME
+        );
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.QUESTION,
+                prompt.getIndex(),
+                true,
+                prompt.getAnswerValue().getDisplayText(),
+                CURRENT_TIME,
+                null
+        );
+    }
+
+    @Test
+    public void whenFormSaverFinishes_whenViewExiting_logsFormSaveAndFormExitAuditEventAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", true);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.FORM_SAVE,
+                false,
+                CURRENT_TIME
+        );
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, CURRENT_TIME);
     }
 
     @Test
-    public void whenFormSaverFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEvents() {
+    public void whenFormSaverFinishes_whenFormComplete_andViewExiting_logsFormExitAndFinalizeAuditEventsAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), true, "", true);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, CURRENT_TIME);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(
+                AuditEvent.AuditEventType.FORM_SAVE,
+                false,
+                CURRENT_TIME
+        );
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, CURRENT_TIME);
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, CURRENT_TIME);
     }
 
     @Test
@@ -160,11 +243,14 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saveError_logsSaveErrorAuditEvent() {
+    public void whenFormSaverFinishes_saveError_logsSaveErrorAuditEvenAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVE_ERROR);
-        verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, CURRENT_TIME);
     }
 
     @Test
@@ -177,11 +263,14 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_encryptionError_logsFinalizeErrorAuditEvent() {
+    public void whenFormSaverFinishes_encryptionError_logsFinalizeErrorAuditEventAfterFlush() {
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
 
         whenFormSaverFinishes(SaveFormToDisk.ENCRYPTION_ERROR);
-        verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, CURRENT_TIME);
+
+        InOrder verifier = inOrder(logger);
+        verifier.verify(logger).flush();
+        verifier.verify(logger).logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, CURRENT_TIME);
     }
 
     @Test
@@ -199,7 +288,7 @@ public class FormSaveViewModelTest {
         whenFormSaverFinishes(FormEntryController.ANSWER_CONSTRAINT_VIOLATED);
 
         InOrder verifier = inOrder(logger);
-        verifier.verify(logger).exitView();
+        verifier.verify(logger).flush();
         verifier.verify(logger).logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, CURRENT_TIME);
     }
 
@@ -232,6 +321,29 @@ public class FormSaveViewModelTest {
         assertThat(saveResult.getValue().getState(), equalTo(SAVING));
     }
 
+    @Test
+    public void saveReason_logsChangeReasonAuditEvent() {
+        viewModel.setReason("Blah");
+        viewModel.saveReason();
+
+        verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
+    }
+
+    @Test
+    public void saveReason_whenReasonIsValid_returnsTrue() {
+        viewModel.setReason("Blah");
+        assertThat(viewModel.saveReason(), equalTo(true));
+    }
+
+    @Test
+    public void saveReason_whenReasonIsNotValid_returnsFalse() {
+        viewModel.setReason("");
+        assertThat(viewModel.saveReason(), equalTo(false));
+
+        viewModel.setReason("  ");
+        assertThat(viewModel.saveReason(), equalTo(false));
+    }
+
     private void whenReasonRequiredToSave() {
         when(logger.isChangeReasonRequired()).thenReturn(true);
         when(logger.isChangesMade()).thenReturn(true);
@@ -247,7 +359,7 @@ public class FormSaveViewModelTest {
         saveToDiskResult.setSaveResult(result, true);
         saveToDiskResult.setSaveErrorMessage(message);
 
-        when(formSaver.save(any(), anyBoolean(), any(), anyBoolean(), any())).thenReturn(saveToDiskResult);
+        when(formSaver.save(any(), any(), anyBoolean(), anyBoolean(), any(), any())).thenReturn(saveToDiskResult);
         Robolectric.getBackgroundThreadScheduler().runOneTask();
     }
 }
