@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.firebase.firebase-perf'
+//apply plugin: 'com.google.firebase.firebase-perf'   // smap
 apply from: '../config/quality.gradle'
 apply from: '../config/jacoco.gradle'
 
@@ -216,7 +216,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:17.0.0"
     implementation "com.google.android.gms:play-services-gcm:17.0.0"    // smap google cloud messaging
 
-    implementation 'com.google.firebase:firebase-perf:19.0.4'
+    //implementation 'com.google.firebase:firebase-perf:19.0.4'         // smap
     implementation 'com.google.firebase:firebase-analytics:17.2.1'
     implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
