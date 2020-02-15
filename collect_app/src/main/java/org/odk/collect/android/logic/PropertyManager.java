@@ -20,13 +20,13 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +71,9 @@ public class PropertyManager implements IPropertyManager {
     @Inject
     RxEventBus eventBus;
 
+    @Inject
+    DeviceDetailsProvider deviceDetailsProvider;
+
     public String getName() {
         return "Property Manager";
     }
@@ -91,12 +94,11 @@ public class PropertyManager implements IPropertyManager {
         Collect.getInstance().getComponent().inject(this);
         try {
             // Device-defined properties
-            TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            IdAndPrefix idp = findDeviceId(context, telMgr);
+            IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
             putProperty(PROPMGR_DEVICE_ID,     idp.prefix,          idp.id);
-            putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          telMgr.getLine1Number());
-            putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         telMgr.getSubscriberId());
-            putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    telMgr.getSimSerialNumber());
+            putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
+            putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         deviceDetailsProvider.getSubscriberId());
+            putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    deviceDetailsProvider.getSimSerialNumber());
         } catch (SecurityException e) {
             Timber.e(e);
         }
@@ -109,9 +111,9 @@ public class PropertyManager implements IPropertyManager {
     }
 
     // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
-    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) throws SecurityException {
+    private IdAndPrefix findDeviceId(Context context, DeviceDetailsProvider deviceDetailsProvider) throws SecurityException {
         final String androidIdName = Settings.Secure.ANDROID_ID;
-        String deviceId = telephonyManager.getDeviceId();
+        String deviceId = deviceDetailsProvider.getDeviceId();
         String scheme = null;
 
         if (deviceId != null) {

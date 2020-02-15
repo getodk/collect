@@ -152,6 +152,6 @@ public class FormHierarchyTest extends BaseRegressionTest {
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
 
-        page.checkIsTextDisplayed("Repeat Group 1_1 > 1");
+        page.assertText("Repeat Group 1_1 > 1");
     }
 }

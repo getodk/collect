@@ -84,7 +84,7 @@ public class IdentifyUserTest {
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Blah")
                 .rotateToLandscape(new IdentifyUserPromptPage("Identify User", rule))
-                .checkIsTextDisplayed("Blah");
+                .assertText("Blah");
     }
 
     @Test

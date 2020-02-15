@@ -66,7 +66,7 @@ public class FormEntrySettingsTest extends BaseRegressionTest {
                 .startBlankForm("All widgets")
                 .swipeToNextQuestion()
                 .swipeToPreviousQuestion()
-                .checkIsTextDisplayed("String widget")
+                .assertText("String widget")
                 .closeSoftKeyboard()
                 .pressBack(new ExitFormDialog("All widgets", rule))
                 .checkIsStringDisplayed(R.string.do_not_save)

@@ -40,7 +40,7 @@ public class DeletingRepeatGroupsTest {
     public void requestingDeletionOfFirstRepeat_deletesFirstRepeat() {
         new FormEntryPage("repeatGroups", activityTestRule)
                 .deleteGroup("text1")
-                .checkIsTextDisplayed("2");
+                .assertText("2");
     }
 
     @Test
@@ -48,7 +48,7 @@ public class DeletingRepeatGroupsTest {
         new FormEntryPage("repeatGroups", activityTestRule)
                 .swipeToNextQuestion()
                 .deleteGroup("text1")
-                .checkIsTextDisplayed("3");
+                .assertText("3");
     }
 
     @Test
@@ -58,7 +58,7 @@ public class DeletingRepeatGroupsTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .deleteGroup("text1")
-                .checkIsTextDisplayed("number1");
+                .assertText("number1");
     }
 
     @Test
@@ -70,13 +70,13 @@ public class DeletingRepeatGroupsTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
 
         page.clickOnText("repeatGroup > 1")
-                .checkIsTextDisplayed("1")
+                .assertText("1")
                 .deleteGroup();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
         page.clickOnText("repeatGroup > 1")
-                .checkIsTextDisplayed("2");
+                .assertText("2");
     }
 
     @Test
@@ -88,13 +88,13 @@ public class DeletingRepeatGroupsTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
 
         page.clickOnText("repeatGroup > 2")
-                .checkIsTextDisplayed("2")
+                .assertText("2")
                 .deleteGroup();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
         page.clickOnText("repeatGroup > 2")
-                .checkIsTextDisplayed("3");
+                .assertText("3");
     }
 
     @Test
@@ -106,13 +106,13 @@ public class DeletingRepeatGroupsTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(4)));
 
         page.clickOnText("repeatGroup > 4")
-                .checkIsTextDisplayed("4")
+                .assertText("4")
                 .deleteGroup();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
         page.clickOnText("repeatGroup > 3")
-                .checkIsTextDisplayed("3");
+                .assertText("3");
     }
 
     @Test
@@ -125,7 +125,7 @@ public class DeletingRepeatGroupsTest {
                 .clickOnText("repeatGroupFieldList > 1")
                 .clickOnText("number1")
                 .deleteGroup("number1")
-                .checkIsTextDisplayed("2");
+                .assertText("2");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class DeletingRepeatGroupsTest {
                 .clickOnText("repeatGroupFieldList > 2")
                 .clickOnText("number1")
                 .deleteGroup("number1")
-                .checkIsTextDisplayed("3");
+                .assertText("3");
     }
 
     @Test
@@ -170,7 +170,7 @@ public class DeletingRepeatGroupsTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
         page.clickOnText("repeatGroupFieldList > 1")
-                .checkIsTextDisplayed("2");
+                .assertText("2");
     }
 
     @Test
@@ -188,7 +188,7 @@ public class DeletingRepeatGroupsTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
         page.clickOnText("repeatGroupFieldList > 2")
-                .checkIsTextDisplayed("3");
+                .assertText("3");
     }
 
     @Test
@@ -206,6 +206,6 @@ public class DeletingRepeatGroupsTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
         page.clickOnText("repeatGroupFieldList > 3")
-                .checkIsTextDisplayed("3");
+                .assertText("3");
     }
 }

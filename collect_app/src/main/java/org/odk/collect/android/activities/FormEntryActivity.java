@@ -92,11 +92,12 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
-import org.odk.collect.android.formentry.FormSaveViewModel;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
@@ -477,7 +478,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (getFormController(true) != null) {
                     FormController formController = getFormController();
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                    formSaveViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                    formSaveViewModel.setFormController(formController);
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
@@ -1035,7 +1036,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (formController != null) {
-                    formController.getAuditEventLogger().exitView();
+                    formController.getAuditEventLogger().flush();
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                 }
 
@@ -1199,13 +1200,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case FormEntryController.EVENT_REPEAT:
                 // should only be a group here if the event_group is a field-list
                 try {
-                    FormEntryPrompt[] prompts = formController.getQuestionPrompts();
-                    for (FormEntryPrompt question : prompts) {
-                        String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, System.currentTimeMillis(), null);
-                    }
+                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), System.currentTimeMillis());
+
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
+                    FormEntryPrompt[] prompts = formController.getQuestionPrompts();
 
                     odkView = createODKView(advancingPage, prompts, groups);
                     odkView.setWidgetValueChangedListener(this);
@@ -1467,7 +1466,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            formController.getAuditEventLogger().exitView();    // Close events waiting for an end time
+            formController.getAuditEventLogger().flush();    // Close events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1532,7 +1531,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             // create savepoint
                             nonblockingCreateSavePointData();
                         }
-                        formController.getAuditEventLogger().exitView();    // Close events
+                        formController.getAuditEventLogger().flush();    // Close events
                         View next = createView(event, false);
                         showView(next, AnimationType.LEFT);
                     } else {
@@ -1826,7 +1825,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        getFormController().getAuditEventLogger().exitView();
         formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit).observe(this, result -> {
             switch (result.getState()) {
                 case CHANGE_REASON_REQUIRED:
@@ -1862,7 +1860,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             }
                         }
 
-                        finishReturnInstance();
+                        finishAndReturnInstance();
                     }
 
                     break;
@@ -1885,7 +1883,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                     showLongToast(String.format(getString(R.string.encryption_error_message),
                             result.getMessage()));
-                    finishReturnInstance();
+                    finishAndReturnInstance();
                     break;
 
                 case CONSTRAINT_ERROR: {
@@ -1940,7 +1938,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 removeTempInstance();
                 MediaManager.INSTANCE.revertChanges();
-                finishReturnInstance();
+                finishAndReturnInstance();
 
                 alertDialog.dismiss();
             }
@@ -2395,7 +2393,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (formController.getInstanceFile() == null) {
                     createInstanceDirectory(formController);
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                    formSaveViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                    formSaveViewModel.setFormController(formController);
 
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
@@ -2412,7 +2410,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                             identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                            formSaveViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                            formSaveViewModel.setFormController(formController);
 
                             identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                                 if (!requiresIdentity) {
@@ -2445,7 +2443,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         }
                     } else {
                         identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                        formSaveViewModel.setAuditEventLogger(formController.getAuditEventLogger());
+                        formSaveViewModel.setFormController(formController);
 
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
@@ -2550,7 +2548,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Returns the instance that was just filled out to the calling activity, if
      * requested.
      */
-    private void finishReturnInstance() {
+    private void finishAndReturnInstance() {
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form

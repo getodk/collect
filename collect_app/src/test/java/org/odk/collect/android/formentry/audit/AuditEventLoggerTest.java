@@ -81,7 +81,7 @@ public class AuditEventLoggerTest {
         AuditEventLogger auditEventLogger = new AuditEventLogger(null, testWriter, formController);
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
-        auditEventLogger.exitView(); // Triggers event writing
+        auditEventLogger.flush(); // Triggers event writing
         assertEquals(0, testWriter.auditEvents.size());
     }
 
@@ -125,7 +125,7 @@ public class AuditEventLoggerTest {
         auditEventLogger.addLocation(location5);
 
         auditEventLogger.logEvent(END_OF_FORM, false, 1548156712000L);
-        auditEventLogger.exitView();
+        auditEventLogger.flush();
 
         AuditEvent auditEvent = testWriter.auditEvents.get(0);
         assertEquals(String.valueOf(location4.getLatitude()), auditEvent.getLatitude());
@@ -152,7 +152,7 @@ public class AuditEventLoggerTest {
         auditEventLogger.addLocation(location2);
 
         auditEventLogger.logEvent(END_OF_FORM, false, 120 * 1000L);
-        auditEventLogger.exitView();
+        auditEventLogger.flush();
 
         AuditEvent auditEvent = testWriter.auditEvents.get(0);
         assertEquals(String.valueOf(location2.getLatitude()), auditEvent.getLatitude());
@@ -165,7 +165,7 @@ public class AuditEventLoggerTest {
         AuditEventLogger auditEventLogger = new AuditEventLogger(testAuditConfigWithNullValues, testWriter, formController);
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
-        auditEventLogger.exitView(); // Triggers event writing
+        auditEventLogger.flush(); // Triggers event writing
 
         assertFalse(testWriter.auditEvents.get(0).isLocationAlreadySet());
     }
@@ -179,7 +179,7 @@ public class AuditEventLoggerTest {
         assertTrue(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_DISABLED));
         assertFalse(auditEventLogger.isDuplicateOfLastLocationEvent(LOCATION_PROVIDERS_ENABLED));
 
-        auditEventLogger.exitView(); // Triggers event writing
+        auditEventLogger.flush(); // Triggers event writing
         assertEquals(2, testWriter.auditEvents.size());
     }
 
@@ -189,7 +189,7 @@ public class AuditEventLoggerTest {
         auditEventLogger.setUser("Riker");
 
         auditEventLogger.logEvent(END_OF_FORM, false, 0);
-        auditEventLogger.exitView(); // Triggers event writing
+        auditEventLogger.flush(); // Triggers event writing
 
         assertEquals("Riker", testWriter.auditEvents.get(0).getUser());
     }
@@ -199,7 +199,7 @@ public class AuditEventLoggerTest {
         AuditEventLogger auditEventLogger = new AuditEventLogger(new AuditConfig.Builder().setMode(null).setLocationMinInterval(null).setLocationMaxAge(null).setIsTrackingChangesEnabled(false).setIsIdentifyUserEnabled(false).setIsTrackChangesReasonEnabled(true).createAuditConfig(), testWriter, formController);
 
         auditEventLogger.logEvent(CHANGE_REASON, null, false, null, 123L, "Blah");
-        auditEventLogger.exitView(); // Triggers event writing
+        auditEventLogger.flush(); // Triggers event writing
 
         assertEquals("Blah", testWriter.auditEvents.get(0).getChangeReason());
     }
@@ -232,7 +232,7 @@ public class AuditEventLoggerTest {
         auditEventLogger.logEvent(LOCATION_PROVIDERS_DISABLED, false, 0);
         auditEventLogger.logEvent(UNKNOWN_EVENT_TYPE, false, 0);
 
-        auditEventLogger.exitView(); // Triggers event writing
+        auditEventLogger.flush(); // Triggers event writing
         assertEquals(21, testWriter.auditEvents.size());
     }
 
