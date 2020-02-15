@@ -236,7 +236,9 @@ public final class ExternalDataUtil {
             return returnedChoices;
         } catch (Exception e) {
             String fileName = String.valueOf(xpathfuncexpr.args[0].eval(null, null));
-            if (!fileName.endsWith(".csv")) {
+            if(fileName.startsWith("linked_s")) {    // smap
+                throw(e);
+            } else if (!fileName.endsWith(".csv")) {
                 fileName = fileName + ".csv";
             }
             FormController formController = Collect.getInstance().getFormController();

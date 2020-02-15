@@ -70,7 +70,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
 
         // Remove any spaces around comma separated display columns
         displayColumns = "";
-        if(dColumns != null) {
+        if(dColumns != null && dColumns.trim().length() > 0) {
             String[] a = dColumns.split(",");
             int idx = 0;
             for(String v : a) {
@@ -79,6 +79,9 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 }
                 displayColumns += v.trim();
             }
+        } else {
+            throw new ExternalDataException(
+                    Collect.getInstance().getString(R.string.smap_no_label));
         }
     }
 
