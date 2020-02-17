@@ -23,6 +23,7 @@ import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -46,6 +47,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
  * for objects you need to inject
  */
 @Module
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class AppDependencyModule {
 
     @Provides
@@ -199,5 +201,11 @@ public class AppDependencyModule {
                 return telMgr.getSimSerialNumber();
             }
         };
+    }
+
+    @Provides
+    @Singleton
+    GeneralSharedPreferences providesGeneralSharedPreferences(Context context) {
+        return new GeneralSharedPreferences(context);
     }
 }

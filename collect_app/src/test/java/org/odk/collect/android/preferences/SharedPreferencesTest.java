@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import java.util.HashMap;
 
@@ -19,13 +20,12 @@ public class SharedPreferencesTest {
     @Before
     public void setup() {
         // Needed otherwise we run into cached data (in the static instance) from other tests
-        GeneralSharedPreferences.getInstance().clear();
         AdminSharedPreferences.getInstance().clear();
     }
 
     @Test
     public void generalSharedPreferences_loadDefaultPreferences_loadsDefaults() {
-        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
+        new GeneralSharedPreferences(RuntimeEnvironment.application).loadDefaultPreferences();
         HashMap<String, Object> defaultValues = GeneralKeys.DEFAULTS;
 
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
@@ -46,11 +46,11 @@ public class SharedPreferencesTest {
 
     @Test
     public void generalSharedPreferencesUpgradeTest() {
-        GeneralSharedPreferences.getInstance().save(KEY_COMPLETED_DEFAULT, false);
-        GeneralSharedPreferences.getInstance().reloadPreferences();
+        GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(RuntimeEnvironment.application);
+        generalSharedPreferences.save(KEY_COMPLETED_DEFAULT, false);
+        generalSharedPreferences.reloadPreferences();
 
         HashMap<String, Object> defaultValues = GeneralKeys.DEFAULTS;
-        GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
             if (key.equals(KEY_COMPLETED_DEFAULT)) {
                 assertThat(generalSharedPreferences.get(key), equalTo(false));

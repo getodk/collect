@@ -14,11 +14,14 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
 import java.util.Map;
@@ -31,18 +34,19 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_
 
 public class GeneralSharedPreferences {
 
-    private static GeneralSharedPreferences instance;
     private final android.content.SharedPreferences sharedPreferences;
 
-    private GeneralSharedPreferences() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+    public GeneralSharedPreferences(Context context) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    /**
+     * Shouldn't use a static helper to inject instance into objects. Either use constructor
+     * injection or Dagger if needed.
+     */
+    @Deprecated
     public static synchronized GeneralSharedPreferences getInstance() {
-        if (instance == null) {
-            instance = new GeneralSharedPreferences();
-        }
-        return instance;
+        return DaggerUtils.getComponent(Collect.getInstance()).generalSharedPreferences();
     }
 
     public Object get(String key) {
