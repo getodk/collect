@@ -63,7 +63,7 @@ public class FormMapViewModelTest {
     @Test public void getDeletedDateOf_returnsDeletedDate() {
         FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
 
-        assertThat(viewModel.getDeletedDateOf(0L), is(1487782554846L));
+        assertThat(viewModel.getDeletedDateOf(0L), is(testInstances[0].getDeletedDate()));
     }
 
     // Should not actually be possible from UI because geometry is deleted on sent instance delete
