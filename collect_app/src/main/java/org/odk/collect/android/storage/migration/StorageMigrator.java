@@ -10,11 +10,7 @@ import androidx.work.WorkManager;
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.dao.ItemsetDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.itemsets.Itemset;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -36,6 +32,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRC
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
 
 public class StorageMigrator {
+    private static final String WHERE_ID = _ID + "=?";
 
     private final StoragePathProvider storagePathProvider;
     private final StorageStateProvider storageStateProvider;
@@ -136,15 +133,16 @@ public class StorageMigrator {
         InstancesDao instancesDao = new InstancesDao();
         Cursor cursor = instancesDao.getInstancesCursor();
         if (cursor != null && cursor.moveToFirst()) {
-            List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
-            for (Instance instance : instances) {
-                ContentValues values = instancesDao.getValuesFromInstanceObject(instance);
-                values.put(INSTANCE_FILE_PATH, getRelativeInstanceDbPath(instance.getInstanceFilePath()));
+            do {
+                int idColumnIndex = cursor.getColumnIndex(_ID);
+                int instanceFilePathIndex = cursor.getColumnIndex(INSTANCE_FILE_PATH);
 
-                String where = _ID + "=?";
-                String[] whereArgs = {String.valueOf(instance.getDatabaseId())};
-                instancesDao.updateInstance(values, where, whereArgs);
-            }
+                ContentValues values = new ContentValues();
+                values.put(INSTANCE_FILE_PATH, getRelativeInstanceDbPath(cursor.getString(instanceFilePathIndex)));
+
+                String[] whereArgs = {String.valueOf(cursor.getLong(idColumnIndex))};
+                instancesDao.updateInstance(values, WHERE_ID, whereArgs);
+            } while (cursor.moveToNext());
         }
         if (cursor != null) {
             cursor.close();
@@ -155,17 +153,20 @@ public class StorageMigrator {
         FormsDao formsDao = new FormsDao();
         Cursor cursor = formsDao.getFormsCursor();
         if (cursor != null && cursor.moveToFirst()) {
-            List<Form> forms = formsDao.getFormsFromCursor(cursor);
-            for (Form form : forms) {
-                ContentValues values = formsDao.getValuesFromFormObject(form);
-                values.put(FORM_MEDIA_PATH, getRelativeFormDbPath(form.getFormMediaPath()));
-                values.put(FORM_FILE_PATH, getRelativeFormDbPath(form.getFormFilePath()));
-                values.put(JRCACHE_FILE_PATH, getRelativeCacheDbPath(form.getJrCacheFilePath()));
+            do {
+                int idColumnIndex = cursor.getColumnIndex(_ID);
+                int formFilePathColumnIndex = cursor.getColumnIndex(FORM_FILE_PATH);
+                int formMediaPathColumnIndex = cursor.getColumnIndex(FORM_MEDIA_PATH);
+                int jrCacheFilePathColumnIndex = cursor.getColumnIndex(JRCACHE_FILE_PATH);
 
-                String where = _ID + "=?";
-                String[] whereArgs = {String.valueOf(form.getId())};
-                formsDao.updateForm(values, where, whereArgs);
-            }
+                ContentValues values = new ContentValues();
+                values.put(FORM_FILE_PATH, getRelativeFormDbPath(cursor.getString(formFilePathColumnIndex)));
+                values.put(FORM_MEDIA_PATH, getRelativeFormDbPath(cursor.getString(formMediaPathColumnIndex)));
+                values.put(JRCACHE_FILE_PATH, getRelativeCacheDbPath(cursor.getString(jrCacheFilePathColumnIndex)));
+
+                String[] whereArgs = {String.valueOf(cursor.getLong(idColumnIndex))};
+                formsDao.updateForm(values, WHERE_ID, whereArgs);
+            } while (cursor.moveToNext());
         }
         if (cursor != null) {
             cursor.close();
@@ -173,20 +174,20 @@ public class StorageMigrator {
     }
 
     private void migrateItemsetsDatabase() {
-        ItemsetDao itemsetDao = new ItemsetDao();
         ItemsetDbAdapter adapter = new ItemsetDbAdapter();
         adapter.open();
         Cursor cursor = adapter.getItemsets();
         if (cursor != null && cursor.moveToFirst()) {
-            List<Itemset> itemsets = itemsetDao.getItemsetsFromCursor(cursor);
-            for (Itemset itemset : itemsets) {
-                ContentValues values = itemsetDao.getValuesFromFormObject(itemset);
-                values.put(KEY_PATH, getRelativeFormDbPath(itemset.getPath()));
+            do {
+                int idColumnIndex = cursor.getColumnIndex(_ID);
+                int itemsetFilePathColumnIndex = cursor.getColumnIndex(KEY_PATH);
 
-                String where = _ID + "=?";
-                String[] whereArgs = {String.valueOf(itemset.getId())};
-                itemsetDao.update(values, where, whereArgs);
-            }
+                ContentValues values = new ContentValues();
+                values.put(KEY_PATH, getRelativeFormDbPath(cursor.getString(itemsetFilePathColumnIndex)));
+
+                String[] whereArgs = {String.valueOf(cursor.getLong(idColumnIndex))};
+                adapter.update(values, WHERE_ID, whereArgs);
+            } while (cursor.moveToNext());
         }
         if (cursor != null) {
             cursor.close();
