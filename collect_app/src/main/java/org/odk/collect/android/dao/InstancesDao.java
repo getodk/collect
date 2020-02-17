@@ -363,9 +363,8 @@ public class InstancesDao {
         values.put(InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
         values.put(InstanceColumns.DELETED_DATE, instance.getDeletedDate());
+        values.put(InstanceColumns.GEOMETRY, instance.getGeometry());
         values.put(InstanceColumns.GEOMETRY_TYPE, instance.getGeometryType());
-        values.put(InstanceColumns.GEOMETRY_TYPE, instance.getGeometry());
-
         return values;
     }
 }
