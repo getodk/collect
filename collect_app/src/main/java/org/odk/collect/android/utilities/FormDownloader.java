@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
@@ -28,6 +29,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -38,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +50,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
+import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
+import static org.odk.collect.android.utilities.FileUtils.write;
 
 public class FormDownloader {
 
@@ -129,7 +134,9 @@ public class FormDownloader {
             throw new TaskCancelledException();
         }
 
-        String tempMediaPath = null;
+        // use a temporary media path until everything is ok.
+        String tempMediaPath = new File(Collect.CACHE_PATH,
+                String.valueOf(System.currentTimeMillis())).getAbsolutePath();
         final String finalMediaPath;
         FileResult fileResult = null;
         try {
@@ -138,9 +145,6 @@ public class FormDownloader {
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl());
 
             if (fd.getManifestUrl() != null) {
-                // use a temporary media path until everything is ok.
-                tempMediaPath = new File(Collect.CACHE_PATH,
-                        String.valueOf(System.currentTimeMillis())).getAbsolutePath();
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
@@ -171,13 +175,20 @@ public class FormDownloader {
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
-                // If the form definition includes attachments, set up the reference manager in case
-                // one of them defines a secondary instance (required to build a FormDef)
-                if (tempMediaPath != null) {
-                    setupReferenceManagerForForm(ReferenceManager.instance(), new File(tempMediaPath));
-                }
+
+                // Add a stub last-saved instance to the tmp media directory so it will be resolved
+                // when parsing a form definition with last-saved reference
+                File tmpLastSaved = new File(tempMediaPath, LAST_SAVED_FILENAME);
+                write(tmpLastSaved, STUB_XML.getBytes(Charset.forName("UTF-8")));
+                ReferenceManager.instance().reset();
+                ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(tempMediaPath));
+                ReferenceManager.instance().addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
 
                 parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
+
+                ReferenceManager.instance().reset();
+                FileUtils.deleteAndReport(tmpLastSaved);
+
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
