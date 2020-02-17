@@ -23,6 +23,7 @@ import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -178,25 +179,25 @@ public class AppDependencyModule {
         return new DeviceDetailsProvider() {
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getDeviceId() {
                 return telMgr.getDeviceId();
             }
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getLine1Number() {
                 return telMgr.getLine1Number();
             }
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getSubscriberId() {
                 return telMgr.getSubscriberId();
             }
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getSimSerialNumber() {
                 return telMgr.getSimSerialNumber();
             }
@@ -207,5 +208,11 @@ public class AppDependencyModule {
     @Singleton
     GeneralSharedPreferences providesGeneralSharedPreferences(Context context) {
         return new GeneralSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    AdminSharedPreferences providesAdminSharedPreferences(Context context) {
+        return new AdminSharedPreferences(context);
     }
 }

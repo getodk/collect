@@ -1,6 +1,5 @@
 package org.odk.collect.android.preferences;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -17,12 +16,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_COMPLETED_DEFA
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesTest {
 
-    @Before
-    public void setup() {
-        // Needed otherwise we run into cached data (in the static instance) from other tests
-        AdminSharedPreferences.getInstance().clear();
-    }
-
     @Test
     public void generalSharedPreferences_loadDefaultPreferences_loadsDefaults() {
         new GeneralSharedPreferences(RuntimeEnvironment.application).loadDefaultPreferences();
@@ -36,9 +29,9 @@ public class SharedPreferencesTest {
 
     @Test
     public void adminSharedPreferences_loadDefaultPreferences_loadsDefaults() {
-        AdminSharedPreferences.getInstance().loadDefaultPreferences();
+        AdminSharedPreferences adminSharedPreferences = new AdminSharedPreferences(RuntimeEnvironment.application);
+        adminSharedPreferences.loadDefaultPreferences();
 
-        AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllAdminKeys()) {
             assertThat(adminSharedPreferences.get(key), equalTo(adminSharedPreferences.getDefault(key)));
         }
@@ -62,10 +55,10 @@ public class SharedPreferencesTest {
 
     @Test
     public void adminSharedPreferencesUpgradeTest() {
-        AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
-        AdminSharedPreferences.getInstance().reloadPreferences();
+        AdminSharedPreferences adminSharedPreferences = new AdminSharedPreferences(RuntimeEnvironment.application);
+        adminSharedPreferences.save(KEY_EDIT_SAVED, false);
+        adminSharedPreferences.reloadPreferences();
 
-        AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllAdminKeys()) {
             if (key.equals(KEY_EDIT_SAVED)) {
                 assertThat(adminSharedPreferences.get(key), equalTo(false));

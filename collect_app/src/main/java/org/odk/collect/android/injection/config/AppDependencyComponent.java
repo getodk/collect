@@ -18,6 +18,7 @@ import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
@@ -133,4 +134,6 @@ public interface AppDependencyComponent {
     Analytics analytics();
 
     GeneralSharedPreferences generalSharedPreferences();
+
+    AdminSharedPreferences adminSharedPreferences();
 }
