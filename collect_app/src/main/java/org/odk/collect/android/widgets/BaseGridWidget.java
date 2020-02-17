@@ -120,7 +120,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         String errorMsg = null;
         if (imageURI != null) {
             try {
-                final File imageFile = new File(ReferenceManager.instance().DeriveReference(imageURI).getLocalURI());
+                final File imageFile = new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
                 if (imageFile.exists()) {
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth());
                     if (b != null) {

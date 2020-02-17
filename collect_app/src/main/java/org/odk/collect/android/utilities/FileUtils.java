@@ -89,7 +89,7 @@ public class FileUtils {
     public static final String LAST_SAVED_FILENAME = "last-saved.xml";
 
     /** Valid XML stub that can be parsed without error. */
-    private static final String STUB_XML = "<?xml version='1.0' ?><stub />";
+    public static final String STUB_XML = "<?xml version='1.0' ?><stub />";
 
     /** True if we have checked whether /sdcard points to getExternalStorageDirectory(). */
     private static boolean isSdcardSymlinkChecked;
@@ -275,8 +275,7 @@ public class FileUtils {
      * public key, auto-delete and auto-send may be included.
      */
     public static HashMap<String, String> getMetadataFromFormDefinition(File formDefinitionXml) {
-        String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formDefinitionXml);
-        FormDef formDef = XFormUtils.getFormFromFormXml(formDefinitionXml.getAbsolutePath(), lastSavedSrc);
+        FormDef formDef = XFormUtils.getFormFromFormXml(formDefinitionXml.getAbsolutePath(), "jr://file/" + LAST_SAVED_FILENAME);
 
         final HashMap<String, String> fields = new HashMap<>();
 

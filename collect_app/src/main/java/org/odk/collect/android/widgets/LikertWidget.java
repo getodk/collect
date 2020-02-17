@@ -1,8 +1,5 @@
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-import java.util.HashMap;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,9 +8,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,6 +28,9 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
+
+import java.io.File;
+import java.util.HashMap;
 
 import timber.log.Timber;
 
@@ -288,7 +288,7 @@ public class LikertWidget extends ItemsWidget {
         String errorMsg = null;
         try {
             String imageFilename =
-                    ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
+                    ReferenceManager.instance().deriveReference(imageURI).getLocalURI();
             final File imageFile = new File(imageFilename);
             if (imageFile.exists()) {
                 Bitmap b = null;

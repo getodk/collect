@@ -163,7 +163,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         String errorMsg = null;
         if (imageURI != null) {
             try {
-                final File imageFile = new File(ReferenceManager.instance().DeriveReference(imageURI).getLocalURI());
+                final File imageFile = new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
                 if (imageFile.exists()) {
                     Bitmap bitmap = FileUtils.getBitmap(imageFile.getPath(), new BitmapFactory.Options());
 

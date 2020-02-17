@@ -134,7 +134,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                 if (imageURI != null) {
                     try {
                         String imageFilename =
-                                ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
+                                ReferenceManager.instance().deriveReference(imageURI).getLocalURI();
                         final File imageFile = new File(imageFilename);
                         if (imageFile.exists()) {
                             Bitmap b = null;

@@ -93,6 +93,7 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
   - Follow [these instructions to generate a signing certificate fingerprint and register the application with the Google API Console](https://developers.google.com/drive/android/auth#generate_the_signing_certificate_fingerprint_and_register_your_application).
   - [Enable the Google Drive API](https://console.developers.google.com/apis/api/drive.googleapis.com).
   - [Enable the Google Sheets API](https://console.developers.google.com/apis/api/sheets.googleapis.com).
+  - Copy the oauth clientID from [the developer console](https://console.developers.google.com/apis/credentials) into the `client_id` of `collect_app/google-services.json` file
 
 **Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   - [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  Note that this requires a credit card number, though the card will not be charged immediately; some free API usage is permitted.  You should carefully read the terms before providing a credit card number.
