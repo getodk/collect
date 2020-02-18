@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.createFakeReference;
 
 public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A extends IAnswerData>
         extends SelectWidgetTest<W, A> {
@@ -27,7 +27,7 @@ public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A
     public void setUp() throws Exception {
         super.setUp();
         overrideDependencyModule();
-        createMockReference(referenceManager, "jr://images/body.svg");
+        createFakeReference(referenceManager, "jr://images/body.svg");
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withImageURI("jr://images/body.svg")

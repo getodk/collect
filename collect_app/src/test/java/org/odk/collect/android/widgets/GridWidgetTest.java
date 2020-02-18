@@ -32,7 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.createFakeReference;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
 
 /**
@@ -76,8 +76,8 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
 
     @Test
     public void whenChoicesHaveAudio_andNoButtonsMode_clickingChoice_playsAndStopsAudio() throws Exception {
-        createMockReference(referenceManager, "file://blah2.mp3");
-        String reference = createMockReference(referenceManager, "file://blah1.mp3");
+        createFakeReference(referenceManager, "file://blah2.mp3");
+        String reference = createFakeReference(referenceManager, "file://blah1.mp3");
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
@@ -103,8 +103,8 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
 
     @Test
     public void whenChoicesHaveAudio_andNoButtonsMode_logsAudioChoiceGridEvent() throws Exception {
-        createMockReference(referenceManager, "file://blah2.mp3");
-        createMockReference(referenceManager, "file://blah1.mp3");
+        createFakeReference(referenceManager, "file://blah2.mp3");
+        createFakeReference(referenceManager, "file://blah1.mp3");
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
@@ -125,8 +125,8 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
 
     @Test
     public void whenChoicesHaveAudio_clickingChoice_doesNotPlayAudio() throws Exception {
-        createMockReference(referenceManager, "file://blah2.mp3");
-        createMockReference(referenceManager, "file://blah1.mp3");
+        createFakeReference(referenceManager, "file://blah2.mp3");
+        createFakeReference(referenceManager, "file://blah1.mp3");
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")

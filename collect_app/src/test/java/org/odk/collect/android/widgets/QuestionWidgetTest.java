@@ -31,7 +31,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.createFakeReference;
 
 @RunWith(RobolectricTestRunner.class)
 public class QuestionWidgetTest {
@@ -56,7 +56,7 @@ public class QuestionWidgetTest {
 
     @Test
     public void whenQuestionHasAudio_audioButtonUsesIndexAsClipID() throws Exception {
-        String reference = createMockReference(referenceManager, "file://blah.mp3");
+        String reference = createFakeReference(referenceManager, "file://blah.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
@@ -72,7 +72,7 @@ public class QuestionWidgetTest {
 
     @Test
     public void whenQuestionHasAudio_logsAudioLabelEvent() throws Exception {
-        createMockReference(referenceManager, "file://blah.mp3");
+        createFakeReference(referenceManager, "file://blah.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")

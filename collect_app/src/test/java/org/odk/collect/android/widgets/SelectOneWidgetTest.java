@@ -38,7 +38,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.createFakeReference;
 import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
 
 /**
@@ -85,8 +85,8 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
                 ))
                 .build();
 
-        String reference1 = createMockReference(referenceManager, "file://blah1.mp3");
-        String reference2 = createMockReference(referenceManager, "file://blah2.mp3");
+        String reference1 = createFakeReference(referenceManager, "file://blah1.mp3");
+        String reference2 = createFakeReference(referenceManager, "file://blah2.mp3");
 
         populateRecyclerView(getActualWidget());
         verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", reference1)));
@@ -95,8 +95,8 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
 
     @Test
     public void whenChoicesHaveAudio_logsAudioChoiceEvent() throws Exception {
-        createMockReference(referenceManager, "file://blah1.mp3");
-        createMockReference(referenceManager, "file://blah2.mp3");
+        createFakeReference(referenceManager, "file://blah1.mp3");
+        createFakeReference(referenceManager, "file://blah2.mp3");
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")

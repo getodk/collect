@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.createFakeReference;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.COMPACT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MINIMAL;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
@@ -47,7 +47,7 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_playsAudio() throws Exception {
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+        String reference = createFakeReference(referenceManager, "file://audio.mp3");
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withAudioURI("file://audio.mp3")
                 .withAdditionalAttribute("autoplay", "audio")
@@ -59,7 +59,7 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_logsAutoplayAudioLabelEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio.mp3");
+        createFakeReference(referenceManager, "file://audio.mp3");
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withAudioURI("file://audio.mp3")
                 .withAdditionalAttribute("autoplay", "audio")
@@ -71,7 +71,7 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_withDifferentCapitalization_playsAudio() throws Exception {
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+        String reference = createFakeReference(referenceManager, "file://audio.mp3");
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withAudioURI("file://audio.mp3")
                 .withAdditionalAttribute("autoplay", "aUdio")
@@ -94,9 +94,9 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_playsAudioInOrder() throws Exception {
-        String reference1 = createMockReference(referenceManager, "file://audio.mp3");
-        String reference2 = createMockReference(referenceManager, "file://audio1.mp3");
-        String reference3 = createMockReference(referenceManager, "file://audio2.mp3");
+        String reference1 = createFakeReference(referenceManager, "file://audio.mp3");
+        String reference2 = createFakeReference(referenceManager, "file://audio1.mp3");
+        String reference3 = createFakeReference(referenceManager, "file://audio2.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
@@ -122,9 +122,9 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectMultiple_playsAllAudioInOrder() throws Exception {
-        String reference1 = createMockReference(referenceManager, "file://audio.mp3");
-        String reference2 = createMockReference(referenceManager, "file://audio1.mp3");
-        String reference3 = createMockReference(referenceManager, "file://audio2.mp3");
+        String reference1 = createFakeReference(referenceManager, "file://audio.mp3");
+        String reference2 = createFakeReference(referenceManager, "file://audio1.mp3");
+        String reference3 = createFakeReference(referenceManager, "file://audio2.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_MULTI)
@@ -150,9 +150,9 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelect_logsAutoplayAudioChoiceEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio.mp3");
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
+        createFakeReference(referenceManager, "file://audio.mp3");
+        createFakeReference(referenceManager, "file://audio1.mp3");
+        createFakeReference(referenceManager, "file://audio2.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_MULTI)
@@ -174,8 +174,8 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_butNoAudioURI_andIsSelectOne_playsAllSelectAudioInOrder() throws Exception {
-        String reference1 = createMockReference(referenceManager, "file://audio1.mp3");
-        String reference2 = createMockReference(referenceManager, "file://audio2.mp3");
+        String reference1 = createFakeReference(referenceManager, "file://audio1.mp3");
+        String reference2 = createFakeReference(referenceManager, "file://audio2.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
@@ -199,8 +199,8 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_butNoAudioURI_andIsSelectOne_doesNotLogAutoplayAudioLabelEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
+        createFakeReference(referenceManager, "file://audio1.mp3");
+        createFakeReference(referenceManager, "file://audio2.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
@@ -221,7 +221,7 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_butNoSelectChoiceAudio_playsPromptAudio() throws Exception {
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+        String reference = createFakeReference(referenceManager, "file://audio.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
@@ -239,7 +239,7 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelect_butNoSelectChoiceAudio_doesNotLogAutoplayAudioChoiceEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio.mp3");
+        createFakeReference(referenceManager, "file://audio.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
@@ -257,9 +257,9 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_withMinimalAppearance_playsPromptAudio() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+        createFakeReference(referenceManager, "file://audio1.mp3");
+        createFakeReference(referenceManager, "file://audio2.mp3");
+        String reference = createFakeReference(referenceManager, "file://audio.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
@@ -282,9 +282,9 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_withNoButtonsAppearance_playsPromptAudio() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+        createFakeReference(referenceManager, "file://audio1.mp3");
+        createFakeReference(referenceManager, "file://audio2.mp3");
+        String reference = createFakeReference(referenceManager, "file://audio.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
@@ -307,9 +307,9 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_withDeprecatedCompactAppearance_playsPromptAudio() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+        createFakeReference(referenceManager, "file://audio1.mp3");
+        createFakeReference(referenceManager, "file://audio2.mp3");
+        String reference = createFakeReference(referenceManager, "file://audio.mp3");
 
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
