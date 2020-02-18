@@ -378,7 +378,7 @@
   <string name="select_time">वेळेची निवड करा</string>
   <string name="no_date_selected">तारीख निवडली नाही</string>
   <string name="no_time_selected">वेळ निवडला नाही</string>
-  <string name="import_settings">आयात / निर्यात सेटिंग्ज</string>
+  <string name="configure_via_qr_code">आयात / निर्यात सेटिंग्ज</string>
   <string name="qr_code">क्यूआर कोड</string>
   <string name="scan_qrcode">इतर डिव्हाइसवरून कोड स्कॅन करा</string>
   <string name="successfully_imported_settings">सेटिंग्ज यशस्वीपणे आयात केली</string>

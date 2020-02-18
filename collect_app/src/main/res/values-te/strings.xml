@@ -467,7 +467,7 @@
   <string name="select_time">సమయాన్ని ఎంపిక చేసుకొండి</string>
   <string name="no_date_selected">తేదిని ఎంపిక చేసుకొలేదు</string>
   <string name="no_time_selected">సమయాన్ని ఎంపిక చేసుకొలేదు</string>
-  <string name="import_settings">ఇంపోర్ట్/ఎక్స్-పోర్ట్ సెట్టింగ్స్ </string>
+  <string name="configure_via_qr_code">ఇంపోర్ట్/ఎక్స్-పోర్ట్ సెట్టింగ్స్ </string>
   <string name="qr_code">QR కోడ్</string>
   <string name="scan_qrcode">ఇతర పరికరం నుండి కోడ్‌ను స్కాన్ చేయండి</string>
   <string name="successfully_imported_settings">సెట్టింగులు విజయవంతంగా దిగుమతి చేయబడ్డాయి</string>

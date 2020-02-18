@@ -258,7 +258,7 @@
   <string name="select_time">انتخاب زمان</string>
   <string name="no_date_selected">هیچ تاریخی انتخاب نشده است</string>
   <string name="no_time_selected">هیچ زمانی انتخاب نشده است</string>
-  <string name="import_settings">تنظیمات واردات/صادرات</string>
+  <string name="configure_via_qr_code">تنظیمات واردات/صادرات</string>
   <string name="qr_code">کد QR</string>
   <string name="scan_qrcode">کود سکن دستگاه دیگر</string>
   <string name="share">اشتراک گذاری</string>

@@ -456,7 +456,7 @@
   <string name="select_time">Odaberi vrijeme</string>
   <string name="no_date_selected">Datum nije odabran</string>
   <string name="no_time_selected">Vrijeme nije odabrano</string>
-  <string name="import_settings">Podešavanja preuzimanja/otpremanja podataka</string>
+  <string name="configure_via_qr_code">Podešavanja preuzimanja/otpremanja podataka</string>
   <string name="qr_code">QR kod</string>
   <string name="scan_qrcode">Skeniraj kod sa drugog uređaja</string>
   <string name="successfully_imported_settings">Podešavanja su uspješno preuzeta</string>

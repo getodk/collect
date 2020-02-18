@@ -101,7 +101,7 @@ public class ShowQRCodeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-        ((CollectAbstractActivity) getActivity()).initToolbar(getString(R.string.import_export_settings));
+        ((CollectAbstractActivity) getActivity()).initToolbar(getString(R.string.configure_via_qr_code));
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         setRetainInstance(true);

@@ -30,7 +30,7 @@
 
         <PreferenceScreen
             android:key="import_settings"
-            android:title="@string/import_settings" />
+            android:title="@string/configure_via_qr_code" />
 
         <PreferenceScreen
             android:key="save_legacy_settings"

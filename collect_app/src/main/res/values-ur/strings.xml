@@ -419,7 +419,7 @@
   <string name="select_time">وقت منتخب کریں</string>
   <string name="no_date_selected">کوئی تاریخ منتخب نہیں کی گئی </string>
   <string name="no_time_selected">کوئی وقت نہیں منتخب کیا گیا </string>
-  <string name="import_settings">امپورٹ/ایکسپورٹ سیٹنگ </string>
+  <string name="configure_via_qr_code">امپورٹ/ایکسپورٹ سیٹنگ </string>
   <string name="qr_code">کیو آرکوڈ </string>
   <string name="scan_qrcode">دوسرے آلہ سے اسکین کوڈکریں</string>
   <string name="successfully_imported_settings">سیٹنگز کامیابی سےامپورٹ ہوگئیں</string>

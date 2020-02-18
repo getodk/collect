@@ -332,7 +332,7 @@
   <string name="select_time">Selecciona hora</string>
   <string name="no_date_selected">Data no seleccionada</string>
   <string name="no_time_selected">Hora no seleccionada</string>
-  <string name="import_settings">Importar/Exportar configuració</string>
+  <string name="configure_via_qr_code">Importar/Exportar configuració</string>
   <string name="qr_code">Codi QR</string>
   <string name="scan_qrcode">Escaneja codi des d\'un altre dispositiu</string>
   <string name="successfully_imported_settings">Configuració importada correctament</string>

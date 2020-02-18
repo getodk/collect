@@ -91,6 +91,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Button reviewDataButton;
     private Button getFormsButton;
     private AlertDialog alertDialog;
+    private MenuItem qrcodeScannerMenuItem;
     private SharedPreferences adminPreferences;
     private int completedCount;
     private int savedCount;
@@ -283,6 +284,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 contentObserver);
 
         setButtonsVisibility();
+        invalidateOptionsMenu();
     }
 
     private void setButtonsVisibility() {
@@ -357,12 +359,22 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        qrcodeScannerMenuItem = menu.findItem(R.id.menu_configure_qr_code);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        qrcodeScannerMenuItem.setVisible(this.getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0).getBoolean(AdminKeys.KEY_QR_CODE_SCANNER, true));
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_configure_qr_code:
+
+                return true;
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;

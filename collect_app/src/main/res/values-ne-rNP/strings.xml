@@ -342,7 +342,7 @@
   <string name="select_time">समय छान्नुहोस्</string>
   <string name="no_date_selected">मिति छानिएको छैन</string>
   <string name="no_time_selected">समय छानिएको छैन</string>
-  <string name="import_settings">ल्याउने / पठाउने सेटिङ्स</string>
+  <string name="configure_via_qr_code">ल्याउने / पठाउने सेटिङ्स</string>
   <string name="qr_code">QR कोड</string>
   <string name="scan_qrcode">अन्य यन्त्रबाट स्क्यान गर्नुहोस्</string>
   <string name="share">शेयर</string>

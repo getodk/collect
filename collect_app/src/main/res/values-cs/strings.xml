@@ -477,7 +477,7 @@
   <string name="select_time">Vybrat čas</string>
   <string name="no_date_selected">Nevybrán žádný datum</string>
   <string name="no_time_selected">Nevybrán žádný čas</string>
-  <string name="import_settings">Nastavení Import / Export </string>
+  <string name="configure_via_qr_code">Nastavení Import / Export </string>
   <string name="qr_code">QR kód</string>
   <string name="scan_qrcode">Sejmout kód z jiného zařízení</string>
   <string name="successfully_imported_settings">Nastavení úspěšně importováno</string>

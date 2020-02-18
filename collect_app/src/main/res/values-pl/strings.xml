@@ -480,7 +480,7 @@
   <string name="select_time">Wybierz godzinę</string>
   <string name="no_date_selected">Nie wybrano daty</string>
   <string name="no_time_selected">Nie wybrano godziny</string>
-  <string name="import_settings">Importowanie/Eksportowanie ustawień</string>
+  <string name="configure_via_qr_code">Importowanie/Eksportowanie ustawień</string>
   <string name="qr_code">Kod QR</string>
   <string name="scan_qrcode">Skanuj kod z innego urządzenia</string>
   <string name="successfully_imported_settings">Ustawienia zostały pomyślnie zaimportowane</string>
