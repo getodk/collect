@@ -22,7 +22,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import androidx.appcompat.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.text.TextUtils;
