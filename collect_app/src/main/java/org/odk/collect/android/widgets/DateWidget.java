@@ -221,8 +221,6 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     private int getTheme() {
         int theme = 0;
-        // https://github.com/opendatakit/collect/issues/1424
-        // https://github.com/opendatakit/collect/issues/1367
         if (!isBrokenSamsungDevice()) {
             theme = themeUtils.getMaterialDialogTheme();
         }

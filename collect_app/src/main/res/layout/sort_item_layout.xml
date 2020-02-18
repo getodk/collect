@@ -14,12 +14,13 @@ License for the specific language governing permissions and limitations under
 the License.
 
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingBottom="8dp"
     android:paddingTop="8dp">
@@ -39,4 +40,4 @@ the License.
         android:layout_marginRight="16dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         tools:text="Sort by Name" />
-</LinearLayout>
+</FrameLayout>
