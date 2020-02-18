@@ -5,21 +5,13 @@ import androidx.lifecycle.ViewModel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.R;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 
 import timber.log.Timber;
 
@@ -30,26 +22,14 @@ public class FormMapViewModel extends ViewModel {
     private final Form form;
 
     /**
-     * Cached count of all of this form's instances, including ones that don't have a geometry to
-     * map.
+     * The count of all filled instances of this form, including unmappable ones.
      */
     private int totalInstanceCount;
 
     /**
-     * Quick lookup of instance objects from map feature IDs.
+     * The filled instances of this form that can be mapped.
      */
-    private final Map<Integer, Instance> instancesByFeatureId = new HashMap<>();
-
-    /**
-     * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
-     * quickly zoom to bounding box.
-     */
-    private final List<MapPoint> points = new ArrayList<>();
-
-    /**
-     * True if the map viewport has been initialized, false otherwise.
-     */
-    private boolean viewportInitialized;
+    private List<MappableFormInstance> mappableFormInstances;
 
     private final InstancesRepository instancesRepository;
 
@@ -66,26 +46,37 @@ public class FormMapViewModel extends ViewModel {
         return form.getJrFormId();
     }
 
-    public int getInstanceCount() {
+    /**
+     * Returns the count of all filled instances of this form, including unmappable ones.
+     */
+    public int getTotalInstanceCount() {
+        initializeFormInstances();
         return totalInstanceCount;
     }
 
-    public int getMappedPointCount() {
-        return points.size();
+    private void initializeFormInstances() {
+        List<Instance> instances = instancesRepository.getAllBy(form.getJrFormId());
+
+        // Note: there is currently no way to delete instances from FormMapActivity so this works
+        // because a change in size means a refresh is needed. Compromise because we don't currently
+        // have an easy way to observe database changes.
+        if (mappableFormInstances == null || instances.size() != totalInstanceCount) {
+            totalInstanceCount = instances.size();
+            mappableFormInstances = getMappableFormInstances(instances);
+        }
     }
 
     /**
-     * Clears the existing features on the given map and places features for the current form's
-     * instances. If features were added to the map and the map view was not previously initialized,
-     * zooms to display all points.
+     * Returns a list of filled instances of this form that can be mapped.
      */
-    public void mapUpdateRequested(MapFragment map) {
-        points.clear();
-        map.clearFeatures();
+    public List<MappableFormInstance> getMappableFormInstances() {
+        initializeFormInstances();
+        return mappableFormInstances;
+    }
 
-        List<Instance> instances = instancesRepository.getAllBy(form.getJrFormId());
-        totalInstanceCount = instances.size();
-        for (Instance instance : instances) {
+    private List<MappableFormInstance> getMappableFormInstances(List<Instance> allInstances) {
+        List<MappableFormInstance> mappableFormInstances = new ArrayList<>();
+        for (Instance instance : allInstances) {
             if (instance.getGeometry() != null) {
                 try {
                     JSONObject geometry = new JSONObject(instance.getGeometry());
@@ -93,17 +84,15 @@ public class FormMapViewModel extends ViewModel {
                         case "Point":
                             JSONArray coordinates = geometry.getJSONArray("coordinates");
                             // In GeoJSON, longitude comes before latitude.
-                            double lon = coordinates.getDouble(0);
-                            double lat = coordinates.getDouble(1);
+                            Double lon = coordinates.getDouble(0);
+                            Double lat = coordinates.getDouble(1);
 
-                            MapPoint point = new MapPoint(lat, lon);
-                            int featureId = map.addMarker(point, false);
-
-                            int drawableId = getDrawableIdForStatus(instance.getStatus());
-                            map.setMarkerIcon(featureId, drawableId);
-
-                            instancesByFeatureId.put(featureId, instance);
-                            points.add(point);
+                            mappableFormInstances.add(new MappableFormInstance(
+                                    instance.getDatabaseId(),
+                                    lat, lon,
+                                    instance.getStatus(),
+                                    getClickActionForInstance(instance)
+                            ));
                     }
                 } catch (JSONException e) {
                     Timber.w("Invalid JSON in instances table: %s", instance.getGeometry());
@@ -111,84 +100,72 @@ public class FormMapViewModel extends ViewModel {
             }
         }
 
-        if (!viewportInitialized && !points.isEmpty()) {
-            mapZoomToBoundingBoxRequested(map);
-            viewportInitialized = true;
-        }
+        return mappableFormInstances;
     }
 
-    public void mapZoomToBoundingBoxRequested(MapFragment map) {
-        map.zoomToBoundingBox(points, 0.8, false);
-    }
-
-    /**
-     * Zooms the map to the new location if the map viewport hasn't been initialized yet.
-     */
-    public void locationChanged(MapPoint point, MapFragment map) {
-        if (!viewportInitialized) {
-            map.zoomToPoint(point, true);
-            viewportInitialized = true;
-        }
-    }
-
-    public FeatureStatus getStatusOfClickedFeature(int featureId) {
-        Instance instance = instancesByFeatureId.get(featureId);
-
+    private ClickAction getClickActionForInstance(Instance instance) {
         if (instance != null) {
             if (instance.getDeletedDate() != null) {
-                return FeatureStatus.DELETED;
+                return ClickAction.DELETED_TOAST;
             }
 
             if ((instance.getStatus().equals(InstanceProviderAPI.STATUS_COMPLETE)
                     || instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)
                     || instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMISSION_FAILED))
                     && !instance.canEditWhenComplete()) {
-                return FeatureStatus.NOT_VIEWABLE;
+                return ClickAction.NOT_VIEWABLE_TOAST;
             } else if (instance.getDatabaseId() != null) {
                 if (instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
-                    return FeatureStatus.VIEW_ONLY;
+                    return ClickAction.OPEN_READ_ONLY;
                 }
-                return FeatureStatus.EDITABLE;
+                return ClickAction.OPEN_EDIT;
             }
         }
 
-        return FeatureStatus.UNKNOWN;
+        return ClickAction.NONE;
     }
 
-    @Nullable
-    public Date getDeletedDateOf(int featureId) {
-        Instance instance = instancesByFeatureId.get(featureId);
-        if (instance != null) {
-            return new Date(instance.getDeletedDate());
-        } else {
-            return null;
+    public long getDeletedDateOf(long databaseId) {
+        return instancesRepository.getBy(databaseId).getDeletedDate();
+    }
+
+    public enum ClickAction {
+        DELETED_TOAST, NOT_VIEWABLE_TOAST, OPEN_READ_ONLY, OPEN_EDIT, NONE
+    }
+
+    public class MappableFormInstance {
+        private final long databaseId;
+        private final Double latitude;
+        private final Double longitude;
+        private final String status;
+        private final ClickAction clickAction;
+
+        MappableFormInstance(long databaseId, Double latitude, Double longitude, String status, ClickAction clickAction) {
+            this.databaseId = databaseId;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.status = status;
+            this.clickAction = clickAction;
         }
-    }
 
-    public Long getDatabaseIdOf(int featureId) {
-        Instance instance = instancesByFeatureId.get(featureId);
-        if (instance != null) {
-            return instance.getDatabaseId();
-        } else {
-            return null;
+        public long getDatabaseId() {
+            return databaseId;
         }
-    }
 
-    private static int getDrawableIdForStatus(String status) {
-        switch (status) {
-            case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return R.drawable.ic_room_blue_24dp;
-            case InstanceProviderAPI.STATUS_COMPLETE:
-                return R.drawable.ic_room_deep_purple_24dp;
-            case InstanceProviderAPI.STATUS_SUBMITTED:
-                return R.drawable.ic_room_green_24dp;
-            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return R.drawable.ic_room_red_24dp;
+        public Double getLatitude() {
+            return latitude;
         }
-        return R.drawable.ic_map_point;
-    }
 
-    public enum FeatureStatus {
-        DELETED, NOT_VIEWABLE, VIEW_ONLY, EDITABLE, UNKNOWN
+        public Double getLongitude() {
+            return longitude;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public ClickAction getClickAction() {
+            return clickAction;
+        }
     }
 }

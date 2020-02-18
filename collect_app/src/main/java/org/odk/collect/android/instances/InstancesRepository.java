@@ -12,6 +12,8 @@ import java.util.List;
  * without introducing new specialized methods (e.g. get(Specification s) instead of getBy(XYZ).
  */
 public interface InstancesRepository {
+    Instance getBy(long databaseId);
+
     List<Instance> getAllBy(String formId);
 
     /**
