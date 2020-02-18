@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.provider.MediaStore;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import net.bytebuddy.utility.RandomString;
 

@@ -3,7 +3,7 @@ package org.odk.collect.android.widgets;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Pair;
+import androidx.core.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 

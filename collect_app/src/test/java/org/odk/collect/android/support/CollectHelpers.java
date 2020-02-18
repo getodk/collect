@@ -1,6 +1,6 @@
 package org.odk.collect.android.support;
 
-import android.util.Pair;
+import androidx.core.util.Pair;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.Reference;

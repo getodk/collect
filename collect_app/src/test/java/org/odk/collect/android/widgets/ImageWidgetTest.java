@@ -2,11 +2,11 @@ package org.odk.collect.android.widgets;
 
 import android.content.Intent;
 import android.provider.MediaStore;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import net.bytebuddy.utility.RandomString;
 
