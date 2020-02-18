@@ -8,7 +8,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -38,12 +37,7 @@ public final class CollectHelpers {
         return referenceManager;
     }
 
-    public static String createFakeReference(ReferenceManager referenceManager, String referenceURI) throws InvalidReferenceException {
-        String localURI = UUID.randomUUID().toString();
-        return createFakeReference(referenceManager, referenceURI, localURI);
-    }
-
-    public static String createFakeReference(ReferenceManager referenceManager, String referenceURI, String localURI) throws InvalidReferenceException {
+    private static String createFakeReference(ReferenceManager referenceManager, String referenceURI, String localURI) throws InvalidReferenceException {
         Reference reference = mock(Reference.class);
         when(reference.getLocalURI()).thenReturn(localURI);
         when(referenceManager.deriveReference(referenceURI)).thenReturn(reference);
