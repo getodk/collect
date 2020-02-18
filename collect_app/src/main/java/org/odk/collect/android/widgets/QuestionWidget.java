@@ -141,10 +141,23 @@ public abstract class QuestionWidget
         }
     }
 
+    /**
+     * Returns the `View` object that represents the interface for answering the question. This
+     * will be rendered underneath the question's `label`, `hint` and `guidance_hint`. This method
+     * is passed the question itself (as a `FormEntryPrompt`) which will often be needed in
+     * rendering the widget. It is also passed the size to be used for question text.
+     */
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         return null;
     }
+
+    /**
+     * Used to make sure clickable views in the widget work with the long click feature (shows
+     * the "Edit Prompt" menu). The passed listener should be set as the long click listener on
+     * clickable views in the widget.
+     */
+    public abstract void setOnLongClickListener(OnLongClickListener l);
 
     protected int getLayout() {
         return R.layout.question_widget;
@@ -303,8 +316,6 @@ public abstract class QuestionWidget
     public void setFocus(Context context) {
         SoftKeyboardUtils.hideSoftKeyboard(this);
     }
-
-    public abstract void setOnLongClickListener(OnLongClickListener l);
 
     /**
      * Override this to implement fling gesture suppression (e.g. for embedded WebView treatments).
