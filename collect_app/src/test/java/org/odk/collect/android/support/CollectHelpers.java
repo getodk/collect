@@ -1,14 +1,15 @@
 package org.odk.collect.android.support;
 
+import android.util.Pair;
+
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.Reference;
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,8 +19,23 @@ public final class CollectHelpers {
 
     }
 
-    public static void setupFakeReferenceManager(ReferenceManager referenceManager) throws InvalidReferenceException {
-        when(referenceManager.deriveReference(any())).thenThrow(InvalidReferenceException.class);
+    public static void overrideReferenceManager(ReferenceManager referenceManager) {
+        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+        });
+    }
+
+    public static ReferenceManager setupFakeReferenceManager(List<Pair<String, String>> references) throws InvalidReferenceException {
+        ReferenceManager referenceManager = mock(ReferenceManager.class);
+
+        for (Pair<String, String> reference : references) {
+            createFakeReference(referenceManager, reference.first, reference.second);
+        }
+
+        return referenceManager;
     }
 
     public static String createFakeReference(ReferenceManager referenceManager, String referenceURI) throws InvalidReferenceException {
@@ -33,13 +49,5 @@ public final class CollectHelpers {
         when(referenceManager.deriveReference(referenceURI)).thenReturn(reference);
 
         return localURI;
-    }
-
-    public static String createFakeBitmapReference(ReferenceManager referenceManager, String referenceURI, String bitmapName) throws InvalidReferenceException, IOException {
-        return createFakeReference(
-                referenceManager,
-                referenceURI,
-                File.createTempFile(bitmapName, ".bmp").getAbsolutePath()
-        );
     }
 }
