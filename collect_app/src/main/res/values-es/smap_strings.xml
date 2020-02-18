@@ -102,4 +102,5 @@
   <string name="smap_disable_prevent_background_location_enabled">Este formulario registra la ubicación GPS</string>
   <string name="smap_sort_by_project_asc">Ascendente por Proyecto, A-Z</string>
   <string name="smap_sort_by_project_desc">Descendente por Proyecto, Z-A</string>
+  <string name="smap_no_label">No se ha especificado una etiqueta en Opciones</string>
 </resources>
