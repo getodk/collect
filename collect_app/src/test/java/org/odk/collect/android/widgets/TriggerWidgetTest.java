@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
  */
 
 public class TriggerWidgetTest extends QuestionWidgetTest<TriggerWidget, StringData> {
+
     @NonNull
     @Override
     public TriggerWidget createWidget() {
@@ -33,13 +34,13 @@ public class TriggerWidgetTest extends QuestionWidgetTest<TriggerWidget, StringD
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData(TriggerWidget.OK_TEXT);
+        return new StringData("OK");
     }
 
     @Override
     public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
         super.getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer();
-        assertTrue(getWidget().getTriggerButton().isChecked());
+        assertTrue(getWidget().getCheckBox().isChecked());
     }
 
     @Test
@@ -47,21 +48,21 @@ public class TriggerWidgetTest extends QuestionWidgetTest<TriggerWidget, StringD
         TriggerWidget widget = getWidget();
         assertNull(widget.getAnswer());
 
-        CheckBox triggerButton = widget.getTriggerButton();
+        CheckBox triggerButton = widget.getCheckBox();
         assertFalse(triggerButton.isChecked());
 
         triggerButton.setChecked(true);
         triggerButton.callOnClick();
 
         IAnswerData answer = widget.getAnswer();
-        assertEquals(answer.getDisplayText(), TriggerWidget.OK_TEXT);
+        assertEquals(answer.getDisplayText(), "OK");
     }
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().triggerButton.getVisibility(), is(View.VISIBLE));
-        assertThat(getWidget().triggerButton.isEnabled(), is(Boolean.FALSE));
+        assertThat(getWidget().getCheckBox().getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().getCheckBox().isEnabled(), is(Boolean.FALSE));
     }
 }
