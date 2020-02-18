@@ -695,6 +695,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_MIGRATION_RESULT, result.getResultCode());
         updateStorageMigrationBanner(result);
+        storageMigrationRepository.consumeResult();
     }
 
     private void updateStorageMigrationBanner(StorageMigrationResult result) {

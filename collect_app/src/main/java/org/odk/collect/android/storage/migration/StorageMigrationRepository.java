@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class StorageMigrationRepository {
-    private final MutableLiveData<StorageMigrationResult> migrationResult = new MutableLiveData<>();
+    private MutableLiveData<StorageMigrationResult> migrationResult = new MutableLiveData<>();
 
     private boolean isMigrationBeingPerformed;
 
@@ -26,5 +26,9 @@ public class StorageMigrationRepository {
 
     void markMigrationEnd() {
         isMigrationBeingPerformed = false;
+    }
+
+    public void consumeResult() {
+        migrationResult = new MutableLiveData<>();
     }
 }
