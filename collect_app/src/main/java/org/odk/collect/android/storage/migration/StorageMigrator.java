@@ -66,16 +66,16 @@ public class StorageMigrator {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
 
-        if (moveAppDataToScopedStorage() != StorageMigrationResult.MOVING_FILES_SUCCEEDED) {
+        if (!moveAppDataToScopedStorage()) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
 
         storageStateProvider.enableUsingScopedStorage();
         reopenDatabases();
-        if (migrateDatabasePaths() != StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED) {
+        if (!migrateDatabasePaths()) {
             storageStateProvider.disableUsingScopedStorage();
             reopenDatabases();
-            return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
+            return StorageMigrationResult.MOVING_FILES_FAILED;
         }
 
         storageEraser.deleteOdkDirFromUnscopedStorage();
@@ -100,28 +100,28 @@ public class StorageMigrator {
         return ServerPollingJob.isDownloadingFormsRunning();
     }
 
-    StorageMigrationResult moveAppDataToScopedStorage() {
+    boolean moveAppDataToScopedStorage() {
         try {
             File odkDirOnUnscopedStorage = new File(storagePathProvider.getUnscopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
             File odkDirOnScopedStorage = new File(storagePathProvider.getScopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
             FileUtils.copyDirectory(odkDirOnUnscopedStorage, odkDirOnScopedStorage);
         } catch (Exception | Error e) {
             Timber.w(e);
-            return StorageMigrationResult.MOVING_FILES_FAILED;
+            return false;
         }
-        return StorageMigrationResult.MOVING_FILES_SUCCEEDED;
+        return true;
     }
 
-    StorageMigrationResult migrateDatabasePaths() {
+    boolean migrateDatabasePaths() {
         try {
             migrateFormsDatabase();
             migrateInstancesDatabase();
             migrateItemsetsDatabase();
         } catch (Exception | Error e) {
             Timber.w(e);
-            return StorageMigrationResult.MIGRATING_DATABASE_PATHS_FAILED;
+            return false;
         }
-        return StorageMigrationResult.MIGRATING_DATABASE_PATHS_SUCCEEDED;
+        return true;
     }
 
     void reopenDatabases() {

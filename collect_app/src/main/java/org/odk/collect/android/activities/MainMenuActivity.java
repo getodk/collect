@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -76,8 +77,12 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_BANNER_DISMISSED;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_MIGRATION_RESULT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
@@ -109,7 +114,17 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
-    // private static boolean DO_NOT_EXIT = false;
+    @BindView(R.id.storageMigrationBanner)
+    LinearLayout storageMigrationBanner;
+
+    @BindView(R.id.storageMigrationBannerText)
+    TextView storageMigrationBannerText;
+
+    @BindView(R.id.storageMigrationBannerDismissButton)
+    Button storageMigrationBannerDismissButton;
+
+    @BindView(R.id.storageMigrationBannerLearnMoreButton)
+    Button storageMigrationBannerLearnMoreButton;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
@@ -126,9 +141,10 @@ public class MainMenuActivity extends CollectAbstractActivity {
         Collect.getInstance().getComponent().inject(this);
 
         setContentView(R.layout.main_menu);
+        ButterKnife.bind(this);
         initToolbar();
         disableSmsIfNeeded();
-        storageMigrationRepository.getResult().observe(this, this::handleMigrationResult);
+        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -296,7 +312,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 contentObserver);
 
         setButtonsVisibility();
-        setStorageMigrationBannerVisibility();
+        setUpStorageMigrationBanner();
     }
 
     private void setButtonsVisibility() {
@@ -655,19 +671,35 @@ public class MainMenuActivity extends CollectAbstractActivity {
         }
     }
 
-    private void setStorageMigrationBannerVisibility() {
-        if (!new StorageStateProvider().isScopedStorageUsed()) {
-            findViewById(R.id.storage_migration_banner).setVisibility(View.VISIBLE);
+    private void setUpStorageMigrationBanner() {
+        boolean storageMigrationBannerDismissed = GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_BANNER_DISMISSED, false);
+        boolean isScopedStorageUsed = new StorageStateProvider().isScopedStorageUsed();
+
+        if (!isScopedStorageUsed || !storageMigrationBannerDismissed) {
+            storageMigrationBanner.setVisibility(View.VISIBLE);
+            Integer storageMigrationResultCode = (Integer) GeneralSharedPreferences.getInstance().get(KEY_SCOPED_STORAGE_MIGRATION_RESULT);
+            updateStorageMigrationBanner(StorageMigrationResult.getResult(storageMigrationResultCode));
         }
     }
 
-    public void onStorageMigrationBannerClick(View view) {
+    public void onStorageMigrationBannerDismiss(View view) {
+        storageMigrationBanner.setVisibility(View.GONE);
+        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_BANNER_DISMISSED, true);
+    }
+
+    public void onStorageMigrationBannerLearnMoreClick(View view) {
         DialogUtils.showIfNotShowing(StorageMigrationDialog.create(), getSupportFragmentManager());
     }
 
-    private void handleMigrationResult(StorageMigrationResult result) {
-        findViewById(R.id.storage_migration_banner).setVisibility(View.GONE);
+    private void onStorageMigrationFinish(StorageMigrationResult result) {
         DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-        ToastUtils.showLongToast(StorageMigrationResult.getResultMessage(result, this));
+        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_MIGRATION_RESULT, result.getResultCode());
+        updateStorageMigrationBanner(result);
+    }
+
+    private void updateStorageMigrationBanner(StorageMigrationResult result) {
+        storageMigrationBannerDismissButton.setVisibility(result == StorageMigrationResult.SUCCESS ? View.VISIBLE : View.GONE);
+        storageMigrationBannerLearnMoreButton.setVisibility(result == StorageMigrationResult.SUCCESS ? View.GONE : View.VISIBLE);
+        storageMigrationBannerText.setText(result.getBannerText(result, this));
     }
 }

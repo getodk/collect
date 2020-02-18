@@ -81,8 +81,7 @@
                         android:paddingTop="12dp"
                         android:paddingBottom="@dimen/margin_small"
                         android:textStyle="bold"
-                        android:textAllCaps="true"
-                        android:onClick="onStorageMigrationBannerClick"/>
+                        android:textAllCaps="true" />
 
                     <Button
                         android:id="@+id/migrateButton"
@@ -95,8 +94,7 @@
                         android:paddingTop="12dp"
                         android:paddingBottom="@dimen/margin_small"
                         android:textStyle="bold"
-                        android:textAllCaps="true"
-                        android:onClick="onStorageMigrationBannerClick"/>
+                        android:textAllCaps="true" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>

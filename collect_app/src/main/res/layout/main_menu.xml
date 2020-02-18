@@ -29,7 +29,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/storage_migration_banner"
+        android:layout_below="@id/storageMigrationBanner"
         android:orientation="vertical"
         android:paddingTop="@dimen/margin_standard">
 
