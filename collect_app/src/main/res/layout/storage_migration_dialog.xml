@@ -53,6 +53,14 @@
                 android:textAllCaps="true"
                 android:paddingTop="@dimen/margin_standard" />
 
+            <TextView
+                android:id="@+id/errorText"
+                style="@style/TextAppearance.Collect.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:visibility="gone"/>
+
             <LinearLayout
                 android:id="@+id/progressBar"
                 android:layout_width="match_parent"

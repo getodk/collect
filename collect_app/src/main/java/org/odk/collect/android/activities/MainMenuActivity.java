@@ -106,7 +106,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
-    private StorageMigrationResult storageMigrationResult;
 
     @BindView(R.id.storageMigrationBanner)
     LinearLayout storageMigrationBanner;
@@ -138,8 +137,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         ButterKnife.bind(this);
         initToolbar();
         disableSmsIfNeeded();
-
-        setUpStorageMigrationResult(savedInstanceState);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -308,12 +305,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         setButtonsVisibility();
         setUpStorageMigrationBanner();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(STORAGE_MIGRATION_RESULT, storageMigrationResult);
     }
 
     private void setButtonsVisibility() {
@@ -630,26 +621,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
     }
 
-    private void setUpStorageMigrationResult(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            storageMigrationResult = (StorageMigrationResult) savedInstanceState.getSerializable(STORAGE_MIGRATION_RESULT);
-        }
-        if (storageMigrationResult == null && new StorageStateProvider().isScopedStorageUsed()) {
-            storageMigrationResult = StorageMigrationResult.SUCCESS;
-        }
-
-    }
-
-    private void setUpStorageMigrationBanner() {
-        boolean storageMigrationBannerDismissed = GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_BANNER_DISMISSED, false);
-        boolean isScopedStorageUsed = new StorageStateProvider().isScopedStorageUsed();
-
-        if (!isScopedStorageUsed || !storageMigrationBannerDismissed) {
-            storageMigrationBanner.setVisibility(View.VISIBLE);
-            updateStorageMigrationBanner();
-        }
-    }
-
     public void onStorageMigrationBannerDismiss(View view) {
         storageMigrationBanner.setVisibility(View.GONE);
         GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_BANNER_DISMISSED, true);
@@ -665,15 +636,30 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
-        storageMigrationResult = result;
-        DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-        updateStorageMigrationBanner();
-        storageMigrationRepository.consumeResult();
+        if (result == StorageMigrationResult.SUCCESS) {
+            setUpStorageMigrationBanner();
+            DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
+            storageMigrationRepository.consumeResult();
+        } else {
+            StorageMigrationDialog storageMigrationDialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
+            if (storageMigrationDialog != null) {
+                storageMigrationDialog.handleMigrationError(result);
+            }
+        }
     }
 
-    private void updateStorageMigrationBanner() {
-        storageMigrationBannerDismissButton.setVisibility(storageMigrationResult == StorageMigrationResult.SUCCESS ? View.VISIBLE : View.GONE);
-        storageMigrationBannerLearnMoreButton.setVisibility(storageMigrationResult == StorageMigrationResult.SUCCESS ? View.GONE : View.VISIBLE);
-        storageMigrationBannerText.setText(StorageMigrationResult.getBannerText(storageMigrationResult, this));
+    private void setUpStorageMigrationBanner() {
+        boolean isScopedStorageUsed = new StorageStateProvider().isScopedStorageUsed();
+        boolean storageMigrationBannerDismissed = GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_BANNER_DISMISSED, false);
+
+        if (isScopedStorageUsed && !storageMigrationBannerDismissed) {
+            storageMigrationBanner.setVisibility(View.VISIBLE);
+            storageMigrationBannerText.setText(R.string.storage_migration_completed);
+            storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
+        } else if (!isScopedStorageUsed) {
+            storageMigrationBanner.setVisibility(View.VISIBLE);
+            storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
+            storageMigrationBannerDismissButton.setVisibility(View.GONE);
+        }
     }
 }

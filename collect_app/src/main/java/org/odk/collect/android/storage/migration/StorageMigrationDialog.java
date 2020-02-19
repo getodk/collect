@@ -40,6 +40,9 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     @BindView(R.id.moreDetailsButton)
     TextView moreDetailsButton;
 
+    @BindView(R.id.errorText)
+    TextView errorText;
+
     @BindView(R.id.progressBar)
     LinearLayout progressBar;
 
@@ -112,10 +115,31 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
         migrateButton.setEnabled(false);
         migrateButton.setAlpha(.5f);
+
+        errorText.setVisibility(View.GONE);
+    }
+
+    private void enableDialog() {
+        messageText1.setAlpha(1);
+        messageText2.setAlpha(1);
+        messageText3.setAlpha(1);
+
+        moreDetailsButton.setEnabled(true);
+        moreDetailsButton.setAlpha(1);
+
+        cancelButton.setEnabled(true);
+        cancelButton.setAlpha(1);
+
+        migrateButton.setEnabled(true);
+        migrateButton.setAlpha(1);
     }
 
     private void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 
     private void startStorageMigrationService() {
@@ -124,5 +148,14 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
             Intent intent = new Intent(activity, StorageMigrationService.class);
             activity.startService(intent);
         }
+    }
+
+    public void handleMigrationError(StorageMigrationResult result) {
+        hideProgressBar();
+        enableDialog();
+
+        errorText.setVisibility(View.VISIBLE);
+        errorText.setText(result.getErrorResultMessage(result, getContext()));
+        migrateButton.setText(R.string.try_again);
     }
 }
