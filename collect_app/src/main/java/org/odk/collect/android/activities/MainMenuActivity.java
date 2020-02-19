@@ -144,7 +144,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
         ButterKnife.bind(this);
         initToolbar();
         disableSmsIfNeeded();
-        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -688,6 +687,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
+        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
         DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
     }
 
