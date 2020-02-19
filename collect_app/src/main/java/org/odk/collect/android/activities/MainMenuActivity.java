@@ -373,7 +373,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_configure_qr_code:
-
+                Intent i = new Intent(this, ScanQRCodeActivity.class);
+                startActivity(i);
                 return true;
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));

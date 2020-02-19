@@ -44,6 +44,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.ScanQRCodeActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
@@ -159,22 +160,8 @@ public class ShowQRCodeFragment extends Fragment {
 
     @OnClick(R.id.btnScan)
     void scanButtonClicked() {
-        new PermissionUtils().requestCameraPermission(getActivity(), new PermissionListener() {
-            @Override
-            public void granted() {
-                IntentIntegrator.forFragment(ShowQRCodeFragment.this)
-                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                        .setBeepEnabled(true)
-                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-                        .setOrientationLocked(false)
-                        .setPrompt(getString(R.string.qrcode_scanner_prompt))
-                        .initiateScan();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
+        Intent i = new Intent(getActivity(), ScanQRCodeActivity.class);
+        startActivity(i);
     }
 
     @OnClick(R.id.btnSelect)
@@ -214,23 +201,6 @@ public class ShowQRCodeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-
-        if (result != null) {
-            if (result.getContents() == null) {
-                // request was canceled...
-                Timber.i("QR code scanning cancelled");
-            } else {
-                try {
-                    applySettings(CompressionUtils.decompress(result.getContents()));
-                } catch (IOException | DataFormatException | IllegalArgumentException e) {
-                    Timber.e(e);
-                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
-                }
-                return;
-            }
-        }
-
         if (requestCode == SELECT_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
@@ -245,7 +215,7 @@ public class ShowQRCodeFragment extends Fragment {
                             String response = QRCodeUtils.decodeFromBitmap(bitmap);
                             if (response != null) {
                                 qrCodeFound = true;
-                                applySettings(response);
+                                ScanQRCodeActivity.applySettings(getActivity(), response);
                             }
                         }
                     }
@@ -265,28 +235,6 @@ public class ShowQRCodeFragment extends Fragment {
         }
     }
 
-    private void applySettings(String content) {
-        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
-            @Override
-            public void onSuccess() {
-                Collect.getInstance().initializeJavaRosa();
-                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
-                getActivity().finish();
-                final LocaleHelper localeHelper = new LocaleHelper();
-                localeHelper.updateLocale(getActivity());
-                MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-                if (exception instanceof GeneralSharedPreferences.ValidationException) {
-                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
-                } else {
-                    Timber.e(exception);
-                }
-            }
-        });
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
