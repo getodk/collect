@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
-    private int unsentInstancesNumber;
+    private final int unsentInstancesNumber;
 
     @BindView(R.id.cancelButton)
     Button cancelButton;
