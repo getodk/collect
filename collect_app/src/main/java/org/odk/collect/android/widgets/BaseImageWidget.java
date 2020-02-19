@@ -311,7 +311,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
     }
 
-    File getFile() {
+    private File getFile() {
         File file = new File(getInstanceFolder() + File.separator + binaryName);
         if (!file.exists() && doesSupportDefaultValues()) {
             file = new File(getDefaultFilePath());
@@ -320,7 +320,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         return file;
     }
 
-    String getDefaultFilePath() {
+    private String getDefaultFilePath() {
         try {
             return referenceManager.deriveReference(binaryName).getLocalURI();
         } catch (InvalidReferenceException e) {
