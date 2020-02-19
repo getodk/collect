@@ -76,7 +76,6 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_BANNER_DISMISSED;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_MIGRATION_RESULT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
@@ -87,6 +86,8 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogListener {
+
+    private static final String STORAGE_MIGRATION_RESULT = "storageMigrationResult";
 
     private static final boolean EXIT = true;
     // buttons
@@ -105,6 +106,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
+    private StorageMigrationResult storageMigrationResult;
 
     @BindView(R.id.storageMigrationBanner)
     LinearLayout storageMigrationBanner;
@@ -136,6 +138,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         ButterKnife.bind(this);
         initToolbar();
         disableSmsIfNeeded();
+
+        setUpStorageMigrationResult(savedInstanceState);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -304,6 +308,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         setButtonsVisibility();
         setUpStorageMigrationBanner();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(STORAGE_MIGRATION_RESULT, storageMigrationResult);
     }
 
     private void setButtonsVisibility() {
@@ -620,14 +630,23 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
     }
 
+    private void setUpStorageMigrationResult(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            storageMigrationResult = (StorageMigrationResult) savedInstanceState.getSerializable(STORAGE_MIGRATION_RESULT);
+        }
+        if (storageMigrationResult == null && new StorageStateProvider().isScopedStorageUsed()) {
+            storageMigrationResult = StorageMigrationResult.SUCCESS;
+        }
+
+    }
+
     private void setUpStorageMigrationBanner() {
         boolean storageMigrationBannerDismissed = GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_BANNER_DISMISSED, false);
         boolean isScopedStorageUsed = new StorageStateProvider().isScopedStorageUsed();
 
         if (!isScopedStorageUsed || !storageMigrationBannerDismissed) {
             storageMigrationBanner.setVisibility(View.VISIBLE);
-            Integer storageMigrationResultCode = (Integer) GeneralSharedPreferences.getInstance().get(KEY_SCOPED_STORAGE_MIGRATION_RESULT);
-            updateStorageMigrationBanner(StorageMigrationResult.getResult(storageMigrationResultCode));
+            updateStorageMigrationBanner();
         }
     }
 
@@ -646,15 +665,15 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
+        storageMigrationResult = result;
         DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_MIGRATION_RESULT, result.getResultCode());
-        updateStorageMigrationBanner(result);
+        updateStorageMigrationBanner();
         storageMigrationRepository.consumeResult();
     }
 
-    private void updateStorageMigrationBanner(StorageMigrationResult result) {
-        storageMigrationBannerDismissButton.setVisibility(result == StorageMigrationResult.SUCCESS ? View.VISIBLE : View.GONE);
-        storageMigrationBannerLearnMoreButton.setVisibility(result == StorageMigrationResult.SUCCESS ? View.GONE : View.VISIBLE);
-        storageMigrationBannerText.setText(result.getBannerText(result, this));
+    private void updateStorageMigrationBanner() {
+        storageMigrationBannerDismissButton.setVisibility(storageMigrationResult == StorageMigrationResult.SUCCESS ? View.VISIBLE : View.GONE);
+        storageMigrationBannerLearnMoreButton.setVisibility(storageMigrationResult == StorageMigrationResult.SUCCESS ? View.GONE : View.VISIBLE);
+        storageMigrationBannerText.setText(StorageMigrationResult.getBannerText(storageMigrationResult, this));
     }
 }

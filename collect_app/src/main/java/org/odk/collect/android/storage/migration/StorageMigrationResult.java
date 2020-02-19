@@ -5,54 +5,25 @@ import android.content.Context;
 import org.odk.collect.android.R;
 
 public enum StorageMigrationResult {
-    NO_RESULT(0),
-    SUCCESS(1),
-    FORM_UPLOADER_IS_RUNNING(2),
-    FORM_DOWNLOADER_IS_RUNNING(3),
-    NOT_ENOUGH_SPACE(4),
-    MOVING_FILES_FAILED(5);
+    SUCCESS,
+    FORM_UPLOADER_IS_RUNNING,
+    FORM_DOWNLOADER_IS_RUNNING,
+    NOT_ENOUGH_SPACE,
+    MOVING_FILES_FAILED;
 
-    private int resultCode;
-
-    StorageMigrationResult(int resultCode) {
-        this.resultCode = resultCode;
-    }
-
-    public int getResultCode() {
-        return resultCode;
-    }
-
-    public static StorageMigrationResult getResult(int resultCode) {
-        switch (resultCode) {
-            case 1:
-                return SUCCESS;
-            case 2:
-                return FORM_UPLOADER_IS_RUNNING;
-            case 3:
-                return FORM_DOWNLOADER_IS_RUNNING;
-            case 4:
-                return NOT_ENOUGH_SPACE;
-            case 5:
-                return MOVING_FILES_FAILED;
-            default:
-                return NO_RESULT;
+    public static String getBannerText(StorageMigrationResult result, Context context) {
+        if (result == null) {
+            return context.getString(R.string.scoped_storage_banner_text);
+        } else if (result == SUCCESS) {
+            return context.getString(R.string.storage_migration_completed);
+        } else {
+            return context.getString(R.string.scoped_storage_banner_text)
+                    + context.getString(R.string.last_attempt_failed)
+                    + getResultMessage(result, context);
         }
     }
 
-    public String getBannerText(StorageMigrationResult result, Context context) {
-        switch (result) {
-            case NO_RESULT:
-                return context.getString(R.string.scoped_storage_banner_text);
-            case SUCCESS:
-                return context.getString(R.string.storage_migration_completed);
-            default:
-                return context.getString(R.string.scoped_storage_banner_text)
-                        + context.getString(R.string.last_attempt_failed)
-                        + getResultMessage(result, context);
-        }
-    }
-
-    private String getResultMessage(StorageMigrationResult result, Context context) {
+    private static String getResultMessage(StorageMigrationResult result, Context context) {
         switch (result) {
             case SUCCESS:
                 return context.getString(R.string.storage_migration_completed);
