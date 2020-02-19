@@ -87,8 +87,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogListener {
 
-    private static final String STORAGE_MIGRATION_RESULT = "storageMigrationResult";
-
     private static final boolean EXIT = true;
     // buttons
     private Button manageFilesButton;
