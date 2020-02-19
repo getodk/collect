@@ -391,7 +391,6 @@
   <string name="qrcode_without_passwords">या क्यूआर कोडमध्ये आपले प्रशासक किंवा सर्व्हर संकेतशब्द नसतात. \n (संकेतशब्द जोडण्यासाठी टॅप करा)</string>
   <string name="qrcode_with_admin_password">हा क्यूआर कोड आपला प्रशासक संकेतशब्द समाविष्ट करतो. कृपया काळजीपूर्वक वागणूक द्या. \n (संकेतशब्द काढण्यासाठी टॅप करा)</string>
   <string name="qrcode_with_server_password">हा क्यूआर कोड आपला सर्व्हर पासवर्ड समाविष्टीत आहे. \n (संकेतशब्द काढण्यासाठी टॅप करा)</string>
-  <string name="import_export_settings">आयात / निर्यात सेटिंग्ज</string>
   <string name="qrcode_scanner_prompt">आयतमध्ये क्यूआर कोड ठेवा</string>
   <string name="server_password">सर्व्हर पासवर्ड</string>
   <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>

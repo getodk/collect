@@ -497,7 +497,6 @@
   <string name="qrcode_without_passwords">كود QR فقط.</string>
   <string name="qrcode_with_admin_password">كود QR بالاضافة لكلمة مرور المدير</string>
   <string name="qrcode_with_server_password">كود QR بالاضافة لكلمة مرور الخادم</string>
-  <string name="import_export_settings">استيراد وتصدير الإعدادات</string>
   <string name="qrcode_scanner_prompt">قارء كود QR</string>
   <string name="barcode_scanner_prompt">قارء باركود</string>
   <string name="server_password">كلمة مرور الخادم</string>

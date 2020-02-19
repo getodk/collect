@@ -391,7 +391,6 @@
   <string name="qrcode_without_passwords">Ky kod QR nuk përmban fjalëkalimet e server-it apo të administratorit. \n(Shto fjalëkalimet)</string>
   <string name="qrcode_with_admin_password">Ky kod QR përmban fjalëkalimin e administratorit. Lutemi, trajtojeni me kujdes. \n(Hiq fjalëkalimin)</string>
   <string name="qrcode_with_server_password">Ky kod QR përmban fajlëkalimin e server-it tuaj. \n(Hiq fjalëkalimin)</string>
-  <string name="import_export_settings">Parametrat e importit dhe eksportit</string>
   <string name="qrcode_scanner_prompt">Vendos kodin QR brenda katrorit</string>
   <string name="barcode_scanner_prompt">Vendos barcode-in brenda drejtkëndëshit</string>
   <string name="server_password">Fjalëkalimi i serverit</string>

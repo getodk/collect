@@ -457,7 +457,6 @@ Dela ODK Collect med dem.</string>
   <string name="qrcode_without_passwords">QR-koden innehåller inte dina administratörs- och serverlösenord. \n(Knacka för att lägga till lösenorden)</string>
   <string name="qrcode_with_admin_password">QR-koden innehåller ditt administratörslösenord. Använd den med försiktighet. \n(Knacka för att ta bort lösenordet)</string>
   <string name="qrcode_with_server_password">QR-koden innehåller ditt serverlösenord. \n(Knacka för att ta bort lösenordet)</string>
-  <string name="import_export_settings">Import/export inställningar</string>
   <string name="qrcode_scanner_prompt">Placera QR-koden innanför rektangeln</string>
   <string name="barcode_scanner_prompt">Placera streckkoden innanför rektangeln</string>
   <string name="server_password">Serverlösenord</string>

@@ -422,7 +422,6 @@ Escolher Imagem</string>
   <string name="qrcode_without_passwords">Este QR code não contém suas senhas de administração e de servidor. \n(Toque para adicionar as senhas)</string>
   <string name="qrcode_with_admin_password">Este QR code contém sua senha de administração. Por favor use com cuidado. \n(Toque para remover a senha)</string>
   <string name="qrcode_with_server_password">Este QR code contém sua senha do servidor. \n(Toque para remover a senha)</string>
-  <string name="import_export_settings">Importar/Exportar configurações</string>
   <string name="qrcode_scanner_prompt">Posicione o QR code dentro do retângulo</string>
   <string name="barcode_scanner_prompt">Coloque o código de barras dentro do retângulo</string>
   <string name="server_password">Senha do servidor</string>

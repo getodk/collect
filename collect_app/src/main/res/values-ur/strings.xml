@@ -432,7 +432,6 @@
   <string name="qrcode_without_passwords">اس کیو آر کوڈ میں ایڈمن اور سرور کے پاس ورڈ شامل نہیں ہیں. \ این (پاس ورڈ ایڈ کرنےکے لیے ٹیپ کریں)</string>
   <string name="qrcode_with_admin_password">اس کیو آر کوڈ میں ایڈمن اور سرور کے پاس ورڈ شامل ہیں. براہ مہربانی اسے احتیاط سے استعمال کریں. \ این (پاس ورڈ کو ہٹانےکے لیےٹیپ کریں )</string>
   <string name="qrcode_with_server_password">اس کیو آر کوڈ میںاپکے سرور کا پاس ورڈ شامل ہے.  \ این (پاس ورڈ کو ہٹانےکے لیے ٹیپ کریں)</string>
-  <string name="import_export_settings">امپورٹ/ایکسپورٹ سیٹنگ </string>
   <string name="qrcode_scanner_prompt"> کیو آر کوڈ کو مستطیل کے اندر رکھیں</string>
   <string name="barcode_scanner_prompt">بارکوڈ کو مستطیل کے اندر رکھیں</string>
   <string name="server_password">سرور پاس ورڈ</string>

@@ -436,7 +436,6 @@
   <string name="qrcode_without_passwords">Этот QR-код не содержит ваши пароли администратора и сервера.\n(Нажмите, чтобы добавить пароли)</string>
   <string name="qrcode_with_admin_password">Этот QR-код содержит ваш пароль администратора. Пожалуйста, будьте осторожнее с ним.\n(Нажмите, чтобы удалить пароль)</string>
   <string name="qrcode_with_server_password">Этот QR-код содержит ваш пароль сервера. Пожалуйста, будьте осторожнее с ним.\n(Нажмите, чтобы удалить пароль)</string>
-  <string name="import_export_settings">Настройки импорта/экспорта</string>
   <string name="qrcode_scanner_prompt">Вместите QR-код внутрь прямоугольника</string>
   <string name="barcode_scanner_prompt">Вместите штрихкод внутрь прямоугольника</string>
   <string name="server_password">Пароль сервера</string>

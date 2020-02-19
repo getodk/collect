@@ -490,7 +490,6 @@
   <string name="qrcode_without_passwords">Tento QR kód neobsahuje vaše administrátorské nebo serverové hesla. \n (Klepnutím přidáte hesla)</string>
   <string name="qrcode_with_admin_password">Tento kód QR obsahuje vaše heslo administrátora. Prosím, zacházejte s ním opatrně. \n (Klepnutím odeberete heslo)</string>
   <string name="qrcode_with_server_password">Tento kód QR obsahuje vaše heslo k serveru. \n (Klepnutím odeberete hesla)</string>
-  <string name="import_export_settings">Import / Export nastavení</string>
   <string name="qrcode_scanner_prompt">Vložte QR kód do obdélníku</string>
   <string name="barcode_scanner_prompt">Vložte čárový kód do obdélníku</string>
   <string name="server_password">Heslo serveru</string>

@@ -480,7 +480,6 @@
   <string name="qrcode_without_passwords">ఈ QR కోడ్‌లో మీ నిర్వాహక లేదా సర్వర్ పాస్‌వర్డ్‌లు లేవు. \n (పాస్‌వర్డ్‌లను జోడించడానికి నొక్కండి)</string>
   <string name="qrcode_with_admin_password">ఈ QR కోడ్‌లో మీ అడ్మిన్ పాస్‌వర్డ్ ఉంటుంది. దయచేసి జాగ్రత్తగా వ్యవహరించండి. \n (పాస్‌వర్డ్‌ను తొలగించడానికి నొక్కండి)</string>
   <string name="qrcode_with_server_password">ఈ QR కోడ్‌లో మీ సర్వర్ పాస్‌వర్డ్ ఉంటుంది. \n (పాస్‌వర్డ్‌లను తొలగించడానికి నొక్కండి)</string>
-  <string name="import_export_settings">ఇంపోర్ట్ /ఎక్స్ పోర్ట్ సెట్టింగ్స్ </string>
   <string name="qrcode_scanner_prompt">QR కోడ్‌ను దీర్ఘచతురస్రం లోపల ఉంచండి</string>
   <string name="barcode_scanner_prompt">బార్‌కోడ్‌ను దీర్ఘచతురస్రం లోపల ఉంచండి</string>
   <string name="server_password">సర్వర్ పాస్వర్డ్</string>

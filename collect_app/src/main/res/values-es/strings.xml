@@ -489,7 +489,6 @@
   <string name="qrcode_without_passwords">Este código QR no incluye contraseñas de administrador y del servidor. \n(Presione para agregar las contraseñas)</string>
   <string name="qrcode_with_admin_password">Este código QR incluye su contraseña de administrador. Por favor uselo cuidadosamente. \n(Presione para remover la contraseña)</string>
   <string name="qrcode_with_server_password">Este código QR incluye su contraseña del servidor. \n(Presione para remover la contraseña)</string>
-  <string name="import_export_settings">Configuración Importar/Exportar</string>
   <string name="qrcode_scanner_prompt">Coloque el código QR dentro del rectangulo</string>
   <string name="barcode_scanner_prompt">Coloque el código de barras dentro del rectángulo</string>
   <string name="server_password">Contraseña del servidor</string>

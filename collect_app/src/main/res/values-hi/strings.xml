@@ -401,7 +401,6 @@
   <string name="qrcode_without_passwords">इस QR कोड में आपके एडमिन या सर्वर पासवर्ड शामिल नहीं हैं I \ N (पासवर्ड जोड़ने के लिए टैप करें)</string>
   <string name="qrcode_with_admin_password">इस QR कोड में आपका एडमिन पासवर्ड शामिल है. कृपया इसे ध्यान से करें \n (पासवर्ड हटाने के लिए टैप करें). </string>
   <string name="qrcode_with_server_password">इस QR कोड में आपका सर्वर पासवर्ड शामिल है \n (पासवर्ड हटाने के लिए टैप करें)</string>
-  <string name="import_export_settings">आयात / निर्यात सेटिंग्स</string>
   <string name="qrcode_scanner_prompt">QR कोड आयत के अंदर रखें</string>
   <string name="server_password">सर्वर पासवर्ड</string>
   <string name="include_password_dialog">पासवर्ड कोड में शामिल </string>

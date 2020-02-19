@@ -338,7 +338,6 @@
   <string name="successfully_imported_settings">Configuració importada correctament</string>
   <string name="share">Comparteix</string>
   <string name="select_qrcode">Selecciona codi des de tarja SD</string>
-  <string name="import_export_settings">Configuració Importació/Exportació</string>
   <string name="qrcode_scanner_prompt">Situa codi QR dins el rectangle</string>
   <string name="server_password">Clau d\'accés servidor</string>
   <string name="include_password_dialog">Claus d\'accés incloses al codi</string>

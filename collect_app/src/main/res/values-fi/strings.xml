@@ -487,7 +487,6 @@
   <string name="qrcode_without_passwords">Tämä QR-koodi ei sisällä pääkäyttäjä- tai palvelinsalasanaasi.  \n(Napauta lisääksesi salasanat)</string>
   <string name="qrcode_with_admin_password">Tämä QR-koodi sisältää pääkäyttäjäsalasanasi. Ole hyvä ja käsittele varoen. \n(Napauta poistaaksesi salasanan)</string>
   <string name="qrcode_with_server_password">Tämä QR-koodi sisältää palvelinsalasanasi. Ole hyvä ja käsittele varoen. \n(Napauta poistaaksesi salasanan)</string>
-  <string name="import_export_settings">Tuo/vie asetuksia</string>
   <string name="qrcode_scanner_prompt">Aseta QR-koodi suorakaiteen sisään</string>
   <string name="barcode_scanner_prompt">Aseta viivakoodi suorakaiteen sisään</string>
   <string name="server_password">Palvelinsalasana</string>

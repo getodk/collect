@@ -472,7 +472,6 @@
   <string name="qrcode_without_passwords">Цей QR код не містить Ваших паролів адміністратора чи сервера. \n(Натисніть щоб додати паролі)</string>
   <string name="qrcode_with_admin_password">Цей QR код містить Ваш пароль адміністратора. Будь ласка, оберігайте його. \n(Натисніть для видалення паролю)</string>
   <string name="qrcode_with_server_password">Цей QR код містить Ваш пароль сервера. \n(Натисніть для видалення паролю)</string>
-  <string name="import_export_settings">Імпорт/Експорт Налаштувань</string>
   <string name="qrcode_scanner_prompt">Помістіть QR код в прямокутник</string>
   <string name="barcode_scanner_prompt">Розмістіть штрихкод в прямокутнику</string>
   <string name="server_password">Пароль Сервера</string>

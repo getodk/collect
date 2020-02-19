@@ -481,7 +481,6 @@
   <string name="qrcode_without_passwords">この QR コードには、管理者パスワードまたはサーバーパスワードは含まれていません。 \n(タップするとパスワードを追加します)</string>
   <string name="qrcode_with_admin_password">この QR コードには管理者パスワードが含まれています。 慎重に扱ってください。 \n(タップするとパスワードを削除します)</string>
   <string name="qrcode_with_server_password">この QR コードにはサーバーのパスワードが含まれています。 \n(タップするとパスワードを削除します)</string>
-  <string name="import_export_settings">設定をインポート/エクスポート</string>
   <string name="qrcode_scanner_prompt">四角の中に QR コードを入れてください</string>
   <string name="barcode_scanner_prompt">四角の中にバーコードを入れてください</string>
   <string name="server_password">サーバーパスワード</string>

@@ -432,7 +432,6 @@
   <string name="qrcode_without_passwords">Kanuni hizi za QR hazijajumuishi  kiongozi au mhifadhi misimbo. \n(Bofya kuongeza Nyilwa)</string>
   <string name="qrcode_with_admin_password">Kanuni hizi  za QR zinajumuishi  neno la siri/nywila za  kiongozi. Tafadhali tumia kwa umakini/uangalifu. \n(Bofya kuondoa kanuni)</string>
   <string name="qrcode_with_server_password">Kanuni hizi za QR zinajumuishi nywila/neno la siri la kiongozi. \n(Bofya kuondoa kanuni)</string>
-  <string name="import_export_settings">Ingiza/Toa Mipangilio</string>
   <string name="qrcode_scanner_prompt">Panga kanuni za  QR ndani ya mstatili</string>
   <string name="barcode_scanner_prompt">Panga msimbo pau ndani ya mstatili</string>
   <string name="server_password">Nenosiri la seva</string>
