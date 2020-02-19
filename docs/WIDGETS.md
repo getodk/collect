@@ -147,4 +147,4 @@ public class TriggerWidgetTest {
 }
 ```
 
-This example makes sure that the widget interface methods (`getAnswer`, `clearAnswer` etc) all behave as expected and also checks that the widget looks and behaves correctly. Widget test helpers make these tests easier to write and can be in `WidgetHelpers`.
+This example makes sure that the widget interface methods (`getAnswer`, `clearAnswer` etc) all behave as expected and also checks that the widget looks and behaves correctly. Widget test helpers make these tests easier to write and can be in `QuestionWidgetHelpers`.
