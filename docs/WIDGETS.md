@@ -62,3 +62,89 @@ To create your own widget your class needs to override several methods:
 
 As you'll see from the example you need to call `widgetValueChanged` whenever the answer is changed in someway. This will make sure that any listeners attached to the widget will be called.
 
+## Testing widgets
+
+Widgets should have the majority of their behavior driven out by tests that treat them as an individual component. This means higher level feature tests for Collect won't have to be as concerned around the many types of question that exist and can be more focused on form entry, form management, settings etc as a whole.
+
+You can use [Robolectric](https://robolectric.org) to write tests for widgets without having to run them on device or manually mock out the Android SDK:
+
+```java
+@RunWith(RobolectricTestRunner.class)
+public class TriggerWidgetTest {
+
+    @Test
+    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
+        assertThat(createWidget(promptWithAnswer(null)).getAnswer(), nullValue());
+    }
+
+    @Test
+    public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
+        TriggerWidget widget = createWidget(promptWithAnswer(new StringData("OK")));
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("OK"));
+    }
+
+    @Test
+    public void clearAnswer_clearsWidgetAnswer() {
+        TriggerWidget widget = createWidget(promptWithAnswer(new StringData("OK")));
+
+        widget.clearAnswer();
+        assertThat(widget.getAnswer(), nullValue());
+    }
+
+    @Test
+    public void clearAnswer_callsValueChangeListeners() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+
+        widget.clearAnswer();
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
+        TriggerWidget widget = createWidget(promptWithReadOnly());
+        assertThat(widget.getCheckBox().getVisibility(), equalTo(View.VISIBLE));
+        assertThat(widget.getCheckBox().isEnabled(), equalTo(Boolean.FALSE));
+    }
+
+    @Test
+    public void whenPromptAnswerDoesNotHaveAnswer_checkboxIsUnchecked() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        assertThat(widget.getCheckBox().isChecked(), equalTo(false));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_checkboxIsChecked() {
+        TriggerWidget widget = createWidget(promptWithAnswer(new StringData("OK")));
+        assertThat(widget.getCheckBox().isChecked(), equalTo(true));
+    }
+
+    @Test
+    public void checkingCheckbox_setsAnswer() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        CheckBox triggerButton = widget.getCheckBox();
+
+        triggerButton.setChecked(true);
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("OK"));
+
+        triggerButton.setChecked(false);
+        assertThat(widget.getAnswer(), nullValue());
+    }
+
+    @Test
+    public void checkingCheckbox_callsValueChangeListeners() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        CheckBox triggerButton = widget.getCheckBox();
+
+        triggerButton.setChecked(true);
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    private TriggerWidget createWidget(FormEntryPrompt prompt) {
+        return new TriggerWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+    }
+}
+```
+
+This example makes sure that the widget interface methods (`getAnswer`, `clearAnswer` etc) all behave as expected and also checks that the widget looks and behaves correctly. Widget test helpers make these tests easier to write and can be in `WidgetHelpers`.
