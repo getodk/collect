@@ -657,9 +657,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             storageMigrationBanner.setVisibility(View.VISIBLE);
             storageMigrationBannerText.setText(R.string.storage_migration_completed);
             storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
+            storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
         } else if (!isScopedStorageUsed) {
             storageMigrationBanner.setVisibility(View.VISIBLE);
             storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
+            storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
             storageMigrationBannerDismissButton.setVisibility(View.GONE);
         }
     }
