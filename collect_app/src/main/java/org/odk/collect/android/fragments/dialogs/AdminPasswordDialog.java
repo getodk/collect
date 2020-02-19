@@ -23,9 +23,8 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 public class AdminPasswordDialog extends DialogFragment {
 
     public interface AdminPasswordDialogListener {
-        void openAdminSettings();
-        void openStorageMigrationDialog();
-        void incorrectAdminPassword();
+        void onCorrectAdminPassword(Action action);
+        void onIncorrectAdminPassword();
     }
 
     public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION }
@@ -81,13 +80,9 @@ public class AdminPasswordDialog extends DialogFragment {
                 .setTitle(getString(R.string.enter_admin_password))
                 .setPositiveButton(getString(R.string.ok), (dialog, whichButton) -> {
                             if (getAdminPassword().equals(input.getText().toString())) {
-                                if (action == Action.ADMIN_SETTINGS) {
-                                    listener.openAdminSettings();
-                                } else {
-                                    listener.openStorageMigrationDialog();
-                                }
+                                listener.onCorrectAdminPassword(action);
                             } else {
-                                listener.incorrectAdminPassword();
+                                listener.onIncorrectAdminPassword();
                             }
                             dismiss();
                         })

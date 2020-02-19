@@ -13,7 +13,11 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
+import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.utilities.DialogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,9 +74,11 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         moreDetailsButton.setOnClickListener(view1 -> showMoreDetails());
         cancelButton.setOnClickListener(v -> dismiss());
         migrateButton.setOnClickListener(v -> {
-            disableDialog();
-            showProgressBar();
-            startStorageMigrationService();
+            if (isAdminPasswordRequired()) {
+                DialogUtils.showIfNotShowing(AdminPasswordDialog.create(AdminPasswordDialog.Action.STORAGE_MIGRATION), getActivity().getSupportFragmentManager());
+            } else {
+                startStorageMigration();
+            }
         });
     }
 
@@ -157,5 +163,16 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         errorText.setVisibility(View.VISIBLE);
         errorText.setText(result.getErrorResultMessage(result, getContext()));
         migrateButton.setText(R.string.try_again);
+    }
+
+    public void startStorageMigration() {
+        disableDialog();
+        showProgressBar();
+        startStorageMigrationService();
+    }
+
+    private boolean isAdminPasswordRequired() {
+        String adminPassword = (String) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_ADMIN_PW);
+        return adminPassword != null && !adminPassword.isEmpty();
     }
 }

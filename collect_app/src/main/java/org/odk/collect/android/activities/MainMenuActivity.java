@@ -395,7 +395,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 if (isAdminPasswordRequired()) {
                     DialogUtils.showIfNotShowing(AdminPasswordDialog.create(AdminPasswordDialog.Action.ADMIN_SETTINGS), getSupportFragmentManager());
                 } else {
-                    openAdminSettings();
+                    startActivity(new Intent(this, AdminPreferencesActivity.class));
                 }
                 return true;
         }
@@ -551,17 +551,22 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     @Override
-    public void openAdminSettings() {
-        startActivity(new Intent(this, AdminPreferencesActivity.class));
+    public void onCorrectAdminPassword(AdminPasswordDialog.Action action) {
+        switch (action) {
+            case ADMIN_SETTINGS:
+                startActivity(new Intent(this, AdminPreferencesActivity.class));
+                break;
+            case STORAGE_MIGRATION:
+                StorageMigrationDialog storageMigrationDialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
+                if (storageMigrationDialog != null) {
+                    storageMigrationDialog.startStorageMigration();
+                }
+                break;
+        }
     }
 
     @Override
-    public void openStorageMigrationDialog() {
-        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
-    }
-
-    @Override
-    public void incorrectAdminPassword() {
+    public void onIncorrectAdminPassword() {
         ToastUtils.showShortToast(R.string.admin_password_incorrect);
     }
 
@@ -628,11 +633,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
         storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
-        if (isAdminPasswordRequired()) {
-            DialogUtils.showIfNotShowing(AdminPasswordDialog.create(AdminPasswordDialog.Action.STORAGE_MIGRATION), getSupportFragmentManager());
-        } else {
-            openStorageMigrationDialog();
-        }
+        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
