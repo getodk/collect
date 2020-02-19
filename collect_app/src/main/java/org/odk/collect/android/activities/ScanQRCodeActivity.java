@@ -13,7 +13,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -82,11 +81,7 @@ public class ScanQRCodeActivity extends CollectAbstractActivity {
                 ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
                 final LocaleHelper localeHelper = new LocaleHelper();
                 localeHelper.updateLocale(activity);
-
-                Intent intent = new Intent(activity, PreferencesActivity.class);
-                intent.putExtra(PreferencesActivity.INTENT_SUCCESS_QR_SCAN, true);
-                activity.startActivity(intent);
-                activity.finish();
+                MainMenuActivity.startActivityAndCloseAllOthers(activity);
             }
 
             @Override
