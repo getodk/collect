@@ -80,8 +80,7 @@
   <string name="location_provider_accuracy">Utilisation de %1$s. La précision est de %2$s m.</string>
   <string name="location_accuracy">La précision est de %1$s mètres.</string>
   <string name="main_menu">Menu principal</string>
-  <string name="main_menu_details">La collecte de données rendue plus facile…</string>
-  <string name="manage_files">Supprimer formulaire sauvegardé</string>
+    <string name="manage_files">Supprimer formulaire sauvegardé</string>
   <string name="mark_finished">Marquer le formulaire comme finalisé</string>
   <string name="noselect_error">Désolé, vous n\'avez pas sélectionné un formulaire.</string>
   <string name="no_connection">Pas de connexion réseau disponible</string>

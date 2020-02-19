@@ -26,7 +26,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     @Override
     public MainMenuPage assertOnPage() {
-        checkIsStringDisplayed(R.string.main_menu);
+        assertText("Collect 1.26.0");
         return this;
     }
 

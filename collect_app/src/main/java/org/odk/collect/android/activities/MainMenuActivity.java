@@ -262,13 +262,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             return;
         }
 
-        {
-            // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
-            mainMenuMessageLabel.setText(Collect.getInstance()
-                    .getVersionedAppName());
-        }
-
         File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
         File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
         // Give JSON file preference
@@ -432,7 +425,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.main_menu));
+        setTitle("Collect 1.26.0");
         setSupportActionBar(toolbar);
     }
 

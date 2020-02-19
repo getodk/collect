@@ -77,8 +77,7 @@
   <string name="location_provider_accuracy">Dengan %1$s. Tingkat akurasi %2$s meter.</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="main_menu">Menu Utama</string>
-  <string name="main_menu_details">Pengumpulan data menjadi lebih mudah…</string>
-  <string name="manage_files">Hapus formulir</string>
+    <string name="manage_files">Hapus formulir</string>
   <string name="mark_finished">Tandai formulir ini telah siap kirim</string>
   <string name="noselect_error">Maaf, anda belum memilih formulir!</string>
   <string name="no_connection">Tidak ditemukan koneksi internet</string>

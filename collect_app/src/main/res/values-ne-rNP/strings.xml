@@ -75,8 +75,7 @@
   <string name="location_provider_accuracy">%1$s प्रयोग गर्दा, सटिकता %2$s m छ |</string>
   <string name="location_accuracy">सटिकता %1$s m छ |</string>
   <string name="main_menu">मूल मेनु</string>
-  <string name="main_menu_details">सजिलो तथ्यांक संकलन…</string>
-  <string name="manage_files">संचित फारम डिलिट गर्न</string>
+    <string name="manage_files">संचित फारम डिलिट गर्न</string>
   <string name="mark_finished">फारामलाई अन्तिम रुप दिइएको अंकित गर्नुहोस् </string>
   <string name="noselect_error">कुनै एक फारम छान्नुहोस् </string>
   <string name="no_connection">नेटवर्क कनेक्सन उपलब्ध छैन</string>

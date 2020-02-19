@@ -80,8 +80,7 @@
   <string name="location_provider_accuracy">Verwendung von %1$s. Genauigkeit beträgt %2$s m.</string>
   <string name="location_accuracy">Genauigkeit beträgt %1$s m</string>
   <string name="main_menu">Haupt-Menü</string>
-  <string name="main_menu_details">Datenerhebung leicht gemacht…</string>
-  <string name="manage_files">Formulare löschen</string>
+    <string name="manage_files">Formulare löschen</string>
   <string name="mark_finished">Formular als vollständig markieren</string>
   <string name="noselect_error">Keine Formulare ausgewählt!</string>
   <string name="no_connection">Keine Netzwerkverbindung vorhanden</string>

@@ -76,8 +76,7 @@
   <string name="location_provider_accuracy">Inatumia %1$s. Usahihi ni %2$s m.</string>
   <string name="location_accuracy">Usahihi ni %1$s m</string>
   <string name="main_menu">Orodha kuu</string>
-  <string name="main_menu_details">Ukusanyaji wa takwimu umerahisishwa…</string>
-  <string name="manage_files">Futa fomu zilizohifadhiwa</string>
+    <string name="manage_files">Futa fomu zilizohifadhiwa</string>
   <string name="mark_finished">Weka alama kuonesha fomu imekamilika</string>
   <string name="noselect_error">Samahani, hujachagua fomu zozote!</string>
   <string name="no_connection">Hakuna mtandao unaopatikana</string>

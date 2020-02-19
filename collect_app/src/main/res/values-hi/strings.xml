@@ -72,8 +72,7 @@
   <string name="location_provider_accuracy">%1$sको प्रयोग कर रहा है. शुद्धता %2$sमीटर है.</string>
   <string name="location_accuracy">शुद्धता %1$s मीटर है</string>
   <string name="main_menu">मुख्य मेन्यू</string>
-  <string name="main_menu_details">डेटा कलेक्शन अब आसान…</string>
-  <string name="manage_files">संरक्षित फॉर्म मिटायें</string>
+    <string name="manage_files">संरक्षित फॉर्म मिटायें</string>
   <string name="mark_finished">फॉर्म पूरा करें</string>
   <string name="noselect_error">क्षमा करें, आपने कोई फॉर्म नही चुना है!</string>
   <string name="no_connection">कोई नेटवर्क कनेक्शन उपलब्ध नहीं</string>

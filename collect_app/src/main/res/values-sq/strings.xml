@@ -72,8 +72,7 @@
   <string name="location_provider_accuracy">Duke përdorur %1$s. Saktësia është %2$s m.</string>
   <string name="location_accuracy">Saktësia është %1$s m</string>
   <string name="main_menu">Menuja kryesore</string>
-  <string name="main_menu_details">Mbledhja e të dhënave, e thjeshtëzuar…</string>
-  <string name="manage_files">Fshi formularin e ruajtur</string>
+    <string name="manage_files">Fshi formularin e ruajtur</string>
   <string name="mark_finished">Shëno formularin si të përfunduar</string>
   <string name="noselect_error">Ndjesë, ju nuk keni përzgjedhur asnjë formular</string>
   <string name="no_connection">Nuk jeni i lidhur me internetin</string>

@@ -31,26 +31,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/storageMigrationBanner"
         android:orientation="vertical"
-        android:paddingTop="@dimen/margin_standard">
-
-        <TextView
-            android:id="@+id/main_menu_header"
-            style="@style/TextAppearance.Collect.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/app_name"
-            android:textStyle="bold"
-            android:textAlignment="center" />
-
-        <TextView
-            style="@style/TextAppearance.Collect.Subtitle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_small"
-            android:text="@string/main_menu_details"
-            android:textAlignment="center" />
+        android:paddingTop="12dp">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -61,7 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_small">
+                android:paddingLeft="@dimen/margin_standard"
+                android:paddingRight="@dimen/margin_standard">
 
                 <LinearLayout
                     android:layout_width="match_parent"

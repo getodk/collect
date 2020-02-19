@@ -77,8 +77,7 @@
   <string name="location_provider_accuracy">Používám %1$s. Přesnost: %2$s m.</string>
   <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="main_menu">Hlavní nabídka</string>
-  <string name="main_menu_details">Pro snazší sběr dat…</string>
-  <string name="manage_files">Smazat uložený dotazník</string>
+    <string name="manage_files">Smazat uložený dotazník</string>
   <string name="mark_finished">Označit dotazník jako dokončený</string>
   <string name="noselect_error">Nevybral/a jste žádný dotazník!</string>
   <string name="no_connection">Není k dispozici připojení k internetu!</string>
