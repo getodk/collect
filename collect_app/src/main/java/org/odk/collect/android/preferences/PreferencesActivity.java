@@ -52,8 +52,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
                     .beginTransaction()
                     .replace(R.id.preferences_fragment_container, basePreferenceFragment)
                     .commit();
-            }
-            else {
+            } else {
                 Bundle bundle = new Bundle();
                 Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
                 fragment.setArguments(bundle);
