@@ -3,6 +3,7 @@ package org.odk.collect.android.activities;
 import android.content.Intent;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,6 +14,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
 
@@ -196,5 +199,19 @@ public class MainActivityTest {
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(FileManagerTabs.class.getName(),
                 shadowIntent.getIntentClass().getName());
+    }
+
+    /**
+     * {@link Test} to assert "Scan QR Code" option item brings user to qr scanning activity
+     */
+    @Test
+    public void pressScanQRCode() throws Exception {
+        MenuItem item = new RoboMenuItem(R.id.menu_configure_qr_code);
+
+        mainMenuActivity.onOptionsItemSelected(item);
+
+        Intent expectedIntent = new Intent(mainMenuActivity, ScanQRCodeActivity.class);
+        Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
+        assertEquals(expectedIntent.getComponent(), actual.getComponent());
     }
 }
