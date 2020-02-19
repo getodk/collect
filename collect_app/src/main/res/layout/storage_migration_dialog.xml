@@ -19,12 +19,39 @@
             android:padding="@dimen/margin_standard">
 
             <TextView
-                android:id="@+id/messageText"
+                android:id="@+id/messageText1"
                 style="@style/TextAppearance.Collect.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:text="@string/storage_migration_dialog_message" />
+                android:text="@string/storage_migration_dialog_message1" />
+
+            <TextView
+                android:id="@+id/messageText2"
+                style="@style/TextAppearance.Collect.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/storage_migration_dialog_message2" />
+
+            <TextView
+                android:id="@+id/messageText3"
+                style="@style/TextAppearance.Collect.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/storage_migration_dialog_message3" />
+
+            <TextView
+                android:id="@+id/moreDetailsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/storage_migration_more_details"
+                android:textColor="?colorAccent"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:paddingTop="@dimen/margin_standard" />
 
             <LinearLayout
                 android:id="@+id/progressBar"

@@ -688,7 +688,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
-        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(), getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
 import butterknife.BindView;
@@ -19,20 +20,35 @@ import butterknife.ButterKnife;
 
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
+    private int unsentInstancesNumber;
+
     @BindView(R.id.cancelButton)
     Button cancelButton;
 
     @BindView(R.id.migrateButton)
     Button migrateButton;
 
-    @BindView(R.id.messageText)
-    TextView messageText;
+    @BindView(R.id.messageText1)
+    TextView messageText1;
+
+    @BindView(R.id.messageText2)
+    TextView messageText2;
+
+    @BindView(R.id.messageText3)
+    TextView messageText3;
+
+    @BindView(R.id.moreDetailsButton)
+    TextView moreDetailsButton;
 
     @BindView(R.id.progressBar)
     LinearLayout progressBar;
 
-    public static StorageMigrationDialog create() {
-        return new StorageMigrationDialog();
+    public static StorageMigrationDialog create(int unsentInstances) {
+        return new StorageMigrationDialog(unsentInstances);
+    }
+
+    private StorageMigrationDialog(int unsentInstancesNumber) {
+        this.unsentInstancesNumber = unsentInstancesNumber;
     }
 
     @Override
@@ -45,8 +61,10 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        updateToolbar();
+        setUpToolbar();
+        setUpMessageAboutUnsetSubmissions();
 
+        moreDetailsButton.setOnClickListener(view1 -> showMoreDetails());
         cancelButton.setOnClickListener(v -> dismiss());
         migrateButton.setOnClickListener(v -> {
             disableDialog();
@@ -63,17 +81,37 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     protected void onBackPressed() {
     }
 
-    private void updateToolbar() {
+    private void setUpToolbar() {
         getToolbar().setTitle(R.string.storage_migration_dialog_title);
         getToolbar().setNavigationIcon(null);
     }
 
+    private void setUpMessageAboutUnsetSubmissions() {
+        if (unsentInstancesNumber > 0) {
+            messageText2.setVisibility(View.VISIBLE);
+            messageText2.setText(getString(R.string.storage_migration_dialog_message2, unsentInstancesNumber));
+        }
+    }
+
+    private void showMoreDetails() {
+        Intent intent = new Intent(getContext(), WebViewActivity.class);
+        intent.putExtra("url", "https://forum.opendatakit.org/t/24159");
+        startActivity(intent);
+    }
+
     private void disableDialog() {
+        messageText1.setAlpha(.5f);
+        messageText2.setAlpha(.5f);
+        messageText3.setAlpha(.5f);
+
+        moreDetailsButton.setEnabled(false);
+        moreDetailsButton.setAlpha(.5f);
+
         cancelButton.setEnabled(false);
         cancelButton.setAlpha(.5f);
+
         migrateButton.setEnabled(false);
         migrateButton.setAlpha(.5f);
-        messageText.setAlpha(.5f);
     }
 
     private void showProgressBar() {
