@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -425,7 +426,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle("Collect 1.26.0");
+        setTitle("Collect " + BuildConfig.VERSION_NAME.split("v")[1].split("-")[0]);
         setSupportActionBar(toolbar);
     }
 
