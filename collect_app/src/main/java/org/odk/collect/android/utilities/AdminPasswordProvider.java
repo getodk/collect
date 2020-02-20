@@ -5,7 +5,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 
 public class AdminPasswordProvider {
-    private AdminSharedPreferences adminSharedPreferences;
+    private final AdminSharedPreferences adminSharedPreferences;
 
     public AdminPasswordProvider(AdminSharedPreferences adminSharedPreferences) {
         this.adminSharedPreferences = adminSharedPreferences;

@@ -27,11 +27,11 @@ public class AdminPasswordDialog extends DialogFragment {
 
     public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION }
 
-    private final Action action;
-
     private AdminPasswordDialogListener listener;
 
-    private AdminPasswordProvider adminPasswordProvider;
+    private final Action action;
+
+    private final AdminPasswordProvider adminPasswordProvider;
 
     public static AdminPasswordDialog create(AdminPasswordProvider adminPasswordProvider, Action action) {
         return new AdminPasswordDialog(adminPasswordProvider, action);

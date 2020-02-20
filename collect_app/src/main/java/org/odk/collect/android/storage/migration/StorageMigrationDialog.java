@@ -49,7 +49,7 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     @BindView(R.id.progressBar)
     LinearLayout progressBar;
 
-    private AdminPasswordProvider adminPasswordProvider;
+    private final AdminPasswordProvider adminPasswordProvider;
 
     public static StorageMigrationDialog create(AdminPasswordProvider adminPasswordProvider, int unsentInstances) {
         return new StorageMigrationDialog(adminPasswordProvider, unsentInstances);
