@@ -122,6 +122,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
+    @Inject
+    StorageStateProvider storageStateProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
+
     public static void startActivityAndCloseAllOthers(Activity activity) {
         activity.startActivity(new Intent(activity, MainMenuActivity.class));
         activity.overridePendingTransition(0, 0);
@@ -259,7 +265,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     .getVersionedAppName());
         }
 
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
         File f = new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK) + "/collect.settings");
         File j = new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK) + "/collect.settings.json");
         // Give JSON file preference
@@ -648,7 +653,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private void onStorageMigrationFinish(StorageMigrationResult result) {
         if (result == StorageMigrationResult.SUCCESS) {
             keepBannerWithSuccesMsgVisible = true;
-            displayBannerWithSuccessResult();
+            displayBannerWithSuccessStorageMigrationResult();
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
             storageMigrationRepository.consumeResult();
         } else {
@@ -660,19 +665,21 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void setUpStorageMigrationBanner() {
-        boolean isScopedStorageUsed = new StorageStateProvider().isScopedStorageUsed();
-
-        if (!isScopedStorageUsed) {
-            storageMigrationBanner.setVisibility(View.VISIBLE);
-            storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
-            storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
-            storageMigrationBannerDismissButton.setVisibility(View.GONE);
+        if (!storageStateProvider.isScopedStorageUsed()) {
+            displayStorageMigrationBanner();
         } else if (keepBannerWithSuccesMsgVisible) {
-            displayBannerWithSuccessResult();
+            displayBannerWithSuccessStorageMigrationResult();
         }
     }
 
-    private void displayBannerWithSuccessResult() {
+    private void displayStorageMigrationBanner() {
+        storageMigrationBanner.setVisibility(View.VISIBLE);
+        storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
+        storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
+        storageMigrationBannerDismissButton.setVisibility(View.GONE);
+    }
+
+    private void displayBannerWithSuccessStorageMigrationResult() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
         storageMigrationBannerText.setText(R.string.storage_migration_completed);
         storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);

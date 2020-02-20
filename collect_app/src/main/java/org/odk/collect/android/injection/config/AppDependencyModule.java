@@ -235,4 +235,14 @@ public class AppDependencyModule {
 
         return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository);
     }
+
+    @Provides
+    public StorageStateProvider storageStateProvider() {
+        return new StorageStateProvider();
+    }
+
+    @Provides
+    public StoragePathProvider storagePathProvider() {
+        return new StoragePathProvider();
+    }
 }
