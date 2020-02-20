@@ -13,6 +13,7 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
@@ -73,13 +74,19 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         setUpToolbar();
         setUpMessageAboutUnsetSubmissions();
 
-        moreDetailsButton.setOnClickListener(view1 -> showMoreDetails());
+        moreDetailsButton.setOnClickListener(v -> {
+            if (Collect.allowClick(getClass().getName())) {
+                showMoreDetails();
+            }
+        });
         cancelButton.setOnClickListener(v -> dismiss());
         migrateButton.setOnClickListener(v -> {
-            if (adminPasswordProvider.isAdminPasswordSet()) {
-                DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.STORAGE_MIGRATION), getActivity().getSupportFragmentManager());
-            } else {
-                startStorageMigration();
+            if (Collect.allowClick(getClass().getName())) {
+                if (adminPasswordProvider.isAdminPasswordSet()) {
+                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.STORAGE_MIGRATION), getActivity().getSupportFragmentManager());
+                } else {
+                    startStorageMigration();
+                }
             }
         });
     }
