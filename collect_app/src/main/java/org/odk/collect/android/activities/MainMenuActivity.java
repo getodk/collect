@@ -75,7 +75,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_BANNER_DISMISSED;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
@@ -86,6 +85,8 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogListener {
+
+    private static final String KEEP_BANNER_WITH_SUCCESS_MSG_VISIBLE = "keepBannerWithSuccessMsgVisible";
 
     private static final boolean EXIT = true;
     // buttons
@@ -104,6 +105,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
+    private boolean keepBannerWithSuccesMsgVisible;
 
     @BindView(R.id.storageMigrationBanner)
     LinearLayout storageMigrationBanner;
@@ -135,6 +137,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         ButterKnife.bind(this);
         initToolbar();
         disableSmsIfNeeded();
+
+        if (savedInstanceState != null) {
+            keepBannerWithSuccesMsgVisible = savedInstanceState.getBoolean(KEEP_BANNER_WITH_SUCCESS_MSG_VISIBLE);
+        }
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -303,6 +309,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         setButtonsVisibility();
         setUpStorageMigrationBanner();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEEP_BANNER_WITH_SUCCESS_MSG_VISIBLE, keepBannerWithSuccesMsgVisible);
     }
 
     private void setButtonsVisibility() {
@@ -626,7 +638,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     public void onStorageMigrationBannerDismiss(View view) {
         storageMigrationBanner.setVisibility(View.GONE);
-        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_BANNER_DISMISSED, true);
     }
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
@@ -636,7 +647,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
         if (result == StorageMigrationResult.SUCCESS) {
-            setUpStorageMigrationBanner();
+            keepBannerWithSuccesMsgVisible = true;
+            displayBannerWithSuccessResult();
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
             storageMigrationRepository.consumeResult();
         } else {
@@ -649,18 +661,21 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void setUpStorageMigrationBanner() {
         boolean isScopedStorageUsed = new StorageStateProvider().isScopedStorageUsed();
-        boolean storageMigrationBannerDismissed = GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_BANNER_DISMISSED, false);
 
-        if (isScopedStorageUsed && !storageMigrationBannerDismissed) {
-            storageMigrationBanner.setVisibility(View.VISIBLE);
-            storageMigrationBannerText.setText(R.string.storage_migration_completed);
-            storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
-            storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
-        } else if (!isScopedStorageUsed) {
+        if (!isScopedStorageUsed) {
             storageMigrationBanner.setVisibility(View.VISIBLE);
             storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
             storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
             storageMigrationBannerDismissButton.setVisibility(View.GONE);
+        } else if (keepBannerWithSuccesMsgVisible) {
+            displayBannerWithSuccessResult();
         }
+    }
+
+    private void displayBannerWithSuccessResult() {
+        storageMigrationBanner.setVisibility(View.VISIBLE);
+        storageMigrationBannerText.setText(R.string.storage_migration_completed);
+        storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
+        storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
     }
 }
