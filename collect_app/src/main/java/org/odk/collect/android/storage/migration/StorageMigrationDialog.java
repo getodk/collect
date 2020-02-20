@@ -110,11 +110,10 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private void disableDialog() {
         messageText1.setAlpha(.5f);
-        messageText2.setAlpha(.5f);
-        messageText3.setAlpha(.5f);
+        messageText2.setVisibility(View.GONE);
+        messageText3.setVisibility(View.GONE);
 
-        moreDetailsButton.setEnabled(false);
-        moreDetailsButton.setAlpha(.5f);
+        moreDetailsButton.setVisibility(View.GONE);
 
         cancelButton.setEnabled(false);
         cancelButton.setAlpha(.5f);
@@ -127,11 +126,10 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private void enableDialog() {
         messageText1.setAlpha(1);
-        messageText2.setAlpha(1);
-        messageText3.setAlpha(1);
+        messageText2.setVisibility(unsentInstancesNumber > 0 ? View.VISIBLE : View.GONE);
+        messageText3.setVisibility(View.VISIBLE);
 
-        moreDetailsButton.setEnabled(true);
-        moreDetailsButton.setAlpha(1);
+        moreDetailsButton.setVisibility(View.VISIBLE);
 
         cancelButton.setEnabled(true);
         cancelButton.setAlpha(1);
