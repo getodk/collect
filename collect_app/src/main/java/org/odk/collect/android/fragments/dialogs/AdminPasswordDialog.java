@@ -14,11 +14,9 @@ import androidx.fragment.app.DialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 
 public class AdminPasswordDialog extends DialogFragment {
 
@@ -33,11 +31,14 @@ public class AdminPasswordDialog extends DialogFragment {
 
     private AdminPasswordDialogListener listener;
 
-    public static AdminPasswordDialog create(Action action) {
-        return new AdminPasswordDialog(action);
+    private AdminPasswordProvider adminPasswordProvider;
+
+    public static AdminPasswordDialog create(AdminPasswordProvider adminPasswordProvider, Action action) {
+        return new AdminPasswordDialog(adminPasswordProvider, action);
     }
 
-    private AdminPasswordDialog(Action action) {
+    private AdminPasswordDialog(AdminPasswordProvider adminPasswordProvider, Action action) {
+        this.adminPasswordProvider = adminPasswordProvider;
         this.action = action;
     }
 
@@ -79,7 +80,7 @@ public class AdminPasswordDialog extends DialogFragment {
                 .setView(dialogView)
                 .setTitle(getString(R.string.enter_admin_password))
                 .setPositiveButton(getString(R.string.ok), (dialog, whichButton) -> {
-                            if (getAdminPassword().equals(input.getText().toString())) {
+                            if (adminPasswordProvider.getAdminPassword().equals(input.getText().toString())) {
                                 listener.onCorrectAdminPassword(action);
                             } else {
                                 listener.onIncorrectAdminPassword();
@@ -88,9 +89,5 @@ public class AdminPasswordDialog extends DialogFragment {
                         })
                 .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> dismiss())
                 .create();
-    }
-
-    private String getAdminPassword() {
-        return (String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW);
     }
 }

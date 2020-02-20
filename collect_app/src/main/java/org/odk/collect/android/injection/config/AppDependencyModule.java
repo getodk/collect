@@ -34,6 +34,7 @@ import org.odk.collect.android.storage.migration.StorageMigrator;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
@@ -244,5 +245,10 @@ public class AppDependencyModule {
     @Provides
     public StoragePathProvider storagePathProvider() {
         return new StoragePathProvider();
+    }
+
+    @Provides
+    public AdminPasswordProvider adminPasswordProvider() {
+        return new AdminPasswordProvider(AdminSharedPreferences.getInstance());
     }
 }

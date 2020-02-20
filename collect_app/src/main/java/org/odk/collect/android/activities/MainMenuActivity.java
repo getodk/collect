@@ -56,6 +56,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -96,7 +97,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Button reviewDataButton;
     private Button getFormsButton;
     private AlertDialog alertDialog;
-    private SharedPreferences adminPreferences;
     private int completedCount;
     private int savedCount;
     private int viewSentCount;
@@ -127,6 +127,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     StoragePathProvider storagePathProvider;
+
+    @Inject
+    AdminPasswordProvider adminPasswordProvider;
 
     public static void startActivityAndCloseAllOthers(Activity activity) {
         activity.startActivity(new Intent(activity, MainMenuActivity.class));
@@ -292,9 +295,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-
-        adminPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
     }
 
     private void initToolbar() {
@@ -407,19 +407,14 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 startActivity(new Intent(this, PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
-                if (isAdminPasswordRequired()) {
-                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(AdminPasswordDialog.Action.ADMIN_SETTINGS), getSupportFragmentManager());
+                if (adminPasswordProvider.isAdminPasswordSet()) {
+                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.ADMIN_SETTINGS), getSupportFragmentManager());
                 } else {
                     startActivity(new Intent(this, AdminPreferencesActivity.class));
                 }
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private boolean isAdminPasswordRequired() {
-        String adminPassword = adminPreferences.getString(AdminKeys.KEY_ADMIN_PW, "");
-        return adminPassword != null && !adminPassword.isEmpty();
     }
 
     private void countSavedForms() {
@@ -647,7 +642,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
         storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
-        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager());
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {

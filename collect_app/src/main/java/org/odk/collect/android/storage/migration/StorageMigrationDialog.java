@@ -15,8 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
-import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 
 import butterknife.BindView;
@@ -50,11 +49,14 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     @BindView(R.id.progressBar)
     LinearLayout progressBar;
 
-    public static StorageMigrationDialog create(int unsentInstances) {
-        return new StorageMigrationDialog(unsentInstances);
+    private AdminPasswordProvider adminPasswordProvider;
+
+    public static StorageMigrationDialog create(AdminPasswordProvider adminPasswordProvider, int unsentInstances) {
+        return new StorageMigrationDialog(adminPasswordProvider, unsentInstances);
     }
 
-    private StorageMigrationDialog(int unsentInstancesNumber) {
+    private StorageMigrationDialog(AdminPasswordProvider adminPasswordProvider, int unsentInstancesNumber) {
+        this.adminPasswordProvider = adminPasswordProvider;
         this.unsentInstancesNumber = unsentInstancesNumber;
     }
 
@@ -74,8 +76,8 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         moreDetailsButton.setOnClickListener(view1 -> showMoreDetails());
         cancelButton.setOnClickListener(v -> dismiss());
         migrateButton.setOnClickListener(v -> {
-            if (isAdminPasswordRequired()) {
-                DialogUtils.showIfNotShowing(AdminPasswordDialog.create(AdminPasswordDialog.Action.STORAGE_MIGRATION), getActivity().getSupportFragmentManager());
+            if (adminPasswordProvider.isAdminPasswordSet()) {
+                DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.STORAGE_MIGRATION), getActivity().getSupportFragmentManager());
             } else {
                 startStorageMigration();
             }
@@ -167,10 +169,5 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         disableDialog();
         showProgressBar();
         startStorageMigrationService();
-    }
-
-    private boolean isAdminPasswordRequired() {
-        String adminPassword = (String) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_ADMIN_PW);
-        return adminPassword != null && !adminPassword.isEmpty();
     }
 }
