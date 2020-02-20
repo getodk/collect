@@ -25,6 +25,7 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -168,8 +169,8 @@ public class AppDependencyModule {
 
     @Provides
     InstallIDProvider providesInstallIDProvider(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("meta", Context.MODE_PRIVATE);
-        return new SharedPreferencesInstallIDProvider(preferences, KEY_INSTALL_ID);
+        SharedPreferences prefs = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
+        return new SharedPreferencesInstallIDProvider(prefs, KEY_INSTALL_ID);
     }
 
     @Provides
