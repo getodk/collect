@@ -641,16 +641,16 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
+        storageMigrationRepository.clearResult();
         storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
         DialogUtils.showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager());
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
         if (result == StorageMigrationResult.SUCCESS) {
+            DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
             keepBannerWithSuccesMsgVisible = true;
             displayBannerWithSuccessStorageMigrationResult();
-            DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-            storageMigrationRepository.consumeResult();
         } else {
             StorageMigrationDialog storageMigrationDialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
             if (storageMigrationDialog != null) {

@@ -65,7 +65,6 @@ public class StorageMigrator {
         if (!storageStateProvider.isEnoughSpaceToPerformMigration(storagePathProvider)) {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
-
         if (!moveAppDataToScopedStorage()) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }

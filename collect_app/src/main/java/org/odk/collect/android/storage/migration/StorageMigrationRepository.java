@@ -28,7 +28,7 @@ public class StorageMigrationRepository {
         isMigrationBeingPerformed = false;
     }
 
-    public void consumeResult() {
+    public void clearResult() {
         migrationResult = new MutableLiveData<>();
     }
 }

@@ -24,8 +24,6 @@ import butterknife.ButterKnife;
 
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
-    private final int unsentInstancesNumber;
-
     @BindView(R.id.cancelButton)
     Button cancelButton;
 
@@ -51,6 +49,7 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     LinearLayout progressBar;
 
     private final AdminPasswordProvider adminPasswordProvider;
+    private final int unsentInstancesNumber;
 
     public static StorageMigrationDialog create(AdminPasswordProvider adminPasswordProvider, int unsentInstances) {
         return new StorageMigrationDialog(adminPasswordProvider, unsentInstances);

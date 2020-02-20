@@ -29,7 +29,7 @@ public class StorageInitializer {
     /**
      * Creates required directories on the SDCard (or other external storage)
      *
-     * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
+     * @throws RuntimeException if the storage is not available
      */
     public void createODKDirs() throws RuntimeException {
         if (!storageStateProvider.isStorageMounted()) {
