@@ -25,6 +25,7 @@
     </style>
 
     <style name="TextAppearance.Collect.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>
