@@ -1,7 +1,5 @@
 package org.odk.collect.android.storage;
 
-import java.io.File;
-
 public enum StorageSubdirectory {
     FORMS("forms"),
     INSTANCES("instances"),

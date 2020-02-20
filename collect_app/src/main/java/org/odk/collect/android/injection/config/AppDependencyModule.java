@@ -54,6 +54,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
  * Add dependency providers here (annotated with @Provides)
  * for objects you need to inject
  */
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 @Module
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class AppDependencyModule {
@@ -236,17 +237,17 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public StorageStateProvider storageStateProvider() {
+    public StorageStateProvider providesStorageStateProvider() {
         return new StorageStateProvider();
     }
 
     @Provides
-    public StoragePathProvider storagePathProvider() {
+    public StoragePathProvider providesStoragePathProvider() {
         return new StoragePathProvider();
     }
 
     @Provides
-    public AdminPasswordProvider adminPasswordProvider() {
+    public AdminPasswordProvider providesAdminPasswordProvider() {
         return new AdminPasswordProvider(AdminSharedPreferences.getInstance());
     }
 }
