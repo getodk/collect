@@ -39,7 +39,7 @@ public class StorageStateProvider {
     }
 
     private long getAvailableScopedStorageSize(StoragePathProvider storagePathProvider) {
-        String scopedStoragePath = storagePathProvider.getScopedExternalFilesDirPath();
+        String scopedStoragePath = storagePathProvider.getScopedStorageRootDirPath();
         if (scopedStoragePath.isEmpty()) {
             return 0;
         }
@@ -49,7 +49,7 @@ public class StorageStateProvider {
     }
 
     private long getOdkDirSize(StoragePathProvider storagePathProvider) {
-        return getFolderSize(new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK)));
+        return getFolderSize(new File(storagePathProvider.getUnscopedStorageRootDirPath()));
     }
 
     private long getFolderSize(File directory) {

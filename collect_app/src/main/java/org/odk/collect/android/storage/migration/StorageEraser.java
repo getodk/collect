@@ -1,7 +1,6 @@
 package org.odk.collect.android.storage.migration;
 
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 
@@ -14,11 +13,11 @@ public class StorageEraser {
     }
 
     void clearOdkDirOnScopedStorage() {
-        deleteDirectory(new File(storagePathProvider.getScopedStorageDirPath(StorageSubdirectory.ODK)));
+        deleteDirectory(new File(storagePathProvider.getScopedStorageRootDirPath()));
     }
 
     void deleteOdkDirFromUnscopedStorage() {
-        deleteDirectory(new File(storagePathProvider.getUnscopedStorageDirPath(StorageSubdirectory.ODK)));
+        deleteDirectory(new File(storagePathProvider.getUnscopedStorageRootDirPath()));
     }
 
     private static void deleteDirectory(File directoryToBeDeleted) {

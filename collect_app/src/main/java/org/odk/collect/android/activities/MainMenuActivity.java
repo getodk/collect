@@ -54,7 +54,6 @@ import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -268,8 +267,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     .getVersionedAppName());
         }
 
-        File f = new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK) + "/collect.settings");
-        File j = new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK) + "/collect.settings.json");
+        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
+        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
             boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);

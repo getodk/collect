@@ -167,7 +167,7 @@ public class ResetAppStateTest {
 
         assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.SETTINGS)).exists() || new File(storagePathProvider.getDirPath(StorageSubdirectory.SETTINGS)).mkdir());
         assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.SETTINGS) + "/collect.settings").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.ODK) + "/collect.settings").createNewFile());
+        assertTrue(new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings").createNewFile());
     }
 
     private void setupTestFormsDatabase() {

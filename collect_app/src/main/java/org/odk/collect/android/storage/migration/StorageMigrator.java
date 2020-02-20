@@ -102,8 +102,8 @@ public class StorageMigrator {
 
     boolean moveAppDataToScopedStorage() {
         try {
-            File odkDirOnUnscopedStorage = new File(storagePathProvider.getUnscopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
-            File odkDirOnScopedStorage = new File(storagePathProvider.getScopedExternalFilesDirPath() + File.separator + StorageSubdirectory.ODK.getDirectoryName());
+            File odkDirOnUnscopedStorage = new File(storagePathProvider.getUnscopedStorageRootDirPath());
+            File odkDirOnScopedStorage = new File(storagePathProvider.getScopedStorageRootDirPath());
             FileUtils.copyDirectory(odkDirOnUnscopedStorage, odkDirOnScopedStorage);
         } catch (Exception | Error e) {
             Timber.w(e);

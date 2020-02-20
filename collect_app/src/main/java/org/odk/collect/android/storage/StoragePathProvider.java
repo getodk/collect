@@ -19,39 +19,61 @@ public class StoragePathProvider {
     }
 
     public String[] getOdkDirPaths() {
+        return storageStateProvider.isScopedStorageUsed()
+                ? getOdkDirPathsForScopedStorage()
+                : getOdkDirPathsForUnScopedStorage();
+    }
+
+    private String[] getOdkDirPathsForScopedStorage() {
         return new String[]{
-                getDirPath(StorageSubdirectory.ODK),
                 getDirPath(StorageSubdirectory.FORMS),
                 getDirPath(StorageSubdirectory.INSTANCES),
                 getDirPath(StorageSubdirectory.CACHE),
                 getDirPath(StorageSubdirectory.METADATA),
                 getDirPath(StorageSubdirectory.LAYERS)
-            };
+        };
     }
 
-    public String getScopedExternalFilesDirPath() {
+    private String[] getOdkDirPathsForUnScopedStorage() {
+        return new String[]{
+                getUnscopedStorageRootDirPath(),
+                getDirPath(StorageSubdirectory.FORMS),
+                getDirPath(StorageSubdirectory.INSTANCES),
+                getDirPath(StorageSubdirectory.CACHE),
+                getDirPath(StorageSubdirectory.METADATA),
+                getDirPath(StorageSubdirectory.LAYERS)
+        };
+    }
+
+    public String getScopedStorageRootDirPath() {
         File scopedExternalFilesDirPath = Collect.getInstance().getExternalFilesDir(null);
         return scopedExternalFilesDirPath != null
                 ? scopedExternalFilesDirPath.getAbsolutePath()
                 : "";
     }
 
-    public String getUnscopedExternalFilesDirPath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath();
+    public String getUnscopedStorageRootDirPath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "odk";
     }
 
     public String getUnscopedStorageDirPath(StorageSubdirectory subdirectory) {
-        return getUnscopedExternalFilesDirPath() + File.separator + subdirectory.getDirectoryName();
+        return getUnscopedStorageRootDirPath() + File.separator + subdirectory.getDirectoryName();
     }
 
-    public String getScopedStorageDirPath(StorageSubdirectory subdirectory) {
-        return getScopedExternalFilesDirPath() + File.separator + subdirectory.getDirectoryName();
+    private String getScopedStorageDirPath(StorageSubdirectory subdirectory) {
+        return getScopedStorageRootDirPath() + File.separator + subdirectory.getDirectoryName();
     }
 
     public String getDirPath(StorageSubdirectory subdirectory) {
         return storageStateProvider.isScopedStorageUsed()
                 ? getScopedStorageDirPath(subdirectory)
                 : getUnscopedStorageDirPath(subdirectory);
+    }
+
+    public String getStorageRootDirPath() {
+        return storageStateProvider.isScopedStorageUsed()
+                ? getScopedStorageRootDirPath()
+                : getUnscopedStorageRootDirPath();
     }
 
     public String getTmpFilePath() {
