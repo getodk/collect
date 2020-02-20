@@ -637,6 +637,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     public void onStorageMigrationBannerDismiss(View view) {
         storageMigrationBanner.setVisibility(View.GONE);
+        keepBannerWithSuccesMsgVisible = false;
     }
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
