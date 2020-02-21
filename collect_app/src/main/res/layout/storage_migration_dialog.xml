@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/storage_migration_more_details"
-                android:textColor="?colorAccent"
+                android:textColor="?colorSecondary"
                 android:textStyle="bold"
                 android:textAllCaps="true"
                 android:paddingTop="@dimen/margin_standard" />
@@ -105,31 +105,29 @@
                     android:orientation="horizontal"
                     android:gravity="end">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/cancelButton"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:text="@string/cancel"
-                        android:textColor="?colorAccent"
+                        android:textColor="?colorSecondary"
                         android:paddingTop="12dp"
                         android:paddingBottom="@dimen/margin_small"
-                        android:textStyle="bold"
-                        android:textAllCaps="true" />
+                        android:textStyle="bold" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/migrateButton"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:text="@string/migrate"
-                        android:textColor="?colorAccent"
+                        android:textColor="?colorSecondary"
                         android:paddingTop="12dp"
                         android:paddingBottom="@dimen/margin_small"
-                        android:textStyle="bold"
-                        android:textAllCaps="true" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>

@@ -22,32 +22,30 @@
             android:textColor="?colorOnSurface">
         </TextView>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/storageMigrationBannerDismissButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="@string/scoped_storage_dismiss"
-            android:textColor="?colorAccent"
+            android:textColor="?colorSecondary"
             android:paddingTop="12dp"
             android:paddingBottom="@dimen/margin_small"
             android:textStyle="bold"
-            android:textAllCaps="true"
             android:onClick="onStorageMigrationBannerDismiss"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/storageMigrationBannerLearnMoreButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="@string/scoped_storage_learn_more"
-            android:textColor="?colorAccent"
+            android:textColor="?colorSecondary"
             android:paddingTop="12dp"
             android:paddingBottom="@dimen/margin_small"
             android:textStyle="bold"
-            android:textAllCaps="true"
             android:onClick="onStorageMigrationBannerLearnMoreClick"/>
 
     </LinearLayout>
