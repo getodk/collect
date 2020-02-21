@@ -175,8 +175,4 @@ public final class DialogUtils {
             existingDialog.dismissAllowingStateLoss();
         }
     }
-
-    public static DialogFragment getDialogFragment(Class dialogClazz, FragmentManager fragmentManager) {
-        return (DialogFragment) fragmentManager.findFragmentByTag(dialogClazz.getName());
-    }
 }
