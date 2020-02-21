@@ -54,13 +54,12 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
  * Add dependency providers here (annotated with @Provides)
  * for objects you need to inject
  */
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 @Module
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class AppDependencyModule {
 
     @Provides
-    public SmsManager provideSmsManager() {
+    SmsManager provideSmsManager() {
         return SmsManager.getDefault();
     }
 
@@ -97,7 +96,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public UserAgentProvider providesUserAgent() {
+    UserAgentProvider providesUserAgent() {
         return new AndroidUserAgent();
     }
 
@@ -175,6 +174,19 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
+    StorageMigrationRepository providesStorageMigrationRepository() {
+        return new StorageMigrationRepository();
+    }
+
+    @Provides
+    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository) {
+        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
+
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository);
+    }
+
+    @Provides
     InstallIDProvider providesInstallIDProvider(Context context) {
         SharedPreferences prefs = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
         return new SharedPreferencesInstallIDProvider(prefs, KEY_INSTALL_ID);
@@ -222,11 +234,6 @@ public class AppDependencyModule {
     @Singleton
     AdminSharedPreferences providesAdminSharedPreferences(Context context) {
         return new AdminSharedPreferences(context);
-    }
-
-    @Singleton
-    public StorageMigrationRepository providesStorageMigrationRepository() {
-        return new StorageMigrationRepository();
     }
 
     @Provides

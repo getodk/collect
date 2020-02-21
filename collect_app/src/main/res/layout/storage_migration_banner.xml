@@ -19,7 +19,7 @@
             android:id="@+id/storageMigrationBannerText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?colorOnSurface">
+            android:textAppearance="@style/TextAppearance.Collect.Body2">
         </TextView>
 
         <com.google.android.material.button.MaterialButton
