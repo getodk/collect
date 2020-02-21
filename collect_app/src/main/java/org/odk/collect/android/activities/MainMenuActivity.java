@@ -561,10 +561,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 startActivity(new Intent(this, AdminPreferencesActivity.class));
                 break;
             case STORAGE_MIGRATION:
-                StorageMigrationDialog storageMigrationDialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
-                if (storageMigrationDialog != null) {
-                    storageMigrationDialog.startStorageMigration();
-                }
+                DialogUtils
+                        .showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager())
+                        .startStorageMigration();
                 break;
         }
     }
@@ -643,10 +642,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
             displayBannerWithSuccessStorageMigrationResult();
         } else {
-            StorageMigrationDialog storageMigrationDialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
-            if (storageMigrationDialog != null) {
-                storageMigrationDialog.handleMigrationError(result);
-            }
+            DialogUtils
+                    .showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager())
+                    .handleMigrationError(result);
         }
     }
 
