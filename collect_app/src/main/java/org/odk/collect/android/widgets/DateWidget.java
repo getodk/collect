@@ -234,7 +234,6 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
     // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
     private boolean isBrokenSamsungDevice() {
         return Build.MANUFACTURER.equalsIgnoreCase("samsung")
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
