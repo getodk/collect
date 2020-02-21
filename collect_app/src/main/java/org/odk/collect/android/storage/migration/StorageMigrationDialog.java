@@ -1,6 +1,7 @@
 package org.odk.collect.android.storage.migration;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,14 +16,19 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.DialogUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
+
+    private static final String UNSENT_INSTANCES = "unsentInstances";
 
     @BindView(R.id.cancelButton)
     Button cancelButton;
@@ -48,16 +54,24 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     @BindView(R.id.progressBar)
     LinearLayout progressBar;
 
-    private final AdminPasswordProvider adminPasswordProvider;
-    private final int unsentInstancesNumber;
+    @Inject
+    AdminPasswordProvider adminPasswordProvider;
 
-    public static StorageMigrationDialog create(AdminPasswordProvider adminPasswordProvider, int unsentInstances) {
-        return new StorageMigrationDialog(adminPasswordProvider, unsentInstances);
+    private int unsentInstancesNumber;
+
+    public static StorageMigrationDialog create(int unsentInstances) {
+        StorageMigrationDialog storageMigrationDialog = new StorageMigrationDialog();
+        Bundle bundle = new Bundle();
+        bundle.putInt(UNSENT_INSTANCES, unsentInstances);
+        storageMigrationDialog.setArguments(bundle);
+
+        return storageMigrationDialog;
     }
 
-    private StorageMigrationDialog(AdminPasswordProvider adminPasswordProvider, int unsentInstancesNumber) {
-        this.adminPasswordProvider = adminPasswordProvider;
-        this.unsentInstancesNumber = unsentInstancesNumber;
+    @Override
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -69,6 +83,10 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        if (getArguments() != null) {
+            unsentInstancesNumber = getArguments().getInt(UNSENT_INSTANCES);
+        }
 
         setUpToolbar();
         setUpMessageAboutUnsetSubmissions();

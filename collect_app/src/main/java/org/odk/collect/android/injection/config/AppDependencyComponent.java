@@ -23,6 +23,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
@@ -129,6 +130,8 @@ public interface AppDependencyComponent {
     void inject(StorageMigrationService storageMigrationService);
 
     void inject(AutoSendWorker autoSendWorker);
+
+    void inject(StorageMigrationDialog storageMigrationDialog);
 
     SmsManager smsManager();
 

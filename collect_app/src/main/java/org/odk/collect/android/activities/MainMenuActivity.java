@@ -562,7 +562,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 break;
             case STORAGE_MIGRATION:
                 DialogUtils
-                        .showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager())
+                        .showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager())
                         .startStorageMigration();
                 break;
         }
@@ -634,7 +634,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
-        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
@@ -643,7 +643,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             displayBannerWithSuccessStorageMigrationResult();
         } else {
             DialogUtils
-                    .showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager())
+                    .showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager())
                     .handleMigrationError(result);
         }
     }
