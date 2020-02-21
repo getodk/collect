@@ -86,8 +86,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogCallback {
 
-    private static final String KEEP_BANNER_WITH_SUCCESS_MSG_VISIBLE = "keepBannerWithSuccessMsgVisible";
-
     private static final boolean EXIT = true;
     // buttons
     private Button manageFilesButton;
@@ -104,7 +102,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
-    private boolean keepBannerWithSuccesMsgVisible;
 
     @BindView(R.id.storageMigrationBanner)
     LinearLayout storageMigrationBanner;
@@ -146,9 +143,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         initToolbar();
         disableSmsIfNeeded();
 
-        if (savedInstanceState != null) {
-            keepBannerWithSuccesMsgVisible = savedInstanceState.getBoolean(KEEP_BANNER_WITH_SUCCESS_MSG_VISIBLE);
-        }
+        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -315,12 +310,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setUpStorageMigrationBanner();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEEP_BANNER_WITH_SUCCESS_MSG_VISIBLE, keepBannerWithSuccesMsgVisible);
-    }
-
     private void setButtonsVisibility() {
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
@@ -388,6 +377,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             alertDialog.dismiss();
         }
         getContentResolver().unregisterContentObserver(contentObserver);
+    }
+
+    @Override
+    public void onDestroy() {
+        storageMigrationRepository.clearResult();
+        super.onDestroy();
     }
 
     @Override
@@ -637,19 +632,15 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     public void onStorageMigrationBannerDismiss(View view) {
         storageMigrationBanner.setVisibility(View.GONE);
-        keepBannerWithSuccesMsgVisible = false;
     }
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
-        storageMigrationRepository.clearResult();
-        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
         DialogUtils.showIfNotShowing(StorageMigrationDialog.create(adminPasswordProvider, savedCount), getSupportFragmentManager());
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
         if (result == StorageMigrationResult.SUCCESS) {
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-            keepBannerWithSuccesMsgVisible = true;
             displayBannerWithSuccessStorageMigrationResult();
         } else {
             StorageMigrationDialog storageMigrationDialog = (StorageMigrationDialog) DialogUtils.getDialogFragment(StorageMigrationDialog.class, getSupportFragmentManager());
@@ -662,8 +653,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private void setUpStorageMigrationBanner() {
         if (!storageStateProvider.isScopedStorageUsed()) {
             displayStorageMigrationBanner();
-        } else if (keepBannerWithSuccesMsgVisible) {
-            displayBannerWithSuccessStorageMigrationResult();
         }
     }
 
