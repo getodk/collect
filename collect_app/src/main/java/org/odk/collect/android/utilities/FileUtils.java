@@ -570,17 +570,6 @@ public class FileUtils {
         return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
     }
 
-    /**
-     * Grants read and write permissions to a content URI added to the specified intent.
-     *
-     * For Android > 4.4, the permissions expire when the receiving app's stack is finished. For
-     * Android <= 4.4, the permissions are granted to all applications that can respond to the
-     * intent.
-     *
-     * For true security, the permissions for Android <= 4.4 should be revoked manually but we don't
-     * revoke them because we don't have many users on lower API levels and prior to targeting API
-     * 24+, all apps always had access to the files anyway.
-     */
     public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
