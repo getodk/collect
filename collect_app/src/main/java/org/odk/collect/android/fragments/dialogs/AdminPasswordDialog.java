@@ -16,18 +16,16 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 
-import timber.log.Timber;
-
 public class AdminPasswordDialog extends DialogFragment {
 
-    public interface AdminPasswordDialogListener {
+    public interface AdminPasswordDialogCallback {
         void onCorrectAdminPassword(Action action);
         void onIncorrectAdminPassword();
     }
 
     public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION }
 
-    private AdminPasswordDialogListener listener;
+    private AdminPasswordDialogCallback callback;
 
     private final Action action;
 
@@ -45,10 +43,8 @@ public class AdminPasswordDialog extends DialogFragment {
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
-        try {
-            listener = (AdminPasswordDialogListener) getActivity();
-        } catch (ClassCastException e) {
-            Timber.w(e);
+        if (context instanceof AdminPasswordDialogCallback) {
+            callback = (AdminPasswordDialogCallback) context;
         }
     }
 
@@ -81,9 +77,9 @@ public class AdminPasswordDialog extends DialogFragment {
                 .setTitle(getString(R.string.enter_admin_password))
                 .setPositiveButton(getString(R.string.ok), (dialog, whichButton) -> {
                             if (adminPasswordProvider.getAdminPassword().equals(input.getText().toString())) {
-                                listener.onCorrectAdminPassword(action);
+                                callback.onCorrectAdminPassword(action);
                             } else {
-                                listener.onIncorrectAdminPassword();
+                                callback.onIncorrectAdminPassword();
                             }
                             dismiss();
                         })

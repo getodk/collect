@@ -84,7 +84,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogListener {
+public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogCallback {
 
     private static final String KEEP_BANNER_WITH_SUCCESS_MSG_VISIBLE = "keepBannerWithSuccessMsgVisible";
 
