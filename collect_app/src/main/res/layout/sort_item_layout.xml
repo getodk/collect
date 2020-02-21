@@ -14,7 +14,7 @@ License for the specific language governing permissions and limitations under
 the License.
 
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -40,4 +40,4 @@ the License.
         android:layout_marginRight="16dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         tools:text="Sort by Name" />
-</FrameLayout>
+</LinearLayout>
