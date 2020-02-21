@@ -43,14 +43,15 @@
                 android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/storage_migration_dialog_message3" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/moreDetailsButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/storage_migration_more_details"
                 android:textColor="?colorSecondary"
-                android:textStyle="bold"
-                android:textAllCaps="true"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 android:paddingTop="@dimen/margin_standard" />
 
             <TextView

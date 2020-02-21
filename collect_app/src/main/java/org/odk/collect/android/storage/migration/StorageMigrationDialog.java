@@ -46,7 +46,7 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     TextView messageText3;
 
     @BindView(R.id.moreDetailsButton)
-    TextView moreDetailsButton;
+    Button moreDetailsButton;
 
     @BindView(R.id.errorText)
     TextView errorText;
