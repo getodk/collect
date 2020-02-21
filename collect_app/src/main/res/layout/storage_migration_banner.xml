@@ -32,7 +32,6 @@
             android:textColor="?colorSecondary"
             android:paddingTop="12dp"
             android:paddingBottom="@dimen/margin_small"
-            android:textStyle="bold"
             android:onClick="onStorageMigrationBannerDismiss"/>
 
         <com.google.android.material.button.MaterialButton
@@ -45,7 +44,6 @@
             android:textColor="?colorSecondary"
             android:paddingTop="12dp"
             android:paddingBottom="@dimen/margin_small"
-            android:textStyle="bold"
             android:onClick="onStorageMigrationBannerLearnMoreClick"/>
 
     </LinearLayout>
