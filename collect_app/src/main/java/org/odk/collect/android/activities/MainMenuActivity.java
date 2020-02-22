@@ -462,9 +462,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     private Dialog createPasswordDialog(Intent intent) {
-        SharedPreferences adminPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog passwordDialog = builder.create();
         passwordDialog.setTitle(getString(R.string.enter_admin_password));
@@ -473,6 +470,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
         passwordDialog.setView(dialogView, 20, 10, 20, 10);
         final CheckBox checkBox = dialogView.findViewById(R.id.checkBox);
         final EditText input = dialogView.findViewById(R.id.editText);
+        final SharedPreferences adminPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
