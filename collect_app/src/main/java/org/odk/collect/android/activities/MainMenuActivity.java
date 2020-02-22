@@ -93,7 +93,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Button getFormsButton;
     private AlertDialog alertDialog;
     private MenuItem qrcodeScannerMenuItem;
-    private SharedPreferences adminPreferences;
     private int completedCount;
     private int savedCount;
     private int viewSentCount;
@@ -264,9 +263,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-
-        adminPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
     }
 
     private void initToolbar() {
@@ -372,6 +368,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences adminPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
         String pw = adminPreferences.getString(
                 AdminKeys.KEY_ADMIN_PW, "");
 
@@ -464,6 +462,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     private Dialog createPasswordDialog(Intent intent) {
+        SharedPreferences adminPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog passwordDialog = builder.create();
         passwordDialog.setTitle(getString(R.string.enter_admin_password));
