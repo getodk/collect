@@ -1,5 +1,7 @@
 package org.odk.collect.android.utilities;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -38,6 +40,24 @@ public class ResponseMessageParser {
                 if (doc.getElementsByTagName(MESSAGE_XML_TAG).item(0) != null) {
                     messageResponse = doc.getElementsByTagName(MESSAGE_XML_TAG).item(0).getTextContent();
                     isValid = true;
+                }
+            } else {        // smap
+                messageResponse = response;
+                isValid = true;
+                if(messageResponse != null) {
+                    String [] parts = messageResponse.split("::");
+                    if(parts.length > 1) {
+                        if(parts[0].equals("blocked")) {
+                            String msg = Collect.getInstance().getString(R.string.smap_survey_blocked);
+                            msg = msg.replace("%s", String.valueOf(parts[1]));
+                            messageResponse = msg;
+                        } else if(parts[0].equals("deleted")) {
+                            String msg = Collect.getInstance().getString(R.string.smap_survey_deleted);
+                            msg = msg.replace("%s", String.valueOf(parts[1]));
+                            messageResponse = msg;
+                        }
+
+                    }
                 }
             }
 

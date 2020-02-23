@@ -222,8 +222,8 @@ public class InstanceServerUploader extends InstanceUploader {
 
         } catch (Exception e) {
             saveFailedStatusToDatabase(instance);
-            throw new UploadException(FAIL + "Generic Exception: "
-                    + (e.getMessage() != null ? e.getMessage() : e.toString()));
+            throw new UploadException(      // smap remove FAIL and generic exception
+                     (e.getMessage() != null ? e.getMessage() : e.toString()));
         }
 
         saveSuccessStatusToDatabase(instance);
