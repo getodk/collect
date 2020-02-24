@@ -32,6 +32,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FOR
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.storage.StoragePathProvider.SD_CARD_PREFIX;
 
 public class StorageMigrator {
     private static final String WHERE_ID = _ID + "=?";
@@ -213,8 +214,8 @@ public class StorageMigrator {
     }
 
     private String getRelativeMapLayerPath(String path) {
-        if (path.startsWith("/sdcard/odk")) {
-            return path.substring("/sdcard/odk".length());
+        if (path.startsWith(SD_CARD_PREFIX)) {
+            return path.substring(SD_CARD_PREFIX.length());
         }
         return path.substring(storagePathProvider.getUnscopedStorageRootDirPath().length());
     }

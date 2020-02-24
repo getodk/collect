@@ -2,6 +2,7 @@ package org.odk.collect.android.storage.migration;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 
@@ -13,7 +14,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 
+@SuppressWarnings("PMD.DoNotHardCodeSDCard")
 public class StorageMigratorTest {
 
     private StorageMigrator storageMigrator;
@@ -21,14 +24,16 @@ public class StorageMigratorTest {
     private final StorageStateProvider storageStateProvider = mock(StorageStateProvider.class);
     private final StorageEraser storageEraser = mock(StorageEraser.class);
     private final StorageMigrationRepository storageMigrationRepository = mock(StorageMigrationRepository.class);
+    private final GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
 
     @Before
     public void setup() {
-        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository));
+        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences));
 
         doNothing().when(storageMigrator).reopenDatabases();
         doNothing().when(storageEraser).clearOdkDirOnScopedStorage();
         doNothing().when(storageEraser).deleteOdkDirFromUnscopedStorage();
+        doReturn("/sdcard/odk/layers/countries/countries-raster.mbtiles").when(generalSharedPreferences).get(KEY_REFERENCE_LAYER);
     }
 
     @Test
@@ -146,6 +151,19 @@ public class StorageMigratorTest {
         storageMigrator.performStorageMigration();
 
         verify(storageStateProvider).disableUsingScopedStorage();
+    }
+
+    @Test
+    public void when_migrationFinished_should_offlineMapLayerBeUpdated() {
+        doReturn(false).when(storageMigrator).isFormUploaderRunning();
+        doReturn(false).when(storageMigrator).isFormDownloaderRunning();
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
+        doReturn(true).when(storageMigrator).moveAppDataToScopedStorage();
+        doReturn(true).when(storageMigrator).migrateDatabasePaths();
+
+        storageMigrator.performStorageMigration();
+
+        verify(generalSharedPreferences).save(KEY_REFERENCE_LAYER, "/layers/countries/countries-raster.mbtiles");
     }
 
     @Test

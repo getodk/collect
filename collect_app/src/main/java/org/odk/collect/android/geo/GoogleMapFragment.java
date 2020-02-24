@@ -158,7 +158,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void applyConfig(Bundle config) {
         mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        String path = new StoragePathProvider().getOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
+        String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
             map.setMapType(mapType);

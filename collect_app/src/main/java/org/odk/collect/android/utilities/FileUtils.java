@@ -36,7 +36,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 import java.io.FileInputStream;

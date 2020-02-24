@@ -203,7 +203,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void applyConfig(Bundle config) {
         styleUrl = config.getString(KEY_STYLE_URL);
-        String path = new StoragePathProvider().getOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
+        String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
             map.setStyle(getStyleBuilder(), style -> {

@@ -7,6 +7,8 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 
 public class StoragePathProvider {
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
+    public static final String SD_CARD_PREFIX = "/sdcard/odk";
 
     private StorageStateProvider storageStateProvider;
 
@@ -139,14 +141,18 @@ public class StoragePathProvider {
                 : filePath;
     }
 
-    public String getOfflineMapLayerPath(String path) {
+    public String getAbsoluteOfflineMapLayerPath(String path) {
         if (path == null) {
             return null;
         }
         if (storageStateProvider.isScopedStorageUsed()) {
+            if (path.startsWith(getStorageRootDirPath())) {
+                return path;
+            }
+
             // Just in case if something went wrong during migration
-            if (path.startsWith("/sdcard/odk")) {
-                path = path.substring("/sdcard/odk".length());
+            if (path.startsWith(SD_CARD_PREFIX)) {
+                path = path.substring(SD_CARD_PREFIX.length());
             } else if (path.startsWith(getUnscopedStorageRootDirPath())) {
                 path = path.substring(getUnscopedStorageRootDirPath().length());
             }

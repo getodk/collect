@@ -145,7 +145,7 @@ public class MapsPreferences extends BasePreferenceFragment {
                 summary = getString(R.string.none);
             } else {
                 MapConfigurator cftor = MapProvider.getConfigurator();
-                summary = cftor.getDisplayName(new File(new StoragePathProvider().getOfflineMapLayerPath(value.toString())));
+                summary = cftor.getDisplayName(new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath(value.toString())));
             }
             referenceLayerPref.setSummary(summary);
         }
@@ -159,7 +159,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         items.add(new Item(null, getString(R.string.none), ""));
         for (File file : getSupportedLayerFiles(cftor)) {
             String path = FileUtils.simplifyPath(file);
-            String name = cftor.getDisplayName(new File(new StoragePathProvider().getOfflineMapLayerPath(path)));
+            String name = cftor.getDisplayName(new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath(path)));
             items.add(new Item(path, name, path));
         }
 

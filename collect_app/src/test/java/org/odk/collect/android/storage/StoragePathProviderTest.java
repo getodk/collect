@@ -7,11 +7,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("PMD.DoNotHardCodeSDCard")
 public class StoragePathProviderTest {
 
     private StorageStateProvider storageStateProvider;
@@ -279,5 +281,27 @@ public class StoragePathProviderTest {
 
         assertThat(storagePathProvider.getAbsoluteCacheFilePath("a688a8b48b2e50c070bc76239f572e16.formdef"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
         assertThat(storagePathProvider.getAbsoluteCacheFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
+    }
+
+    @Test
+    public void getOfflineMapLayerPathTestWithUnscopedStorage() {
+        mockUsingUnscopedStorage();
+
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is(nullValue()));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(""), is(""));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/sdcard/odk/layers/countries/countries-raster.mbtiles"), is("/sdcard/odk/layers/countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/storage/emulated/0/odk/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/odk/layers/countries/countries-raster.mbtiles"));
+    }
+
+    @Test
+    public void getOfflineMapLayerPathTestWithScopedStorage() {
+        mockUsingScopedStorage();
+
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is(nullValue()));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(""), is("/storage/emulated/0/Android/data/org.odk.collect.android/files"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/sdcard/odk/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/storage/emulated/0/odk/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
+
     }
 }
