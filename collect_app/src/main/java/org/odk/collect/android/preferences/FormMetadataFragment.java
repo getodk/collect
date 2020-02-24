@@ -2,8 +2,11 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import org.jetbrains.annotations.NotNull;
@@ -88,9 +91,30 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
 
     private void initDangerousPrefs() {
         PropertyManager propertyManager = new PropertyManager(getActivity());
-        findPreference(PROPMGR_DEVICE_ID).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_DEVICE_ID));
-        findPreference(PROPMGR_SIM_SERIAL).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_SIM_SERIAL));
-        findPreference(PROPMGR_SUBSCRIBER_ID).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_SUBSCRIBER_ID));
-        findPreference(KEY_METADATA_PHONENUMBER).setSummaryProvider(preference -> propertyManager.reload(getActivity()).getSingularProperty(PROPMGR_PHONE_NUMBER));
+        findPreference(PROPMGR_DEVICE_ID).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
+        findPreference(PROPMGR_SIM_SERIAL).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SIM_SERIAL));
+        findPreference(PROPMGR_SUBSCRIBER_ID).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SUBSCRIBER_ID));
+        findPreference(KEY_METADATA_PHONENUMBER).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
+    }
+
+    private class PropertyManagerPropertySummaryProvider implements Preference.SummaryProvider<EditTextPreference> {
+
+        private final PropertyManager propertyManager;
+        private final String propertyKey;
+
+        PropertyManagerPropertySummaryProvider(PropertyManager propertyManager, String propertyName) {
+            this.propertyManager = propertyManager;
+            this.propertyKey = propertyName;
+        }
+
+        @Override
+        public CharSequence provideSummary(EditTextPreference preference) {
+            String value = propertyManager.reload(getActivity()).getSingularProperty(propertyKey);
+            if (!TextUtils.isEmpty(value)) {
+                return value;
+            } else {
+                return getString(R.string.preference_not_set);
+            }
+        }
     }
 }
