@@ -207,7 +207,9 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation('androidx.preference:preference:1.1.0') {
+        exclude group: 'androidx.appcompat', module: 'appcompat' // Again because of https://issuetracker.google.com/issues/141869006
+    }
 
     implementation "com.google.android.gms:play-services-auth:17.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
