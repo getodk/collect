@@ -32,7 +32,6 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FOR
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.storage.StoragePathProvider.SD_CARD_PREFIX;
 
 public class StorageMigrator {
     private static final String WHERE_ID = _ID + "=?";
@@ -213,18 +212,11 @@ public class StorageMigrator {
         return storagePathProvider.getRelativeFilePath(storagePathProvider.getUnscopedStorageDirPath(StorageSubdirectory.CACHE), path);
     }
 
-    private String getRelativeMapLayerPath(String path) {
-        if (path.startsWith(SD_CARD_PREFIX)) {
-            return path.substring(SD_CARD_PREFIX.length());
-        }
-        return path.substring(storagePathProvider.getUnscopedStorageRootDirPath().length());
-    }
-
     private void migrateMapLayerPath() {
         try {
             String layerPath = (String) generalSharedPreferences.get(KEY_REFERENCE_LAYER);
             if (layerPath != null && !layerPath.isEmpty()) {
-                generalSharedPreferences.save(KEY_REFERENCE_LAYER, getRelativeMapLayerPath(layerPath));
+                generalSharedPreferences.save(KEY_REFERENCE_LAYER, storagePathProvider.getRelativeMapLayerPath(layerPath));
             }
         } catch (Exception | Error e) {
             generalSharedPreferences.reset(KEY_REFERENCE_LAYER);

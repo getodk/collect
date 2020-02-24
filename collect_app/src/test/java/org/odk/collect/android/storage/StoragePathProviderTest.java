@@ -284,12 +284,21 @@ public class StoragePathProviderTest {
     }
 
     @Test
+    public void getRelativeMapLayerPathTest() {
+        assertThat(storagePathProvider.getRelativeMapLayerPath(null), is(nullValue()));
+        assertThat(storagePathProvider.getRelativeMapLayerPath(""), is(""));
+        assertThat(storagePathProvider.getRelativeMapLayerPath("/layers/countries/countries-raster.mbtiles"), is("/layers/countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getRelativeMapLayerPath("/sdcard/odk/layers/countries/countries-raster.mbtiles"), is("/layers/countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getRelativeMapLayerPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("/layers/countries/countries-raster.mbtiles"));
+    }
+
+    @Test
     public void getOfflineMapLayerPathTestWithUnscopedStorage() {
         mockUsingUnscopedStorage();
 
-        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is(nullValue()));
-        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(""), is(""));
-        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/sdcard/odk/layers/countries/countries-raster.mbtiles"), is("/sdcard/odk/layers/countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is("/storage/emulated/0/odk"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(""), is("/storage/emulated/0/odk"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/sdcard/odk/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/odk/layers/countries/countries-raster.mbtiles"));
         assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/storage/emulated/0/odk/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/odk/layers/countries/countries-raster.mbtiles"));
     }
 
@@ -297,7 +306,7 @@ public class StoragePathProviderTest {
     public void getOfflineMapLayerPathTestWithScopedStorage() {
         mockUsingScopedStorage();
 
-        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is(nullValue()));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is("/storage/emulated/0/Android/data/org.odk.collect.android/files"));
         assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(""), is("/storage/emulated/0/Android/data/org.odk.collect.android/files"));
         assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/sdcard/odk/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
         assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/storage/emulated/0/odk/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));

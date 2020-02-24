@@ -589,8 +589,7 @@ public class FileUtils {
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public static String simplifyPath(File file) {
         if (new StorageStateProvider().isScopedStorageUsed()) {
-            StoragePathProvider storagePathProvider = new StoragePathProvider();
-            return File.separator + storagePathProvider.getRelativeFilePath(storagePathProvider.getStorageRootDirPath(), file.getAbsolutePath());
+            return new StoragePathProvider().getRelativeMapLayerPath(file.getAbsolutePath());
         } else {
             // The symlink at /sdcard points to the same location as the storage
             // path returned by getExternalStorageDirectory() on every Android

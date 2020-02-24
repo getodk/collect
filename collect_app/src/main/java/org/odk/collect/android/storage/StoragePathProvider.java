@@ -8,7 +8,7 @@ import java.io.File;
 
 public class StoragePathProvider {
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
-    public static final String SD_CARD_PREFIX = "/sdcard/odk";
+    private static final String SD_CARD_PREFIX = "/sdcard/odk";
 
     private StorageStateProvider storageStateProvider;
 
@@ -141,25 +141,24 @@ public class StoragePathProvider {
                 : filePath;
     }
 
-    public String getAbsoluteOfflineMapLayerPath(String path) {
+    public String getRelativeMapLayerPath(String path) {
         if (path == null) {
             return null;
         }
-        if (storageStateProvider.isScopedStorageUsed()) {
-            if (path.startsWith(getStorageRootDirPath())) {
-                return path;
-            }
-
-            // Just in case if something went wrong during migration
-            if (path.startsWith(SD_CARD_PREFIX)) {
-                path = path.substring(SD_CARD_PREFIX.length());
-            } else if (path.startsWith(getUnscopedStorageRootDirPath())) {
-                path = path.substring(getUnscopedStorageRootDirPath().length());
-            }
-
-            return getStorageRootDirPath() + path;
-        } else {
-            return path;
+        if (path.startsWith(SD_CARD_PREFIX)) {
+            return path.substring(SD_CARD_PREFIX.length());
+        } else if (path.startsWith(getUnscopedStorageRootDirPath())) {
+            return path.substring(getUnscopedStorageRootDirPath().length());
+        } else if (path.startsWith(getScopedStorageRootDirPath())) {
+            return path.substring(getScopedStorageRootDirPath().length());
         }
+        return path;
+    }
+
+    public String getAbsoluteOfflineMapLayerPath(String path) {
+        String relativePath = getRelativeMapLayerPath(path);
+        return storageStateProvider.isScopedStorageUsed()
+                ? getStorageRootDirPath() + (relativePath != null ? relativePath : "")
+                : getUnscopedStorageRootDirPath() + (relativePath != null ? relativePath : "");
     }
 }
