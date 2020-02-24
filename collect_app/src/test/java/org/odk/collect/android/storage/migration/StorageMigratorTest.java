@@ -1,5 +1,6 @@
 package org.odk.collect.android.storage.migration;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -25,10 +26,11 @@ public class StorageMigratorTest {
     private final StorageEraser storageEraser = mock(StorageEraser.class);
     private final StorageMigrationRepository storageMigrationRepository = mock(StorageMigrationRepository.class);
     private final GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
+    private final ReferenceManager referenceManager = mock(ReferenceManager.class);
 
     @Before
     public void setup() {
-        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences));
+        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences, referenceManager));
 
         doNothing().when(storageMigrator).reopenDatabases();
         doNothing().when(storageEraser).clearOdkDirOnScopedStorage();
@@ -164,6 +166,19 @@ public class StorageMigratorTest {
         storageMigrator.performStorageMigration();
 
         verify(generalSharedPreferences).save(KEY_REFERENCE_LAYER, "/layers/countries/countries-raster.mbtiles");
+    }
+
+    @Test
+    public void when_migrationFinished_should_referenceManagerBeClearedBeUpdated() {
+        doReturn(false).when(storageMigrator).isFormUploaderRunning();
+        doReturn(false).when(storageMigrator).isFormDownloaderRunning();
+        doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
+        doReturn(true).when(storageMigrator).moveAppDataToScopedStorage();
+        doReturn(true).when(storageMigrator).migrateDatabasePaths();
+
+        storageMigrator.performStorageMigration();
+
+        verify(referenceManager).reset();
     }
 
     @Test

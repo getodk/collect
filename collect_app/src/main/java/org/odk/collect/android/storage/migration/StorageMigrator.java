@@ -8,6 +8,7 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import org.apache.commons.io.FileUtils;
+import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
@@ -40,15 +41,19 @@ public class StorageMigrator {
     private final StorageStateProvider storageStateProvider;
     private final StorageEraser storageEraser;
     private final GeneralSharedPreferences generalSharedPreferences;
+    private final ReferenceManager referenceManager;
 
     private final StorageMigrationRepository storageMigrationRepository;
 
-    public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository, GeneralSharedPreferences generalSharedPreferences) {
+    public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider,
+                           StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository,
+                           GeneralSharedPreferences generalSharedPreferences, ReferenceManager referenceManager) {
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
         this.storageEraser = storageEraser;
         this.storageMigrationRepository = storageMigrationRepository;
         this.generalSharedPreferences = generalSharedPreferences;
+        this.referenceManager = referenceManager;
     }
 
     void performStorageMigration() {
@@ -82,7 +87,7 @@ public class StorageMigrator {
         }
 
         migrateMapLayerPath();
-
+        referenceManager.reset();
         storageEraser.deleteOdkDirFromUnscopedStorage();
 
         return StorageMigrationResult.SUCCESS;
