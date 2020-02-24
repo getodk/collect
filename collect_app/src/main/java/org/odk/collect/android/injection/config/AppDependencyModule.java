@@ -183,7 +183,7 @@ public class AppDependencyModule {
     StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository) {
         StorageEraser storageEraser = new StorageEraser(storagePathProvider);
 
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository);
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance());
     }
 
     @Provides
@@ -234,13 +234,6 @@ public class AppDependencyModule {
     @Singleton
     AdminSharedPreferences providesAdminSharedPreferences(Context context) {
         return new AdminSharedPreferences(context);
-    }
-
-    @Provides
-    public StorageMigrator storageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository) {
-        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
-
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository);
     }
 
     @Provides

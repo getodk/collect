@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -26,6 +27,7 @@ import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.ItemsetDbAdapter.KEY_PATH;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
@@ -37,14 +39,16 @@ public class StorageMigrator {
     private final StoragePathProvider storagePathProvider;
     private final StorageStateProvider storageStateProvider;
     private final StorageEraser storageEraser;
+    private final GeneralSharedPreferences generalSharedPreferences;
 
     private final StorageMigrationRepository storageMigrationRepository;
 
-    public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository) {
+    public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository, GeneralSharedPreferences generalSharedPreferences) {
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
         this.storageEraser = storageEraser;
         this.storageMigrationRepository = storageMigrationRepository;
+        this.generalSharedPreferences = generalSharedPreferences;
     }
 
     void performStorageMigration() {
@@ -76,6 +80,8 @@ public class StorageMigrator {
             reopenDatabases();
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
+
+        migrateMapLayerPath();
 
         storageEraser.deleteOdkDirFromUnscopedStorage();
 
@@ -204,5 +210,23 @@ public class StorageMigrator {
 
     private String getRelativeCacheDbPath(String path) {
         return storagePathProvider.getRelativeFilePath(storagePathProvider.getUnscopedStorageDirPath(StorageSubdirectory.CACHE), path);
+    }
+
+    private String getRelativeMapLayerPath(String path) {
+        if (path.startsWith("/sdcard/odk")) {
+            return path.substring("/sdcard/odk".length());
+        }
+        return path.substring(storagePathProvider.getUnscopedStorageRootDirPath().length());
+    }
+
+    private void migrateMapLayerPath() {
+        try {
+            String layerPath = (String) generalSharedPreferences.get(KEY_REFERENCE_LAYER);
+            if (layerPath != null && !layerPath.isEmpty()) {
+                generalSharedPreferences.save(KEY_REFERENCE_LAYER, getRelativeMapLayerPath(layerPath));
+            }
+        } catch (Exception | Error e) {
+            generalSharedPreferences.reset(KEY_REFERENCE_LAYER);
+        }
     }
 }

@@ -138,4 +138,22 @@ public class StoragePathProvider {
                 ? filePath.substring(dirPath.length() + 1)
                 : filePath;
     }
+
+    public String getOfflineMapLayerPath(String path) {
+        if (path == null) {
+            return null;
+        }
+        if (storageStateProvider.isScopedStorageUsed()) {
+            // Just in case if something went wrong during migration
+            if (path.startsWith("/sdcard/odk")) {
+                path = path.substring("/sdcard/odk".length());
+            } else if (path.startsWith(getUnscopedStorageRootDirPath())) {
+                path = path.substring(getUnscopedStorageRootDirPath().length());
+            }
+
+            return getStorageRootDirPath() + path;
+        } else {
+            return path;
+        }
+    }
 }

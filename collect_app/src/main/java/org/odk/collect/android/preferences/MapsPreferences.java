@@ -145,7 +145,7 @@ public class MapsPreferences extends BasePreferenceFragment {
                 summary = getString(R.string.none);
             } else {
                 MapConfigurator cftor = MapProvider.getConfigurator();
-                summary = cftor.getDisplayName(new File(value.toString()));
+                summary = cftor.getDisplayName(new File(new StoragePathProvider().getOfflineMapLayerPath(value.toString())));
             }
             referenceLayerPref.setSummary(summary);
         }
@@ -158,8 +158,8 @@ public class MapsPreferences extends BasePreferenceFragment {
         List<Item> items = new ArrayList<>();
         items.add(new Item(null, getString(R.string.none), ""));
         for (File file : getSupportedLayerFiles(cftor)) {
-            String path = FileUtils.simplifyPath(file).toString();
-            String name = cftor.getDisplayName(file);
+            String path = FileUtils.simplifyPath(file);
+            String name = cftor.getDisplayName(new File(new StoragePathProvider().getOfflineMapLayerPath(path)));
             items.add(new Item(path, name, path));
         }
 
@@ -182,7 +182,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
         referenceLayerPref.setItems(items);
 
-        File layerDir = FileUtils.simplifyPath(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.LAYERS)));
+        String layerDir = FileUtils.simplifyPath(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.LAYERS)));
         referenceLayerPref.setDialogCaption(context.getString(
             items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
             layerDir, context.getString(MapProvider.getSourceLabelId())
