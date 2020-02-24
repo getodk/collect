@@ -38,7 +38,6 @@
             android:key="deviceid"
             android:selectable="false"
             android:title="@string/device_id"
-            app:enableCopying="true"
             app:iconSpaceReserved="false"
             app:persistent="false" />
 
@@ -46,7 +45,6 @@
             android:key="subscriberid"
             android:selectable="false"
             android:title="@string/subscriber_id"
-            app:enableCopying="true"
             app:iconSpaceReserved="false"
             app:persistent="false" />
 
@@ -54,7 +52,6 @@
             android:key="simserial"
             android:selectable="false"
             android:title="@string/sim_serial_id"
-            app:enableCopying="true"
             app:iconSpaceReserved="false"
             app:persistent="false" />
 
