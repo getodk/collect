@@ -241,6 +241,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public AddNewRepeatDialog clickPlus(String repeatName) {
+        onView(withId(R.id.menu_add_repeat)).perform(click());
+        return new AddNewRepeatDialog(repeatName, rule);
+    }
+
     public FormEntryPage longPressOnView(int id, int index) {
         onView(withIndex(withId(id), index)).perform(longClick());
         return this;
