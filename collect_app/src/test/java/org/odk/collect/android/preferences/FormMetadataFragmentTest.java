@@ -95,7 +95,7 @@ public class FormMetadataFragmentTest {
         FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
         permissionUtils.grant();
         scenario.onFragment(fragment -> {
-            String notSetMessage = fragment.getContext().getString(R.string.preference_not_set);
+            String notSetMessage = fragment.getContext().getString(R.string.preference_not_available);
 
             assertThat(fragment.findPreference(PROPMGR_SIM_SERIAL).getSummary(), equalTo(notSetMessage));
             assertThat(fragment.findPreference(KEY_METADATA_PHONENUMBER).getSummary(), equalTo(notSetMessage));

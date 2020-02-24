@@ -113,7 +113,7 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
             if (!TextUtils.isEmpty(value)) {
                 return value;
             } else {
-                return getString(R.string.preference_not_set);
+                return getString(R.string.preference_not_available);
             }
         }
     }
