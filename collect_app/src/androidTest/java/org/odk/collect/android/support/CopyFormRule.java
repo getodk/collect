@@ -53,7 +53,7 @@ public class CopyFormRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
-            FormLoadingUtils.copyFormToSdCard(fileName, mediaFilenames, copyToDatabase);
+            FormLoadingUtils.copyFormToStorage(fileName, mediaFilenames, copyToDatabase);
             base.evaluate();
         }
     }
