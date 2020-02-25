@@ -26,6 +26,7 @@ import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.CaptionedListPreference.Item;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -154,13 +155,20 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
         MapConfigurator cftor = MapProvider.getConfigurator();
+        StorageStateProvider storageStateProvider = new StorageStateProvider();
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
 
         List<Item> items = new ArrayList<>();
         items.add(new Item(null, getString(R.string.none), ""));
         for (File file : getSupportedLayerFiles(cftor)) {
-            String path = FileUtils.simplifyPath(file);
-            String name = cftor.getDisplayName(new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath(path)));
-            items.add(new Item(path, name, path));
+            String path = storageStateProvider.isScopedStorageUsed()
+                    ? File.separator + StorageSubdirectory.LAYERS.getDirectoryName() + File.separator + storagePathProvider.getRelativeMapLayerPath(FileUtils.simplifyPath(file))
+                    : FileUtils.simplifyPath(file);
+            String value = storageStateProvider.isScopedStorageUsed()
+                    ? storagePathProvider.getRelativeMapLayerPath(file.getAbsolutePath())
+                    : path;
+            String name = cftor.getDisplayName(new File(file.getAbsolutePath()));
+            items.add(new Item(value, name, path));
         }
 
         // Sort by display name, then by path for files with identical names.
@@ -182,7 +190,9 @@ public class MapsPreferences extends BasePreferenceFragment {
 
         referenceLayerPref.setItems(items);
 
-        String layerDir = FileUtils.simplifyPath(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.LAYERS)));
+        String layerDir = storageStateProvider.isScopedStorageUsed()
+                ? File.separator + StorageSubdirectory.LAYERS.getDirectoryName()
+                : FileUtils.simplifyPath(new File(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS)));
         referenceLayerPref.setDialogCaption(context.getString(
             items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
             layerDir, context.getString(MapProvider.getSourceLabelId())

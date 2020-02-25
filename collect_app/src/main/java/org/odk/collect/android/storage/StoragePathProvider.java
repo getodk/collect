@@ -7,9 +7,6 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 
 public class StoragePathProvider {
-    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
-    private static final String SD_CARD_PREFIX = "/sdcard/odk";
-
     private StorageStateProvider storageStateProvider;
 
     public StoragePathProvider() {
@@ -141,24 +138,25 @@ public class StoragePathProvider {
                 : filePath;
     }
 
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public String getRelativeMapLayerPath(String path) {
         if (path == null) {
             return null;
         }
-        if (path.startsWith(SD_CARD_PREFIX)) {
-            return path.substring(SD_CARD_PREFIX.length());
-        } else if (path.startsWith(getUnscopedStorageRootDirPath())) {
-            return path.substring(getUnscopedStorageRootDirPath().length());
-        } else if (path.startsWith(getScopedStorageRootDirPath())) {
-            return path.substring(getScopedStorageRootDirPath().length());
+        if (path.startsWith("/sdcard/odk/layers")) {
+            return path.substring("/sdcard/odk/layers".length() + 1);
+        } else if (path.startsWith(getUnscopedStorageDirPath(StorageSubdirectory.LAYERS))) {
+            return path.substring(getUnscopedStorageDirPath(StorageSubdirectory.LAYERS).length() + 1);
+        } else if (path.startsWith(getScopedStorageDirPath(StorageSubdirectory.LAYERS))) {
+            return path.substring(getScopedStorageDirPath(StorageSubdirectory.LAYERS).length() + 1);
         }
         return path;
     }
 
     public String getAbsoluteOfflineMapLayerPath(String path) {
-        String relativePath = getRelativeMapLayerPath(path);
-        return storageStateProvider.isScopedStorageUsed()
-                ? getStorageRootDirPath() + (relativePath != null ? relativePath : "")
-                : getUnscopedStorageRootDirPath() + (relativePath != null ? relativePath : "");
+        if (path == null) {
+            return null;
+        }
+        return getDirPath(StorageSubdirectory.LAYERS) + File.separator + getRelativeMapLayerPath(path);
     }
 }

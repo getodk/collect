@@ -34,7 +34,6 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 
 import java.io.File;
@@ -589,7 +588,7 @@ public class FileUtils {
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public static String simplifyPath(File file) {
         if (new StorageStateProvider().isScopedStorageUsed()) {
-            return new StoragePathProvider().getRelativeMapLayerPath(file.getAbsolutePath());
+            return file.getAbsolutePath();
         } else {
             // The symlink at /sdcard points to the same location as the storage
             // path returned by getExternalStorageDirectory() on every Android

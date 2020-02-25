@@ -21,7 +21,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYE
 public class StorageMigratorTest {
 
     private StorageMigrator storageMigrator;
-    private final StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);
+    private final StoragePathProvider storagePathProvider = spy(StoragePathProvider.class);
     private final StorageStateProvider storageStateProvider = mock(StorageStateProvider.class);
     private final StorageEraser storageEraser = mock(StorageEraser.class);
     private final StorageMigrationRepository storageMigrationRepository = mock(StorageMigrationRepository.class);
@@ -165,7 +165,7 @@ public class StorageMigratorTest {
 
         storageMigrator.performStorageMigration();
 
-        verify(generalSharedPreferences).save(KEY_REFERENCE_LAYER, "/layers/countries/countries-raster.mbtiles");
+        verify(generalSharedPreferences).save(KEY_REFERENCE_LAYER, "countries/countries-raster.mbtiles");
     }
 
     @Test
