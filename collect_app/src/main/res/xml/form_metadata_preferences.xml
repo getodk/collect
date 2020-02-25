@@ -15,9 +15,9 @@
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
-            android:inputType="phone"
             android:key="metadata_phonenumber"
             android:title="@string/phone_number"
+            android:inputType=""
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 

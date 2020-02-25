@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.EditTextPreference;
@@ -38,6 +39,14 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     @Inject
     PermissionUtils permissionUtils;
 
+    private Preference emailPreference;
+    private EditTextPreference phonePreference;
+    private Preference installIDPreference;
+    private Preference deviceIDPreference;
+    private Preference simSerialPrererence;
+    private Preference subscriberIDPreference;
+
+
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
@@ -48,6 +57,13 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.form_metadata_preferences, rootKey);
 
+        emailPreference = findPreference(KEY_METADATA_EMAIL);
+        phonePreference = findPreference(KEY_METADATA_PHONENUMBER);
+        installIDPreference = findPreference(KEY_INSTALL_ID);
+        deviceIDPreference = findPreference(PROPMGR_DEVICE_ID);
+        simSerialPrererence = findPreference(PROPMGR_SIM_SERIAL);
+        subscriberIDPreference = findPreference(PROPMGR_SUBSCRIBER_ID);
+
         FragmentActivity activity = getActivity();
         if (activity instanceof CollectAbstractActivity) {
             ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
@@ -57,15 +73,15 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initNormalPrefs();
+        setupPrefs();
 
         if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
-            initDangerousPrefs();
+            setupPrefsWithPermissions();
         } else if (savedInstanceState == null) {
             permissionUtils.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
                 @Override
                 public void granted() {
-                    initDangerousPrefs();
+                    setupPrefsWithPermissions();
                 }
 
                 @Override
@@ -75,8 +91,8 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void initNormalPrefs() {
-        findPreference(KEY_METADATA_EMAIL).setOnPreferenceChangeListener((preference, newValue) -> {
+    private void setupPrefs() {
+        emailPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             String newValueString = newValue.toString();
             if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
                 ToastUtils.showLongToast(R.string.invalid_email_address);
@@ -86,15 +102,16 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        findPreference(KEY_INSTALL_ID).setSummaryProvider(preference -> installIDProvider.getInstallID());
+        phonePreference.setOnBindEditTextListener(editText -> editText.setInputType(EditorInfo.TYPE_CLASS_PHONE));
+        installIDPreference.setSummaryProvider(preference -> installIDProvider.getInstallID());
     }
 
-    private void initDangerousPrefs() {
+    private void setupPrefsWithPermissions() {
         PropertyManager propertyManager = new PropertyManager(getActivity());
-        findPreference(PROPMGR_DEVICE_ID).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
-        findPreference(PROPMGR_SIM_SERIAL).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SIM_SERIAL));
-        findPreference(PROPMGR_SUBSCRIBER_ID).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SUBSCRIBER_ID));
-        findPreference(KEY_METADATA_PHONENUMBER).setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
+        deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
+        simSerialPrererence.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SIM_SERIAL));
+        subscriberIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SUBSCRIBER_ID));
+        phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
     }
 
     private class PropertyManagerPropertySummaryProvider implements Preference.SummaryProvider<EditTextPreference> {
