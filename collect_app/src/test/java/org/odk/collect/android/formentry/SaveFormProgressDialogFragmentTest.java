@@ -2,10 +2,12 @@ package org.odk.collect.android.formentry;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -20,6 +22,12 @@ public class SaveFormProgressDialogFragmentTest {
     @Before
     public void setup() {
         FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
+
+        // Fragment relies on Activity having set up ViewModel
+        ViewModelProviders
+                .of(activity, new FormSaveViewModel.Factory(null, null))
+                .get(FormSaveViewModel.class);
+
         fragmentManager = activity.getSupportFragmentManager();
     }
 

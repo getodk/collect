@@ -429,7 +429,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        FormSaveViewModel.Factory changesReasonViewModelFactory = new FormSaveViewModel.Factory(analytics);
+        FormSaveViewModel.Factory changesReasonViewModelFactory = new FormSaveViewModel.Factory(this::getFormController, analytics);
         formSaveViewModel = ViewModelProviders
                 .of(this, changesReasonViewModelFactory)
                 .get(FormSaveViewModel.class);

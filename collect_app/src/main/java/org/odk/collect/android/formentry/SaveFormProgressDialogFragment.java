@@ -20,7 +20,7 @@ public class SaveFormProgressDialogFragment extends ProgressDialogFragment {
         super.onAttach(context);
 
         viewModel = ViewModelProviders
-                .of(requireActivity(), new FormSaveViewModel.Factory())
+                .of(requireActivity())
                 .get(FormSaveViewModel.class);
 
         setCancelable(false);
