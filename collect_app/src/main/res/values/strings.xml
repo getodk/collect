@@ -728,4 +728,5 @@
     <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage by August 2020 to comply with Android requirements.</string>
     <string name="scoped_storage_learn_more">Learn more and migrate</string>
     <string name="install_id">Install ID - will replace Device ID in August 2020</string>
+    <string name="preference_not_available">Not available</string>
 </resources>

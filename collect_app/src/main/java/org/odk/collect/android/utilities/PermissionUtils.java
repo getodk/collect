@@ -68,7 +68,7 @@ public class PermissionUtils {
         return isPermissionGranted(context, Manifest.permission.GET_ACCOUNTS);
     }
 
-    public static boolean isReadPhoneStatePermissionGranted(Context context) {
+    public boolean isReadPhoneStatePermissionGranted(Context context) {
         return isPermissionGranted(context, Manifest.permission.READ_PHONE_STATE);
     }
 

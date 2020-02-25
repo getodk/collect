@@ -132,6 +132,7 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
+        <activity android:name=".preferences.FormMetadataPreferencesActivity" />
         <activity android:name=".activities.FormHierarchyActivity" />
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <activity android:name=".activities.GeoPointActivity" />

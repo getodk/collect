@@ -150,7 +150,7 @@ public final class GeneralKeys {
             KEY_SCOPED_STORAGE_USED
     );
 
-    public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
+    public static final HashMap<String, Object> DEFAULTS = getHashMap();
 
     private GeneralKeys() {
 
