@@ -3,9 +3,10 @@ package org.odk.collect.android.storage.migration;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import androidx.lifecycle.LiveData;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
+
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.apache.commons.io.FileUtils;
 import org.javarosa.core.reference.ReferenceManager;
@@ -94,16 +95,20 @@ public class StorageMigrator {
     }
 
     boolean isFormUploaderRunning() {
-        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.class.getName());
-
-        if (statuses.getValue() != null) {
-            for (WorkInfo status : statuses.getValue()) {
-                if (status.getState().equals(WorkInfo.State.RUNNING)) {
-                    return true;
+        boolean result = false;
+        ListenableFuture<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosByTag(AutoSendWorker.class.getName());
+        try {
+            for (WorkInfo workInfo : statuses.get()) {
+                if (workInfo.getState() == WorkInfo.State.RUNNING) {
+                    result = true;
+                    break;
                 }
             }
+        } catch (Exception | Error e) {
+            Timber.w(e);
         }
-        return false;
+
+        return result;
     }
 
     boolean isFormDownloaderRunning() {
