@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -113,13 +112,14 @@ public class FormMapActivity extends BaseGeoMapActivity {
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
 
-        if (map == null) { // tests set their maps directly
-            Context context = getApplicationContext();
-            map = MapProvider.createMapFragment(context);
+        MapFragment mapToAdd = map; // tests will have a value for the map field
+
+        if (mapToAdd == null) {
+            mapToAdd = MapProvider.createMapFragment(getApplicationContext());
         }
 
-        if (map != null) {
-            map.addTo(this, R.id.map_container, this::initMap, this::finish);
+        if (mapToAdd != null) {
+            mapToAdd.addTo(this, R.id.map_container, this::initMap, this::finish);
         } else {
             finish(); // The configured map provider is not available
         }
