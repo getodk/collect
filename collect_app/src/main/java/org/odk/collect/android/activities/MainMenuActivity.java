@@ -303,8 +303,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         countSavedForms();
         updateButtons();
-        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
-                contentObserver);
+        if (!storageMigrationRepository.isMigrationBeingPerformed()) {
+            getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, contentObserver);
+        }
 
         setButtonsVisibility();
         setUpStorageMigrationBanner();
@@ -635,6 +636,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     public void onStorageMigrationBannerLearnMoreClick(View view) {
         DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
+        getContentResolver().unregisterContentObserver(contentObserver);
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
