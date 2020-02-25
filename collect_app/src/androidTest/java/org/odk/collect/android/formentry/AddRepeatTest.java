@@ -35,19 +35,27 @@ public class AddRepeatTest {
     public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Test
-    public void whenInARepeat_clickingPlus_andClickingAdd_addsAnotherRepeat() {
+    public void whenInRepeat_clickingPlus_andClickingAdd_addsRepeatToEndOfSeries() {
         new MainMenuPage(rule)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .swipeToPreviousQuestion()
+                .assertText("Person > 1")
                 .clickPlus("Person")
                 .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
-                .assertText("Person > 2");
+                .assertText("Person > 3");
     }
 
     @Test
     public void whenInARepeat_clickingPlus_andClickingDoNotAdd_returns() {
         new MainMenuPage(rule)
                 .startBlankForm("One Question Repeat")
+                .assertText("Person > 1")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .swipeToPreviousQuestion()
                 .assertText("Person > 1")
                 .clickPlus("Person")
                 .clickOnDoNotAdd(new FormEntryPage("One Question Repeat", rule))

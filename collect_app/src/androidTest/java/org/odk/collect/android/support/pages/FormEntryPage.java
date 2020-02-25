@@ -261,4 +261,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withText(R.string.discard_answer)).perform(click());
         return this;
     }
+
+    public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        return new AddNewRepeatDialog(repeatName, rule);
+    }
 }

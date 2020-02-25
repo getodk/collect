@@ -397,13 +397,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * Return the index of the "prompt" to add a new child to the given repeat group,
      * without changing the current index.
      */
-    private FormIndex getRepeatPromptIndex(FormIndex repeatIndex) {
+    public static FormIndex getRepeatPromptIndex(FormIndex repeatIndex) {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex originalIndex = formController.getFormIndex();
 
         // Temporarily jump to the specified repeat group.
         formController.jumpToIndex(repeatIndex);
-        String repeatRef = getGroupRef(repeatIndex).toString(false);
+        String repeatRef = repeatIndex.getReference().toString(false);
         String testRef = "";
 
         // There may be nested repeat groups within this group; skip over those.
@@ -415,7 +415,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 break;
             }
 
-            testRef = getGroupRef(formController.getFormIndex()).toString(false);
+            testRef = formController.getFormIndex().getReference().toString(false);
         }
 
         FormIndex result = formController.getFormIndex();
@@ -444,7 +444,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         // If we're currently at a displayable group, record the name of the node and step to the next
         // node to display.
         if (formController.isDisplayableGroup(startIndex)) {
-            contextGroupRef = getGroupRef(formController);
+            contextGroupRef = formController.getFormIndex().getReference();
             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
         } else {
             FormIndex potentialStartIndex = formController.stepIndexOut(startIndex);
@@ -466,7 +466,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             // Now test again. This should be true at this point or we're at the beginning.
             if (formController.isDisplayableGroup(formController.getFormIndex())) {
-                contextGroupRef = getGroupRef(formController);
+                contextGroupRef = formController.getFormIndex().getReference();
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             } else {
                 // Let contextGroupRef be null.
@@ -485,14 +485,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         }
 
         return formController.isDisplayableGroup(index);
-    }
-
-    private TreeReference getGroupRef(FormController formController) {
-        return getGroupRef(formController.getFormIndex());
-    }
-
-    private TreeReference getGroupRef(FormIndex index) {
-        return index.getReference();
     }
 
     private boolean shouldShowRepeatGroupPicker() {
@@ -545,7 +537,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             while (event != FormEntryController.EVENT_END_OF_FORM) {
                 // get the ref to this element
-                TreeReference currentRef = getGroupRef(formController);
+                TreeReference currentRef = formController.getFormIndex().getReference();
 
                 // retrieve the current group
                 TreeReference curGroup = (visibleGroupRef == null) ? contextGroupRef : visibleGroupRef;
@@ -639,7 +631,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                         if (shouldShowRepeatGroupPicker()) {
                             // Don't render other groups' instances.
-                            String repeatGroupPickerRef = getGroupRef(repeatGroupPickerIndex).toString(false);
+                            String repeatGroupPickerRef = repeatGroupPickerIndex.getReference().toString(false);
                             if (!currentRef.toString(false).equals(repeatGroupPickerRef)) {
                                 break;
                             }
