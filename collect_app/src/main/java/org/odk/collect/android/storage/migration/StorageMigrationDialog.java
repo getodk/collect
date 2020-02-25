@@ -57,6 +57,9 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     @Inject
     AdminPasswordProvider adminPasswordProvider;
 
+    @Inject
+    StorageMigrationRepository storageMigrationRepository;
+
     private int unsentInstancesNumber;
 
     public static StorageMigrationDialog create(int unsentInstances) {
@@ -89,7 +92,12 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         }
 
         setUpToolbar();
-        setUpMessageAboutUnsetSubmissions();
+        if (storageMigrationRepository.isMigrationBeingPerformed()) {
+            disableDialog();
+            showProgressBar();
+        } else {
+            setUpMessageAboutUnsetSubmissions();
+        }
 
         moreDetailsButton.setOnClickListener(v -> {
             if (Collect.allowClick(getClass().getName())) {
