@@ -8,18 +8,21 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.FormIndex;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 public class FormEntryViewModel extends ViewModel {
 
     private final FormControllerProvider formControllerProvider;
+    private final Analytics analytics;
     private final MutableLiveData<ViewUpdate> updates = new MutableLiveData<>(null);
 
     @Nullable
     private FormIndex jumpBackIndex;
 
-    public FormEntryViewModel(FormControllerProvider formControllerProvider) {
+    public FormEntryViewModel(FormControllerProvider formControllerProvider, Analytics analytics) {
         this.formControllerProvider = formControllerProvider;
+        this.analytics = analytics;
     }
 
     public LiveData<ViewUpdate> getUpdates() {
@@ -34,11 +37,25 @@ public class FormEntryViewModel extends ViewModel {
         updates.setValue(ViewUpdate.REFRESH);
     }
 
+    public void addRepeat() {
+        if (jumpBackIndex != null) {
+            jumpBackIndex = null;
+            analytics.logEvent("AddRepeat", "Inline");
+        } else {
+            analytics.logEvent("AddRepeat", "Prompt");
+        }
+
+        getFormController().newRepeat();
+    }
+
     public void cancelRepeatPrompt() {
+        analytics.logEvent("AddRepeat", "InlineDecline");
+
         FormController formController = formControllerProvider.getFormController();
 
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
+            jumpBackIndex = null;
             updates.setValue(ViewUpdate.REFRESH);
         } else {
             updates.setValue(ViewUpdate.SHOW_NEXT);
@@ -57,15 +74,17 @@ public class FormEntryViewModel extends ViewModel {
     public static class Factory implements ViewModelProvider.Factory {
 
         private final FormControllerProvider formControllerProvider;
+        private final Analytics analytics;
 
-        public Factory(FormControllerProvider formControllerProvider) {
+        public Factory(FormControllerProvider formControllerProvider, Analytics analytics) {
             this.formControllerProvider = formControllerProvider;
+            this.analytics = analytics;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(formControllerProvider);
+            return (T) new FormEntryViewModel(formControllerProvider, analytics);
         }
     }
 }

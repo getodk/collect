@@ -430,7 +430,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel = ViewModelProviders
-                .of(this, new FormEntryViewModel.Factory(this::getFormController))
+                .of(this, new FormEntryViewModel.Factory(this::getFormController, analytics))
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getUpdates().observe(this, new Observer<FormEntryViewModel.ViewUpdate>() {
@@ -1707,7 +1707,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
 
                 try {
-                    formController.newRepeat();
+                    formEntryViewModel.addRepeat();
                 } catch (Exception e) {
                     FormEntryActivity.this.createErrorDialog(
                             e.getMessage(), DO_NOT_EXIT);
