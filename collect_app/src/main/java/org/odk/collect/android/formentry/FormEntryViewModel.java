@@ -58,7 +58,7 @@ public class FormEntryViewModel extends ViewModel {
             } catch (JavaRosaException ignored) {
                 // ignored
             }
-            
+
             updates.setValue(getFormController().getFormIndex());
         }
     }

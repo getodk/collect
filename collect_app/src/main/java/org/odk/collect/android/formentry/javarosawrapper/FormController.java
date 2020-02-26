@@ -68,6 +68,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.javarosawrapper.FormIndexUtils.getPreviousLevel;
+import static org.odk.collect.android.formentry.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
 
 /**
@@ -894,7 +895,15 @@ public class FormController {
      * Jumps to the next prompt for a repeated instance of the group referenced by the current FormIndex.
      */
     public void jumpToNewRepeatPrompt() {
-        stepToNextEventType(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
+        FormIndex repeatGroupIndex = getRepeatGroupIndex(getFormIndex(), getFormDef());
+        String repeatRef = repeatGroupIndex.getReference().toString(false);
+        String testRef = "";
+
+        // There may be nested repeat groups within this group; skip over those.
+        while (!repeatRef.equals(testRef)) {
+            stepToNextEventType(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
+            testRef = getFormIndex().getReference().toString(false);
+        }
     }
 
     /**

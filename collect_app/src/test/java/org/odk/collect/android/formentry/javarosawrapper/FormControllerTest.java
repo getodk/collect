@@ -5,10 +5,12 @@ import com.google.common.io.Files;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,10 +19,7 @@ public class FormControllerTest {
 
     @Test
     public void jumpToNewRepeatPrompt_whenIndexIsInRepeat_jumpsToRepeatPrompt() throws Exception {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(ONE_QUESTION_REPEAT.getBytes());
-        final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
-        final FormEntryController formEntryController = new FormEntryController(fem);
-        FormController formController = new FormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
+        FormController formController = createFormController(ONE_QUESTION_REPEAT);
 
         formController.stepToNextScreenEvent();
         assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_QUESTION));
@@ -34,10 +33,7 @@ public class FormControllerTest {
 
     @Test
     public void jumpToNewRepeatPrompt_whenIndexIsRepeatInGroup_jumpsToRepeatPrompt() throws Exception {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(ONE_QUESTION_GROUP_REPEAT.getBytes());
-        final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
-        final FormEntryController formEntryController = new FormEntryController(fem);
-        FormController formController = new FormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
+        FormController formController = createFormController(ONE_QUESTION_GROUP_REPEAT);
 
         formController.stepToNextScreenEvent();
         assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_QUESTION));
@@ -50,20 +46,40 @@ public class FormControllerTest {
     }
 
     @Test
-    public void jumpToNewRepeatPrompt_whenIndexIsInNestedRepeat_jumpsToNestedRepeatPrompt() throws Exception {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(ONE_QUESTION_NESTED_REPEAT.getBytes());
-        final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
-        final FormEntryController formEntryController = new FormEntryController(fem);
-        FormController formController = new FormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
+    public void jumpToNewRepeatPrompt_whenIndexIsOuterOfNestedRepeat_jumpsToOuterRepeatPrompt() throws Exception {
+        FormController formController = createFormController(ONE_QUESTION_NESTED_REPEAT);
 
         formController.stepToNextScreenEvent();
         assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_QUESTION));
-        assertThat(formController.getFormIndex().toString(), equalTo("0_0, 0_0, 0, "));
+        assertThat(formController.getFormIndex().toString(), equalTo("0_0, 0, "));
 
         formController.jumpToNewRepeatPrompt();
 
         assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_PROMPT_NEW_REPEAT));
-        assertThat(formController.getFormIndex().toString(), equalTo("0_0, 0_1, "));
+        assertThat(formController.getFormIndex().toString(), equalTo("0_1, "));
+    }
+
+    @Test
+    public void jumpToNewRepeatPrompt_whenIndexIsInNestedRepeat_jumpsToNestedRepeatPrompt() throws Exception {
+        FormController formController = createFormController(ONE_QUESTION_NESTED_REPEAT);
+
+        formController.stepToNextScreenEvent();
+        formController.stepToNextScreenEvent();
+        assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_QUESTION));
+        assertThat(formController.getFormIndex().toString(), equalTo("0_0, 1_0, 0, "));
+
+        formController.jumpToNewRepeatPrompt();
+
+        assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_PROMPT_NEW_REPEAT));
+        assertThat(formController.getFormIndex().toString(), equalTo("0_0, 1_1, "));
+    }
+
+    @NotNull
+    private FormController createFormController(String xform) throws IOException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(xform.getBytes());
+        final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
+        final FormEntryController formEntryController = new FormEntryController(fem);
+        return new FormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
     }
 
     private static final String ONE_QUESTION_REPEAT = "<?xml version=\"1.0\"?>\n" +
@@ -132,22 +148,27 @@ public class FormControllerTest {
             "            <instance>\n" +
             "                <data id=\"one_question_repeat\">\n" +
             "                    <person>\n" +
-            "                        <questions>\n" +
-            "                            <age/>\n" +
-            "                        </questions>\n" +
+            "                        <age/>\n" +
+            "                        <tattoo>\n" +
+            "                            <description />\n" +
+            "                        </tattoo>\n" +
             "                    </person>\n" +
             "                </data>\n" +
             "            </instance>\n" +
             "            <bind nodeset=\"age\" type=\"int\"/>\n" +
+            "            <bind nodeset=\"description\" type=\"string\"/>\n" +
             "        </model>\n" +
             "    </h:head>\n" +
             "    <h:body>\n" +
             "        <group ref=\"/data/person\">\n" +
             "            <label>Person</label>\n" +
             "            <repeat nodeset=\"/data/person\">\n" +
-            "                <repeat nodeset=\"/data/person/questions\">\n" +
-            "                    <input ref=\"/data/person/questions/age\">\n" +
-            "                        <label>What is their age?</label>\n" +
+            "                <input ref=\"/data/person/age\">\n" +
+            "                    <label>What is their age?</label>\n" +
+            "                </input>\n" +
+            "                <repeat nodeset=\"/data/person/tattoo\">\n" +
+            "                    <input ref=\"/data/person/tattoo/description\">\n" +
+            "                        <label>What is the tattoo of?</label>\n" +
             "                    </input>\n" +
             "                </repeat>\n" +
             "            </repeat>\n" +
