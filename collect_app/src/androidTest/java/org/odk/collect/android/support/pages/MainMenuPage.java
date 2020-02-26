@@ -5,7 +5,10 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.support.ActivityHelpers;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.NoActivityResumedException;
 import androidx.test.rule.ActivityTestRule;
+
+import timber.log.Timber;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -15,6 +18,7 @@ import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
@@ -84,6 +88,32 @@ public class MainMenuPage extends Page<MainMenuPage> {
         } else {
             onView(withText(getTranslatedString(R.string.send_data_button, String.valueOf(number)))).check(matches(isDisplayed()));
         }
+        return this;
+    }
+
+    public MainMenuPage assertStorageMigrationCompletedBannerIsDisplayed() {
+        onView(withText(R.string.storage_migration_completed)).check(matches(isDisplayed()));
+        onView(withText(R.string.scoped_storage_dismiss)).check(matches(isDisplayed()));
+        return this;
+    }
+
+    public MainMenuPage assertStorageMigrationCompletedBannerIsNotDisplayed() {
+        onView(withId(R.id.storageMigrationBanner)).check(matches(not(isDisplayed())));
+        return this;
+    }
+
+    public MainMenuPage clickDismissButton() {
+        onView(withId(R.id.storageMigrationBannerDismissButton)).perform(click());
+        return this;
+    }
+
+    public MainMenuPage reopenApp() {
+        try {
+            Espresso.pressBack();
+        } catch (NoActivityResumedException e) {
+            Timber.i(e);
+        }
+        rule.launchActivity(null);
         return this;
     }
 }

@@ -175,7 +175,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    StorageMigrationRepository providesStorageMigrationRepository() {
+    public StorageMigrationRepository providesStorageMigrationRepository() {
         return new StorageMigrationRepository();
     }
 
