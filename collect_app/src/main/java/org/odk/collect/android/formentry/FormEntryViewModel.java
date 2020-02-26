@@ -9,13 +9,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 public class FormEntryViewModel extends ViewModel {
 
     private final FormControllerProvider formControllerProvider;
     private final Analytics analytics;
-    private final MutableLiveData<ViewUpdate> updates = new MutableLiveData<>(null);
+    private final MutableLiveData<FormIndex> updates = new MutableLiveData<>(null);
 
     @Nullable
     private FormIndex jumpBackIndex;
@@ -25,7 +26,7 @@ public class FormEntryViewModel extends ViewModel {
         this.analytics = analytics;
     }
 
-    public LiveData<ViewUpdate> getUpdates() {
+    public LiveData<FormIndex> getUpdates() {
         return updates;
     }
 
@@ -34,7 +35,7 @@ public class FormEntryViewModel extends ViewModel {
         jumpBackIndex = index;
 
         getFormController().jumpToNewRepeatPrompt();
-        updates.setValue(ViewUpdate.REFRESH);
+        updates.setValue(getFormController().getFormIndex());
     }
 
     public void addRepeat(boolean fromPrompt) {
@@ -50,9 +51,15 @@ public class FormEntryViewModel extends ViewModel {
         getFormController().newRepeat();
 
         if (getFormController().indexIsInFieldList()) {
-            updates.setValue(ViewUpdate.REFRESH);
+            updates.setValue(getFormController().getFormIndex());
         } else {
-            updates.setValue(ViewUpdate.SHOW_NEXT);
+            try {
+                getFormController().stepToNextScreenEvent();
+            } catch (JavaRosaException ignored) {
+                // ignored
+            }
+            
+            updates.setValue(getFormController().getFormIndex());
         }
     }
 
@@ -64,15 +71,16 @@ public class FormEntryViewModel extends ViewModel {
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
-            updates.setValue(ViewUpdate.REFRESH);
+            updates.setValue(getFormController().getFormIndex());
         } else {
-            updates.setValue(ViewUpdate.SHOW_NEXT);
-        }
-    }
+            try {
+                getFormController().stepToNextScreenEvent();
+            } catch (JavaRosaException ignored) {
+                // ignored
+            }
 
-    public enum ViewUpdate {
-        REFRESH,
-        SHOW_NEXT
+            updates.setValue(getFormController().getFormIndex());
+        }
     }
 
     private FormController getFormController() {

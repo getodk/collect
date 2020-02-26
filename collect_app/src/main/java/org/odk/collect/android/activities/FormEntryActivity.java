@@ -56,7 +56,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -433,19 +432,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, new FormEntryViewModel.Factory(this::getFormController, analytics))
                 .get(FormEntryViewModel.class);
 
-        formEntryViewModel.getUpdates().observe(this, new Observer<FormEntryViewModel.ViewUpdate>() {
-            @Override
-            public void onChanged(FormEntryViewModel.ViewUpdate update) {
-                if (update != null) {
-                    switch (update) {
-                        case REFRESH:
-                            refreshCurrentView();
-                            break;
-                        case SHOW_NEXT:
-                            showNextView();
-                            break;
-                    }
-                }
+        formEntryViewModel.getUpdates().observe(this, index -> {
+            if (index != null) {
+                refreshCurrentView();
             }
         });
         formSaveViewModel = ViewModelProviders
