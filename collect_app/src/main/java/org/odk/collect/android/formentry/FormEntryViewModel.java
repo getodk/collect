@@ -48,6 +48,12 @@ public class FormEntryViewModel extends ViewModel {
         }
 
         getFormController().newRepeat();
+
+        if (getFormController().indexIsInFieldList()) {
+            updates.setValue(ViewUpdate.REFRESH);
+        } else {
+            updates.setValue(ViewUpdate.SHOW_NEXT);
+        }
     }
 
     public void cancelRepeatPrompt() {

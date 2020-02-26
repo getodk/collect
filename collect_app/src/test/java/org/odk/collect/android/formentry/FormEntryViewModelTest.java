@@ -9,6 +9,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.robolectric.RobolectricTestRunner;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -31,8 +33,25 @@ public class FormEntryViewModelTest {
         formController = mock(FormController.class);
         startingIndex = new FormIndex(null, 0, 0, new TreeReference());
         when(formController.getFormIndex()).thenReturn(startingIndex);
+        when(formController.indexIsInFieldList()).thenReturn(false);
 
         viewModel = new FormEntryViewModel(() -> formController, analytics);
+    }
+
+    @Test
+    public void addRepeat_updatesScreenWithShowNext() {
+        when(formController.indexIsInFieldList()).thenReturn(false);
+
+        viewModel.addRepeat(true);
+        assertThat(viewModel.getUpdates().getValue(), equalTo(FormEntryViewModel.ViewUpdate.SHOW_NEXT));
+    }
+
+    @Test
+    public void addRepeat_whenInFieldList_updatesScreenWithRefresh() {
+        when(formController.indexIsInFieldList()).thenReturn(true);
+
+        viewModel.addRepeat(true);
+        assertThat(viewModel.getUpdates().getValue(), equalTo(FormEntryViewModel.ViewUpdate.REFRESH));
     }
 
     @Test

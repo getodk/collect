@@ -1708,26 +1708,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onAddRepeatClicked() {
                 shownAlertDialogIsGroupRepeat = false;
 
-                FormController formController = getFormController();
-
                 try {
                     formEntryViewModel.addRepeat(true);
                 } catch (Exception e) {
                     FormEntryActivity.this.createErrorDialog(
                             e.getMessage(), DO_NOT_EXIT);
                     return;
-                }
-                if (!formController.indexIsInFieldList()) {
-                    // we are at a REPEAT event that does not have a
-                    // field-list appearance
-                    // step to the next visible field...
-                    // which could be the start of a new repeat group...
-                    showNextView();
-                } else {
-                    // we are at a REPEAT event that has a field-list
-                    // appearance
-                    // just display this REPEAT event's group.
-                    refreshCurrentView();
                 }
             }
 

@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.EndOfFormPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
@@ -33,6 +34,25 @@ public class AddRepeatTest {
 
     @Rule
     public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+
+    @Test
+    public void swipingToNextAfterARepeat_andClickingAdd_addsAnotherRepeat() {
+        new MainMenuPage(rule)
+                .startBlankForm("One Question Repeat")
+                .assertText("Person > 1")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .assertText("Person > 2");
+    }
+
+    @Test
+    public void swipingToNextAfterARepeat_andClickingDoNotAdd_leavesRepeatGroup() {
+        new MainMenuPage(rule)
+                .startBlankForm("One Question Repeat")
+                .assertText("Person > 1")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnDoNotAdd(new EndOfFormPage("One Question Repeat", rule));
+    }
 
     @Test
     public void whenInRepeat_clickingPlus_andClickingAdd_addsRepeatToEndOfSeries() {

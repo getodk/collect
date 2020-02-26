@@ -112,11 +112,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage swipeOnText(String text) {
-        onView(withClassName(endsWith("EditText"))).check(matches(withText(text))).perform(swipeLeft());
-        return this;
-    }
-
     public FormEntryPage clickWidgetButton() {
         onView(withId(R.id.simple_button)).perform(click());
         return this;
