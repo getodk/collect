@@ -24,7 +24,7 @@ import java.util.zip.DataFormatException;
 import androidx.annotation.Nullable;
 import timber.log.Timber;
 
-// ScanQRCodeActivity uses the decorator pattern to process the results from ScannerWithFlashlightActivity
+// ScanQRCodeActivity initiates barcode scanning and process its results
 // it does not have a UI
 public class ScanQRCodeActivity extends CollectAbstractActivity {
     @Override
