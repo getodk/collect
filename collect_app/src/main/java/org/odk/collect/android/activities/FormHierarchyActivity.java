@@ -58,6 +58,8 @@ import static org.odk.collect.android.formentry.javarosawrapper.FormIndexUtils.g
 import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_FORM_CONTROLLER_EVENT;
 
 public class FormHierarchyActivity extends CollectAbstractActivity {
+
+    public static final int RESULT_ADD_REPEAT = 2;
     /**
      * The questions and repeats at the current level.
      * Recreated every time {@link #refreshView()} is called.
@@ -270,7 +272,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             case R.id.menu_add_repeat:
                 FormIndex repeatPromptIndex = getRepeatPromptIndex(repeatGroupPickerIndex);
-                exitToIndex(repeatPromptIndex);
+                Collect.getInstance().getFormController().jumpToIndex(repeatPromptIndex);
+                setResult(RESULT_ADD_REPEAT);
+                finish();
                 return true;
 
             case R.id.menu_go_up:
@@ -744,15 +748,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 return;
             }
         }
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    /**
-     * Jumps to the form filling view with the given index shown.
-     */
-    void exitToIndex(FormIndex index) {
-        Collect.getInstance().getFormController().jumpToIndex(index);
         setResult(RESULT_OK);
         finish();
     }

@@ -37,14 +37,20 @@ public class FormEntryViewModelTest {
 
     @Test
     public void addRepeat_sendsAddRepeatPromptAnalyticsEvent() {
-        viewModel.addRepeat();
+        viewModel.addRepeat(true);
         verify(analytics, only()).logEvent("AddRepeat", "Prompt");
+    }
+
+    @Test
+    public void addRepeat_whenFromPromptIsFalse_sendsAddHierarchyAnalyticsEvent() {
+        viewModel.addRepeat(false);
+        verify(analytics, only()).logEvent("AddRepeat", "Hierarchy");
     }
 
     @Test
     public void promptForNewRepeat_thenAddRepeat_sendsAddRepeatInlineAnalyticsEvent() {
         viewModel.promptForNewRepeat();
-        viewModel.addRepeat();
+        viewModel.addRepeat(true);
         verify(analytics, only()).logEvent("AddRepeat", "Inline");
     }
 
@@ -58,7 +64,7 @@ public class FormEntryViewModelTest {
     @Test
     public void cancelRepeatPrompt_afterPromptForNewRepeatAndAddRepeat_doesNotJumpBack() {
         viewModel.promptForNewRepeat();
-        viewModel.addRepeat();
+        viewModel.addRepeat(true);
 
         viewModel.cancelRepeatPrompt();
         verify(formController, never()).jumpToIndex(startingIndex);

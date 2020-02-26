@@ -745,7 +745,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY) {
-            formEntryViewModel.addRepeat();
+            if (resultCode == FormHierarchyActivity.RESULT_ADD_REPEAT) {
+                formEntryViewModel.addRepeat(false);
+            }
+
             refreshCurrentView();
             return;
         }
@@ -1708,7 +1711,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
 
                 try {
-                    formEntryViewModel.addRepeat();
+                    formEntryViewModel.addRepeat(true);
                 } catch (Exception e) {
                     FormEntryActivity.this.createErrorDialog(
                             e.getMessage(), DO_NOT_EXIT);

@@ -37,12 +37,14 @@ public class FormEntryViewModel extends ViewModel {
         updates.setValue(ViewUpdate.REFRESH);
     }
 
-    public void addRepeat() {
+    public void addRepeat(boolean fromPrompt) {
         if (jumpBackIndex != null) {
             jumpBackIndex = null;
             analytics.logEvent("AddRepeat", "Inline");
-        } else {
+        } else if (fromPrompt) {
             analytics.logEvent("AddRepeat", "Prompt");
+        } else {
+            analytics.logEvent("AddRepeat", "Hierarchy");
         }
 
         getFormController().newRepeat();
