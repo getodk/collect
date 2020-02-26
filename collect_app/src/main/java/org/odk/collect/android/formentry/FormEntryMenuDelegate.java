@@ -1,10 +1,12 @@
 package org.odk.collect.android.formentry;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
@@ -18,10 +20,10 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOC
 
 public class FormEntryMenuDelegate {
 
-    private final Context context;
+    private final AppCompatActivity context;
     private final FormControllerProvider formControllerProvider;
 
-    public FormEntryMenuDelegate(Context context, FormControllerProvider formControllerProvider) {
+    public FormEntryMenuDelegate(AppCompatActivity context, FormControllerProvider formControllerProvider) {
         this.context = context;
         this.formControllerProvider = formControllerProvider;
     }
@@ -73,9 +75,17 @@ public class FormEntryMenuDelegate {
                 Intent pref = new Intent(context, PreferencesActivity.class);
                 context.startActivity(pref);
                 return true;
+
+            case R.id.menu_add_repeat:
+                getFormEntryViewModel().promptForNewRepeat();
+                return true;
         }
 
         return false;
+    }
+
+    private FormEntryViewModel getFormEntryViewModel() {
+        return ViewModelProviders.of(context).get(FormEntryViewModel.class);
     }
 
     private boolean isInRepeat() {

@@ -1042,9 +1042,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
                 backgroundLocationViewModel.backgroundLocationPreferenceToggled();
                 return true;
-
-            case R.id.menu_add_repeat:
-                formEntryViewModel.promptForNewRepeat();
         }
 
         return super.onOptionsItemSelected(item);
@@ -1057,7 +1054,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+    private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -1432,24 +1429,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         try {
             FormController formController = getFormController();
 
-            // get constraint behavior preference value with appropriate default
-            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                    .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-            if (formController != null && formController.currentPromptIsQuestion()) {
-                // if constraint behavior says we should validate on swipe, do so
-                if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                    if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-                        // A constraint was violated so a dialog should be showing.
-                        beenSwiped = false;
-                        return;
-                    }
-
-                    // otherwise, just save without validating (constraints will be validated on
-                    // finalize)
-                } else {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
+            if (saveBeforeMovingForward(formController)) {
+                return;
             }
 
             View next;
@@ -1492,6 +1473,29 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.d(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
+    }
+
+    private boolean saveBeforeMovingForward(FormController formController) {
+        if (formController != null && formController.currentPromptIsQuestion()) {
+            // get constraint behavior preference value with appropriate default
+            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                    .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+
+            // if constraint behavior says we should validate on swipe, do so
+            if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+                    // A constraint was violated so a dialog should be showing.
+                    beenSwiped = false;
+                    return true;
+                }
+
+                // otherwise, just save without validating (constraints will be validated on
+                // finalize)
+            } else {
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
+        }
+        return false;
     }
 
     /**

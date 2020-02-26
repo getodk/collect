@@ -44,10 +44,10 @@ public class RobolectricHelpers {
     }
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz, int theme) {
-        T activity = Robolectric.setupActivity(clazz);
-        activity.setTheme(theme); // Needed so attrs are available
+        ActivityController<T> activity = Robolectric.buildActivity(clazz);
+        activity.get().setTheme(theme); // Needed so attrs are available
 
-        return activity;
+        return activity.setup().get();
     }
 
     public static FragmentActivity createThemedActivity() {
