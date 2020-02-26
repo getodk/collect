@@ -32,7 +32,6 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.UriUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -528,14 +527,12 @@ public class FormsProvider extends ContentProvider {
         return newWhereArgs;
     }
 
-    // Leading slashes are removed from paths to support minSdkVersion < 18:
-    // https://developer.android.com/reference/android/content/UriMatcher
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, UriUtils.stripLeadingUriSlashes(FormsColumns.CONTENT_URI.getPath()), FORMS);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, UriUtils.stripLeadingUriSlashes(FormsColumns.CONTENT_URI.getPath()) + "/#", FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath(), FORMS);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath() + "/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, UriUtils.stripLeadingUriSlashes(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath()), NEWEST_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath(), NEWEST_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);

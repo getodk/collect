@@ -179,8 +179,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     }
 
     private void performFileSearch() {
-        Intent intent = new Intent(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT
-                ? Intent.ACTION_OPEN_DOCUMENT : Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*"); // all file types
         ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);

@@ -14,10 +14,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -106,7 +106,7 @@ public class CaptionedListPreference extends ListPreference {
         button.setOnClickListener(view -> onItemClicked(i));
         item.setOnClickListener(view -> onItemClicked(i));
         parent.addView(item);
-        if (ObjectUtils.equals(value, getSharedPreferences().getString(getKey(), null))) {
+        if (Objects.equals(value, getSharedPreferences().getString(getKey(), null))) {
             button.setChecked(true);
             item.post(() -> item.requestRectangleOnScreen(new Rect(0, 0, item.getWidth(), item.getHeight())));
         }

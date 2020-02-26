@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -33,7 +34,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.io.File;
@@ -76,7 +76,7 @@ public class LabelWidget extends ItemsWidget {
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = ViewIds.generateViewId();
+                final int labelId = View.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;

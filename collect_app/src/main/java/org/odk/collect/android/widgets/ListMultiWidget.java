@@ -41,7 +41,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
@@ -85,7 +84,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
 
                 AppCompatCheckBox c = new AppCompatCheckBox(getContext());
                 c.setTag(i);
-                c.setId(ViewIds.generateViewId());
+                c.setId(View.generateViewId());
                 c.setFocusable(!questionDetails.getPrompt().isReadOnly());
                 c.setEnabled(!questionDetails.getPrompt().isReadOnly());
 
@@ -127,7 +126,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = ViewIds.generateViewId();
+                final int labelId = View.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;

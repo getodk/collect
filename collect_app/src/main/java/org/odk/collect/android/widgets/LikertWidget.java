@@ -27,7 +27,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 import java.util.HashMap;
@@ -202,7 +201,7 @@ public class LikertWidget extends ItemsWidget {
 
     public RadioButton getRadioButton(int i) {
         AppCompatRadioButton button = new AppCompatRadioButton(getContext());
-        button.setId(ViewIds.generateViewId());
+        button.setId(View.generateViewId());
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
         radioButtonsParams.addRule(CENTER_HORIZONTAL, TRUE);

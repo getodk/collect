@@ -44,8 +44,7 @@ limitations under the License.
             android:button="@null"
             app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/instances"
@@ -56,8 +55,7 @@ limitations under the License.
             android:button="@null"
             app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/forms"
@@ -68,8 +66,7 @@ limitations under the License.
             android:button="@null"
             app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cache"
@@ -80,8 +77,7 @@ limitations under the License.
             android:button="@null"
             app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/layers"
@@ -92,8 +88,7 @@ limitations under the License.
             android:button="@null"
             app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/osmdroid"
@@ -104,8 +99,7 @@ limitations under the License.
             android:button="@null"
             app:buttonCompat="@null"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
 
     </LinearLayout>
 </ScrollView>

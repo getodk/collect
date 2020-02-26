@@ -16,95 +16,36 @@
 
 package org.odk.collect.android.activities;
 
-import android.hardware.Camera;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.fragments.Camera2Fragment;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.views.CameraPreview;
 
-import timber.log.Timber;
+import static org.odk.collect.android.utilities.PermissionUtils.isCameraPermissionGranted;
 
 public class CaptureSelfieActivity extends CollectAbstractActivity {
-    private Camera camera;
-    private CameraPreview preview;
-    private int cameraId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isCameraPermissionGranted(this)) {
+            finish();
+            return;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager
                 .LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_capture_selfie);
-        FrameLayout previewLayout = findViewById(R.id.camera_preview);
-
-        try {
-            cameraId = CameraUtils.getFrontCameraId();
-            camera = CameraUtils.getCameraInstance(this, cameraId);
-        } catch (Exception e) {
-            Timber.e(e);
+        if (null == savedInstanceState) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, Camera2Fragment.newInstance())
+                    .commit();
         }
-
-        preview = new CameraPreview(this, camera);
-        previewLayout.addView(preview);
-
-        preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                preview.setEnabled(false);
-                camera.takePicture(null, null, picture);
-            }
-        });
-
         ToastUtils.showLongToast(R.string.take_picture_instruction);
-    }
-
-    private final Camera.PictureCallback picture = new Camera.PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            CameraUtils.savePhoto(new StoragePathProvider().getTmpFilePath(), data);
-            setResult(RESULT_OK);
-            finish();
-        }
-    };
-
-    @Override
-    protected void onPause() {
-        camera = null;
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (camera == null) {
-            setContentView(R.layout.activity_capture_selfie);
-            FrameLayout preview = findViewById(R.id.camera_preview);
-
-            try {
-                cameraId = CameraUtils.getFrontCameraId();
-                camera = CameraUtils.getCameraInstance(this, cameraId);
-            } catch (Exception e) {
-                Timber.e(e);
-            }
-
-            this.preview = new CameraPreview(this, camera);
-            preview.addView(this.preview);
-            preview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    camera.takePicture(null, null, picture);
-                }
-            });
-        }
     }
 }

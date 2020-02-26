@@ -27,9 +27,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginRight="@dimen/margin_standard"
         android:layout_toStartOf="@id/map_view"
-        android:layout_toLeftOf="@id/map_view"
-        android:layout_toEndOf="@id/imageView"
-        android:layout_toRightOf="@id/imageView">
+        android:layout_toEndOf="@id/imageView">
 
         <include layout="@layout/form_chooser_list_item_text" />
     </FrameLayout>
@@ -44,7 +42,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@id/text_view"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
 
         android:layout_marginRight="-16dp"
         android:layout_marginStart="-16dp"

@@ -1,7 +1,6 @@
 package org.odk.collect.android.material;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -62,10 +61,6 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
         toolbar.setNavigationOnClickListener(v -> {
             onCloseClicked();
         });
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            view.findViewById(R.id.action_bar_shadow).setVisibility(View.VISIBLE);
-        }
     }
 
     protected abstract void onCloseClicked();

@@ -24,7 +24,6 @@ import android.database.Cursor;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -2776,16 +2775,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         String snackBarText;
 
-        // Older Android versions don't have the "⋮" character. Only insert it into the text if the
-        // Android version supports it. If the Android version doesn't support it, there will be a
-        // double space where the placeholder is in the text resource. Collapse those spaces.
-        // See https://github.com/opendatakit/collect/pull/2864
         if (backgroundLocationMessage.isMenuCharacterNeeded()) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
-            } else {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "").replace("  ", " ");
-            }
+            snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
         } else {
             snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
         }

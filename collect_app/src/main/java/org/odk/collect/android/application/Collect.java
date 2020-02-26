@@ -16,13 +16,11 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -35,8 +33,6 @@ import androidx.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -65,7 +61,6 @@ import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
-import org.odk.collect.android.utilities.PRNGFixes;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.ByteArrayInputStream;
@@ -199,7 +194,6 @@ public class Collect extends Application {
         singleton = this;
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        installTls12();
         setupDagger();
 
         NotificationUtils.createNotificationChannel(singleton);
@@ -222,7 +216,6 @@ public class Collect extends Application {
 
         reloadSharedPreferences();
 
-        PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         JodaTimeAndroid.init(this);
 
@@ -262,23 +255,6 @@ public class Collect extends Application {
                 .build();
 
         applicationComponent.inject(this);
-    }
-
-    private void installTls12() {
-        if (Build.VERSION.SDK_INT <= 20) {
-            ProviderInstaller.installIfNeededAsync(getApplicationContext(), new ProviderInstaller.ProviderInstallListener() {
-                @Override
-                public void onProviderInstalled() {
-                }
-
-                @Override
-                public void onProviderInstallFailed(int i, Intent intent) {
-                    GoogleApiAvailability
-                            .getInstance()
-                            .showErrorNotification(getApplicationContext(), i);
-                }
-            });
-        }
     }
 
     protected RefWatcher setupLeakCanary() {

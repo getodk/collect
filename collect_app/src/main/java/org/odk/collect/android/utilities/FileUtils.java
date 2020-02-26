@@ -16,12 +16,9 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
@@ -572,34 +569,9 @@ public class FileUtils {
         return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
     }
 
-    /**
-     * Grants read and write permissions to a content URI added to the specified intent.
-     *
-     * For Android > 4.4, the permissions expire when the receiving app's stack is finished. For
-     * Android <= 4.4, the permissions are granted to all applications that can respond to the
-     * intent.
-     *
-     * For true security, the permissions for Android <= 4.4 should be revoked manually but we don't
-     * revoke them because we don't have many users on lower API levels and prior to targeting API
-     * 24+, all apps always had access to the files anyway.
-     */
     public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
-        // bug report: https://issuetracker.google.com/issues/37005552
-        // workaround: https://stackoverflow.com/a/18332000/137744
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager()
-                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-
-            for (ResolveInfo resolveInfo : resInfoList) {
-                String packageName = resolveInfo.activityInfo.packageName;
-                context.grantUriPermission(packageName, uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            }
-        }
     }
 
     /**
@@ -609,19 +581,6 @@ public class FileUtils {
      */
     public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
-        // bug report: https://issuetracker.google.com/issues/37005552
-        // workaround: https://stackoverflow.com/a/18332000/137744
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager()
-                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-
-            for (ResolveInfo resolveInfo : resInfoList) {
-                String packageName = resolveInfo.activityInfo.packageName;
-                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-        }
     }
 
     /** Uses the /sdcard symlink to shorten a path, if it's valid to do so. */

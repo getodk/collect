@@ -148,10 +148,8 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.SplashScreenActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".activities.CaptureSelfieActivity" />
-        <activity android:name=".activities.CaptureSelfieActivityNewApi" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
 
         <!-- Configure this key by setting GOOGLE_MAPS_API_KEY in collect_app/secrets.properties. -->
         <meta-data

@@ -31,7 +31,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -68,7 +67,7 @@ public class SpinnerWidget extends ItemsWidget implements MultiChoiceWidget {
         spinner.setPrompt(questionDetails.getPrompt().getQuestionText());
         spinner.setEnabled(!questionDetails.getPrompt().isReadOnly());
         spinner.setFocusable(!questionDetails.getPrompt().isReadOnly());
-        spinner.setId(ViewIds.generateViewId());
+        spinner.setId(View.generateViewId());
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
