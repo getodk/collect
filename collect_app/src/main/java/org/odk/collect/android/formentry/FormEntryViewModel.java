@@ -7,13 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.GroupDef;
-import org.javarosa.core.model.IFormElement;
 import org.odk.collect.android.logic.FormController;
-
-import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 
 public class FormEntryViewModel extends ViewModel {
 
@@ -32,28 +27,10 @@ public class FormEntryViewModel extends ViewModel {
     }
 
     public void promptForNewRepeat() {
-        FormController formController = getFormController();
-
-        FormIndex index = formController.getFormIndex();
+        FormIndex index = getFormController().getFormIndex();
         jumpBackIndex = index;
-        FormDef formDef = formController.getFormDef();
-        FormIndex parentRepeatGroup = null;
 
-        while (index.getNextLevel() != null) {
-            index = index.getNextLevel();
-
-            IFormElement element = formDef.getChild(index);
-            if (element instanceof GroupDef && ((GroupDef) element).getRepeat()) {
-                parentRepeatGroup = index;
-                break;
-            }
-        }
-
-        if (parentRepeatGroup != null) {
-            formController.jumpToIndex(parentRepeatGroup);
-            formController.stepToNextEventType(EVENT_PROMPT_NEW_REPEAT);
-        }
-
+        getFormController().jumpToNewRepeatPrompt();
         updates.setValue(ViewUpdate.REFRESH);
     }
 
