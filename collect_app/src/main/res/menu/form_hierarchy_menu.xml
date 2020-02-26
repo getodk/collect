@@ -11,7 +11,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_add_child"
+        android:id="@+id/menu_add_repeat"
         android:icon="@drawable/ic_add_circle"
         android:title="@string/add_another_menu"
         android:visible="false"

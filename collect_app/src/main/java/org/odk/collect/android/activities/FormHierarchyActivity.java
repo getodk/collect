@@ -241,7 +241,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
     /** Override to disable this button. */
     protected void showAddButton(boolean shouldShow) {
-        optionsMenu.findItem(R.id.menu_add_child).setVisible(shouldShow);
+        optionsMenu.findItem(R.id.menu_add_repeat).setVisible(shouldShow);
     }
 
     /** Override to disable this button. */
@@ -268,7 +268,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 }, null);
                 return true;
 
-            case R.id.menu_add_child:
+            case R.id.menu_add_repeat:
                 FormIndex repeatPromptIndex = getRepeatPromptIndex(repeatGroupPickerIndex);
                 exitToIndex(repeatPromptIndex);
                 return true;

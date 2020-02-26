@@ -61,4 +61,17 @@ public class AddRepeatTest {
                 .clickOnDoNotAdd(new FormEntryPage("One Question Repeat", rule))
                 .assertText("Person > 1");
     }
+
+    @Test
+    public void whenInHierarchyForRepeat_clickingPlus_addsRepeatAtEndOfSeries() {
+        new MainMenuPage(rule)
+                .startBlankForm("One Question Repeat")
+                .assertText("Person > 1")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickPlus("Person")
+                .assertText("Person > 3");
+    }
 }
