@@ -91,6 +91,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
+    public MainMenuPage assertStorageMigrationBannerIsDisplayed() {
+        onView(withText(R.string.scoped_storage_banner_text)).check(matches(isDisplayed()));
+        onView(withText(R.string.scoped_storage_learn_more)).check(matches(isDisplayed()));
+        return this;
+    }
+
     public MainMenuPage assertStorageMigrationCompletedBannerIsDisplayed() {
         onView(withText(R.string.storage_migration_completed)).check(matches(isDisplayed()));
         onView(withText(R.string.scoped_storage_dismiss)).check(matches(isDisplayed()));
@@ -100,6 +106,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public MainMenuPage assertStorageMigrationCompletedBannerIsNotDisplayed() {
         onView(withId(R.id.storageMigrationBanner)).check(matches(not(isDisplayed())));
         return this;
+    }
+
+    public StorageMigrationDialogPage clickLearnMoreButton() {
+        onView(withId(R.id.storageMigrationBannerLearnMoreButton)).perform(click());
+        return new StorageMigrationDialogPage<>(rule);
     }
 
     public MainMenuPage clickDismissButton() {
