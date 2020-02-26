@@ -1,7 +1,7 @@
 package org.odk.collect.android.formentry.audit;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;

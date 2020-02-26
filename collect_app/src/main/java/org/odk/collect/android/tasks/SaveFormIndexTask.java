@@ -20,7 +20,7 @@ import android.os.AsyncTask;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -120,8 +120,8 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -430,7 +430,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel = ViewModelProviders
-                .of(this, new FormEntryViewModel.Factory(this::getFormController, analytics))
+                .of(this, new FormEntryViewModel.Factory(this::getFormController))
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getUpdates().observe(this, new Observer<FormEntryViewModel.ViewUpdate>() {
@@ -449,7 +449,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
         formSaveViewModel = ViewModelProviders
-                .of(this, new FormSaveViewModel.Factory(this::getFormController))
+                .of(this, new FormSaveViewModel.Factory(this::getFormController, analytics))
                 .get(FormSaveViewModel.class);
 
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);

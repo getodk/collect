@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.FormIndex;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 public class FormEntryViewModel extends ViewModel {
 

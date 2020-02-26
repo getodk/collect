@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;

@@ -32,7 +32,7 @@ import org.joda.time.chrono.GregorianChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
 /**

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.formentry.javarosawrapper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,6 +67,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.javarosawrapper.FormIndexUtils.getPreviousLevel;
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
 
 /**
@@ -893,9 +894,6 @@ public class FormController {
      * Jumps to the next prompt for a repeated instance of the group referenced by the current FormIndex.
      */
     public void jumpToNewRepeatPrompt() {
-        FormIndex parentRepeatGroup = getPreviousLevel(getFormIndex());
-
-        jumpToIndex(parentRepeatGroup);
         stepToNextEventType(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
     }
 

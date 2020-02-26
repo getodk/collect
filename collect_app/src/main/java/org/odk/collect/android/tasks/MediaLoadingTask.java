@@ -13,7 +13,7 @@ import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
