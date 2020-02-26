@@ -56,6 +56,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -71,8 +72,6 @@ import com.google.zxing.integration.android.IntentResult;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.GroupDef;
-import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeElement;
@@ -94,6 +93,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialog;
@@ -295,7 +295,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     MediaLoadingFragment mediaLoadingFragment;
     private FormEntryMenuDelegate optionsMenuDelegate;
-    private FormIndex previousFormIndex;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -331,6 +330,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private BackgroundLocationViewModel backgroundLocationViewModel;
     private IdentityPromptViewModel identityPromptViewModel;
     private FormSaveViewModel formSaveViewModel;
+    private FormEntryViewModel formEntryViewModel;
 
     /**
      * Called when the activity is first created.
@@ -429,9 +429,27 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        FormSaveViewModel.Factory changesReasonViewModelFactory = new FormSaveViewModel.Factory(this::getFormController, analytics);
+        formEntryViewModel = ViewModelProviders
+                .of(this, new FormEntryViewModel.Factory(this::getFormController, analytics))
+                .get(FormEntryViewModel.class);
+
+        formEntryViewModel.getUpdates().observe(this, new Observer<FormEntryViewModel.ViewUpdate>() {
+            @Override
+            public void onChanged(FormEntryViewModel.ViewUpdate update) {
+                if (update != null) {
+                    switch (update) {
+                        case REFRESH:
+                            refreshCurrentView();
+                            break;
+                        case SHOW_NEXT:
+                            showNextView();
+                            break;
+                    }
+                }
+            }
+        });
         formSaveViewModel = ViewModelProviders
-                .of(this, changesReasonViewModelFactory)
+                .of(this, new FormSaveViewModel.Factory(this::getFormController))
                 .get(FormSaveViewModel.class);
 
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
@@ -1033,27 +1051,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return true;
 
             case R.id.menu_add_repeat:
-                previousFormIndex = formController.getFormIndex();
-
-                FormDef formDef = formController.getFormDef();
-                FormIndex index = previousFormIndex;
-                FormIndex parentRepeatGroup = null;
-                while (index.getNextLevel() != null) {
-                    index = index.getNextLevel();
-
-                    IFormElement element = formDef.getChild(index);
-                    if (element instanceof GroupDef && ((GroupDef) element).getRepeat()) {
-                        parentRepeatGroup = index;
-                        break;
-                    }
-                }
-
-                if (parentRepeatGroup != null) {
-                    formController.jumpToIndex(parentRepeatGroup);
-                    formController.stepToNextEventType(EVENT_PROMPT_NEW_REPEAT);
-                }
-
-                refreshCurrentView();
+                formEntryViewModel.promptForNewRepeat();
         }
 
         return super.onOptionsItemSelected(item);
@@ -1754,12 +1752,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 Timber.e(e);
                             }
 
-                            if (previousFormIndex != null) {
-                                getFormController().jumpToIndex(previousFormIndex);
-                                refreshCurrentView();
-                            } else {
-                                showNextView();
-                            }
+                            formEntryViewModel.cancelRepeatPrompt();
                         });
                     }
                 }.start();

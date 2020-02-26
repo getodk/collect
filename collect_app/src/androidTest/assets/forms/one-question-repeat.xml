@@ -7,10 +7,12 @@
                 <data id="one_question_repeat">
                     <person>
                         <age/>
+                        <age2/>
                     </person>
                 </data>
             </instance>
             <bind nodeset="age" type="int"/>
+            <bind nodeset="age2" type="int"/>
         </model>
     </h:head>
     <h:body>
@@ -19,6 +21,9 @@
             <repeat nodeset="/data/person">
                 <input ref="/data/person/age">
                     <label>What is their age?</label>
+                </input>
+                <input ref="/data/person/age2">
+                    <label>Oh what is their age?</label>
                 </input>
             </repeat>
         </group>
