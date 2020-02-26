@@ -110,7 +110,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public StorageMigrationDialogPage clickLearnMoreButton() {
         onView(withId(R.id.storageMigrationBannerLearnMoreButton)).perform(click());
-        return new StorageMigrationDialogPage<>(rule);
+        return new StorageMigrationDialogPage(rule).assertOnPage();
     }
 
     public MainMenuPage clickDismissButton() {
