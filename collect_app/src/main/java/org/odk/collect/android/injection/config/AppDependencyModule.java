@@ -16,6 +16,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
+import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
@@ -249,5 +250,10 @@ public class AppDependencyModule {
     @Provides
     public AdminPasswordProvider providesAdminPasswordProvider() {
         return new AdminPasswordProvider(AdminSharedPreferences.getInstance());
+    }
+
+    @Provides
+    public CollectJobCreator providesCollectJobCreator() {
+        return new CollectJobCreator();
     }
 }

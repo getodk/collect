@@ -104,6 +104,10 @@ public class Collect extends Application {
     @Inject
     UserAgentProvider userAgentProvider;
 
+    @Inject
+    public
+    CollectJobCreator collectJobCreator;
+
     public static Collect getInstance() {
         return singleton;
     }
@@ -203,7 +207,7 @@ public class Collect extends Application {
         try {
             JobManager
                     .create(this)
-                    .addJobCreator(new CollectJobCreator());
+                    .addJobCreator(collectJobCreator);
         } catch (JobManagerCreateException e) {
             Timber.e(e);
         }

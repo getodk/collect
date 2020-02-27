@@ -6,6 +6,8 @@ import android.database.Cursor;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.apache.commons.io.FileUtils;
@@ -24,6 +26,7 @@ import org.odk.collect.android.upload.AutoSendWorker;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -63,7 +66,7 @@ public class StorageMigrator {
         storageMigrationRepository.markMigrationEnd();
     }
 
-    StorageMigrationResult migrate() {
+    public StorageMigrationResult migrate() {
         storageEraser.clearOdkDirOnScopedStorage();
 
         if (isFormUploaderRunning()) {
@@ -95,24 +98,28 @@ public class StorageMigrator {
     }
 
     boolean isFormUploaderRunning() {
-        boolean result = false;
         ListenableFuture<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosByTag(AutoSendWorker.class.getName());
         try {
             for (WorkInfo workInfo : statuses.get()) {
                 if (workInfo.getState() == WorkInfo.State.RUNNING) {
-                    result = true;
-                    break;
+                    return true;
                 }
             }
         } catch (Exception | Error e) {
             Timber.w(e);
         }
 
-        return result;
+        return false;
     }
 
     boolean isFormDownloaderRunning() {
-        return ServerPollingJob.isDownloadingFormsRunning();
+        Set<Job> jobs = JobManager.instance().getAllJobsForTag(ServerPollingJob.TAG);
+        for (Job job : jobs) {
+            if (!job.isFinished()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     boolean moveAppDataToScopedStorage() {
