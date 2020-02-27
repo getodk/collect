@@ -54,9 +54,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public void editingForm() {
-        if (formController.getAuditEventLogger() != null) {
-            formController.getAuditEventLogger().setEditing(true);
-        }
+        formController.getAuditEventLogger().setEditing(true);
     }
 
     public void saveAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
@@ -65,6 +63,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         } catch (JavaRosaException ignored) {
             // ignored
         }
+
+        formController.getAuditEventLogger().flush();
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
@@ -72,9 +72,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return;
         }
 
-        if (formController.getAuditEventLogger() != null) {
-            formController.getAuditEventLogger().flush();
-        }
+        formController.getAuditEventLogger().flush();
 
         SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
 
