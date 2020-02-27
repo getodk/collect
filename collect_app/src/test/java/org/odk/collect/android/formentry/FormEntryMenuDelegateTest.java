@@ -43,7 +43,7 @@ public class FormEntryMenuDelegateTest {
         formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
         formSaveViewModel = mockViewModelProvider(activity, FormSaveViewModel.class).get(FormSaveViewModel.class);
 
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> formController, answersProvider);
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> formController, answersProvider, () -> { });
     }
 
     @Test
@@ -70,7 +70,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormControllerIsNull_hidesAddRepeat() {
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider);
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider, () -> { });
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -81,8 +81,6 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onItemSelected_whenAddRepeat_callsPromptForNewRepeat() {
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider);
-
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
         formEntryMenuDelegate.onPrepare(menu);
@@ -92,9 +90,7 @@ public class FormEntryMenuDelegateTest {
     }
 
     @Test
-    public void onItemSelected_whenAddRepeat_savesScreenAnswers() throws Exception {
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider);
-
+    public void onItemSelected_whenAddRepeat_savesScreenAnswers() {
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
         formEntryMenuDelegate.onPrepare(menu);
