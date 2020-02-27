@@ -85,7 +85,7 @@ public class FormEntryMenuDelegate {
             case R.id.menu_add_repeat:
                 getFormSaveViewModel().saveAnswersForScreen(answersProvider.getAnswers());
                 getFormEntryViewModel().promptForNewRepeat();
-                onScreenChangedListener.onViewChanged();
+                onScreenChangedListener.onMovingForward();
                 return true;
         }
 
@@ -111,6 +111,6 @@ public class FormEntryMenuDelegate {
     }
 
     public interface OnScreenChangedListener {
-        void onViewChanged();
+        void onMovingForward();
     }
 }

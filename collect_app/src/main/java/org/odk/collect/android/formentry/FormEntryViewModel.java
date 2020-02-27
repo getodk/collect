@@ -2,8 +2,6 @@ package org.odk.collect.android.formentry;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,7 +14,6 @@ public class FormEntryViewModel extends ViewModel {
 
     private FormController formController;
     private final Analytics analytics;
-    private final MutableLiveData<FormIndex> updates = new MutableLiveData<>(null);
 
     @Nullable
     private FormIndex jumpBackIndex;
@@ -29,16 +26,11 @@ public class FormEntryViewModel extends ViewModel {
         this.formController = formController;
     }
 
-    public LiveData<FormIndex> getUpdates() {
-        return updates;
-    }
-
     public void promptForNewRepeat() {
         FormIndex index = getFormController().getFormIndex();
         jumpBackIndex = index;
 
         getFormController().jumpToNewRepeatPrompt();
-        updates.setValue(getFormController().getFormIndex());
     }
 
     public void addRepeat(boolean fromPrompt) {
@@ -53,20 +45,19 @@ public class FormEntryViewModel extends ViewModel {
 
         getFormController().newRepeat();
 
-        if (getFormController().indexIsInFieldList()) {
-            updates.setValue(getFormController().getFormIndex());
-        } else {
+        if (!getFormController().indexIsInFieldList()) {
             try {
                 getFormController().stepToNextScreenEvent();
             } catch (JavaRosaException ignored) {
                 // ignored
             }
-
-            updates.setValue(getFormController().getFormIndex());
         }
     }
 
-    public void cancelRepeatPrompt() {
+    /**
+     * Returns true if moving forward or false if moving backwards after cancelling
+     */
+    public boolean cancelRepeatPrompt() {
         analytics.logEvent("AddRepeat", "InlineDecline");
 
         FormController formController = getFormController();
@@ -74,7 +65,7 @@ public class FormEntryViewModel extends ViewModel {
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
-            updates.setValue(getFormController().getFormIndex());
+            return false;
         } else {
             try {
                 getFormController().stepToNextScreenEvent();
@@ -82,7 +73,7 @@ public class FormEntryViewModel extends ViewModel {
                 // ignored
             }
 
-            updates.setValue(getFormController().getFormIndex());
+            return true;
         }
     }
 

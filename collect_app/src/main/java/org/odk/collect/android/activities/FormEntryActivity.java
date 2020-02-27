@@ -362,7 +362,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 this,
                 this::getFormController,
                 () -> getCurrentViewIfODKView().getAnswers(),
-                this::refreshCurrentView
+                this::animateToNextView
         );
 
         nextButton = findViewById(R.id.form_forward_button);
@@ -1441,11 +1441,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         try {
             FormController formController = getFormController();
 
-            if (saveBeforeMovingForward(formController)) {
+            if (saveBeforeNextView(formController)) {
                 return;
             }
-
-            View next;
 
             int originalEvent = formController.getEvent();
             int event = formController.stepToNextScreenEvent();
@@ -1457,38 +1455,42 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            formController.getAuditEventLogger().flush();    // Close events waiting for an end time
-
-            switch (event) {
-                case FormEntryController.EVENT_QUESTION:
-                case FormEntryController.EVENT_GROUP:
-                    // create a savepoint
-                    nonblockingCreateSavePointData();
-                    next = createView(event, true);
-                    showView(next, AnimationType.RIGHT);
-                    break;
-                case FormEntryController.EVENT_END_OF_FORM:
-                case FormEntryController.EVENT_REPEAT:
-                case EVENT_PROMPT_NEW_REPEAT:
-                    next = createView(event, true);
-                    showView(next, AnimationType.RIGHT);
-                    break;
-                case FormEntryController.EVENT_REPEAT_JUNCTURE:
-                    Timber.i("Repeat juncture: %s", formController.getFormIndex().getReference());
-                    // skip repeat junctures until we implement them
-                    break;
-                default:
-                    Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
-                    break;
-            }
+            animateToNextView();
         } catch (JavaRosaException e) {
             Timber.d(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
     }
 
-    private boolean saveBeforeMovingForward(FormController formController) {
-        if (formController != null && formController.currentPromptIsQuestion()) {
+    private void animateToNextView() {
+        int event = getFormController().getEvent();
+
+        switch (event) {
+            case FormEntryController.EVENT_QUESTION:
+            case FormEntryController.EVENT_GROUP:
+                // create a savepoint
+                nonblockingCreateSavePointData();
+                showView(createView(event, true), AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_END_OF_FORM:
+            case FormEntryController.EVENT_REPEAT:
+            case EVENT_PROMPT_NEW_REPEAT:
+                showView(createView(event, true), AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_REPEAT_JUNCTURE:
+                Timber.i("Repeat juncture: %s", getFormController().getFormIndex().getReference());
+                // skip repeat junctures until we implement them
+                break;
+            default:
+                Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+                break;
+        }
+    }
+
+    private boolean saveBeforeNextView(FormController formController) {
+        formController.getAuditEventLogger().flush();    // Close events waiting for an end time
+
+        if (formController.currentPromptIsQuestion()) {
             // get constraint behavior preference value with appropriate default
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                     .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
@@ -1518,14 +1520,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void showPreviousView() {
         if (allowMovingBackwards) {
             state = null;
-            try {
-                FormController formController = getFormController();
-                if (formController != null) {
-                    // The answer is saved on a back swipe, but question constraints are ignored.
-                    if (formController.currentPromptIsQuestion()) {
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    }
+            FormController formController = getFormController();
+            if (formController != null) {
+                // The answer is saved on a back swipe, but question constraints are ignored.
+                if (formController.currentPromptIsQuestion()) {
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                }
 
+                try {
                     if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
                         int event = formController.stepToPreviousScreenEvent();
 
@@ -1545,22 +1547,28 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             // create savepoint
                             nonblockingCreateSavePointData();
                         }
+
                         formController.getAuditEventLogger().flush();    // Close events
-                        View next = createView(event, false);
-                        showView(next, AnimationType.LEFT);
-                    } else {
-                        beenSwiped = false;
+
+                        animateToPreviousView();
                     }
-                } else {
-                    Timber.w("FormController has a null value");
+                } catch (JavaRosaException e) {
+                    Timber.d(e);
+                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
-            } catch (JavaRosaException e) {
-                Timber.d(e);
-                createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+            } else {
+                Timber.w("FormController has a null value");
             }
+
         } else {
             beenSwiped = false;
         }
+    }
+
+    private void animateToPreviousView() {
+        int event = getFormController().getEvent();
+        View next = createView(event, false);
+        showView(next, AnimationType.LEFT);
     }
 
     /**
@@ -1748,8 +1756,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 Timber.e(e);
                             }
 
-                            formEntryViewModel.cancelRepeatPrompt();
-                            refreshCurrentView();
+                            if (formEntryViewModel.cancelRepeatPrompt()) {
+                                animateToNextView();
+                            } else {
+                                animateToPreviousView();
+                            }
                         });
                     }
                 }.start();
@@ -2762,7 +2773,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Displays UI representing the given background location message, if there is one.
      */
-    private void displayUIFor(@Nullable BackgroundLocationManager.BackgroundLocationMessage backgroundLocationMessage) {
+    private void displayUIFor(@Nullable BackgroundLocationManager.BackgroundLocationMessage
+                                      backgroundLocationMessage) {
         if (backgroundLocationMessage == null) {
             return;
         }
