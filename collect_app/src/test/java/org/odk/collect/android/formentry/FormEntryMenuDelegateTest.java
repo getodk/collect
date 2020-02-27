@@ -1,28 +1,29 @@
 package org.odk.collect.android.formentry;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.formentry.questions.AnswersProvider;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.fakes.RoboMenu;
 import org.robolectric.fakes.RoboMenuItem;
 
-import static androidx.lifecycle.ViewModelProvider.Factory;
+import java.util.HashMap;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormEntryMenuDelegateTest {
@@ -31,20 +32,18 @@ public class FormEntryMenuDelegateTest {
     private FormController formController;
     private AppCompatActivity activity;
     private FormEntryViewModel formEntryViewModel;
+    private AnswersProvider answersProvider;
+    private FormSaveViewModel formSaveViewModel;
 
     @Before
     public void setup() {
         activity = RobolectricHelpers.createThemedActivity(AppCompatActivity.class, R.style.Theme_AppCompat);
         formController = mock(FormController.class);
-        formEntryViewModel = ViewModelProviders.of(activity, new Factory() {
-            @NonNull
-            @Override
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) mock(FormEntryViewModel.class);
-            }
-        }).get(FormEntryViewModel.class);
+        answersProvider = mock(AnswersProvider.class);
+        formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
+        formSaveViewModel = mockViewModelProvider(activity, FormSaveViewModel.class).get(FormSaveViewModel.class);
 
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> formController);
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> formController, answersProvider);
     }
 
     @Test
@@ -71,7 +70,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormControllerIsNull_hidesAddRepeat() {
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null);
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider);
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -82,7 +81,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onItemSelected_whenAddRepeat_callsPromptForNewRepeat() {
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null);
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider);
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -90,5 +89,19 @@ public class FormEntryMenuDelegateTest {
 
         formEntryMenuDelegate.onItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel).promptForNewRepeat();
+    }
+
+    @Test
+    public void onItemSelected_whenAddRepeat_savesScreenAnswers() throws Exception {
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepare(menu);
+
+        HashMap answers = new HashMap();
+        when(answersProvider.getAnswers()).thenReturn(answers);
+        formEntryMenuDelegate.onItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        verify(formSaveViewModel).saveAnswersForScreen(answers);
     }
 }

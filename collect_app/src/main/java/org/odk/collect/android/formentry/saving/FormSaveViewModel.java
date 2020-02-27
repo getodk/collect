@@ -10,7 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormControllerProvider;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -21,6 +24,8 @@ import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.utilities.Clock;
+
+import java.util.HashMap;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
@@ -50,6 +55,14 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     public void editingForm() {
         if (getAuditEventLogger() != null) {
             getAuditEventLogger().setEditing(true);
+        }
+    }
+
+    public void saveAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
+        try {
+            formControllerProvider.getFormController().saveAllScreenAnswers(answers, false);
+        } catch (JavaRosaException ignored) {
+            // ignored
         }
     }
 

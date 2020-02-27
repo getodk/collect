@@ -358,7 +358,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
-        optionsMenuDelegate = new FormEntryMenuDelegate(this, this::getFormController);
+        optionsMenuDelegate = new FormEntryMenuDelegate(
+                this,
+                this::getFormController,
+                () -> getCurrentViewIfODKView().getAnswers()
+        );
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {

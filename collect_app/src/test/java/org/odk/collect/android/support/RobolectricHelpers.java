@@ -6,7 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
@@ -21,6 +26,7 @@ import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
 
+import static org.mockito.Mockito.mock;
 import static org.robolectric.Shadows.shadowOf;
 
 public class RobolectricHelpers {
@@ -94,5 +100,15 @@ public class RobolectricHelpers {
         }
 
         return view;
+    }
+
+    public static <V> ViewModelProvider mockViewModelProvider(AppCompatActivity activity, final Class<V> viewModelClass) {
+        return ViewModelProviders.of(activity, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) mock(viewModelClass);
+            }
+        });
     }
 }
