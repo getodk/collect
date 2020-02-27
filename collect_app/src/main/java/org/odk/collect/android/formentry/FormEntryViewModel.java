@@ -10,6 +10,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
+
 public class FormEntryViewModel extends ViewModel {
 
     private FormController formController;
@@ -36,11 +38,11 @@ public class FormEntryViewModel extends ViewModel {
     public void addRepeat(boolean fromPrompt) {
         if (jumpBackIndex != null) {
             jumpBackIndex = null;
-            analytics.logEvent("AddRepeat", "Inline");
+            analytics.logEvent(ADD_REPEAT, "Inline");
         } else if (fromPrompt) {
-            analytics.logEvent("AddRepeat", "Prompt");
+            analytics.logEvent(ADD_REPEAT, "Prompt");
         } else {
-            analytics.logEvent("AddRepeat", "Hierarchy");
+            analytics.logEvent(ADD_REPEAT, "Hierarchy");
         }
 
         getFormController().newRepeat();
@@ -58,7 +60,7 @@ public class FormEntryViewModel extends ViewModel {
      * Returns true if moving forward or false if moving backwards after cancelling
      */
     public boolean cancelRepeatPrompt() {
-        analytics.logEvent("AddRepeat", "InlineDecline");
+        analytics.logEvent(ADD_REPEAT, "InlineDecline");
 
         FormController formController = getFormController();
 
