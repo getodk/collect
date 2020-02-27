@@ -474,7 +474,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formLoaderTask = (FormLoaderTask) data;
         } else if (data == null) {
             if (!newForm) {
-                if (getFormController(true) != null) {
+                if (getFormController() != null) {
                     FormController formController = getFormController();
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                     formSaveViewModel.setFormController(formController);
@@ -655,19 +655,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Nullable
     private FormController getFormController() {
-        return getFormController(false);
+        return Collect.getInstance().getFormController();
     }
-
-    @Nullable
-    private FormController getFormController(boolean formReloading) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            Collect.getInstance().logNullFormControllerEvent(formReloading ? "FormReloading" : "OtherInFormEntryActivity");
-        }
-
-        return formController;
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
