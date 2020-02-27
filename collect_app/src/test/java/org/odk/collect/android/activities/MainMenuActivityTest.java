@@ -17,9 +17,6 @@ import static android.os.Environment.MEDIA_MOUNTED;
 import static junit.framework.Assert.assertEquals;
 import static org.robolectric.Shadows.shadowOf;
 
-/**
- * Unit test for checking {@link ScanQRCodeActivity} launched correctly from {@link MainMenuActivity}
- */
 @RunWith(RobolectricTestRunner.class)
 public class MainMenuActivityTest {
     private MainMenuActivity mainMenuActivity;
