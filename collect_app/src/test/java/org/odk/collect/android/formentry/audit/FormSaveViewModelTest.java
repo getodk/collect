@@ -11,9 +11,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
@@ -63,7 +63,8 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(() -> formController, () -> CURRENT_TIME, formSaver, analytics);
+        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics);
+        viewModel.formLoaded(formController);
     }
 
     @Test

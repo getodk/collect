@@ -2,7 +2,7 @@ package org.odk.collect.android.formentry.audit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;

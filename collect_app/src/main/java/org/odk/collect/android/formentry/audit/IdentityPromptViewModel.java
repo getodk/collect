@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 

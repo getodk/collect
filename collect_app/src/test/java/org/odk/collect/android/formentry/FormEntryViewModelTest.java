@@ -33,7 +33,8 @@ public class FormEntryViewModelTest {
         when(formController.getFormIndex()).thenReturn(startingIndex);
         when(formController.indexIsInFieldList()).thenReturn(false);
 
-        viewModel = new FormEntryViewModel(() -> formController, analytics);
+        viewModel = new FormEntryViewModel(analytics);
+        viewModel.formLoaded(formController);
     }
 
     @Test

@@ -14,16 +14,19 @@ import org.odk.collect.android.formentry.javarosawrapper.FormController;
 
 public class FormEntryViewModel extends ViewModel {
 
-    private final FormControllerProvider formControllerProvider;
+    private FormController formController;
     private final Analytics analytics;
     private final MutableLiveData<FormIndex> updates = new MutableLiveData<>(null);
 
     @Nullable
     private FormIndex jumpBackIndex;
 
-    public FormEntryViewModel(FormControllerProvider formControllerProvider, Analytics analytics) {
-        this.formControllerProvider = formControllerProvider;
+    public FormEntryViewModel(Analytics analytics) {
         this.analytics = analytics;
+    }
+
+    public void formLoaded(FormController formController) {
+        this.formController = formController;
     }
 
     public LiveData<FormIndex> getUpdates() {
@@ -66,7 +69,7 @@ public class FormEntryViewModel extends ViewModel {
     public void cancelRepeatPrompt() {
         analytics.logEvent("AddRepeat", "InlineDecline");
 
-        FormController formController = formControllerProvider.getFormController();
+        FormController formController = getFormController();
 
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
@@ -84,23 +87,21 @@ public class FormEntryViewModel extends ViewModel {
     }
 
     private FormController getFormController() {
-        return formControllerProvider.getFormController();
+        return formController;
     }
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final FormControllerProvider formControllerProvider;
         private final Analytics analytics;
 
-        public Factory(FormControllerProvider formControllerProvider, Analytics analytics) {
-            this.formControllerProvider = formControllerProvider;
+        public Factory(Analytics analytics) {
             this.analytics = analytics;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(formControllerProvider, analytics);
+            return (T) new FormEntryViewModel(analytics);
         }
     }
 }
