@@ -103,4 +103,6 @@
   <string name="smap_sort_by_project_asc">Ascendente por Proyecto, A-Z</string>
   <string name="smap_sort_by_project_desc">Descendente por Proyecto, Z-A</string>
   <string name="smap_no_label">No se ha especificado una etiqueta en Opciones</string>
+  <string name="smap_survey_blocked">El formulario \"%s\" está inactivo en el servidor. Contacte a su administrador para desbloquearlo.</string>
+  <string name="smap_survey_deleted">El formulario \"%s\" se ha eliminado del servidor. Contacte su administrador si necesita que se recupere ese formulario para poder enviar los datos desde su dispositivo.</string>
 </resources>
