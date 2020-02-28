@@ -8,6 +8,7 @@
   the specific language governing permissions and limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,14 +25,13 @@
         layout="@layout/storage_migration_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_action_bar_shadow"/>
+        android:layout_below="@id/toolbar_action_bar_shadow" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/storageMigrationBanner"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/margin_small">
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -43,7 +43,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/margin_standard"
-                android:paddingRight="@dimen/margin_standard">
+                android:paddingTop="@dimen/margin_small"
+                android:paddingRight="@dimen/margin_standard"
+                android:paddingBottom="@dimen/margin_standard">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -55,21 +57,24 @@
                         style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/enter_data" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/review_data"
                         style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/review_data" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/send_data"
                         style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/send_data" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/view_sent_forms"
@@ -84,14 +89,25 @@
                         style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/get_forms" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/manage_forms"
                         style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/manage_files" />
+
+                    <TextView
+                        android:id="@+id/version_sha"
+                        style="TextAppearance.Collect.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/margin_standard"
+                        tools:text="commit sha" />
 
                 </LinearLayout>
             </LinearLayout>
