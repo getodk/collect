@@ -161,12 +161,6 @@ public class Collect extends Application {
         this.externalDataManager = externalDataManager;
     }
 
-    public String getVersionedAppName() {
-        String versionName = BuildConfig.VERSION_NAME;
-        versionName = " " + versionName.replaceFirst("-", "\n");
-        return getString(R.string.app_name) + versionName;
-    }
-
     /**
      * Get a User-Agent string that provides the platform details followed by the application ID
      * and application version name: {@code Dalvik/<version> (platform info) org.odk.collect.android/v<version>}.
