@@ -31,12 +31,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
@@ -86,6 +89,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     @Inject
     GoogleAccountsManager accountsManager;
+
+    @Inject
+    Analytics analytics;
 
     /*
     private ListPreference transportPreference;
@@ -393,6 +399,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 case KEY_FORMLIST_URL:
                 case KEY_SUBMISSION_URL:
                     preference.setSummary(newValue.toString());
+
+                    String customEndpointId = FileUtils.getMd5Hash(new ByteArrayInputStream(newValue.toString().getBytes()));
+                    String action = preference.getKey() + " " + customEndpointId;
+                    analytics.logEvent(AnalyticsEvents.SET_CUSTOM_ENDPOINT, action);
                     break;
             }
             return true;
@@ -423,7 +433,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String urlHash = FileUtils.getMd5Hash(
                 new ByteArrayInputStream(url.getBytes()));
 
-        Collect.getInstance().logRemoteAnalytics("SetServer", scheme + " " + host, urlHash);
+        analytics.logEvent(AnalyticsEvents.SET_SERVER, scheme + " " + host, urlHash);
     }
 
     private void maskPasswordSummary(String password) {
