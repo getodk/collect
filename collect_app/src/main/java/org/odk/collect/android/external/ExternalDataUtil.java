@@ -32,6 +32,7 @@ import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
+import org.odk.collect.android.exception.InvalidSyntaxException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerSearch;
 import org.odk.collect.android.logic.FormInfo;
@@ -177,7 +178,7 @@ public final class ExternalDataUtil {
     }
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
-            XPathFuncExpr xpathfuncexpr) throws FileNotFoundException {
+            XPathFuncExpr xpathfuncexpr) throws FileNotFoundException, InvalidSyntaxException {     // Smap add InvalidSynax Exception
         ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();        // smap
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
@@ -235,7 +236,26 @@ public final class ExternalDataUtil {
             }
             return returnedChoices;
         } catch (Exception e) {
+
             String fileName = String.valueOf(xpathfuncexpr.args[0].eval(null, null));
+
+            String msg = e.getMessage();        // Smap throw SQL errors
+            if(msg != null) {                   // Smap throw SQL errors
+                if(msg.contains("no such column")) {
+                    int idx1 = msg.indexOf("column:");
+                    int idx2 = msg.indexOf('(');
+                    idx1 += 7;
+                    if(idx2 > idx1) {
+                        String columnTitle = msg.substring(idx1, idx2).trim();
+                        if(columnTitle.startsWith("c_")) {
+                            columnTitle = columnTitle.substring(2);
+                        }
+                        String newMsg = Collect.getInstance().getString(R.string.smap_csv_column_nf, columnTitle, fileName);
+                        throw (new InvalidSyntaxException(newMsg));
+                    }
+                }
+            }
+
             if(fileName.startsWith("linked_s")) {    // smap
                 throw(e);
             } else if (!fileName.endsWith(".csv")) {
@@ -247,7 +267,10 @@ public final class ExternalDataUtil {
                 filePath = Collect.getInstance().getFormController().getMediaFolder() + File.separator + fileName;
             }
             if (!new File(filePath).exists()) {
-                throw new FileNotFoundException(filePath);
+                filePath += ".imported";    // smap
+                if (!new File(filePath).exists()) {
+                    throw new FileNotFoundException(filePath);
+                }
             }
 
             return returnedChoices;  // smap
