@@ -85,7 +85,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    new StorageInitializer().createODKDirs();
+                    new StorageInitializer().createOdkDirsOnStorage();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
                             e.getMessage(), EXIT), InstanceUploaderActivity.this);

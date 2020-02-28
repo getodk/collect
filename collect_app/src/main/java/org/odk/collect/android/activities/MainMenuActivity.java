@@ -249,7 +249,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         // external intent
         Timber.i("Starting up, creating directories");
         try {
-            new StorageInitializer().createODKDirs();
+            new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;

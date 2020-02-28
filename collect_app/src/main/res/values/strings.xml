@@ -735,7 +735,7 @@
     <string name="storage_migration_more_details">More details</string>
     <string name="try_again">Try again</string>
     <string name="migrate">Migrate</string>
-    <string name="error">Error:&#160;</string>
+    <string name="error">Error:</string>
     <string name="storage_migration_not_enough_space">You do not have enough space on your internal storage to migrate your data. Please free up some space and try again.</string>
     <string name="storage_migration_form_uploader_is_running">Background form uploader is running. Please try again.</string>
     <string name="storage_migration_form_downloader_is_running">Background form downloader is running. Please try again.</string>

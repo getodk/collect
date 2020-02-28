@@ -193,7 +193,7 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         enableDialog();
 
         errorText.setVisibility(View.VISIBLE);
-        errorText.setText(result.getErrorResultMessage(result, getContext()));
+        errorText.setText(result.getErrorResultMessage(getContext()));
         migrateButton.setText(R.string.try_again);
     }
 

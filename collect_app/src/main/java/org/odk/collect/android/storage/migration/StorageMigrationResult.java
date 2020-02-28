@@ -11,9 +11,9 @@ public enum StorageMigrationResult {
     NOT_ENOUGH_SPACE,
     MOVING_FILES_FAILED;
 
-    public String getErrorResultMessage(StorageMigrationResult result, Context context) {
+    public String getErrorResultMessage(Context context) {
         String errorMessage = context.getString(R.string.error) + " ";
-        switch (result) {
+        switch (this) {
             case NOT_ENOUGH_SPACE:
                 return errorMessage + context.getString(R.string.storage_migration_not_enough_space);
             case FORM_UPLOADER_IS_RUNNING:

@@ -51,7 +51,7 @@ public class FormLoadingUtils {
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
     public static void copyFormToStorage(String formFilename, List<String> mediaFilenames, boolean copyToDatabase) throws IOException {
-        new StorageInitializer().createODKDirs();
+        new StorageInitializer().createOdkDirsOnStorage();
 
         String pathname = copyForm(formFilename);
         if (mediaFilenames != null) {

@@ -1,6 +1,5 @@
 package org.odk.collect.android.storage;
 
-import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
@@ -46,10 +45,7 @@ public class StorageStateProvider {
         }
 
         StatFs stat = new StatFs(scopedStoragePath);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
-        }
-        return 0;
+        return stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
     }
 
     private long getOdkDirSize(StoragePathProvider storagePathProvider) {
