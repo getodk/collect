@@ -24,8 +24,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
-import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -54,6 +52,8 @@ import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import java.io.File;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
@@ -106,7 +106,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         // retrieve answer from data model and update ui
         binaryName = questionDetails.getPrompt().getAnswerText();
-        playButton.setEnabled(binaryName != null);
+        if (binaryName == null) {
+            playButton.setVisibility(GONE);
+        } else {
+            playButton.setEnabled(true);
+        }
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());

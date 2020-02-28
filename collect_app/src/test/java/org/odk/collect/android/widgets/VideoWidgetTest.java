@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
@@ -20,6 +18,8 @@ import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
+
+import androidx.annotation.NonNull;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -131,6 +131,10 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
 
         assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().playButton.getVisibility(), is(View.VISIBLE));
+        if (getWidget().getQuestionDetails().getPrompt().getAnswerText() == null) {
+            assertThat(getWidget().playButton.getVisibility(), is(View.GONE));
+        } else {
+            assertThat(getWidget().playButton.getVisibility(), is(View.VISIBLE));
+        }
     }
 }
