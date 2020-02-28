@@ -37,7 +37,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DES
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
+//import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
@@ -64,7 +64,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String[] COLUMN_NAMES_V8 = {_ID, DISPLAY_NAME, DESCRIPTION,
         JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
         SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-        LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH};
+        //LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH}; // smap
+        LAST_DETECTED_FORM_VERSION_HASH};   // smap
 
     static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V8;
 
@@ -265,7 +266,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion8(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
+        //SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");   // smap
     }
 
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
@@ -325,8 +326,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
-                + GEOMETRY_XPATH + " text);");
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");   // smap
+                //+ GEOMETRY_XPATH + " text);");  // smap
     }
 
     public static void databaseMigrationStarted() {

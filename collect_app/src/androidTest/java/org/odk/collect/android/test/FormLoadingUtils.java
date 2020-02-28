@@ -80,7 +80,7 @@ public class FormLoadingUtils {
         v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
         v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
         v.put(FormsColumns.AUTO_SEND,               formInfo.get(FileUtils.AUTO_SEND));
-        v.put(FormsColumns.GEOMETRY_XPATH,          formInfo.get(FileUtils.GEOMETRY_XPATH));
+        //v.put(FormsColumns.GEOMETRY_XPATH,          formInfo.get(FileUtils.GEOMETRY_XPATH));  // smap
 
         new FormsDao().saveForm(v);
     }

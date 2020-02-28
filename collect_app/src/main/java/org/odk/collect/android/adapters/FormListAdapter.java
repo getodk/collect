@@ -78,10 +78,10 @@ public class FormListAdapter extends SimpleCursorAdapter {
                     v.setText(versionIdText);
                     v.setVisibility(View.VISIBLE);
                 }
-            } else if (columnName.equals(FormsColumns.GEOMETRY_XPATH)) {
-                String xpath = cursor.getString(columnIndex);
-                //view.setVisibility(xpath != null ? View.VISIBLE : View.GONE); // Disable
-                view.setVisibility(View.GONE);      // Disable
+            //} else if (columnName.equals(FormsColumns.GEOMETRY_XPATH)) {   // smap
+            //    String xpath = cursor.getString(columnIndex);
+            //    //view.setVisibility(xpath != null ? View.VISIBLE : View.GONE); // Disable
+            //    view.setVisibility(View.GONE);      // Disable
             } else {
                 view.setVisibility(View.VISIBLE);
                 return originalBinder != null && originalBinder.setViewValue(view, cursor, columnIndex);

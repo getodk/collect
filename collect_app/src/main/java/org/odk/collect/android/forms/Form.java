@@ -38,7 +38,7 @@ public final class Form {
     private final String autoSend;
     private final String autoDelete;
     private final String lastDetectedFormVersionHash;
-    private final String geometryXPath;
+    //private final String geometryXPath;  // smap
 
     private Form(Form.Builder builder) {
         id = builder.id;
@@ -57,7 +57,7 @@ public final class Form {
         autoSend = builder.autoSend;
         autoDelete = builder.autoDelete;
         lastDetectedFormVersionHash = builder.lastDetectedFormVersionHash;
-        geometryXPath = builder.geometryXpath;
+        //geometryXPath = builder.geometryXpath;  // smap
     }
 
     public static class Builder {
@@ -77,7 +77,7 @@ public final class Form {
         private String autoSend;
         private String autoDelete;
         private String lastDetectedFormVersionHash;
-        private String geometryXpath;
+        //private String geometryXpath;  // smap
 
         public Builder id(Long id) {
             this.id = id;
@@ -159,10 +159,10 @@ public final class Form {
             return this;
         }
 
-        public Builder geometryXpath(String geometryXpath) {
-            this.geometryXpath = geometryXpath;
-            return this;
-        }
+        //public Builder geometryXpath(String geometryXpath) {// smap
+        //    //this.geometryXpath = geometryXpath;   // smap
+        //    return this;// smap
+        //}// smap
 
         public Form build() {
             return new Form(this);
@@ -234,7 +234,8 @@ public final class Form {
     }
 
     public String getGeometryXpath() {
-        return geometryXPath;
+        //return geometryXPath;  // smap
+        return null;    // smap
     }
 
     @Override

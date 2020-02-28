@@ -256,7 +256,7 @@ public class FormsDao {
                     int autoSendColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SEND);
                     int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
                     int lastDetectedFormVersionHashColumnIndex = cursor.getColumnIndex(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
-                    int geometryXpathColumnIndex = cursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH);
+                    //int geometryXpathColumnIndex = cursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH);   // smap disable
 
                     Form form = new Form.Builder()
                             .id(cursor.getLong(idColumnIndex))
@@ -275,7 +275,7 @@ public class FormsDao {
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))
                             .lastDetectedFormVersionHash(cursor.getString(lastDetectedFormVersionHashColumnIndex))
-                            .geometryXpath(cursor.getString(geometryXpathColumnIndex))
+                            //.geometryXpath(cursor.getString(geometryXpathColumnIndex))    // smap disable
                             .build();
 
                     forms.add(form);
@@ -303,7 +303,7 @@ public class FormsDao {
         values.put(FormsColumns.LANGUAGE, form.getLanguage());
         values.put(FormsColumns.AUTO_SEND, form.getAutoSend());
         values.put(FormsColumns.AUTO_DELETE, form.getAutoDelete());
-        values.put(FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
+        //values.put(FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());  // smap disable
 
         return values;
     }

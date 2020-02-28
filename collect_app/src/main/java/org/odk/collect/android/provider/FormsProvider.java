@@ -146,7 +146,7 @@ public class FormsProvider extends ContentProvider {
                 + FormsColumns.AUTO_SEND + " text, "
                 + FormsColumns.AUTO_DELETE + " text, "
                 + FormsColumns.LAST_DETECTED_FORM_VERSION_HASH + " text,"
-                + FormsColumns.GEOMETRY_XPATH + " text,"
+                //+ FormsColumns.GEOMETRY_XPATH + " text,"  // smap
                 + FormsColumns.PROJECT + " text,"
                 + FormsColumns.TASKS_ONLY + " text,"
                 + FormsColumns.SOURCE + " text,"
@@ -639,7 +639,7 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
         sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
         sFormsProjectionMap.put(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH, FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
-        sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);
+        //sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);   // smap
     }
 
     static List<String> getFormColumnNames(SQLiteDatabase db) {

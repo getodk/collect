@@ -37,7 +37,7 @@ public class TaskEntry {
     public String instanceId;
     public String formStatus;
     public String formURI;
-    public String geometryXPath;
+    //public String geometryXPath;  // Disable
 
 
 

@@ -187,8 +187,9 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
                 FormsProviderAPI.FormsColumns.JR_FORM_ID,
                 FormsProviderAPI.FormsColumns.JR_VERSION,
                 FormsProviderAPI.FormsColumns.PROJECT,
-                FormsProviderAPI.FormsColumns.DISPLAY_NAME,
-                FormsProviderAPI.FormsColumns.GEOMETRY_XPATH};
+                FormsProviderAPI.FormsColumns.DISPLAY_NAME};
+                //FormsProviderAPI.FormsColumns.GEOMETRY_XPATH};  // smap
+
 
         String selectClause = "(lower(" + FormsProviderAPI.FormsColumns.SOURCE + ")='" + Utilities.getSource() + "' or " +
                 FormsProviderAPI.FormsColumns.SOURCE + " is null)" +
@@ -216,7 +217,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
                 entry.formVersion = formListCursor.getInt(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION));
                 entry.name = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_NAME));
                 entry.project = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.PROJECT));
-                entry.geometryXPath = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH));
+                //entry.geometryXPath = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH));   // smap
                 entry.id = formListCursor.getLong(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
 
                 entries.add(entry);

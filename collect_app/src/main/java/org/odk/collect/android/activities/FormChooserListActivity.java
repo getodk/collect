@@ -190,14 +190,14 @@ public class FormChooserListActivity extends FormListActivity implements
         String[] columnNames = {
             FormsColumns.DISPLAY_NAME,
             FormsColumns.JR_VERSION,
-            hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE,
-            FormsColumns.GEOMETRY_XPATH
+            hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE
+            // FormsColumns.GEOMETRY_XPATH smap
         };
         int[] viewIds = {
             R.id.form_title,
             R.id.form_subtitle,
-            R.id.form_subtitle2,
-            R.id.map_view
+            R.id.form_subtitle2
+            //R.id.map_view     // smap
         };
 
         listAdapter = new FormListAdapter(

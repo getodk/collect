@@ -81,7 +81,7 @@ public class FileUtils {
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
-    public static final String GEOMETRY_XPATH = "geometryXpath";
+    //public static final String GEOMETRY_XPATH = "geometryXpath";   // smap
 
     /** Suffix for the form media directory. */
     public static final String MEDIA_SUFFIX = "-media";
@@ -297,7 +297,7 @@ public class FileUtils {
             fields.put(AUTO_SEND, formDef.getSubmissionProfile().getAttribute("auto-send"));
         }
 
-        fields.put(GEOMETRY_XPATH, getOverallFirstGeoPoint(formDef));
+        //fields.put(GEOMETRY_XPATH, getOverallFirstGeoPoint(formDef));  // smap
         return fields;
     }
 

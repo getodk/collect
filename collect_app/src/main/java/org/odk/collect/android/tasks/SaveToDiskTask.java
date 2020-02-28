@@ -254,8 +254,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         if (Collect.getInstance().getContentResolver().getType(uri).equals(
                 InstanceColumns.CONTENT_ITEM_TYPE)) {
             // TODO: reduce geometry duplication across three branches with different database queries
-            String geometryXpath = getGeometryXpathForInstance(uri);
-            ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
+            //String geometryXpath = getGeometryXpathForInstance(uri);      // smap disable
+            ContentValues geometryContentValues = extractGeometryContentValues(formInstance, null); // smap set geometryXpath null
             if (geometryContentValues != null) {
                 values.putAll(geometryContentValues);
             }
@@ -282,8 +282,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             if (instance != null) {
                 uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
 
-                String geometryXpath = getGeometryXpathForInstance(uri);
-                ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
+                //String geometryXpath = getGeometryXpathForInstance(uri);  // smap
+                ContentValues geometryContentValues = extractGeometryContentValues(formInstance, null); // Smap set geometryXpath null
                 if (geometryContentValues != null) {
                     values.putAll(geometryContentValues);
                 }
@@ -330,11 +330,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     values.put(InstanceColumns.JR_FORM_ID, jrformid);
                     values.put(InstanceColumns.JR_VERSION, jrversion);
 
-                    String geometryXpath = c.getString(c.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
-                    ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
-                    if (geometryContentValues != null) {
-                        values.putAll(geometryContentValues);
-                    }
+                    //String geometryXpath = c.getString(c.getColumnIndex(FormsColumns.GEOMETRY_XPATH)); //smap
+                    //ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath );  // smap
+                    //if (geometryContentValues != null) {  // smap
+                    //    values.putAll(geometryContentValues); // smap
+                    //} // smap
                 }
                 uri = new InstancesDao().saveInstance(values);
             }
@@ -575,7 +575,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 String version = instanceCursor.getString(1);
                 try (Cursor formCursor = new FormsDao().getFormsCursor(jrFormId, version)) {
                     if (formCursor.moveToFirst()) {
-                        return formCursor.getString(formCursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
+                        //return formCursor.getString(formCursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH));  // smap
                     }
                 }
             }
