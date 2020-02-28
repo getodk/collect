@@ -18,8 +18,6 @@ import org.odk.collect.android.preferences.PrefUtils;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import javax.inject.Singleton;
-
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
@@ -37,7 +35,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
  * This is the top-level class that should be used by the rest of the application.
  * The available options on the Maps preferences screen are also defined here.
  */
-@Singleton
 public class MapProvider {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
