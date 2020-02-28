@@ -7,36 +7,42 @@
   OR CONDITIONS OF ANY KIND, either express or implied. See the License for
   the specific language governing permissions and limitations under the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?colorSurface">
 
-    <!-- Toolbar -->
-    <include layout="@layout/toolbar" />
-
-    <include
-        layout="@layout/toolbar_action_bar_shadow"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar" />
+        android:elevation="4dp">
 
-    <include
-        layout="@layout/storage_migration_banner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_action_bar_shadow" />
+        <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            style="@style/Widget.Collect.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/notes"
+            tools:title="ODK Collect" />
 
-    <LinearLayout
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/storageMigrationBanner"
         android:orientation="vertical">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <include
+                layout="@layout/storage_migration_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,7 +108,7 @@
 
                     <TextView
                         android:id="@+id/version_sha"
-                        style="TextAppearance.Collect.Caption"
+                        style="@style/TextAppearance.Collect.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -111,6 +117,7 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-</RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
