@@ -69,7 +69,6 @@
   <string name="load_remote_form_error">Erro na Listagem de Formulários</string>
   <string name="location_provider_accuracy">Usando %1$s. Precisão de %2$s m.</string>
   <string name="location_accuracy">Precisão de %1$s m</string>
-  <string name="main_menu">Menu Principal</string>
     <string name="manage_files">Apagar Formulário Salvo</string>
   <string name="mark_finished">Marcar formulário como finalizado</string>
   <string name="noselect_error">Desculpe, você não selecionou nenhum formulário!</string>

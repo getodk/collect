@@ -91,7 +91,6 @@
     <string name="load_remote_form_error">Error Getting Form List</string>
     <string name="location_provider_accuracy">Using %1$s. Accuracy is %2$s m.</string>
     <string name="location_accuracy">Accuracy is %1$s m</string>
-    <string name="main_menu">Main Menu</string>
     <string name="manage_files">Delete Saved Form</string>
     <string name="mark_finished">Mark form as finalized</string>
     <string name="noselect_error">Sorry, you have not selected any forms!</string>

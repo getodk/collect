@@ -79,7 +79,6 @@
   <string name="load_remote_form_error">Virhe lomakelistaa hakiessa.</string>
   <string name="location_provider_accuracy">%1$s käytössä. Tarkkuus %2$s m.</string>
   <string name="location_accuracy">Tarkkuus %1$s m</string>
-  <string name="main_menu">Päävalikko</string>
     <string name="manage_files">Poista tallennettu lomake</string>
   <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="noselect_error">Pahoittelen, et ole valinnut yhtään lomaketta!</string>

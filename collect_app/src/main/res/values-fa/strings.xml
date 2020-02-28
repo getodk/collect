@@ -67,8 +67,7 @@
   <string name="jump_to_end">به آخر برو</string>
   <string name="jump_to_previous">بالا برو</string>
   <string name="loading_form">در حال آماده سازی فورم</string>
-  <string name="main_menu">منوی اصلی</string>
-  <string name="manage_files">حذف فورم ذخیره شده</string>
+    <string name="manage_files">حذف فورم ذخیره شده</string>
   <string name="no_items_display">هیچ موردی برای نمایش وجورد ندارد.</string>
   <string name="ok">درست است</string>
   <string name="password">پسورد</string>

@@ -78,7 +78,6 @@
   <string name="load_remote_form_error">Не удалось получить список бланков</string>
   <string name="location_provider_accuracy">Использую %1$s. Точность %2$s м.</string>
   <string name="location_accuracy">Точность %1$s м.</string>
-  <string name="main_menu">Главное меню</string>
     <string name="manage_files">Удаление опросов / бланков</string>
   <string name="mark_finished">Пометить опрос как финализированный </string>
   <string name="noselect_error">Не было выбрано ни одного бланка</string>
