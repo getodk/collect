@@ -61,6 +61,18 @@ public class TestMapFragment implements MapFragment {
         return mappedPoints.get(point);
     }
 
+    public void resetState() {
+        zoomCount = 0;
+        animate = false;
+        zoomPoint = null;
+        zoomBoundingBox = null;
+        scaleFactor = 0;
+        zoomLevel = 0;
+        locationListener = null;
+        lastFeatureId = 0;
+        mappedPoints.clear();
+    }
+
     @Override
     public void applyConfig(Bundle config) {
 
@@ -97,11 +109,8 @@ public class TestMapFragment implements MapFragment {
 
     @Override
     public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
-        this.zoomPoint = center;
+        zoomToPoint(center, animate);
         this.zoomLevel = zoom;
-        this.animate = animate;
-
-        zoomCount++;
     }
 
     @Override

@@ -78,10 +78,10 @@ While it's important to read the Dagger [documentation](https://google.github.io
 
 ### Providing dependencies
 
-To declare a new dependency that objects can inject add a `@Provider` method to the `AppDepedencyModule`:
+To declare a new dependency that objects can inject add a `@Provides` method to the `AppDependencyModule`:
 
 ```java
-@Provider
+@Provides
 public MyDependency providesMyDependency() {
     return MyDependency();
 }
