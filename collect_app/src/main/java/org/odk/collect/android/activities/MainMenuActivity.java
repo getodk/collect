@@ -426,7 +426,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle("Collect " + BuildConfig.VERSION_NAME.split("v")[1].split("-")[0]);
+        setTitle("ODK Collect " + BuildConfig.VERSION_NAME.split("v")[1].split("-")[0]);
         setSupportActionBar(toolbar);
     }
 
