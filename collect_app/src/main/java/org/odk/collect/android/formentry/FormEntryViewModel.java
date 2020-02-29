@@ -60,10 +60,7 @@ public class FormEntryViewModel extends ViewModel {
         }
     }
 
-    /**
-     * Returns true if moving forward or false if moving backwards after cancelling
-     */
-    public boolean cancelRepeatPrompt() {
+    public void cancelRepeatPrompt() {
         analytics.logEvent(ADD_REPEAT, "InlineDecline");
 
         FormController formController = getFormController();
@@ -71,15 +68,12 @@ public class FormEntryViewModel extends ViewModel {
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
-            return false;
         } else {
             try {
                 getFormController().stepToNextScreenEvent();
             } catch (JavaRosaException ignored) {
                 // ignored
             }
-
-            return true;
         }
     }
 
