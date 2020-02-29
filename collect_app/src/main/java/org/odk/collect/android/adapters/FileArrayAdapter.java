@@ -33,7 +33,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.DriveListItem;
-import org.odk.collect.android.provider.FormsProviderAPI;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -85,6 +84,8 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 checkBox.setVisibility(View.VISIBLE);
                 if (isNewVersion(item)) {
                     formUpdateAlert.setVisibility(View.VISIBLE);
+                } else {
+                    formUpdateAlert.setVisibility(View.GONE);
                 }
             } else {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_folder);
@@ -119,10 +120,9 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         FormsDao formsDao = new FormsDao();
         Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + File.separator + item.getName());
         if (cursor != null && cursor.getCount() > 0) {
-            cursor.moveToNext();
-            Long savedTime = cursor.getLong(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DATE));
-            Long modifiedTime = item.getDate().getValue();
-            return modifiedTime > savedTime;
+            Long lastModifiedLocal = new File(Collect.FORMS_PATH + File.separator + item.getName()).lastModified();
+            Long lastModifiedServer = item.getDate().getValue();
+            return lastModifiedServer > lastModifiedLocal;
         }
         return false;
     }
