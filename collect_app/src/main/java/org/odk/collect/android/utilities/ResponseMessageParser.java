@@ -48,13 +48,9 @@ public class ResponseMessageParser {
                     String [] parts = messageResponse.split("::");
                     if(parts.length > 1) {
                         if(parts[0].equals("blocked")) {
-                            String msg = Collect.getInstance().getString(R.string.smap_survey_blocked);
-                            msg = msg.replace("%s", String.valueOf(parts[1]));
-                            messageResponse = msg;
+                            messageResponse = Collect.getInstance().getBaseContext().getString(R.string.smap_survey_blocked, String.valueOf(parts[1]));
                         } else if(parts[0].equals("deleted")) {
-                            String msg = Collect.getInstance().getString(R.string.smap_survey_deleted);
-                            msg = msg.replace("%s", String.valueOf(parts[1]));
-                            messageResponse = msg;
+                            messageResponse = Collect.getInstance().getBaseContext().getString(R.string.smap_survey_deleted, String.valueOf(parts[1]));
                         }
 
                     }

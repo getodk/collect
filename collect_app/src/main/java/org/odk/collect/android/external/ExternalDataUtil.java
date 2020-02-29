@@ -250,8 +250,7 @@ public final class ExternalDataUtil {
                         if(columnTitle.startsWith("c_")) {
                             columnTitle = columnTitle.substring(2);
                         }
-                        String newMsg = Collect.getInstance().getString(R.string.smap_csv_column_nf, columnTitle, fileName);
-                        throw (new InvalidSyntaxException(newMsg));
+                        throw (new InvalidSyntaxException(Collect.getInstance().getString(R.string.smap_csv_column_nf, columnTitle, fileName)));
                     }
                 }
             }
