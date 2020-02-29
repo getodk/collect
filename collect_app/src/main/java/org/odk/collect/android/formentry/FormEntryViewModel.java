@@ -28,6 +28,10 @@ public class FormEntryViewModel extends ViewModel {
         this.formController = formController;
     }
 
+    public FormIndex getCurrentIndex() {
+        return getFormController().getFormIndex();
+    }
+
     public void promptForNewRepeat() {
         FormIndex index = getFormController().getFormIndex();
         jumpBackIndex = index;
