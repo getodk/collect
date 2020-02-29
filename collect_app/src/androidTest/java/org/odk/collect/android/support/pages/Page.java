@@ -15,6 +15,7 @@ import androidx.test.runner.lifecycle.Stage;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
+import org.odk.collect.android.support.matchers.ToastMatcher;
 
 import timber.log.Timber;
 
@@ -124,7 +125,7 @@ abstract class Page<T extends Page<T>> {
 
     public T checkIsToastWithMessageDisplayed(String message) {
         onView(withText(message))
-                .inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView()))))
+                .inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
 
         return (T) this;
