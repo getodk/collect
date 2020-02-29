@@ -271,8 +271,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 return true;
 
             case R.id.menu_add_repeat:
-                FormIndex repeatPromptIndex = getRepeatPromptIndex(repeatGroupPickerIndex);
-                Collect.getInstance().getFormController().jumpToIndex(repeatPromptIndex);
+                Collect.getInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
+                Collect.getInstance().getFormController().jumpToNewRepeatPrompt();
                 setResult(RESULT_ADD_REPEAT);
                 finish();
                 return true;
@@ -396,39 +396,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         boolean hideLastMultiplicity = shouldShowRepeatGroupPicker();
 
         return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]), hideLastMultiplicity);
-    }
-
-    /**
-     * Return the index of the "prompt" to add a new child to the given repeat group,
-     * without changing the current index.
-     */
-    public static FormIndex getRepeatPromptIndex(FormIndex repeatIndex) {
-        FormController formController = Collect.getInstance().getFormController();
-        FormIndex originalIndex = formController.getFormIndex();
-
-        // Temporarily jump to the specified repeat group.
-        formController.jumpToIndex(repeatIndex);
-        String repeatRef = repeatIndex.getReference().toString(false);
-        String testRef = "";
-
-        // There may be nested repeat groups within this group; skip over those.
-        while (!repeatRef.equals(testRef)) {
-            int event = formController.stepToNextEventType(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
-
-            if (event == FormEntryController.EVENT_END_OF_FORM) {
-                Timber.w("Failed to find repeat prompt, got end of form instead.");
-                break;
-            }
-
-            testRef = formController.getFormIndex().getReference().toString(false);
-        }
-
-        FormIndex result = formController.getFormIndex();
-
-        // Reset to where we started from.
-        formController.jumpToIndex(originalIndex);
-
-        return result;
     }
 
     /**
