@@ -41,6 +41,7 @@ public class FormEntryMenuDelegateTest {
         formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
         formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
+        formSaveViewModel = mockViewModelProvider(activity, FormSaveViewModel.class).get(FormSaveViewModel.class);
 
         formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> formController, answersProvider, mock(FormIndexAnimationHandler.class));
     }
