@@ -9,12 +9,14 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -119,6 +121,10 @@ public interface AppDependencyComponent {
     void inject(ODKView odkView);
 
     void inject(FormMetadataFragment formMetadataFragment);
+
+    void inject(MainMenuActivity mainMenuActivity);
+
+    void inject(ShowQRCodeFragment showQRCodeFragment);
 
     SmsManager smsManager();
 

@@ -41,8 +41,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -67,6 +69,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -103,6 +107,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
+    @Inject
+    public Analytics analytics;
+
     // private static boolean DO_NOT_EXIT = false;
 
     public static void startActivityAndCloseAllOthers(Activity activity) {
@@ -116,6 +123,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         initToolbar();
+        DaggerUtils.getComponent(this).inject(this);
 
         disableSmsIfNeeded();
 
@@ -377,6 +385,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_configure_qr_code:
+                analytics.logEvent("ScanQRCode", "MainMenu");
                 if ("".equalsIgnoreCase(pw)) {
                     startActivity(new Intent(this, ScanQRCodeActivity.class));
                 } else {

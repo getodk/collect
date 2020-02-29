@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,8 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.ScanQRCodeActivity;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -52,6 +55,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,6 +90,9 @@ public class ShowQRCodeFragment extends Fragment {
     private Intent shareIntent;
     private AlertDialog dialog;
 
+    @Inject
+    public Analytics analytics;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -95,6 +103,12 @@ public class ShowQRCodeFragment extends Fragment {
         setRetainInstance(true);
         generateCode();
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     private void generateCode() {
@@ -147,6 +161,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     @OnClick(R.id.btnScan)
     void scanButtonClicked() {
+        analytics.logEvent("ScanQRCode", "Settings");
         Intent i = new Intent(getActivity(), ScanQRCodeActivity.class);
         startActivity(i);
     }
