@@ -1,4 +1,4 @@
-package org.odk.collect.android.formentry;
+package org.odk.collect.android.formentry.saving;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;

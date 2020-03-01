@@ -2,6 +2,10 @@ package org.odk.collect.android.formentry;
 
 import org.javarosa.core.model.FormIndex;
 
+/**
+ * Responsible for determining how a new "screen" in a form should be animated to based on
+ * the {@link FormIndex}.
+ */
 public class FormIndexAnimationHandler {
 
     private final Listener listener;
@@ -27,6 +31,10 @@ public class FormIndexAnimationHandler {
         lastIndex = index;
     }
 
+    /**
+     * Can be used to update the handler on the starting index in situations
+     * where {@link #handle(FormIndex)} isn't be called.
+     */
     public void setLastIndex(FormIndex lastIndex) {
         this.lastIndex = lastIndex;
     }

@@ -51,8 +51,8 @@ public class FormEntryMenuDelegateTest {
         when(formController.indexContainsRepeatableGroup()).thenReturn(true);
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepare(menu);
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_add_repeat).isVisible(), equalTo(true));
     }
@@ -62,8 +62,8 @@ public class FormEntryMenuDelegateTest {
         when(formController.indexContainsRepeatableGroup()).thenReturn(false);
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepare(menu);
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_add_repeat).isVisible(), equalTo(false));
     }
@@ -73,8 +73,8 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider, mock(FormIndexAnimationHandler.class));
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepare(menu);
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_add_repeat).isVisible(), equalTo(false));
     }
@@ -82,22 +82,22 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenAddRepeat_callsPromptForNewRepeat() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepare(menu);
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
-        formEntryMenuDelegate.onItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel).promptForNewRepeat();
     }
 
     @Test
     public void onItemSelected_whenAddRepeat_savesScreenAnswers() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreate(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepare(menu);
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         HashMap answers = new HashMap();
         when(answersProvider.getAnswers()).thenReturn(answers);
-        formEntryMenuDelegate.onItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formSaveViewModel).saveAnswersForScreen(answers);
     }
 }

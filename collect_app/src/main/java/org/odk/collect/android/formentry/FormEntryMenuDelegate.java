@@ -16,11 +16,12 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
-public class FormEntryMenuDelegate {
+public class FormEntryMenuDelegate implements MenuDelegate {
 
     private final AppCompatActivity context;
     private final FormControllerProvider formControllerProvider;
@@ -34,11 +35,13 @@ public class FormEntryMenuDelegate {
         this.formIndexAnimationHandler = formIndexAnimationHandler;
     }
 
-    public void onCreate(MenuInflater menuInflater, Menu menu) {
+    @Override
+    public void onCreateOptionsMenu(MenuInflater menuInflater, Menu menu) {
         menuInflater.inflate(R.menu.form_menu, menu);
     }
 
-    public void onPrepare(Menu menu) {
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
         FormController formController = formControllerProvider.getFormController();
 
         boolean useability;
@@ -75,7 +78,8 @@ public class FormEntryMenuDelegate {
         menu.findItem(R.id.menu_add_repeat).setVisible(isInRepeat());
     }
 
-    public boolean onItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_preferences:
                 Intent pref = new Intent(context, PreferencesActivity.class);

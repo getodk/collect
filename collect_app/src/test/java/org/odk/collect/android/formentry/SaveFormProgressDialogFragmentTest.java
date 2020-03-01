@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -25,7 +26,7 @@ public class SaveFormProgressDialogFragmentTest {
 
         // Fragment relies on Activity having set up ViewModel
         ViewModelProviders
-                .of(activity, new FormSaveViewModel.Factory(null, null))
+                .of(activity, new FormSaveViewModel.Factory(null))
                 .get(FormSaveViewModel.class);
 
         fragmentManager = activity.getSupportFragmentManager();
