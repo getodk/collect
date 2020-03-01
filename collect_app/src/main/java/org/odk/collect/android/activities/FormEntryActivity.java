@@ -48,7 +48,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -56,7 +55,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.work.Constraints;
@@ -97,19 +95,18 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialog;
-import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
-import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
@@ -121,7 +118,6 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.location.client.GoogleLocationClient;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -184,7 +180,6 @@ import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
@@ -424,7 +419,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void setupViewModels() {
-        backgroundLocationViewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(BackgroundLocationViewModel.class);
+        backgroundLocationViewModel = ViewModelProviders
+                .of(this, new BackgroundLocationViewModel.Factory())
+                .get(BackgroundLocationViewModel.class);
 
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
@@ -940,15 +937,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
             case RequestCodes.GEOSHAPE_CAPTURE:
+            case RequestCodes.GEOTRACE_CAPTURE:
                 String gshr = intent.getStringExtra(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(gshr);
-                }
-                break;
-            case RequestCodes.GEOTRACE_CAPTURE:
-                String traceExtra = intent.getStringExtra(ANSWER_KEY);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(traceExtra);
                 }
                 break;
             case RequestCodes.BEARING_CAPTURE:
@@ -1049,11 +1041,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
-                return true;
-
-            case R.id.track_location:
-                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
-                backgroundLocationViewModel.backgroundLocationPreferenceToggled();
                 return true;
         }
 
@@ -2888,23 +2875,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
         return !(mutableQuestionBeforeSave.getAnswerText() == null && immutableQuestionBeforeSave.getAnswerText() == null
                 || mutableQuestionBeforeSave.getAnswerText().equals(immutableQuestionBeforeSave.getAnswerText()));
-    }
-
-    /**
-     * Build {@link BackgroundLocationViewModel} and its dependencies.
-     */
-    private class FormEntryViewModelFactory implements ViewModelProvider.Factory {
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if (modelClass.equals(BackgroundLocationViewModel.class)) {
-                GoogleLocationClient googleLocationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
-
-                BackgroundLocationManager locationManager =
-                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());
-                return (T) new BackgroundLocationViewModel(locationManager);
-            }
-            return null;
-        }
     }
 }
 

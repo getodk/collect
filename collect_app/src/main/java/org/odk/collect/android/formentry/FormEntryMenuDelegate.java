@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
@@ -81,15 +82,19 @@ public class FormEntryMenuDelegate implements MenuDelegate {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_add_repeat:
+                getFormSaveViewModel().saveAnswersForScreen(answersProvider.getAnswers());
+                getFormEntryViewModel().promptForNewRepeat();
+                formIndexAnimationHandler.handle(getFormEntryViewModel().getCurrentIndex());
+                return true;
+
             case R.id.menu_preferences:
                 Intent pref = new Intent(context, PreferencesActivity.class);
                 context.startActivity(pref);
                 return true;
 
-            case R.id.menu_add_repeat:
-                getFormSaveViewModel().saveAnswersForScreen(answersProvider.getAnswers());
-                getFormEntryViewModel().promptForNewRepeat();
-                formIndexAnimationHandler.handle(getFormEntryViewModel().getCurrentIndex());
+            case R.id.track_location:
+                getBackgroundLocationViewModel().backgroundLocationPreferenceToggled();
                 return true;
         }
 
@@ -102,6 +107,10 @@ public class FormEntryMenuDelegate implements MenuDelegate {
 
     private FormSaveViewModel getFormSaveViewModel() {
         return ViewModelProviders.of(context).get(FormSaveViewModel.class);
+    }
+
+    private BackgroundLocationViewModel getBackgroundLocationViewModel() {
+        return ViewModelProviders.of(context).get(BackgroundLocationViewModel.class);
     }
 
     private boolean isInRepeat() {
