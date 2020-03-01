@@ -1017,6 +1017,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return true;
         }
 
+        // These actions should move into the `FormEntryMenuDelegate`
         FormController formController = getFormController();
         switch (item.getItemId()) {
             case R.id.menu_languages:
