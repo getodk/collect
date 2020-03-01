@@ -1723,19 +1723,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         beenSwiped = false;
         shownAlertDialogIsGroupRepeat = true;
 
-        AddRepeatDialog.show(this, getFormController(), new AddRepeatDialog.Listener() {
+        AddRepeatDialog.show(this, getFormController().getLastGroupText(), new AddRepeatDialog.Listener() {
             @Override
             public void onAddRepeatClicked() {
                 shownAlertDialogIsGroupRepeat = false;
-
-                try {
-                    formEntryViewModel.addRepeat(true);
-                    formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
-                } catch (Exception e) {
-                    FormEntryActivity.this.createErrorDialog(
-                            e.getMessage(), DO_NOT_EXIT);
-                    return;
-                }
+                formEntryViewModel.addRepeat(true);
+                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
             }
 
             @Override
