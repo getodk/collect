@@ -94,7 +94,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.formentry.QuitFormDialog;
+import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
@@ -1917,13 +1917,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * saving
      */
     private void createQuitDialog() {
-        alertDialog = QuitFormDialog.show(this, getFormController(), new QuitFormDialog.Listener() {
+        DialogFragment quitFormDialogFragment = new QuitFormDialogFragment(getFormController(), new QuitFormDialogFragment.Listener() {
             @Override
             public void onSaveChangedClicked() {
                 saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
-                alertDialog.dismiss();
+                finishAndReturnInstance();
             }
-
             @Override
             public void onIgnoreChangesClicked() {
                 // close all open databases of external data.
@@ -1939,10 +1938,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 removeTempInstance();
                 MediaManager.INSTANCE.revertChanges();
                 finishAndReturnInstance();
-
-                alertDialog.dismiss();
             }
         });
+        DialogUtils.showIfNotShowing(quitFormDialogFragment, getSupportFragmentManager());
     }
 
     // Cleanup when user exits a form without saving
