@@ -137,23 +137,6 @@ public class ItemsetDbAdapter {
         return true;
     }
 
-    public boolean tableExists(String tableName) {
-        // select name from sqlite_master where type = 'table'
-        String selection = "type=? and name=?";
-        String[] selectionArgs = {
-                "table", DATABASE_TABLE + tableName
-        };
-        Cursor c = db.query("sqlite_master", null, selection, selectionArgs,
-                null, null, null);
-        boolean exists = false;
-        if (c.getCount() == 1) {
-            exists = true;
-        }
-        c.close();
-        return exists;
-
-    }
-
     public void beginTransaction() {
         db.execSQL("BEGIN");
     }

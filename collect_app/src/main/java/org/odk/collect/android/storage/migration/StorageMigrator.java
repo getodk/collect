@@ -14,7 +14,6 @@ import org.apache.commons.io.FileUtils;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
@@ -31,7 +30,6 @@ import java.util.Set;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.database.ItemsetDbAdapter.KEY_PATH;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
@@ -92,6 +90,8 @@ public class StorageMigrator {
 
         migrateMapLayerPath();
         referenceManager.reset();
+        storageEraser.removeItemsetsDb();
+        storageEraser.clearCache();
         storageEraser.deleteOdkDirFromUnscopedStorage();
 
         return StorageMigrationResult.SUCCESS;
@@ -138,7 +138,6 @@ public class StorageMigrator {
         try {
             migrateFormsDatabase();
             migrateInstancesDatabase();
-            migrateItemsetsDatabase();
         } catch (Exception | Error e) {
             Timber.w(e);
             return false;
@@ -192,28 +191,6 @@ public class StorageMigrator {
         }
         if (cursor != null) {
             cursor.close();
-        }
-    }
-
-    private void migrateItemsetsDatabase() {
-        ItemsetDbAdapter adapter = new ItemsetDbAdapter();
-        adapter.open();
-        Cursor cursor = adapter.getItemsets();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                int idColumnIndex = cursor.getColumnIndex(_ID);
-                int itemsetFilePathColumnIndex = cursor.getColumnIndex(KEY_PATH);
-
-                ContentValues values = new ContentValues();
-                values.put(KEY_PATH, getRelativeFormDbPath(cursor.getString(itemsetFilePathColumnIndex)));
-
-                String[] whereArgs = {String.valueOf(cursor.getLong(idColumnIndex))};
-                adapter.update(values, WHERE_ID, whereArgs);
-            } while (cursor.moveToNext());
-        }
-        if (cursor != null) {
-            cursor.close();
-            adapter.close();
         }
     }
 

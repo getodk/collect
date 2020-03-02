@@ -1,6 +1,8 @@
 package org.odk.collect.android.storage.migration;
 
+import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 
@@ -10,6 +12,14 @@ public class StorageEraser {
 
     public StorageEraser(StoragePathProvider storagePathProvider) {
         this.storagePathProvider = storagePathProvider;
+    }
+
+    void clearCache() {
+        deleteDirectory(new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)));
+    }
+
+    void removeItemsetsDb() {
+        removeFile(storagePathProvider.getDirPath(StorageSubdirectory.CACHE) + File.separator + ItemsetDbAdapter.DATABASE_NAME);
     }
 
     void clearOdkDirOnScopedStorage() {
@@ -28,5 +38,9 @@ public class StorageEraser {
             }
         }
         directoryToBeDeleted.delete();
+    }
+
+    void removeFile(String filePath) {
+        new File(filePath).delete();
     }
 }

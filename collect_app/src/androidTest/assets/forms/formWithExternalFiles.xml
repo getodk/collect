@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <h:head>
+      <h:title>formWithExternalFiles</h:title>
+      <model odk:xforms-version="1.0.0">
+         <instance>
+            <data id="formWithExternalFiles">
+               <name />
+               <fruits1 />
+               <fruits2 />
+               <fruits3 />
+               <calc />
+               <fruits4 />
+               <meta>
+                  <instanceID />
+               </meta>
+            </data>
+         </instance>
+         <instance id="fruits" src="jr://file-csv/fruits.csv" />
+         <instance id="__last-saved" src="jr://instance/last-saved" />
+         <instance id="external_xml" src="jr://file/fruits.xml"></instance>
+         <bind nodeset="/data/name" type="string" />
+         <setvalue event="odk-instance-first-load" ref="/data/name" value=" instance('__last-saved')/data/name " />
+         <bind nodeset="/data/fruits1" type="select1" />
+         <bind nodeset="/data/fruits2" type="string" />
+         <bind nodeset="/data/fruits3" type="string" />
+         <bind calculate="pulldata('fruits', 'name', 'name_key', 'cherry')" nodeset="/data/calc" type="string" />
+         <bind nodeset="/data/fruits4" readonly="true()" type="string" />
+         <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+      </model>
+   </h:head>
+   <h:body>
+      <input ref="/data/name">
+         <label>Name from last-saved file</label>
+      </input>
+      <select1 ref="/data/fruits1">
+         <label>Fruits from external xml file</label>
+            <itemset nodeset="instance('external_xml')/root/item">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+      </select1>
+      <input query="instance('fruits')/root/item[type=&quot;a&quot;]" ref="/data/fruits2">
+         <label>Fruits from external itemset file</label>
+      </input>
+      <select1 appearance="search('fruits')" ref="/data/fruits3">
+         <label>Fruits from search function</label>
+         <item>
+            <label>name</label>
+            <value>name_key</value>
+         </item>
+      </select1>
+      <input ref="/data/fruits4">
+         <label>
+            The fruit <output value=" /data/calc " /> from pulldata function
+         </label>
+      </input>
+   </h:body>
+</h:html>
