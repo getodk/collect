@@ -2,6 +2,8 @@ package org.odk.collect.android.formentry;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,7 +17,9 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
 public class FormEntryViewModel extends ViewModel {
 
     private FormController formController;
+
     private final Analytics analytics;
+    private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
     @Nullable
     private FormIndex jumpBackIndex;
@@ -30,6 +34,10 @@ public class FormEntryViewModel extends ViewModel {
 
     public FormIndex getCurrentIndex() {
         return getFormController().getFormIndex();
+    }
+
+    public LiveData<String> getError() {
+        return error;
     }
 
     public void promptForNewRepeat() {
@@ -54,8 +62,8 @@ public class FormEntryViewModel extends ViewModel {
         if (!getFormController().indexIsInFieldList()) {
             try {
                 getFormController().stepToNextScreenEvent();
-            } catch (JavaRosaException ignored) {
-                // ignored
+            } catch (JavaRosaException exception) {
+                error.setValue(exception.getCause().getMessage());
             }
         }
     }
@@ -71,10 +79,14 @@ public class FormEntryViewModel extends ViewModel {
         } else {
             try {
                 getFormController().stepToNextScreenEvent();
-            } catch (JavaRosaException ignored) {
-                // ignored
+            } catch (JavaRosaException exception) {
+                error.setValue(exception.getCause().getMessage());
             }
         }
+    }
+
+    public void errorDisplayed() {
+        error.setValue(null);
     }
 
     private FormController getFormController() {

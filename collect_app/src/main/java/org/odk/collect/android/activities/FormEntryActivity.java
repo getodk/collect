@@ -439,6 +439,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, new FormEntryViewModel.Factory(analytics))
                 .get(FormEntryViewModel.class);
 
+        formEntryViewModel.getError().observe(this, error -> {
+            if (error != null) {
+                createErrorDialog(error, DO_NOT_EXIT);
+                formEntryViewModel.errorDisplayed();
+            }
+        });
+
         formSaveViewModel = ViewModelProviders
                 .of(this, new FormSaveViewModel.Factory(analytics))
                 .get(FormSaveViewModel.class);

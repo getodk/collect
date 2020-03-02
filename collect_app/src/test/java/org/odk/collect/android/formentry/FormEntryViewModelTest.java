@@ -6,9 +6,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.javarosawrapper.FormController;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.IOException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -43,6 +48,15 @@ public class FormEntryViewModelTest {
 
         viewModel.addRepeat(true);
         verify(formController).stepToNextScreenEvent();
+    }
+
+    @Test
+    public void addRepeat_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithMessage() throws Exception {
+        when(formController.indexIsInFieldList()).thenReturn(false);
+        when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.addRepeat(true);
+        assertThat(viewModel.getError().getValue(), equalTo("OH NO"));
     }
 
     @Test
@@ -96,5 +110,13 @@ public class FormEntryViewModelTest {
 
         viewModel.cancelRepeatPrompt();
         verify(formController, atMostOnce()).jumpToIndex(startingIndex);
+    }
+
+    @Test
+    public void cancelRepeatPrompt_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithMessage() throws Exception {
+        when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.cancelRepeatPrompt();
+        assertThat(viewModel.getError().getValue(), equalTo("OH NO"));
     }
 }
