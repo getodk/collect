@@ -17,7 +17,6 @@
 package org.odk.collect.android.dao;
 
 import android.Manifest;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -194,35 +193,6 @@ public class InstancesDaoTest {
 
         assertThat(formWithGeopointInstance.getGeometryType(), is(nullValue()));
         assertThat(formWithGeopointInstance.getGeometry(), is(nullValue()));
-    }
-
-    @Test
-    public void getValuesFromInstanceObjectTest() {
-        ContentValues values = new InstancesDao().getValuesFromInstanceObject(new Instance.Builder()
-                .displayName("Form with geopoint")
-                .submissionUri("https://fakeSubmission.com")
-                .canEditWhenComplete(true)
-                .instanceFilePath("/my/fake/path")
-                .jrFormId("fake")
-                .jrVersion("1")
-                .status(InstanceProviderAPI.STATUS_SUBMITTED)
-                .lastStatusChangeDate(1487595836793L)
-                .deletedDate(1487695836793L)
-                .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
-                .geometryType("Point")
-                .build());
-
-        assertThat(values.get(InstanceColumns.DISPLAY_NAME), is("Form with geopoint"));
-        assertThat(values.get(InstanceColumns.SUBMISSION_URI), is("https://fakeSubmission.com"));
-        assertThat(values.get(InstanceColumns.CAN_EDIT_WHEN_COMPLETE), is("true"));
-        assertThat(values.get(InstanceColumns.INSTANCE_FILE_PATH), is("/my/fake/path"));
-        assertThat(values.get(InstanceColumns.JR_FORM_ID), is("fake"));
-        assertThat(values.get(InstanceColumns.JR_VERSION), is("1"));
-        assertThat(values.get(InstanceColumns.STATUS), is(InstanceProviderAPI.STATUS_SUBMITTED));
-        assertThat(values.get(InstanceColumns.LAST_STATUS_CHANGE_DATE), is(1487595836793L));
-        assertThat(values.get(InstanceColumns.DELETED_DATE), is(1487695836793L));
-        assertThat(values.get(InstanceColumns.GEOMETRY), is("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}"));
-        assertThat(values.get(InstanceColumns.GEOMETRY_TYPE), is("Point"));
     }
 
     private void fillDatabase() {
