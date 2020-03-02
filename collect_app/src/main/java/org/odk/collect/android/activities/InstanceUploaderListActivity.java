@@ -69,6 +69,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.FILTER_FORMS_TO_SEND;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
@@ -520,7 +521,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                         case 1: // show all
                             showAllMode = true;
                             updateAdapter();
-                            analytics.logEvent("FilterSendForms", "SentAndUnsent");
+                            analytics.logEvent(FILTER_FORMS_TO_SEND, "SentAndUnsent");
                             break;
 
                         case 2:// do nothing

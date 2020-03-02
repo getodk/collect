@@ -46,4 +46,44 @@ public class AnalyticsEvents {
      * Track submission encryption. The action should be a hash of the form definition.
      */
     public static final String ENCRYPT_SUBMISSION = "EncryptSubmission";
+
+    /**
+     * Track changes to the filter applied to the list of forms to send. The action should be a
+     * filter.
+     */
+    public static final String FILTER_FORMS_TO_SEND = "FilterSendForms";
+
+    /**
+     * Track displays of the likert question type. The action should be a hash of the form definition.
+     */
+    public static final String LIKERT = "Likert";
+
+    /**
+     * Track null form controllers. The action should be a description of when this occurred.
+     */
+    public static final String NULL_FORM_CONTROLLER_EVENT = "NullFormControllerEvent";
+
+    /**
+     * Track changes to preferences related to automatic form updates. The action should be the
+     * preference name and the label should be the new preference value.
+     */
+    public static final String AUTO_FORM_UPDATE_PREF_CHANGE = "PreferenceChange";
+
+    /**
+     * Track submissions. The action should describe how it's being sent and the label should be a
+     * hash of the form definition.
+     */
+    public static final String SUBMISSION = "Submission";
+
+    /**
+     * Track form definitions with the saveIncomplete attribute. The action should be saveIncomplete
+     * and the label should be a hash of the form definition.
+     */
+    public static final String SAVE_INCOMPLETE = "WidgetAttribute";
+
+    /**
+     * Track displays of audio question types. The action should be the type of audio question and
+     * the label should be a hash of the form definition.
+     */
+    public static final String AUDIO_QUESTION = "Prompt";
 }

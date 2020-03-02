@@ -67,6 +67,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
@@ -160,7 +161,7 @@ public abstract class QuestionWidget
         String playableAudioURI = getPlayableAudioURI(prompt, referenceManager);
         if (playableAudioURI != null) {
             label.setAudio(playableAudioURI, audioHelper);
-            analytics.logEvent("Prompt", "AudioLabel", questionDetails.getFormAnalyticsID());
+            analytics.logEvent(AUDIO_QUESTION, "AudioLabel", questionDetails.getFormAnalyticsID());
         }
 
         label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));

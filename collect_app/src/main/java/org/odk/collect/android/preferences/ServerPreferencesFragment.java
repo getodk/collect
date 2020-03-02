@@ -31,11 +31,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
-import androidx.appcompat.content.res.AppCompatResources;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -57,6 +54,9 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_CUSTOM_ENDPOINT;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
@@ -405,7 +405,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                     String customEndpointId = FileUtils.getMd5Hash(new ByteArrayInputStream(newValue.toString().getBytes()));
                     String action = preference.getKey() + " " + customEndpointId;
-                    analytics.logEvent(AnalyticsEvents.SET_CUSTOM_ENDPOINT, action);
+                    analytics.logEvent(SET_CUSTOM_ENDPOINT, action);
                     break;
             }
             return true;
@@ -436,7 +436,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String urlHash = FileUtils.getMd5Hash(
                 new ByteArrayInputStream(url.getBytes()));
 
-        analytics.logEvent(AnalyticsEvents.SET_SERVER, scheme + " " + host, urlHash);
+        analytics.logEvent(SET_SERVER, scheme + " " + host, urlHash);
     }
 
     private void maskPasswordSummary(String password) {

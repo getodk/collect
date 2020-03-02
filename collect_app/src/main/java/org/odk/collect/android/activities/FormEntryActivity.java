@@ -177,6 +177,7 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -1620,7 +1621,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());
+                        Collect.getInstance().logRemoteAnalytics(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
                         saveForm(false, false, null, false);
                         autoSaved = true;

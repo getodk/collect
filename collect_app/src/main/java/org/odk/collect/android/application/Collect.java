@@ -374,8 +374,4 @@ public class Collect extends Application {
         String formIdentifier = new FormsDao().getFormTitleForFormIdAndFormVersion(formId, formVersion) + " " + formId;
         return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
-
-    public void logNullFormControllerEvent(String action) {
-        logRemoteAnalytics("NullFormControllerEvent", action, null);
-    }
 }

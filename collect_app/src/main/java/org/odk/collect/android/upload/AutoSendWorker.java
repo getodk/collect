@@ -56,6 +56,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
@@ -171,7 +172,7 @@ public class AutoSendWorker extends Worker {
                 String action = protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
-                Collect.getInstance().logRemoteAnalytics("Submission", action, label);
+                Collect.getInstance().logRemoteAnalytics(SUBMISSION, action, label);
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
