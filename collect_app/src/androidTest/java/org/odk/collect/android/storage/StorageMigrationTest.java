@@ -2,7 +2,7 @@ package org.odk.collect.android.storage;
 
 import android.Manifest;
 
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
@@ -12,6 +12,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.StorageMigrationDialogPage;
 
 import java.util.Arrays;
 
@@ -27,7 +28,7 @@ public class StorageMigrationTest {
             .around(new CopyFormRule("formWithExternalFiles.xml", Arrays.asList("formWithExternalFiles-media/itemsets.csv", "formWithExternalFiles-media/fruits.xml", "formWithExternalFiles-media/fruits.csv", "formWithExternalFiles-media/last-saved.xml"), true));
 
     @Rule
-    public ActivityTestRule<MainMenuActivity> main = new ActivityTestRule<MainMenuActivity>(MainMenuActivity.class) {
+    public IntentsTestRule<MainMenuActivity> main = new IntentsTestRule<MainMenuActivity>(MainMenuActivity.class) {
         @Override
         protected void beforeActivityLaunched() {
             new StorageStateProvider().disableUsingScopedStorage();
@@ -35,7 +36,7 @@ public class StorageMigrationTest {
     };
 
     @Test
-    public void when_migrationIsFinishedWithSuccess_should_formsWorkAsBefore() {
+    public void when_migrationFinishedWithSuccess_should_formsWorkAsBefore() {
         // Fill the form with external files and migrate
         new MainMenuPage(main)
                 .startBlankForm("formWithExternalFiles")
@@ -80,5 +81,68 @@ public class StorageMigrationTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
+    }
+
+    @Test
+    public void when_storageMigrationNotPerformed_should_bannerBeVisible() {
+        new MainMenuPage(main)
+                .assertStorageMigrationBannerIsDisplayed()
+                .rotateToLandscape(new MainMenuPage(main))
+                .assertStorageMigrationBannerIsDisplayed()
+                .rotateToPortrait(new MainMenuPage(main))
+                .assertStorageMigrationBannerIsDisplayed()
+                .recreateActivity()
+                .assertStorageMigrationBannerIsDisplayed();
+    }
+
+    @Test
+    public void when_thereAreNoSavedForms_should_thePromptToSubmitFormsBeNotVisible() {
+        new MainMenuPage(main)
+                .clickLearnMoreButton()
+                .assertStorageMigrationContentWithoutSavedFormsIsVisible();
+    }
+
+    @Test
+    public void when_savedFormsExist_should_thePromptToSubmitFormsBeVisible() {
+        new MainMenuPage(main)
+                .startBlankForm("formWithExternalFiles")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+                .clickLearnMoreButton()
+                .assertStorageMigrationContentWithSavedFormsIsVisible();
+    }
+
+    @Test
+    public void when_moreDetailsButtonClicked_should_odkForumPageAppear() {
+        new MainMenuPage(main)
+                .clickLearnMoreButton()
+                .clickMoreDetails()
+                .assertWebViewOpen();
+    }
+
+    @Test
+    public void when_backButtonPressed_should_storageMigrationDialogPersist() {
+        new MainMenuPage(main)
+                .clickLearnMoreButton()
+                .pressBack(new StorageMigrationDialogPage(main));
+    }
+
+    @Test
+    public void when_cancelButtonPressed_should_storageMigrationDialogBeClosed() {
+        new MainMenuPage(main)
+                .clickLearnMoreButton()
+                .clickCancel();
+    }
+
+    @Test
+    public void when_rotationHappens_should_storageMigrationDialogPersist() {
+        new MainMenuPage(main)
+                .clickLearnMoreButton()
+                .rotateToLandscape(new StorageMigrationDialogPage(main))
+                .rotateToPortrait(new StorageMigrationDialogPage(main));
     }
 }

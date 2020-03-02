@@ -5,10 +5,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.support.ActivityHelpers;
 
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.NoActivityResumedException;
 import androidx.test.rule.ActivityTestRule;
-
-import timber.log.Timber;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -18,6 +15,7 @@ import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.core.IsNot.not;
 
 public class MainMenuPage extends Page<MainMenuPage> {
@@ -118,13 +116,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
-    public MainMenuPage reopenApp() {
-        try {
-            Espresso.pressBack();
-        } catch (NoActivityResumedException e) {
-            Timber.i(e);
-        }
-        rule.launchActivity(null);
+    public MainMenuPage recreateActivity() {
+        getInstrumentation().runOnMainSync(() -> rule.getActivity().recreate());
         return this;
     }
 }
