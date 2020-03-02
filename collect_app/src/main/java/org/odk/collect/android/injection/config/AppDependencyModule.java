@@ -141,19 +141,7 @@ public class AppDependencyModule {
     @Singleton
     public Analytics providesAnalytics(Application application) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
-        FirebaseAnalytics firebaseAnalytics = new FirebaseAnalytics(firebaseAnalyticsInstance);
-
-        return new Analytics() {
-            @Override
-            public void logEvent(String category, String action) {
-                firebaseAnalytics.logEvent(category, action);
-            }
-
-            @Override
-            public void logEvent(String category, String action, String label) {
-                firebaseAnalytics.logEvent(category, action, label);
-            }
-        };
+        return new FirebaseAnalytics(firebaseAnalyticsInstance);
     }
 
     @Provides
