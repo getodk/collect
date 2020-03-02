@@ -143,7 +143,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         Collect.getInstance().getComponent().inject(this);
         setContentView(R.layout.main_menu);
         ButterKnife.bind(this);
-        viewModel = ViewModelProviders.of(this).get(MainMenuViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory()).get(MainMenuViewModel.class);
 
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);
@@ -252,7 +252,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         });
 
-        String versionSHA = viewModel.getVersionSHA();
+        String versionSHA = viewModel.getVersionCommitDescription();
         if (versionSHA != null) {
             versionSHAView.setText(versionSHA);
         } else {
