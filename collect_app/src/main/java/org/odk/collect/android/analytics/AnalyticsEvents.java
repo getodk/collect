@@ -23,4 +23,27 @@ public class AnalyticsEvents {
      */
     public static final String SET_FALLBACK_SHEETS_URL = "SetFallbackSheetsUrl";
 
+    /**
+     * Track displays of the splash screen that are not on first launch. The action should be a hash
+     * of the splash path.
+     */
+    public static final String SHOW_SPLASH_SCREEN = "ShowSplashScreen";
+
+    /**
+     * Track video requests with high resolution setting turned off. The action should be a hash of
+     * the form definition.
+     */
+    public static final String REQUEST_VIDEO_NOT_HIGH_RES = "RequestVideoNotHighRes";
+
+    /**
+     * Track video requests with high resolution setting turned on. This is tracked to contextualize
+     * the counts with the high resolution setting turned off since we expect that video is not very
+     * common overall. The action should be a hash of the form definition.
+     */
+    public static final String REQUEST_HIGH_RES_VIDEO = "RequestHighResVideo";
+
+    /**
+     * Track submission encryption. The action should be a hash of the form definition.
+     */
+    public static final String ENCRYPT_SUBMISSION = "EncryptSubmission";
 }
