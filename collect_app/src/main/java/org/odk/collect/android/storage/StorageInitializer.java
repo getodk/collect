@@ -26,12 +26,7 @@ public class StorageInitializer {
         this.context = context;
     }
 
-    /**
-     * Creates required directories on the SDCard (or other external storage)
-     *
-     * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
-     */
-    public void createODKDirs() throws RuntimeException {
+    public void createOdkDirsOnStorage() throws RuntimeException {
         if (!storageStateProvider.isStorageMounted()) {
             throw new RuntimeException(context.getString(R.string.sdcard_unmounted, Environment.getExternalStorageState()));
         }

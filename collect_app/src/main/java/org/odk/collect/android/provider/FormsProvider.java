@@ -58,7 +58,7 @@ public class FormsProvider extends ContentProvider {
     private synchronized FormsDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
-            new StorageInitializer().createODKDirs();
+            new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
             return null;
         }
@@ -68,10 +68,14 @@ public class FormsProvider extends ContentProvider {
             if (databaseNeedsUpgrade) {
                 FormsDatabaseHelper.databaseMigrationStarted();
             }
-            dbHelper = new FormsDatabaseHelper();
+            recreateDatabaseHelper();
         }
 
         return dbHelper;
+    }
+
+    public static void recreateDatabaseHelper() {
+        dbHelper = new FormsDatabaseHelper();
     }
 
     @Override

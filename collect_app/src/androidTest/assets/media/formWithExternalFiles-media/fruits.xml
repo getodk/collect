@@ -1,0 +1,10 @@
+<root>
+    <item>
+        <name>apple</name>
+        <label>Apple</label>
+    </item>
+    <item>
+        <name>melon</name>
+        <label>Melon</label>
+    </item>
+</root>

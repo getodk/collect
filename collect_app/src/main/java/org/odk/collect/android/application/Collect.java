@@ -55,7 +55,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
@@ -105,6 +104,10 @@ public class Collect extends Application {
     @Inject
     UserAgentProvider userAgentProvider;
 
+    @Inject
+    public
+    CollectJobCreator collectJobCreator;
+
     public static Collect getInstance() {
         return singleton;
     }
@@ -130,8 +133,8 @@ public class Collect extends Application {
          */
         String dirPath = directory.getAbsolutePath();
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        if (dirPath.startsWith(storagePathProvider.getDirPath(StorageSubdirectory.ODK))) {
-            dirPath = dirPath.substring(storagePathProvider.getDirPath(StorageSubdirectory.ODK).length());
+        if (dirPath.startsWith(storagePathProvider.getStorageRootDirPath())) {
+            dirPath = dirPath.substring(storagePathProvider.getStorageRootDirPath().length());
             String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {
@@ -204,7 +207,7 @@ public class Collect extends Application {
         try {
             JobManager
                     .create(this)
-                    .addJobCreator(new CollectJobCreator());
+                    .addJobCreator(collectJobCreator);
         } catch (JobManagerCreateException e) {
             Timber.e(e);
         }

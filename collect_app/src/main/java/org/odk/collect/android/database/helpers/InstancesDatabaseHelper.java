@@ -51,7 +51,6 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  */
 public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "instances.db";
-    public static final String DATABASE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
     public static final String INSTANCES_TABLE_NAME = "instances";
 
     static final int DATABASE_VERSION = 6;
@@ -69,6 +68,10 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     public InstancesDatabaseHelper() {
         super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static String getDatabasePath() {
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
     }
 
     @Override
@@ -222,7 +225,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     public static boolean databaseNeedsUpgrade() {
         boolean isDatabaseHelperOutOfDate = false;
         try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
             isDatabaseHelperOutOfDate = InstancesDatabaseHelper.DATABASE_VERSION != db.getVersion();
             db.close();
         } catch (SQLException e) {

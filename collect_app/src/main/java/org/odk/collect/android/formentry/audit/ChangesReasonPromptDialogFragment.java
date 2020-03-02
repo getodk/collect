@@ -93,4 +93,9 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     protected void onCloseClicked() {
         dismiss();
     }
+
+    @Override
+    protected boolean shouldShowSoftKeyboard() {
+        return true;
+    }
 }

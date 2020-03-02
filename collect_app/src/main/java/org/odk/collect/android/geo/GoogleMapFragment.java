@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -68,7 +69,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     // Bundle keys understood by applyConfig().
     static final String KEY_MAP_TYPE = "MAP_TYPE";
-    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     private GoogleMap map;
     private Marker locationCrosshairs;
@@ -158,7 +158,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void applyConfig(Bundle config) {
         mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        String path = config.getString(KEY_REFERENCE_LAYER);
+        String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
             map.setMapType(mapType);

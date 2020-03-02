@@ -21,7 +21,6 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.DATABASE_PATH;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelperTest.Action.DOWNGRADE;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelperTest.Action.UPGRADE;
@@ -30,6 +29,8 @@ import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 @RunWith(Parameterized.class)
 public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
     enum Action { UPGRADE, DOWNGRADE }
+
+    private static final String DATABASE_PATH = FormsDatabaseHelper.getDatabasePath();
 
     @Parameterized.Parameter
     public Action action;

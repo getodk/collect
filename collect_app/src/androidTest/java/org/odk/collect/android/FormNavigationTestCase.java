@@ -16,8 +16,6 @@
 
 package org.odk.collect.android;
 
-import android.os.Environment;
-
 import org.javarosa.core.model.FormDef;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +23,12 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.test.FormLoadingUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -46,8 +47,6 @@ import static junit.framework.Assert.assertEquals;
  */
 @RunWith(Parameterized.class)
 public class FormNavigationTestCase {
-
-    private static final String FORMS_DIRECTORY = "/odk/forms/";
 
     @Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
@@ -94,7 +93,7 @@ public class FormNavigationTestCase {
 
     private void testIndices(String formName, String[] expectedIndices) throws ExecutionException, InterruptedException {
         try {
-            copyToSdCard(formName);
+            copyToStorage(formName);
         } catch (IOException e) {
             Timber.i(e);
         }
@@ -137,13 +136,13 @@ public class FormNavigationTestCase {
     /**
      * FormLoaderTask loads forms from SD card so we need to put each form there
      */
-    private void copyToSdCard(String formName) throws IOException {
-        FormLoadingUtils.copyFormToSdCard(formName);
+    private void copyToStorage(String formName) throws IOException {
+        FormLoadingUtils.copyFormToStorage(formName);
     }
 
     private static String formPath(String formName) {
-        return Environment.getExternalStorageDirectory().getPath()
-                + FORMS_DIRECTORY
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS)
+                + File.separator
                 + formName;
     }
 }

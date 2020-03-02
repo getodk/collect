@@ -60,7 +60,7 @@ public class InstanceProvider extends ContentProvider {
     private synchronized InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
-            new StorageInitializer().createODKDirs();
+            new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
             return null;
         }
@@ -70,10 +70,14 @@ public class InstanceProvider extends ContentProvider {
             if (databaseNeedsUpgrade) {
                 InstancesDatabaseHelper.databaseMigrationStarted();
             }
-            dbHelper = new InstancesDatabaseHelper();
+            recreateDatabaseHelper();
         }
 
         return dbHelper;
+    }
+
+    public static void recreateDatabaseHelper() {
+        dbHelper = new InstancesDatabaseHelper();
     }
 
     @Override
