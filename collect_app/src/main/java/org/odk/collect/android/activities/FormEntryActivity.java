@@ -2525,10 +2525,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .build();
         OneTimeWorkRequest autoSendWork =
                 new OneTimeWorkRequest.Builder(AutoSendWorker.class)
-                        .addTag(AutoSendWorker.class.getName())
+                        .addTag(AutoSendWorker.TAG)
                         .setConstraints(constraints)
                         .build();
-        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.class.getName(),
+        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG,
                 ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
     }
 

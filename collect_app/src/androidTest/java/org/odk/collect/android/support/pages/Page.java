@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAction;
-
 import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
@@ -16,8 +15,6 @@ import androidx.test.runner.lifecycle.Stage;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
-
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -165,10 +162,6 @@ abstract class Page<T extends Page<T>> {
 
     String getTranslatedString(Integer id) {
         return getCurrentActivity().getString(id);
-    }
-
-    String getTranslatedString(Integer id, List... args) {
-        return getCurrentActivity().getString(id, args);
     }
 
     String getTranslatedString(Integer id, Object... formatArgs) {
