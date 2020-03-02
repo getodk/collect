@@ -17,5 +17,10 @@ public class AnalyticsEvents {
      */
     public static final String SET_CUSTOM_ENDPOINT = "SetCustomEndpoint";
 
+    /**
+     * Track changes to the Google Sheets fallback submission URL setting. The action should be
+     * a hash of the URL.
+     */
+    public static final String SET_FALLBACK_SHEETS_URL = "SetFallbackSheetsUrl";
 
 }

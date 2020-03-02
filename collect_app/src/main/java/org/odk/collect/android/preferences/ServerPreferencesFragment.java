@@ -378,6 +378,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                     if (Validator.isUrlValid(url)) {
                         preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+
+                        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
+                        analytics.logEvent(SET_FALLBACK_SHEETS_URL, urlHash);
                     } else if (url.length() == 0) {
                         preference.setSummary(getString(R.string.google_sheets_url_hint));
                     } else {
