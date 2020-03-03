@@ -5,10 +5,10 @@ import android.preference.PreferenceManager;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.javarosa.core.reference.ReferenceManager;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
@@ -22,13 +22,23 @@ import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN
 public class ResetStateRule implements TestRule {
 
     private final boolean useScopedStorage;
+    private AppDependencyModule appDependencyModule;
 
     public ResetStateRule() {
-        useScopedStorage = false;
+        this(false, null);
     }
 
     public ResetStateRule(boolean useScopedStorage) {
+        this(useScopedStorage, null);
+    }
+
+    public ResetStateRule(AppDependencyModule appDependencyModule) {
+        this(false, appDependencyModule);
+    }
+
+    public ResetStateRule(boolean useScopedStorage, AppDependencyModule appDependencyModule) {
         this.useScopedStorage = useScopedStorage;
+        this.appDependencyModule = appDependencyModule;
     }
 
     @Override
@@ -47,7 +57,11 @@ public class ResetStateRule implements TestRule {
         @Override
         public void evaluate() throws Throwable {
             // Reset any singleton state
-            CollectHelpers.overrideAppDependencyModule(new AppDependencyModule());
+            if (appDependencyModule != null) {
+                CollectHelpers.overrideAppDependencyModule(appDependencyModule);
+            } else {
+                CollectHelpers.overrideAppDependencyModule(new AppDependencyModule());
+            }
 
             // Make sure we clear all our shared prefs - ignore logic that doesn't reset keys
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -55,7 +69,7 @@ public class ResetStateRule implements TestRule {
             context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
             new MetaSharedPreferencesProvider(context).getMetaSharedPreferences().edit().clear().commit();
 
-            // Reset the app in both the old and new storage locations
+            // Reset the app in both the old and new storage locations (just nuke dirs)
             List<Integer> resetActions = Arrays.asList(
                     ResetUtility.ResetAction.RESET_PREFERENCES,
                     ResetUtility.ResetAction.RESET_INSTANCES,
@@ -77,8 +91,9 @@ public class ResetStateRule implements TestRule {
                 new StorageStateProvider().disableUsingScopedStorage();
             }
 
-            // Make sure to clear any state out of JavaRosa
-            ReferenceManager.instance().reset();
+            // Any dependencies (PropertyManager for instance) will already have been
+            // passed to JavaRosa so make sure everything is reset
+            ((Collect) context.getApplicationContext()).initializeJavaRosa();
 
             base.evaluate();
         }

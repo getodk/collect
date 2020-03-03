@@ -21,25 +21,10 @@ import javax.inject.Singleton;
 
 import dagger.Provides;
 
-import static org.odk.collect.android.support.CollectHelpers.overrideAppDependencyModule;
-
 @RunWith(AndroidJUnit4.class)
 public class StorageMigrationCompletedBannerTest {
 
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<MainMenuActivity>(MainMenuActivity.class) {
-        @Override
-        protected void beforeActivityLaunched() {
-            overrideAppDependencyModule(new AppDependencyModule() {
-                @Provides
-                @Singleton
-                public StorageMigrationRepository providesStorageMigrationRepository() {
-                    StorageMigrationRepository storageMigrationRepository = new StorageMigrationRepository();
-                    storageMigrationRepository.setResult(StorageMigrationResult.SUCCESS);
-                    return storageMigrationRepository;
-                }
-            });
-        }
-    };
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -47,7 +32,15 @@ public class StorageMigrationCompletedBannerTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
-            .around(new ResetStateRule(true))
+            .around(new ResetStateRule(true, new AppDependencyModule() {
+                @Provides
+                @Singleton
+                public StorageMigrationRepository providesStorageMigrationRepository() {
+                    StorageMigrationRepository storageMigrationRepository = new StorageMigrationRepository();
+                    storageMigrationRepository.setResult(StorageMigrationResult.SUCCESS);
+                    return storageMigrationRepository;
+                }
+            }))
             .around(rule);
 
     @Test
