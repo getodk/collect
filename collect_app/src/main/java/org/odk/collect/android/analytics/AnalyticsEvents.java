@@ -92,4 +92,10 @@ public class AnalyticsEvents {
      * was launched from.
      */
     public static final String SCAN_QR_CODE = "ScanQRCode";
+
+    /**
+     * Track launches of form definitions that have a background location action. The action should
+     * be a hash of the form definition.
+     */
+    public static final String LAUNCH_FORM_WITH_BG_LOCATION = "LaunchFormWithBGLocation";
 }

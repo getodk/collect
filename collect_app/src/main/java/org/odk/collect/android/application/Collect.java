@@ -351,17 +351,12 @@ public class Collect extends Application {
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getCurrentFormIdentifierHash() {
-        String formIdentifier = "";
         FormController formController = getInstance().getFormController();
         if (formController != null) {
-            if (formController.getFormDef() != null) {
-                String formID = formController.getFormDef().getMainInstance()
-                        .getRoot().getAttributeValue("", "id");
-                formIdentifier = formController.getFormTitle() + " " + formID;
-            }
+            return formController.getCurrentFormIdentifierHash();
         }
 
-        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+        return "";
     }
 
     /**
