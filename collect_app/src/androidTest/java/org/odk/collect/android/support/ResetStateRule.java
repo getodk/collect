@@ -9,6 +9,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.ResetUtility;
@@ -45,9 +46,11 @@ public class ResetStateRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
-            Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            // Reset any singleton state
+            CollectHelpers.overrideAppDependencyModule(new AppDependencyModule());
 
             // Make sure we clear all our shared prefs - ignore logic that doesn't reset keys
+            Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
             PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
             context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
             new MetaSharedPreferencesProvider(context).getMetaSharedPreferences().edit().clear().commit();
@@ -74,7 +77,9 @@ public class ResetStateRule implements TestRule {
                 new StorageStateProvider().disableUsingScopedStorage();
             }
 
+            // Make sure to clear any state out of JavaRosa
             ReferenceManager.instance().reset();
+
             base.evaluate();
         }
     }
