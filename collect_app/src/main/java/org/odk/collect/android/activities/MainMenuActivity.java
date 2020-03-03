@@ -296,12 +296,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-    }
 
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.main_menu));
-        setSupportActionBar(toolbar);
+        setUpStorageMigrationBanner();
     }
 
     @Override
@@ -434,6 +430,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(getString(R.string.main_menu));
+        setSupportActionBar(toolbar);
     }
 
     private void countSavedForms() {
