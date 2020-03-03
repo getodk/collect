@@ -6,8 +6,6 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 
-import static org.odk.collect.android.utilities.FileUtils.deleteDirectory;
-
 public class StorageEraser {
 
     private final StoragePathProvider storagePathProvider;
@@ -30,6 +28,16 @@ public class StorageEraser {
 
     void deleteOdkDirFromUnscopedStorage() {
         deleteDirectory(new File(storagePathProvider.getUnscopedStorageRootDirPath()));
+    }
+
+    private static void deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        directoryToBeDeleted.delete();
     }
 
     void removeFile(String filePath) {
