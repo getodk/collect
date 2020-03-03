@@ -25,8 +25,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,25 +33,29 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.migration.StorageMigrationDialog;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -85,7 +87,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogCallback {
-
     private static final boolean EXIT = true;
     // buttons
     private Button manageFilesButton;
@@ -94,6 +95,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Button reviewDataButton;
     private Button getFormsButton;
     private AlertDialog alertDialog;
+    private MenuItem qrcodeScannerMenuItem;
     private int completedCount;
     private int savedCount;
     private int viewSentCount;
@@ -102,6 +104,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
+
+    @Inject
+    public Analytics analytics;
 
     @BindView(R.id.storageMigrationBanner)
     LinearLayout storageMigrationBanner;
@@ -141,6 +146,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setContentView(R.layout.main_menu);
         ButterKnife.bind(this);
         initToolbar();
+        DaggerUtils.getComponent(this).inject(this);
+
         disableSmsIfNeeded();
 
         storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
@@ -308,6 +315,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
 
         setButtonsVisibility();
+        invalidateOptionsMenu();
         setUpStorageMigrationBanner();
     }
 
@@ -389,12 +397,28 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        qrcodeScannerMenuItem = menu.findItem(R.id.menu_configure_qr_code);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        qrcodeScannerMenuItem.setVisible(this.getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0).getBoolean(AdminKeys.KEY_QR_CODE_SCANNER, true));
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_configure_qr_code:
+                analytics.logEvent("ScanQRCode", "MainMenu");
+
+                if (adminPasswordProvider.isAdminPasswordSet()) {
+                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.SCAN_QR_CODE), getSupportFragmentManager());
+                } else {
+                    startActivity(new Intent(this, ScanQRCodeActivity.class));
+                }
+                return true;
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
@@ -565,6 +589,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 DialogUtils
                         .showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager())
                         .startStorageMigration();
+                break;
+            case SCAN_QR_CODE:
+                startActivity(new Intent(this, ScanQRCodeActivity.class));
                 break;
         }
     }

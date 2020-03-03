@@ -484,7 +484,7 @@
   <string name="select_time">الوقت</string>
   <string name="no_date_selected">لم يتم اختيار التاريخ</string>
   <string name="no_time_selected">لم يتم اختيار الوقت</string>
-  <string name="import_settings">استيراد الإعدادات</string>
+  <string name="configure_via_qr_code">استيراد الإعدادات</string>
   <string name="qr_code">كود QR</string>
   <string name="scan_qrcode">قراءة كود QR</string>
   <string name="successfully_imported_settings">تم استيراد الإعدادات بنجاح…</string>
@@ -497,7 +497,6 @@
   <string name="qrcode_without_passwords">كود QR فقط.</string>
   <string name="qrcode_with_admin_password">كود QR بالاضافة لكلمة مرور المدير</string>
   <string name="qrcode_with_server_password">كود QR بالاضافة لكلمة مرور الخادم</string>
-  <string name="import_export_settings">استيراد وتصدير الإعدادات</string>
   <string name="qrcode_scanner_prompt">قارء كود QR</string>
   <string name="barcode_scanner_prompt">قارء باركود</string>
   <string name="server_password">كلمة مرور الخادم</string>
