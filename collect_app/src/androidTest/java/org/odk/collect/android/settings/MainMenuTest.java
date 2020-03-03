@@ -2,6 +2,10 @@ package org.odk.collect.android.settings;
 
 import android.Manifest;
 
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -11,10 +15,6 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AdminSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuTest {
@@ -40,7 +40,7 @@ public class MainMenuTest {
                 .pressBack(new AdminSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
-                .checkIfTextDoesNotExist(R.string.scan_qrcode_overflow_menu);
+                .checkIfTextDoesNotExist(R.string.configure_via_qr_code);
     }
 
 }

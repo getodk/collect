@@ -495,7 +495,6 @@
     <string name="no_time_selected">No time selected</string>
     <string name="configure_via_qr_code">Configure via QR code</string>
     <string name="qr_code">QR code configuration</string>
-    <string name="scan_qrcode_overflow_menu">Scan QR code</string>
     <string name="scan_qrcode">Scan code from other device</string>
     <string name="successfully_imported_settings">Settings imported successfully</string>
     <string name="encoding_max_limit">Maximum characters limit reached: QR code can\'t be generated for all settings</string>
