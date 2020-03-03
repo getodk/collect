@@ -1,6 +1,7 @@
 package org.odk.collect.android.support;
 
 import android.content.Context;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,12 +13,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.utilities.ResetUtility;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
 
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
+import static org.odk.collect.android.utilities.FileUtils.deleteDirectory;
 
 public class ResetStateRule implements TestRule {
 
@@ -70,19 +70,8 @@ public class ResetStateRule implements TestRule {
             new MetaSharedPreferencesProvider(context).getMetaSharedPreferences().edit().clear().commit();
 
             // Reset the app in both the old and new storage locations (just nuke dirs)
-            List<Integer> resetActions = Arrays.asList(
-                    ResetUtility.ResetAction.RESET_PREFERENCES,
-                    ResetUtility.ResetAction.RESET_INSTANCES,
-                    ResetUtility.ResetAction.RESET_FORMS,
-                    ResetUtility.ResetAction.RESET_LAYERS,
-                    ResetUtility.ResetAction.RESET_CACHE,
-                    ResetUtility.ResetAction.RESET_OSM_DROID
-            );
-
-            new StorageStateProvider().disableUsingScopedStorage();
-            new ResetUtility().reset(context, resetActions);
-            new StorageStateProvider().enableUsingScopedStorage();
-            new ResetUtility().reset(context, resetActions);
+            deleteDirectory(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "odk"));
+            deleteDirectory(context.getExternalFilesDir(null));
 
             // Setup storage location for tests
             if (useScopedStorage) {
