@@ -42,6 +42,7 @@
             android:paddingRight="@dimen/margin_standard"
             android:paddingBottom="@dimen/margin_standard"
             android:scaleType="fitStart"
+            android:adjustViewBounds="true"
             android:visibility="gone" />
 
         <TextView
