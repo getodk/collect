@@ -16,15 +16,11 @@ package org.odk.collect.android.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +30,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -105,9 +104,9 @@ public class ShowQRCodeFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        DaggerUtils.getComponent(activity).inject(this);
     }
 
     private void generateCode() {
