@@ -268,8 +268,8 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
         return formLoaderTask != null && formLoaderTask.isCancelled();
     }
 
-    // Create a metadata table with a simple schema as needed to address a bug. This metadata table
-    // is not meant to evolve since this is a legacy feature.
+    // Create a metadata table with a single column that keeps track of the date of the last import
+    // of this data set.
     protected static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) throws Exception {
         final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
         final String lastModifiedColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_LAST_MODIFIED);

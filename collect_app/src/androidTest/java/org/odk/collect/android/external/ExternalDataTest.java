@@ -57,11 +57,6 @@ public class ExternalDataTest {
         return externalDataMap;
     }
 
-    private static SQLiteDatabase openDatabase(File databaseFile) {
-        SQLiteDatabase.OpenParams.Builder paramsBuilder = new SQLiteDatabase.OpenParams.Builder();
-        return SQLiteDatabase.openDatabase(databaseFile, paramsBuilder.build());
-    }
-
     @Test
     public void testCreateDBonImportCSV() {
         Map<String, File> externalDataMap = makeExternalDataMap(csvFile);
@@ -71,7 +66,7 @@ public class ExternalDataTest {
 
         // Check expected table and metadata table
         Assert.assertTrue(dbFile.exists());
-        SQLiteDatabase db = openDatabase(dbFile);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         Assert.assertNotNull(db);
         Assert.assertTrue(SQLiteUtils.doesTableExist(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME));
         Assert.assertTrue(SQLiteUtils.doesTableExist(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME));
@@ -126,14 +121,14 @@ public class ExternalDataTest {
         Assert.assertTrue(dbFile.exists());
 
         // Remove the metadata table (mimicking prior versions without the metadata table)
-        SQLiteDatabase db = openDatabase(dbFile);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         SQLiteUtils.dropTable(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME);
         db.close();
         // Reimport
         externalDataReader = new ExternalDataReaderImpl(null);
         externalDataReader.doImport(externalDataMap);
         Assert.assertTrue(dbFile.exists());
-        db = openDatabase(dbFile);
+        db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         Assert.assertTrue("metadata table should be recreated", SQLiteUtils.doesTableExist(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME));
         db.close();
     }
@@ -153,7 +148,7 @@ public class ExternalDataTest {
         // Fake an update by rewinding the clock on the database metadata timestamp field
         long originalTimestamp = csvFile.lastModified();
         long olderTimestamp = originalTimestamp - 1000;
-        SQLiteDatabase db = openDatabase(dbFile);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
 
         ContentValues metadata = new ContentValues();
         metadata.put(ExternalDataUtil.COLUMN_LAST_MODIFIED, olderTimestamp);
@@ -164,7 +159,7 @@ public class ExternalDataTest {
         // Reimport
         externalDataReader = new ExternalDataReaderImpl(null);
         externalDataReader.doImport(externalDataMap);
-        db = openDatabase(dbFile);
+        db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
 
         // Check the metadata table import timestamp
         metadataLastModified = ExternalSQLiteOpenHelper.getLastImportTimestamp(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME, csvFile);
@@ -180,7 +175,7 @@ public class ExternalDataTest {
         ExternalDataReader externalDataReader = new ExternalDataReaderImpl(null);
         externalDataReader.doImport(externalDataMap);
         Assert.assertTrue(dbFile.exists());
-        SQLiteDatabase db = openDatabase(dbFile);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         Cursor cursor = db.rawQuery(selectStarQuery, null);
         Assert.assertNotNull(cursor);
         Assert.assertTrue(cursor.getCount() > 0);
@@ -196,7 +191,7 @@ public class ExternalDataTest {
         // Reimport
         externalDataReader = new ExternalDataReaderImpl(null);
         externalDataReader.doImport(externalDataMap);
-        db = openDatabase(dbFile);
+        db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         cursor = db.rawQuery(selectStarQuery, null);
         Assert.assertNotNull(cursor);
         Assert.assertEquals("expected zero rows of data after reimporting unchanged file", 0, cursor.getCount());
