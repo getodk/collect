@@ -52,15 +52,15 @@ limitations under the License.
             android:id="@+id/min_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layoutDirection="locale"
+            android:textDirection="locale"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/max_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:textSize="20sp" />
     </RelativeLayout>

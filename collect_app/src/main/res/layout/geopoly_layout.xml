@@ -39,15 +39,11 @@
             android:visibility="gone"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:paddingBottom="20dp"
-            android:drawableRight="@drawable/ic_distance_wrapped"
             android:drawableEnd="@drawable/ic_distance_wrapped"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/scroller"
             android:layout_toStartOf="@+id/scroller"/>
 
         <ScrollView
@@ -55,7 +51,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true">
 
             <LinearLayout

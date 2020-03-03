@@ -36,6 +36,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -69,6 +70,9 @@ public class ServerPollingJob extends Job {
     @Inject
     FormListDownloader formListDownloader;
 
+    @Inject
+    StorageMigrationRepository storageMigrationRepository;
+
     public ServerPollingJob() {
         Collect.getInstance().getComponent().inject(this);
     }
@@ -76,7 +80,7 @@ public class ServerPollingJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
-        if (!isDeviceOnline()) {
+        if (!isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
             return Result.FAILURE;
         }
 

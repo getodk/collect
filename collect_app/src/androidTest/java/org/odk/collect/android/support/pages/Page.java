@@ -17,6 +17,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 
+import java.util.List;
+
 import timber.log.Timber;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -163,6 +165,10 @@ abstract class Page<T extends Page<T>> {
 
     String getTranslatedString(Integer id) {
         return getCurrentActivity().getString(id);
+    }
+
+    String getTranslatedString(Integer id, List... args) {
+        return getCurrentActivity().getString(id, args);
     }
 
     String getTranslatedString(Integer id, Object... formatArgs) {

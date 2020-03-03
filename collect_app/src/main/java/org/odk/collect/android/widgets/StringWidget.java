@@ -22,6 +22,7 @@ import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.utilities.ViewIds;
 
 import timber.log.Timber;
 
@@ -129,7 +129,7 @@ public class StringWidget extends QuestionWidget {
 
     private EditText getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
         EditText answerEditText = new EditText(getContext());
-        answerEditText.setId(ViewIds.generateViewId());
+        answerEditText.setId(View.generateViewId());
         answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerEditText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
 

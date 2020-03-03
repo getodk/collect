@@ -4,7 +4,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class FormUtils {
         // This should get moved to the Application Class
         if (referenceManager.getFactories().length == 0) {
             // Always build URIs against the ODK root, regardless of the absolute path of formMediaDir
-            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getDirPath(StorageSubdirectory.ODK)));
+            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getStorageRootDirPath()));
         }
 
         addSessionRootTranslators(referenceManager,

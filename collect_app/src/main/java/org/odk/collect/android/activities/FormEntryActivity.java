@@ -24,7 +24,6 @@ import android.database.Cursor;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -373,7 +372,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    new StorageInitializer().createODKDirs();
+                    new StorageInitializer().createOdkDirsOnStorage();
                     setupFields(savedInstanceState);
                     loadForm();
 
@@ -475,7 +474,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formLoaderTask = (FormLoaderTask) data;
         } else if (data == null) {
             if (!newForm) {
-                if (getFormController(true) != null) {
+                if (getFormController() != null) {
                     FormController formController = getFormController();
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                     formSaveViewModel.setFormController(formController);
@@ -656,19 +655,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Nullable
     private FormController getFormController() {
-        return getFormController(false);
+        return Collect.getInstance().getFormController();
     }
-
-    @Nullable
-    private FormController getFormController(boolean formReloading) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            Collect.getInstance().logNullFormControllerEvent(formReloading ? "FormReloading" : "OtherInFormEntryActivity");
-        }
-
-        return formController;
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -2776,16 +2764,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         String snackBarText;
 
-        // Older Android versions don't have the "⋮" character. Only insert it into the text if the
-        // Android version supports it. If the Android version doesn't support it, there will be a
-        // double space where the placeholder is in the text resource. Collapse those spaces.
-        // See https://github.com/opendatakit/collect/pull/2864
         if (backgroundLocationMessage.isMenuCharacterNeeded()) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
-            } else {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "").replace("  ", " ");
-            }
+            snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
         } else {
             snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
         }

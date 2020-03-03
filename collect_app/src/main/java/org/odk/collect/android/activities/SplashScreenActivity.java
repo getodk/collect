@@ -64,7 +64,7 @@ public class SplashScreenActivity extends Activity {
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    new StorageInitializer().createODKDirs();
+                    new StorageInitializer().createOdkDirsOnStorage();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(SplashScreenActivity.this,
                             e.getMessage(), EXIT), SplashScreenActivity.this);

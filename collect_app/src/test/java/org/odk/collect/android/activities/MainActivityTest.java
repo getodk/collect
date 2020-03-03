@@ -14,8 +14,10 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowIntent;
 
+import static android.os.Environment.MEDIA_MOUNTED;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.robolectric.Shadows.shadowOf;
@@ -32,6 +34,7 @@ public class MainActivityTest {
      */
     @Before
     public void setUp() throws Exception {
+        ShadowEnvironment.setExternalStorageState(MEDIA_MOUNTED);
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
     }
 

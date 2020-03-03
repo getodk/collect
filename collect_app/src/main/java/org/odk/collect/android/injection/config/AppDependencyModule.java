@@ -17,6 +17,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
@@ -27,9 +28,15 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.migration.StorageEraser;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.storage.migration.StorageMigrator;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
@@ -54,7 +61,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 public class AppDependencyModule {
 
     @Provides
-    public SmsManager provideSmsManager() {
+    SmsManager provideSmsManager() {
         return SmsManager.getDefault();
     }
 
@@ -91,7 +98,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public UserAgentProvider providesUserAgent() {
+    UserAgentProvider providesUserAgent() {
         return new AndroidUserAgent();
     }
 
@@ -169,6 +176,19 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
+    public StorageMigrationRepository providesStorageMigrationRepository() {
+        return new StorageMigrationRepository();
+    }
+
+    @Provides
+    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager) {
+        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
+
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager);
+    }
+
+    @Provides
     InstallIDProvider providesInstallIDProvider(Context context) {
         SharedPreferences prefs = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
         return new SharedPreferencesInstallIDProvider(prefs, KEY_INSTALL_ID);
@@ -222,5 +242,25 @@ public class AppDependencyModule {
     @Singleton
     public MapProvider providesMapProvider() {
         return new MapProvider();
+    }
+
+    @Provides
+    public StorageStateProvider providesStorageStateProvider() {
+        return new StorageStateProvider();
+    }
+
+    @Provides
+    public StoragePathProvider providesStoragePathProvider() {
+        return new StoragePathProvider();
+    }
+
+    @Provides
+    public AdminPasswordProvider providesAdminPasswordProvider() {
+        return new AdminPasswordProvider(AdminSharedPreferences.getInstance());
+    }
+
+    @Provides
+    public CollectJobCreator providesCollectJobCreator() {
+        return new CollectJobCreator();
     }
 }

@@ -15,7 +15,6 @@ limitations under the License.
 package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -104,12 +103,9 @@ abstract class AppListFragment extends ListFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Use the nicer-looking drawable with Material Design insets.
-            ListView listView = getListView();
-            listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
-            listView.setDividerHeight(1);
-        }
+        ListView listView = getListView();
+        listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
+        listView.setDividerHeight(1);
     }
 
     @Override

@@ -50,12 +50,12 @@ public class FormLoadingUtils {
      * Copies a form with the given file name and given associated media from the given assets
      * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
      */
-    public static void copyFormToSdCard(String formFilename, List<String> mediaFilenames, boolean copyToDatabase) throws IOException {
-        new StorageInitializer().createODKDirs();
+    public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase) throws IOException {
+        new StorageInitializer().createOdkDirsOnStorage();
 
         String pathname = copyForm(formFilename);
-        if (mediaFilenames != null) {
-            copyFormMediaFiles(formFilename, mediaFilenames);
+        if (mediaFilePaths != null) {
+            copyFormMediaFiles(formFilename, mediaFilePaths);
         }
 
         if (copyToDatabase) {
@@ -68,8 +68,8 @@ public class FormLoadingUtils {
      * Copies a form with the given file name from the from the given assets folder to the SD Card
      * where it will be loaded by {@link FormLoaderTask}.
      */
-    public static void copyFormToSdCard(String formFilename) throws IOException {
-            copyFormToSdCard(formFilename, null, false);
+    public static void copyFormToStorage(String formFilename) throws IOException {
+            copyFormToStorage(formFilename, null, false);
     }
 
     private static void saveFormToDatabase(File outFile) {
@@ -99,12 +99,18 @@ public class FormLoadingUtils {
         return pathname;
     }
 
-    private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {
+    private static void copyFormMediaFiles(String formFilename, List<String> mediaFilePaths) throws IOException {
         String mediaPathName = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
-        for (String mediaFilename : mediaFilenames) {
-            copyFileFromAssets("media/" + mediaFilename, mediaPathName + mediaFilename);
+        for (String mediaFilePath : mediaFilePaths) {
+            copyFileFromAssets("media/" + mediaFilePath, mediaPathName + getMediaFileName(mediaFilePath));
         }
+    }
+
+    private static String getMediaFileName(String mediaFilePath) {
+        return mediaFilePath.contains(File.separator)
+                ? mediaFilePath.substring(mediaFilePath.indexOf(File.separator) + 1)
+                : mediaFilePath;
     }
 }

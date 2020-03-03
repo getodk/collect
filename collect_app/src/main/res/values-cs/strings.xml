@@ -477,7 +477,7 @@
   <string name="select_time">Vybrat čas</string>
   <string name="no_date_selected">Nevybrán žádný datum</string>
   <string name="no_time_selected">Nevybrán žádný čas</string>
-  <string name="import_settings">Nastavení Import / Export </string>
+  <string name="configure_via_qr_code">Nastavení Import / Export </string>
   <string name="qr_code">QR kód</string>
   <string name="scan_qrcode">Sejmout kód z jiného zařízení</string>
   <string name="successfully_imported_settings">Nastavení úspěšně importováno</string>
@@ -490,7 +490,6 @@
   <string name="qrcode_without_passwords">Tento QR kód neobsahuje vaše administrátorské nebo serverové hesla. \n (Klepnutím přidáte hesla)</string>
   <string name="qrcode_with_admin_password">Tento kód QR obsahuje vaše heslo administrátora. Prosím, zacházejte s ním opatrně. \n (Klepnutím odeberete heslo)</string>
   <string name="qrcode_with_server_password">Tento kód QR obsahuje vaše heslo k serveru. \n (Klepnutím odeberete hesla)</string>
-  <string name="import_export_settings">Import / Export nastavení</string>
   <string name="qrcode_scanner_prompt">Vložte QR kód do obdélníku</string>
   <string name="barcode_scanner_prompt">Vložte čárový kód do obdélníku</string>
   <string name="server_password">Heslo serveru</string>

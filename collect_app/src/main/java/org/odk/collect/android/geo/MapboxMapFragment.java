@@ -56,6 +56,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,7 +90,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     // Bundle keys understood by applyConfig().
     static final String KEY_STYLE_URL = "STYLE_URL";
-    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
     @Inject
     MapProvider mapProvider;
@@ -214,7 +214,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void applyConfig(Bundle config) {
         styleUrl = config.getString(KEY_STYLE_URL);
-        String path = config.getString(KEY_REFERENCE_LAYER);
+        String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
             map.setStyle(getStyleBuilder(), style -> {

@@ -22,8 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import androidx.annotation.NonNull;
@@ -38,7 +36,6 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
-import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -55,13 +52,10 @@ import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import timber.log.Timber;
 
-import static android.os.Build.MODEL;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -76,11 +70,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class VideoWidget extends QuestionWidget implements FileWidget {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-
-    public static final String NEXUS7 = "Nexus 7";
-    private static final String DIRECTORY_PICTURES = "Pictures";
 
     @NonNull
     private MediaUtil mediaUtil;
@@ -92,7 +81,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     Button playButton;
     Button chooseButton;
     private String binaryName;
-    private Uri nexus7Uri;
 
     private boolean selfie;
 
@@ -136,54 +124,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }
         }
-    }
-
-    /*
-     * Create a file Uri for saving an image or video
-     * For Nexus 7 fix ...
-     * See http://developer.android.com/guide/topics/media/camera.html for more info
-     */
-    private static Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /*
-     *  Create a File for saving an image or video
-     *  For Nexus 7 fix ...
-     *  See http://developer.android.com/guide/topics/media/camera.html for more info
-     */
-    public static File getOutputMediaFile(int type) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(),
-                DIRECTORY_PICTURES);
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Timber.d("failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ", Locale.US).format(
-                new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
     }
 
     @Override
@@ -271,18 +211,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         }
 
         binaryName = newVideo.getName();
-
-        // Need to have this ugly code to account for
-        // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
-        // of the intent - uri in this case is a file
-        if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-            if (object instanceof File) {
-                File fileToDelete = (File) object;
-                int delCount = fileToDelete.delete() ? 1 : 0;
-                Timber.i("Deleting original capture of file: %s count: %d", binaryName, delCount);
-            }
-        }
-
         widgetValueChanged();
         playButton.setEnabled(binaryName != null);
     }
@@ -353,26 +281,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     private void captureVideo() {
         Intent i;
         if (selfie) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                i = new Intent(getContext(), CaptureSelfieVideoActivityNewApi.class);
-            } else {
-                i = new Intent(getContext(), CaptureSelfieVideoActivity.class);
-            }
+            i = new Intent(getContext(), CaptureSelfieVideoActivity.class);
         } else {
             i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-            // Need to have this ugly code to account for
-            // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
-            // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
-            // Have it saving to an intermediate location instead of final destination
-            // to allow the current location to catch issues with the intermediate file
-            Timber.i("The build of this device is %s", MODEL);
-            if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-                nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
-            } else {
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                        Video.Media.EXTERNAL_CONTENT_URI.toString());
-            }
+            i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    Video.Media.EXTERNAL_CONTENT_URI.toString());
         }
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect

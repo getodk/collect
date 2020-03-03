@@ -7,7 +7,6 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 
 public class StoragePathProvider {
-
     private StorageStateProvider storageStateProvider;
 
     public StoragePathProvider() {
@@ -19,35 +18,61 @@ public class StoragePathProvider {
     }
 
     public String[] getOdkDirPaths() {
+        return storageStateProvider.isScopedStorageUsed()
+                ? getOdkDirPathsForScopedStorage()
+                : getOdkDirPathsForUnScopedStorage();
+    }
+
+    private String[] getOdkDirPathsForScopedStorage() {
         return new String[]{
-                getDirPath(StorageSubdirectory.ODK),
                 getDirPath(StorageSubdirectory.FORMS),
                 getDirPath(StorageSubdirectory.INSTANCES),
                 getDirPath(StorageSubdirectory.CACHE),
                 getDirPath(StorageSubdirectory.METADATA),
                 getDirPath(StorageSubdirectory.LAYERS)
-            };
+        };
     }
 
-    private String getStorageDirPath() {
-        return storageStateProvider.isScopedStorageUsed()
-                ? getScopedExternalFilesDirPath()
-                : getUnscopedExternalFilesDirPath();
+    private String[] getOdkDirPathsForUnScopedStorage() {
+        return new String[]{
+                getUnscopedStorageRootDirPath(),
+                getDirPath(StorageSubdirectory.FORMS),
+                getDirPath(StorageSubdirectory.INSTANCES),
+                getDirPath(StorageSubdirectory.CACHE),
+                getDirPath(StorageSubdirectory.METADATA),
+                getDirPath(StorageSubdirectory.LAYERS)
+        };
     }
 
-    String getScopedExternalFilesDirPath() {
+    public String getScopedStorageRootDirPath() {
         File scopedExternalFilesDirPath = Collect.getInstance().getExternalFilesDir(null);
         return scopedExternalFilesDirPath != null
                 ? scopedExternalFilesDirPath.getAbsolutePath()
                 : "";
     }
 
-    String getUnscopedExternalFilesDirPath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath();
+    public String getUnscopedStorageRootDirPath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "odk";
+    }
+
+    public String getUnscopedStorageDirPath(StorageSubdirectory subdirectory) {
+        return getUnscopedStorageRootDirPath() + File.separator + subdirectory.getDirectoryName();
+    }
+
+    private String getScopedStorageDirPath(StorageSubdirectory subdirectory) {
+        return getScopedStorageRootDirPath() + File.separator + subdirectory.getDirectoryName();
     }
 
     public String getDirPath(StorageSubdirectory subdirectory) {
-        return getStorageDirPath() + File.separator + subdirectory.getDirectoryName();
+        return storageStateProvider.isScopedStorageUsed()
+                ? getScopedStorageDirPath(subdirectory)
+                : getUnscopedStorageDirPath(subdirectory);
+    }
+
+    public String getStorageRootDirPath() {
+        return storageStateProvider.isScopedStorageUsed()
+                ? getScopedStorageRootDirPath()
+                : getUnscopedStorageRootDirPath();
     }
 
     public String getTmpFilePath() {
@@ -107,9 +132,31 @@ public class StoragePathProvider {
                 : dirPath + File.separator + filePath;
     }
 
-    private String getRelativeFilePath(String dirPath, String filePath) {
+    public String getRelativeFilePath(String dirPath, String filePath) {
         return filePath.startsWith(dirPath)
                 ? filePath.substring(dirPath.length() + 1)
                 : filePath;
+    }
+
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
+    public String getRelativeMapLayerPath(String path) {
+        if (path == null) {
+            return null;
+        }
+        if (path.startsWith("/sdcard/odk/layers")) {
+            return path.substring("/sdcard/odk/layers".length() + 1);
+        } else if (path.startsWith(getUnscopedStorageDirPath(StorageSubdirectory.LAYERS))) {
+            return path.substring(getUnscopedStorageDirPath(StorageSubdirectory.LAYERS).length() + 1);
+        } else if (path.startsWith(getScopedStorageDirPath(StorageSubdirectory.LAYERS))) {
+            return path.substring(getScopedStorageDirPath(StorageSubdirectory.LAYERS).length() + 1);
+        }
+        return path;
+    }
+
+    public String getAbsoluteOfflineMapLayerPath(String path) {
+        if (path == null) {
+            return null;
+        }
+        return getDirPath(StorageSubdirectory.LAYERS) + File.separator + getRelativeMapLayerPath(path);
     }
 }

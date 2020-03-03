@@ -14,9 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
@@ -67,7 +65,6 @@ public final class ThemeUtils {
                 theme == android.R.style.Theme_Holo_Dialog;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @StyleRes
     public int getMaterialDialogTheme() {
         return isDarkTheme() ?

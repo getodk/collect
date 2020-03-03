@@ -47,7 +47,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -179,7 +178,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     protected void setUpLayout() {
         errorTextView = new TextView(getContext());
-        errorTextView.setId(ViewIds.generateViewId());
+        errorTextView.setId(View.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         answerLayout = new LinearLayout(getContext());
