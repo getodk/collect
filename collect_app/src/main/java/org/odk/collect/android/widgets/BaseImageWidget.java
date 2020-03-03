@@ -24,15 +24,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -46,7 +47,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -178,7 +178,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     protected void setUpLayout() {
         errorTextView = new TextView(getContext());
-        errorTextView.setId(ViewIds.generateViewId());
+        errorTextView.setId(View.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         answerLayout = new LinearLayout(getContext());
@@ -310,7 +310,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
     }
 
-    File getFile() {
+    private File getFile() {
         File file = new File(getInstanceFolder() + File.separator + binaryName);
         if (!file.exists() && doesSupportDefaultValues()) {
             file = new File(getDefaultFilePath());
@@ -319,7 +319,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         return file;
     }
 
-    String getDefaultFilePath() {
+    private String getDefaultFilePath() {
         try {
             return referenceManager.deriveReference(binaryName).getLocalURI();
         } catch (InvalidReferenceException e) {
@@ -330,4 +330,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     protected abstract boolean doesSupportDefaultValues();
+
+    @Nullable
+    public ImageView getImageView() {
+        return imageView;
+    }
 }

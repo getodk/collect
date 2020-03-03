@@ -143,7 +143,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    new StorageInitializer().createODKDirs();
+                    new StorageInitializer().createOdkDirsOnStorage();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT), FormDownloadList.this);
                     return;

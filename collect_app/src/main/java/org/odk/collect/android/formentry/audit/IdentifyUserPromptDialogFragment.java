@@ -93,4 +93,9 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
         dismiss();
         viewModel.promptDismissed();
     }
+
+    @Override
+    protected boolean shouldShowSoftKeyboard() {
+        return true;
+    }
 }

@@ -9,10 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@id/media_buttons"
-        android:layout_toLeftOf="@id/media_buttons"
         android:orientation="vertical">
 
         <FrameLayout
@@ -67,12 +65,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:gravity="end"
         android:orientation="vertical"
         android:paddingTop="@dimen/margin_extra_small"
         android:paddingEnd="@dimen/margin_standard"
-        android:paddingRight="@dimen/margin_standard"
         android:paddingBottom="@dimen/margin_extra_small"
         android:visibility="gone"
         tools:visibility="visible">

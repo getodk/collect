@@ -40,6 +40,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -51,6 +52,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
@@ -59,6 +62,9 @@ import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEE
 
 public class AutoSendWorker extends Worker {
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
+
+    @Inject
+    StorageMigrationRepository storageMigrationRepository;
 
     public AutoSendWorker(@NonNull Context c, @NonNull WorkerParameters parameters) {
         super(c, parameters);
@@ -80,6 +86,12 @@ public class AutoSendWorker extends Worker {
     @Override
     @SuppressLint("WrongThread")
     public Result doWork() {
+        Collect.getInstance().getComponent().inject(this);
+
+        if (storageMigrationRepository.isMigrationBeingPerformed()) {
+            return Result.failure();
+        }
+
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();

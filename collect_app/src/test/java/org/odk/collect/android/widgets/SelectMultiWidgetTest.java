@@ -30,6 +30,8 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -37,7 +39,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
 
 /**
@@ -56,16 +58,13 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock
-    public ReferenceManager referenceManager;
-
-    @Mock
     public AudioHelper audioHelper;
 
     @Mock
     public Analytics analytics;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         overrideDependencyModule();
         when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(new MutableLiveData<>());
     }
@@ -79,24 +78,18 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
                 ))
                 .build();
 
-        String reference1 = createMockReference(referenceManager, "file://blah1.mp3");
-        String reference2 = createMockReference(referenceManager, "file://blah2.mp3");
-
         populateRecyclerView(getActualWidget());
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", reference1)));
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", reference2)));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", REFERENCES.get(0).second)));
+        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", REFERENCES.get(1).second)));
     }
 
     @Test
     public void whenChoicesHaveAudio_logsAudioChoiceEvent() throws Exception {
-        createMockReference(referenceManager, "file://blah1.mp3");
-        createMockReference(referenceManager, "file://blah2.mp3");
-
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(
@@ -104,8 +97,8 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
                 ))
                 .build();
 
@@ -113,7 +106,8 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         verify(analytics).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
     }
 
-    private void overrideDependencyModule() {
+    private void overrideDependencyModule() throws Exception {
+        ReferenceManager referenceManager = setupFakeReferenceManager(REFERENCES);
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
@@ -162,4 +156,9 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         FrameLayout view = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
         assertThat(view.isEnabled(), is(Boolean.FALSE));
     }
+
+    private static final List<Pair<String, String>> REFERENCES = asList(
+            new Pair<>("ref", "file://audio.mp3"),
+            new Pair<>("ref1", "file://audio1.mp3")
+    );
 }

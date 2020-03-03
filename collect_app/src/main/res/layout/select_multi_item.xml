@@ -12,7 +12,6 @@
     android:paddingTop="@dimen/margin_small"
     android:paddingBottom="@dimen/margin_small"
     android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
-    android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
     android:button="@null"
     app:buttonCompat="@null"
     android:drawablePadding="@dimen/margin_standard"

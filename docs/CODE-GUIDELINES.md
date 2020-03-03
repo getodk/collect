@@ -118,9 +118,9 @@ For Fragment objects you should hook into the `onAttach` lifecycle method instea
 
 ```java
 @Override
-public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    DaggerUtils.getComponent(activity).inject(this);
+public void onAttach(Context context) {
+    super.onAttach(context);
+    DaggerUtils.getComponent(context).inject(this);
 }
 ```
 

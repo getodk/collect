@@ -31,14 +31,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.utilities.QRCodeUtils.MD5_CACHE_PATH;
-import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 @RunWith(RobolectricTestRunner.class)
 public class QRCodeUtilsTest {
 
-    private final File savedQrCodeImage = new File(QR_CODE_FILEPATH);
-    private final File md5File = new File(MD5_CACHE_PATH);
+    private final File savedQrCodeImage = new File(QRCodeUtils.getQrCodeFilepath());
+    private final File md5File = new File(QRCodeUtils.getMd5CachePath());
 
     @Before
     public void setup() {
@@ -80,7 +78,7 @@ public class QRCodeUtilsTest {
 
         // stubbing cache and bitmap files
         new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS)).mkdirs();
-        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QR_CODE_FILEPATH);
+        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QRCodeUtils.getQrCodeFilepath());
         FileUtils.write(md5File, getDigest(expectedData.getBytes()));
 
         // verify that QRCode and md5 cache files exist

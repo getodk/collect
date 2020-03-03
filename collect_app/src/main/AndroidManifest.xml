@@ -135,6 +135,7 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
+        <activity android:name=".preferences.FormMetadataPreferencesActivity" />
         <activity android:name=".activities.FormHierarchyActivity" />
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <activity android:name=".activities.GeoPointActivity" />
@@ -150,10 +151,8 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.SplashScreenActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".activities.CaptureSelfieActivity" />
-        <activity android:name=".activities.CaptureSelfieActivityNewApi" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
 
         <!-- Configure this key by setting GOOGLE_MAPS_API_KEY in collect_app/secrets.properties. -->
         <meta-data
@@ -288,5 +287,10 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".storage.migration.StorageMigrationService"
+            android:exported="false" />
+
     </application>
 </manifest>

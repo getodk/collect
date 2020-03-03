@@ -14,13 +14,11 @@
 
 package org.odk.collect.android.utilities;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
@@ -417,37 +415,10 @@ public class MediaUtils {
      * media prompts. Beginning with KitKat, the responses use a different
      * mechanism and needs a lot of special handling.
      */
-    @SuppressLint("NewApi")
     public static String getPathFromUri(Context ctxt, Uri uri, String pathKey) {
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            return getPath(ctxt, uri);
-        } else {
-            if (uri.toString().startsWith("file")) {
-                return uri.toString().substring(7);
-            } else {
-                String[] projection = {pathKey};
-                Cursor c = null;
-                try {
-                    c = ctxt.getContentResolver().query(uri, projection, null,
-                            null, null);
-                    int columnIndex = c.getColumnIndexOrThrow(pathKey);
-                    String path = null;
-                    if (c.getCount() > 0) {
-                        c.moveToFirst();
-                        path = c.getString(columnIndex);
-                    }
-                    return path;
-                } finally {
-                    if (c != null) {
-                        c.close();
-                    }
-                }
-            }
-        }
+        return getPath(ctxt, uri);
     }
 
-    @SuppressLint("NewApi")
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
@@ -464,10 +435,8 @@ public class MediaUtils {
      */
     public static String getPath(final Context context, final Uri uri) {
 
-        final boolean isKitKat = Build.VERSION.SDK_INT >= 19;
-
         // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
 
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {

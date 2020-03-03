@@ -15,53 +15,49 @@ import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.COMPACT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MINIMAL;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
 
 public class PromptAutoplayerTest {
 
-    public static final String FORM_IDENTIFIER_HASH = "formIdentifierHash";
-    private ReferenceManager referenceManager;
-    private AudioHelper audioHelper;
-    private Analytics analytics;
+    private static final String FORM_IDENTIFIER_HASH = "formIdentifierHash";
+    private final AudioHelper audioHelper = mock(AudioHelper.class);
+    private final Analytics analytics = mock(Analytics.class);
 
     private PromptAutoplayer autoplayer;
 
     @Before
-    public void setup() {
-        referenceManager = mock(ReferenceManager.class);
-        audioHelper = mock(AudioHelper.class);
-        analytics = mock(Analytics.class);
-
+    public void setup() throws Exception {
+        ReferenceManager referenceManager = setupFakeReferenceManager(REFERENCES);
         autoplayer = new PromptAutoplayer(audioHelper, referenceManager, analytics, FORM_IDENTIFIER_HASH);
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_playsAudio() throws Exception {
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+    public void whenPromptHasAutoplayAudio_playsAudio() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), reference)));
+        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_logsAutoplayAudioLabelEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio.mp3");
+    public void whenPromptHasAutoplayAudio_logsAutoplayAudioLabelEvent() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .build();
 
@@ -70,15 +66,14 @@ public class PromptAutoplayerTest {
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_withDifferentCapitalization_playsAudio() throws Exception {
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
+    public void whenPromptHasAutoplayAudio_withDifferentCapitalization_playsAudio() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "aUdio")
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), reference)));
+        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
@@ -93,78 +88,66 @@ public class PromptAutoplayerTest {
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_andIsSelectOne_playsAudioInOrder() throws Exception {
-        String reference1 = createMockReference(referenceManager, "file://audio.mp3");
-        String reference2 = createMockReference(referenceManager, "file://audio1.mp3");
-        String reference3 = createMockReference(referenceManager, "file://audio2.mp3");
-
+    public void whenPromptHasAutoplayAudio_andIsSelectOne_playsAudioInOrder() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(2).first)
                 ))
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
         verify(audioHelper).playInOrder(asList(
-                new Clip(prompt.getIndex().toString(), reference1),
-                new Clip(prompt.getIndex().toString() + " 0", reference2),
-                new Clip(prompt.getIndex().toString() + " 1", reference3)
+                new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second),
+                new Clip(prompt.getIndex().toString() + " 0", REFERENCES.get(1).second),
+                new Clip(prompt.getIndex().toString() + " 1", REFERENCES.get(2).second)
         ));
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_andIsSelectMultiple_playsAllAudioInOrder() throws Exception {
-        String reference1 = createMockReference(referenceManager, "file://audio.mp3");
-        String reference2 = createMockReference(referenceManager, "file://audio1.mp3");
-        String reference3 = createMockReference(referenceManager, "file://audio2.mp3");
-
+    public void whenPromptHasAutoplayAudio_andIsSelectMultiple_playsAllAudioInOrder() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_MULTI)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(2).first)
                 ))
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
         verify(audioHelper).playInOrder(asList(
-                new Clip(prompt.getIndex().toString(), reference1),
-                new Clip(prompt.getIndex().toString() + " 0", reference2),
-                new Clip(prompt.getIndex().toString() + " 1", reference3)
+                new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second),
+                new Clip(prompt.getIndex().toString() + " 0", REFERENCES.get(1).second),
+                new Clip(prompt.getIndex().toString() + " 1", REFERENCES.get(2).second)
         ));
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_andIsSelect_logsAutoplayAudioChoiceEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio.mp3");
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-
+    public void whenPromptHasAutoplayAudio_andIsSelect_logsAutoplayAudioChoiceEvent() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_MULTI)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(2).first)
                 ))
                 .build();
 
@@ -173,10 +156,7 @@ public class PromptAutoplayerTest {
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_butNoAudioURI_andIsSelectOne_playsAllSelectAudioInOrder() throws Exception {
-        String reference1 = createMockReference(referenceManager, "file://audio1.mp3");
-        String reference2 = createMockReference(referenceManager, "file://audio2.mp3");
-
+    public void whenPromptHasAutoplayAudio_butNoAudioURI_andIsSelectOne_playsAllSelectAudioInOrder() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
                 .withAdditionalAttribute("autoplay", "audio")
@@ -185,23 +165,20 @@ public class PromptAutoplayerTest {
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
                 ))
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
         verify(audioHelper).playInOrder(asList(
-                new Clip(prompt.getIndex().toString() + " 0", reference1),
-                new Clip(prompt.getIndex().toString() + " 1", reference2)
+                new Clip(prompt.getIndex().toString() + " 0", REFERENCES.get(0).second),
+                new Clip(prompt.getIndex().toString() + " 1", REFERENCES.get(1).second)
         ));
     }
 
     @Test
-    public void whenPromptHasAutoplayAudio_butNoAudioURI_andIsSelectOne_doesNotLogAutoplayAudioLabelEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-
+    public void whenPromptHasAutoplayAudio_butNoAudioURI_andIsSelectOne_doesNotLogAutoplayAudioLabelEvent() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
                 .withAdditionalAttribute("autoplay", "audio")
@@ -210,8 +187,8 @@ public class PromptAutoplayerTest {
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
                 ))
                 .build();
 
@@ -221,11 +198,9 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_butNoSelectChoiceAudio_playsPromptAudio() throws Exception {
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
-
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
@@ -234,16 +209,14 @@ public class PromptAutoplayerTest {
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), reference)));
+        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelect_butNoSelectChoiceAudio_doesNotLogAutoplayAudioChoiceEvent() throws Exception {
-        createMockReference(referenceManager, "file://audio.mp3");
-
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
@@ -257,77 +230,65 @@ public class PromptAutoplayerTest {
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_withMinimalAppearance_playsPromptAudio() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
-
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
                 .withAppearance(MINIMAL)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(2).first)
                 ))
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), reference)));
+        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_withNoButtonsAppearance_playsPromptAudio() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
-
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
                 .withAppearance("whatever " + NO_BUTTONS)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(2).first)
                 ))
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), reference)));
+        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
     public void whenPromptHasAutoplayAudio_andIsSelectOne_withDeprecatedCompactAppearance_playsPromptAudio() throws Exception {
-        createMockReference(referenceManager, "file://audio1.mp3");
-        createMockReference(referenceManager, "file://audio2.mp3");
-        String reference = createMockReference(referenceManager, "file://audio.mp3");
-
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(Constants.CONTROL_SELECT_ONE)
                 .withAppearance(COMPACT)
-                .withAudioURI("file://audio.mp3")
+                .withAudioURI(REFERENCES.get(0).first)
                 .withAdditionalAttribute("autoplay", "audio")
                 .withSelectChoices(asList(
                         new SelectChoice("1", "1"),
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://audio2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(2).first)
                 ))
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), reference)));
+        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test // We only support audio autoplaying with the helper right now
@@ -360,4 +321,10 @@ public class PromptAutoplayerTest {
         verify(analytics, never()).logEvent(any(), any());
         verify(analytics, never()).logEvent(any(), any(), any());
     }
+
+    private static final List<Pair<String, String>> REFERENCES = asList(
+            new Pair<>("ref", "file://audio.mp3"),
+            new Pair<>("ref1", "file://audio1.mp3"),
+            new Pair<>("ref2", "file://audio2.mp3")
+    );
 }

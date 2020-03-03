@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -28,10 +29,11 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 
+import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 
 @RunWith(RobolectricTestRunner.class)
 public class QuestionWidgetTest {
@@ -40,43 +42,36 @@ public class QuestionWidgetTest {
     public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock
-    public ReferenceManager referenceManager;
-
-    @Mock
     public AudioHelper audioHelper;
 
     @Mock
     public Analytics analytics;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         overrideDependencyModule();
         when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(new MutableLiveData<>());
     }
 
     @Test
     public void whenQuestionHasAudio_audioButtonUsesIndexAsClipID() throws Exception {
-        String reference = createMockReference(referenceManager, "file://blah.mp3");
-
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
-                .withAudioURI("file://blah.mp3")
+                .withAudioURI("ref")
                 .build();
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
         TestWidget widget = new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
 
         AudioButton audioButton = widget.getAudioVideoImageTextLabel().findViewById(R.id.audioButton);
-        verify(audioHelper).setAudio(audioButton, new Clip("i am index", reference));
+        verify(audioHelper).setAudio(audioButton, new Clip("i am index", "blah.mp3"));
     }
 
     @Test
     public void whenQuestionHasAudio_logsAudioLabelEvent() throws Exception {
-        createMockReference(referenceManager, "file://blah.mp3");
-
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
-                .withAudioURI("file://blah.mp3")
+                .withAudioURI("ref")
                 .build();
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
@@ -85,7 +80,8 @@ public class QuestionWidgetTest {
         verify(analytics).logEvent("Prompt", "AudioLabel", "formAnalyticsID");
     }
 
-    private void overrideDependencyModule() {
+    private void overrideDependencyModule() throws Exception {
+        ReferenceManager referenceManager = setupFakeReferenceManager(asList(new Pair<>("ref", "blah.mp3")));
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override

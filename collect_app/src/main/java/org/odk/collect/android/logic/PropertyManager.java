@@ -27,6 +27,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
+import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.utilities.PermissionUtils.isReadPhoneStatePermissionGranted;
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -74,6 +74,9 @@ public class PropertyManager implements IPropertyManager {
     @Inject
     DeviceDetailsProvider deviceDetailsProvider;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     public String getName() {
         return "Property Manager";
     }
@@ -92,6 +95,10 @@ public class PropertyManager implements IPropertyManager {
         Timber.i("calling constructor");
 
         Collect.getInstance().getComponent().inject(this);
+        reload(context);
+    }
+
+    public PropertyManager reload(Context context) {
         try {
             // Device-defined properties
             IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
@@ -108,6 +115,8 @@ public class PropertyManager implements IPropertyManager {
         initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
         initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
         initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
+
+        return this;
     }
 
     // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
@@ -173,7 +182,7 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public String getSingularProperty(String propertyName) {
-        if (!isReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
+        if (!permissionUtils.isReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
             eventBus.post(new ReadPhoneStatePermissionRxEvent());
         }
 

@@ -87,6 +87,7 @@ public class MockFormEntryPromptBuilder {
     public MockFormEntryPromptBuilder withAnswerDisplayText(String text) {
         IAnswerData answer = mock(IAnswerData.class);
         when(answer.getDisplayText()).thenReturn(text);
+        when(prompt.getAnswerText()).thenReturn(text);
         when(prompt.getAnswerValue()).thenReturn(answer);
 
         return this;

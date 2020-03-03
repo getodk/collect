@@ -25,6 +25,8 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
 
 /**
@@ -45,16 +47,14 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock
-    private ReferenceManager referenceManager;
-
-    @Mock
     private AudioHelper audioHelper;
 
     @Mock
     private Analytics analytics;
 
     @Before
-    public void overrideDependencyModule() {
+    public void overrideDependencyModule() throws Exception {
+        ReferenceManager referenceManager = setupFakeReferenceManager(REFERENCES);
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
@@ -76,9 +76,6 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
 
     @Test
     public void whenChoicesHaveAudio_andNoButtonsMode_clickingChoice_playsAndStopsAudio() throws Exception {
-        createMockReference(referenceManager, "file://blah2.mp3");
-        String reference = createMockReference(referenceManager, "file://blah1.mp3");
-
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withAppearance(NO_BUTTONS)
@@ -87,15 +84,15 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
                 ))
                 .build();
 
         GridWidget widget = getActualWidget();
 
         widget.onItemClick(0);
-        verify(audioHelper).play(new Clip("i am index 0", reference));
+        verify(audioHelper).play(new Clip("i am index 0", REFERENCES.get(0).second));
 
         widget.onItemClick(0);
         verify(audioHelper).stop();
@@ -103,9 +100,6 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
 
     @Test
     public void whenChoicesHaveAudio_andNoButtonsMode_logsAudioChoiceGridEvent() throws Exception {
-        createMockReference(referenceManager, "file://blah2.mp3");
-        createMockReference(referenceManager, "file://blah1.mp3");
-
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withAppearance(NO_BUTTONS)
@@ -114,8 +108,8 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
                 ))
                 .build();
 
@@ -125,9 +119,6 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
 
     @Test
     public void whenChoicesHaveAudio_clickingChoice_doesNotPlayAudio() throws Exception {
-        createMockReference(referenceManager, "file://blah2.mp3");
-        createMockReference(referenceManager, "file://blah1.mp3");
-
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(
@@ -135,8 +126,8 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
                         new SelectChoice("2", "2")
                 ))
                 .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah1.mp3"),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, "file://blah2.mp3")
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
+                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
                 ))
                 .build();
 
@@ -161,4 +152,9 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
             assertThat(view.isEnabled(), is(Boolean.FALSE));
         }
     }
+
+    private static final List<Pair<String, String>> REFERENCES = asList(
+            new Pair<>("ref", "file://audio.mp3"),
+            new Pair<>("ref1", "file://audio1.mp3")
+    );
 }

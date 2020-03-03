@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
@@ -17,6 +16,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
+import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
@@ -24,9 +24,18 @@ import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.migration.StorageEraser;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.storage.migration.StorageMigrator;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
@@ -47,10 +56,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
  * for objects you need to inject
  */
 @Module
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class AppDependencyModule {
 
     @Provides
-    public SmsManager provideSmsManager() {
+    SmsManager provideSmsManager() {
         return SmsManager.getDefault();
     }
 
@@ -87,7 +97,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public UserAgentProvider providesUserAgent() {
+    UserAgentProvider providesUserAgent() {
         return new AndroidUserAgent();
     }
 
@@ -165,9 +175,22 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
+    public StorageMigrationRepository providesStorageMigrationRepository() {
+        return new StorageMigrationRepository();
+    }
+
+    @Provides
+    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager) {
+        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
+
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager);
+    }
+
+    @Provides
     InstallIDProvider providesInstallIDProvider(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return new SharedPreferencesInstallIDProvider(preferences, KEY_INSTALL_ID);
+        SharedPreferences prefs = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
+        return new SharedPreferencesInstallIDProvider(prefs, KEY_INSTALL_ID);
     }
 
     @Provides
@@ -177,28 +200,60 @@ public class AppDependencyModule {
         return new DeviceDetailsProvider() {
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getDeviceId() {
                 return telMgr.getDeviceId();
             }
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getLine1Number() {
                 return telMgr.getLine1Number();
             }
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getSubscriberId() {
                 return telMgr.getSubscriberId();
             }
 
             @Override
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getSimSerialNumber() {
                 return telMgr.getSimSerialNumber();
             }
         };
+    }
+
+    @Provides
+    @Singleton
+    GeneralSharedPreferences providesGeneralSharedPreferences(Context context) {
+        return new GeneralSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    AdminSharedPreferences providesAdminSharedPreferences(Context context) {
+        return new AdminSharedPreferences(context);
+    }
+
+    @Provides
+    public StorageStateProvider providesStorageStateProvider() {
+        return new StorageStateProvider();
+    }
+
+    @Provides
+    public StoragePathProvider providesStoragePathProvider() {
+        return new StoragePathProvider();
+    }
+
+    @Provides
+    public AdminPasswordProvider providesAdminPasswordProvider() {
+        return new AdminPasswordProvider(AdminSharedPreferences.getInstance());
+    }
+
+    @Provides
+    public CollectJobCreator providesCollectJobCreator() {
+        return new CollectJobCreator();
     }
 }
