@@ -86,4 +86,10 @@ public class AnalyticsEvents {
      * the label should be a hash of the form definition.
      */
     public static final String AUDIO_QUESTION = "Prompt";
+
+    /**
+     * Track initiations of a configuration QR code scan. The action should describe where the scan
+     * was launched from.
+     */
+    public static final String SCAN_QR_CODE = "ScanQRCode";
 }

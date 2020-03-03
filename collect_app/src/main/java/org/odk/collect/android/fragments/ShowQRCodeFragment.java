@@ -68,6 +68,7 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SCAN_QR_CODE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
@@ -159,7 +160,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     @OnClick(R.id.btnScan)
     void scanButtonClicked() {
-        analytics.logEvent("ScanQRCode", "Settings");
+        analytics.logEvent(SCAN_QR_CODE, "Settings");
         Intent i = new Intent(getActivity(), ScanQRCodeActivity.class);
         startActivity(i);
     }
