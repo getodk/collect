@@ -9,7 +9,7 @@
 
     <style name="Theme.Collect.BaseDark" parent="Theme.AppCompat.NoActionBar">
         <!--Material theme attributes-->
-        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimary">#616161</item>
         <item name="colorSecondary">#57C4C2</item>
         <item name="colorError">@color/red_500</item>
 

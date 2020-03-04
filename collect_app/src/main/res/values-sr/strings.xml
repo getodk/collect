@@ -76,9 +76,7 @@
   <string name="load_remote_form_error">Greška u pristupu formularima na serveru</string>
   <string name="location_provider_accuracy">Koristim %1$s. Preciznost %2$s m.</string>
   <string name="location_accuracy">Preciznost %1$s m</string>
-  <string name="main_menu">Glavni meni</string>
-  <string name="main_menu_details">Prikupljanje podataka je pojednostavljeno…</string>
-  <string name="manage_files">Obriši sačuvani formular</string>
+    <string name="manage_files">Obriši sačuvani formular</string>
   <string name="mark_finished">Označi formular kao završen</string>
   <string name="noselect_error">Niste odabrali nijedan formular!</string>
   <string name="no_connection">Povezivanje na mrežu trenutno nije dostupno</string>

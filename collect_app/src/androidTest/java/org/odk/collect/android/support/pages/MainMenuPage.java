@@ -1,11 +1,11 @@
 package org.odk.collect.android.support.pages;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.rule.ActivityTestRule;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.support.ActivityHelpers;
-
-import androidx.test.espresso.Espresso;
-import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 
 public class MainMenuPage extends Page<MainMenuPage> {
@@ -26,7 +27,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     @Override
     public MainMenuPage assertOnPage() {
-        checkIsStringDisplayed(R.string.main_menu);
+        onView(withText(containsString(getTranslatedString(R.string.app_name)))).check(matches(isDisplayed()));
         return this;
     }
 

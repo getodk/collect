@@ -79,9 +79,7 @@
   <string name="load_remote_form_error">បញ្ហានៃការទាញបញ្ជីសំណុំបែបបទ</string>
   <string name="location_provider_accuracy">កំពុងប្រើប្រាស់ %1$s. ភាពត្រឹមត្រូវគឺ %2$s ម៉ែត្រ.</string>
   <string name="location_accuracy">ភាព​ត្រឹមត្រូវគឺ %1$s ម៉ែត្រ</string>
-  <string name="main_menu">ម៉ឺនុយ​មេ</string>
-  <string name="main_menu_details">ការប្រមូលទិន្នន័យកាន់តែមានភាពងាយស្រួល</string>
-  <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
+    <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
   <string name="mark_finished">សម្គាល់សំណុំបែបបទថាបានបញ្ចប់</string>
   <string name="noselect_error">សុំទោស, អ្នកមិនបានជ្រើសរើសសំណុំបែបបទណាមួយទេ!</string>
   <string name="no_connection">គ្មានការតភ្ជាប់បណ្តាញដែល​អាច​ប្រើបាន</string>

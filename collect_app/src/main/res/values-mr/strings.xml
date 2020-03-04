@@ -66,9 +66,7 @@
   <string name="load_remote_form_error">प्रपत्र यादी प्राप्त करताना त्रुटी</string>
   <string name="location_provider_accuracy">%1$s वापरून अचूकता  %2$s मी आहे.</string>
   <string name="location_accuracy">अचूकता %1$s मी आहे</string>
-  <string name="main_menu">मुख्य मेनू</string>
-  <string name="main_menu_details">डेटा संकलन सोपे केले …</string>
-  <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
+    <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
   <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
   <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>
   <string name="no_connection">कोणतेही नेटवर्क कनेक्शन उपलब्ध नाही</string>

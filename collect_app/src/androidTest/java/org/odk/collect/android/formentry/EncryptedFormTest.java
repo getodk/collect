@@ -18,22 +18,21 @@ package org.odk.collect.android.formentry;
 
 import android.Manifest;
 
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FeatureTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 
 public class EncryptedFormTest {
+
     @Rule
-    public ActivityTestRule<MainMenuActivity> main = new ActivityTestRule<>(MainMenuActivity.class);
+    public FeatureTestRule rule = new FeatureTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -48,7 +47,7 @@ public class EncryptedFormTest {
 
     @Test
     public void instanceOfEncryptedForm_cantBeEditedWhenFinalized() {
-        new MainMenuPage(main)
+        rule.mainMenu()
                 .startBlankForm("encrypted")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()
@@ -61,7 +60,7 @@ public class EncryptedFormTest {
 
     @Test
     public void instanceOfEncryptedFormWithoutInstanceID_failsFinalizationWithMessage() {
-        new MainMenuPage(main)
+        rule.mainMenu()
                 .startBlankForm("encrypted-no-instanceID")
                 .swipeToNextQuestion()
                 .clickSaveAndExit()

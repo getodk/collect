@@ -61,9 +61,7 @@
   <string name="load_remote_form_error">May Mali sa pag-karga ng Listahan ng Form</string>
   <string name="location_provider_accuracy">Gamit ang %1$s. Ang Kawastuhan ay %2$s m.</string>
   <string name="location_accuracy">Ang kawastuhan ay %1$s m</string>
-  <string name="main_menu">Main Menu</string>
-  <string name="main_menu_details">Pinadaling pangangalap ng datos…</string>
-  <string name="manage_files">Burahin ang Inimpok na Form</string>
+    <string name="manage_files">Burahin ang Inimpok na Form</string>
   <string name="mark_finished">Markahan Yari ang Form</string>
   <string name="noselect_error">Paumanhin, walang form na pinili!</string>
   <string name="no_connection">Wala koneksyon sa network</string>

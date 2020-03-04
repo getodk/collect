@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,8 +33,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -121,6 +122,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @BindView(R.id.storageMigrationBannerLearnMoreButton)
     Button storageMigrationBannerLearnMoreButton;
 
+    @BindView(R.id.version_sha)
+    TextView versionSHAView;
+
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
@@ -132,20 +136,16 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     AdminPasswordProvider adminPasswordProvider;
-
-    public static void startActivityAndCloseAllOthers(Activity activity) {
-        activity.startActivity(new Intent(activity, MainMenuActivity.class));
-        activity.overridePendingTransition(0, 0);
-        activity.finishAffinity();
-    }
+    private MainMenuViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Collect.getInstance().getComponent().inject(this);
-
         setContentView(R.layout.main_menu);
         ButterKnife.bind(this);
+        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory()).get(MainMenuViewModel.class);
+
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);
 
@@ -253,6 +253,13 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         });
 
+        String versionSHA = viewModel.getVersionCommitDescription();
+        if (versionSHA != null) {
+            versionSHAView.setText(versionSHA);
+        } else {
+            versionSHAView.setVisibility(View.GONE);
+        }
+
         // must be at the beginning of any activity that can be called from an
         // external intent
         Timber.i("Starting up, creating directories");
@@ -261,13 +268,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         } catch (RuntimeException e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
-        }
-
-        {
-            // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
-            mainMenuMessageLabel.setText(Collect.getInstance()
-                    .getVersionedAppName());
         }
 
         File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
@@ -433,7 +433,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.main_menu));
+        setTitle(String.format("%s %s", getString(R.string.app_name), viewModel.getVersion()));
         setSupportActionBar(toolbar);
     }
 
