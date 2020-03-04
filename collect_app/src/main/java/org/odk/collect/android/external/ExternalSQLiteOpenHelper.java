@@ -270,7 +270,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
     // Create a metadata table with a single column that keeps track of the date of the last import
     // of this data set.
-    protected static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) throws Exception {
+    static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
         final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
         final String lastModifiedColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_LAST_MODIFIED);
 
@@ -286,7 +286,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
         db.insertOrThrow(metadataTableName, null, metadata);
     }
 
-    protected static long getLastImportTimestamp(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
+    static long getLastImportTimestamp(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
         final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
         final String lastModifiedColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_LAST_MODIFIED);
         final String dataSetFilenameLiteral = CustomSQLiteQueryBuilder.quoteStringLiteral(dataSetFile.getName());
@@ -304,12 +304,12 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
         return lastImportTimestamp;
     }
 
-    protected static boolean shouldUpdateDBforDataSet(File dbFile, File dataSetFile) {
+    static boolean shouldUpdateDBforDataSet(File dbFile, File dataSetFile) {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READONLY);
         return shouldUpdateDBforDataSet(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME, dataSetFile);
     }
 
-    protected static boolean shouldUpdateDBforDataSet(SQLiteDatabase db, String dataTableName, String metadataTableName, File dataSetFile) {
+    static boolean shouldUpdateDBforDataSet(SQLiteDatabase db, String dataTableName, String metadataTableName, File dataSetFile) {
         if (!SQLiteUtils.doesTableExist(db, dataTableName)) {
             return true;
         }

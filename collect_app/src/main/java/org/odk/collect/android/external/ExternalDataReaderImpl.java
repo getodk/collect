@@ -56,7 +56,7 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
         }
     }
 
-    protected boolean doImportDataSetAndContinue(String dataSetName, File dataSetFile) {
+    private boolean doImportDataSetAndContinue(String dataSetName, File dataSetFile) {
         File dbFile = new File(dataSetFile.getParentFile().getAbsolutePath(),
                 dataSetName + ".db");
         if (dbFile.exists()) {
