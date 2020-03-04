@@ -24,6 +24,8 @@ import java.util.zip.DataFormatException;
 import androidx.annotation.Nullable;
 import timber.log.Timber;
 
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
+
 // ScanQRCodeActivity initiates barcode scanning and process its results
 // it does not have a UI
 public class ScanQRCodeActivity extends CollectAbstractActivity {
@@ -81,7 +83,7 @@ public class ScanQRCodeActivity extends CollectAbstractActivity {
                 ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
                 final LocaleHelper localeHelper = new LocaleHelper();
                 localeHelper.updateLocale(activity);
-                MainMenuActivity.startActivityAndCloseAllOthers(activity);
+                startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
             }
 
             @Override
