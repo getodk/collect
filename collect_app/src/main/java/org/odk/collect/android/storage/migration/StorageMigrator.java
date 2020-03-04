@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import org.apache.commons.io.FileUtils;
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -22,6 +23,7 @@ import java.io.File;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SCOPED_STORAGE_MIGRATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
@@ -40,9 +42,13 @@ public class StorageMigrator {
     private final StorageMigrationRepository storageMigrationRepository;
     private final BackgroundWorkManager backgroundWorkManager;
 
+    private final Analytics analytics;
+
     public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider,
                            StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository,
-                           GeneralSharedPreferences generalSharedPreferences, ReferenceManager referenceManager, BackgroundWorkManager workManager) {
+                           GeneralSharedPreferences generalSharedPreferences, ReferenceManager referenceManager,
+                           BackgroundWorkManager workManager, Analytics analytics) {
+
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
         this.storageEraser = storageEraser;
@@ -50,12 +56,16 @@ public class StorageMigrator {
         this.generalSharedPreferences = generalSharedPreferences;
         this.referenceManager = referenceManager;
         this.backgroundWorkManager = workManager;
+        this.analytics = analytics;
     }
 
     void performStorageMigration() {
         storageMigrationRepository.markMigrationStart();
-        storageMigrationRepository.setResult(migrate());
+        StorageMigrationResult result = migrate();
+        storageMigrationRepository.setResult(result);
         storageMigrationRepository.markMigrationEnd();
+
+        analytics.logEvent(SCOPED_STORAGE_MIGRATION, result.toString());
     }
 
     public StorageMigrationResult migrate() {

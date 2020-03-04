@@ -3,6 +3,7 @@ package org.odk.collect.android.storage.migration;
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
@@ -32,6 +33,7 @@ public class StorageMigratorTest {
     private final GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
     private final ReferenceManager referenceManager = mock(ReferenceManager.class);
     private final BackgroundWorkManager backgroundWorkManager = mock(BackgroundWorkManager.class);
+    private final Analytics analytics = mock(Analytics.class);
 
     @Before
     public void setup() {
@@ -42,7 +44,7 @@ public class StorageMigratorTest {
         doNothing().when(storageEraser).deleteOdkDirFromUnscopedStorage();
         doReturn("/sdcard/odk/layers/countries/countries-raster.mbtiles").when(generalSharedPreferences).get(KEY_REFERENCE_LAYER);
 
-        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences, referenceManager, backgroundWorkManager));
+        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences, referenceManager, backgroundWorkManager, analytics));
 
         doNothing().when(storageMigrator).reopenDatabases();
     }
