@@ -77,6 +77,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SCAN_QR_CODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
@@ -405,7 +406,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_configure_qr_code:
-                analytics.logEvent("ScanQRCode", "MainMenu");
+                analytics.logEvent(SCAN_QR_CODE, "MainMenu");
 
                 if (adminPasswordProvider.isAdminPasswordSet()) {
                     DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.SCAN_QR_CODE), getSupportFragmentManager());

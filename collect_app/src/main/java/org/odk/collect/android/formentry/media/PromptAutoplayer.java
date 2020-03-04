@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
+import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
@@ -43,13 +44,13 @@ public class PromptAutoplayer {
             Clip promptClip = getPromptClip(prompt);
             if (promptClip != null) {
                 clipsToPlay.add(promptClip);
-                analytics.logEvent("Prompt", "AutoplayAudioLabel", formIdentifierHash);
+                analytics.logEvent(AUDIO_QUESTION, "AutoplayAudioLabel", formIdentifierHash);
             }
 
             List<Clip> selectClips = getSelectClips(prompt);
             if (!selectClips.isEmpty()) {
                 clipsToPlay.addAll(selectClips);
-                analytics.logEvent("Prompt", "AutoplayAudioChoice", formIdentifierHash);
+                analytics.logEvent(AUDIO_QUESTION, "AutoplayAudioChoice", formIdentifierHash);
             }
 
             if (clipsToPlay.isEmpty()) {

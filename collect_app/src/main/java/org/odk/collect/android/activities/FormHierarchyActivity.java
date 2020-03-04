@@ -51,26 +51,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
-/**
- * Displays the structure of a form along with the answers for the current instance. Different form
- * elements are displayed in the following ways:
- * - Questions each take up a row with their full label shown and their answers below
- * - Non-repeat groups are not represented at all
- * - Repeat groups are initially shown as a "header" which takes you to a "picker" when tapped,
- *   revealing instances of that repeat
- * - Repeat instances are displayed with their label and index (e.g. `My group (1)`)
- *
- * Tapping on a repeat instance shows all the questions in that repeat instance using the display
- * rules above.
- *
- * Tapping on a question sets the app-wide current question to that question and terminates the
- * activity, returning to {@link FormEntryActivity}.
- *
- * Although the user gets the impression of navigating "into" a repeat, the view is refreshed in
- * {@link #refreshView()} rather than another activity/fragment being added to the back stack.
- *
- * Buttons at the bottom of the screen allow users to navigate the form.
- */
+import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_FORM_CONTROLLER_EVENT;
+
 public class FormHierarchyActivity extends CollectAbstractActivity {
     /**
      * The questions and repeats at the current level.
@@ -143,7 +125,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         if (formController == null) {
             finish();
             Timber.w("FormController is null");
-            Collect.getInstance().logNullFormControllerEvent("FormHierarchyActivity");
+            Collect.getInstance().logRemoteAnalytics(NULL_FORM_CONTROLLER_EVENT, "FormHierarchyActivity", null);
             return;
         }
 

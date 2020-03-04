@@ -58,6 +58,7 @@ import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActio
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -313,6 +314,22 @@ public class FormController {
      */
     public String getFormTitle() {
         return formEntryController.getModel().getFormTitle();
+    }
+
+    /**
+     * Gets a unique, privacy-preserving identifier for the current form.
+     *
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public String getCurrentFormIdentifierHash() {
+        String formIdentifier = "";
+
+        if (getFormDef() != null) {
+            String formID = getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+            formIdentifier = getFormTitle() + " " + formID;
+        }
+
+        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     /**
