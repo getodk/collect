@@ -2,12 +2,14 @@ package org.odk.collect.android.storage;
 
 import android.Manifest;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
@@ -19,9 +21,10 @@ import javax.inject.Singleton;
 
 import dagger.Provides;
 
-import static org.odk.collect.android.support.CollectHelpers.overrideAppDependencyModule;
-
+@RunWith(AndroidJUnit4.class)
 public class StorageMigrationCompletedBannerTest {
+
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -29,13 +32,7 @@ public class StorageMigrationCompletedBannerTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
-            .around(new ResetStateRule());
-
-    @Rule
-    public ActivityTestRule<MainMenuActivity> main = new ActivityTestRule<MainMenuActivity>(MainMenuActivity.class) {
-        @Override
-        protected void beforeActivityLaunched() {
-            overrideAppDependencyModule(new AppDependencyModule() {
+            .around(new ResetStateRule(true, new AppDependencyModule() {
                 @Provides
                 @Singleton
                 public StorageMigrationRepository providesStorageMigrationRepository() {
@@ -43,36 +40,34 @@ public class StorageMigrationCompletedBannerTest {
                     storageMigrationRepository.setResult(StorageMigrationResult.SUCCESS);
                     return storageMigrationRepository;
                 }
-            });
-            new StorageStateProvider().enableUsingScopedStorage();
-        }
-    };
+            }))
+            .around(rule);
 
     @Test
     public void when_storageMigrationCompleted_should_bannerBeVisibleAndPersistScreenRotation() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .assertStorageMigrationCompletedBannerIsDisplayed()
-                .rotateToLandscape(new MainMenuPage(main))
+                .rotateToLandscape(new MainMenuPage(rule))
                 .assertStorageMigrationCompletedBannerIsDisplayed()
-                .rotateToPortrait(new MainMenuPage(main))
+                .rotateToPortrait(new MainMenuPage(rule))
                 .assertStorageMigrationCompletedBannerIsDisplayed()
                 .clickDismissButton()
                 .assertStorageMigrationCompletedBannerIsNotDisplayed()
-                .rotateToLandscape(new MainMenuPage(main))
+                .rotateToLandscape(new MainMenuPage(rule))
                 .assertStorageMigrationCompletedBannerIsNotDisplayed()
-                .rotateToPortrait(new MainMenuPage(main))
+                .rotateToPortrait(new MainMenuPage(rule))
                 .assertStorageMigrationCompletedBannerIsNotDisplayed();
     }
 
     @Test
     public void when_storageMigrationCompleted_should_bannerBeVisibleAndDismissForEverIfAUserClicksDismissButton() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .assertStorageMigrationCompletedBannerIsDisplayed()
                 .clickDismissButton()
                 .assertStorageMigrationCompletedBannerIsNotDisplayed()
-                .rotateToLandscape(new MainMenuPage(main))
+                .rotateToLandscape(new MainMenuPage(rule))
                 .assertStorageMigrationCompletedBannerIsNotDisplayed()
-                .rotateToPortrait(new MainMenuPage(main))
+                .rotateToPortrait(new MainMenuPage(rule))
                 .assertStorageMigrationCompletedBannerIsNotDisplayed()
                 .recreateActivity()
                 .assertStorageMigrationCompletedBannerIsNotDisplayed();
@@ -80,7 +75,7 @@ public class StorageMigrationCompletedBannerTest {
 
     @Test
     public void when_storageMigrationCompleted_should_bannerBeVisibleAndDismissAfterReopeningApp() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .assertStorageMigrationCompletedBannerIsDisplayed()
                 .recreateActivity()
                 .assertStorageMigrationCompletedBannerIsNotDisplayed();

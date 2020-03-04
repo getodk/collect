@@ -268,7 +268,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.class.getName());
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.TAG);
 
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {

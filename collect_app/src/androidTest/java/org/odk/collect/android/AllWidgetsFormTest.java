@@ -24,8 +24,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -66,7 +64,6 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.CollectHelpers.overrideAppDependencyModule;
 import static org.odk.collect.android.test.CustomMatchers.withProgress;
 import static org.odk.collect.android.test.FormLoadingUtils.ALL_WIDGETS_FORM;
 
@@ -81,15 +78,12 @@ public class AllWidgetsFormTest {
 
     private final Random random = new Random();
     private final ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
+    private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
 
     @ClassRule
     public static final LocaleTestRule LOCALE_TEST_RULE = new LocaleTestRule();
 
-    @Rule
     public AllWidgetsFormTestRule activityTestRule = new AllWidgetsFormTestRule();
-
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -97,8 +91,14 @@ public class AllWidgetsFormTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
-            .around(new ResetStateRule())
-            .around(new CopyFormRule(ALL_WIDGETS_FORM));
+            .around(new ResetStateRule(new AppDependencyModule() {
+                @Override
+                public ActivityAvailability providesActivityAvailability(Context context) {
+                    return activityAvailability;
+                }
+            }))
+            .around(new CopyFormRule(ALL_WIDGETS_FORM))
+            .around(activityTestRule);
 
     @BeforeClass
     public static void beforeAll() {
@@ -267,7 +267,7 @@ public class AllWidgetsFormTest {
         // Manually input the value:
         String exStringWidgetFirstText = randomString();
 
-        when(activityTestRule.activityAvailability.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                .thenReturn(false);
 
         onView(withText("Launch")).perform(click());
@@ -293,7 +293,7 @@ public class AllWidgetsFormTest {
 
         )).respondWith(exStringResult);
 
-        when(activityTestRule.activityAvailability.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(true);
 
         onView(withText("Launch")).perform(click());
@@ -359,7 +359,7 @@ public class AllWidgetsFormTest {
         // Manually input the value:
         String exIntegerFirstValue = randomIntegerString();
 
-        when(activityTestRule.activityAvailability.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(false);
 
         onView(withText("Launch")).perform(click());
@@ -385,7 +385,7 @@ public class AllWidgetsFormTest {
 
         )).respondWith(exStringResult);
 
-        when(activityTestRule.activityAvailability.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(true);
 
         onView(withText("Launch")).perform(click());
@@ -420,7 +420,7 @@ public class AllWidgetsFormTest {
         // Manually input the value:
         String exDecimalFirstValue = randomDecimalString();
 
-        when(activityTestRule.activityAvailability.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(false);
 
         onView(withText("Launch")).perform(click());
@@ -446,7 +446,7 @@ public class AllWidgetsFormTest {
 
         )).respondWith(exStringResult);
 
-        when(activityTestRule.activityAvailability.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(true);
 
         onView(withText("Launch")).perform(click());
@@ -1044,23 +1044,8 @@ public class AllWidgetsFormTest {
 
     private static class AllWidgetsFormTestRule extends FormActivityTestRule {
 
-        ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
-
         AllWidgetsFormTestRule() {
             super(ALL_WIDGETS_FORM);
-        }
-
-        @Override
-        protected void beforeActivityLaunched() {
-            super.beforeActivityLaunched();
-
-            overrideAppDependencyModule(new AppDependencyModule() {
-
-                @Override
-                public ActivityAvailability providesActivityAvailability(Context context) {
-                    return activityAvailability;
-                }
-            });
         }
     }
 }

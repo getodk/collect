@@ -298,12 +298,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
     }
 
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.main_menu));
-        setSupportActionBar(toolbar);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -434,6 +428,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(getString(R.string.main_menu));
+        setSupportActionBar(toolbar);
     }
 
     private void countSavedForms() {

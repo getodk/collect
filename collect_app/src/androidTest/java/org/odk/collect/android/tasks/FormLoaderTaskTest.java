@@ -4,7 +4,6 @@ import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -16,7 +15,11 @@ import org.odk.collect.android.support.ResetStateRule;
 import java.io.File;
 import java.util.Arrays;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+
 public class FormLoaderTaskTest {
+
     private static final String EXTERNAL_CSV_FORM = "external_csv_form.xml";
 
     @Rule
@@ -34,6 +37,6 @@ public class FormLoaderTaskTest {
         final String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + EXTERNAL_CSV_FORM;
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
-        Assert.assertNotNull(wrapper);
+        assertThat(wrapper, notNullValue());
     }
 }
