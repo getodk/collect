@@ -35,11 +35,7 @@ import java.util.List;
 public class ResetUtility {
 
     private List<Integer> failedResetActions;
-    private final StoragePathProvider storagePathProvider;
-
-    public ResetUtility() {
-        storagePathProvider = new StoragePathProvider();
-    }
+    private final StoragePathProvider storagePathProvider = new StoragePathProvider();
 
     public List<Integer> reset(Context context, List<Integer> resetActions) {
 

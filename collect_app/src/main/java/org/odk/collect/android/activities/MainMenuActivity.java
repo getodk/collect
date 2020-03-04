@@ -296,8 +296,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-
-        setUpStorageMigrationBanner();
     }
 
     @Override
