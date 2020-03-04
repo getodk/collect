@@ -16,7 +16,6 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-
 /**
  * Abstraction that sits on top of {@link com.evernote.android.job.JobManager} and
  * {@link androidx.work.WorkManager}. Implementation of {@link BackgroundWorkManager} which objects
