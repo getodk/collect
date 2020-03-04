@@ -44,8 +44,8 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 public class RankingWidget extends ItemsWidget implements BinaryWidget {
 
     private List<SelectChoice> savedItems;
-    private LinearLayout widgetLayout;
     Button showRankingDialogButton;
+    private TextView answerTextView;
 
     public RankingWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -68,7 +68,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
     @Override
     public void clearAnswer() {
         savedItems = null;
-        setUpLayout(items);
+        answerTextView.setText(getAnswerText());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object values) {
         savedItems = (List<SelectChoice>) values;
-        setUpLayout(savedItems);
+        answerTextView.setText(getAnswerText());
     }
 
     @Override
@@ -132,13 +132,13 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
     }
 
     private void setUpLayout(List<SelectChoice> items) {
-        removeView(widgetLayout);
-
-        widgetLayout = new LinearLayout(getContext());
-        widgetLayout.setOrientation(LinearLayout.VERTICAL);
         showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.rank_items), getAnswerFontSize(), this);
+        answerTextView = createAnswerTextView(getContext(), getAnswerText(), getAnswerFontSize());
+
+        LinearLayout widgetLayout = new LinearLayout(getContext());
+        widgetLayout.setOrientation(LinearLayout.VERTICAL);
         widgetLayout.addView(showRankingDialogButton);
-        widgetLayout.addView(setUpAnswerTextView());
+        widgetLayout.addView(answerTextView);
 
         addAnswerView(widgetLayout, WidgetViewUtils.getStandardMargin(getContext()));
         SpacesInUnderlyingValuesWarning
@@ -146,7 +146,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
                 .renderWarningIfNecessary(items);
     }
 
-    private TextView setUpAnswerTextView() {
+    private String getAnswerText() {
         StringBuilder answerText = new StringBuilder();
         if (savedItems != null) {
             for (SelectChoice item : savedItems) {
@@ -159,6 +159,6 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
                 }
             }
         }
-        return createAnswerTextView(getContext(), answerText.toString(), getAnswerFontSize());
+        return answerText.toString();
     }
 }
