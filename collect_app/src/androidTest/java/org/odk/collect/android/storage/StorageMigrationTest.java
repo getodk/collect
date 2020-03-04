@@ -119,7 +119,7 @@ public class StorageMigrationTest {
         new MainMenuPage(rule)
                 .clickLearnMoreButton()
                 .clickMoreDetails()
-                .assertWebViewOpen();
+                .assertForumPostOpen();
     }
 
     @Test
