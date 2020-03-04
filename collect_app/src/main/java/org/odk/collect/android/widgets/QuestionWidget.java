@@ -77,7 +77,6 @@ public abstract class QuestionWidget
         extends FrameLayout
         implements Widget {
 
-    private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
     private final QuestionDetails questionDetails;
@@ -118,8 +117,6 @@ public abstract class QuestionWidget
             permissionUtils = new PermissionUtils();
         }
 
-        questionFontSize = Collect.getQuestionFontsize();
-
         this.questionDetails = questionDetails;
         formEntryPrompt = questionDetails.getPrompt();
 
@@ -135,10 +132,33 @@ public abstract class QuestionWidget
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
         setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
+        View answerView = onCreateAnswerView(context, getFormEntryPrompt(), getAnswerFontSize());
+        if (answerView != null) {
+            addAnswerView(answerView);
+        }
+
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context);
         }
     }
+
+    /**
+     * Returns the `View` object that represents the interface for answering the question. This
+     * will be rendered underneath the question's `label`, `hint` and `guidance_hint`. This method
+     * is passed the question itself (as a `FormEntryPrompt`) which will often be needed in
+     * rendering the widget. It is also passed the size to be used for question text.
+     */
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        return null;
+    }
+
+    /**
+     * Used to make sure clickable views in the widget work with the long click feature (shows
+     * the "Edit Prompt" menu). The passed listener should be set as the long click listener on
+     * clickable views in the widget.
+     */
+    public abstract void setOnLongClickListener(OnLongClickListener l);
 
     protected int getLayout() {
         return R.layout.question_widget;
@@ -298,8 +318,6 @@ public abstract class QuestionWidget
         SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
-    public abstract void setOnLongClickListener(OnLongClickListener l);
-
     /**
      * Override this to implement fling gesture suppression (e.g. for embedded WebView treatments).
      *
@@ -362,10 +380,15 @@ public abstract class QuestionWidget
         }
     }
 
+    @Deprecated
     protected final void addAnswerView(View v) {
         addAnswerView(v, null);
     }
 
+    /**
+     * Widget should use {@link #onCreateAnswerView} to define answer view
+     */
+    @Deprecated
     protected final void addAnswerView(View v, Integer margin) {
         ViewGroup answerContainer = findViewById(R.id.answer_container);
 
@@ -378,7 +401,7 @@ public abstract class QuestionWidget
         }
 
         answerContainer.addView(v, params);
-}
+    }
 
     /**
      * Register this widget's child views to pop up a context menu to clear the widget when the
@@ -393,6 +416,7 @@ public abstract class QuestionWidget
      * Every subclassed widget should override this, adding any views they may contain, and calling
      * super.cancelLongPress()
      */
+    @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         if (getAudioVideoImageTextLabel() != null) {
@@ -474,7 +498,7 @@ public abstract class QuestionWidget
     }
 
     public int getAnswerFontSize() {
-        return questionFontSize + 2;
+        return (int) questionTextSizeHelper.getHeadline6();
     }
 
     public View getHelpTextLayout() {

@@ -1,67 +1,98 @@
 package org.odk.collect.android.widgets;
 
-import androidx.annotation.NonNull;
-
 import android.view.View;
 import android.widget.CheckBox;
 
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.base.QuestionWidgetTest;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.verify;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
-/**
- * @author James Knight
- */
+@RunWith(RobolectricTestRunner.class)
+public class TriggerWidgetTest {
 
-public class TriggerWidgetTest extends QuestionWidgetTest<TriggerWidget, StringData> {
-    @NonNull
-    @Override
-    public TriggerWidget createWidget() {
-        return new TriggerWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
-    }
-
-    @NonNull
-    @Override
-    public StringData getNextAnswer() {
-        return new StringData(TriggerWidget.OK_TEXT);
-    }
-
-    @Override
-    public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        super.getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer();
-        assertTrue(getWidget().getTriggerButton().isChecked());
+    @Test
+    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
+        assertThat(createWidget(promptWithAnswer(null)).getAnswer(), nullValue());
     }
 
     @Test
-    public void checkingTheTriggerBoxShouldSetTheAnswer() {
-        TriggerWidget widget = getWidget();
-        assertNull(widget.getAnswer());
+    public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
+        TriggerWidget widget = createWidget(promptWithAnswer(new StringData("OK")));
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("OK"));
+    }
 
-        CheckBox triggerButton = widget.getTriggerButton();
-        assertFalse(triggerButton.isChecked());
+    @Test
+    public void clearAnswer_clearsWidgetAnswer() {
+        TriggerWidget widget = createWidget(promptWithAnswer(new StringData("OK")));
+
+        widget.clearAnswer();
+        assertThat(widget.getAnswer(), nullValue());
+    }
+
+    @Test
+    public void clearAnswer_callsValueChangeListeners() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+
+        widget.clearAnswer();
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
+        TriggerWidget widget = createWidget(promptWithReadOnly());
+        assertThat(widget.getCheckBox().getVisibility(), equalTo(View.VISIBLE));
+        assertThat(widget.getCheckBox().isEnabled(), equalTo(Boolean.FALSE));
+    }
+
+    @Test
+    public void whenPromptAnswerDoesNotHaveAnswer_checkboxIsUnchecked() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        assertThat(widget.getCheckBox().isChecked(), equalTo(false));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_checkboxIsChecked() {
+        TriggerWidget widget = createWidget(promptWithAnswer(new StringData("OK")));
+        assertThat(widget.getCheckBox().isChecked(), equalTo(true));
+    }
+
+    @Test
+    public void checkingCheckbox_setsAnswer() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        CheckBox triggerButton = widget.getCheckBox();
 
         triggerButton.setChecked(true);
-        triggerButton.callOnClick();
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("OK"));
 
-        IAnswerData answer = widget.getAnswer();
-        assertEquals(answer.getDisplayText(), TriggerWidget.OK_TEXT);
+        triggerButton.setChecked(false);
+        assertThat(widget.getAnswer(), nullValue());
     }
 
     @Test
-    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+    public void checkingCheckbox_callsValueChangeListeners() {
+        TriggerWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        CheckBox triggerButton = widget.getCheckBox();
 
-        assertThat(getWidget().triggerButton.getVisibility(), is(View.VISIBLE));
-        assertThat(getWidget().triggerButton.isEnabled(), is(Boolean.FALSE));
+        triggerButton.setChecked(true);
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    private TriggerWidget createWidget(FormEntryPrompt prompt) {
+        return new TriggerWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
     }
 }
