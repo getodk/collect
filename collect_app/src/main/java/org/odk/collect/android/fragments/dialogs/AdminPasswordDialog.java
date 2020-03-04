@@ -23,7 +23,7 @@ public class AdminPasswordDialog extends DialogFragment {
         void onIncorrectAdminPassword();
     }
 
-    public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION }
+    public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION, SCAN_QR_CODE }
 
     private AdminPasswordDialogCallback callback;
 

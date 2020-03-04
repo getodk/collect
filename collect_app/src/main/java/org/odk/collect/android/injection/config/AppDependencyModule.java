@@ -11,6 +11,7 @@ import android.webkit.MimeTypeMap;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
+import org.odk.collect.android.backgroundwork.CollectBackgroundWorkManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -41,6 +42,7 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.utilities.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import javax.inject.Singleton;
@@ -139,19 +141,7 @@ public class AppDependencyModule {
     @Singleton
     public Analytics providesAnalytics(Application application) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
-        FirebaseAnalytics firebaseAnalytics = new FirebaseAnalytics(firebaseAnalyticsInstance);
-
-        return new Analytics() {
-            @Override
-            public void logEvent(String category, String action) {
-                firebaseAnalytics.logEvent(category, action);
-            }
-
-            @Override
-            public void logEvent(String category, String action, String label) {
-                firebaseAnalytics.logEvent(category, action, label);
-            }
-        };
+        return new FirebaseAnalytics(firebaseAnalyticsInstance);
     }
 
     @Provides
@@ -181,10 +171,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager) {
+    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, BackgroundWorkManager backgroundWorkManager, Analytics analytics) {
         StorageEraser storageEraser = new StorageEraser(storagePathProvider);
 
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager);
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, backgroundWorkManager, analytics);
     }
 
     @Provides
@@ -255,5 +245,10 @@ public class AppDependencyModule {
     @Provides
     public CollectJobCreator providesCollectJobCreator() {
         return new CollectJobCreator();
+    }
+
+    @Provides
+    public BackgroundWorkManager providesBackgroundWorkManager() {
+        return new CollectBackgroundWorkManager();
     }
 }

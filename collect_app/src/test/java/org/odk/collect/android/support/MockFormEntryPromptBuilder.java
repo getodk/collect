@@ -92,4 +92,11 @@ public class MockFormEntryPromptBuilder {
 
         return this;
     }
+
+    public MockFormEntryPromptBuilder withAnswer(IAnswerData answer) {
+        when(prompt.getAnswerValue()).thenReturn(answer);
+        when(prompt.getAnswerText()).thenCallRealMethod();
+
+        return this;
+    }
 }

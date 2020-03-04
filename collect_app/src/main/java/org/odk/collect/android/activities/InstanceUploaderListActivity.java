@@ -69,6 +69,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.FILTER_FORMS_TO_SEND;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
@@ -268,7 +269,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.class.getName());
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.TAG);
 
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
@@ -520,7 +521,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                         case 1: // show all
                             showAllMode = true;
                             updateAdapter();
-                            analytics.logEvent("FilterSendForms", "SentAndUnsent");
+                            analytics.logEvent(FILTER_FORMS_TO_SEND, "SentAndUnsent");
                             break;
 
                         case 2:// do nothing

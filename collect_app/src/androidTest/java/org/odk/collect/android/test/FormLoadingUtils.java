@@ -52,6 +52,7 @@ public class FormLoadingUtils {
      */
     public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase) throws IOException {
         new StorageInitializer().createOdkDirsOnStorage();
+        ReferenceManager.instance().reset();
 
         String pathname = copyForm(formFilename);
         if (mediaFilePaths != null) {

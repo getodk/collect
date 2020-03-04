@@ -22,6 +22,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
@@ -69,7 +70,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     ServerPollingJob.schedulePeriodicJob((String) newValue);
 
-                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Periodic form updates check", (String) newValue);
+                    Collect.getInstance().logRemoteAnalytics(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
 
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
@@ -99,7 +100,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));
 
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    Collect.getInstance().logRemoteAnalytics("PreferenceChange", "Automatic form updates", newValue + " " + formUpdateCheckPeriod);
+                    Collect.getInstance().logRemoteAnalytics(AUTO_FORM_UPDATE_PREF_CHANGE, "Automatic form updates", newValue + " " + formUpdateCheckPeriod);
 
                     return true;
                 });

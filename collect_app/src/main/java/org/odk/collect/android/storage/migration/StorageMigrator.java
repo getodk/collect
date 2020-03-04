@@ -3,15 +3,9 @@ package org.odk.collect.android.storage.migration;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobManager;
-import com.google.common.util.concurrent.ListenableFuture;
-
 import org.apache.commons.io.FileUtils;
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -22,14 +16,14 @@ import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
+import org.odk.collect.utilities.BackgroundWorkManager;
 
 import java.io.File;
-import java.util.List;
-import java.util.Set;
 
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SCOPED_STORAGE_MIGRATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
@@ -46,22 +40,32 @@ public class StorageMigrator {
     private final ReferenceManager referenceManager;
 
     private final StorageMigrationRepository storageMigrationRepository;
+    private final BackgroundWorkManager backgroundWorkManager;
+
+    private final Analytics analytics;
 
     public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider,
                            StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository,
-                           GeneralSharedPreferences generalSharedPreferences, ReferenceManager referenceManager) {
+                           GeneralSharedPreferences generalSharedPreferences, ReferenceManager referenceManager,
+                           BackgroundWorkManager workManager, Analytics analytics) {
+
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
         this.storageEraser = storageEraser;
         this.storageMigrationRepository = storageMigrationRepository;
         this.generalSharedPreferences = generalSharedPreferences;
         this.referenceManager = referenceManager;
+        this.backgroundWorkManager = workManager;
+        this.analytics = analytics;
     }
 
     void performStorageMigration() {
         storageMigrationRepository.markMigrationStart();
-        storageMigrationRepository.setResult(migrate());
+        StorageMigrationResult result = migrate();
+        storageMigrationRepository.setResult(result);
         storageMigrationRepository.markMigrationEnd();
+
+        analytics.logEvent(SCOPED_STORAGE_MIGRATION, result.toString());
     }
 
     public StorageMigrationResult migrate() {
@@ -70,12 +74,15 @@ public class StorageMigrator {
         if (isFormUploaderRunning()) {
             return StorageMigrationResult.FORM_UPLOADER_IS_RUNNING;
         }
+
         if (isFormDownloaderRunning()) {
             return StorageMigrationResult.FORM_DOWNLOADER_IS_RUNNING;
         }
+
         if (!storageStateProvider.isEnoughSpaceToPerformMigration(storagePathProvider)) {
             return StorageMigrationResult.NOT_ENOUGH_SPACE;
         }
+
         if (!moveAppDataToScopedStorage()) {
             return StorageMigrationResult.MOVING_FILES_FAILED;
         }
@@ -97,29 +104,12 @@ public class StorageMigrator {
         return StorageMigrationResult.SUCCESS;
     }
 
-    boolean isFormUploaderRunning() {
-        ListenableFuture<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosByTag(AutoSendWorker.class.getName());
-        try {
-            for (WorkInfo workInfo : statuses.get()) {
-                if (workInfo.getState() == WorkInfo.State.RUNNING) {
-                    return true;
-                }
-            }
-        } catch (Exception | Error e) {
-            Timber.w(e);
-        }
-
-        return false;
+    private boolean isFormUploaderRunning() {
+        return backgroundWorkManager.isRunning(AutoSendWorker.TAG);
     }
 
-    boolean isFormDownloaderRunning() {
-        Set<Job> jobs = JobManager.instance().getAllJobsForTag(ServerPollingJob.TAG);
-        for (Job job : jobs) {
-            if (!job.isFinished()) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isFormDownloaderRunning() {
+        return backgroundWorkManager.isRunning(ServerPollingJob.TAG);
     }
 
     boolean moveAppDataToScopedStorage() {

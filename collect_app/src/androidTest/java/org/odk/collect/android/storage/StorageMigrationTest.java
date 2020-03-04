@@ -3,11 +3,13 @@ package org.odk.collect.android.storage;
 import android.Manifest;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -16,7 +18,10 @@ import org.odk.collect.android.support.pages.StorageMigrationDialogPage;
 
 import java.util.Arrays;
 
+@RunWith(AndroidJUnit4.class)
 public class StorageMigrationTest {
+
+    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -24,21 +29,26 @@ public class StorageMigrationTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
-            .around(new ResetStateRule())
-            .around(new CopyFormRule("formWithExternalFiles.xml", Arrays.asList("formWithExternalFiles-media/itemsets.csv", "formWithExternalFiles-media/fruits.xml", "formWithExternalFiles-media/fruits.csv", "formWithExternalFiles-media/last-saved.xml"), true));
+            .around(new ResetStateRule(false))
+            .around(new CopyFormRule("formWithExternalFiles.xml", Arrays.asList("formWithExternalFiles-media/itemsets.csv", "formWithExternalFiles-media/fruits.xml", "formWithExternalFiles-media/fruits.csv", "formWithExternalFiles-media/last-saved.xml"), true))
+            .around(rule);
 
-    @Rule
-    public IntentsTestRule<MainMenuActivity> main = new IntentsTestRule<MainMenuActivity>(MainMenuActivity.class) {
-        @Override
-        protected void beforeActivityLaunched() {
-            new StorageStateProvider().disableUsingScopedStorage();
-        }
-    };
+    @Test
+    public void when_storageMigrationNotPerformed_should_bannerBeVisible() {
+        new MainMenuPage(rule)
+                .assertStorageMigrationBannerIsDisplayed()
+                .rotateToLandscape(new MainMenuPage(rule))
+                .assertStorageMigrationBannerIsDisplayed()
+                .rotateToPortrait(new MainMenuPage(rule))
+                .assertStorageMigrationBannerIsDisplayed()
+                .recreateActivity()
+                .assertStorageMigrationBannerIsDisplayed();
+    }
 
     @Test
     public void when_migrationFinishedWithSuccess_should_formsWorkAsBefore() {
         // Fill the form with external files and migrate
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("formWithExternalFiles")
                 .putTextOnIndex(0, "John")
                 .swipeToNextQuestion()
@@ -52,7 +62,7 @@ public class StorageMigrationTest {
                 .assertStorageMigrationCompletedBannerIsDisplayed();
 
         // Open the saved form
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickEditSavedForm()
                 .clickOnForm("formWithExternalFiles")
                 .clickGoToStart()
@@ -69,7 +79,7 @@ public class StorageMigrationTest {
                 .clickSaveAndExit();
 
         // Fill another form
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("formWithExternalFiles")
                 .putTextOnIndex(0, "John")
                 .swipeToNextQuestion()
@@ -84,27 +94,15 @@ public class StorageMigrationTest {
     }
 
     @Test
-    public void when_storageMigrationNotPerformed_should_bannerBeVisible() {
-        new MainMenuPage(main)
-                .assertStorageMigrationBannerIsDisplayed()
-                .rotateToLandscape(new MainMenuPage(main))
-                .assertStorageMigrationBannerIsDisplayed()
-                .rotateToPortrait(new MainMenuPage(main))
-                .assertStorageMigrationBannerIsDisplayed()
-                .recreateActivity()
-                .assertStorageMigrationBannerIsDisplayed();
-    }
-
-    @Test
     public void when_thereAreNoSavedForms_should_thePromptToSubmitFormsBeNotVisible() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickLearnMoreButton()
                 .assertStorageMigrationContentWithoutSavedFormsIsVisible();
     }
 
     @Test
     public void when_savedFormsExist_should_thePromptToSubmitFormsBeVisible() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .startBlankForm("formWithExternalFiles")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
@@ -118,31 +116,31 @@ public class StorageMigrationTest {
 
     @Test
     public void when_moreDetailsButtonClicked_should_odkForumPageAppear() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickLearnMoreButton()
                 .clickMoreDetails()
-                .assertWebViewOpen();
+                .assertForumPostOpen();
     }
 
     @Test
     public void when_backButtonPressed_should_storageMigrationDialogPersist() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickLearnMoreButton()
-                .pressBack(new StorageMigrationDialogPage(main));
+                .pressBack(new StorageMigrationDialogPage(rule));
     }
 
     @Test
     public void when_cancelButtonPressed_should_storageMigrationDialogBeClosed() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickLearnMoreButton()
                 .clickCancel();
     }
 
     @Test
     public void when_rotationHappens_should_storageMigrationDialogPersist() {
-        new MainMenuPage(main)
+        new MainMenuPage(rule)
                 .clickLearnMoreButton()
-                .rotateToLandscape(new StorageMigrationDialogPage(main))
-                .rotateToPortrait(new StorageMigrationDialogPage(main));
+                .rotateToLandscape(new StorageMigrationDialogPage(rule))
+                .rotateToPortrait(new StorageMigrationDialogPage(rule));
     }
 }

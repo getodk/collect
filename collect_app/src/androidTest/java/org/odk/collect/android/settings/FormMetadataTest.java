@@ -16,7 +16,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
-import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -30,6 +29,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 public class FormMetadataTest {
 
     private final DeviceDetailsProvider deviceDetailsProvider = new FakeDeviceDetailsProvider();
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -38,26 +38,17 @@ public class FormMetadataTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_PHONE_STATE
             ))
-            .around(new ResetStateRule())
-            .around(new CopyFormRule("metadata.xml"));
-
-    @Rule
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<MainMenuActivity>(MainMenuActivity.class) {
-        @Override
-        protected void beforeActivityLaunched() {
-            super.beforeActivityLaunched();
-
-            CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            .around(new ResetStateRule(new AppDependencyModule() {
                 @Override
                 public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
                     return deviceDetailsProvider;
                 }
-            });
-        }
-    };
+            }))
+            .around(new CopyFormRule("metadata.xml"))
+            .around(rule);
 
     @Test
-    public void settingMetadata_letsThemBeIncludedInForm() {
+    public void settingMetadata_letsThemBeIncludedInAForm() {
         new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
@@ -96,7 +87,7 @@ public class FormMetadataTest {
     }
 
     @Test
-    public void deviceIdentifiersCanBeIncludedInForm() {
+    public void deviceIdentifiersCanBeIncludedInAForm() {
         new MainMenuPage(rule)
                 .startBlankForm("Metadata")
                 .scrollToAndAssertText(deviceDetailsProvider.getDeviceId())

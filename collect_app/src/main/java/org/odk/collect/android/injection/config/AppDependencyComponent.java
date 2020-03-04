@@ -16,6 +16,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -126,6 +127,8 @@ public interface AppDependencyComponent {
     void inject(FormMetadataFragment formMetadataFragment);
 
     void inject(MainMenuActivity mainMenuActivity);
+
+    void inject(ShowQRCodeFragment showQRCodeFragment);
 
     void inject(StorageMigrationService storageMigrationService);
 

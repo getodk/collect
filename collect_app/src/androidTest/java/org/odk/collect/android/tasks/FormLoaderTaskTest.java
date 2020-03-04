@@ -17,7 +17,11 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+
 public class FormLoaderTaskTest {
+
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
 
     private static final String SECONDARY_INSTANCE_EXTERNAL_CSV_FORM = "external_csv_form.xml";
@@ -51,12 +55,12 @@ public class FormLoaderTaskTest {
         final String formPath = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
-        Assert.assertNotNull(wrapper);
+        assertThat(wrapper, notNullValue());
     }
 
     // Validate the side effects of importing external data for search/pulldata
     @Test
-    public void loadSearchFromExternalCSVdoesNotRenameFiles() throws Exception {
+    public void loadSearchFromExternalCSVrenamesFiles() throws Exception {
         final String formPath = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
@@ -65,7 +69,10 @@ public class FormLoaderTaskTest {
 
         File mediaFolder = wrapper.getController().getMediaFolder();
         File importedCSV = new File(mediaFolder + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FILE);
-        Assert.assertTrue("Expected the imported CSV file to remain unchanged", importedCSV.exists());
+        Assert.assertFalse("Expected the imported CSV file to have been renamed", importedCSV.exists());
+
+        File renamedCSV = new File(mediaFolder + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FILE + ".imported");
+        Assert.assertTrue("Expected the renamed CSV file to still be present", renamedCSV.exists());
     }
 
     // Validate that importing external data multiple times does not fail due to side effects from import
@@ -81,7 +88,7 @@ public class FormLoaderTaskTest {
         File mediaFolder = wrapper.getController().getMediaFolder();
         File dbFile = new File(mediaFolder + File.separator + SIMPLE_SEARCH_EXTERNAL_DB_FILE);
         Assert.assertTrue(dbFile.exists());
-        final long dbLastModified = dbFile.lastModified();
+        long dbLastModified = dbFile.lastModified();
 
         // subsequent load should succeed despite side effects from import
         formLoaderTask = new FormLoaderTask(formPath, null, null);

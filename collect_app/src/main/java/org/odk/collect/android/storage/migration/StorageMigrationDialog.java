@@ -3,6 +3,7 @@ package org.odk.collect.android.storage.migration;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -137,8 +137,8 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     }
 
     private void showMoreDetails() {
-        Intent intent = new Intent(getContext(), WebViewActivity.class);
-        intent.putExtra("url", "https://forum.opendatakit.org/t/24159");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://forum.opendatakit.org/t/25268"));
         startActivity(intent);
     }
 

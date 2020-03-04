@@ -63,6 +63,7 @@ import java.io.RandomAccessFile;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.ENCRYPT_SUBMISSION;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 
 /**
@@ -419,6 +420,8 @@ public class SaveFormToDisk {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;
+
+                Collect.getInstance().logRemoteAnalytics(ENCRYPT_SUBMISSION, Collect.getCurrentFormIdentifierHash(), "");
             }
 
             // At this point, we have:

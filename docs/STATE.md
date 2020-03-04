@@ -8,7 +8,7 @@ and update this document as the code evolves.
 
 * App originally built in Java for Android 1.0/T-Mobile G1
 * Written at Google by graduate student interns and then University of Washington
-* Designed as a survey application backed by [JavaRosa](https://github.com/opendatakit/javarosa/) communicating with [OpenRosa](https://docs.opendatakit.org/openrosa/) servers
+* Designed as a survey application backed by [JavaRosa](https://github.com/opendatakit/javarosa/) (which deals with XForm forms) communicating with [OpenRosa](https://docs.opendatakit.org/openrosa/) servers
 * Many different contributors/styles/eras over 10 year lifetime
 * App wasn't built with a TDD workflow or with automated testing
 * Lots of work in the last two years to add more tests and clean up code using coverage measurement and static checks
@@ -21,6 +21,7 @@ and update this document as the code evolves.
 * UI is "iconic" (old) but with a lot of inconsistencies and quirks and is best adapted to small screens
 * A lot of code lives in between one "god" Activity (FormEntryActivity) and a process singleton (FormController)
 * Core form entry flow uses custom side-to-side swipe view (in FormEntryActivity made up of ODKView)
+* Questions are rendered using a view "framework" of implementations inheriting from `QuestionWidget`
 * Async/reactivity handled with a mixture of callbacks, LiveData and Rx
 * App stores data in flat files indexed in SQLite
 * Access to data in SQLite is done inconsistently through a mix of provider, helper and DAO objects
@@ -45,3 +46,4 @@ and update this document as the code evolves.
 * Favoring domain objects (instance, form) with related logic where possible to more explicitly link data and logic
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code
 * Refactoring towards an OpenRosa abstraction (`OpenRosaAPIClient`) closer to its [documented API](https://docs.opendatakit.org/openrosa/) and takes care of all interactions with Aggregate, Central etc (currently some high level work interacts with `OpenRosaHttpInterface` directly)
+* `QuestionWiget` implementations are moving from defining their "answer" view programmatically to [implementing `onCreateAnswerView`](WIDGETS.md)

@@ -474,7 +474,7 @@
   <string name="select_time">Uhrzeit auswählen</string>
   <string name="no_date_selected">Kein Datum ausgewählt</string>
   <string name="no_time_selected">Keine Uhrzeit ausgewählt</string>
-  <string name="import_settings">Import/Export Einstellungen</string>
+  <string name="configure_via_qr_code">Import/Export Einstellungen</string>
   <string name="qr_code">QR-Code</string>
   <string name="scan_qrcode">Code von anderem Gerät scannen</string>
   <string name="successfully_imported_settings">Einstellungen erfolgreich importiert</string>
@@ -487,7 +487,6 @@
   <string name="qrcode_without_passwords">Dieser QR-Code enthält nicht ihre Admin- oder Server-Passwörter. \n(Hier berühren um die Passwörter hinzuzufügen)</string>
   <string name="qrcode_with_admin_password">Dieser QR-Code enthält ihr Admin-Passwort. Bitte gehen Sie vorsichtig damit um.\n(Hier berühren um das Passwort zu entfernen)</string>
   <string name="qrcode_with_server_password">Dieser QR-Code enthält ihr Server-Passwort. \n(Hier berühren um das Passwort zu entfernen)</string>
-  <string name="import_export_settings">Import/Export Einstellungen</string>
   <string name="qrcode_scanner_prompt">Positionieren Sie den QR-Code innerhalb des Rechtecks</string>
   <string name="barcode_scanner_prompt">Positionieren Sie den Barcode innerhalb des Rechtecks.</string>
   <string name="server_password">Server-Passwort</string>
