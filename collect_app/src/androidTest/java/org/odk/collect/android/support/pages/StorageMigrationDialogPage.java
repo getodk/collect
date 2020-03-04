@@ -1,20 +1,19 @@
 package org.odk.collect.android.support.pages;
 
+import android.net.Uri;
+
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.WebViewActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 public class StorageMigrationDialogPage extends Page<StorageMigrationDialogPage>  {
@@ -44,11 +43,8 @@ public class StorageMigrationDialogPage extends Page<StorageMigrationDialogPage>
         return new MainMenuPage(rule).assertOnPage();
     }
 
-    public StorageMigrationDialogPage assertWebViewOpen() {
-        intended(allOf(
-                hasComponent(WebViewActivity.class.getName()),
-                hasExtra("url", "https://forum.opendatakit.org/t/24159")
-        ));
+    public StorageMigrationDialogPage assertForumPostOpen() {
+        intended(hasData(Uri.parse("https://forum.opendatakit.org/t/25268")));
         return this;
     }
 
