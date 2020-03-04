@@ -72,12 +72,4 @@ public class StorageMigrationCompletedBannerTest {
                 .recreateActivity()
                 .assertStorageMigrationCompletedBannerIsNotDisplayed();
     }
-
-    @Test
-    public void when_storageMigrationCompleted_should_bannerBeVisibleAndDismissAfterReopeningApp() {
-        new MainMenuPage(rule)
-                .assertStorageMigrationCompletedBannerIsDisplayed()
-                .recreateActivity()
-                .assertStorageMigrationCompletedBannerIsNotDisplayed();
-    }
 }
