@@ -15,7 +15,6 @@ package org.odk.collect.android.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +32,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -86,7 +86,7 @@ public class ShowQRCodeFragment extends Fragment {
     @BindView(R.id.tvPasswordWarning)
     TextView tvPasswordWarning;
 
-    private Intent shareIntent;
+
     private AlertDialog dialog;
 
     @Inject
@@ -111,7 +111,6 @@ public class ShowQRCodeFragment extends Fragment {
     }
 
     private void generateCode() {
-        shareIntent = null;
         progressBar.setVisibility(VISIBLE);
         ivQRCode.setVisibility(GONE);
         addPasswordStatusString();
@@ -123,7 +122,7 @@ public class ShowQRCodeFragment extends Fragment {
                     progressBar.setVisibility(GONE);
                     ivQRCode.setVisibility(VISIBLE);
                     ivQRCode.setImageBitmap(bitmap);
-                }, Timber::e, this::updateShareIntent);
+                }, Timber::e);
         compositeDisposable.add(disposable);
     }
 
@@ -145,17 +144,6 @@ public class ShowQRCodeFragment extends Fragment {
             status = getString(R.string.qrcode_without_passwords);
         }
         tvPasswordWarning.setText(status);
-    }
-
-    private void updateShareIntent() {
-        // Initialize the intent to share QR Code
-        shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        Uri uri =
-                FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", new File(QRCodeUtils.getQrCodeFilepath()));
-        FileUtils.grantFileReadPermissions(shareIntent, uri, getActivity());
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
     }
 
     @OnClick(R.id.btnScan)
@@ -234,25 +222,6 @@ public class ShowQRCodeFragment extends Fragment {
                 Timber.i("Choosing QR code from sdcard cancelled");
             }
         }
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.settings_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_share:
-                if (shareIntent != null) {
-                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
-                }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private Collection<String> getSelectedPasswordKeys() {
