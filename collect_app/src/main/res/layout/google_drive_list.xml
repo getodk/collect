@@ -19,13 +19,7 @@ the License.
         android:layout_height="match_parent"
         android:layout_alignParentTop="true">
 
-    <include layout="@layout/toolbar"/>
-
-    <include
-            layout="@layout/toolbar_action_bar_shadow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"/>
+    <include layout="@layout/app_bar_layout"/>
 
     <LinearLayout
             android:id="@+id/buttonholder"
@@ -74,7 +68,7 @@ the License.
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/buttonholder"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/appBarLayout"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
@@ -84,7 +78,7 @@ the License.
     <TextView
             android:id="@android:id/empty"
             android:layout_above="@+id/buttonholder"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/appBarLayout"
             style="@style/Widget.Collect.TextView.Empty"
             android:text="@string/google_search_browse"/>
 
