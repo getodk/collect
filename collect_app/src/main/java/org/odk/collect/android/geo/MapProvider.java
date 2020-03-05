@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
@@ -15,8 +17,6 @@ import org.odk.collect.android.preferences.PrefUtils;
 
 import java.util.Map;
 import java.util.WeakHashMap;
-
-import androidx.annotation.NonNull;
 
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
@@ -31,13 +31,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STY
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 /**
- * A static class that obtains a MapFragment according to the user's preferences.
+ * Obtains a MapFragment according to the user's preferences.
  * This is the top-level class that should be used by the rest of the application.
  * The available options on the Maps preferences screen are also defined here.
  */
 public class MapProvider {
-    private MapProvider() { }  // prevent instantiation
-
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
@@ -54,11 +52,11 @@ public class MapProvider {
     // automatically when it's no longer needed.
 
     /** Keeps track of the listener associated with a given MapFragment. */
-    private static Map<MapFragment, OnSharedPreferenceChangeListener>
+    private final Map<MapFragment, OnSharedPreferenceChangeListener>
         listenersByMap = new WeakHashMap<>();
 
     /** Keeps track of the configurator associated with a given MapFragment. */
-    private static Map<MapFragment, MapConfigurator>
+    private final Map<MapFragment, MapConfigurator>
         configuratorsByMap = new WeakHashMap<>();
 
     /**
@@ -140,7 +138,7 @@ public class MapProvider {
     }
 
     /** Gets a new MapFragment from the selected MapConfigurator. */
-    public static MapFragment createMapFragment(Context context) {
+    public MapFragment createMapFragment(Context context) {
         MapConfigurator cftor = getConfigurator();
         MapFragment map = cftor.createMapFragment(context);
         if (map != null) {
@@ -203,7 +201,7 @@ public class MapProvider {
         return SOURCE_OPTIONS[0];
     }
 
-    static void onMapFragmentStart(MapFragment map) {
+    void onMapFragmentStart(MapFragment map) {
         MapConfigurator cftor = configuratorsByMap.get(map);
         if (cftor != null) {
             OnSharedPreferenceChangeListener listener = (prefs, key) -> {
@@ -218,7 +216,7 @@ public class MapProvider {
         }
     }
 
-    static void onMapFragmentStop(MapFragment map) {
+    void onMapFragmentStop(MapFragment map) {
         OnSharedPreferenceChangeListener listener = listenersByMap.get(map);
         if (listener != null) {
             SharedPreferences prefs = PrefUtils.getSharedPrefs();
