@@ -24,6 +24,7 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.ScanQRCodeActivity;
 import org.odk.collect.android.adapters.TabAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.fragments.QRScannerFragment;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
@@ -76,7 +77,7 @@ public class QRCodeTabs extends CollectAbstractActivity {
         tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
         adapter = new TabAdapter(getSupportFragmentManager());
         adapter.addFragment(new ShowQRCodeFragment(), "QR code");
-        adapter.addFragment(new ShowQRCodeFragment(), "Scan");
+        adapter.addFragment(new QRScannerFragment(), "Scan");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         this.updateShareIntent();
