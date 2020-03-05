@@ -76,7 +76,7 @@
   <string name="load_remote_form_error">Terjadi kesalahan saat mengambil daftar fromulir</string>
   <string name="location_provider_accuracy">Dengan %1$s. Tingkat akurasi %2$s meter.</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
-    <string name="manage_files">Hapus formulir</string>
+  <string name="manage_files">Hapus formulir</string>
   <string name="mark_finished">Tandai formulir ini telah siap kirim</string>
   <string name="noselect_error">Maaf, anda belum memilih formulir!</string>
   <string name="no_connection">Tidak ditemukan koneksi internet</string>
@@ -421,8 +421,6 @@
   <string name="select_time">Pilih waktu</string>
   <string name="no_date_selected">Tanggal tidak dipilih</string>
   <string name="no_time_selected">Waktu tidak dipilih</string>
-  <string name="configure_via_qr_code">Pengaturan Impor/Expor</string>
-  <string name="qr_code">QR code</string>
   <string name="scan_qrcode">Pindai kode dari perangkat lain</string>
   <string name="successfully_imported_settings">Pengaturan berhasil diimpor</string>
   <string name="encoding_max_limit">Batas karakter maksimum tercapai: QR code tidak dapat dibuat untuk seluruh pengaturan</string>
