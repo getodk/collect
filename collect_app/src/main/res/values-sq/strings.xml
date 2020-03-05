@@ -71,7 +71,7 @@
   <string name="load_remote_form_error">Gabim në ngarkimin e listës së formularëve</string>
   <string name="location_provider_accuracy">Duke përdorur %1$s. Saktësia është %2$s m.</string>
   <string name="location_accuracy">Saktësia është %1$s m</string>
-    <string name="manage_files">Fshi formularin e ruajtur</string>
+  <string name="manage_files">Fshi formularin e ruajtur</string>
   <string name="mark_finished">Shëno formularin si të përfunduar</string>
   <string name="noselect_error">Ndjesë, ju nuk keni përzgjedhur asnjë formular</string>
   <string name="no_connection">Nuk jeni i lidhur me internetin</string>
@@ -376,8 +376,6 @@
   <string name="select_time">Zgjidh orën</string>
   <string name="no_date_selected">Data nuk është përzgjedhur</string>
   <string name="no_time_selected">Ora nuk është përzgjedhur</string>
-  <string name="configure_via_qr_code">Parametrat e eksportimit dhe importimit</string>
-  <string name="qr_code">Kod QR</string>
   <string name="scan_qrcode">Skano kodin nga një aparat tjetër</string>
   <string name="successfully_imported_settings">Parametrat u importuan me sukses</string>
   <string name="encoding_max_limit">U arrit limiti maksimal i karaktereve: Kodi QR nuk mund të gjenerohet për të gjithë parametrat. </string>

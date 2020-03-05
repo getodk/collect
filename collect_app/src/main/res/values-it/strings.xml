@@ -78,7 +78,7 @@
   <string name="load_remote_form_error">Errore nel recupero Elenco Moduli.</string>
   <string name="location_provider_accuracy">Utilizzando %1$s. Precisione%2$s m.</string>
   <string name="location_accuracy">Precisione: %1$s m</string>
-    <string name="manage_files">Elimina Modulo Salvato</string>
+  <string name="manage_files">Elimina Modulo Salvato</string>
   <string name="mark_finished">Segna Modulo come Completato</string>
   <string name="noselect_error">Spiacenti, non hai selezionato alcun modulo!</string>
   <string name="no_connection">Nessuna connessione di rete disponibile</string>
@@ -466,8 +466,6 @@
   <string name="select_time">Seleziona un orario</string>
   <string name="no_date_selected">Nessuna data selezionata</string>
   <string name="no_time_selected">Nessun orario selezionato</string>
-  <string name="configure_via_qr_code">Parametri di configurazione per Importare/Esportare</string>
-  <string name="qr_code">Codice QR</string>
   <string name="scan_qrcode">Scansiona il codice con l\'altro dispositivo</string>
   <string name="successfully_imported_settings">Impostazioni importate con successo</string>
   <string name="encoding_max_limit">Numero massimo di caratteri raggiunto: codice QR non può essere generato per tutte le impostazioni</string>
