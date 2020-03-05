@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
@@ -87,7 +87,7 @@ public class WidgetViewUtils {
             button.setLayoutParams(params);
 
             button.setOnClickListener(v -> {
-                if (Collect.allowClick(QuestionWidget.class.getName())) {
+                if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
                     ((ButtonWidget) listener).onButtonClick(withId);
                 }
             });
