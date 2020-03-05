@@ -47,61 +47,61 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
         for (Map.Entry<String, File> stringFileEntry : externalDataMap.entrySet()) {
             String dataSetName = stringFileEntry.getKey();
             File dataSetFile = stringFileEntry.getValue();
-            if (dataSetFile.exists()) {
-                File dbFile = new File(dataSetFile.getParentFile().getAbsolutePath(),
-                        dataSetName + ".db");
-                if (dbFile.exists()) {
-                    // this means the someone updated the csv file, so we need to reload it
-                    boolean deleted = dbFile.delete();
-                    if (!deleted) {
-                        Timber.e("%s has changed but we could not delete the previous DB at %s",
-                                dataSetFile.getName(), dbFile.getAbsolutePath());
-                        continue;
-                    }
-                }
-                ExternalSQLiteOpenHelper externalSQLiteOpenHelper = new ExternalSQLiteOpenHelper(
-                        dbFile);
-                externalSQLiteOpenHelper.importFromCSV(dataSetFile, this, formLoaderTask);
-
-                if (formLoaderTask.isCancelled()) {
-                    Timber.w(
-                            "The import was cancelled, so we need to rollback.");
-
-                    // we need to drop the database file since it might be partially populated.
-                    // It will be re-created next time.
-
-                    Timber.w("Closing database to be deleted %s", dbFile.toString());
-
-                    // then close the database
-                    SQLiteDatabase db = externalSQLiteOpenHelper.getReadableDatabase();
-                    db.close();
-
-                    // the physically delete the db.
-                    try {
-                        FileUtils.forceDelete(dbFile);
-                        Timber.w("Deleted %s", dbFile.getName());
-                    } catch (IOException e) {
-                        Timber.e(e);
-                    }
-
-                    // then just exit and do not process any other CSVs.
-                    return;
-
-                } else {
-                    // rename the dataSetFile into "dataSetFile.csv.imported" in order not to be
-                    // loaded again
-                    File importedFile = new File(dataSetFile.getParentFile(),
-                            dataSetFile.getName() + ".imported");
-                    boolean renamed = dataSetFile.renameTo(importedFile);
-                    if (!renamed) {
-                        Timber.e("%s could not be renamed to be archived. It will be re-imported "
-                                + "again! :(", dataSetFile.getName());
-                    } else {
-                        Timber.e("%s was renamed to %s", dataSetFile.getName(), importedFile.getName());
-                    }
-                }
+            if (!dataSetFile.exists()) {
+                continue;
+            }
+            if (!doImportDataSetAndContinue(dataSetName, dataSetFile)) {
+                return; // halt if import was cancelled
             }
         }
+    }
+
+    private boolean doImportDataSetAndContinue(String dataSetName, File dataSetFile) {
+        File dbFile = new File(dataSetFile.getParentFile().getAbsolutePath(),
+                dataSetName + ".db");
+        if (dbFile.exists()) {
+            // Determine if we need to reimport
+            if (ExternalSQLiteOpenHelper.shouldUpdateDBforDataSet(dbFile, dataSetFile)) {
+                boolean deleted = dbFile.delete();
+                if (!deleted) {
+                    Timber.e("%s has changed but we could not delete the previous DB at %s",
+                            dataSetFile.getName(), dbFile.getAbsolutePath());
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+        ExternalSQLiteOpenHelper externalSQLiteOpenHelper = new ExternalSQLiteOpenHelper(
+                dbFile);
+        externalSQLiteOpenHelper.importFromCSV(dataSetFile, this, formLoaderTask);
+
+        if (formLoaderTask != null && formLoaderTask.isCancelled()) {
+            Timber.w(
+                    "The import was cancelled, so we need to rollback.");
+
+            // we need to drop the database file since it might be partially populated.
+            // It will be re-created next time.
+
+            Timber.w("Closing database to be deleted %s", dbFile.toString());
+
+            // then close the database
+            SQLiteDatabase db = externalSQLiteOpenHelper.getReadableDatabase();
+            db.close();
+
+            // the physically delete the db.
+            try {
+                FileUtils.forceDelete(dbFile);
+                Timber.w("Deleted %s", dbFile.getName());
+            } catch (IOException e) {
+                Timber.e(e);
+            }
+
+            // then just exit and do not process any other CSVs.
+            return false;
+
+        }
+        return true;
     }
 
 }

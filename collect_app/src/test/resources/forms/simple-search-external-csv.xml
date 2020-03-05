@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>simple-search-external-csv</h:title>
+        <model>
+            <instance>
+                <simple-search-external-csv id="simple-search-external-csv">
+                    <fruit1 />
+                    <note_fruit />
+                </simple-search-external-csv>
+            </instance>
+            <bind nodeset="/simple-search-external-csv/fruit1" type="select1" />
+            <bind nodeset="/simple-search-external-csv/note_fruit" readonly="true()" type="string" />
+            <submission action="https://docs.google.com/spreadsheets/d/1lxzQR336UOy2LtHjIIhXKPFJzq_cIusfdwWq24H7q90/edit?usp=sharing" method="post"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 appearance="search('simple-search-external-csv-fruits')" ref="/simple-search-external-csv/fruit1">
+            <label>Select from a CSV using search() appearance/function</label>
+            <item>
+                <label>name</label>
+                <value>name_key</value>
+            </item>
+        </select1>
+        <input ref="/simple-search-external-csv/note_fruit">
+            <label>
+                The fruit <output value=" /simple-search-external-csv/fruit1 " /> pulled from csv
+            </label>
+        </input>
+    </h:body>
+</h:html>

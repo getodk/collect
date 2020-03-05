@@ -16,39 +16,32 @@
 
 package org.odk.collect.android.utilities;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
+import java.util.Arrays;
+import java.util.List;
 
 public class CustomSQLiteQueryBuilder {
-    private static final String SPACE = " ";
-    private static final String SEMICOLON = ";";
+    protected static final String SPACE = " ";
+    protected static final String LIST_SEPARATOR = ", ";
+    protected static final String SEMICOLON = ";";
 
-    private final SQLiteDatabase db;
+    protected StringBuilder query;
 
-    private StringBuilder query;
-
-    // Only for tests
     CustomSQLiteQueryBuilder() {
-        this(null);
-    }
-
-    // Only for tests
-    public StringBuilder getQuery() {
-        return query;
-    }
-
-    private CustomSQLiteQueryBuilder(SQLiteDatabase db) {
-        this.db = db;
         query = new StringBuilder();
     }
 
-    public static CustomSQLiteQueryBuilder begin(SQLiteDatabase db) {
-        return new CustomSQLiteQueryBuilder(db);
+    public void end() {}
+
+    public String getQueryString() {
+        return query.toString();
     }
 
-    public void end() throws SQLiteException {
-        query.append(SEMICOLON);
-        db.execSQL(query.toString());
+    public static String quoteIdentifier(String unquoted) {
+        return "\"" + unquoted + "\"";
+    }
+
+    public static String quoteStringLiteral(String unquoted) {
+        return "\'" + unquoted + "\'";
     }
 
     public CustomSQLiteQueryBuilder select() {
@@ -78,6 +71,23 @@ public class CustomSQLiteQueryBuilder {
         return this;
     }
 
+    public CustomSQLiteQueryBuilder where(String selectCriteria) {
+        query.append("WHERE").append(SPACE).append(selectCriteria).append(SPACE);
+        return this;
+    }
+
+    public CustomSQLiteQueryBuilder where(String[] selectCriteria) {
+        return where(formatLogicalAnd(selectCriteria));
+    }
+
+    public static String formatCompareEquals(String left, String right) {
+        return left + " = " + right;
+    }
+
+    public static String formatLogicalAnd(String[] criteria) {
+        return StringUtils.join(" AND ", Arrays.asList(criteria));
+    }
+
     public CustomSQLiteQueryBuilder renameTable(String table) {
         query.append("ALTER TABLE").append(SPACE).append(table).append(SPACE).append("RENAME TO").append(SPACE);
         return this;
@@ -96,6 +106,20 @@ public class CustomSQLiteQueryBuilder {
     public CustomSQLiteQueryBuilder insertInto(String table) {
         query.append("INSERT INTO").append(SPACE).append(table);
         return this;
+    }
+
+    public CustomSQLiteQueryBuilder createTable(final String tableName) {
+        query.append("CREATE").append(SPACE);
+        return table(tableName);
+    }
+
+    public CustomSQLiteQueryBuilder columnsForCreate(List<String> columnDefinitions) {
+        query.append('(').append(StringUtils.join(LIST_SEPARATOR, columnDefinitions)).append(')');
+        return this;
+    }
+
+    public static String formatColumnDefinition(String columnName, String columnType) {
+        return columnName + SPACE + columnType;
     }
 
     public CustomSQLiteQueryBuilder alter() {
