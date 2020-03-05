@@ -17,13 +17,31 @@ public class MainMenuViewModelTest {
     }
 
     @Test
-    public void version_whenBeta_returnsSemanticVersionWithPrefix_andBetaVersion() {
+    public void version_whenDirtyRelease_returnsSemanticVersionWithPrefix() {
+        MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.1.7-dirty");
+        assertThat(viewModel.getVersion(), equalTo("v1.1.7"));
+    }
+
+    @Test
+    public void version_whenBetaRelease_returnsSemanticVersionWithPrefix_andBetaVersion() {
+        MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.23.0-beta.1");
+        assertThat(viewModel.getVersion(), equalTo("v1.23.0 Beta 1"));
+    }
+
+    @Test
+    public void version_whenDirtyBetaRelease_returnsSemanticVersionWithPrefix_andBetaVersion() {
+        MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.23.0-beta.1-dirty");
+        assertThat(viewModel.getVersion(), equalTo("v1.23.0 Beta 1"));
+    }
+
+    @Test
+    public void version_whenBetaTag_returnsSemanticVersionWithPrefix_andBetaVersion() {
         MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.23.0-beta.1-181-ge51d004d4");
         assertThat(viewModel.getVersion(), equalTo("v1.23.0 Beta 1"));
     }
 
     @Test
-    public void version_whenNormalCommit_returnsSemanticVersionWithPrefix() {
+    public void version_whenReleaseTag_returnsSemanticVersionWithPrefix() {
         MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.23.0-181-ge51d004d4");
         assertThat(viewModel.getVersion(), equalTo("v1.23.0"));
     }
@@ -35,13 +53,31 @@ public class MainMenuViewModelTest {
     }
 
     @Test
-    public void versionCommitDescription_whenBeta_returnsCommitCountAndSHA() {
+    public void versionCommitDescription_whenDirtyRelease_returnsDirty() {
+        MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.1.7-dirty");
+        assertThat(viewModel.getVersionCommitDescription(), equalTo("dirty"));
+    }
+
+    @Test
+    public void versionCommitDescription_whenBetaRelease_returnsNull() {
+        MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.1.7-beta.7");
+        assertThat(viewModel.getVersionCommitDescription(), equalTo(null));
+    }
+
+    @Test
+    public void versionCommitDescription_whenDirtyBetaRelease_returnsNull() {
+        MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.1.7-beta.7-dirty");
+        assertThat(viewModel.getVersionCommitDescription(), equalTo("dirty"));
+    }
+
+    @Test
+    public void versionCommitDescription_whenBetaTag_returnsCommitCountAndSHA() {
         MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.23.0-beta.1-181-ge51d004d4");
         assertThat(viewModel.getVersionCommitDescription(), equalTo("181-ge51d004d4"));
     }
 
     @Test
-    public void versionCommitDescription_whenNormalCommit_returnsCommitCountAndSHA() {
+    public void versionCommitDescription_whenReleaseTag_returnsCommitCountAndSHA() {
         MainMenuViewModel viewModel = new MainMenuViewModel(() -> "v1.23.0-181-ge51d004d4");
         assertThat(viewModel.getVersionCommitDescription(), equalTo("181-ge51d004d4"));
     }
