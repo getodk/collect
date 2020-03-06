@@ -22,11 +22,16 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.ResultPoint;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.ScanQRCodeActivity;
+import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
+import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.List;
 
@@ -40,14 +45,25 @@ public class QRScannerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
         barcodeView = rootView.findViewById(R.id.barcode_view);
-        barcodeView.decodeContinuous(new BarcodeCallback() {
+
+        new PermissionUtils().requestCameraPermission(getActivity(), new PermissionListener() {
             @Override
-            public void barcodeResult(BarcodeResult result) {
-                beepSound();
+            public void granted() {
+                barcodeView.decodeContinuous(new BarcodeCallback() {
+                    @Override
+                    public void barcodeResult(BarcodeResult result) {
+                        beepSound();
+                    }
+
+                    @Override
+                    public void possibleResultPoints(List<ResultPoint> resultPoints) {
+
+                    }
+                });
             }
 
             @Override
-            public void possibleResultPoints(List<ResultPoint> resultPoints) {
+            public void denied() {
 
             }
         });
