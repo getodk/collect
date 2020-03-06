@@ -12,6 +12,7 @@
  */
 
 package org.odk.collect.android.fragments;
+import android.app.Activity;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
+import timber.log.Timber;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -28,14 +30,23 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.ScanQRCodeActivity;
-import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
-import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.ActionListener;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceSaver;
+import org.odk.collect.android.preferences.QRCodeTabs;
+import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.ToastUtils;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
 public class QRScannerFragment extends Fragment {
 
@@ -60,6 +71,15 @@ public class QRScannerFragment extends Fragment {
 
                     }
                 });
+            }
+            public void barcodeResult(BarcodeResult result) {
+                beepSound();
+                try {
+                    QRCodeTabs.applySettings(getActivity(), CompressionUtils.decompress(result.getText()));
+                } catch (IOException | DataFormatException | IllegalArgumentException e) {
+                    Timber.e(e);
+                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
+                }
             }
 
             @Override
@@ -92,4 +112,7 @@ public class QRScannerFragment extends Fragment {
         super.onResume();
         barcodeView.resume();
     }
+
+
+
 }

@@ -21,12 +21,15 @@ import android.widget.ProgressBar;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScanQRCodeActivity;
 import org.odk.collect.android.adapters.TabAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.QRScannerFragment;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
+import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -59,6 +62,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
+
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
 public class QRCodeTabs extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
@@ -166,5 +171,27 @@ public class QRCodeTabs extends CollectAbstractActivity {
                 Timber.i("Choosing QR code from sdcard cancelled");
             }
         }
+    }
+
+    public static void applySettings(Activity activity, String content) {
+        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
+            @Override
+            public void onSuccess() {
+                Collect.getInstance().initializeJavaRosa();
+                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
+                final LocaleHelper localeHelper = new LocaleHelper();
+                localeHelper.updateLocale(activity);
+                startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                if (exception instanceof GeneralSharedPreferences.ValidationException) {
+                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
+                } else {
+                    Timber.e(exception);
+                }
+            }
+        });
     }
 }
