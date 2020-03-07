@@ -24,7 +24,7 @@ import java.util.List;
 
 public class QuitFormDialogFragment extends DialogFragment {
 
-    private FormController formController;
+    private final FormController formController;
     private Listener listener;
     private ListView listView;
     private String title;
