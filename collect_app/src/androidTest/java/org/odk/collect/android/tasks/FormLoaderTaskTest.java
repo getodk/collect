@@ -58,9 +58,8 @@ public class FormLoaderTaskTest {
         assertThat(wrapper, notNullValue());
     }
 
-    // Validate the side effects of importing external data for search/pulldata
     @Test
-    public void loadSearchFromExternalCSVrenamesFiles() throws Exception {
+    public void loadSearchFromexternalCsvLeavesFileUnchanged() throws Exception {
         final String formPath = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();

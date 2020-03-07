@@ -33,7 +33,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.odk.collect.android.external.ExternalDataUtil.COLUMN_DATASET_FILENAME;
-import static org.odk.collect.android.external.ExternalDataUtil.COLUMN_LAST_MODIFIED;
+import static org.odk.collect.android.external.ExternalDataUtil.COLUMN_MD5_HASH;
 import static org.odk.collect.android.external.ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME;
 import static org.odk.collect.android.external.ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME;
 
@@ -101,7 +101,7 @@ public class ExternalDataReaderTest {
     }
 
     @Test
-    public void createAndPopulateMetadataTable_createsMetadataTableWithExpectedTimestamp() {
+    public void createAndPopulateMetadataTable_createsMetadataTableWithExpectedMd5Hash() {
         final String testMetadataTable = "testMetadataTable";
 
         SQLiteDatabase.OpenParams.Builder paramsBuilder = new SQLiteDatabase.OpenParams.Builder();
@@ -110,15 +110,15 @@ public class ExternalDataReaderTest {
 
         assertThat(SQLiteUtils.doesTableExist(db, testMetadataTable), is(true));
 
-        final String[] columnNames = {COLUMN_LAST_MODIFIED};
+        final String[] columnNames = {COLUMN_MD5_HASH};
         final String selectCriteria = CustomSQLiteQueryBuilder.formatCompareEquals(
                 COLUMN_DATASET_FILENAME,
                 CustomSQLiteQueryBuilder.quoteStringLiteral(SIMPLE_SEARCH_EXTERNAL_CSV_FILENAME));
         Cursor cursor = db.query(testMetadataTable, columnNames, selectCriteria, null, null, null, null);
         cursor.moveToFirst();
-        long fileTimestamp = cursor.getLong(0);
+        String fileMd5 = cursor.getString(0);
 
-        assertThat(fileTimestamp, is(csvFile.lastModified()));
+        assertThat(fileMd5, is(FileUtils.getMd5Hash(csvFile)));
     }
 
     @Test
@@ -167,18 +167,16 @@ public class ExternalDataReaderTest {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         assertThat(db.rawQuery(SELECT_ALL_DATA_QUERY, null).getCount(), is(3));
 
-        long originalTimestamp = csvFile.lastModified();
-        long metadataLastModified = ExternalSQLiteOpenHelper.getLastImportTimestamp(db, EXTERNAL_METADATA_TABLE_NAME, csvFile);
-        assertThat(metadataLastModified, is(originalTimestamp));
-
-        Thread.sleep(1000); // this test is so fast that we need to guarantee the modified time changes
+        String originalHash = FileUtils.getMd5Hash(csvFile);
+        String metadataTableHash = ExternalSQLiteOpenHelper.getLastMd5Hash(db, EXTERNAL_METADATA_TABLE_NAME, csvFile);
+        assertThat(metadataTableHash, is(originalHash));
 
         try (Writer out = new BufferedWriter(new FileWriter(csvFile, true))) {
             out.write("\ncherimoya,Cherimoya");
         }
 
-        long newTimestamp = csvFile.lastModified();
-        assertThat(newTimestamp, is(not(originalTimestamp)));
+        String newHash = FileUtils.getMd5Hash(csvFile);
+        assertThat(newHash, is(not(originalHash)));
 
         // Reimport
         externalDataReader = new ExternalDataReaderImpl(null);
@@ -188,8 +186,8 @@ public class ExternalDataReaderTest {
         assertThat(db.rawQuery(SELECT_ALL_DATA_QUERY, null).getCount(), is(4));
 
         // Check the metadata table import timestamp
-        metadataLastModified = ExternalSQLiteOpenHelper.getLastImportTimestamp(db, EXTERNAL_METADATA_TABLE_NAME, csvFile);
-        assertThat(metadataLastModified, is(newTimestamp));
+        metadataTableHash = ExternalSQLiteOpenHelper.getLastMd5Hash(db, EXTERNAL_METADATA_TABLE_NAME, csvFile);
+        assertThat(metadataTableHash, is(newHash));
     }
 
     @Test
