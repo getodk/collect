@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".preferences.QRCodeTabs">
+    tools:context="org.odk.collect.android.fragments.QRScannerFragment">
 
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
@@ -12,4 +12,14 @@
         android:layout_height="match_parent"
         />
 
+    <Button
+        android:id="@+id/switch_flashlight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:layout_marginBottom="15dp"
+        android:padding="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/turn_on_flashlight" />
 </RelativeLayout>

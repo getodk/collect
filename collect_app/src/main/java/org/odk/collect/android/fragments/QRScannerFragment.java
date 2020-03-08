@@ -12,58 +12,68 @@
  */
 
 package org.odk.collect.android.fragments;
-import android.app.Activity;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 import androidx.fragment.app.Fragment;
 import timber.log.Timber;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.ActionListener;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.QRCodeTabs;
 import org.odk.collect.android.utilities.CompressionUtils;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
+public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
 
-public class QRScannerFragment extends Fragment {
-
-    DecoratedBarcodeView barcodeView;
+    DecoratedBarcodeView barcodeScannerView;
+    private Button switchFlashlightButton;
+    private BeepManager beepManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
-        barcodeView = rootView.findViewById(R.id.barcode_view);
+        beepManager = new BeepManager(getActivity());
+        barcodeScannerView = rootView.findViewById(R.id.barcode_view);
+        switchFlashlightButton = rootView.findViewById(R.id.switch_flashlight);
 
+        barcodeScannerView.setTorchListener(this);
+
+        switchFlashlightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFlashlight(v);
+            }
+        });
         new PermissionUtils().requestCameraPermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
-                barcodeView.decodeContinuous(new BarcodeCallback() {
+                barcodeScannerView.decodeSingle(new BarcodeCallback() {
                     @Override
                     public void barcodeResult(BarcodeResult result) {
-                        beepSound();
+                        beepManager.playBeepSoundAndVibrate();
+                        try {
+                            QRCodeTabs.applySettings(getActivity(), CompressionUtils.decompress(result.getText()));
+                        } catch (IOException | DataFormatException | IllegalArgumentException e) {
+                            Timber.e(e);
+                            ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
+                        }
                     }
 
                     @Override
@@ -72,15 +82,6 @@ public class QRScannerFragment extends Fragment {
                     }
                 });
             }
-            public void barcodeResult(BarcodeResult result) {
-                beepSound();
-                try {
-                    QRCodeTabs.applySettings(getActivity(), CompressionUtils.decompress(result.getText()));
-                } catch (IOException | DataFormatException | IllegalArgumentException e) {
-                    Timber.e(e);
-                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
-                }
-            }
 
             @Override
             public void denied() {
@@ -88,31 +89,50 @@ public class QRScannerFragment extends Fragment {
             }
         });
 
-        return rootView;
-    }
-
-    protected void beepSound() {
-        try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!hasFlash()) {
+            switchFlashlightButton.setVisibility(View.GONE);
         }
+
+        return rootView;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        barcodeView.pauseAndWait();
+        barcodeScannerView.pauseAndWait();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        barcodeView.resume();
+        barcodeScannerView.resume();
     }
 
+    /**
+     * Check if the device's camera has a Flashlight.
+     *
+     * @return true if there is Flashlight, otherwise false.
+     */
+    private boolean hasFlash() {
+        return getActivity().getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
 
+    public void switchFlashlight(View view) {
+        if (getString(R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
+            barcodeScannerView.setTorchOn();
+        } else {
+            barcodeScannerView.setTorchOff();
+        }
+    }
 
+    @Override
+    public void onTorchOn() {
+        switchFlashlightButton.setText(R.string.turn_off_flashlight);
+    }
+
+    @Override
+    public void onTorchOff() {
+        switchFlashlightButton.setText(R.string.turn_on_flashlight);
+    }
 }
