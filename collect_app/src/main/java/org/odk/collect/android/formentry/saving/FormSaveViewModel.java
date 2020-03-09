@@ -183,7 +183,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         return saveResult;
     }
 
-    public void consumeSavedResult() {
+    public void resumeFormEntry() {
         saveResult = new MutableLiveData<>(null);
     }
 
