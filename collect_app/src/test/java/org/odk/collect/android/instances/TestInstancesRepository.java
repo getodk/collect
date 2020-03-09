@@ -55,9 +55,9 @@ public final class TestInstancesRepository implements InstancesRepository {
         instances.add(instance);
     }
 
-    public void removeInstanceById(int databaseId) {
+    public void removeInstanceById(Long databaseId) {
         for (int i = 0; i < instances.size(); i++) {
-            if (instances.get(i).getDatabaseId() == databaseId) {
+            if (instances.get(i).getDatabaseId().equals(databaseId)) {
                 instances.remove(i);
                 return;
             }
