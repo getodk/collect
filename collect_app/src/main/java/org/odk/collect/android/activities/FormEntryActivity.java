@@ -1868,7 +1868,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     finishAndReturnInstance();
                 }
-
+                formSaveViewModel.consumeSavedResult();
                 break;
 
             case SAVE_ERROR:
@@ -1883,6 +1883,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 showLongToast(message);
+                formSaveViewModel.consumeSavedResult();
                 break;
 
             case FINALIZE_ERROR:
@@ -1890,6 +1891,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 showLongToast(String.format(getString(R.string.encryption_error_message),
                         result.getMessage()));
                 finishAndReturnInstance();
+                formSaveViewModel.consumeSavedResult();
                 break;
 
             case CONSTRAINT_ERROR: {
@@ -1909,11 +1911,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // otherwise, we can get the proper toast(s) by saving with constraint check
                     saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
                 }
-
+                formSaveViewModel.consumeSavedResult();
                 break;
             }
         }
-        formSaveViewModel.consumeSavedResult();
     }
 
     /**
