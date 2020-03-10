@@ -61,6 +61,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected String binaryName;
     protected TextView errorTextView;
     protected LinearLayout answerLayout;
+    protected boolean errorLoadingImage;
 
     protected ImageClickHandler imageClickHandler;
     protected ExternalImageCaptureHandler imageCaptureHandler;
@@ -162,6 +163,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
+                    errorLoadingImage = true;
                 } else {
                     imageView = createAnswerImageView(getContext(), bmp);
                     imageView.setOnClickListener(v -> {
@@ -172,6 +174,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
                     answerLayout.addView(imageView);
                 }
+            } else {
+                errorLoadingImage = true;
             }
         }
     }

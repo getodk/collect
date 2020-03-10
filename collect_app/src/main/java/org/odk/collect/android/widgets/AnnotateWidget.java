@@ -65,6 +65,9 @@ public class AnnotateWidget extends BaseImageWidget {
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         addCurrentImageToLayout();
+        if (errorLoadingImage) {
+            annotateButton.setEnabled(false);
+        }
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
