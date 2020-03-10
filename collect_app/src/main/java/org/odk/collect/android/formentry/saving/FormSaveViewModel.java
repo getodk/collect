@@ -59,7 +59,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
         if (isSaving()) {
-            saveResult.setValue(new SaveResult(SaveResult.State.ALREADY_SAVING, null));
             return;
         }
 
@@ -112,7 +111,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         return reason;
     }
 
-    private void saveToDisk(SaveRequest saveRequest) {
+    public void saveToDisk(SaveRequest saveRequest) {
         saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
@@ -224,8 +223,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             SAVED,
             SAVE_ERROR,
             FINALIZE_ERROR,
-            CONSTRAINT_ERROR,
-            ALREADY_SAVING
+            CONSTRAINT_ERROR
         }
 
         public SaveRequest getRequest() {

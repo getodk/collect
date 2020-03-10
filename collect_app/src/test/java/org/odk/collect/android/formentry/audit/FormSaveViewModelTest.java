@@ -30,9 +30,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.ALREADY_SAVING;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
@@ -61,7 +62,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver);
+        viewModel = spy(new FormSaveViewModel(() -> CURRENT_TIME, formSaver));
         viewModel.setFormController(formController);
     }
 
@@ -79,8 +80,7 @@ public class FormSaveViewModelTest {
         assertThat(saveResult1.getState(), equalTo(SAVING));
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        FormSaveViewModel.SaveResult saveResult2 = viewModel.getSavedResult().getValue();
-        assertThat(saveResult2.getState(), equalTo(ALREADY_SAVING));
+        verify(viewModel, times(1)).saveToDisk(any());
     }
 
     @Test
