@@ -30,7 +30,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private final FormSaver formSaver;
 
     private String reason = "";
-    private MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
+    private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
 
     @Nullable
     private AuditEventLogger auditEventLogger;
@@ -184,7 +184,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public void resumeFormEntry() {
-        saveResult = new MutableLiveData<>(null);
+        saveResult.setValue(null);
     }
 
     private boolean requiresReasonToSave() {

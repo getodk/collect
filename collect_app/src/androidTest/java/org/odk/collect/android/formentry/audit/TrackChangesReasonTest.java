@@ -124,7 +124,7 @@ public class TrackChangesReasonTest {
                 .enterReason("Something")
                 .rotateToLandscape(new ChangesReasonPromptPage("Track Changes Reason", rule))
                 .assertText("Something")
-                .rotateToPortrait(new ChangesReasonPromptPage("Track Changes Reason", rule))
+                .closeSoftKeyboard()
                 .clickSave();
     }
 

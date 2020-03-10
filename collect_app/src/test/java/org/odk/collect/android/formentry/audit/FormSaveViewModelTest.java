@@ -23,7 +23,6 @@ import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -67,38 +66,29 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void saveForm_returnsNewSaveResult_inSavingState() {
+    public void saveForm_returnsSaveResult_inSavingState() {
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        FormSaveViewModel.SaveResult saveResult1 = viewModel.getSavedResult().getValue();
+        assertThat(saveResult1.getState(), equalTo(SAVING));
+    }
+
+    @Test
+    public void saveForm_wontRunMultipleSavesAtOnce() {
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         FormSaveViewModel.SaveResult saveResult1 = viewModel.getSavedResult().getValue();
         assertThat(saveResult1.getState(), equalTo(SAVING));
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         FormSaveViewModel.SaveResult saveResult2 = viewModel.getSavedResult().getValue();
-        assertThat(saveResult2, not(equalTo(saveResult1)));
-    }
-
-    @Test
-    public void saveForm_wontRunMultipleSavesAtOnce() {
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        LiveData<FormSaveViewModel.SaveResult> saveResult1 = viewModel.getSavedResult();
-        assertThat(saveResult1.getValue().getState(), equalTo(SAVING));
-
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        LiveData<FormSaveViewModel.SaveResult> saveResult2 = viewModel.getSavedResult();
-        assertThat(saveResult2.getValue().getState(), equalTo(ALREADY_SAVING));
-
-        assertThat(Robolectric.getBackgroundThreadScheduler().size(), equalTo(1));
-
-        whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        assertThat(saveResult1.getValue().getState(), equalTo(SAVED));
+        assertThat(saveResult2.getState(), equalTo(ALREADY_SAVING));
     }
 
     @Test
     public void saveForm_whenReasonRequiredToSave_returnsSaveResult_inChangeReasonRequiredState() {
         whenReasonRequiredToSave();
 
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSavedResult();
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
     }
 
@@ -354,6 +344,14 @@ public class FormSaveViewModelTest {
 
         viewModel.setReason("  ");
         assertThat(viewModel.saveReason(), equalTo(false));
+    }
+
+    @Test
+    public void resumeFormEntry_clearsSaveResult() {
+        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSavedResult();
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        viewModel.resumeFormEntry();
+        assertThat(saveResult.getValue(), equalTo(null));
     }
 
     private void whenReasonRequiredToSave() {
