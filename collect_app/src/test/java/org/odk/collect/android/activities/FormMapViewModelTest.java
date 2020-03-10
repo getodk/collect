@@ -133,6 +133,30 @@ public class FormMapViewModelTest {
         assertThat(instances.get(6).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
     }
 
+    @Test public void clearingInstanceGeometry_isReflectedInInstanceCountsAndList() {
+        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
+
+        List<FormMapViewModel.MappableFormInstance> mappableInstances = viewModel.getMappableFormInstances();
+        assertThat(viewModel.getTotalInstanceCount(), is(7));
+        assertThat(mappableInstances.size(), is(6));
+
+        assertThat(mappableInstances.get(5).getClickAction(), is(FormMapViewModel.ClickAction.NOT_VIEWABLE_TOAST));
+        ((TestInstancesRepository) testInstancesRepository).removeInstanceById(6L);
+
+        ((TestInstancesRepository) testInstancesRepository).addInstance(new Instance.Builder().databaseId(6L)
+                .jrFormId("formId1")
+                .jrVersion("2019103101")
+                .geometryType("")
+                .geometry("")
+                .canEditWhenComplete(false)
+                .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build());
+
+        mappableInstances = viewModel.getMappableFormInstances();
+        assertThat(viewModel.getTotalInstanceCount(), is(7));
+        assertThat(mappableInstances.size(), is(5));
+        assertThat(mappableInstances.get(4).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_READ_ONLY));
+    }
+
     static final Form TEST_FORM_1 = new Form.Builder().id(0L)
             .jrFormId("formId1")
             .jrVersion("2019103104")
