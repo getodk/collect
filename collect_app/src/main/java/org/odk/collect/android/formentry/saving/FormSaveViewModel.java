@@ -111,7 +111,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         return reason;
     }
 
-    public void saveToDisk(SaveRequest saveRequest) {
+    private void saveToDisk(SaveRequest saveRequest) {
         saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {

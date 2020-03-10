@@ -30,7 +30,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,7 +61,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = spy(new FormSaveViewModel(() -> CURRENT_TIME, formSaver));
+        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver);
         viewModel.setFormController(formController);
     }
 
@@ -76,11 +75,13 @@ public class FormSaveViewModelTest {
     @Test
     public void saveForm_wontRunMultipleSavesAtOnce() {
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        FormSaveViewModel.SaveResult saveResult1 = viewModel.getSavedResult().getValue();
-        assertThat(saveResult1.getState(), equalTo(SAVING));
-
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        verify(viewModel, times(1)).saveToDisk(any());
+
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
+        verify(formSaver).save(any(), any(), anyBoolean(), anyBoolean(), any(), any());
+
+        Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable(); // Run any other queued tasks
+        verify(formSaver, times(1)).save(any(), any(), anyBoolean(), anyBoolean(), any(), any());
     }
 
     @Test
