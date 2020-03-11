@@ -425,6 +425,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formSaveViewModel = ViewModelProviders
                 .of(this, changesReasonViewModelFactory)
                 .get(FormSaveViewModel.class);
+
+        formSaveViewModel.getSavedResult().observe(this, this::handleSaveResult);
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -1821,91 +1823,98 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit).observe(this, result -> {
-            switch (result.getState()) {
-                case CHANGE_REASON_REQUIRED:
-                    ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
-                    DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
-                    break;
-
-                case SAVING:
-                    autoSaved = true;
-
-                    SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
-                            new SaveFormProgressDialogFragment(),
-                            getSupportFragmentManager()
-                    );
-
-                    if (result.getMessage() != null) {
-                        progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
-                    }
-
-                    break;
-
-                case SAVED:
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    showShortToast(R.string.data_saved_ok);
-
-                    if (exit) {
-                        if (complete) {
-                            // Request auto-send if app-wide auto-send is enabled or the form that was just
-                            // finalized specifies that it should always be auto-sent.
-                            String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-                            if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
-                                requestAutoSend();
-                            }
-                        }
-
-                        finishAndReturnInstance();
-                    }
-
-                    break;
-
-                case SAVE_ERROR:
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    String message;
-
-                    if (result.getMessage() != null) {
-                        message = getString(R.string.data_saved_error) + " "
-                                + result.getMessage();
-                    } else {
-                        message = getString(R.string.data_saved_error);
-                    }
-
-                    showLongToast(message);
-                    break;
-
-                case FINALIZE_ERROR:
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    showLongToast(String.format(getString(R.string.encryption_error_message),
-                            result.getMessage()));
-                    finishAndReturnInstance();
-                    break;
-
-                case CONSTRAINT_ERROR: {
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    refreshCurrentView();
-
-                    // get constraint behavior preference value with appropriate default
-                    String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                            .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-                    // an answer constraint was violated, so we need to display the proper toast(s)
-                    // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
-                    // next question
-                    if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                        next();
-                    } else {
-                        // otherwise, we can get the proper toast(s) by saving with constraint check
-                        saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
-                    }
-
-                    break;
-                }
-            }
-        });
+        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit);
 
         return true;
+    }
+
+    private void handleSaveResult(FormSaveViewModel.SaveResult result) {
+        if (result == null) {
+            return;
+        }
+        switch (result.getState()) {
+            case CHANGE_REASON_REQUIRED:
+                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
+                DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
+                break;
+
+            case SAVING:
+                autoSaved = true;
+
+                SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
+                        new SaveFormProgressDialogFragment(),
+                        getSupportFragmentManager()
+                );
+
+                if (result.getMessage() != null) {
+                    progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
+                }
+
+                break;
+
+            case SAVED:
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                showShortToast(R.string.data_saved_ok);
+
+                if (result.getRequest().viewExiting()) {
+                    if (result.getRequest().shouldFinalize()) {
+                        // Request auto-send if app-wide auto-send is enabled or the form that was just
+                        // finalized specifies that it should always be auto-sent.
+                        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+                        if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
+                            requestAutoSend();
+                        }
+                    }
+
+                    finishAndReturnInstance();
+                }
+                formSaveViewModel.resumeFormEntry();
+                break;
+
+            case SAVE_ERROR:
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                String message;
+
+                if (result.getMessage() != null) {
+                    message = getString(R.string.data_saved_error) + " "
+                            + result.getMessage();
+                } else {
+                    message = getString(R.string.data_saved_error);
+                }
+
+                showLongToast(message);
+                formSaveViewModel.resumeFormEntry();
+                break;
+
+            case FINALIZE_ERROR:
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                showLongToast(String.format(getString(R.string.encryption_error_message),
+                        result.getMessage()));
+                finishAndReturnInstance();
+                formSaveViewModel.resumeFormEntry();
+                break;
+
+            case CONSTRAINT_ERROR: {
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                refreshCurrentView();
+
+                // get constraint behavior preference value with appropriate default
+                String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                        .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+
+                // an answer constraint was violated, so we need to display the proper toast(s)
+                // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
+                // next question
+                if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                    next();
+                } else {
+                    // otherwise, we can get the proper toast(s) by saving with constraint check
+                    saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
+                }
+                formSaveViewModel.resumeFormEntry();
+                break;
+            }
+        }
     }
 
     /**
