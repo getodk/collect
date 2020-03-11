@@ -30,6 +30,7 @@ import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -272,36 +273,36 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     // of this data set.
     static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
         final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
-        final String lastModifiedColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_LAST_MODIFIED);
+        final String md5HashColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_MD5_HASH);
 
         List<String> columnDefinitions = new ArrayList<>();
         columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(dataSetFilenameColumn, "TEXT"));
-        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(lastModifiedColumn, "INTEGER"));
+        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(md5HashColumn, "TEXT NOT NULL"));
 
         CustomSQLiteQueryExecutor.begin(db).createTable(metadataTableName).columnsForCreate(columnDefinitions).end();
 
         ContentValues metadata = new ContentValues();
         metadata.put(ExternalDataUtil.COLUMN_DATASET_FILENAME, dataSetFile.getName());
-        metadata.put(ExternalDataUtil.COLUMN_LAST_MODIFIED, dataSetFile.lastModified());
+        metadata.put(ExternalDataUtil.COLUMN_MD5_HASH, FileUtils.getMd5Hash(dataSetFile));
         db.insertOrThrow(metadataTableName, null, metadata);
     }
 
-    static long getLastImportTimestamp(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
+    static String getLastMd5Hash(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
         final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
-        final String lastModifiedColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_LAST_MODIFIED);
+        final String md5HashColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_MD5_HASH);
         final String dataSetFilenameLiteral = CustomSQLiteQueryBuilder.quoteStringLiteral(dataSetFile.getName());
 
-        String[] columns = {lastModifiedColumn};
+        String[] columns = {md5HashColumn};
         String selectionCriteria = CustomSQLiteQueryBuilder.formatCompareEquals(dataSetFilenameColumn, dataSetFilenameLiteral);
         Cursor cursor = db.query(metadataTableName, columns, selectionCriteria, null, null, null, null);
 
-        long lastImportTimestamp = 0;
+        String lastImportMd5 = "";
         if (cursor != null && cursor.getCount() == 1) {
             cursor.moveToFirst();
-            lastImportTimestamp = cursor.getLong(0);
+            lastImportMd5 = cursor.getString(0);
         }
         cursor.close();
-        return lastImportTimestamp;
+        return lastImportMd5;
     }
 
     static boolean shouldUpdateDBforDataSet(File dbFile, File dataSetFile) {
@@ -317,8 +318,9 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
             return true;
         }
         // Import if the CSV file has been updated
-        long priorImportTimestamp = getLastImportTimestamp(db, metadataTableName, dataSetFile);
-        return dataSetFile.lastModified() > priorImportTimestamp;
+        String priorImportMd5 = getLastMd5Hash(db, metadataTableName, dataSetFile);
+        String newFileMd5 = FileUtils.getMd5Hash(dataSetFile);
+        return newFileMd5 == null || !newFileMd5.equals(priorImportMd5);
     }
 
     @Override

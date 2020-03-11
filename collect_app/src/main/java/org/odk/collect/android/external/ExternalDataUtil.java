@@ -61,7 +61,7 @@ public final class ExternalDataUtil {
     public static final String EXTERNAL_METADATA_TABLE_NAME = "externalMetadata";
     public static final String SORT_COLUMN_NAME = "c_sortby";
     public static final String COLUMN_DATASET_FILENAME = "dataSetFilename";
-    public static final String COLUMN_LAST_MODIFIED = "lastModified";
+    public static final String COLUMN_MD5_HASH = "md5Hash";
 
     public static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile("search\\(.+\\)");
     private static final String COLUMN_SEPARATOR = ",";
