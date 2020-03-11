@@ -45,6 +45,7 @@ public class FormLoadingDialogFragment extends ProgressDialogFragment {
 
         setTitle(getString(R.string.loading_form));
         setMessage(getString(R.string.please_wait));
+        setCancelable(false);
 
         if (context instanceof FormLoadingDialogFragmentListener) {
             listener = (FormLoadingDialogFragmentListener) context;
