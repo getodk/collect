@@ -46,4 +46,5 @@
     <issue id="ContentDescription" severity="ignore"/>
     <issue id="HardwareIds" severity="ignore"/>
     <issue id="MissingPermission" severity="error"/>
+    <issue id="RedundantNamespace" severity="error"/>
 </lint>
