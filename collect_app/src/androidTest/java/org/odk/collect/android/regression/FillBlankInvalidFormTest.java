@@ -16,8 +16,9 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
 public class FillBlankInvalidFormTest extends BaseRegressionTest {
+
     @Rule
-    public RuleChain copyFormChain = RuleChain
+    public RuleChain ruleChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,

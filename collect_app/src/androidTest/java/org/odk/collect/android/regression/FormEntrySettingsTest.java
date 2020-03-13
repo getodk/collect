@@ -17,9 +17,6 @@ import org.odk.collect.android.support.ResetStateRule;
 
 //Issue NODK-243
 public class FormEntrySettingsTest extends BaseRegressionTest {
-    @Rule
-    public RuleChain ruleChain = RuleChain
-            .outerRule(new ResetStateRule());
 
     @Rule
     public RuleChain copyFormChain = RuleChain

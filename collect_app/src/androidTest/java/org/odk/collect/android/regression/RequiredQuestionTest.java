@@ -20,7 +20,7 @@ import org.odk.collect.android.support.ResetStateRule;
 public class RequiredQuestionTest extends BaseRegressionTest {
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
+    public RuleChain ruleChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
