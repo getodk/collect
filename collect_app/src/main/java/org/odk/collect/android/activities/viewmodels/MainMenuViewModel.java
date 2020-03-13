@@ -15,10 +15,6 @@ public class MainMenuViewModel extends ViewModel {
     private final VersionDescriptionProvider versionDescriptionProvider;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    MainMenuViewModel(AdminSharedPreferences adminSharedPreferences) {
-        this(() -> null, adminSharedPreferences);
-    }
-
     MainMenuViewModel(VersionDescriptionProvider versionDescriptionProvider) {
         this(versionDescriptionProvider, AdminSharedPreferences.getInstance());
     }
