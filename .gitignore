@@ -12,6 +12,7 @@ fieldTask/fieldTask-release/
 *.*~
 
 *.iml
+*.swp
 collect_app/collect_app.iml
 
 collect_app/src/kontrolid

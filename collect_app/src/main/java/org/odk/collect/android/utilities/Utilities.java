@@ -799,6 +799,18 @@ public class Utilities {
         return submitted;
     }
 
+    /*
+     * Return true if the current task is selfAssigned
+     */
+    public static boolean isSelfAssigned(String currentStatus) {
+        boolean selfAssigned = false;
+        if (currentStatus != null && currentStatus.equals(STATUS_T_NEW)) {
+            selfAssigned = true;
+        }
+
+        return selfAssigned;
+    }
+
 
     /*
      * Copy instance files to a new location

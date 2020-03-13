@@ -721,6 +721,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             // set the adhoc location
             boolean canUpdate = Utilities.canComplete(status);
             boolean isSubmitted = Utilities.isSubmitted(status);
+            boolean isSelfAssigned = Utilities.isSelfAssigned(status);
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             boolean reviewFinal = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, true);
@@ -732,10 +733,17 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                         Toast.LENGTH_LONG).show();
             } else if (!canUpdate && reviewFinal) {
                 // Show a message if this task is read only
-                Toast.makeText(
-                        SmapMain.this,
-                        getString(R.string.read_only),
-                        Toast.LENGTH_LONG).show();
+                if(isSelfAssigned) {
+                    Toast.makeText(
+                            SmapMain.this,
+                            getString(R.string.smap_self_select),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(
+                            SmapMain.this,
+                            getString(R.string.read_only),
+                            Toast.LENGTH_LONG).show();
+                }
             } else if (!canUpdate && !reviewFinal) {
                 // Show a message if this task is read only and cannot be reviewed
                 Toast.makeText(
@@ -745,7 +753,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             }
 
             // Open the task if it is editable or reviewable
-            if ((canUpdate || reviewFinal) && !isSubmitted) {
+            if ((canUpdate || reviewFinal) && !isSubmitted && !isSelfAssigned) {
                 // Get the provider URI of the instance
                 String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
                 String[] whereArgs = {
