@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/form_metadata_title">
 
-    <PreferenceCategory android:title="@string/user_defined">
+    <PreferenceCategory
+        android:title="@string/user_defined"
+        app:iconSpaceReserved="false">
+
         <EditTextPreference
             android:inputType="textNoSuggestions"
             android:key="metadata_username"
-            android:title="@string/username" />
+            android:title="@string/username"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
         <EditTextPreference
-            android:inputType="phone"
             android:key="metadata_phonenumber"
-            android:title="@string/phone_number" />
+            android:title="@string/phone_number"
+            android:inputType=""
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
         <EditTextPreference
             android:inputType="textEmailAddress"
             android:key="metadata_email"
             android:maxLength="254"
-            android:title="@string/email" />
+            android:title="@string/email"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/device_defined">
-        <EditTextPreference
-            android:selectable="false"
-            android:key="deviceid"
-            android:title="@string/device_id" />
-        <EditTextPreference
-            android:selectable="false"
-            android:key="subscriberid"
-            android:title="@string/subscriber_id" />
-        <EditTextPreference
-            android:selectable="false"
-            android:key="simserial"
-            android:title="@string/sim_serial_id" />
+    <PreferenceCategory
+        android:title="@string/device_defined"
+        app:iconSpaceReserved="false">
 
         <EditTextPreference
+            android:key="deviceid"
             android:selectable="false"
+            android:title="@string/device_id"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+        <EditTextPreference
+            android:key="subscriberid"
+            android:selectable="false"
+            android:title="@string/subscriber_id"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+        <EditTextPreference
+            android:key="simserial"
+            android:selectable="false"
+            android:title="@string/sim_serial_id"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+        <EditTextPreference
             android:key="metadata_installid"
-            android:title="@string/install_id" />
+            android:selectable="false"
+            android:title="@string/install_id"
+            app:enableCopying="true"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
     </PreferenceCategory>
 </PreferenceScreen>

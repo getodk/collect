@@ -58,8 +58,6 @@
   <string name="jump_to_beginning">اولي برخي ته لاړ شی</string>
   <string name="jump_to_end">اخرني برخي ته لاړ شی</string>
   <string name="jump_to_previous">پورته لاړ شی</string>
-  <string name="main_menu">اصلی مینو</string>
-  <string name="main_menu_details">د معلوماتو راغونډول اسانه کړل …</string>
   <string name="manage_files">ثبت شوی فورمه لري کړی</string>
   <string name="mark_finished">د وروستي بڼه په توګه نښه کړئ</string>
   <string name="noselect_error">بخښنه غواړو، تاسو کومه فورمه نه ده ټاکلې</string>

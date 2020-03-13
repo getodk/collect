@@ -9,7 +9,7 @@
 
     <style name="Theme.Collect.BaseLight" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Material theme attributes-->
-        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimary">#E0E0E0</item>
         <item name="colorSecondary">#2196F3</item>
         <item name="colorError">@color/red_500</item>
 
@@ -33,7 +33,7 @@
         <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
         <item name="textAppearanceBody2">@style/TextAppearance.Collect.Body2</item>
         <item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
-        <item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Collect.Button</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
 
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MaterialComponents.SmallComponent</item>

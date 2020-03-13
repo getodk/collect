@@ -78,8 +78,6 @@
   <string name="load_remote_form_error">Не удалось получить список бланков</string>
   <string name="location_provider_accuracy">Использую %1$s. Точность %2$s м.</string>
   <string name="location_accuracy">Точность %1$s м.</string>
-  <string name="main_menu">Главное меню</string>
-  <string name="main_menu_details">Data collection made easier…</string>
   <string name="manage_files">Удаление опросов / бланков</string>
   <string name="mark_finished">Пометить опрос как финализированный </string>
   <string name="noselect_error">Не было выбрано ни одного бланка</string>
@@ -423,8 +421,6 @@
   <string name="select_time">Выберете время</string>
   <string name="no_date_selected">Дата не выбрана</string>
   <string name="no_time_selected">Время не выбрано</string>
-  <string name="import_settings">Настройки импорта/экспорта</string>
-  <string name="qr_code">QR-код</string>
   <string name="scan_qrcode">Сканировать код с другого устройства</string>
   <string name="successfully_imported_settings">Настройки успешно импортированы</string>
   <string name="encoding_max_limit">Превышен лимит количества символов: QR-код не удалось сгенерировать для всех настроек.</string>
@@ -436,7 +432,6 @@
   <string name="qrcode_without_passwords">Этот QR-код не содержит ваши пароли администратора и сервера.\n(Нажмите, чтобы добавить пароли)</string>
   <string name="qrcode_with_admin_password">Этот QR-код содержит ваш пароль администратора. Пожалуйста, будьте осторожнее с ним.\n(Нажмите, чтобы удалить пароль)</string>
   <string name="qrcode_with_server_password">Этот QR-код содержит ваш пароль сервера. Пожалуйста, будьте осторожнее с ним.\n(Нажмите, чтобы удалить пароль)</string>
-  <string name="import_export_settings">Настройки импорта/экспорта</string>
   <string name="qrcode_scanner_prompt">Вместите QR-код внутрь прямоугольника</string>
   <string name="barcode_scanner_prompt">Вместите штрихкод внутрь прямоугольника</string>
   <string name="server_password">Пароль сервера</string>

@@ -19,5 +19,8 @@
         <CheckBoxPreference
             android:key="delete_saved"
             android:title="@string/manage_files" />
+        <CheckBoxPreference
+            android:key="qr_code_scanner"
+            android:title="@string/qr_code" />
     </PreferenceCategory>
 </PreferenceScreen>

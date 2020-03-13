@@ -1,7 +1,6 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.os.Build;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -36,12 +35,8 @@ public class DateTimeUtils {
     private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {
         DateFormat dateFormatter;
         locale = locale == null ? Locale.getDefault() : locale;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
-            dateFormatter = new SimpleDateFormat(format, locale);
-        } else {
-            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
-        }
+        String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
+        dateFormatter = new SimpleDateFormat(format, locale);
         return dateFormatter.format(date);
     }
 

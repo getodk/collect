@@ -22,7 +22,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import androidx.appcompat.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -33,11 +32,11 @@ import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
@@ -55,6 +54,9 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_CUSTOM_ENDPOINT;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
@@ -88,6 +90,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Inject
     GoogleAccountsManager accountsManager;
 
+    @Inject
+    Analytics analytics;
+
     /*
     private ListPreference transportPreference;
     private ExtendedPreferenceCategory smsPreferenceCategory;
@@ -113,9 +118,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         urlDropdownSetup();
 
-        // TODO: use just 'serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);' once minSdkVersion is >= 21
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(null, null,
-                AppCompatResources.getDrawable(getActivity(), R.drawable.ic_arrow_drop_down), null);
+        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
         serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
@@ -375,6 +378,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                     if (Validator.isUrlValid(url)) {
                         preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+
+                        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
+                        analytics.logEvent(SET_FALLBACK_SHEETS_URL, urlHash);
                     } else if (url.length() == 0) {
                         preference.setSummary(getString(R.string.google_sheets_url_hint));
                     } else {
@@ -396,6 +402,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 case KEY_FORMLIST_URL:
                 case KEY_SUBMISSION_URL:
                     preference.setSummary(newValue.toString());
+
+                    String customEndpointId = FileUtils.getMd5Hash(new ByteArrayInputStream(newValue.toString().getBytes()));
+                    String action = preference.getKey() + " " + customEndpointId;
+                    analytics.logEvent(SET_CUSTOM_ENDPOINT, action);
                     break;
             }
             return true;
@@ -426,7 +436,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String urlHash = FileUtils.getMd5Hash(
                 new ByteArrayInputStream(url.getBytes()));
 
-        Collect.getInstance().logRemoteAnalytics("SetServer", scheme + " " + host, urlHash);
+        analytics.logEvent(SET_SERVER, scheme + " " + host, urlHash);
     }
 
     private void maskPasswordSummary(String password) {

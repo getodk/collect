@@ -64,8 +64,6 @@
   <string name="load_remote_form_error">Fout tydens haal van vormlys</string>
   <string name="location_provider_accuracy">Gebruik tans %1$s. Akkuraatheid is %2$s m.</string>
   <string name="location_accuracy">Akkuraatheid is %1$s m</string>
-  <string name="main_menu">Hoofkieslys</string>
-  <string name="main_menu_details">Data-insameling vereenvoudig…</string>
   <string name="manage_files">Verwyder Gestoorde Vorm</string>
   <string name="mark_finished">Merk vorm as gefinaliseer</string>
   <string name="noselect_error">Jammer, u het nie enige vorms geselekteer nie!</string>

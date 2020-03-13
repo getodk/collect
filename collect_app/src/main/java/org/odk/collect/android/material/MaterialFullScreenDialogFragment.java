@@ -1,7 +1,6 @@
 package org.odk.collect.android.material;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,8 +38,10 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
 
-            // Make sure soft keyboard shows for focused field - annoyingly needed
-            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            if (shouldShowSoftKeyboard()) {
+                // Make sure soft keyboard shows for focused field - annoyingly needed
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            }
 
             setCancelable(false);
             dialog.setOnKeyListener((dialogInterface, keyCode, event) -> {
@@ -62,10 +63,6 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
         toolbar.setNavigationOnClickListener(v -> {
             onCloseClicked();
         });
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            view.findViewById(R.id.action_bar_shadow).setVisibility(View.VISIBLE);
-        }
     }
 
     protected abstract void onCloseClicked();
@@ -74,5 +71,9 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
 
     protected Toolbar getToolbar() {
         return toolbar;
+    }
+
+    protected boolean shouldShowSoftKeyboard() {
+        return false;
     }
 }

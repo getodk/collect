@@ -21,6 +21,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -107,17 +108,25 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         if (osmDroid.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_OSM_DROID);
         }
+
         if (!resetActions.isEmpty()) {
-            showProgressDialog();
-            Runnable runnable = new Runnable() {
+            new AsyncTask<Void, Void, List<Integer>>() {
                 @Override
-                public void run() {
-                    List<Integer> failedResetActions = new ResetUtility().reset(getContext(), resetActions);
+                protected void onPreExecute() {
+                    showProgressDialog();
+                }
+
+                @Override
+                protected List<Integer> doInBackground(Void... voids) {
+                    return new ResetUtility().reset(getContext(), resetActions);
+                }
+
+                @Override
+                protected void onPostExecute(List<Integer> failedResetActions) {
                     hideProgressDialog();
                     handleResult(resetActions, failedResetActions);
                 }
-            };
-            new Thread(runnable).start();
+            }.execute();
         }
     }
 

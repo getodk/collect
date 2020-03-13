@@ -71,8 +71,6 @@
   <string name="load_remote_form_error">सूची से फॉर्म प्राप्ति में गलती </string>
   <string name="location_provider_accuracy">%1$sको प्रयोग कर रहा है. शुद्धता %2$sमीटर है.</string>
   <string name="location_accuracy">शुद्धता %1$s मीटर है</string>
-  <string name="main_menu">मुख्य मेन्यू</string>
-  <string name="main_menu_details">डेटा कलेक्शन अब आसान…</string>
   <string name="manage_files">संरक्षित फॉर्म मिटायें</string>
   <string name="mark_finished">फॉर्म पूरा करें</string>
   <string name="noselect_error">क्षमा करें, आपने कोई फॉर्म नही चुना है!</string>
@@ -388,8 +386,6 @@
   <string name="select_time">समय चुनें</string>
   <string name="no_date_selected">कोई दिनांक चयनित नहीं</string>
   <string name="no_time_selected">कोई समय चयनित नहीं</string>
-  <string name="import_settings">आयात / निर्यात सेटिंग्स</string>
-  <string name="qr_code">क्यूआर कोड</string>
   <string name="scan_qrcode">अन्य डिवाइस से कोड स्कैन करें</string>
   <string name="successfully_imported_settings">सेटिंग सफलतापूर्वक आयातित की गईं</string>
   <string name="encoding_max_limit">अधिकतम वर्ण सीमा आ गयी: सभी सेटिंग्स के लिए क्यूआर कोड नहीं बनाया जा सकता</string>
@@ -401,7 +397,6 @@
   <string name="qrcode_without_passwords">इस QR कोड में आपके एडमिन या सर्वर पासवर्ड शामिल नहीं हैं I \ N (पासवर्ड जोड़ने के लिए टैप करें)</string>
   <string name="qrcode_with_admin_password">इस QR कोड में आपका एडमिन पासवर्ड शामिल है. कृपया इसे ध्यान से करें \n (पासवर्ड हटाने के लिए टैप करें). </string>
   <string name="qrcode_with_server_password">इस QR कोड में आपका सर्वर पासवर्ड शामिल है \n (पासवर्ड हटाने के लिए टैप करें)</string>
-  <string name="import_export_settings">आयात / निर्यात सेटिंग्स</string>
   <string name="qrcode_scanner_prompt">QR कोड आयत के अंदर रखें</string>
   <string name="server_password">सर्वर पासवर्ड</string>
   <string name="include_password_dialog">पासवर्ड कोड में शामिल </string>

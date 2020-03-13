@@ -7,114 +7,116 @@
   OR CONDITIONS OF ANY KIND, either express or implied. See the License for
   the specific language governing permissions and limitations under the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Toolbar -->
-    <include layout="@layout/toolbar" />
-
-    <include
-        layout="@layout/toolbar_action_bar_shadow"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar" />
+        android:elevation="4dp">
 
-    <LinearLayout
+        <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            style="@style/Widget.Collect.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/notes"
+            tools:title="ODK Collect" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/margin_standard">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/main_menu_header"
-            style="@style/TextAppearance.Collect.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/app_name"
-            android:textStyle="bold"
-            android:textAlignment="center" />
-
-        <TextView
-            style="@style/TextAppearance.Collect.Subtitle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_small"
-            android:text="@string/main_menu_details"
-            android:textAlignment="center" />
-
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <include
+                layout="@layout/storage_migration_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_small">
+                android:paddingLeft="@dimen/margin_standard"
+                android:paddingTop="@dimen/margin_small"
+                android:paddingRight="@dimen/margin_standard"
+                android:paddingBottom="@dimen/margin_standard">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/enter_data"
-                        style="@style/Widget.Collect.Button.Big"
+                        style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/enter_data" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/review_data"
-                        style="@style/Widget.Collect.Button.Big"
+                        style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/review_data" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/send_data"
-                        style="@style/Widget.Collect.Button.Big"
+                        style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/send_data" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/view_sent_forms"
-                        style="@style/Widget.Collect.Button.Big"
+                        style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
                         android:text="@string/view_sent_forms" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:orientation="vertical">
-
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/get_forms"
-                        style="@style/Widget.Collect.Button.Big"
+                        style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/get_forms" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/manage_forms"
-                        style="@style/Widget.Collect.Button.Big"
+                        style="@style/Widget.Collect.Button.MainMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small" />
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        tools:text="@string/manage_files" />
+
+                    <TextView
+                        android:id="@+id/version_sha"
+                        style="@style/TextAppearance.Collect.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/margin_standard"
+                        tools:text="commit sha" />
+
                 </LinearLayout>
             </LinearLayout>
 
-        </ScrollView>
-    </LinearLayout>
-</RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

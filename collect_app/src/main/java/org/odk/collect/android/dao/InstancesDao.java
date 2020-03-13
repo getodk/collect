@@ -233,6 +233,10 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
 
+    public Cursor getInstancesCursor() {
+        return getInstancesCursor(null, null, null, null);
+    }
+
     public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver()
                 .query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
@@ -359,9 +363,8 @@ public class InstancesDao {
         values.put(InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
         values.put(InstanceColumns.DELETED_DATE, instance.getDeletedDate());
+        values.put(InstanceColumns.GEOMETRY, instance.getGeometry());
         values.put(InstanceColumns.GEOMETRY_TYPE, instance.getGeometryType());
-        values.put(InstanceColumns.GEOMETRY_TYPE, instance.getGeometry());
-
         return values;
     }
 }

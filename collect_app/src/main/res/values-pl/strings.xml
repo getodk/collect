@@ -79,8 +79,6 @@
   <string name="load_remote_form_error">Błąd Pobierania Listy Formularzy</string>
   <string name="location_provider_accuracy">Korzystam z %1$s. Dokładność rzędu %2$s m.</string>
   <string name="location_accuracy">Dokładność rzędu %1$s m</string>
-  <string name="main_menu">Menu Główne</string>
-  <string name="main_menu_details">Łatwiejsze zbieranie danych…</string>
   <string name="manage_files">Skasuj Zapisany Formularz</string>
   <string name="mark_finished">Zaznacz formularz jako zakończony</string>
   <string name="noselect_error">Przykro mi, nie zaznaczyłeś żadnego formularza!</string>
@@ -480,8 +478,6 @@
   <string name="select_time">Wybierz godzinę</string>
   <string name="no_date_selected">Nie wybrano daty</string>
   <string name="no_time_selected">Nie wybrano godziny</string>
-  <string name="import_settings">Importowanie/Eksportowanie ustawień</string>
-  <string name="qr_code">Kod QR</string>
   <string name="scan_qrcode">Skanuj kod z innego urządzenia</string>
   <string name="successfully_imported_settings">Ustawienia zostały pomyślnie zaimportowane</string>
   <string name="encoding_max_limit">Osiągnięto maksymalną liczbę znaków: kod QR nie może zostać wygenerowany dla wszystkich ustawień</string>
@@ -493,7 +489,6 @@
   <string name="qrcode_without_passwords">Ten kod QR nie zawiera hasła administratora ani hasła do serwera. \n(Dotknij, by dodać hasło)</string>
   <string name="qrcode_with_admin_password">Ten kod QR zawiera twoje hasło administratora. Używaj go rozważnie. \n(Dotknij, by usunąć hasło)</string>
   <string name="qrcode_with_server_password">Ten kod QR zawiera hasło do serwera. \n(Dotknij, by usunąć hasło)</string>
-  <string name="import_export_settings">Importowanie/Eksportowanie Ustawień</string>
   <string name="qrcode_scanner_prompt">Umieść kod QR wewnątrz prostokąta.</string>
   <string name="barcode_scanner_prompt">Umieść kod kreskowy wewnątrz prostokąta</string>
   <string name="server_password">Hasło Serwera</string>

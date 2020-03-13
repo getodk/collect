@@ -24,7 +24,6 @@ import android.database.Cursor;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -81,6 +80,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.dao.FormsDao;
@@ -92,7 +92,6 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
@@ -105,6 +104,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHe
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
@@ -178,6 +178,8 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
+import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -304,6 +306,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     RxEventBus eventBus;
 
+    @Inject
+    Analytics analytics;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     /**
@@ -373,7 +378,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    new StorageInitializer().createODKDirs();
+                    new StorageInitializer().createOdkDirsOnStorage();
                     setupFields(savedInstanceState);
                     loadForm();
 
@@ -420,6 +425,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formSaveViewModel = ViewModelProviders
                 .of(this, changesReasonViewModelFactory)
                 .get(FormSaveViewModel.class);
+
+        formSaveViewModel.getSavedResult().observe(this, this::handleSaveResult);
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -475,7 +482,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formLoaderTask = (FormLoaderTask) data;
         } else if (data == null) {
             if (!newForm) {
-                if (getFormController(true) != null) {
+                if (getFormController() != null) {
                     FormController formController = getFormController();
                     identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
                     formSaveViewModel.setFormController(formController);
@@ -656,19 +663,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Nullable
     private FormController getFormController() {
-        return getFormController(false);
+        return Collect.getInstance().getFormController();
     }
-
-    @Nullable
-    private FormController getFormController(boolean formReloading) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            Collect.getInstance().logNullFormControllerEvent(formReloading ? "FormReloading" : "OtherInFormEntryActivity");
-        }
-
-        return formController;
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -1013,6 +1009,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
+
+            analytics.logEvent(LAUNCH_FORM_WITH_BG_LOCATION, getFormController().getCurrentFormIdentifierHash());
         }
 
         return true;
@@ -1632,7 +1630,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());
+                        Collect.getInstance().logRemoteAnalytics(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
                         saveForm(false, false, null, false);
                         autoSaved = true;
@@ -1825,91 +1823,98 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit).observe(this, result -> {
-            switch (result.getState()) {
-                case CHANGE_REASON_REQUIRED:
-                    ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
-                    DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
-                    break;
-
-                case SAVING:
-                    autoSaved = true;
-
-                    SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
-                            new SaveFormProgressDialogFragment(),
-                            getSupportFragmentManager()
-                    );
-
-                    if (result.getMessage() != null) {
-                        progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
-                    }
-
-                    break;
-
-                case SAVED:
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    showShortToast(R.string.data_saved_ok);
-
-                    if (exit) {
-                        if (complete) {
-                            // Request auto-send if app-wide auto-send is enabled or the form that was just
-                            // finalized specifies that it should always be auto-sent.
-                            String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-                            if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
-                                requestAutoSend();
-                            }
-                        }
-
-                        finishAndReturnInstance();
-                    }
-
-                    break;
-
-                case SAVE_ERROR:
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    String message;
-
-                    if (result.getMessage() != null) {
-                        message = getString(R.string.data_saved_error) + " "
-                                + result.getMessage();
-                    } else {
-                        message = getString(R.string.data_saved_error);
-                    }
-
-                    showLongToast(message);
-                    break;
-
-                case FINALIZE_ERROR:
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    showLongToast(String.format(getString(R.string.encryption_error_message),
-                            result.getMessage()));
-                    finishAndReturnInstance();
-                    break;
-
-                case CONSTRAINT_ERROR: {
-                    DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                    refreshCurrentView();
-
-                    // get constraint behavior preference value with appropriate default
-                    String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                            .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-                    // an answer constraint was violated, so we need to display the proper toast(s)
-                    // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
-                    // next question
-                    if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                        next();
-                    } else {
-                        // otherwise, we can get the proper toast(s) by saving with constraint check
-                        saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
-                    }
-
-                    break;
-                }
-            }
-        });
+        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit);
 
         return true;
+    }
+
+    private void handleSaveResult(FormSaveViewModel.SaveResult result) {
+        if (result == null) {
+            return;
+        }
+        switch (result.getState()) {
+            case CHANGE_REASON_REQUIRED:
+                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
+                DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
+                break;
+
+            case SAVING:
+                autoSaved = true;
+
+                SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
+                        new SaveFormProgressDialogFragment(),
+                        getSupportFragmentManager()
+                );
+
+                if (result.getMessage() != null) {
+                    progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
+                }
+
+                break;
+
+            case SAVED:
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                showShortToast(R.string.data_saved_ok);
+
+                if (result.getRequest().viewExiting()) {
+                    if (result.getRequest().shouldFinalize()) {
+                        // Request auto-send if app-wide auto-send is enabled or the form that was just
+                        // finalized specifies that it should always be auto-sent.
+                        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+                        if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
+                            requestAutoSend();
+                        }
+                    }
+
+                    finishAndReturnInstance();
+                }
+                formSaveViewModel.resumeFormEntry();
+                break;
+
+            case SAVE_ERROR:
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                String message;
+
+                if (result.getMessage() != null) {
+                    message = getString(R.string.data_saved_error) + " "
+                            + result.getMessage();
+                } else {
+                    message = getString(R.string.data_saved_error);
+                }
+
+                showLongToast(message);
+                formSaveViewModel.resumeFormEntry();
+                break;
+
+            case FINALIZE_ERROR:
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                showLongToast(String.format(getString(R.string.encryption_error_message),
+                        result.getMessage()));
+                finishAndReturnInstance();
+                formSaveViewModel.resumeFormEntry();
+                break;
+
+            case CONSTRAINT_ERROR: {
+                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                refreshCurrentView();
+
+                // get constraint behavior preference value with appropriate default
+                String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                        .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+
+                // an answer constraint was violated, so we need to display the proper toast(s)
+                // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
+                // next question
+                if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                    next();
+                } else {
+                    // otherwise, we can get the proper toast(s) by saving with constraint check
+                    saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
+                }
+                formSaveViewModel.resumeFormEntry();
+                break;
+            }
+        }
     }
 
     /**
@@ -2535,10 +2540,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .build();
         OneTimeWorkRequest autoSendWork =
                 new OneTimeWorkRequest.Builder(AutoSendWorker.class)
-                        .addTag(AutoSendWorker.class.getName())
+                        .addTag(AutoSendWorker.TAG)
                         .setConstraints(constraints)
                         .build();
-        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.class.getName(),
+        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG,
                 ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
     }
 
@@ -2774,16 +2779,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         String snackBarText;
 
-        // Older Android versions don't have the "⋮" character. Only insert it into the text if the
-        // Android version supports it. If the Android version doesn't support it, there will be a
-        // double space where the placeholder is in the text resource. Collapse those spaces.
-        // See https://github.com/opendatakit/collect/pull/2864
         if (backgroundLocationMessage.isMenuCharacterNeeded()) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
-            } else {
-                snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "").replace("  ", " ");
-            }
+            snackBarText = String.format(getString(backgroundLocationMessage.getMessageTextResourceId()), "⋮");
         } else {
             snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
         }

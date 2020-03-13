@@ -12,10 +12,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
-import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -23,13 +23,13 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataTest {
 
     private final DeviceDetailsProvider deviceDetailsProvider = new FakeDeviceDetailsProvider();
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -38,26 +38,17 @@ public class FormMetadataTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_PHONE_STATE
             ))
-            .around(new ResetStateRule())
-            .around(new CopyFormRule("metadata.xml"));
-
-    @Rule
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<MainMenuActivity>(MainMenuActivity.class) {
-        @Override
-        protected void beforeActivityLaunched() {
-            super.beforeActivityLaunched();
-
-            CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            .around(new ResetStateRule(new AppDependencyModule() {
                 @Override
                 public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
                     return deviceDetailsProvider;
                 }
-            });
-        }
-    };
+            }))
+            .around(new CopyFormRule("metadata.xml"))
+            .around(rule);
 
     @Test
-    public void settingMetadata_letsThemBeIncludedInForm() {
+    public void settingMetadata_letsThemBeIncludedInAForm() {
         new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
@@ -66,12 +57,15 @@ public class FormMetadataTest {
                 .clickUsername()
                 .inputText("Chino")
                 .clickOKOnDialog()
+                .assertPreference(R.string.username, "Chino")
                 .clickEmail()
                 .inputText("chino@whitepony.com")
                 .clickOKOnDialog()
+                .assertPreference(R.string.email, "chino@whitepony.com")
                 .clickPhoneNumber()
                 .inputText("664615")
                 .clickOKOnDialog()
+                .assertPreference(R.string.phone_number, "664615")
                 .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
@@ -86,14 +80,14 @@ public class FormMetadataTest {
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
-                .assertText(deviceDetailsProvider.getDeviceId())
-                .assertText(deviceDetailsProvider.getSubscriberId())
-                .assertText(deviceDetailsProvider.getSimSerialNumber())
-                .assertText(getInstallID());
+                .assertPreference(R.string.device_id, deviceDetailsProvider.getDeviceId())
+                .assertPreference(R.string.subscriber_id, deviceDetailsProvider.getSubscriberId())
+                .assertPreference(R.string.sim_serial_id, deviceDetailsProvider.getSimSerialNumber())
+                .assertPreference(R.string.install_id, getInstallID());
     }
 
     @Test
-    public void deviceIdentifiersCanBeIncludedInForm() {
+    public void deviceIdentifiersCanBeIncludedInAForm() {
         new MainMenuPage(rule)
                 .startBlankForm("Metadata")
                 .scrollToAndAssertText(deviceDetailsProvider.getDeviceId())
@@ -102,7 +96,7 @@ public class FormMetadataTest {
     }
 
     private String getInstallID() {
-        SharedPreferences sharedPreferences = getDefaultSharedPreferences(rule.getActivity());
+        SharedPreferences sharedPreferences = rule.getActivity().getSharedPreferences("meta", Context.MODE_PRIVATE);
         return new SharedPreferencesInstallIDProvider(sharedPreferences, KEY_INSTALL_ID).getInstallID();
     }
 

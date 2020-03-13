@@ -75,8 +75,6 @@
   <string name="load_remote_form_error">Hitilafu kupata orodha ya fomu</string>
   <string name="location_provider_accuracy">Inatumia %1$s. Usahihi ni %2$s m.</string>
   <string name="location_accuracy">Usahihi ni %1$s m</string>
-  <string name="main_menu">Orodha kuu</string>
-  <string name="main_menu_details">Ukusanyaji wa takwimu umerahisishwa…</string>
   <string name="manage_files">Futa fomu zilizohifadhiwa</string>
   <string name="mark_finished">Weka alama kuonesha fomu imekamilika</string>
   <string name="noselect_error">Samahani, hujachagua fomu zozote!</string>
@@ -419,8 +417,6 @@
   <string name="select_time">Chagua muda</string>
   <string name="no_date_selected">Hakuna tarehe iliyochaguliwa</string>
   <string name="no_time_selected">Hakuna muda uliochaguliwa</string>
-  <string name="import_settings">Ingiza/Toa mpangilio</string>
-  <string name="qr_code">Msimbo wa QR</string>
   <string name="scan_qrcode">Chuja msimbo kutoka kifaa kingine</string>
   <string name="successfully_imported_settings">Mipangilio imeingizwa kwa mafanikio</string>
   <string name="encoding_max_limit">Kiwango cha herufi kimefikia ukomo: Misimbo ya QR haziwezi kutengenezwa kwa mipangilio yote</string>
@@ -432,7 +428,6 @@
   <string name="qrcode_without_passwords">Kanuni hizi za QR hazijajumuishi  kiongozi au mhifadhi misimbo. \n(Bofya kuongeza Nyilwa)</string>
   <string name="qrcode_with_admin_password">Kanuni hizi  za QR zinajumuishi  neno la siri/nywila za  kiongozi. Tafadhali tumia kwa umakini/uangalifu. \n(Bofya kuondoa kanuni)</string>
   <string name="qrcode_with_server_password">Kanuni hizi za QR zinajumuishi nywila/neno la siri la kiongozi. \n(Bofya kuondoa kanuni)</string>
-  <string name="import_export_settings">Ingiza/Toa Mipangilio</string>
   <string name="qrcode_scanner_prompt">Panga kanuni za  QR ndani ya mstatili</string>
   <string name="barcode_scanner_prompt">Panga msimbo pau ndani ya mstatili</string>
   <string name="server_password">Nenosiri la seva</string>

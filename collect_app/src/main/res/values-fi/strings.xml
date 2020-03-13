@@ -79,8 +79,6 @@
   <string name="load_remote_form_error">Virhe lomakelistaa hakiessa.</string>
   <string name="location_provider_accuracy">%1$s käytössä. Tarkkuus %2$s m.</string>
   <string name="location_accuracy">Tarkkuus %1$s m</string>
-  <string name="main_menu">Päävalikko</string>
-  <string name="main_menu_details">Helpompaa tiedonkeruuta</string>
   <string name="manage_files">Poista tallennettu lomake</string>
   <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="noselect_error">Pahoittelen, et ole valinnut yhtään lomaketta!</string>
@@ -474,8 +472,8 @@
   <string name="select_time">Valitse aika</string>
   <string name="no_date_selected">Päivämäärä valitsematta</string>
   <string name="no_time_selected">Aika valitsematta</string>
-  <string name="import_settings">Tuo/vie asetuksia</string>
-  <string name="qr_code">QR-koodi</string>
+  <string name="configure_via_qr_code">Konfigurointi QR-koodilla</string>
+  <string name="qr_code">QR-koodi-asetukset</string>
   <string name="scan_qrcode">Skannaa koodi toiselta laitteelta</string>
   <string name="successfully_imported_settings">Asetukset haettu onnistuneesti</string>
   <string name="encoding_max_limit">Merkkien maksimimäärä ylitetty: QR-koodia ei voida luoda kaikille asetuksille</string>
@@ -487,7 +485,6 @@
   <string name="qrcode_without_passwords">Tämä QR-koodi ei sisällä pääkäyttäjä- tai palvelinsalasanaasi.  \n(Napauta lisääksesi salasanat)</string>
   <string name="qrcode_with_admin_password">Tämä QR-koodi sisältää pääkäyttäjäsalasanasi. Ole hyvä ja käsittele varoen. \n(Napauta poistaaksesi salasanan)</string>
   <string name="qrcode_with_server_password">Tämä QR-koodi sisältää palvelinsalasanasi. Ole hyvä ja käsittele varoen. \n(Napauta poistaaksesi salasanan)</string>
-  <string name="import_export_settings">Tuo/vie asetuksia</string>
   <string name="qrcode_scanner_prompt">Aseta QR-koodi suorakaiteen sisään</string>
   <string name="barcode_scanner_prompt">Aseta viivakoodi suorakaiteen sisään</string>
   <string name="server_password">Palvelinsalasana</string>
@@ -505,6 +502,7 @@
   <string name="user_setting_summary">Napsauta asettaaksesi yleisten asetusten kohtia</string>
   <string name="main_menu_settings">Päävalikkoasetukset</string>
   <string name="main_menu_settings_summary">Napsauta asettaaksesi päävalikon kohtia</string>
+  <string name="app_configuration">Sovelluksen asetukset</string>
   <string name="user_access_control">Käyttäjän pääsynvalvonta</string>
   <string name="autosend_selector_title">Automaattinen lähetys</string>
   <string name="off">Pois</string>
@@ -698,7 +696,26 @@
   <string name="reason_for_changes">Muutosten selitys</string>
   <string name="reason">Selitys</string>
   <string name="save">Tallenna</string>
+  <string name="save_legacy_settings">Tallenna vanhanmuotoinen .settings -tiedosto</string>
+  <string name="save_legacy_settings_warning">Poistetaan tulevassa versiossa. Käytä QR-koodia yllä.</string>
   <string name="reason_for_changes_description">Tämän lomakkeen muutoksille tarvitaan selitys</string>
   <string name="scoped_storage_banner_text">Sinun täytyy siirtää Collect-lomakkeet yksityiseen tallennukseen elokuuhun 2020 mennessä moudattaaksesi Androidin vaatimuksia.</string>
   <string name="scoped_storage_learn_more">Lisätiedot ja siirtyminen</string>
+  <string name="storage_migration_completed">Tietojen tallennuksen siirto valmis!</string>
+  <string name="scoped_storage_dismiss">Hylkää</string>
+  <string name="storage_migration_dialog_message1">Androidin vaatimukset ovat muuttuneet, ja Collect-sovelluksen tiedostot piutää siirtää vuoden 2020 elokuuhun mennessä.</string>
+  <string name="storage_migration_dialog_message2">Sinulla on %d lähetys tekemättä. Kehoitamme lähettämään kaikki täytetyt lomakkeet ennen siirtoa..</string>
+  <string name="storage_migration_dialog_message3">Jos käytät ulkoista sovellusintegraatiota kuten OpenMapKit, ole hyvä ja odota siirron kanssa.</string>
+  <string name="storage_migration_more_details">Lisätietoja</string>
+  <string name="try_again">Yritä uudestaan</string>
+  <string name="migrate">Siirrä</string>
+  <string name="error">Virhe:</string>
+  <string name="storage_migration_not_enough_space">Sinulla ei ole riittävästi tilaa sisäisessä muistissa tietojesi siirtämiseen. Ole hyvä ja vapauta tilaa ja yritä uudelleen.</string>
+  <string name="storage_migration_form_uploader_is_running">Lomakkeiden taustalähetys käynnissä. Ole hyvä ja yritä uudelleen.</string>
+  <string name="storage_migration_form_downloader_is_running">Lomakkeiden taustalataus käynnissä. Ole hyvä ja yritä uudelleen.</string>
+  <string name="storage_migration_failed">Tietojen siirto epäonnistui. Ole hyvä ja yritä uudelleen.</string>
+  <string name="storage_migration_dialog_title">Tallennuksen siirto</string>
+  <string name="storage_migration_progress_msg">Siirto käynnissä.\Tässä voi kulua muutama sekunti…</string>
+  <string name="install_id">Install ID - korvaa Device ID -laitetunnisteen elokuussa 2020</string>
+  <string name="preference_not_available">Ei käytettävissä</string>
 </resources>

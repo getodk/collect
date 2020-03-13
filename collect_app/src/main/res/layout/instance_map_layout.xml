@@ -35,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_above="@id/geometry_status"
         app:srcCompat="@drawable/ic_note_add"
@@ -45,7 +44,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/form_title"
         android:layout_above="@+id/new_instance">
 

@@ -47,6 +47,8 @@ public interface MapFragment {
     float INITIAL_ZOOM = 2;
     float POINT_ZOOM = 16;
 
+    String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
+
     /**
      * Configures the map according to settings such as styling preferences and
      * layer data sources.  For now, this means anything that is configurable

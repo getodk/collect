@@ -21,7 +21,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import androidx.core.content.ContextCompat;
 
 import org.odk.collect.android.R;
@@ -32,8 +31,7 @@ public class IconUtils {
     }
 
     public static int getNotificationAppIcon() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-                R.drawable.ic_notes_white : R.drawable.ic_notes_white_png;
+        return R.drawable.ic_notes_white;
     }
 
     /** Renders a Drawable (such as a vector drawable) into a Bitmap. */

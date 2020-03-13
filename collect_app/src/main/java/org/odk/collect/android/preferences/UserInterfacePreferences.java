@@ -34,6 +34,7 @@ import java.util.TreeMap;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
@@ -77,7 +78,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 if (!pref.getEntry().equals(entry)) {
                     preference.setSummary(entry);
-                    MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
+                    startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 }
                 return true;
             });
@@ -144,7 +145,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 edit.apply();
 
                 localeHelper.updateLocale(getActivity());
-                MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
+                startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 return true;
             });
         }

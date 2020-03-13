@@ -76,8 +76,6 @@
   <string name="load_remote_form_error">ఫారం జాబితాను పొందడంలో లోపం జరిగింది </string>
   <string name="location_provider_accuracy">%1$s ఉపయోగించబడుతోంది. దీని ఖచ్చితత్వం %2$s m.</string>
   <string name="location_accuracy">ఖచ్చితత్వం %1$sm</string>
-  <string name="main_menu">ప్రధాన మెనూ</string>
-  <string name="main_menu_details">డేటా సేకరణ సులభం చేసింది…</string>
   <string name="manage_files">సేవ్ చేసిన ఫారంలను తొలగించండి </string>
   <string name="mark_finished">ఫారంను ఖరారు చేసినట్లుగా గుర్తించండి</string>
   <string name="noselect_error">క్షమించండి, మీరు ఏ ఫారంలను ఎంచుకోలేదు!</string>
@@ -467,8 +465,6 @@
   <string name="select_time">సమయాన్ని ఎంపిక చేసుకొండి</string>
   <string name="no_date_selected">తేదిని ఎంపిక చేసుకొలేదు</string>
   <string name="no_time_selected">సమయాన్ని ఎంపిక చేసుకొలేదు</string>
-  <string name="import_settings">ఇంపోర్ట్/ఎక్స్-పోర్ట్ సెట్టింగ్స్ </string>
-  <string name="qr_code">QR కోడ్</string>
   <string name="scan_qrcode">ఇతర పరికరం నుండి కోడ్‌ను స్కాన్ చేయండి</string>
   <string name="successfully_imported_settings">సెట్టింగులు విజయవంతంగా దిగుమతి చేయబడ్డాయి</string>
   <string name="encoding_max_limit">గరిష్ట అక్షరాల పరిమితి చేరుకుంది: అన్ని సెట్టింగ్‌ల కోసం QR కోడ్ ఉత్పత్తి చేయబడదు</string>
@@ -480,7 +476,6 @@
   <string name="qrcode_without_passwords">ఈ QR కోడ్‌లో మీ నిర్వాహక లేదా సర్వర్ పాస్‌వర్డ్‌లు లేవు. \n (పాస్‌వర్డ్‌లను జోడించడానికి నొక్కండి)</string>
   <string name="qrcode_with_admin_password">ఈ QR కోడ్‌లో మీ అడ్మిన్ పాస్‌వర్డ్ ఉంటుంది. దయచేసి జాగ్రత్తగా వ్యవహరించండి. \n (పాస్‌వర్డ్‌ను తొలగించడానికి నొక్కండి)</string>
   <string name="qrcode_with_server_password">ఈ QR కోడ్‌లో మీ సర్వర్ పాస్‌వర్డ్ ఉంటుంది. \n (పాస్‌వర్డ్‌లను తొలగించడానికి నొక్కండి)</string>
-  <string name="import_export_settings">ఇంపోర్ట్ /ఎక్స్ పోర్ట్ సెట్టింగ్స్ </string>
   <string name="qrcode_scanner_prompt">QR కోడ్‌ను దీర్ఘచతురస్రం లోపల ఉంచండి</string>
   <string name="barcode_scanner_prompt">బార్‌కోడ్‌ను దీర్ఘచతురస్రం లోపల ఉంచండి</string>
   <string name="server_password">సర్వర్ పాస్వర్డ్</string>

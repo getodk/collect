@@ -64,8 +64,6 @@
   <string name="load_remote_form_error">ফরম এর তালিকা পেতে ত্রুটি পাওয়া গেছে।</string>
   <string name="location_provider_accuracy">এখানে ব্যবহৃত %1$s. যার যথাযথতা হল %2$s m.</string>
   <string name="location_accuracy">যথাযথতা মান %1$s m.</string>
-  <string name="main_menu">প্রধান মেনু</string>
-  <string name="main_menu_details">প্রধান মেনু বিস্তারিত</string>
   <string name="manage_files">সংরক্ষিত ফরম মুছে দিন </string>
   <string name="mark_finished">ফরম চূড়ান্ত হিসেবে চিন্হিত করুন </string>
   <string name="noselect_error">দুঃখিত, আপনি কোন ফরম  নির্বাচন করেন নি!</string>

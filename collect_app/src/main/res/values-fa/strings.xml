@@ -67,7 +67,6 @@
   <string name="jump_to_end">به آخر برو</string>
   <string name="jump_to_previous">بالا برو</string>
   <string name="loading_form">در حال آماده سازی فورم</string>
-  <string name="main_menu">منوی اصلی</string>
   <string name="manage_files">حذف فورم ذخیره شده</string>
   <string name="no_items_display">هیچ موردی برای نمایش وجورد ندارد.</string>
   <string name="ok">درست است</string>
@@ -258,8 +257,6 @@
   <string name="select_time">انتخاب زمان</string>
   <string name="no_date_selected">هیچ تاریخی انتخاب نشده است</string>
   <string name="no_time_selected">هیچ زمانی انتخاب نشده است</string>
-  <string name="import_settings">تنظیمات واردات/صادرات</string>
-  <string name="qr_code">کد QR</string>
   <string name="scan_qrcode">کود سکن دستگاه دیگر</string>
   <string name="share">اشتراک گذاری</string>
   <string name="select_qrcode">انتخاب کد از مموری کارت</string>

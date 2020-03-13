@@ -75,8 +75,6 @@
   <string name="load_remote_form_error">فارم لسٹ حاصل کرنے میں خرابی</string>
   <string name="location_provider_accuracy">‎%1$s‏ استعمال ہو رہا ہے، ‎%2$s‏ درستگی  میٹر ہے</string>
   <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
-  <string name="main_menu">مین مینو</string>
-  <string name="main_menu_details">ڈیٹاکولیکشن آسان بنا دی گئی۔۔۔</string>
   <string name="manage_files">محفوظ شدہ فارم کو ڈیلیٹ کردیں۔</string>
   <string name="mark_finished">فارم کو حتمی کردیں</string>
   <string name="noselect_error">معذرت، آپنے کسی فارم کا انتخاب نہیں کیا!</string>
@@ -419,8 +417,6 @@
   <string name="select_time">وقت منتخب کریں</string>
   <string name="no_date_selected">کوئی تاریخ منتخب نہیں کی گئی </string>
   <string name="no_time_selected">کوئی وقت نہیں منتخب کیا گیا </string>
-  <string name="import_settings">امپورٹ/ایکسپورٹ سیٹنگ </string>
-  <string name="qr_code">کیو آرکوڈ </string>
   <string name="scan_qrcode">دوسرے آلہ سے اسکین کوڈکریں</string>
   <string name="successfully_imported_settings">سیٹنگز کامیابی سےامپورٹ ہوگئیں</string>
   <string name="encoding_max_limit">زیادہ سے زیادہ حروف کی حدپہنچ گئی:کیو آر کوڈ تمام سیٹنگنزکے لئے بنایا نہیں کیا جا سکتا</string>
@@ -432,7 +428,6 @@
   <string name="qrcode_without_passwords">اس کیو آر کوڈ میں ایڈمن اور سرور کے پاس ورڈ شامل نہیں ہیں. \ این (پاس ورڈ ایڈ کرنےکے لیے ٹیپ کریں)</string>
   <string name="qrcode_with_admin_password">اس کیو آر کوڈ میں ایڈمن اور سرور کے پاس ورڈ شامل ہیں. براہ مہربانی اسے احتیاط سے استعمال کریں. \ این (پاس ورڈ کو ہٹانےکے لیےٹیپ کریں )</string>
   <string name="qrcode_with_server_password">اس کیو آر کوڈ میںاپکے سرور کا پاس ورڈ شامل ہے.  \ این (پاس ورڈ کو ہٹانےکے لیے ٹیپ کریں)</string>
-  <string name="import_export_settings">امپورٹ/ایکسپورٹ سیٹنگ </string>
   <string name="qrcode_scanner_prompt"> کیو آر کوڈ کو مستطیل کے اندر رکھیں</string>
   <string name="barcode_scanner_prompt">بارکوڈ کو مستطیل کے اندر رکھیں</string>
   <string name="server_password">سرور پاس ورڈ</string>

@@ -64,8 +64,6 @@
   <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
   <string name="location_provider_accuracy">Sử dụng %1$s. Độ chính xác là %2$s m.</string>
   <string name="location_accuracy">Độ chính xác là %1$s m</string>
-  <string name="main_menu">Thực đơn</string>
-  <string name="main_menu_details">Thu thập số liệu dễ dàng và thuận tiện hơn…</string>
   <string name="manage_files">Xoá biểu mẫu cũ</string>
   <string name="mark_finished">Đánh dấu biểu mẫu là hoàn thành</string>
   <string name="noselect_error">Xin lỗi, bạn không chọn biểu mẫu nào!</string>

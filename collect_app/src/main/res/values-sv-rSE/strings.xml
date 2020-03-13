@@ -78,8 +78,6 @@
   <string name="load_remote_form_error">Ett fel inträffade vid listning av formulär</string>
   <string name="location_provider_accuracy">Använder %1$s. Noggrannheten är %2$s m.</string>
   <string name="location_accuracy">Noggrannheten är %1$s m</string>
-  <string name="main_menu">Huvudmeny</string>
-  <string name="main_menu_details">Enkel datainsamling…</string>
   <string name="manage_files">Radera sparat formulär</string>
   <string name="mark_finished">Markera formulär som avslutat</string>
   <string name="noselect_error">Tyvärr, du har inte valt några formulär!</string>
@@ -444,8 +442,6 @@ Dela ODK Collect med dem.</string>
   <string name="select_time">Välj tid</string>
   <string name="no_date_selected">Inget datum valt</string>
   <string name="no_time_selected">Ingen tidpunkt vald</string>
-  <string name="import_settings">Import/export inställningar</string>
-  <string name="qr_code">QR-kod</string>
   <string name="scan_qrcode">Skanna koden från den andra enheten</string>
   <string name="successfully_imported_settings">Import av inställningarna lyckades</string>
   <string name="encoding_max_limit">Maximalt antal tecken uppnått: QR-kod kan inte genereras för alla inställningar</string>
@@ -457,7 +453,6 @@ Dela ODK Collect med dem.</string>
   <string name="qrcode_without_passwords">QR-koden innehåller inte dina administratörs- och serverlösenord. \n(Knacka för att lägga till lösenorden)</string>
   <string name="qrcode_with_admin_password">QR-koden innehåller ditt administratörslösenord. Använd den med försiktighet. \n(Knacka för att ta bort lösenordet)</string>
   <string name="qrcode_with_server_password">QR-koden innehåller ditt serverlösenord. \n(Knacka för att ta bort lösenordet)</string>
-  <string name="import_export_settings">Import/export inställningar</string>
   <string name="qrcode_scanner_prompt">Placera QR-koden innanför rektangeln</string>
   <string name="barcode_scanner_prompt">Placera streckkoden innanför rektangeln</string>
   <string name="server_password">Serverlösenord</string>

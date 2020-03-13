@@ -64,8 +64,6 @@
   <string name="load_remote_form_error">Eroare la preluarea listei de formulare</string>
   <string name="location_provider_accuracy">Utilizat %1$s. Precizie de %2$s m.</string>
   <string name="location_accuracy">Precizie de %1$s m</string>
-  <string name="main_menu">Meniu principal</string>
-  <string name="main_menu_details">Colectare mai ușoară a datelor…</string>
   <string name="manage_files">Ștergeți formular salvat</string>
   <string name="mark_finished">Marcați formularul ca finalizat</string>
   <string name="noselect_error">Ne pare rău, nu ați selectat niciun formular!</string>

@@ -126,7 +126,7 @@ public class GoogleLocationClientTest {
         // Should still be second:
         assertSame(secondLocation, firstListener.getLastLocation());
 
-        // Call requestLocationUpdates again with new Listener:
+        // Call requestLocationUpdates again with new listener:
         TestLocationListener secondListener = new TestLocationListener();
         googleLocationClient.requestLocationUpdates(secondListener);
 

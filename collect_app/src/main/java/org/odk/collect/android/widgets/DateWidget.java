@@ -221,9 +221,7 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     private int getTheme() {
         int theme = 0;
-        // https://github.com/opendatakit/collect/issues/1424
-        // https://github.com/opendatakit/collect/issues/1367
-        if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (!isBrokenSamsungDevice()) {
             theme = themeUtils.getMaterialDialogTheme();
         }
         if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
@@ -236,7 +234,6 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
     // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
     private boolean isBrokenSamsungDevice() {
         return Build.MANUFACTURER.equalsIgnoreCase("samsung")
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 

@@ -79,8 +79,6 @@
   <string name="load_remote_form_error">შეცდომა ფორმების ჩამონათვლის ჩვენებისას</string>
   <string name="location_provider_accuracy">მდებარეობის მიღება %1$s-ით. აკურატულობა შეადგენს %2$s მეტრს.</string>
   <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
-  <string name="main_menu">მთავარი მენიუ</string>
-  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა…</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>
   <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="noselect_error">უკაცრავად, თქვენ ფორმა არ აგირჩევიათ!</string>

@@ -1,8 +1,5 @@
 package org.odk.collect.android.widgets;
 
-import java.io.File;
-import java.util.HashMap;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,9 +8,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,13 +27,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewIds;
+
+import java.io.File;
+import java.util.HashMap;
 
 import timber.log.Timber;
 
 import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_IN_PARENT;
 import static android.widget.RelativeLayout.TRUE;
+import static org.odk.collect.android.analytics.AnalyticsEvents.LIKERT;
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 
 @SuppressLint("ViewConstructor")
@@ -64,7 +64,7 @@ public class LikertWidget extends ItemsWidget {
         setSavedButton();
         addAnswerView(view, dpFromPx(context, 10));
 
-        analytics.logEvent("Likert", questionDetails.getFormAnalyticsID());
+        analytics.logEvent(LIKERT, questionDetails.getFormAnalyticsID());
     }
 
     public void setMainViewLayoutParameters() {
@@ -202,7 +202,7 @@ public class LikertWidget extends ItemsWidget {
 
     public RadioButton getRadioButton(int i) {
         AppCompatRadioButton button = new AppCompatRadioButton(getContext());
-        button.setId(ViewIds.generateViewId());
+        button.setId(View.generateViewId());
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
         radioButtonsParams.addRule(CENTER_HORIZONTAL, TRUE);
@@ -288,7 +288,7 @@ public class LikertWidget extends ItemsWidget {
         String errorMsg = null;
         try {
             String imageFilename =
-                    ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
+                    ReferenceManager.instance().deriveReference(imageURI).getLocalURI();
             final File imageFile = new File(imageFilename);
             if (imageFile.exists()) {
                 Bitmap b = null;

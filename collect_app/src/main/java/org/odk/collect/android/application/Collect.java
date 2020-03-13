@@ -16,13 +16,11 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -35,8 +33,6 @@ import androidx.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -59,13 +55,11 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
-import org.odk.collect.android.utilities.PRNGFixes;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.ByteArrayInputStream;
@@ -110,6 +104,10 @@ public class Collect extends Application {
     @Inject
     UserAgentProvider userAgentProvider;
 
+    @Inject
+    public
+    CollectJobCreator collectJobCreator;
+
     public static Collect getInstance() {
         return singleton;
     }
@@ -135,8 +133,8 @@ public class Collect extends Application {
          */
         String dirPath = directory.getAbsolutePath();
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        if (dirPath.startsWith(storagePathProvider.getDirPath(StorageSubdirectory.ODK))) {
-            dirPath = dirPath.substring(storagePathProvider.getDirPath(StorageSubdirectory.ODK).length());
+        if (dirPath.startsWith(storagePathProvider.getStorageRootDirPath())) {
+            dirPath = dirPath.substring(storagePathProvider.getStorageRootDirPath().length());
             String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {
@@ -161,12 +159,6 @@ public class Collect extends Application {
 
     public void setExternalDataManager(ExternalDataManager externalDataManager) {
         this.externalDataManager = externalDataManager;
-    }
-
-    public String getVersionedAppName() {
-        String versionName = BuildConfig.VERSION_NAME;
-        versionName = " " + versionName.replaceFirst("-", "\n");
-        return getString(R.string.app_name) + versionName;
     }
 
     /**
@@ -199,7 +191,6 @@ public class Collect extends Application {
         singleton = this;
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        installTls12();
         setupDagger();
 
         NotificationUtils.createNotificationChannel(singleton);
@@ -210,7 +201,7 @@ public class Collect extends Application {
         try {
             JobManager
                     .create(this)
-                    .addJobCreator(new CollectJobCreator());
+                    .addJobCreator(collectJobCreator);
         } catch (JobManagerCreateException e) {
             Timber.e(e);
         }
@@ -222,7 +213,6 @@ public class Collect extends Application {
 
         reloadSharedPreferences();
 
-        PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         JodaTimeAndroid.init(this);
 
@@ -262,23 +252,6 @@ public class Collect extends Application {
                 .build();
 
         applicationComponent.inject(this);
-    }
-
-    private void installTls12() {
-        if (Build.VERSION.SDK_INT <= 20) {
-            ProviderInstaller.installIfNeededAsync(getApplicationContext(), new ProviderInstaller.ProviderInstallListener() {
-                @Override
-                public void onProviderInstalled() {
-                }
-
-                @Override
-                public void onProviderInstallFailed(int i, Intent intent) {
-                    GoogleApiAvailability
-                            .getInstance()
-                            .showErrorNotification(getApplicationContext(), i);
-                }
-            });
-        }
     }
 
     protected RefWatcher setupLeakCanary() {
@@ -372,17 +345,12 @@ public class Collect extends Application {
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getCurrentFormIdentifierHash() {
-        String formIdentifier = "";
         FormController formController = getInstance().getFormController();
         if (formController != null) {
-            if (formController.getFormDef() != null) {
-                String formID = formController.getFormDef().getMainInstance()
-                        .getRoot().getAttributeValue("", "id");
-                formIdentifier = formController.getFormTitle() + " " + formID;
-            }
+            return formController.getCurrentFormIdentifierHash();
         }
 
-        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+        return "";
     }
 
     /**
@@ -394,9 +362,5 @@ public class Collect extends Application {
     public static String getFormIdentifierHash(String formId, String formVersion) {
         String formIdentifier = new FormsDao().getFormTitleForFormIdAndFormVersion(formId, formVersion) + " " + formId;
         return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
-    }
-
-    public void logNullFormControllerEvent(String action) {
-        logRemoteAnalytics("NullFormControllerEvent", action, null);
     }
 }

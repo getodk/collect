@@ -74,8 +74,6 @@
   <string name="load_remote_form_error">फारम सूची प्राप्त गर्न असफल</string>
   <string name="location_provider_accuracy">%1$s प्रयोग गर्दा, सटिकता %2$s m छ |</string>
   <string name="location_accuracy">सटिकता %1$s m छ |</string>
-  <string name="main_menu">मूल मेनु</string>
-  <string name="main_menu_details">सजिलो तथ्यांक संकलन…</string>
   <string name="manage_files">संचित फारम डिलिट गर्न</string>
   <string name="mark_finished">फारामलाई अन्तिम रुप दिइएको अंकित गर्नुहोस् </string>
   <string name="noselect_error">कुनै एक फारम छान्नुहोस् </string>
@@ -342,8 +340,6 @@
   <string name="select_time">समय छान्नुहोस्</string>
   <string name="no_date_selected">मिति छानिएको छैन</string>
   <string name="no_time_selected">समय छानिएको छैन</string>
-  <string name="import_settings">ल्याउने / पठाउने सेटिङ्स</string>
-  <string name="qr_code">QR कोड</string>
   <string name="scan_qrcode">अन्य यन्त्रबाट स्क्यान गर्नुहोस्</string>
   <string name="share">शेयर</string>
   <string name="select_qrcode">SD कार्डबाट कोड छान्नुहोस्</string>

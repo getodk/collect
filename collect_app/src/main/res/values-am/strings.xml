@@ -60,8 +60,6 @@
   <string name="list_failed_with_error">የቅፅ ዝርዝሩ አልተሳካም፡፡ 1 %s</string>
   <string name="loading_form">ቅጽ በመጫን ላይ</string>
   <string name="load_remote_form_error">የቅጽ ዝርዝር ማግኘት ላይ ስህተት ተከስቷል</string>
-  <string name="main_menu">ዋና ምናሌ</string>
-  <string name="main_menu_details">የውሂብ መሰብሰብ ይበልጥ ቀላል ሆነ …</string>
   <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
   <string name="mark_finished">ቅጹን እንደተጠናቀቀ ምልክት አድርግ</string>
   <string name="noselect_error">ይቅርታ፣ ምንም ቅጽ አልመረጡም!</string>

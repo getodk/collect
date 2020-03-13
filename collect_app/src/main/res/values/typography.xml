@@ -23,4 +23,12 @@
     <style name="TextAppearance.Collect.Body2.MediumEmphasis" parent="TextAppearance.Collect.Body2">
         <item name="android:textColor">@color/color_on_surface_medium_emphasis</item>
     </style>
+
+    <style name="TextAppearance.Collect.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Collect.Caption" parent="TextAppearance.MaterialComponents.Caption">
+    </style>
 </resources>

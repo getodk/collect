@@ -72,7 +72,6 @@ the License.
                 android:textStyle="bold"
                 android:padding="10dp"
                 android:visibility="gone"
-                android:drawableLeft="@drawable/ic_navigate_back_wrapped"
                 android:drawableStart="@drawable/ic_navigate_back_wrapped" />
 
             <View
@@ -94,7 +93,6 @@ the License.
                 android:textStyle="bold"
                 android:padding="10dp"
                 android:visibility="gone"
-                android:drawableRight="@drawable/ic_navigate_forward_wrapped"
                 android:drawableEnd="@drawable/ic_navigate_forward_wrapped" />
         </LinearLayout>
     </FrameLayout>

@@ -4,7 +4,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,15 +15,21 @@ public class FormUtils {
         
     }
 
+    /**
+     * Configures the given reference manager to resolve jr:// URIs to a folder in the root ODK forms
+     * directory with name matching the name of the directory represented by {@code formMediaDir}.
+     *
+     * E.g. if /foo/bar/baz is passed in as {@code formMediaDir}, jr:// URIs will be resolved to
+     * /odk/root/forms/baz.
+     */
     public static void setupReferenceManagerForForm(ReferenceManager referenceManager, File formMediaDir) {
-
-        // Remove previous forms
+        // Clear mappings to the media dir for the previous form that was configured
         referenceManager.clearSession();
 
         // This should get moved to the Application Class
         if (referenceManager.getFactories().length == 0) {
-            // this is /sdcard/odk
-            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getDirPath(StorageSubdirectory.ODK)));
+            // Always build URIs against the ODK root, regardless of the absolute path of formMediaDir
+            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getStorageRootDirPath()));
         }
 
         addSessionRootTranslators(referenceManager,

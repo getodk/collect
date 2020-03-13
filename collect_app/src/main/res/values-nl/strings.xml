@@ -75,8 +75,6 @@
   <string name="load_remote_form_error">Fout bij laden formulieren</string>
   <string name="location_provider_accuracy">Gebruikt %1$s. Nauwkeurigheid is %2$s m.</string>
   <string name="location_accuracy">Nauwkeurigheid is %1$s m</string>
-  <string name="main_menu">Hoofdmenu</string>
-  <string name="main_menu_details">Data collection made easier…</string>
   <string name="manage_files">Verwijder formulieren</string>
   <string name="mark_finished">Definitief maken</string>
   <string name="noselect_error">Sorry, u heeft geen formulier gekozen!</string>
@@ -308,7 +306,6 @@
   <string name="no_time_selected">Geen tijd geselecteerd</string>
   <string name="share">Deel</string>
   <string name="qrcode_with_server_password">Deze QR-code bevat jouw serverwachtwoord. \n(Klik om de wachtwoorden te verwijderen)</string>
-  <string name="import_export_settings">Import/Export Instellingen</string>
   <string name="user_settings">Gebruikersinstellingen</string>
   <string name="main_menu_settings">Hoofdmenu instellingen</string>
   <string name="autosend_selector_title">Automatisch versturen</string>

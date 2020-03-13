@@ -30,13 +30,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,6 +47,7 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SHOW_SPLASH_SCREEN;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 
 public class SplashScreenActivity extends Activity {
@@ -64,7 +68,7 @@ public class SplashScreenActivity extends Activity {
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
-                    new StorageInitializer().createODKDirs();
+                    new StorageInitializer().createOdkDirsOnStorage();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(SplashScreenActivity.this,
                             e.getMessage(), EXIT), SplashScreenActivity.this);
@@ -121,6 +125,11 @@ public class SplashScreenActivity extends Activity {
             editor.putBoolean(GeneralKeys.KEY_FIRST_RUN, false);
             editor.commit();
             startSplashScreen(splashPath);
+
+            if (showSplash) {
+                String splashPathHash = FileUtils.getMd5Hash(new ByteArrayInputStream(splashPath.getBytes()));
+                Collect.getInstance().logRemoteAnalytics(SHOW_SPLASH_SCREEN, splashPathHash, "");
+            }
         } else {
             endSplashScreen();
         }

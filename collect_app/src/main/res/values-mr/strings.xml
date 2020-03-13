@@ -66,8 +66,6 @@
   <string name="load_remote_form_error">प्रपत्र यादी प्राप्त करताना त्रुटी</string>
   <string name="location_provider_accuracy">%1$s वापरून अचूकता  %2$s मी आहे.</string>
   <string name="location_accuracy">अचूकता %1$s मी आहे</string>
-  <string name="main_menu">मुख्य मेनू</string>
-  <string name="main_menu_details">डेटा संकलन सोपे केले …</string>
   <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
   <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
   <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>
@@ -378,8 +376,6 @@
   <string name="select_time">वेळेची निवड करा</string>
   <string name="no_date_selected">तारीख निवडली नाही</string>
   <string name="no_time_selected">वेळ निवडला नाही</string>
-  <string name="import_settings">आयात / निर्यात सेटिंग्ज</string>
-  <string name="qr_code">क्यूआर कोड</string>
   <string name="scan_qrcode">इतर डिव्हाइसवरून कोड स्कॅन करा</string>
   <string name="successfully_imported_settings">सेटिंग्ज यशस्वीपणे आयात केली</string>
   <string name="encoding_max_limit">कमाल वर्ण मर्यादेपर्यंत पोहोचले: सर्व सेटिंग्जसाठी क्यूआर कोड व्युत्पन्न करणे शक्य नाही</string>
@@ -391,7 +387,6 @@
   <string name="qrcode_without_passwords">या क्यूआर कोडमध्ये आपले प्रशासक किंवा सर्व्हर संकेतशब्द नसतात. \n (संकेतशब्द जोडण्यासाठी टॅप करा)</string>
   <string name="qrcode_with_admin_password">हा क्यूआर कोड आपला प्रशासक संकेतशब्द समाविष्ट करतो. कृपया काळजीपूर्वक वागणूक द्या. \n (संकेतशब्द काढण्यासाठी टॅप करा)</string>
   <string name="qrcode_with_server_password">हा क्यूआर कोड आपला सर्व्हर पासवर्ड समाविष्टीत आहे. \n (संकेतशब्द काढण्यासाठी टॅप करा)</string>
-  <string name="import_export_settings">आयात / निर्यात सेटिंग्ज</string>
   <string name="qrcode_scanner_prompt">आयतमध्ये क्यूआर कोड ठेवा</string>
   <string name="server_password">सर्व्हर पासवर्ड</string>
   <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>

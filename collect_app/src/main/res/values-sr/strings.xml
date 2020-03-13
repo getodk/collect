@@ -76,8 +76,6 @@
   <string name="load_remote_form_error">Greška u pristupu formularima na serveru</string>
   <string name="location_provider_accuracy">Koristim %1$s. Preciznost %2$s m.</string>
   <string name="location_accuracy">Preciznost %1$s m</string>
-  <string name="main_menu">Glavni meni</string>
-  <string name="main_menu_details">Prikupljanje podataka je pojednostavljeno…</string>
   <string name="manage_files">Obriši sačuvani formular</string>
   <string name="mark_finished">Označi formular kao završen</string>
   <string name="noselect_error">Niste odabrali nijedan formular!</string>
@@ -456,8 +454,6 @@
   <string name="select_time">Odaberi vrijeme</string>
   <string name="no_date_selected">Datum nije odabran</string>
   <string name="no_time_selected">Vrijeme nije odabrano</string>
-  <string name="import_settings">Podešavanja preuzimanja/otpremanja podataka</string>
-  <string name="qr_code">QR kod</string>
   <string name="scan_qrcode">Skeniraj kod sa drugog uređaja</string>
   <string name="successfully_imported_settings">Podešavanja su uspješno preuzeta</string>
   <string name="encoding_max_limit">Dostignut je maksimalan broj karaktera: QR kod ne može biti generisan za sva podešavanja</string>
@@ -469,7 +465,6 @@
   <string name="qrcode_without_passwords">Ovaj QR kod ne sadrži administratorske i serverske lozinke. \n(Klikni kako bi dodao-la lozinke)</string>
   <string name="qrcode_with_admin_password">Ovaj QR kod sadrži administratorske i serverske lozinke. Molim da ga tretirate povjerljivo. \n(Klikni kako bi uklonio-la lozinke)</string>
   <string name="qrcode_with_server_password">Ovaj QR kod sadrži serverske lozinke. \n(Klikni kako bi uklonio-la lozinku)</string>
-  <string name="import_export_settings">Podešavanja preuzimanja i otpremanja</string>
   <string name="qrcode_scanner_prompt">Postavi QR kod unutar kocke</string>
   <string name="barcode_scanner_prompt">Postavi barkod unutar kocke</string>
   <string name="server_password">Server lozinka</string>

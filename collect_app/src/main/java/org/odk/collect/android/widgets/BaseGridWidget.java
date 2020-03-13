@@ -54,6 +54,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 /**
@@ -120,7 +121,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
         String errorMsg = null;
         if (imageURI != null) {
             try {
-                final File imageFile = new File(ReferenceManager.instance().DeriveReference(imageURI).getLocalURI());
+                final File imageFile = new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
                 if (imageFile.exists()) {
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth());
                     if (b != null) {
@@ -256,7 +257,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
                 String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
 
                 if (audioURI != null) {
-                    analytics.logEvent("Prompt", "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
+                    analytics.logEvent(AUDIO_QUESTION, "AudioChoiceGrid", questionDetails.getFormAnalyticsID());
                     break;
                 }
             }

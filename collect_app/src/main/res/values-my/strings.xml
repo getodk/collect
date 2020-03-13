@@ -71,8 +71,6 @@
   <string name="load_remote_form_error">ပံုစံစာရင္းရယူမွု မွားယြင္းေနပါသည္</string>
   <string name="location_provider_accuracy">သံုးစြဲမွု %1$s. တိက်မွန္ကန္မွု %2$s m.</string>
   <string name="location_accuracy">တိက်မွန္ကန္မွု %1$s m</string>
-  <string name="main_menu">ပင္မစာရင္းစဥ္</string>
-  <string name="main_menu_details">အခ်က္အလက္ေကာက္ယူမွုလြယ္ကူေစရန္</string>
   <string name="manage_files">သိမ္းထားေသာပံုစံအားဖ်က္ရန္</string>
   <string name="mark_finished">အၿပီးသတ္ထားေသာပံုစံအားမွတ္သားရန္</string>
   <string name="noselect_error">ပံုစံေရြးခ်ယ္ထားျခင္းမရိွပါ</string>

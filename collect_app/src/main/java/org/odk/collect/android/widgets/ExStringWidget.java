@@ -32,7 +32,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -119,8 +118,6 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(answerText);
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
-
-        Collect.getInstance().logRemoteAnalytics("WidgetType", "ExternalApp", Collect.getCurrentFormIdentifierHash());
     }
 
     private String getButtonText() {

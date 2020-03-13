@@ -3,38 +3,40 @@ package org.odk.collect.android.widgets;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.core.util.Pair;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.reference.ReferenceManager;
-import org.mockito.Mock;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.SelectWidgetTest;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.Helpers.createMockReference;
+import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 
 public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A extends IAnswerData>
         extends SelectWidgetTest<W, A> {
-
-    @Mock
-    public ReferenceManager referenceManager;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         overrideDependencyModule();
-        createMockReference(referenceManager, "jr://images/body.svg");
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withImageURI("jr://images/body.svg")
                 .build();
     }
 
-    private void overrideDependencyModule() {
+    private void overrideDependencyModule() throws Exception {
+        ReferenceManager referenceManager = setupFakeReferenceManager(asList(
+                new Pair<>("jr://images/body.svg", "body.svg")
+        ));
+
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public ReferenceManager providesReferenceManager() {
@@ -52,6 +54,6 @@ public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A
         when(motionEvent.getAction()).thenReturn(MotionEvent.ACTION_DOWN);
 
         assertThat(getWidget().webView.getVisibility(), is(View.VISIBLE));
-        assertThat(getWidget().webView.isEnabled(), is(Boolean.FALSE));
+        assertThat(getWidget().webView.isClickable(), is(Boolean.FALSE));
     }
 }

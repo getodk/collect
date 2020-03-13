@@ -276,6 +276,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             final File formMediaDir = FileUtils.getFormMediaDir(formDefFile);
             setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
 
+            FileUtils.getOrCreateLastSavedSrc(formDefFile);
             fields = FileUtils.getMetadataFromFormDefinition(formDefFile);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(formDefFile.getName() + " :: " + e.toString());

@@ -93,6 +93,7 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
   - Follow [these instructions to generate a signing certificate fingerprint and register the application with the Google API Console](https://developers.google.com/drive/android/auth#generate_the_signing_certificate_fingerprint_and_register_your_application).
   - [Enable the Google Drive API](https://console.developers.google.com/apis/api/drive.googleapis.com).
   - [Enable the Google Sheets API](https://console.developers.google.com/apis/api/sheets.googleapis.com).
+  - Copy the oauth clientID from [the developer console](https://console.developers.google.com/apis/credentials) into the `client_id` of `collect_app/google-services.json` file
 
 **Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   - [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  Note that this requires a credit card number, though the card will not be charged immediately; some free API usage is permitted.  You should carefully read the terms before providing a credit card number.
@@ -158,16 +159,14 @@ Translations are updated right before the first beta for a release and before th
 
 ## Contributing testing
 All pull requests are verified on the following devices (ordered by Android version):
-* [Infinix Race Bolt Q X451](http://bestmobs.com/infinix-race-bolt-q-x451) - Android 4.2.1
-* [Samsung Galaxy J1 SM-J100H](http://www.gsmarena.com/samsung_galaxy_j1-6907.php) - Android 4.4.4
 * [Huawei Y560-L01](http://www.gsmarena.com/huawei_y560-7829.php) - Android 5.1.1
 * [Sony Xperia Z3 D6603](http://www.gsmarena.com/sony_xperia_z3-6539.php) - Android 6.0.1
 * [Samsung Galaxy S7 SM-G930F](https://www.gsmarena.com/samsung_galaxy_s7-7821.php) - Android 7.0.0
 * [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.1
 * [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0
+* [Google Pixel 3a](https://www.gsmarena.com/google_pixel_3a-9408.php) - Android 10.0
 
 Our regular code contributors use these devices (ordered by Android version): 
-* [Alcatel One Touch 5020D](https://www.gsmarena.com/alcatel_one_touch_m_pop-5242.php) - Android 4.1.1
 * [Xiaomi Redmi Note 4](https://www.gsmarena.com/xiaomi_redmi_note_4-8531.php) - Android 7.0
 * [Samsung Galaxy S4 GT-I9506](http://www.gsmarena.com/samsung_i9506_galaxy_s4-5542.php) - Android 5.0.1
 * [Samsung Galaxy Tab SM-T285](http://www.gsmarena.com/samsung_galaxy_tab_a_7_0_(2016)-7880.php) - Android 5.1.1
@@ -202,6 +201,8 @@ RELEASE_KEY_PASSWORD=secure-alias-password
 ```
 
 Maintainers also have a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
+
+When ready to generate a build for the Play Store, maintainers tag the build by [adding a release](releases). Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
 
 To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `collect_app/secrets.properties` file, and a configured `collect_app/src/odkCollectRelease/google-services.json` file. Then run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
 

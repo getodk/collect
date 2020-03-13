@@ -69,8 +69,6 @@
   <string name="load_remote_form_error">Erro na Listagem de Formulários</string>
   <string name="location_provider_accuracy">Usando %1$s. Precisão de %2$s m.</string>
   <string name="location_accuracy">Precisão de %1$s m</string>
-  <string name="main_menu">Menu Principal</string>
-  <string name="main_menu_details">Coleta de dados facilitada…</string>
   <string name="manage_files">Apagar Formulário Salvo</string>
   <string name="mark_finished">Marcar formulário como finalizado</string>
   <string name="noselect_error">Desculpe, você não selecionou nenhum formulário!</string>
@@ -409,8 +407,6 @@ Escolher Imagem</string>
   <string name="select_time">Selecionar hora</string>
   <string name="no_date_selected">Nenhuma data selecionada</string>
   <string name="no_time_selected">Nenhuma hora selecionada</string>
-  <string name="import_settings">Importar/Exportar configurações</string>
-  <string name="qr_code">QR code</string>
   <string name="scan_qrcode">Digitalizar código de outro dispositivo</string>
   <string name="successfully_imported_settings">Configurações importadas com sucesso</string>
   <string name="encoding_max_limit">Número máximo de caracteres alcançado: QR code não pode ser gerado para todas as configurações</string>
@@ -422,7 +418,6 @@ Escolher Imagem</string>
   <string name="qrcode_without_passwords">Este QR code não contém suas senhas de administração e de servidor. \n(Toque para adicionar as senhas)</string>
   <string name="qrcode_with_admin_password">Este QR code contém sua senha de administração. Por favor use com cuidado. \n(Toque para remover a senha)</string>
   <string name="qrcode_with_server_password">Este QR code contém sua senha do servidor. \n(Toque para remover a senha)</string>
-  <string name="import_export_settings">Importar/Exportar configurações</string>
   <string name="qrcode_scanner_prompt">Posicione o QR code dentro do retângulo</string>
   <string name="barcode_scanner_prompt">Coloque o código de barras dentro do retângulo</string>
   <string name="server_password">Senha do servidor</string>

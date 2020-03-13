@@ -91,8 +91,6 @@
     <string name="load_remote_form_error">Error Getting Form List</string>
     <string name="location_provider_accuracy">Using %1$s. Accuracy is %2$s m.</string>
     <string name="location_accuracy">Accuracy is %1$s m</string>
-    <string name="main_menu">Main Menu</string>
-    <string name="main_menu_details">Data collection made easier…</string>
     <string name="manage_files">Delete Saved Form</string>
     <string name="mark_finished">Mark form as finalized</string>
     <string name="noselect_error">Sorry, you have not selected any forms!</string>
@@ -493,7 +491,7 @@
     <string name="select_time">Select time</string>
     <string name="no_date_selected">No date selected</string>
     <string name="no_time_selected">No time selected</string>
-    <string name="import_settings">Configure via QR Code</string>
+    <string name="configure_via_qr_code">Configure via QR code</string>
     <string name="qr_code">QR code configuration</string>
     <string name="scan_qrcode">Scan code from other device</string>
     <string name="successfully_imported_settings">Settings imported successfully</string>
@@ -506,7 +504,6 @@
     <string name="qrcode_without_passwords">This QR code does not contain your admin or server passwords. \n(Tap to add the passwords)</string>
     <string name="qrcode_with_admin_password">This QR code includes your admin password. Please treat it carefully. \n(Tap to remove the password)</string>
     <string name="qrcode_with_server_password">This QR code includes your server password. \n(Tap to remove the passwords)</string>
-    <string name="import_export_settings">Configure via QR Code</string>
     <string name="qrcode_scanner_prompt">Place the QR code inside the rectangle</string>
     <string name="barcode_scanner_prompt">Place the barcode inside the rectangle</string>
     <string name="server_password">Server Password</string>
@@ -727,5 +724,22 @@
 
     <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage by August 2020 to comply with Android requirements.</string>
     <string name="scoped_storage_learn_more">Learn more and migrate</string>
+    <string name="storage_migration_completed">Storage migration completed!</string>
+    <string name="scoped_storage_dismiss">Dismiss</string>
+    <string name="storage_migration_dialog_message1">Android requirements have changed and files used by Collect must be migrated by August 2020.</string>
+    <string name="storage_migration_dialog_message2">You have %d unsent submissions. You are encouraged to submit all data before migrating.</string>
+    <string name="storage_migration_dialog_message3">If you use an external application integration such as OpenMapKit, please do not migrate yet.</string>
+    <string name="storage_migration_more_details">More details</string>
+    <string name="try_again">Try again</string>
+    <string name="migrate">Migrate</string>
+    <string name="error">Error:</string>
+    <string name="storage_migration_not_enough_space">You do not have enough space on your internal storage to migrate your data. Please free up some space and try again.</string>
+    <string name="storage_migration_form_uploader_is_running">Background form uploader is running. Please try again.</string>
+    <string name="storage_migration_form_downloader_is_running">Background form downloader is running. Please try again.</string>
+    <string name="storage_migration_failed">Data migration failed. Please try again.</string>
+    <string name="storage_migration_dialog_title">Storage migration</string>
+    <string name="storage_migration_progress_msg">Migration in progress.\nThis may take a few seconds…</string>
+
     <string name="install_id">Install ID - will replace Device ID in August 2020</string>
+    <string name="preference_not_available">Not available</string>
 </resources>

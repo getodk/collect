@@ -8,7 +8,7 @@
   <string name="view_video">Visionner la vidéo</string>
   <string name="choose_audio">Choisir l\'audio</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
-  <string name="add_repeat_question">Ajouter \"%s\"?</string>
+  <string name="add_repeat_question">Ajouter «%s» ?</string>
   <string name="add_repeat">Ajouter</string>
   <string name="dont_add_repeat">Ne pas ajouter</string>
   <string name="add_another_menu">Ajouter un autre </string>
@@ -25,7 +25,7 @@
   <string name="change_language">Changer la langue</string>
   <string name="change_password">Mot de passe ODK</string>
   <string name="change_username">Nom d\'utilisateur ODK</string>
-  <string name="clearanswer_confirm">Enlever la réponse à \"%s\" ?</string>
+  <string name="clearanswer_confirm">Enlever la réponse à «%s» ?</string>
   <string name="clear_answer">Enlever la réponse</string>
   <string name="clear_answer_ask">Enlever cette réponse ?</string>
   <string name="clear_answer_no">Annuler</string>
@@ -79,8 +79,6 @@
   <string name="load_remote_form_error">Erreur de récupération de la liste</string>
   <string name="location_provider_accuracy">Utilisation de %1$s. La précision est de %2$s m.</string>
   <string name="location_accuracy">La précision est de %1$s mètres.</string>
-  <string name="main_menu">Menu principal</string>
-  <string name="main_menu_details">La collecte de données rendue plus facile…</string>
   <string name="manage_files">Supprimer formulaire sauvegardé</string>
   <string name="mark_finished">Marquer le formulaire comme finalisé</string>
   <string name="noselect_error">Désolé, vous n\'avez pas sélectionné un formulaire.</string>
@@ -338,7 +336,7 @@
   <string name="geotrace_title">TracéGéo</string>
   <string name="gps_enable_message">Le GPS est désactivé sur votre appareil. Voulez vous l\'activer ?</string>
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
-  <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
+  <string name="geo_exit_warning">Abandoner les changements et retourner au formulaire?</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
   <string name="polyline_validator">Il faut au moins 2 points pour créer une ligne</string>
   <string name="clear">Effacer</string>
@@ -373,7 +371,7 @@
   <string name="collection_status_auto_minutes_accuracy">Points entrés: %1$d (enregistrement chaque %2$d min, précision%3$d m)</string>
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
-  <string name="discard">Annuler</string>
+  <string name="discard">Abandoner changements</string>
   <string name="geoshape_view_change_location">Voir ou Modifier la FormeGéo</string>
   <string name="geotrace_view_change_location">Voir ou Modifier le TracéGéo</string>
   <string name="geometry_status">Formulaires enregistrés %d (%d affichés sur la carte)</string>
@@ -474,8 +472,8 @@
   <string name="select_time">Choisir l\'heure</string>
   <string name="no_date_selected">Aucune date choisie</string>
   <string name="no_time_selected">Aucune heure choisie</string>
-  <string name="import_settings">Importer/Exporter les paramètres</string>
-  <string name="qr_code">QR code</string>
+  <string name="configure_via_qr_code">Configurer par code QR</string>
+  <string name="qr_code">Configuration par code QR</string>
   <string name="scan_qrcode">Scanner un code depuis un autre appareil</string>
   <string name="successfully_imported_settings">Paramètres importés avec succès</string>
   <string name="encoding_max_limit">Limite maximale de caractères atteinte: le QR code ne peut pas être généré pour tous les paramètres</string>
@@ -487,7 +485,6 @@
   <string name="qrcode_without_passwords">Ce QR code ne contient pas vos mots de passe administrateur ou serveur. \n(appuyez pour ajouter les mots de passe)</string>
   <string name="qrcode_with_admin_password">Ce QR code inclut votre mot de passe administrateur. Veuillez le conserver en sécurité. \n(Appuyez pour supprimer le mot de passe)</string>
   <string name="qrcode_with_server_password">Ce QR code inclut votre mot de passe serveur. Veuillez le conserver en sécurité. \n(Appuyez pour supprimer le mot de passe)</string>
-  <string name="import_export_settings">Importer/Exporter les paramètres</string>
   <string name="qrcode_scanner_prompt">Placer le QR code à l\'intérieur du rectangle</string>
   <string name="barcode_scanner_prompt">Mettre le code-barre dans le rectangle</string>
   <string name="server_password">Mot de passe serveur</string>
@@ -505,6 +502,7 @@
   <string name="user_setting_summary">Appuyez pour gérer les paramètres généraux</string>
   <string name="main_menu_settings">Paramètres du Menu principal</string>
   <string name="main_menu_settings_summary">Appuyez pour gérer les éléments du Menu Principal</string>
+  <string name="app_configuration">Configuration de l\'application</string>
   <string name="user_access_control">Contrôle d\'Accès Utilisateur</string>
   <string name="autosend_selector_title">Envoi automatique</string>
   <string name="off">Off</string>
@@ -698,7 +696,26 @@
   <string name="reason_for_changes">Raison du changement</string>
   <string name="reason">Raison</string>
   <string name="save">Enregistre</string>
+  <string name="save_legacy_settings">Sauvegarder fichier .settings (ancienne fonctionnalité)</string>
+  <string name="save_legacy_settings_warning">Sera enlevé dans une version à venir. Veuillez utiliser le code QR ci-dessus.</string>
   <string name="reason_for_changes_description">Vous devez expliquer les raisons du changement de ce formulaire</string>
   <string name="scoped_storage_banner_text">Vous devez transférer les formulaires de Collect à un répertoire privé avant août 2020 pour satisfaire les exigences de Android.</string>
   <string name="scoped_storage_learn_more">En apprendre plus et transférer</string>
+  <string name="storage_migration_completed">Migration des données terminée!</string>
+  <string name="scoped_storage_dismiss">Fermer</string>
+  <string name="storage_migration_dialog_message1">Les exigences de Android ont changés et les fichiers de Collect doivent être transférés avant août 2020.</string>
+  <string name="storage_migration_dialog_message2">Vous avez %d soumissions qui n\'ont pas encore été envoyées. Vous êtes encouragés à envoyer toutes vos données avant de commencer le transfer.</string>
+  <string name="storage_migration_dialog_message3">Si vous utiliser une application externe telle que OpenMapKit, veuillez attendre avant de transférer vos données.</string>
+  <string name="storage_migration_more_details">En apprendre plus</string>
+  <string name="try_again">Essayer encore</string>
+  <string name="migrate">Transférer</string>
+  <string name="error">Erreur:</string>
+  <string name="storage_migration_not_enough_space">Votre mémoire interne n\'a pas assez d\'espace pour transférer vos données. Veuillez libérer de l\'espace et réessayer.</string>
+  <string name="storage_migration_form_uploader_is_running">Envoi de soumissions en tâche de fond en cours. Veuillez réessayer plus tard.</string>
+  <string name="storage_migration_form_downloader_is_running">Téléchargement de formulaires en tâche de fond en cours. Veuillez réessayer plus tard.</string>
+  <string name="storage_migration_failed">Le transfer des données a échoué. Veuillez réessayer.</string>
+  <string name="storage_migration_dialog_title">Transfer des données</string>
+  <string name="storage_migration_progress_msg">Transfer en cours.\nCeci pourrait prendre quelques secondes…</string>
+  <string name="install_id">ID d\'installation - remplacera l\'ID du périphérique en août 2020</string>
+  <string name="preference_not_available">Pas disponible</string>
 </resources>

@@ -65,8 +65,6 @@
   <string name="load_remote_form_error">Vormide nimekirja laadimisel esines viga</string>
   <string name="location_provider_accuracy">Kasutades %1$s. Täpsusasteks on %2$s m.</string>
   <string name="location_accuracy">Täpsusasteks on %1$s m</string>
-  <string name="main_menu">Peamenüü</string>
-  <string name="main_menu_details">Andmekogumine on nüüd lihtsam…</string>
   <string name="manage_files">Kustuta salvestatud vorm</string>
   <string name="mark_finished">Märgi vorm lõpetatuks</string>
   <string name="noselect_error">Kahjuks ei ole te ühtegi vormi valinud!</string>
