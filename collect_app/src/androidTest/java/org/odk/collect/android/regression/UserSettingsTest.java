@@ -1,5 +1,8 @@
 package org.odk.collect.android.regression;
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -18,7 +21,11 @@ public class UserSettingsTest extends BaseRegressionTest {
 
     @Rule
     public RuleChain ruleChain = RuleChain
-            .outerRule(new ResetStateRule());
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new ResetStateRule());
 
     @Test
     public void typeOption_ShouldNotBeVisible() {
