@@ -31,7 +31,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.ShowQRCodeFragment;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -152,7 +152,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                             return false;
                         }
                     }
-
                     File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
                     boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
                     if (success) {
