@@ -81,6 +81,14 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
     }
 
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (referenceLayerPref != null) {
+            populateReferenceLayerPref();
+        }
+    }
+
     /**
      * Creates the Basemap Source preference widget (but doesn't add it to
      * the screen; onBasemapSourceChanged will do that part).

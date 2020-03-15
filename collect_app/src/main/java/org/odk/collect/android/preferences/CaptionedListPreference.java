@@ -120,16 +120,6 @@ public class CaptionedListPreference extends ListPreference {
         getDialog().dismiss();
     }
 
-    /** Closes the dialog when the screen is rotated. */
-    public Parcelable onSaveInstanceState() {
-        // If the dialog is left open, it becomes empty when restored.  For now,
-        // instead of building all the save/restore machinery, just close it.
-        if (getDialog() != null) {
-            getDialog().dismiss();
-        }
-        return super.onSaveInstanceState();
-    }
-
     /** Saves the selected value to the preferences when the dialog is closed. */
     protected void onDialogClosed(boolean positiveResult) {
         CharSequence[] values = getEntryValues();
