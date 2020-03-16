@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,6 +37,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -55,6 +55,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /** Show a map with points representing saved instances of the selected form. */
@@ -64,7 +66,9 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     private FormMapViewModel viewModel;
 
-    @VisibleForTesting public MapFragment map;
+    @Inject
+    MapProvider mapProvider;
+    private MapFragment map;
 
     /**
      * Quick lookup of instance objects from map feature IDs.
@@ -86,6 +90,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
 
         FormsDao dao = new FormsDao();
         Form form = null;
@@ -113,13 +118,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
 
-        if (map == null) { // tests set their maps directly
-            Context context = getApplicationContext();
-            map = MapProvider.createMapFragment(context);
-        }
+        MapFragment mapToAdd = mapProvider.createMapFragment(getApplicationContext());
 
-        if (map != null) {
-            map.addTo(this, R.id.map_container, this::initMap, this::finish);
+        if (mapToAdd != null) {
+            mapToAdd.addTo(this, R.id.map_container, this::initMap, this::finish);
         } else {
             finish(); // The configured map provider is not available
         }

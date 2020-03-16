@@ -17,7 +17,7 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public String getVersion() {
-        if (isBeta()) {
+        if (hasBetaTag()) {
             return getVersionDescriptionComponents()[0] + " Beta " + versionDescriptionProvider.getVersionDescription().split("beta")[1].substring(1, 2);
         } else {
             return getVersionDescriptionComponents()[0];
@@ -26,20 +26,24 @@ public class MainMenuViewModel extends ViewModel {
 
     @Nullable
     public String getVersionCommitDescription() {
-        if (isRelease()) {
+        if (isRelease() || isBetaRelease()) {
             return null;
         } else {
-            String commitDescription;
+            String commitDescription = "";
             String[] components = getVersionDescriptionComponents();
 
-            if (isBeta()) {
+            if (hasBetaTag() && getVersionDescriptionComponents().length > 3) {
                 commitDescription = components[2] + "-" + components[3];
-            } else {
+            } else if (!hasBetaTag() && getVersionDescriptionComponents().length > 2) {
                 commitDescription = components[1] + "-" + components[2];
             }
 
             if (isDirty()) {
-                commitDescription = commitDescription + "-dirty";
+                if (commitDescription.isEmpty()) {
+                    commitDescription = "dirty";
+                } else {
+                    commitDescription = commitDescription + "-dirty";
+                }
             }
 
             return commitDescription;
@@ -50,12 +54,16 @@ public class MainMenuViewModel extends ViewModel {
         return versionDescriptionProvider.getVersionDescription().contains("dirty");
     }
 
+    private boolean hasBetaTag() {
+        return versionDescriptionProvider.getVersionDescription().contains("beta");
+    }
+
     private boolean isRelease() {
         return getVersionDescriptionComponents().length == 1;
     }
 
-    private boolean isBeta() {
-        return versionDescriptionProvider.getVersionDescription().contains("beta");
+    private boolean isBetaRelease() {
+        return hasBetaTag() && getVersionDescriptionComponents().length == 2;
     }
 
     @NotNull

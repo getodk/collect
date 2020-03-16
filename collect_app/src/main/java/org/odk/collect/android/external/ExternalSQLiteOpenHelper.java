@@ -19,6 +19,7 @@
 package org.odk.collect.android.external;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -27,6 +28,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -88,7 +93,10 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
         }
 
         try {
-            onCreateNamed(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME);
+            if (shouldUpdateDBforDataSet(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME, dataSetFile)) {
+                onCreateNamed(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME);
+                createAndPopulateMetadataTable(db, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME, dataSetFile);
+            }
         } catch (Exception e) {
             throw new ExternalDataException(
                     Collect.getInstance().getString(R.string.ext_import_generic_error,
@@ -182,7 +190,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
             // populate the database
             String[] row = reader.readNext();
             int rowCount = 0;
-            while (row != null && !formLoaderTask.isCancelled()) {
+            while (row != null && !isCancelled()) {
                 // SCTO-894 - first we should make sure that this is not an empty line
                 if (!ExternalDataUtil.containsAnyData(row)) {
                     // yes, that is an empty row, ignore it
@@ -230,7 +238,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                 }
             }
 
-            if (formLoaderTask.isCancelled()) {
+            if (isCancelled()) {
                 Timber.w("User canceled reading data from %s", dataSetFile.toString());
                 onProgress(Collect.getInstance().getString(R.string.ext_import_cancelled_message));
             } else {
@@ -255,6 +263,64 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                 }
             }
         }
+    }
+
+    protected boolean isCancelled() {
+        return formLoaderTask != null && formLoaderTask.isCancelled();
+    }
+
+    // Create a metadata table with a single column that keeps track of the date of the last import
+    // of this data set.
+    static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
+        final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
+        final String md5HashColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_MD5_HASH);
+
+        List<String> columnDefinitions = new ArrayList<>();
+        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(dataSetFilenameColumn, "TEXT"));
+        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(md5HashColumn, "TEXT NOT NULL"));
+
+        CustomSQLiteQueryExecutor.begin(db).createTable(metadataTableName).columnsForCreate(columnDefinitions).end();
+
+        ContentValues metadata = new ContentValues();
+        metadata.put(ExternalDataUtil.COLUMN_DATASET_FILENAME, dataSetFile.getName());
+        metadata.put(ExternalDataUtil.COLUMN_MD5_HASH, FileUtils.getMd5Hash(dataSetFile));
+        db.insertOrThrow(metadataTableName, null, metadata);
+    }
+
+    static String getLastMd5Hash(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
+        final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
+        final String md5HashColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_MD5_HASH);
+        final String dataSetFilenameLiteral = CustomSQLiteQueryBuilder.quoteStringLiteral(dataSetFile.getName());
+
+        String[] columns = {md5HashColumn};
+        String selectionCriteria = CustomSQLiteQueryBuilder.formatCompareEquals(dataSetFilenameColumn, dataSetFilenameLiteral);
+        Cursor cursor = db.query(metadataTableName, columns, selectionCriteria, null, null, null, null);
+
+        String lastImportMd5 = "";
+        if (cursor != null && cursor.getCount() == 1) {
+            cursor.moveToFirst();
+            lastImportMd5 = cursor.getString(0);
+        }
+        cursor.close();
+        return lastImportMd5;
+    }
+
+    static boolean shouldUpdateDBforDataSet(File dbFile, File dataSetFile) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READONLY);
+        return shouldUpdateDBforDataSet(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME, dataSetFile);
+    }
+
+    static boolean shouldUpdateDBforDataSet(SQLiteDatabase db, String dataTableName, String metadataTableName, File dataSetFile) {
+        if (!SQLiteUtils.doesTableExist(db, dataTableName)) {
+            return true;
+        }
+        if (!SQLiteUtils.doesTableExist(db, metadataTableName)) {
+            return true;
+        }
+        // Import if the CSV file has been updated
+        String priorImportMd5 = getLastMd5Hash(db, metadataTableName, dataSetFile);
+        String newFileMd5 = FileUtils.getMd5Hash(dataSetFile);
+        return newFileMd5 == null || !newFileMd5.equals(priorImportMd5);
     }
 
     @Override

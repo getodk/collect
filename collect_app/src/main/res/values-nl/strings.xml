@@ -75,7 +75,7 @@
   <string name="load_remote_form_error">Fout bij laden formulieren</string>
   <string name="location_provider_accuracy">Gebruikt %1$s. Nauwkeurigheid is %2$s m.</string>
   <string name="location_accuracy">Nauwkeurigheid is %1$s m</string>
-    <string name="manage_files">Verwijder formulieren</string>
+  <string name="manage_files">Verwijder formulieren</string>
   <string name="mark_finished">Definitief maken</string>
   <string name="noselect_error">Sorry, u heeft geen formulier gekozen!</string>
   <string name="no_connection">Geen internet verbinding beschikbaar</string>

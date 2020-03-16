@@ -172,7 +172,6 @@ jobs:
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
               echo "y" | gcloud firebase test android run \
               --type instrumentation \
-              --num-uniform-shards=50 \
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
               --device model=Pixel2,version=27,locale=en,orientation=portrait \

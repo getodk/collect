@@ -57,13 +57,9 @@ public class FormMapViewModel extends ViewModel {
     private void initializeFormInstances() {
         List<Instance> instances = instancesRepository.getAllBy(form.getJrFormId());
 
-        // Note: there is currently no way to delete instances from FormMapActivity so this works
-        // because a change in size means a refresh is needed. Compromise because we don't currently
-        // have an easy way to observe database changes.
-        if (mappableFormInstances == null || instances.size() != totalInstanceCount) {
-            totalInstanceCount = instances.size();
-            mappableFormInstances = getMappableFormInstances(instances);
-        }
+        // Ideally we could observe database changes instead of re-computing this every time.
+        totalInstanceCount = instances.size();
+        mappableFormInstances = getMappableFormInstances(instances);
     }
 
     /**

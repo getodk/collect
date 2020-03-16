@@ -30,7 +30,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private final FormSaver formSaver;
 
     private String reason = "";
-    private MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
+    private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
 
     @Nullable
     private AuditEventLogger auditEventLogger;
@@ -57,9 +57,9 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
-    public LiveData<SaveResult> saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
+    public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
         if (isSaving()) {
-            return new MutableLiveData<>(new SaveResult(SaveResult.State.ALREADY_SAVING, null));
+            return;
         }
 
         if (auditEventLogger != null) {
@@ -67,7 +67,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
 
         SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
-        this.saveResult = new MutableLiveData<>(null);
 
         if (!requiresReasonToSave()) {
             this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
@@ -75,8 +74,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         } else {
             this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
         }
-
-        return this.saveResult;
     }
 
     public boolean isSaving() {
@@ -181,6 +178,14 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
+    public LiveData<SaveResult> getSavedResult() {
+        return saveResult;
+    }
+
+    public void resumeFormEntry() {
+        saveResult.setValue(null);
+    }
+
     private boolean requiresReasonToSave() {
         return auditEventLogger != null
                 && auditEventLogger.isEditing()
@@ -218,8 +223,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             SAVED,
             SAVE_ERROR,
             FINALIZE_ERROR,
-            CONSTRAINT_ERROR,
-            ALREADY_SAVING
+            CONSTRAINT_ERROR
         }
 
         public SaveRequest getRequest() {
@@ -227,7 +231,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
-    private static class SaveRequest {
+    public static class SaveRequest {
 
         private final boolean shouldFinalize;
         private final boolean viewExiting;
@@ -239,6 +243,14 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             this.viewExiting = viewExiting;
             this.updatedSaveName = updatedSaveName;
             this.uri = instanceContentURI;
+        }
+
+        public boolean shouldFinalize() {
+            return shouldFinalize;
+        }
+
+        public boolean viewExiting() {
+            return viewExiting;
         }
     }
 

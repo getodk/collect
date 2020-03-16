@@ -23,10 +23,13 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.VisibleForTesting;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -34,7 +37,8 @@ import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
 
-import androidx.annotation.VisibleForTesting;
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /**
@@ -62,6 +66,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     public static final String LOCATION_STATUS_VISIBILITY_KEY = "location_status_visibility";
     public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
 
+    @Inject
+    MapProvider mapProvider;
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
 
@@ -100,6 +106,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         try {
@@ -117,7 +124,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         zoomButton = findViewById(R.id.zoom);
 
         Context context = getApplicationContext();
-        MapProvider.createMapFragment(context)
+        mapProvider.createMapFragment(context)
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 

@@ -32,9 +32,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -62,11 +69,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /** A MapFragment drawn by OSMDroid. */
@@ -77,6 +81,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     // Bundle keys understood by applyConfig().
     static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
 
+    @Inject
+    MapProvider mapProvider;
     private MapView map;
     private ReadyListener readyListener;
     private PointListener clickListener;
@@ -120,15 +126,20 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             .beginTransaction().replace(containerId, this).commit();
     }
 
+    @Override public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
     @Override public void onStart() {
         super.onStart();
-        MapProvider.onMapFragmentStart(this);
+        mapProvider.onMapFragmentStart(this);
         enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
         enableLocationUpdates(false);
-        MapProvider.onMapFragmentStop(this);
+        mapProvider.onMapFragmentStop(this);
         super.onStop();
     }
 

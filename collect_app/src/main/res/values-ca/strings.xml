@@ -66,7 +66,7 @@
   <string name="load_remote_form_error">Error al demanar la llista de formularis</string>
   <string name="location_provider_accuracy">Usant %1$s. Precisió de %2$s m.</string>
   <string name="location_accuracy">Precisió de %1$s m</string>
-    <string name="manage_files">Eliminar formulari desat</string>
+  <string name="manage_files">Eliminar formulari desat</string>
   <string name="mark_finished">Marcar formulari com completat</string>
   <string name="noselect_error">Atenció, no hi ha cap formulari seleccionat!</string>
   <string name="no_connection">No hi ha connexió a xarxa disponible</string>
@@ -330,8 +330,6 @@
   <string name="select_time">Selecciona hora</string>
   <string name="no_date_selected">Data no seleccionada</string>
   <string name="no_time_selected">Hora no seleccionada</string>
-  <string name="configure_via_qr_code">Importar/Exportar configuració</string>
-  <string name="qr_code">Codi QR</string>
   <string name="scan_qrcode">Escaneja codi des d\'un altre dispositiu</string>
   <string name="successfully_imported_settings">Configuració importada correctament</string>
   <string name="share">Comparteix</string>

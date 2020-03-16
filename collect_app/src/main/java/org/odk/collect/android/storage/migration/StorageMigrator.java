@@ -29,6 +29,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FOR
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
 
 public class StorageMigrator {
     private static final String WHERE_ID = _ID + "=?";
@@ -146,10 +147,12 @@ public class StorageMigrator {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 int idColumnIndex = cursor.getColumnIndex(_ID);
-                int instanceFilePathIndex = cursor.getColumnIndex(INSTANCE_FILE_PATH);
+                int instanceFilePathColumnIndex = cursor.getColumnIndex(INSTANCE_FILE_PATH);
+                int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE);
 
                 ContentValues values = new ContentValues();
-                values.put(INSTANCE_FILE_PATH, getRelativeInstanceDbPath(cursor.getString(instanceFilePathIndex)));
+                values.put(INSTANCE_FILE_PATH, getRelativeInstanceDbPath(cursor.getString(instanceFilePathColumnIndex)));
+                values.put(LAST_STATUS_CHANGE_DATE, cursor.getLong(lastStatusChangeDateColumnIndex));
 
                 String[] whereArgs = {String.valueOf(cursor.getLong(idColumnIndex))};
                 instancesDao.updateInstance(values, WHERE_ID, whereArgs);

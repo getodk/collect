@@ -8,6 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.common.collect.ImmutableSet;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
@@ -49,6 +55,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
@@ -60,11 +67,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
+import javax.inject.Inject;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
@@ -87,6 +91,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     // Bundle keys understood by applyConfig().
     static final String KEY_STYLE_URL = "STYLE_URL";
 
+    @Inject
+    MapProvider mapProvider;
     private MapboxMap map;
     private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     private PointListener gpsLocationListener;
@@ -182,15 +188,20 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         });
     }
 
+    @Override public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
     @Override public void onStart() {
         super.onStart();
-        MapProvider.onMapFragmentStart(this);
+        mapProvider.onMapFragmentStart(this);
         enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
         enableLocationUpdates(false);
-        MapProvider.onMapFragmentStop(this);
+        mapProvider.onMapFragmentStop(this);
         super.onStop();
     }
 

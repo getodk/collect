@@ -79,7 +79,7 @@
   <string name="load_remote_form_error">បញ្ហានៃការទាញបញ្ជីសំណុំបែបបទ</string>
   <string name="location_provider_accuracy">កំពុងប្រើប្រាស់ %1$s. ភាពត្រឹមត្រូវគឺ %2$s ម៉ែត្រ.</string>
   <string name="location_accuracy">ភាព​ត្រឹមត្រូវគឺ %1$s ម៉ែត្រ</string>
-    <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
+  <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
   <string name="mark_finished">សម្គាល់សំណុំបែបបទថាបានបញ្ចប់</string>
   <string name="noselect_error">សុំទោស, អ្នកមិនបានជ្រើសរើសសំណុំបែបបទណាមួយទេ!</string>
   <string name="no_connection">គ្មានការតភ្ជាប់បណ្តាញដែល​អាច​ប្រើបាន</string>
@@ -423,8 +423,6 @@
   <string name="select_time">ជ្រើសរើសម៉ោង</string>
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="no_time_selected">មិនបានជ្រើសរើសម៉ោង</string>
-  <string name="configure_via_qr_code">ការ​កំណត់​ នាំចូល/នាំចេញ</string>
-  <string name="qr_code">QR Code</string>
   <string name="scan_qrcode">ស្កេន​កូដ​ចេញ​ឧបករណ៍​ផ្សេង​ទៀត​</string>
   <string name="successfully_imported_settings">បាន​នាំ​ចូល​ការ​កំណត់​ដោយ​ជោគ​ជ័យ</string>
   <string name="encoding_max_limit">តួអក្សរ​ដល់​ដែន​កំណត់​អតិបរមា​: លេខកូដ​ QR ​មិន​អាច​បង្កើត​តាម​ការកំណត់​ទាំងអស់​</string>

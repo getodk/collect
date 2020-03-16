@@ -48,7 +48,7 @@
   <string name="get_location">Yeri kaydet</string>
   <string name="jump_to_beginning">Başlangıca Git</string>
   <string name="loading_form">Form Yükleniyor</string>
-    <string name="manage_files">Kayitli Formu Sil</string>
+  <string name="manage_files">Kayitli Formu Sil</string>
   <string name="mark_finished">Bitirilen Formu işaretle</string>
   <string name="noselect_error">Herhangi bir form seçilmedi !</string>
   <string name="no_connection">Network bağlantisi yok</string>

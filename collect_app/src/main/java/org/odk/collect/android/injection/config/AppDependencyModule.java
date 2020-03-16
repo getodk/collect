@@ -17,6 +17,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -225,6 +226,12 @@ public class AppDependencyModule {
     @Singleton
     AdminSharedPreferences providesAdminSharedPreferences(Context context) {
         return new AdminSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    public MapProvider providesMapProvider() {
+        return new MapProvider();
     }
 
     @Provides
