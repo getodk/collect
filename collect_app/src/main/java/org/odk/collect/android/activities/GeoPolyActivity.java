@@ -59,6 +59,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
+    public static final String IS_SETTINGS_DIALOG_ACTIVE = "is_settings_dialog_active";
 
     public enum OutputMode { GEOTRACE, GEOSHAPE }
 
@@ -111,6 +112,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     private Double restoredMapZoom;
     private List<MapPoint> restoredPoints;
 
+    private static boolean isSettingsDialogActive;
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
@@ -125,8 +128,15 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
             intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
+            isSettingsDialogActive = savedInstanceState.getBoolean(IS_SETTINGS_DIALOG_ACTIVE, false);
         }
 
+        if(isSettingsDialogActive) {
+            initSettingsView();
+            updateSettingsView();
+            buildDialogs();
+            settingsDialog.show();
+        }
         outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -156,6 +166,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         state.putBoolean(INPUT_ACTIVE_KEY, inputActive);
         state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled);
         state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic);
+        state.putBoolean(IS_SETTINGS_DIALOG_ACTIVE, isSettingsDialogActive);
         state.putInt(INTERVAL_INDEX_KEY, intervalIndex);
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
     }
@@ -164,14 +175,14 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
         }
+        if (isSettingsDialogActive) {
+            settingsDialog.cancel();
+            settingsDialog.dismiss();
+        }
         super.onDestroy();
     }
 
-    public void initMap(MapFragment newMapFragment) {
-        map = newMapFragment;
-
-        locationStatus = findViewById(R.id.location_status);
-        collectionStatus = findViewById(R.id.collection_status);
+    private void initSettingsView() {
         settingsView = getLayoutInflater().inflate(R.layout.geopoly_dialog, null);
         radioGroup = settingsView.findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(this::updateRecordingMode);
@@ -205,6 +216,26 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
             options[i] = formatAccuracyThreshold(ACCURACY_THRESHOLD_OPTIONS[i]);
         }
         populateSpinner(accuracyThreshold, options);
+    }
+
+    private void updateSettingsView() {
+        if (recordingEnabled) {
+            radioGroup.check(recordingAutomatic ? R.id.automatic_mode : R.id.manual_mode);
+        } else {
+            radioGroup.check(R.id.placement_mode);
+        }
+        autoOptions.setVisibility(recordingEnabled && recordingAutomatic ? View.VISIBLE : View.GONE);
+        autoInterval.setSelection(intervalIndex);
+        accuracyThreshold.setSelection(accuracyThresholdIndex);
+    }
+
+    public void initMap(MapFragment newMapFragment) {
+        map = newMapFragment;
+
+        locationStatus = findViewById(R.id.location_status);
+        collectionStatus = findViewById(R.id.collection_status);
+
+        initSettingsView();
 
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
@@ -238,8 +269,9 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
 
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
-            if (map.getPolyPoints(featureId).isEmpty()) {
+            if (map.getPolyPoints(featureId).isEmpty() && !isSettingsDialogActive) {
                 settingsDialog.show();
+                isSettingsDialogActive = true;
             } else {
                 startInput();
             }
@@ -320,6 +352,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         if (!formatPoints(map.getPolyPoints(featureId)).equals(originalAnswerString)) {
             showBackDialog();
         } else {
+            isSettingsDialogActive = false;
             finish();
         }
     }
@@ -414,10 +447,12 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
                 startInput();
                 dialog.cancel();
                 settingsDialog.dismiss();
+                isSettingsDialogActive = false;
             })
             .setNegativeButton(R.string.cancel, (dialog, id) -> {
                 dialog.cancel();
                 settingsDialog.dismiss();
+                isSettingsDialogActive = false;
             })
             .create();
     }
@@ -499,63 +534,58 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
 
     /** Updates the state of various UI widgets to reflect internal state. */
     private void updateUi() {
-        final int numPoints = map.getPolyPoints(featureId).size();
-        final MapPoint location = map.getGpsLocation();
+        if (map!=null) {
+            final int numPoints = map.getPolyPoints(featureId).size();
+            final MapPoint location = map.getGpsLocation();
 
-        // Visibility state
-        playButton.setVisibility(inputActive ? View.GONE : View.VISIBLE);
-        pauseButton.setVisibility(inputActive ? View.VISIBLE : View.GONE);
-        recordButton.setVisibility(inputActive && recordingEnabled ? View.VISIBLE : View.GONE);
+            // Visibility state
+            playButton.setVisibility(inputActive ? View.GONE : View.VISIBLE);
+            pauseButton.setVisibility(inputActive ? View.VISIBLE : View.GONE);
+            recordButton.setVisibility(inputActive && recordingEnabled ? View.VISIBLE : View.GONE);
 
-        // Enabled state
-        zoomButton.setEnabled(location != null);
-        backspaceButton.setEnabled(numPoints > 0);
-        clearButton.setEnabled(!inputActive && numPoints > 0);
-        settingsView.findViewById(R.id.manual_mode).setEnabled(location != null);
-        settingsView.findViewById(R.id.automatic_mode).setEnabled(location != null);
+            // Enabled state
+            zoomButton.setEnabled(location != null);
+            backspaceButton.setEnabled(numPoints > 0);
+            clearButton.setEnabled(!inputActive && numPoints > 0);
+            settingsView.findViewById(R.id.manual_mode).setEnabled(location != null);
+            settingsView.findViewById(R.id.automatic_mode).setEnabled(location != null);
 
-        // Settings dialog
-        if (recordingEnabled) {
-            radioGroup.check(recordingAutomatic ? R.id.automatic_mode : R.id.manual_mode);
-        } else {
-            radioGroup.check(R.id.placement_mode);
+            // Settings dialog
+            updateSettingsView();
+
+            // GPS status
+            boolean usingThreshold = isAccuracyThresholdActive();
+            boolean acceptable = location != null && isLocationAcceptable(location);
+            int seconds = INTERVAL_OPTIONS[intervalIndex];
+            int minutes = seconds / 60;
+            int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+            locationStatus.setText(
+                    location == null ? getString(R.string.location_status_searching)
+                            : !usingThreshold ? getString(R.string.location_status_accuracy, location.sd)
+                            : acceptable ? getString(R.string.location_status_acceptable, location.sd)
+                            : getString(R.string.location_status_unacceptable, location.sd)
+            );
+            locationStatus.setBackgroundColor(getResources().getColor(
+                    location == null ? R.color.locationStatusSearching
+                            : acceptable ? R.color.locationStatusAcceptable
+                            : R.color.locationStatusUnacceptable
+            ));
+            collectionStatus.setText(
+                    !inputActive ? getString(R.string.collection_status_paused, numPoints)
+                            : !recordingEnabled ? getString(R.string.collection_status_placement, numPoints)
+                            : !recordingAutomatic ? getString(R.string.collection_status_manual, numPoints)
+                            : !usingThreshold ? (
+                            minutes > 0 ?
+                                    getString(R.string.collection_status_auto_minutes, numPoints, minutes) :
+                                    getString(R.string.collection_status_auto_seconds, numPoints, seconds)
+                    )
+                            : (
+                            minutes > 0 ?
+                                    getString(R.string.collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
+                                    getString(R.string.collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
+                    )
+            );
         }
-        autoOptions.setVisibility(recordingEnabled && recordingAutomatic ? View.VISIBLE : View.GONE);
-        autoInterval.setSelection(intervalIndex);
-        accuracyThreshold.setSelection(accuracyThresholdIndex);
-
-        // GPS status
-        boolean usingThreshold = isAccuracyThresholdActive();
-        boolean acceptable = location != null && isLocationAcceptable(location);
-        int seconds = INTERVAL_OPTIONS[intervalIndex];
-        int minutes = seconds / 60;
-        int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
-        locationStatus.setText(
-            location == null ? getString(R.string.location_status_searching)
-                : !usingThreshold ? getString(R.string.location_status_accuracy, location.sd)
-                : acceptable ? getString(R.string.location_status_acceptable, location.sd)
-                : getString(R.string.location_status_unacceptable, location.sd)
-        );
-        locationStatus.setBackgroundColor(getResources().getColor(
-            location == null ? R.color.locationStatusSearching
-                : acceptable ? R.color.locationStatusAcceptable
-                : R.color.locationStatusUnacceptable
-        ));
-        collectionStatus.setText(
-            !inputActive ? getString(R.string.collection_status_paused, numPoints)
-                : !recordingEnabled ? getString(R.string.collection_status_placement, numPoints)
-                : !recordingAutomatic ? getString(R.string.collection_status_manual, numPoints)
-                : !usingThreshold ? (
-                    minutes > 0 ?
-                        getString(R.string.collection_status_auto_minutes, numPoints, minutes) :
-                        getString(R.string.collection_status_auto_seconds, numPoints, seconds)
-                )
-                : (
-                    minutes > 0 ?
-                        getString(R.string.collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
-                        getString(R.string.collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
-                )
-        );
     }
 
     private void showClearDialog() {
