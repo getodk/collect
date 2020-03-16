@@ -81,7 +81,7 @@ public class ServerPollingJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
-        if (!networkStateProvider.isNetworkAvailable() || storageMigrationRepository.isMigrationBeingPerformed()) {
+        if (!networkStateProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
             return Result.FAILURE;
         }
 

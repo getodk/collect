@@ -152,7 +152,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             // new
             myDrive = false;
 
-            if (!networkStateProvider.isNetworkAvailable()) {
+            if (!networkStateProvider.isDeviceOnline()) {
                 createAlertDialog(getString(R.string.no_connection));
             }
         }
@@ -226,7 +226,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         if (!accountsManager.isAccountSelected()) {
             selectAccount();
         } else {
-            if (networkStateProvider.isNetworkAvailable()) {
+            if (networkStateProvider.isDeviceOnline()) {
                 toDownload.clear();
                 filteredList.clear();
                 driveList.clear();
@@ -555,7 +555,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 downloadButton.setEnabled(false);
                 toDownload.clear();
                 driveList.clear();
-                if (networkStateProvider.isNetworkAvailable()) {
+                if (networkStateProvider.isDeviceOnline()) {
                     if (folderIdStack.empty()) {
                         parentId = ROOT_KEY;
                     } else {
@@ -579,7 +579,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         DriveListItem item = filteredList.get(position);
         if (item != null && item.getType() == DriveListItem.DIR) {
-            if (networkStateProvider.isNetworkAvailable()) {
+            if (networkStateProvider.isDeviceOnline()) {
                 toDownload.clear();
                 driveList.clear();
                 clearSearchView();

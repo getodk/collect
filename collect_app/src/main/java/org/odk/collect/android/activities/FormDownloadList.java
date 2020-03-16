@@ -298,7 +298,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * Starts the download task and shows the progress dialog.
      */
     private void downloadFormList() {
-        if (!networkStateProvider.isNetworkAvailable()) {
+        if (!networkStateProvider.isDeviceOnline()) {
             ToastUtils.showShortToast(R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {

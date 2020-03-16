@@ -8,10 +8,16 @@ import org.odk.collect.android.application.Collect;
 
 public class NetworkStateProvider {
 
-    public boolean isNetworkAvailable() {
-        ConnectivityManager manager = (ConnectivityManager) Collect.getInstance()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-        return currentNetworkInfo != null && currentNetworkInfo.isConnected();
+    public boolean isDeviceOnline() {
+        NetworkInfo networkInfo = getNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private NetworkInfo getNetworkInfo() {
+        return getConnectivityManager().getActiveNetworkInfo();
+    }
+
+    private ConnectivityManager getConnectivityManager() {
+        return (ConnectivityManager) Collect.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }

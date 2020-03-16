@@ -177,7 +177,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
-            if (!networkStateProvider.isNetworkAvailable()) {
+            if (!networkStateProvider.isDeviceOnline()) {
                 ToastUtils.showShortToast(R.string.no_connection);
                 return;
             }

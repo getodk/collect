@@ -538,7 +538,7 @@ public class MediaUtils {
     }
 
     private static File getGoogleDriveFile(Context context, Uri uri, NetworkStateProvider networkStateProvider) throws GDriveConnectionException {
-        if (!networkStateProvider.isNetworkAvailable()) {
+        if (!networkStateProvider.isDeviceOnline()) {
             throw new GDriveConnectionException();
         }
         if (uri == null) {

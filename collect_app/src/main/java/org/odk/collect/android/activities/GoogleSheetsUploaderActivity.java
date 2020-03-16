@@ -144,7 +144,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private void getResultsFromApi() {
         if (!accountsManager.isAccountSelected()) {
             selectAccount();
-        } else if (!networkStateProvider.isNetworkAvailable()) {
+        } else if (!networkStateProvider.isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();
