@@ -20,8 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,6 +54,7 @@ import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.upload.AutoSendWorker;
+import org.odk.collect.android.utilities.NetworkStateProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -132,6 +131,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Inject
     PermissionUtils permissionUtils;
 
+    @Inject
+    NetworkStateProvider networkStateProvider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,11 +177,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                    Context.CONNECTIVITY_SERVICE);
-            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-            if (ni == null || !ni.isConnected()) {
+            if (!networkStateProvider.isNetworkAvailable()) {
                 ToastUtils.showShortToast(R.string.no_connection);
                 return;
             }
