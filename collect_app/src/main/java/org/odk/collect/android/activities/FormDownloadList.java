@@ -16,12 +16,9 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,6 +51,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.utilities.NetworkStateProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -125,6 +123,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     @Inject
     FormListDownloader formListDownloader;
+
+    @Inject
+    NetworkStateProvider networkStateProvider;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -297,11 +298,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * Starts the download task and shows the progress dialog.
      */
     private void downloadFormList() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-        if (ni == null || !ni.isConnected()) {
+        if (!networkStateProvider.isNetworkAvailable()) {
             ToastUtils.showShortToast(R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {
