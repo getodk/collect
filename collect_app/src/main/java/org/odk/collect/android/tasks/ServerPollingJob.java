@@ -18,11 +18,8 @@ package org.odk.collect.android.tasks;
 
 import android.app.PendingIntent;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
@@ -39,6 +36,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.NetworkStateProvider;
 import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
@@ -73,6 +71,9 @@ public class ServerPollingJob extends Job {
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
+    @Inject
+    NetworkStateProvider networkStateProvider;
+
     public ServerPollingJob() {
         Collect.getInstance().getComponent().inject(this);
     }
@@ -80,7 +81,7 @@ public class ServerPollingJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
-        if (!isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
+        if (!networkStateProvider.isNetworkAvailable() || storageMigrationRepository.isMigrationBeingPerformed()) {
             return Result.FAILURE;
         }
 
@@ -183,13 +184,6 @@ public class ServerPollingJob extends Job {
         ContentValues values = new ContentValues();
         values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
         new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
-    }
-
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) Collect.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 
     private String getContentText(HashMap<FormDetails, String> result) {
