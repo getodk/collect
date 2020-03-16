@@ -131,12 +131,13 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
             isSettingsDialogActive = savedInstanceState.getBoolean(IS_SETTINGS_DIALOG_ACTIVE, false);
         }
 
-        if(isSettingsDialogActive) {
+        if (isSettingsDialogActive) {
             initSettingsView();
             updateSettingsView();
             buildDialogs();
             settingsDialog.show();
         }
+
         outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -534,7 +535,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
 
     /** Updates the state of various UI widgets to reflect internal state. */
     private void updateUi() {
-        if (map!=null) {
+        if (map != null) {
             final int numPoints = map.getPolyPoints(featureId).size();
             final MapPoint location = map.getGpsLocation();
 
