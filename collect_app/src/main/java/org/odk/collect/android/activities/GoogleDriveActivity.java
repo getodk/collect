@@ -22,11 +22,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -54,6 +51,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.NetworkStateProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -111,6 +109,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Inject
     GoogleAccountsManager accountsManager;
 
+    @Inject
+    NetworkStateProvider networkStateProvider;
+
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.google_drive));
@@ -151,7 +152,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             // new
             myDrive = false;
 
-            if (!isDeviceOnline()) {
+            if (!networkStateProvider.isNetworkAvailable()) {
                 createAlertDialog(getString(R.string.no_connection));
             }
         }
@@ -225,7 +226,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         if (!accountsManager.isAccountSelected()) {
             selectAccount();
         } else {
-            if (isDeviceOnline()) {
+            if (networkStateProvider.isNetworkAvailable()) {
                 toDownload.clear();
                 filteredList.clear();
                 driveList.clear();
@@ -262,18 +263,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 finish();
             }
         });
-    }
-
-    /**
-     * Checks whether the device currently has a network connection.
-     *
-     * @return true if the device has a network connection, false otherwise.
-     */
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 
     @Override
@@ -566,7 +555,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 downloadButton.setEnabled(false);
                 toDownload.clear();
                 driveList.clear();
-                if (isDeviceOnline()) {
+                if (networkStateProvider.isNetworkAvailable()) {
                     if (folderIdStack.empty()) {
                         parentId = ROOT_KEY;
                     } else {
@@ -590,7 +579,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         DriveListItem item = filteredList.get(position);
         if (item != null && item.getType() == DriveListItem.DIR) {
-            if (isDeviceOnline()) {
+            if (networkStateProvider.isNetworkAvailable()) {
                 toDownload.clear();
                 driveList.clear();
                 clearSearchView();
