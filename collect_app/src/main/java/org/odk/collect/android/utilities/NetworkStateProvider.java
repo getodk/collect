@@ -13,7 +13,7 @@ public class NetworkStateProvider {
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    private NetworkInfo getNetworkInfo() {
+    public NetworkInfo getNetworkInfo() {
         return getConnectivityManager().getActiveNetworkInfo();
     }
 
