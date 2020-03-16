@@ -56,7 +56,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
                 String destMediaPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
                 try {
-                    File chosenFile = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA);
+                    File chosenFile = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA, formEntryActivity.get().getNetworkStateProvider());
                     if (chosenFile != null) {
                         final File newFile = new File(destMediaPath);
                         FileUtils.copyFile(chosenFile, newFile);

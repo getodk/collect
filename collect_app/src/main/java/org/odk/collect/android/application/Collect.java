@@ -19,8 +19,6 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -159,20 +157,6 @@ public class Collect extends Application {
 
     public void setExternalDataManager(ExternalDataManager externalDataManager) {
         this.externalDataManager = externalDataManager;
-    }
-
-    /**
-     * Get a User-Agent string that provides the platform details followed by the application ID
-     * and application version name: {@code Dalvik/<version> (platform info) org.odk.collect.android/v<version>}.
-     *
-     * This deviates from the recommended format as described in https://github.com/opendatakit/collect/issues/3253.
-     */
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager manager = (ConnectivityManager) getInstance()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-        return currentNetworkInfo != null && currentNetworkInfo.isConnected();
     }
 
     /*

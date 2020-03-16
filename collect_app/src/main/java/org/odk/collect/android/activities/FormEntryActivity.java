@@ -144,6 +144,7 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.NetworkStateProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -308,6 +309,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     Analytics analytics;
+
+    @Inject
+    NetworkStateProvider networkStateProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -2899,6 +2903,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
             return null;
         }
+    }
+
+    public NetworkStateProvider getNetworkStateProvider() {
+        return networkStateProvider;
     }
 }
 

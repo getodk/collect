@@ -525,20 +525,20 @@ public class MediaUtils {
         return null;
     }
 
-    public static File getFileFromUri(final Context context, final Uri uri, String pathKey) throws GDriveConnectionException {
+    public static File getFileFromUri(final Context context, final Uri uri, String pathKey, NetworkStateProvider networkStateProvider) throws GDriveConnectionException {
         File file = null;
         String filePath = getPathFromUri(context, uri, pathKey);
         if (filePath != null) {
             file = new File(filePath);
         } else if (isGoogleDriveDocument(uri)) {
-            file = getGoogleDriveFile(context, uri);
+            file = getGoogleDriveFile(context, uri, networkStateProvider);
         }
 
         return file;
     }
 
-    private static File getGoogleDriveFile(Context context, Uri uri) throws GDriveConnectionException {
-        if (!Collect.getInstance().isNetworkAvailable()) {
+    private static File getGoogleDriveFile(Context context, Uri uri, NetworkStateProvider networkStateProvider) throws GDriveConnectionException {
+        if (!networkStateProvider.isNetworkAvailable()) {
             throw new GDriveConnectionException();
         }
         if (uri == null) {
