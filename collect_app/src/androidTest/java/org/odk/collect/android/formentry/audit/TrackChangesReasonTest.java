@@ -123,7 +123,9 @@ public class TrackChangesReasonTest {
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .enterReason("Something")
                 .rotateToLandscape(new ChangesReasonPromptPage("Track Changes Reason", rule))
-                .assertText("Something");
+                .assertText("Something")
+                .closeSoftKeyboard()
+                .clickSave();
     }
 
     @Test
