@@ -15,6 +15,7 @@ public class SaveFormProgressDialogFragment extends ProgressDialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
+        setCancelable(false);
         setTitle(getString(R.string.saving_form));
         setMessage(getString(R.string.please_wait));
     }
