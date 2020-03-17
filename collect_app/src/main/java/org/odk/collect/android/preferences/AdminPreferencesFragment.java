@@ -17,6 +17,7 @@ package org.odk.collect.android.preferences;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -63,6 +64,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
+        findPreference("odk_preferences").setOnPreferenceClickListener(this);
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
         findPreference("main_menu").setOnPreferenceClickListener(this);
@@ -77,6 +79,11 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             Fragment fragment = null;
 
             switch (preference.getKey()) {
+                case "odk_preferences":
+                    Intent intent = new Intent(getActivity(), PreferencesActivity.class);
+                    intent.putExtra("adminMode", true);
+                    startActivity(intent);
+                    break;
 
                 case KEY_CHANGE_ADMIN_PASSWORD:
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
