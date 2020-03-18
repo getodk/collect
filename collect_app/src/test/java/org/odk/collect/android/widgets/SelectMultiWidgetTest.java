@@ -84,7 +84,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 ))
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
         verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", REFERENCES.get(0).second)));
         verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", REFERENCES.get(1).second)));
     }
@@ -103,7 +103,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 ))
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
         verify(analytics).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
     }
 
@@ -140,9 +140,9 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 .withReadOnly(true)
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
 
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) (((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0));
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) (((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0));
         assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
 
         resetWidget();
@@ -152,9 +152,9 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
 
-        FrameLayout view = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
+        FrameLayout view = (FrameLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
         assertThat(view.isEnabled(), is(Boolean.FALSE));
     }
 

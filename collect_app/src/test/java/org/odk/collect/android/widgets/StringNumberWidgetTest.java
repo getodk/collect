@@ -32,14 +32,14 @@ public class StringNumberWidgetTest extends GeneralStringWidgetTest<StringNumber
 
     @Test
     public void digitsNumberShouldNotBeLimited() {
-        getActualWidget().answerText.setText("123456789123456789123456789123456789");
-        assertEquals("123456789123456789123456789123456789", getActualWidget().getAnswerText());
+        getWidget().answerText.setText("123456789123456789123456789123456789");
+        assertEquals("123456789123456789123456789123456789", getWidget().getAnswerText());
     }
 
     @Test
     public void separatorsShouldBeAddedWhenEnabled() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
-        getActualWidget().answerText.setText("123456789123456789123456789123456789");
-        assertEquals("123,456,789,123,456,789,123,456,789,123,456,789", getActualWidget().answerText.getText().toString());
+        getWidget().answerText.setText("123456789123456789123456789123456789");
+        assertEquals("123,456,789,123,456,789,123,456,789,123,456,789", getWidget().answerText.getText().toString());
     }
 }

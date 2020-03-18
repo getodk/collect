@@ -129,8 +129,8 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().captureButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().chooseButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().playButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
     }
 }

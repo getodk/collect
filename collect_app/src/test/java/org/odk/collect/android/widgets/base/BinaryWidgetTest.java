@@ -19,7 +19,7 @@ public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswer
 
     @Test
     public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
-        W widget = getWidget();
+        W widget = getSpyWidget();
         assertNull(widget.getAnswer());
 
         A answer = getNextAnswer();
@@ -38,7 +38,7 @@ public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswer
         A answer = getInitialAnswer();
         when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
 
-        W widget = getWidget();
+        W widget = getSpyWidget();
 
         A newAnswer = getNextAnswer();
         Object binaryData = createBinaryData(newAnswer);

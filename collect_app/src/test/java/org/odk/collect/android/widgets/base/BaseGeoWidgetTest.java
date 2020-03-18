@@ -25,6 +25,6 @@ public abstract class BaseGeoWidgetTest<W extends BaseGeoWidget, A extends IAnsw
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().startGeoButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().startGeoButton.getVisibility(), is(View.GONE));
     }
 }

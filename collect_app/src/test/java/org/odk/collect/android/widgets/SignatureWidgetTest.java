@@ -85,7 +85,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().signButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().signButton.getVisibility(), is(View.GONE));
     }
 
     @Test

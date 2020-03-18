@@ -98,6 +98,6 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().launchOpenMapKitButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().launchOpenMapKitButton.getVisibility(), is(View.GONE));
     }
 }
