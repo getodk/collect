@@ -33,6 +33,7 @@ import androidx.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.GDriveConnectionException;
+import org.odk.collect.android.network.ConnectivityProvider;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -525,20 +526,20 @@ public class MediaUtils {
         return null;
     }
 
-    public static File getFileFromUri(final Context context, final Uri uri, String pathKey, NetworkStateProvider networkStateProvider) throws GDriveConnectionException {
+    public static File getFileFromUri(final Context context, final Uri uri, String pathKey, ConnectivityProvider connectivityProvider) throws GDriveConnectionException {
         File file = null;
         String filePath = getPathFromUri(context, uri, pathKey);
         if (filePath != null) {
             file = new File(filePath);
         } else if (isGoogleDriveDocument(uri)) {
-            file = getGoogleDriveFile(context, uri, networkStateProvider);
+            file = getGoogleDriveFile(context, uri, connectivityProvider);
         }
 
         return file;
     }
 
-    private static File getGoogleDriveFile(Context context, Uri uri, NetworkStateProvider networkStateProvider) throws GDriveConnectionException {
-        if (!networkStateProvider.isDeviceOnline()) {
+    private static File getGoogleDriveFile(Context context, Uri uri, ConnectivityProvider connectivityProvider) throws GDriveConnectionException {
+        if (!connectivityProvider.isDeviceOnline()) {
             throw new GDriveConnectionException();
         }
         if (uri == null) {

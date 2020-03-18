@@ -42,7 +42,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -72,7 +72,7 @@ public class AutoSendWorker extends Worker {
     StorageMigrationRepository storageMigrationRepository;
 
     @Inject
-    NetworkStateProvider networkStateProvider;
+    ConnectivityProvider connectivityProvider;
 
     public AutoSendWorker(@NonNull Context c, @NonNull WorkerParameters parameters) {
         super(c, parameters);
@@ -100,7 +100,7 @@ public class AutoSendWorker extends Worker {
             return Result.failure();
         }
 
-        NetworkInfo currentNetworkInfo = networkStateProvider.getNetworkInfo();
+        NetworkInfo currentNetworkInfo = connectivityProvider.getNetworkInfo();
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
                 || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
             if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo)) {

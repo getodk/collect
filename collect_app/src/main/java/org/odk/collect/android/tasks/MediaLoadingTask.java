@@ -17,7 +17,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.BaseImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -30,11 +30,11 @@ import timber.log.Timber;
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     private WeakReference<FormEntryActivity> formEntryActivity;
-    private WeakReference<NetworkStateProvider> networkStateProvider;
+    private WeakReference<ConnectivityProvider> connectivityProvider;
 
-    public MediaLoadingTask(FormEntryActivity formEntryActivity, NetworkStateProvider networkStateProvider) {
+    public MediaLoadingTask(FormEntryActivity formEntryActivity, ConnectivityProvider connectivityProvider) {
         onAttach(formEntryActivity);
-        this.networkStateProvider = new WeakReference<>(networkStateProvider);
+        this.connectivityProvider = new WeakReference<>(connectivityProvider);
     }
 
     public void onAttach(FormEntryActivity formEntryActivity) {
@@ -43,7 +43,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     public void onDetach() {
         formEntryActivity = null;
-        networkStateProvider = null;
+        connectivityProvider = null;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
                 String destMediaPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
                 try {
-                    File chosenFile = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA, networkStateProvider.get());
+                    File chosenFile = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA, connectivityProvider.get());
                     if (chosenFile != null) {
                         final File newFile = new File(destMediaPath);
                         FileUtils.copyFile(chosenFile, newFile);

@@ -51,7 +51,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -110,7 +110,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     GoogleAccountsManager accountsManager;
 
     @Inject
-    NetworkStateProvider networkStateProvider;
+    ConnectivityProvider connectivityProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -152,7 +152,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             // new
             myDrive = false;
 
-            if (!networkStateProvider.isDeviceOnline()) {
+            if (!connectivityProvider.isDeviceOnline()) {
                 createAlertDialog(getString(R.string.no_connection));
             }
         }
@@ -226,7 +226,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         if (!accountsManager.isAccountSelected()) {
             selectAccount();
         } else {
-            if (networkStateProvider.isDeviceOnline()) {
+            if (connectivityProvider.isDeviceOnline()) {
                 toDownload.clear();
                 filteredList.clear();
                 driveList.clear();
@@ -555,7 +555,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 downloadButton.setEnabled(false);
                 toDownload.clear();
                 driveList.clear();
-                if (networkStateProvider.isDeviceOnline()) {
+                if (connectivityProvider.isDeviceOnline()) {
                     if (folderIdStack.empty()) {
                         parentId = ROOT_KEY;
                     } else {
@@ -579,7 +579,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         DriveListItem item = filteredList.get(position);
         if (item != null && item.getType() == DriveListItem.DIR) {
-            if (networkStateProvider.isDeviceOnline()) {
+            if (connectivityProvider.isDeviceOnline()) {
                 toDownload.clear();
                 driveList.clear();
                 clearSearchView();

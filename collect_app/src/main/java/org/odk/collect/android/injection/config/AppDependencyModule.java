@@ -41,7 +41,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.utilities.BackgroundWorkManager;
@@ -261,7 +261,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public NetworkStateProvider providesNetworkStateProvider() {
-        return new NetworkStateProvider();
+    public ConnectivityProvider providesConnectivityProvider() {
+        return new ConnectivityProvider();
     }
 }

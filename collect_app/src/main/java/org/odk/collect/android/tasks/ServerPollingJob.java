@@ -36,7 +36,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class ServerPollingJob extends Job {
     StorageMigrationRepository storageMigrationRepository;
 
     @Inject
-    NetworkStateProvider networkStateProvider;
+    ConnectivityProvider connectivityProvider;
 
     public ServerPollingJob() {
         Collect.getInstance().getComponent().inject(this);
@@ -81,7 +81,7 @@ public class ServerPollingJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
-        if (!networkStateProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
+        if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
             return Result.FAILURE;
         }
 

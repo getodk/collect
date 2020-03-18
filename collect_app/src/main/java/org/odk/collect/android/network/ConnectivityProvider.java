@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 
 import org.odk.collect.android.application.Collect;
 
-public class NetworkStateProvider {
+public class ConnectivityProvider implements NetworkStateProvider {
 
     public boolean isDeviceOnline() {
         NetworkInfo networkInfo = getNetworkInfo();

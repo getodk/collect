@@ -51,7 +51,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormListDownloader;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -125,7 +125,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     FormListDownloader formListDownloader;
 
     @Inject
-    NetworkStateProvider networkStateProvider;
+    ConnectivityProvider connectivityProvider;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -298,7 +298,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      * Starts the download task and shows the progress dialog.
      */
     private void downloadFormList() {
-        if (!networkStateProvider.isDeviceOnline()) {
+        if (!connectivityProvider.isDeviceOnline()) {
             ToastUtils.showShortToast(R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {

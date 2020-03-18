@@ -54,7 +54,7 @@ import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.upload.AutoSendWorker;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -132,7 +132,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     PermissionUtils permissionUtils;
 
     @Inject
-    NetworkStateProvider networkStateProvider;
+    ConnectivityProvider connectivityProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,7 +177,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
-            if (!networkStateProvider.isDeviceOnline()) {
+            if (!connectivityProvider.isDeviceOnline()) {
                 ToastUtils.showShortToast(R.string.no_connection);
                 return;
             }

@@ -42,7 +42,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -73,7 +73,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     GoogleAccountsManager accountsManager;
 
     @Inject
-    NetworkStateProvider networkStateProvider;
+    ConnectivityProvider connectivityProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +144,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private void getResultsFromApi() {
         if (!accountsManager.isAccountSelected()) {
             selectAccount();
-        } else if (!networkStateProvider.isDeviceOnline()) {
+        } else if (!connectivityProvider.isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();

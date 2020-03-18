@@ -144,7 +144,7 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.NetworkStateProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -311,7 +311,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     Analytics analytics;
 
     @Inject
-    NetworkStateProvider networkStateProvider;
+    ConnectivityProvider connectivityProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -862,7 +862,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-                mediaLoadingFragment.beginMediaLoadingTask(intent.getData(), networkStateProvider);
+                mediaLoadingFragment.beginMediaLoadingTask(intent.getData(), connectivityProvider);
                 break;
             case RequestCodes.AUDIO_CAPTURE:
                 /*
