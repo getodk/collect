@@ -86,7 +86,7 @@ import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
+public class FormDownloadListActivity extends FormListActivity implements FormListDownloaderListener,
         DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
@@ -146,7 +146,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 try {
                     new StorageInitializer().createOdkDirsOnStorage();
                 } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT), FormDownloadList.this);
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadListActivity.this, e.getMessage(), EXIT), FormDownloadListActivity.this);
                     return;
                 }
 

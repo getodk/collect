@@ -20,7 +20,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormChooserListActivity;
-import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
@@ -98,7 +98,7 @@ public class PermissionUtils {
         activities.add(FormChooserListActivity.class);
         activities.add(InstanceUploaderListActivity.class);
         activities.add(SplashScreenActivity.class);
-        activities.add(FormDownloadList.class);
+        activities.add(FormDownloadListActivity.class);
         activities.add(InstanceUploaderActivity.class);
 
         for (Class<?> act : activities) {

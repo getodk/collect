@@ -232,7 +232,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                         }
                     } else {
                         i = new Intent(getApplicationContext(),
-                                FormDownloadList.class);
+                                FormDownloadListActivity.class);
                     }
                     startActivity(i);
                 }

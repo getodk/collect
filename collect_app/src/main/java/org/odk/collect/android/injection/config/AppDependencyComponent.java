@@ -4,7 +4,7 @@ import android.app.Application;
 import android.telephony.SmsManager;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
@@ -113,7 +113,7 @@ public interface AppDependencyComponent {
 
     void inject(AuthDialogUtility authDialogUtility);
 
-    void inject(FormDownloadList formDownloadList);
+    void inject(FormDownloadListActivity formDownloadListActivity);
 
     void inject(InstanceUploaderListActivity activity);
 
