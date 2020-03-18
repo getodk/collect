@@ -9,14 +9,15 @@ import androidx.annotation.Nullable;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.tasks.MediaLoadingTask;
+import org.odk.collect.android.utilities.NetworkStateProvider;
 
 public class MediaLoadingFragment extends Fragment {
 
     private MediaLoadingTask mediaLoadingTask;
     private FormEntryActivity formEntryActivity;
 
-    public void beginMediaLoadingTask(Uri uri) {
-        mediaLoadingTask = new MediaLoadingTask(formEntryActivity);
+    public void beginMediaLoadingTask(Uri uri, NetworkStateProvider networkStateProvider) {
+        mediaLoadingTask = new MediaLoadingTask(formEntryActivity, networkStateProvider);
         mediaLoadingTask.execute(uri);
     }
 
