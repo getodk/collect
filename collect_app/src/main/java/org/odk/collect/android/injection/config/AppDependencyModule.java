@@ -21,6 +21,7 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -261,7 +262,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ConnectivityProvider providesConnectivityProvider() {
+    public NetworkStateProvider providesConnectivityProvider() {
         return new ConnectivityProvider();
     }
 }

@@ -47,11 +47,11 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -110,7 +110,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     GoogleAccountsManager accountsManager;
 
     @Inject
-    ConnectivityProvider connectivityProvider;
+    NetworkStateProvider connectivityProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);

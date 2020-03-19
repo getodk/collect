@@ -32,11 +32,11 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class ServerPollingJob extends Job {
     StorageMigrationRepository storageMigrationRepository;
 
     @Inject
-    ConnectivityProvider connectivityProvider;
+    NetworkStateProvider connectivityProvider;
 
     public ServerPollingJob() {
         Collect.getInstance().getComponent().inject(this);
