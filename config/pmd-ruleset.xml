@@ -59,6 +59,7 @@
         <exclude name="LocalVariableNamingConventions" />
         <exclude name="UseUnderscoresInNumericLiterals" />
         <exclude name="LinguisticNaming" />
+        <exclude name="UnnecessaryFullyQualifiedName" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
     </rule>
 
