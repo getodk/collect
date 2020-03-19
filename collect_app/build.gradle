@@ -262,12 +262,7 @@ dependencies {
     implementation "net.danlew:android.joda:2.10.3"
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:${rootProject.leakyCanaryVersion}"
-    // No-Op version of LeakCanary for release builds: no notifications, no analysis, nothing
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
-    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
-    odkCollectReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     // Android Architecture Components:
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
