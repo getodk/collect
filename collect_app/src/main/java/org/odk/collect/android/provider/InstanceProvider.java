@@ -381,10 +381,10 @@ public class InstanceProvider extends ContentProvider {
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                 } else {
-                    // smap Update the deleted date and also change the assignment status to rejected
+                    // smap Update the deleted date and also change the assignment status to closed
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
-                    cv.put(InstanceColumns.T_TASK_STATUS, Utilities.STATUS_T_REJECTED);
+                    cv.put(InstanceColumns.T_TASK_STATUS, Utilities.STATUS_T_CLOSED);
                     // Geometry fields represent data inside the form which can be very
                     // sensitive so they are removed on delete.
                     cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);

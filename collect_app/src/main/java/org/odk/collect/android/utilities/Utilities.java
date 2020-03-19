@@ -288,7 +288,7 @@ public class Utilities {
                             String mediaPath = file.getParent() + "/" + mediaName;
                             try {
                                 File f = new File(mediaPath);
-                                fd.downloadFile(f, mediaUrl);
+                                fd.downloadFile(f, mediaUrl,false);    // Smap add flag not to use credentials
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -301,7 +301,7 @@ public class Utilities {
                             String mediaPath = file.getParent() + "/" + media;
                             try {
                                 File f = new File(mediaPath);
-                                fd.downloadFile(f, mediaUrl);
+                                fd.downloadFile(f, mediaUrl, false);    // smap credentials flag
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

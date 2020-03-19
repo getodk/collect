@@ -397,7 +397,7 @@ public class FormDownloader {
                 i++;
             }
 
-            downloadFile(f, url);
+            downloadFile(f, url, true);     // smap credentials flag
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
@@ -448,7 +448,7 @@ public class FormDownloader {
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
      */
-    public void downloadFile(File file, String downloadUrl)     // smap made public
+    public void downloadFile(File file, String downloadUrl, boolean credentials)     // smap made public, flag to include credentials
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(Collect.CACHE_PATH));
@@ -470,7 +470,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = collectServerClient.getHttpInputStream(downloadUrl, null).getInputStream();
+                    is = collectServerClient.getHttpInputStream(downloadUrl, null, credentials).getInputStream();   // smap credentials flag
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
@@ -742,7 +742,7 @@ public class FormDownloader {
                     jsonFile.createNewFile();
                 } else if (!finalMediaFile.exists() && (finalImportedMediaFile == null || !finalImportedMediaFile.exists())) { // smap for csv files the final media file may have had imported added to its name
                     downloadMsg.append(Collect.getInstance().getString(R.string.smap_get_media, tempMediaFile.getName())).append("\n");     // smap
-                    downloadFile(tempMediaFile, toDownload.getDownloadUrl());
+                    downloadFile(tempMediaFile, toDownload.getDownloadUrl(), true);              // smap credentials flag
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
                     if(currentFileHash == null && finalImportedMediaFile != null && finalImportedMediaFile.exists()) { // smap get hash from imported if necessary
@@ -755,7 +755,7 @@ public class FormDownloader {
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
                         downloadMsg.append(Collect.getInstance().getString(R.string.smap_get_media, tempMediaFile.getName())).append("\n");     // smap
-                        downloadFile(tempMediaFile, toDownload.getDownloadUrl());
+                        downloadFile(tempMediaFile, toDownload.getDownloadUrl(), true);             // smap credentials flag
                     } else {
                         // exists, and the hash is the same
                         // no need to download it again

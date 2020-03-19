@@ -49,7 +49,7 @@ public class CollectServerClient {
         HttpGetResult inputStreamResult;
 
         try {
-            inputStreamResult = getHttpInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
+            inputStreamResult = getHttpInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML, true);    // smap credentials flag
 
             if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
                 String error = "getXmlDocument failed while accessing "
@@ -85,7 +85,8 @@ public class CollectServerClient {
      * @throws Exception - Can throw a multitude of Exceptions, such as MalformedURLException or IOException
      */
     public @NonNull
-    HttpGetResult getHttpInputStream(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
+    HttpGetResult getHttpInputStream(@NonNull String downloadUrl, @Nullable final String contentType,
+                                     boolean credentials) throws Exception {    // smap include credentials flag
         URI uri;
         try {
             // assume the downloadUrl is escaped properly
@@ -101,7 +102,11 @@ public class CollectServerClient {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
+        if(!credentials) {       // Smap do not pass credentials if it is not required (proxyPass 400 error)
+            return httpInterface.executeGetRequest(uri, contentType, null);
+        } else {
+            return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
+        }
     }
 
     public static String getPlainTextMimeType() {
