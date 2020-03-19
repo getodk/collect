@@ -8,6 +8,10 @@
   <string name="view_video">Onesha video</string>
   <string name="choose_audio">Chagua sauti</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Ongeza \"1%s\"?</string>
+  <string name="add_repeat">Ongeza</string>
+  <string name="dont_add_repeat">Usiongeze </string>
+  <string name="add_another_menu">Ongeza ingine</string>
   <string name="cancel">Sitisha</string>
   <string name="cancel_loading_form">Sitisha</string>
   <string name="cancel_location">Sitisha</string>
@@ -94,6 +98,8 @@
   <string name="quit_application">Toka %s</string>
   <string name="quit_entry">Hifadhi fomu na toka</string>
   <string name="refresh">Onyesha upya</string>
+  <string name="group_label">Kundi</string>
+  <string name="repeatable_group_label">Kundi lililojirudia</string>
   <string name="replace_barcode">Badili barcode</string>
   <string name="required_answer_error">Samahani, jibu hili linahitajika!</string>
   <string name="review_data">Hariri fomu iliyohifadhiwa</string>
@@ -177,6 +183,7 @@
   <string name="sending_failed_on_date_at_time">\'Kutuma ilikataa\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Futa kwenye\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="submission_deleted">Wasilisho limefutwa</string>
   <string name="version">Toleo:</string>
   <string name="parent_form_not_present">Haiwezekani kurekebisha fomu hii kwa sababu fomu yake tupu haipo au imeshaondolewa..\n\nFomu ID: %1$s</string>
   <string name="launch_app">Anza</string>
@@ -203,6 +210,7 @@
   <string name="found_in_main">Ondoa alama ili kuficha kutoka kwenye orodha kuu</string>
   <string name="found_in_settings">Ondoa alama ili kuficha kutoka kwenye mipangilio kuu</string>
   <string name="form_forward">Inayofuata</string>
+  <string name="form_backward">Rudi</string>
   <string name="navigation">Tafuta</string>
   <string name="swipe_navigation">Tumia upitishaji wa mlalo\"horizontal swipes\"</string>
   <string name="buttons_navigation">Tumia vitufe vya mbele/yuma</string>
@@ -277,6 +285,7 @@
   <string name="google_sheets_url">Uwasilishaji wa URL ulio chelewa</string>
   <string name="send_in_progress">Utumaji unaendelea kwa nyuma, jaribu tena baada ya muda mfupi</string>
   <string name="invalid_sheet_id">KItambulisho cha karatasi ni batilii%1$s</string>
+  <string name="missing_submission_url">Wasilisho lililokosekana URL</string>
   <string name="google_sheets_access_denied">Ruhusa imekatazwa. Tafadhali hakikisha mwenye programu ya lahajedwali \"spreadsheet\" amekuruhusu kufanya mabadiliko.</string>
   <string name="google_sheets_missing_columns">Lahajedwali \"Spreadsheet\" zinakosa safu zifuatazo: %1$s</string>
   <string name="password_error_whitespace">Nafasi za wazi kabla au baada ya nywila \"neno la siri\" hairuhusiwi</string>
@@ -288,6 +297,7 @@
   <string name="leave_a_review">Acha tathmini katika Play Store</string>
   <string name="leave_a_review_msg">Tathmini yako (tunatumaini itakuwa chanya) inaongeza nafasi ya programu hii kuonekana Pay Store</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">Ramani</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -298,24 +308,49 @@
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Ramani msingi</string>
+  <string name="basemap_source">Chanzo</string>
+  <string name="map_style_label">%s aina ya ramani</string>
   <string name="streets">Mitaa</string>
   <string name="terrain">Ardhi ya eneo</string>
   <string name="hybrid">Mseto</string>
   <string name="satellite">Satelaiti</string>
+  <string name="light">Mwanga</string>
+  <string name="dark">Giza</string>
+  <string name="outdoors">Nje</string>
+  <string name="topographic">Picha mpya</string>
+  <string name="carto_map_style_positron">Positron</string>
+  <string name="carto_map_style_dark_matter">Jambo la Giza</string>
+  <string name="reference_layer">Safu ya Kumbukumbu</string>
+  <string name="layer_data_caption_none">Hakuna faili za safu katika %1$s ambazo zinasaidiwa na sura ya %2$s.</string>
+  <string name="layer_data_caption">Hapo juu kuna faili zote za safu katika 1%1$s ambazo zinasaidiwa na sura ya 2%2$s.</string>
+  <string name="layer_data_file">Safu ya faili la data</string>
   <string name="save_point">Hifadhi geopoint</string>
   <string name="get_point">Anza geopoint</string>
   <string name="geopoint_view_read_only">Tazama geopoint</string>
   <string name="get_shape">Anza umbo la kijografia</string>
   <string name="get_trace">Anza geotrace</string>
   <string name="geoshape_title">Umbo la kijografia</string>
+  <string name="input_method">Njia ya pembejeo</string>
   <string name="start">Anza</string>
   <string name="enable_gps">Wezesha GPS</string>
   <string name="geotrace_title">Fatilisha mstari kijografia</string>
+  <string name="gps_enable_message">GPS imezimwa kwenye kifaa chako. Ungependa kutumia?</string>
   <string name="geo_clear_warning">Umbo lishatengenezwa. Ungependa kufuta Umbo?</string>
   <string name="geo_exit_warning">Sitisha mabadiliko na rudi kwenye ODK?</string>
   <string name="polygon_validator">Lazima uwe na angalau  nukta 3 ili kutengeneza poligoni</string>
   <string name="polyline_validator">Ni lazima uwe angalau na pointi 2 kutengeneza Mistari </string>
   <string name="clear">Futa</string>
+  <string name="placement_mode">Kuwekwa kwa kugonga</string>
+  <string name="manual_mode">Rekodi sauti kawaida</string>
+  <string name="automatic_mode">Rekodi sauti automatiki</string>
+  <string name="recording_interval">Muda wa kurekodi</string>
+  <string name="accuracy_requirement">Sharti sahihi</string>
+  <string name="none">Hakuna</string>
+  <string name="location_status_searching">Natafuta GPS ilipo, tafadhali subiri</string>
+  <string name="location_status_accuracy">Usahihi wa eneo la GPS %.2f</string>
+  <string name="location_status_acceptable">Usahihi wa eneo la GPS: %.2f m (imekubali)</string>
+  <string name="location_status_unacceptable">Usahihi wa eneo la GPS: %.2f m (haukubali)</string>
+  <string name="collection_status_paused">Vidokezo vilivyoingizwa: %d</string>
   <string name="geopoint_instruction">Bonyeza kwa mda kuweka alama au bofya kitufe ongeza alama.</string>
   <string name="geopoint_no_draggable_instruction">Bofya kitufe cha kuongeza alama.</string>
   <string name="discard">Sitisha</string>
@@ -597,4 +632,8 @@
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
   <string name="sms_invalid_phone_number_description">Weka namba ya simu itakayotumiwa ujumbe au badilisha aina yako ya usafirishaji</string>
   <string name="read_details">Soma maelezo</string>
+  <string name="storage_migration_dialog_title">Uhamiaji wa uhifadhi</string>
+  <string name="storage_migration_progress_msg">Uhamiaji unaendelea. \ Hii inaweza kuchukua sekunde chache…</string>
+  <string name="install_id">Ingiza Kitambulisho - itachukua nafasi ya Kitambulisho cha Kifaa mnamo Agosti 2020</string>
+  <string name="preference_not_available">Haipatikani</string>
 </resources>
