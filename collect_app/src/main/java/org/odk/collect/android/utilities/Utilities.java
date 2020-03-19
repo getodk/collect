@@ -74,7 +74,7 @@ public class Utilities {
     // Valid values for task status
     public static final String STATUS_T_ACCEPTED = "accepted";
     public static final String STATUS_T_REJECTED = "rejected";
-    public static String STATUS_T_COMPLETE = "complete";
+    public static final String STATUS_T_COMPLETE = "complete";
     public static final String STATUS_T_SUBMITTED = "submitted";
     public static final String STATUS_T_CANCELLED = "cancelled";
     public static final String STATUS_T_CLOSED = "closed";
@@ -556,6 +556,10 @@ public class Utilities {
 
         StringBuffer selectClause = new StringBuffer(InstanceColumns.T_ASS_ID + " is not null and " + InstanceColumns.SOURCE + " = ?");
         selectClause.append(" and " + InstanceColumns.DELETED_DATE + " is null");
+
+        // Only reject tasks that are still active
+        selectClause.append(" and (" + InstanceColumns.T_TASK_STATUS + " == '" + STATUS_T_ACCEPTED + "' " +
+                " or " + InstanceColumns.T_TASK_STATUS + " == '" + STATUS_T_NEW + "' ) ");
 
         if (nIds > 0) {
             selectClause.append(" and " + InstanceColumns.T_ASS_ID + " not in (");
