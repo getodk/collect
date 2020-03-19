@@ -152,6 +152,10 @@ public final class DialogUtils {
     }
 
     public static <T extends DialogFragment> T showIfNotShowing(T newDialog, FragmentManager fragmentManager) {
+        if (fragmentManager.isStateSaved()) {
+            return newDialog;
+        }
+
         String tag = newDialog.getClass().getName();
         T existingDialog = (T) fragmentManager.findFragmentByTag(tag);
 
