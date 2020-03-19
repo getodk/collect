@@ -167,11 +167,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
-        map.setMinZoomLevel(2);
-        map.setMaxZoomLevel(22);
+        map.setMinZoomLevel(2.0);
+        map.setMaxZoomLevel(22.0);
         map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
+        map.setFlingEnabled(false);
         addAttributionAndMapEventsOverlays();
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
