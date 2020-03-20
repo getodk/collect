@@ -36,6 +36,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -70,6 +71,9 @@ public class AutoSendWorker extends Worker {
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
     public AutoSendWorker(@NonNull Context c, @NonNull WorkerParameters parameters) {
         super(c, parameters);
     }
@@ -96,10 +100,7 @@ public class AutoSendWorker extends Worker {
             return Result.failure();
         }
 
-        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-
+        NetworkInfo currentNetworkInfo = connectivityProvider.getNetworkInfo();
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
                 || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
             if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo)) {

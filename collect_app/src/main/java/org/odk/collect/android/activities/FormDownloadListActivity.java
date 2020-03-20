@@ -16,12 +16,9 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +38,7 @@ import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
@@ -88,7 +86,7 @@ import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
+public class FormDownloadListActivity extends FormListActivity implements FormListDownloaderListener,
         DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
@@ -126,6 +124,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @Inject
     FormListDownloader formListDownloader;
 
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,7 +146,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 try {
                     new StorageInitializer().createOdkDirsOnStorage();
                 } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT), FormDownloadList.this);
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadListActivity.this, e.getMessage(), EXIT), FormDownloadListActivity.this);
                     return;
                 }
 
@@ -297,11 +298,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * Starts the download task and shows the progress dialog.
      */
     private void downloadFormList() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-        if (ni == null || !ni.isConnected()) {
+        if (!connectivityProvider.isDeviceOnline()) {
             ToastUtils.showShortToast(R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {
