@@ -197,6 +197,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 && auditEventLogger.isChangesMade();
     }
 
+    public String getFormName() {
+        return formController.getFormTitle();
+    }
+
     public static class SaveResult {
 
         private final State state;

@@ -24,11 +24,8 @@ public class DialogUtilsTest {
         FragmentActivity activity = createThemedActivity(FragmentActivity.class);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
-        DialogFragment dialog1 = new DialogFragment();
-        DialogUtils.showIfNotShowing(dialog1, fragmentManager);
-
-        DialogFragment dialog2 = new DialogFragment();
-        DialogUtils.showIfNotShowing(dialog2, fragmentManager);
+        DialogFragment dialog1 = DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
+        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
 
         assertThat(fragmentManager.getFragments().size(), equalTo(1));
         assertThat(fragmentManager.getFragments().get(0), equalTo(dialog1));
@@ -40,7 +37,7 @@ public class DialogUtilsTest {
         activityController.pause().stop().saveInstanceState(new Bundle());
 
         FragmentManager fragmentManager = activityController.get().getSupportFragmentManager();
-        DialogUtils.showIfNotShowing(new DialogFragment(), fragmentManager);
+        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         assertThat(fragmentManager.getFragments().size(), equalTo(0));
     }
 
@@ -50,7 +47,7 @@ public class DialogUtilsTest {
         activityController.pause().stop().destroy();
 
         FragmentManager fragmentManager = activityController.get().getSupportFragmentManager();
-        DialogUtils.showIfNotShowing(new DialogFragment(), fragmentManager);
+        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         assertThat(fragmentManager.getFragments().size(), equalTo(0));
     }
 }

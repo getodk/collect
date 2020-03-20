@@ -21,18 +21,9 @@ import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
-    private static final String ARG_FORM_NAME = "ArgFormName";
     private FormSaveViewModel viewModel;
 
     public ViewModelProvider.Factory viewModelFactory = new FormSaveViewModel.Factory();
-
-    public static ChangesReasonPromptDialogFragment create(String formName) {
-        ChangesReasonPromptDialogFragment fragment = new ChangesReasonPromptDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(ChangesReasonPromptDialogFragment.ARG_FORM_NAME, formName);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Nullable
     @Override
@@ -45,7 +36,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         super.onViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = getToolbar();
-        toolbar.setTitle(getArguments().getString(ARG_FORM_NAME));
+        toolbar.setTitle(viewModel.getFormName());
         toolbar.inflateMenu(R.menu.changes_reason_dialog);
 
         EditText reasonField = view.findViewById(R.id.reason);

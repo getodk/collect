@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -151,6 +152,34 @@ public final class DialogUtils {
         return alertDialog;
     }
 
+    public static <T extends DialogFragment> T showIfNotShowing(Class<T> dialogClass, FragmentManager fragmentManager) {
+        if (fragmentManager.isStateSaved()) {
+            return createNewInstance(dialogClass);
+        }
+
+        String tag = dialogClass.getName();
+        T existingDialog = (T) fragmentManager.findFragmentByTag(tag);
+
+        if (existingDialog == null) {
+            T newDialog = createNewInstance(dialogClass);
+            newDialog.show(fragmentManager.beginTransaction(), tag);
+
+            // We need to execute this transaction. Otherwise a follow up call to this method
+            // could happen before the Fragment exists in the Fragment Manager and so the
+            // call to findFragmentByTag would return null and result in second dialog being show.
+            fragmentManager.executePendingTransactions();
+
+            return newDialog;
+        } else {
+            return existingDialog;
+        }
+    }
+
+    /**
+     * Use {@link #showIfNotShowing(Class, FragmentManager)} instead to avoid creating extra instances
+     * and creating confusion around which instance is actually visible
+     */
+    @Deprecated
     public static <T extends DialogFragment> T showIfNotShowing(T newDialog, FragmentManager fragmentManager) {
         if (fragmentManager.isStateSaved()) {
             return newDialog;
@@ -177,6 +206,16 @@ public final class DialogUtils {
         DialogFragment existingDialog = (DialogFragment) fragmentManager.findFragmentByTag(dialogClazz.getName());
         if (existingDialog != null) {
             existingDialog.dismissAllowingStateLoss();
+        }
+    }
+
+    @NotNull
+    private static <T extends DialogFragment> T createNewInstance(Class<T> dialogClass) {
+        try {
+            return dialogClass.newInstance();
+        } catch (IllegalAccessException | InstantiationException e) {
+            // These would mean we have a non zero arg constructor for a Fragment
+            throw new RuntimeException(e);
         }
     }
 }
