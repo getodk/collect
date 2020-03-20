@@ -222,7 +222,7 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.0.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
 
-    implementation("com.google.guava:guava:28.1-android")
+    implementation("com.google.guava:guava:28.2-android")
 
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:2.2'
@@ -240,15 +240,15 @@ dependencies {
     }
     implementation "com.karumi:dexter:6.0.2"
     implementation "org.osmdroid:osmdroid-android:6.1.6"
-    implementation("com.google.api-client:google-api-client-android:1.30.7") {
+    implementation("com.google.api-client:google-api-client-android:1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-drive:v3-rev20191108-1.30.3") {
+    implementation("com.google.apis:google-api-services-drive:v3-rev20200306-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20191213-1.30.3") {
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20200312-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
@@ -310,7 +310,7 @@ dependencies {
 
     testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation 'androidx.test.ext:junit:1.1.1'
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.2'
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.3'
     testImplementation "org.robolectric:shadows-multidex:4.3.1"
     testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
     testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
