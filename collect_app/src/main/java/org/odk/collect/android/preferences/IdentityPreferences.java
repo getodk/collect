@@ -20,6 +20,7 @@ import android.preference.CheckBoxPreference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.MultiClickGuard;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -42,8 +43,11 @@ public class IdentityPreferences extends BasePreferenceFragment {
         addPreferencesFromResource(R.xml.identity_preferences);
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
-            startActivity(new Intent(getActivity(), FormMetadataPreferencesActivity.class));
-            return true;
+            if (MultiClickGuard.allowClick(getClass().getName())) {
+                startActivity(new Intent(getActivity(), FormMetadataPreferencesActivity.class));
+                return true;
+            }
+            return false;
         });
 
         initAnalyticsPref();
