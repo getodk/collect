@@ -7,13 +7,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 
 public class MainMenuViewModel extends ViewModel {
 
     private final VersionDescriptionProvider versionDescriptionProvider;
+    private final AdminSharedPreferences adminSharedPreferences;
 
-    public MainMenuViewModel(VersionDescriptionProvider versionDescriptionProvider) {
+    MainMenuViewModel(VersionDescriptionProvider versionDescriptionProvider) {
+        this(versionDescriptionProvider, AdminSharedPreferences.getInstance());
+    }
+
+    private MainMenuViewModel(VersionDescriptionProvider versionDescriptionProvider, AdminSharedPreferences adminSharedPreferences) {
         this.versionDescriptionProvider = versionDescriptionProvider;
+        this.adminSharedPreferences = adminSharedPreferences;
     }
 
     public String getVersion() {
@@ -75,12 +83,32 @@ public class MainMenuViewModel extends ViewModel {
         String getVersionDescription();
     }
 
+    public boolean shouldEditSavedFormButtonBeVisible() {
+        return (boolean) adminSharedPreferences.get(AdminKeys.KEY_EDIT_SAVED);
+    }
+
+    public boolean shouldSendFinalizedFormButtonBeVisible() {
+        return (boolean) adminSharedPreferences.get(AdminKeys.KEY_SEND_FINALIZED);
+    }
+
+    public boolean shouldViewSentFormButtonBeVisible() {
+        return (boolean) adminSharedPreferences.get(AdminKeys.KEY_VIEW_SENT);
+    }
+
+    public boolean shouldGetBlankFormButtonBeVisible() {
+        return (boolean) adminSharedPreferences.get(AdminKeys.KEY_GET_BLANK);
+    }
+
+    public boolean shouldDeleteSavedFormButtonBeVisible() {
+        return (boolean) adminSharedPreferences.get(AdminKeys.KEY_DELETE_SAVED);
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(() -> BuildConfig.VERSION_NAME);
+            return (T) new MainMenuViewModel(() -> BuildConfig.VERSION_NAME, AdminSharedPreferences.getInstance());
         }
     }
 }
