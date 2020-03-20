@@ -30,6 +30,7 @@ import androidx.work.WorkerParameters;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -73,6 +74,9 @@ public class AutoSendWorker extends Worker {
 
     @Inject
     NetworkStateProvider connectivityProvider;
+
+    @Inject
+    Analytics analytics;
 
     public AutoSendWorker(@NonNull Context c, @NonNull WorkerParameters parameters) {
         super(c, parameters);
@@ -173,7 +177,7 @@ public class AutoSendWorker extends Worker {
                 String action = protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
-                Collect.getInstance().logRemoteAnalytics(SUBMISSION, action, label);
+                analytics.logEvent(SUBMISSION, action, label);
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
