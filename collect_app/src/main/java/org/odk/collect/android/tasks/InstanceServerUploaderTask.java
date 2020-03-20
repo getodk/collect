@@ -15,6 +15,7 @@
 package org.odk.collect.android.tasks;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -42,6 +43,9 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
     @Inject
     WebCredentialsUtils webCredentialsUtils;
+
+    @Inject
+    Analytics analytics;
 
     // Custom submission URL, username and password that can be sent via intent extras by external
     // applications
@@ -77,7 +81,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
 
-                Collect.getInstance().logRemoteAnalytics(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to
