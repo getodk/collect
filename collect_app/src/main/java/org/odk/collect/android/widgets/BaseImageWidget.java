@@ -40,10 +40,10 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -245,7 +245,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            if (Collect.allowClick(getClass().getName())) {
+            if (MultiClickGuard.allowClick(getClass().getName())) {
                 launchDrawActivity();
             }
         }

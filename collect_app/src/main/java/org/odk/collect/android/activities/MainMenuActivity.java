@@ -60,6 +60,7 @@ import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -160,7 +161,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick(getClass().getName())) {
+                if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
                             FormChooserListActivity.class);
                     startActivity(i);
@@ -174,7 +175,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick(getClass().getName())) {
+                if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.EDIT_SAVED);
@@ -189,7 +190,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick(getClass().getName())) {
+                if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
                             InstanceUploaderListActivity.class);
                     startActivity(i);
@@ -202,7 +203,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick(getClass().getName())) {
+                if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.VIEW_SENT);
@@ -217,7 +218,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick(getClass().getName())) {
+                if (MultiClickGuard.allowClick(getClass().getName())) {
                     SharedPreferences sharedPreferences = PreferenceManager
                             .getDefaultSharedPreferences(MainMenuActivity.this);
                     String protocol = sharedPreferences.getString(
@@ -246,7 +247,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick(getClass().getName())) {
+                if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
                             FileManagerTabs.class);
                     startActivity(i);
