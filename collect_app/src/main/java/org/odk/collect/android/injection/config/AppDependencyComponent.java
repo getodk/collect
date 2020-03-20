@@ -28,6 +28,7 @@ import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
@@ -156,6 +157,8 @@ public interface AppDependencyComponent {
     void inject(SplashScreenActivity splashScreenActivity);
 
     void inject(FormHierarchyActivity formHierarchyActivity);
+
+    void inject(FormManagementPreferences formManagementPreferences);
 
     SmsManager smsManager();
 
