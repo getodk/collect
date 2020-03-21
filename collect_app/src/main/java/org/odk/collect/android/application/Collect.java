@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -184,6 +185,7 @@ public class Collect extends Application {
         }
 
         setupOSMDroid();
+        setupStrictMode();
 
         // Force inclusion of scoped storage strings so they can be translated
         Timber.i("%s %s", getString(R.string.scoped_storage_banner_text),
@@ -192,6 +194,19 @@ public class Collect extends Application {
 
     protected void setupOSMDroid() {
         org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
+    }
+
+    private void setupStrictMode() {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build());
+
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .build());
     }
 
     private void setupDagger() {
