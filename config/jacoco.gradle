@@ -22,7 +22,7 @@ tasks.register("jacocoTestReport", JacocoReport) {
     }
 
     classDirectories = fileTree(
-            dir: "${buildDir}/intermediates/classes/debug",
+            dir: "${buildDir}/intermediates/javac/debug/classes",
             excludes: ['**/R.class',
                        '**/R$*.class',
                        '**/*$ViewInjector*.*',
