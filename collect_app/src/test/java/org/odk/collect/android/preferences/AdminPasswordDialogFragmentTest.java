@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences;
 
 import android.app.AlertDialog;
+import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -17,6 +18,7 @@ import org.robolectric.annotation.LooperMode;
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.odk.collect.android.preferences.AdminPasswordDialogFragment.ARG_ACTION;
 import static org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action.STORAGE_MIGRATION;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
@@ -39,8 +41,7 @@ public class AdminPasswordDialogFragmentTest {
     public void enteringPassword_andClickingOK_callsOnCorrectAdminPasswordWithAction() {
         TestActivityScenario<MockAdminPasswordDialogCallback> activityScenario = TestActivityScenario.launch(MockAdminPasswordDialogCallback.class);
         activityScenario.onActivity(activity -> {
-            AdminPasswordDialogFragment fragment = new AdminPasswordDialogFragment();
-            fragment.setAction(STORAGE_MIGRATION);
+            AdminPasswordDialogFragment fragment = createFragment();
             fragment.show(activity.getSupportFragmentManager(), "tag");
             shadowOf(getMainLooper()).idle();
 
@@ -56,8 +57,7 @@ public class AdminPasswordDialogFragmentTest {
     public void afterRecreating_enteringPassword_andClickingOK_callsOnCorrectAdminPasswordWithAction() {
         TestActivityScenario<MockAdminPasswordDialogCallback> activityScenario = TestActivityScenario.launch(MockAdminPasswordDialogCallback.class);
         activityScenario.onActivity(activity -> {
-            AdminPasswordDialogFragment fragment = new AdminPasswordDialogFragment();
-            fragment.setAction(STORAGE_MIGRATION);
+            AdminPasswordDialogFragment fragment = createFragment();
             fragment.show(activity.getSupportFragmentManager(), "tag");
             shadowOf(getMainLooper()).idle();
         });
@@ -72,6 +72,14 @@ public class AdminPasswordDialogFragmentTest {
 
             assertThat(activity.onCorrectAdminPasswordCalledWith, equalTo(STORAGE_MIGRATION));
         });
+    }
+
+    private AdminPasswordDialogFragment createFragment() {
+        AdminPasswordDialogFragment fragment = new AdminPasswordDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ACTION, STORAGE_MIGRATION);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     private static class StubAdminPasswordProvider extends AdminPasswordProvider {

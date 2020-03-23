@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 public class AdminPasswordDialogFragment extends DialogFragment {
 
-    private static final String KEY_ACTION = "ACTION";
+    public static final String ARG_ACTION = "ACTION";
 
     public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION, SCAN_QR_CODE }
 
@@ -30,14 +30,6 @@ public class AdminPasswordDialogFragment extends DialogFragment {
 
     @Inject
     AdminPasswordProvider adminPasswordProvider;
-
-    public void setAction(Action action) {
-        if (getArguments() == null) {
-            setArguments(new Bundle());
-        }
-
-        getArguments().putSerializable(KEY_ACTION, action);
-    }
 
     @Override
     public void onAttach(@NotNull Context context) {

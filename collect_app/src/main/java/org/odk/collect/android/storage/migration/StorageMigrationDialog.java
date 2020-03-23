@@ -17,6 +17,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
+import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 
 public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
-    private static final String UNSENT_INSTANCES = "unsentInstances";
+    public static final String ARG_UNSENT_INSTANCES = "unsentInstances";
 
     @BindView(R.id.cancelButton)
     Button cancelButton;
@@ -62,15 +63,6 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private int unsentInstancesNumber;
 
-    public static StorageMigrationDialog create(int unsentInstances) {
-        StorageMigrationDialog storageMigrationDialog = new StorageMigrationDialog();
-        Bundle bundle = new Bundle();
-        bundle.putInt(UNSENT_INSTANCES, unsentInstances);
-        storageMigrationDialog.setArguments(bundle);
-
-        return storageMigrationDialog;
-    }
-
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
@@ -88,7 +80,7 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         ButterKnife.bind(this, view);
 
         if (getArguments() != null) {
-            unsentInstancesNumber = getArguments().getInt(UNSENT_INSTANCES);
+            unsentInstancesNumber = getArguments().getInt(ARG_UNSENT_INSTANCES);
         }
 
         setUpToolbar();
@@ -108,8 +100,9 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         migrateButton.setOnClickListener(v -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
                 if (adminPasswordProvider.isAdminPasswordSet()) {
-                    DialogUtils.showIfNotShowing(AdminPasswordDialogFragment.class, getActivity().getSupportFragmentManager())
-                            .setAction(AdminPasswordDialogFragment.Action.STORAGE_MIGRATION);
+                    Bundle args = new Bundle();
+                    args.putSerializable(AdminPasswordDialogFragment.ARG_ACTION, Action.STORAGE_MIGRATION);
+                    DialogUtils.showIfNotShowing(AdminPasswordDialogFragment.class, args, getActivity().getSupportFragmentManager());
                 } else {
                     startStorageMigration();
                 }
