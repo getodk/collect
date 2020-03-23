@@ -17,6 +17,7 @@ package org.odk.collect.android.preferences;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -35,6 +36,7 @@ import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -62,6 +64,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
+        findPreference("odk_preferences").setOnPreferenceClickListener(this);
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
         findPreference("main_menu").setOnPreferenceClickListener(this);
@@ -72,107 +75,115 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
+        if (MultiClickGuard.allowClick(getClass().getName())) {
+            Fragment fragment = null;
 
-        Fragment fragment = null;
+            switch (preference.getKey()) {
+                case "odk_preferences":
+                    Intent intent = new Intent(getActivity(), PreferencesActivity.class);
+                    intent.putExtra("adminMode", true);
+                    startActivity(intent);
+                    break;
 
-        switch (preference.getKey()) {
+                case KEY_CHANGE_ADMIN_PASSWORD:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            case KEY_CHANGE_ADMIN_PASSWORD:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    LayoutInflater factory = LayoutInflater.from(getActivity());
+                    final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
+                    final EditText passwordEditText = dialogView.findViewById(R.id.pwd_field);
+                    final CheckBox passwordCheckBox = dialogView.findViewById(R.id.checkBox2);
+                    passwordEditText.requestFocus();
+                    passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            if (!passwordCheckBox.isChecked()) {
+                                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            } else {
+                                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            }
+                        }
+                    });
+                    builder.setTitle(R.string.change_admin_password);
+                    builder.setView(dialogView);
+                    builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String pw = passwordEditText.getText().toString();
+                            if (!pw.equals("")) {
+                                SharedPreferences.Editor editor = getActivity()
+                                        .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                                editor.putString(KEY_ADMIN_PW, pw);
+                                ToastUtils.showShortToast(R.string.admin_password_changed);
+                                editor.apply();
+                                dialog.dismiss();
+                            } else {
+                                SharedPreferences.Editor editor = getActivity()
+                                        .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                                editor.putString(KEY_ADMIN_PW, "");
+                                editor.apply();
+                                ToastUtils.showShortToast(R.string.admin_password_disabled);
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
 
-                LayoutInflater factory = LayoutInflater.from(getActivity());
-                final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
-                final EditText passwordEditText = dialogView.findViewById(R.id.pwd_field);
-                final CheckBox passwordCheckBox = dialogView.findViewById(R.id.checkBox2);
-                passwordEditText.requestFocus();
-                passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (!passwordCheckBox.isChecked()) {
-                            passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        } else {
-                            passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    builder.setCancelable(false);
+                    AlertDialog dialog = builder.create();
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    dialog.show();
+
+                    break;
+
+                case KEY_IMPORT_SETTINGS:
+                    fragment = new ShowQRCodeFragment();
+                    break;
+                case "save_legacy_settings":
+                    File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
+                    if (!writeDir.exists()) {
+                        if (!writeDir.mkdirs()) {
+                            ToastUtils.showShortToast("Error creating directory "
+                                    + writeDir.getAbsolutePath());
+                            return false;
                         }
                     }
-                });
-                builder.setTitle(R.string.change_admin_password);
-                builder.setView(dialogView);
-                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String pw = passwordEditText.getText().toString();
-                        if (!pw.equals("")) {
-                            SharedPreferences.Editor editor = getActivity()
-                                    .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                            editor.putString(KEY_ADMIN_PW, pw);
-                            ToastUtils.showShortToast(R.string.admin_password_changed);
-                            editor.apply();
-                            dialog.dismiss();
-                        } else {
-                            SharedPreferences.Editor editor = getActivity()
-                                    .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                            editor.putString(KEY_ADMIN_PW, "");
-                            editor.apply();
-                            ToastUtils.showShortToast(R.string.admin_password_disabled);
-                            dialog.dismiss();
-                        }
+
+                    File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
+                    boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
+                    if (success) {
+                        ToastUtils.showLongToast("Settings successfully written to "
+                                + dst.getAbsolutePath());
+                    } else {
+                        ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
                     }
-                });
-                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                    return true;
+                case "main_menu":
+                    fragment = new MainMenuAccessPreferences();
+                    break;
+                case "user_settings":
+                    fragment = new UserSettingsAccessPreferences();
+                    break;
+                case "form_entry":
+                    fragment = new FormEntryAccessPreferences();
+                    break;
+            }
 
-                builder.setCancelable(false);
-                AlertDialog dialog = builder.create();
-                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                dialog.show();
+            if (fragment != null) {
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.preferences_fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
 
-                break;
-
-            case KEY_IMPORT_SETTINGS:
-                fragment = new ShowQRCodeFragment();
-                break;
-            case "save_legacy_settings":
-                File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
-                if (!writeDir.exists()) {
-                    if (!writeDir.mkdirs()) {
-                        ToastUtils.showShortToast("Error creating directory "
-                                + writeDir.getAbsolutePath());
-                        return false;
-                    }
-                }
-
-                File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
-                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
-                if (success) {
-                    ToastUtils.showLongToast("Settings successfully written to "
-                            + dst.getAbsolutePath());
-                } else {
-                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
-                }
-                return true;
-            case "main_menu":
-                fragment = new MainMenuAccessPreferences();
-                break;
-            case "user_settings":
-                fragment = new UserSettingsAccessPreferences();
-                break;
-            case "form_entry":
-                fragment = new FormEntryAccessPreferences();
-                break;
+            return true;
         }
 
-        if (fragment != null) {
-            getActivity().getFragmentManager().beginTransaction()
-                    .replace(R.id.preferences_fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        }
-
-        return true;
+        return false;
     }
 
     public static class MainMenuAccessPreferences extends BasePreferenceFragment {
