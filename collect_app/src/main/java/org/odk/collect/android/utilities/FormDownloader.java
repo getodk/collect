@@ -345,8 +345,7 @@ public class FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url)
-            throws IOException, TaskCancelledException, Exception {
+    FileResult downloadXform(String formName, String url) throws Exception {
         // clean up friendly form name...
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
