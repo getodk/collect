@@ -40,9 +40,9 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
@@ -89,7 +89,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogCallback {
+public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
     private static final boolean EXIT = true;
     // buttons
     private Button manageFilesButton;
@@ -359,7 +359,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 analytics.logEvent(SCAN_QR_CODE, "MainMenu");
 
                 if (adminPasswordProvider.isAdminPasswordSet()) {
-                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.SCAN_QR_CODE), getSupportFragmentManager());
+                    DialogUtils.showIfNotShowing(AdminPasswordDialogFragment.class, getSupportFragmentManager())
+                            .setAction(AdminPasswordDialogFragment.Action.SCAN_QR_CODE);
                 } else {
                     startActivity(new Intent(this, ScanQRCodeActivity.class));
                 }
@@ -372,7 +373,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 return true;
             case R.id.menu_admin_preferences:
                 if (adminPasswordProvider.isAdminPasswordSet()) {
-                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.ADMIN_SETTINGS), getSupportFragmentManager());
+                    DialogUtils.showIfNotShowing(AdminPasswordDialogFragment.class, getSupportFragmentManager())
+                            .setAction(AdminPasswordDialogFragment.Action.ADMIN_SETTINGS);
                 } else {
                     startActivity(new Intent(this, AdminPreferencesActivity.class));
                 }
@@ -531,7 +533,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     @Override
-    public void onCorrectAdminPassword(AdminPasswordDialog.Action action) {
+    public void onCorrectAdminPassword(AdminPasswordDialogFragment.Action action) {
         switch (action) {
             case ADMIN_SETTINGS:
                 startActivity(new Intent(this, AdminPreferencesActivity.class));

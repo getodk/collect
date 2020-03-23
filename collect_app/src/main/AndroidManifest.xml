@@ -93,7 +93,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity
             android:name=".activities.MainMenuActivity"
-            android:configChanges="locale|orientation|screenSize" />
+            android:configChanges="locale" />
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
             android:screenOrientation="portrait"

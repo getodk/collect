@@ -14,12 +14,12 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
+import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 
 import javax.inject.Inject;
 
@@ -108,7 +108,8 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
         migrateButton.setOnClickListener(v -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
                 if (adminPasswordProvider.isAdminPasswordSet()) {
-                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.STORAGE_MIGRATION), getActivity().getSupportFragmentManager());
+                    DialogUtils.showIfNotShowing(AdminPasswordDialogFragment.class, getActivity().getSupportFragmentManager())
+                            .setAction(AdminPasswordDialogFragment.Action.STORAGE_MIGRATION);
                 } else {
                     startStorageMigration();
                 }
