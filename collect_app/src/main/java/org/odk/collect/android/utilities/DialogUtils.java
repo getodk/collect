@@ -154,13 +154,18 @@ public final class DialogUtils {
         return alertDialog;
     }
 
-    public static <T extends DialogFragment> T showIfNotShowing(Class<T> dialogClass, FragmentManager fragmentManager) {
-        return showIfNotShowing(dialogClass, null, fragmentManager);
+    @Nullable
+    public static <T extends DialogFragment> T getDialog(Class<T> dialogClass, FragmentManager fragmentManager) {
+        return (T) fragmentManager.findFragmentByTag(dialogClass.getName());
     }
 
-    public static <T extends DialogFragment> T showIfNotShowing(Class<T> dialogClass, @Nullable Bundle args, FragmentManager fragmentManager) {
+    public static <T extends DialogFragment> void showIfNotShowing(Class<T> dialogClass, FragmentManager fragmentManager) {
+        showIfNotShowing(dialogClass, null, fragmentManager);
+    }
+
+    public static <T extends DialogFragment> void showIfNotShowing(Class<T> dialogClass, @Nullable Bundle args, FragmentManager fragmentManager) {
         if (fragmentManager.isStateSaved()) {
-            return createNewInstance(dialogClass, args);
+            return;
         }
 
         String tag = dialogClass.getName();
@@ -174,10 +179,6 @@ public final class DialogUtils {
             // could happen before the Fragment exists in the Fragment Manager and so the
             // call to findFragmentByTag would return null and result in second dialog being show.
             fragmentManager.executePendingTransactions();
-
-            return newDialog;
-        } else {
-            return existingDialog;
         }
     }
 

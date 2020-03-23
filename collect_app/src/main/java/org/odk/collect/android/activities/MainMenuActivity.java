@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -82,6 +83,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
+import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
 /**
@@ -543,8 +545,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 startActivity(new Intent(this, AdminPreferencesActivity.class));
                 break;
             case STORAGE_MIGRATION:
-                showStorageMigrationDialog()
-                        .startStorageMigration();
+                StorageMigrationDialog dialog = showStorageMigrationDialog();
+                if (dialog != null) {
+                    dialog.startStorageMigration();
+                }
+
                 break;
             case SCAN_QR_CODE:
                 startActivity(new Intent(this, ScanQRCodeActivity.class));
@@ -628,16 +633,21 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
             displayBannerWithSuccessStorageMigrationResult();
         } else {
-            showStorageMigrationDialog()
-                    .handleMigrationError(result);
+            StorageMigrationDialog dialog = showStorageMigrationDialog();
+
+            if (dialog != null) {
+                dialog.handleMigrationError(result);
+            }
         }
     }
 
+    @Nullable
     private StorageMigrationDialog showStorageMigrationDialog() {
         Bundle args = new Bundle();
         args.putInt(StorageMigrationDialog.ARG_UNSENT_INSTANCES, savedCount);
 
-        return showIfNotShowing(StorageMigrationDialog.class, args, getSupportFragmentManager());
+        showIfNotShowing(StorageMigrationDialog.class, args, getSupportFragmentManager());
+        return getDialog(StorageMigrationDialog.class, getSupportFragmentManager());
     }
 
     private void setUpStorageMigrationBanner() {

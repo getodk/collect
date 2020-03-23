@@ -185,6 +185,8 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.DialogUtils.getDialog;
+import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.ToastUtils.showLongToast;
@@ -413,7 +415,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
-                DialogUtils.showIfNotShowing(IdentifyUserPromptDialogFragment.class, getSupportFragmentManager());
+                showIfNotShowing(IdentifyUserPromptDialogFragment.class, getSupportFragmentManager());
             }
         });
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
@@ -427,7 +429,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, changesReasonViewModelFactory)
                 .get(FormSaveViewModel.class);
 
-        formSaveViewModel.getSavedResult().observe(this, this::handleSaveResult);
+        formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -491,7 +493,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
-                    DialogUtils.showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
+                    showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
                 }
                 return;
@@ -626,7 +628,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null);
-        DialogUtils.showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
+        showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);
     }
 
@@ -1834,23 +1836,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (result == null) {
             return;
         }
+
         switch (result.getState()) {
             case CHANGE_REASON_REQUIRED:
-                DialogUtils.showIfNotShowing(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+                showIfNotShowing(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
                 break;
 
             case SAVING:
                 autoSaved = true;
-
-                SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
-                        SaveFormProgressDialogFragment.class,
-                        getSupportFragmentManager()
-                );
-
-                if (result.getMessage() != null) {
-                    progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
-                }
-
+                showIfNotShowing(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 break;
 
             case SAVED:
@@ -2518,10 +2512,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public void onProgressStep(String stepMessage) {
-        DialogUtils.showIfNotShowing(
-                FormLoadingDialogFragment.class,
-                getSupportFragmentManager()
-        ).setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+        showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
+
+        FormLoadingDialogFragment dialog = getDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
+        if (dialog != null) {
+            dialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+        }
     }
 
     public void next() {

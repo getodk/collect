@@ -3,6 +3,7 @@ package org.odk.collect.android.utilities;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -24,9 +25,11 @@ public class DialogUtilsTest {
         FragmentActivity activity = createThemedActivity(FragmentActivity.class);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
-        DialogFragment dialog1 = DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
+        assertThat(fragmentManager.getFragments().size(), equalTo(1));
+        Fragment dialog1 = fragmentManager.getFragments().get(0);
 
+        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         assertThat(fragmentManager.getFragments().size(), equalTo(1));
         assertThat(fragmentManager.getFragments().get(0), equalTo(dialog1));
     }
