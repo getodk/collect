@@ -140,7 +140,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     break;
 
                 case KEY_IMPORT_SETTINGS:
-                    fragment = new ShowQRCodeFragment();
+                    Intent pref = new Intent(getActivity(), QRCodeTabs.class);
+                    startActivity(pref);
                     break;
                 case "save_legacy_settings":
                     File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
