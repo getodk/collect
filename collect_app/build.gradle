@@ -220,7 +220,7 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.0.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.7.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
 
     implementation("com.google.guava:guava:28.1-android")
 
