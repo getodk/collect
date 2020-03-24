@@ -64,6 +64,15 @@ public final class SharedPreferencesUtils {
             keys.remove(KEY_ADMIN_PW);
         }
 
+        // checking for server password
+        if (keys.contains(KEY_PASSWORD)) {
+            String password = (String) GeneralSharedPreferences.getInstance().get(KEY_PASSWORD);
+            if (!password.equals("")) {
+                adminPrefs.put(KEY_ADMIN_PW, password);
+            }
+            keys.remove(KEY_PASSWORD);
+        }
+
         for (String key : keys) {
             Object defaultValue = DEFAULTS.get(key);
             Object value = GeneralSharedPreferences.getInstance().get(key);

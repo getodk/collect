@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,8 +27,7 @@
                     app:tabIndicatorHeight="4dp"
                     app:tabMode="fixed"
                     android:layout_gravity="top" />
-
             </androidx.viewpager.widget.ViewPager>
         </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -8,26 +8,26 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.List;
 public class TabAdapter extends FragmentPagerAdapter {
-    private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<String> mFragmentTitleList = new ArrayList<>();
+    private final List<Fragment> myFragmentList = new ArrayList<>();
+    private final List<String> myFragmentTitleList = new ArrayList<>();
     public TabAdapter(FragmentManager fm) {
         super(fm);
     }
     @Override
     public Fragment getItem(int position) {
-        return mFragmentList.get(position);
+        return myFragmentList.get(position);
     }
     public void addFragment(Fragment fragment, String title) {
-        mFragmentList.add(fragment);
-        mFragmentTitleList.add(title);
+        myFragmentList.add(fragment);
+        myFragmentTitleList.add(title);
     }
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mFragmentTitleList.get(position);
+        return myFragmentTitleList.get(position);
     }
     @Override
     public int getCount() {
-        return mFragmentList.size();
+        return myFragmentList.size();
     }
 }

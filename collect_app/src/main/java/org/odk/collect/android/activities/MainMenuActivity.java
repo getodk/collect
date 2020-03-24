@@ -53,6 +53,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.QRCodeTabs;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -367,7 +368,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     args.putSerializable(AdminPasswordDialogFragment.ARG_ACTION, Action.SCAN_QR_CODE);
                     showIfNotShowing(AdminPasswordDialogFragment.class, args, getSupportFragmentManager());
                 } else {
-                    startActivity(new Intent(this, ScanQRCodeActivity.class));
+                    startActivity(new Intent(this, QRCodeTabs.class));
                 }
                 return true;
             case R.id.menu_about:
@@ -552,7 +553,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
                 break;
             case SCAN_QR_CODE:
-                startActivity(new Intent(this, ScanQRCodeActivity.class));
+                startActivity(new Intent(this, QRCodeTabs.class));
                 break;
         }
     }

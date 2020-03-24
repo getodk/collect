@@ -38,12 +38,12 @@ import com.google.zxing.NotFoundException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.activities.ScanQRCodeActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.ViewPagerListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.QRCodeTabs;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -180,7 +180,7 @@ public class ShowQRCodeFragment extends Fragment implements ViewPagerListener {
                     new ViewGroup.OnHierarchyChangeListener() {
                         @Override
                         public void onChildViewAdded(View parent, View child) {
-                            CharSequence text = ((AppCompatCheckedTextView)child).getText();
+                            CharSequence text = ((AppCompatCheckedTextView) child).getText();
                             int itemIndex = Arrays.asList(items).indexOf(text);
                             if (!passwordsSet[itemIndex]) {
                                 child.setEnabled(passwordsSet[itemIndex]);
@@ -215,7 +215,7 @@ public class ShowQRCodeFragment extends Fragment implements ViewPagerListener {
                             String response = QRCodeUtils.decodeFromBitmap(bitmap);
                             if (response != null) {
                                 qrCodeFound = true;
-                                ScanQRCodeActivity.applySettings(getActivity(), response);
+                                QRCodeTabs.applySettings(getActivity(), response);
                             }
                         }
                     }
