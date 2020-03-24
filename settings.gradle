@@ -1,1 +1,2 @@
 include ':collect_app'
+include ':nbi-stubs'

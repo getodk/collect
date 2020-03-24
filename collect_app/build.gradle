@@ -115,6 +115,8 @@ android {
             resValue("bool", "CRASHLYTICS_ENABLED", "true")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+
+            matchingFallbacks = ['release'] // So other modules use release built type for this
         }
         debug {
             debuggable(true)
@@ -292,6 +294,8 @@ dependencies {
     implementation("android.arch.work:work-firebase:1.0.0-alpha11") {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
+
+    implementation project(':nbi-stubs')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.1"

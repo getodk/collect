@@ -1,0 +1,1 @@
+This Android library includes zero byte stubs for every ABI (architecture) so that Collect looks like it supports them all. This lets us exclude unneeded x86 native libs for dependencies like Mapbox without getting `INSTALL_FAILED_NO_MATCHING_ABIS` errors.
