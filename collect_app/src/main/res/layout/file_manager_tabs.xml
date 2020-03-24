@@ -23,10 +23,12 @@ limitations under the License.
         android:orientation="vertical"
         android:padding="0dp">
 
+    <include layout="@layout/app_bar_layout"/>
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/appBarLayout"
             android:orientation="vertical">
 
         <org.odk.collect.android.views.SlidingTabLayout
@@ -42,13 +44,4 @@ limitations under the License.
                 android:layout_weight="1"/>
 
     </LinearLayout>
-
-    <include layout="@layout/toolbar"/>
-
-    <include
-            layout="@layout/toolbar_action_bar_shadow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"/>
-
 </RelativeLayout>

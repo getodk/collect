@@ -16,13 +16,13 @@ the License.
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/app_bar_layout"/>
 
     <TextView
         android:id="@+id/pathtext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/appBarLayout"
         android:layout_margin="4dp" />
     <!-- would prefer not to use an extra LinearLayout here, but weights don't
         seem to work properly in RelativeLayout -->
@@ -81,10 +81,4 @@ the License.
         android:padding="20dp"
         android:text="@string/no_items_display"
         android:textSize="21sp" />
-
-    <include
-        layout="@layout/toolbar_action_bar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar" />
 </RelativeLayout>

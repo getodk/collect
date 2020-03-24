@@ -17,24 +17,15 @@ the License.
     android:id="@+id/llParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!-- Toolbar -->
-    <include
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
-    <include
-        layout="@layout/toolbar_action_bar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+    <include layout="@layout/app_bar_layout"/>
 
     <LinearLayout
         android:id="@+id/questionholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/navigation_view"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/appBarLayout"
         android:orientation="horizontal"/>
 
     <ImageView
