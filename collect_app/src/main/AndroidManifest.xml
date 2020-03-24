@@ -104,7 +104,6 @@ the specific language governing permissions and limitations under the License.
             />
         <activity
             android:name=".activities.FormEntryActivity"
-            android:configChanges="orientation"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"
@@ -139,12 +138,8 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.FormHierarchyActivity" />
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <activity android:name=".activities.GeoPointActivity" />
-        <activity
-            android:name=".activities.GeoPointMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoPolyActivity"
-            android:configChanges="orientation" />
+        <activity android:name=".activities.GeoPointMapActivity" />
+        <activity android:name=".activities.GeoPolyActivity" />
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
         <activity
