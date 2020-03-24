@@ -24,10 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.ChecksumException;
@@ -39,12 +41,16 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.ScanQRCodeActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.listeners.ViewPagerListener;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
@@ -61,16 +67,16 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SCAN_QR_CODE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
-public class ShowQRCodeFragment extends Fragment {
+public class ShowQRCodeFragment extends Fragment implements ViewPagerListener {
 
     private static final int SELECT_PHOTO = 111;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final boolean[] checkedItems = {true, true};
+    private final boolean[] passwordsSet = {true, true};
 
     @BindView(R.id.ivQRcode)
     ImageView ivQRCode;
@@ -78,7 +84,8 @@ public class ShowQRCodeFragment extends Fragment {
     ProgressBar progressBar;
     @BindView(R.id.tvPasswordWarning)
     TextView tvPasswordWarning;
-
+    @BindView(R.id.status)
+    LinearLayout passwordStatus;
 
     private AlertDialog dialog;
 
@@ -93,6 +100,8 @@ public class ShowQRCodeFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        passwordsSet[0] = !((String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW)).isEmpty();
+        passwordsSet[1] = !((String) GeneralSharedPreferences.getInstance().get(KEY_PASSWORD)).isEmpty();
         generateCode();
         return view;
     }
@@ -106,7 +115,7 @@ public class ShowQRCodeFragment extends Fragment {
     private void generateCode() {
         progressBar.setVisibility(VISIBLE);
         ivQRCode.setVisibility(GONE);
-        addPasswordStatusString();
+        setPasswordWarning();
 
         Disposable disposable = QRCodeUtils.getQRCodeGeneratorObservable(getSelectedPasswordKeys())
                 .subscribeOn(Schedulers.io())
@@ -125,37 +134,27 @@ public class ShowQRCodeFragment extends Fragment {
         super.onDestroy();
     }
 
-    private void addPasswordStatusString() {
-        String status;
-        if (checkedItems[0] && checkedItems[1]) {
-            status = getString(R.string.qrcode_with_both_passwords);
-        } else if (checkedItems[0]) {
-            status = getString(R.string.qrcode_with_admin_password);
-        } else if (checkedItems[1]) {
-            status = getString(R.string.qrcode_with_server_password);
+    private void setPasswordWarning() {
+        if (!passwordsSet[0] && !passwordsSet[1]) {
+            // should not display password warning is passwords are not set
+            passwordStatus.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        boolean showingAdminPassword = passwordsSet[0] && checkedItems[0];
+        boolean showingServerPassword = passwordsSet[1] && checkedItems[1];
+        CharSequence status;
+        if (showingAdminPassword && showingServerPassword) {
+            status = getText(R.string.qrcode_with_both_passwords);
+        } else if (showingAdminPassword) {
+            status = getText(R.string.qrcode_with_admin_password);
+        } else if (showingServerPassword) {
+            status = getText(R.string.qrcode_with_server_password);
         } else {
-            status = getString(R.string.qrcode_without_passwords);
+            status = getText(R.string.qrcode_without_passwords);
         }
         tvPasswordWarning.setText(status);
-    }
-
-    @OnClick(R.id.btnScan)
-    void scanButtonClicked() {
-        analytics.logEvent(SCAN_QR_CODE, "Settings");
-        Intent i = new Intent(getActivity(), ScanQRCodeActivity.class);
-        startActivity(i);
-    }
-
-    @OnClick(R.id.btnSelect)
-    void chooseButtonClicked() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        if (photoPickerIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-        } else {
-            ToastUtils.showShortToast(getString(R.string.activity_not_found, getString(R.string.choose_image)));
-            Timber.w(getString(R.string.activity_not_found, getString(R.string.choose_image)));
-        }
+        passwordStatus.setVisibility(VISIBLE);
     }
 
     @OnClick(R.id.tvPasswordWarning)
@@ -175,7 +174,26 @@ public class ShowQRCodeFragment extends Fragment {
                     })
                     .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                     .create();
+
+            // disable checkbox if password not set
+            dialog.getListView().setOnHierarchyChangeListener(
+                    new ViewGroup.OnHierarchyChangeListener() {
+                        @Override
+                        public void onChildViewAdded(View parent, View child) {
+                            CharSequence text = ((AppCompatCheckedTextView)child).getText();
+                            int itemIndex = Arrays.asList(items).indexOf(text);
+                            if (!passwordsSet[itemIndex]) {
+                                child.setEnabled(passwordsSet[itemIndex]);
+                                child.setOnClickListener(null);
+                            }
+                        }
+
+                        @Override
+                        public void onChildViewRemoved(View view, View view1) {
+                        }
+                    });
         }
+
         dialog.show();
     }
 
@@ -229,5 +247,15 @@ public class ShowQRCodeFragment extends Fragment {
             keys.add(KEY_PASSWORD);
         }
         return keys;
+    }
+
+    @Override
+    public void onPauseFragment() {
+
+    }
+
+    @Override
+    public void onResumeFragment() {
+
     }
 }

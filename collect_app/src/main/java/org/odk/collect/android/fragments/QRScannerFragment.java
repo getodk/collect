@@ -29,6 +29,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.ViewPagerListener;
 import org.odk.collect.android.preferences.QRCodeTabs;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -40,7 +41,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
+public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener, ViewPagerListener {
 
     DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
@@ -134,5 +135,15 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
     @Override
     public void onTorchOff() {
         switchFlashlightButton.setText(R.string.turn_on_flashlight);
+    }
+
+    @Override
+    public void onPauseFragment() {
+        barcodeScannerView.pause();
+    }
+
+    @Override
+    public void onResumeFragment() {
+        barcodeScannerView.resume();
     }
 }

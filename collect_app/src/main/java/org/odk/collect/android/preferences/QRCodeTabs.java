@@ -19,6 +19,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.QRScannerFragment;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.listeners.ActionListener;
+import org.odk.collect.android.listeners.ViewPagerListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
@@ -45,21 +46,43 @@ public class QRCodeTabs extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
 
     private TabAdapter adapter;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
     private Intent shareIntent;
+
+    private int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qrcode_tab);
         initToolbar();
-        viewPager = (ViewPager) this.findViewById(R.id.viewPager);
-        tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
+        ViewPager viewPager = (ViewPager) this.findViewById(R.id.viewPager);
+        TabLayout tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
         adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ShowQRCodeFragment(), "QR code");
         adapter.addFragment(new QRScannerFragment(), "Scan");
+        adapter.addFragment(new ShowQRCodeFragment(), "QR code");
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener (new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                ViewPagerListener fragmentToShow = (ViewPagerListener)adapter.getItem(position);
+                fragmentToShow.onResumeFragment();
+
+                ViewPagerListener fragmentToHide = (ViewPagerListener)adapter.getItem(currentPosition);
+                fragmentToHide.onPauseFragment();
+
+                currentPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
         this.updateShareIntent();
     }

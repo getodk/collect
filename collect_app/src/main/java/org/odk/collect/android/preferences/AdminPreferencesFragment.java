@@ -31,7 +31,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.storage.StoragePathProvider;

@@ -12,6 +12,7 @@
      the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -19,7 +20,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttons">
+        android:layout_above="@+id/status">
 
         <ProgressBar
             android:id="@+id/circularProgressBar"
@@ -36,27 +37,100 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/buttons"
+        android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/status"
-        android:layout_margin="5dp"
-        android:orientation="vertical">
+        android:background="#FEE29F"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
-        <Button
-            android:id="@+id/btnScan"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/scan_qrcode" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@android:drawable/ic_dialog_alert"
+            android:tint="#8F6601"
+            />
 
-        <Button
-            android:id="@+id/btnSelect"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <TextView
+            android:id="@+id/tvPasswordWarning"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/select_qrcode" />
+            android:padding="5dp"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:text="@string/qrcode_with_both_passwords"
+            android:textColor="#000000"
+            />
+
     </LinearLayout>
+
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/qrcode_options_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginEnd="5dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:visibility="visible">-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/buttons"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:orientation="vertical">-->
+<!--            <CheckBox-->
+<!--                android:id="@+id/checkBox3"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="include admin password"-->
+<!--                android:layout_margin="5dp"/>-->
+
+<!--            <CheckBox-->
+<!--                android:id="@+id/checkBox4"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="include server password"-->
+<!--                android:layout_margin="5dp"/>-->
+<!--        </LinearLayout>-->
+
+
+<!--    </LinearLayout>-->
+
+<!-- #FDDA05 -->
+    <!--    <LinearLayout-->
+<!--        android:id="@+id/buttons"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:orientation="vertical">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnScan"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="@string/scan_qrcode" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnSelect"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="@string/select_qrcode" />-->
+<!--    </LinearLayout>-->
+    <!--
 
     <LinearLayout
         android:id="@+id/status"
@@ -83,4 +157,6 @@
             android:textSize="15sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    !-->
 </RelativeLayout>
