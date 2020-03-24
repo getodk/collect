@@ -15,16 +15,21 @@
 package org.odk.collect.android.utilities.gdrive;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.accounts.GoogleAccountManager;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -89,8 +94,20 @@ public class GoogleAccountsManager {
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff());
 
-        intentChooseAccount = credential.newChooseAccountIntent();
         themeUtils = new ThemeUtils(context);
+
+        if (themeUtils.getAccountPickerTheme() == 1) {
+            intentChooseAccount = AccountManager.newChooseAccountIntent(null,
+                    null,
+                    new String[]{GoogleAccountManager.ACCOUNT_TYPE},
+                    true,
+                    null,
+                    null,
+                    null,
+                    null);
+        } else {
+            intentChooseAccount = credential.newChooseAccountIntent();
+        }
     }
 
     public static void showSettingsDialog(Activity activity) {
@@ -180,8 +197,6 @@ public class GoogleAccountsManager {
     public Intent getAccountChooserIntent() {
         Account selectedAccount = getAccountPickerCurrentAccount();
         intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
-        intentChooseAccount.putExtra("overrideCustomTheme", 0);
         return intentChooseAccount;
     }
 }
