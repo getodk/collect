@@ -91,9 +91,7 @@ the specific language governing permissions and limitations under the License.
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity
-            android:name=".activities.MainMenuActivity"
-            android:configChanges="locale|orientation|screenSize" />
+        <activity android:name=".activities.MainMenuActivity" />
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
             android:screenOrientation="portrait"
