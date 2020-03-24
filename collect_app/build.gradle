@@ -116,7 +116,7 @@ android {
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
 
-            matchingFallbacks = ['release'] // So other modules use release built type for this
+            matchingFallbacks = ['release'] // So other modules use release build type for this
         }
         debug {
             debuggable(true)
