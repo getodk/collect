@@ -196,11 +196,11 @@ configurations.all {
 }
 
 dependencies {
-    // To make ODK Collect is installable on all devices even though the Mapbox
-    // native library is missing for some ABIs, we include an .aar dependency
-    // named "nbi-stubs", which causes there to be at least one .so library
-    // present for every ABI (armeabi, armeabi-v7a, arm64-v8a, x86, x86_64).
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
@@ -231,7 +231,7 @@ dependencies {
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
-    implementation 'bikramsambat:bikram-sambat:1.1.0'
+    implementation name: 'bikram-sambat-1.1.0'
     implementation "com.evernote:android-job:1.4.2"
     implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
