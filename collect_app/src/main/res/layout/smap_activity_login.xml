@@ -40,6 +40,7 @@
             style="@style/Base.Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:entries="@array/smap_kontrolid_servers"
             android:layout_marginTop="20dp"/>
 
         <!--  URL Label -->
