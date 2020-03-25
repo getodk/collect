@@ -43,7 +43,7 @@ public class MainMenuActivityTest {
     }
 
     @Test
-    public void pressingConfigureQRCode_launchesScanQRCodeActivity() {
+    public void pressingConfigureQRCode_launchesQRCodeTabsActivity() {
         ActivityScenario<MainMenuActivity> firstActivity = ActivityScenario.launch(MainMenuActivity.class);
         firstActivity.onActivity(activity -> {
             MenuItem item = new RoboMenuItem(R.id.menu_configure_qr_code);
