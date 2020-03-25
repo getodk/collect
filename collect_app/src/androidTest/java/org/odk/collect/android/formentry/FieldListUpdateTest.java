@@ -183,25 +183,23 @@ public class FieldListUpdateTest {
         onView(withText("Please don't use your calculator, !")).check(matches(isDisplayed()));
     }
 
-    /**
-     * TODO: calculation doesn't seem to be updated whether or not there's a fieldlist.
-     *
-     * @Test public void changeInValueUsedInOtherField_ShouldChangeValue() {
-     * onView(withId(R.id.menu_goto)).perform(click());
-     * onView(withId(R.id.menu_go_up)).perform(click());
-     * onView(allOf(withText("Value change"), isDisplayed())).perform(click());
-     * onView(withText(startsWith("What is your"))).perform(click());
-     * <p>
-     * String name = UUID.randomUUID().toString();
-     * <p>
-     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
-     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(name.length())));
-     * onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-     * onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-     * }
-     **/
+
+    @Test
+    public void changeInValueUsedInOtherField_ShouldChangeValue() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        onView(withId(R.id.menu_go_up)).perform(click());
+        onView(allOf(withText("Value change"), isDisplayed())).perform(click());
+        onView(withText(startsWith("What is your"))).perform(click());
+
+        String name = UUID.randomUUID().toString();
+
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
+        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(String.valueOf(name.length()))));
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
+        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+    }
 
     @Test
     public void selectionChangeAtFirstCascadeLevel_ShouldUpdateNextLevels() {
