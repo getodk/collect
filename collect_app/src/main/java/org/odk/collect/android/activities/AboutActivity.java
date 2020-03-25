@@ -21,11 +21,16 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
@@ -75,6 +80,13 @@ public class AboutActivity extends CollectAbstractActivity implements
 
         websiteUri = Uri.parse(getString(R.string.app_url));    // smap
         forumUri = Uri.parse(ODK_FORUM);
+
+        // start smap
+        ImageView imageView = findViewById(R.id.androidVersionImageView);
+        imageView.setImageResource(R.drawable.ic_phone);
+        TextView textView = findViewById(R.id.android_version_id);
+        textView.setText(AboutActivity.this.getString(R.string.smap_android_version, Build.VERSION.RELEASE));
+        // end smap
     }
 
     private void initToolbar() {
