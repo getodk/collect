@@ -66,7 +66,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         //setTheme(R.style.DarkAppTheme);     // override theme for login
         setContentView(R.layout.smap_activity_login);
         ButterKnife.bind(this);
-
+        urlSpinner = findViewById(R.id.urlSpinner);
 
         url = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
 
@@ -74,13 +74,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
             useSpinner = true;
             urlText.setVisibility(View.GONE);
 
-            urlSpinner = findViewById(R.id.urlSpinner);
-
-            // Setup the choices and values lists
-            urlChoices = new ArrayList<> ();
-            urlChoices.add("Kontrolid Org Server");        // https://app.kontrolid.org
-            urlChoices.add("Kontrolid Com Server");        // https://app.kontrolid.com
-
+            // Setup the values list this must have the same number of entries as specified in smap_string
             urlValues = new ArrayList<> ();
             urlValues.add("https://app.kontrolid.org");        // https://app.kontrolid.org
             urlValues.add("https://app.kontrolid.com");        // https://app.kontrolid.com
