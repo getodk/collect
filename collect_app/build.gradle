@@ -198,13 +198,13 @@ configurations.all {
 dependencies {
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01' // Shouldn't be upgraded until https://issuetracker.google.com/issues/141869006 is fixed
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01' // https://github.com/opendatakit/collect/issues/3649
     implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation('androidx.preference:preference:1.1.0') {
-        exclude group: 'androidx.appcompat', module: 'appcompat' // Again because of https://issuetracker.google.com/issues/141869006
+        exclude group: 'androidx.appcompat', module: 'appcompat' // Again because of https://github.com/opendatakit/collect/issues/3649
     }
 
     implementation "com.google.android.gms:play-services-auth:17.0.0"
