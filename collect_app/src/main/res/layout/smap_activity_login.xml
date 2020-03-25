@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:textSize="64sp"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:fitsSystemWindows="true">
 
@@ -32,6 +33,14 @@
                    android:layout_height="100dp"
                    android:layout_marginBottom="24dp"
                    android:layout_gravity="center_horizontal" />
+
+        <!--URI for Kontrolid -->
+        <org.odk.collect.android.views.ScrolledToTopSpinner
+            android:id="@+id/urlSpinner"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"/>
 
         <!--  URL Label -->
         <com.google.android.material.textfield.TextInputLayout

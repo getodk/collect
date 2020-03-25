@@ -14,19 +14,20 @@ package org.odk.collect.android.activities;
  * the License.
  */
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.SmapLoginListener;
@@ -36,6 +37,9 @@ import org.odk.collect.android.tasks.SmapLoginTask;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.Validator;
 
+import java.util.ArrayList;
+
+import androidx.appcompat.widget.AppCompatSpinner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -48,6 +52,14 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     @BindView(R.id.btn_login) Button loginButton;
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
+
+    private String url;
+    private boolean useSpinner;
+    private AppCompatSpinner urlSpinner;
+    private ArrayAdapter<String> urlAdapter;
+    ArrayList<String> urlChoices;
+    ArrayList<String> urlValues;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +67,61 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         setContentView(R.layout.smap_activity_login);
         ButterKnife.bind(this);
 
-        urlText.setText((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL));
+
+        url = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
+
+        if(BuildConfig.FLAVOR.equals("kontrolid")) {
+            useSpinner = true;
+            urlText.setVisibility(View.GONE);
+
+            urlSpinner = findViewById(R.id.urlSpinner);
+
+            // Setup the choices and values lists
+            urlChoices = new ArrayList<> ();
+            urlChoices.add("Kontrolid Org Server");        // https://app.kontrolid.org
+            urlChoices.add("Kontrolid Com Server");        // https://app.kontrolid.com
+
+            urlValues = new ArrayList<> ();
+            urlValues.add("https://app.kontrolid.org");        // https://app.kontrolid.org
+            urlValues.add("https://app.kontrolid.com");        // https://app.kontrolid.com
+
+            // Add the choices to the Spinner
+            urlAdapter = new ArrayAdapter<> (this, android.R.layout.simple_spinner_item, urlChoices);
+            urlAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+            urlSpinner.setAdapter(urlAdapter);
+
+            // Set the initial value
+            for(int i = 0; i < urlValues.size(); i++) {
+                if(urlValues.get(i).equals(url)) {
+                    urlSpinner.setSelection(i);
+                    break;
+                }
+            }
+            urlSpinner.setPrompt(Collect.getInstance().getString(R.string.change_server_url));
+            urlSpinner.setEnabled(true);
+            urlSpinner.setFocusable(true);
+
+            // Respond to the spinner value being changes
+            urlSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(position < urlValues.size()) {
+                        url = urlValues.get(urlSpinner.getSelectedItemPosition());
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                }
+            });
+
+
+        } else {        // Use the text field
+            useSpinner = false;
+            urlSpinner.setVisibility(View.GONE);
+            urlText.setText(url);
+        }
+
         userText.setText((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME));
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +131,6 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
             }
         });
 
-        // https://stackoverflow.com/questions/1919742/how-do-i-make-an-android-editview-done-button-and-hide-the-keyboard-when-click
         passwordText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
@@ -81,7 +146,9 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     public void login() {
         Timber.i("Login started");
 
-        String url = urlText.getText().toString();
+        if(!useSpinner) {
+            url = urlText.getText().toString();
+        }
         String username = userText.getText().toString();
         String password = passwordText.getText().toString();
 
@@ -120,7 +187,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
 
         // Update preferences with login values
         GeneralSharedPreferences prefs = GeneralSharedPreferences.getInstance();
-        prefs.save(GeneralKeys.KEY_SERVER_URL, urlText.getText().toString());
+        prefs.save(GeneralKeys.KEY_SERVER_URL, url);
         prefs.save(GeneralKeys.KEY_USERNAME, userText.getText().toString());
         prefs.save(GeneralKeys.KEY_PASSWORD, passwordText.getText().toString());
 
@@ -138,7 +205,6 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     public void loginFailed(String status) {
 
         // Attempt to login by comparing values agains stored preferences
-        String url = urlText.getText().toString();
         String username = userText.getText().toString();
         String password = passwordText.getText().toString();
 
@@ -197,5 +263,12 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         }
 
         return valid;
+    }
+
+    private CharSequence[] getChoices() {
+        CharSequence[] choices = new CharSequence[2];
+        choices[0] = "https://app.kontrolid.org";
+        choices[1] = "https://app.kontrolid.com";
+        return choices;
     }
 }
