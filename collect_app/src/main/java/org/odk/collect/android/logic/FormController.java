@@ -803,18 +803,17 @@ public class FormController {
                                                  boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
-                saveOneScreenAnswers(index, answers.get(index), evaluateConstraints);
+                saveOneScreenAnswer(index, answers.get(index), evaluateConstraints);
             }
         }
         return null;
     }
 
-    public FailedConstraint saveOneScreenAnswers(FormIndex index, IAnswerData answer, boolean evaluateConstraints) throws JavaRosaException {
+    public FailedConstraint saveOneScreenAnswer(FormIndex index, IAnswerData answer, boolean evaluateConstraints) throws JavaRosaException {
         // Within a group, you can only save for question events
         if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
-            int saveStatus;
             if (evaluateConstraints) {
-                saveStatus = answerQuestion(index, answer);
+                int saveStatus = answerQuestion(index, answer);
                 if (saveStatus != FormEntryController.ANSWER_OK) {
                     return new FailedConstraint(index, saveStatus);
                 }

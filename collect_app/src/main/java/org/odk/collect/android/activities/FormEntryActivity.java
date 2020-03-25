@@ -2871,7 +2871,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         for (Map.Entry<FormIndex, IAnswerData> answer : currentView.getAnswers().entrySet()) {
             if (isQuestionNotRecalculated(mutableQuestionsBeforeSave[index], immutableQuestionsBeforeSave.get(index))) {
                 try {
-                    formController.saveOneScreenAnswers(answer.getKey(), answer.getValue(), false);
+                    formController.saveOneScreenAnswer(answer.getKey(), answer.getValue(), false);
                 } catch (JavaRosaException e) {
                     Timber.w(e);
                 }
