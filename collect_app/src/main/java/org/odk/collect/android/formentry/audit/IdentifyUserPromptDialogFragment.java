@@ -28,7 +28,7 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getToolbar().setTitle(viewModel.getFormName());
+        getToolbar().setTitle(viewModel.getFormTitle());
 
         EditText identityField = view.findViewById(R.id.identity);
         identityField.setText(viewModel.getUser());

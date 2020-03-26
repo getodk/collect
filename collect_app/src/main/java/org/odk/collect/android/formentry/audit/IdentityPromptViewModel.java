@@ -64,7 +64,7 @@ public class IdentityPromptViewModel extends ViewModel {
         return user != null && !user.isEmpty() && !isBlank(user);
     }
 
-    public String getFormName() {
+    public String getFormTitle() {
         return formName;
     }
 }
