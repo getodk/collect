@@ -14,7 +14,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.common.collect.ImmutableSet;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -41,6 +40,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
@@ -65,13 +65,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
@@ -94,6 +94,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @Inject
     MapProvider mapProvider;
     private MapboxMap map;
+    private ReadyListener mapReadyListener;
     private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     private PointListener gpsLocationListener;
     private PointListener clickListener;
@@ -118,6 +119,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     private TileHttpServer tileServer;
 
+    private static final String PLACEHOLDER_LAYER_ID = "placeholder";
+
     // During Robolectric tests, Google Play Services is unavailable; sadly, the
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
@@ -127,6 +130,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         @NonNull FragmentActivity activity, int containerId,
         @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         Context context = getContext();
+        mapReadyListener = readyListener;
         if (MapboxUtils.initMapbox() == null) {
             MapProvider.getConfigurator().showUnavailableMessage(context);
             if (errorListener != null) {
@@ -160,9 +164,22 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 map.addOnMapClickListener(this);
                 map.addOnMapLongClickListener(this);
 
-                // MAPBOX ISSUE: Only the last-created manager gets draggable annotations.
-                // https://github.com/mapbox/mapbox-plugins-android/issues/863
-                // For symbols to be draggable, SymbolManager must be created last.
+                // MAPBOX ISSUE: https://github.com/mapbox/mapbox-gl-native/issues/15262
+                // Unfortunately, the API no longer provides a way to to get an ID
+                // or a reference to the symbol layer or the line layer.  We needed
+                // this in order to keep the symbol layer and line layer on top when
+                // adding a reference layer to the map.  But without a way to refer
+                // to these layers, we can't move them to the top or insert the
+                // reference layer below them.  To work around this, we add a dummy
+                // placeholder layer first, so that the symbol, line, and location
+                // layers are added on top of it.  Then we use the placeholder layer
+                // to determine where to insert the reference layer.
+                style.addLayer(new BackgroundLayer(PLACEHOLDER_LAYER_ID)
+                    .withProperties(backgroundColor("rgba(0, 0, 0, 0)")));
+
+                // MAPBOX ISSUE: https://github.com/mapbox/mapbox-plugins-android/issues/863
+                // Only the last-created manager gets draggable annotations. For
+                // symbols to be draggable, the SymbolManager must be created last.
                 lineManager = createLineManager();
                 symbolManager = createSymbolManager();
 
@@ -175,15 +192,15 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 // If the screen is rotated before the map is ready, this fragment
                 // could already be detached, which makes it unsafe to use.  Only
                 // call the ReadyListener if this fragment is still attached.
-                if (readyListener != null && getActivity() != null) {
-                    readyListener.onReady(this);
+                if (mapReadyListener != null && getActivity() != null) {
+                    mapReadyListener.onReady(this);
                 }
             });
 
             // In Robolectric tests, getMapAsync() never gets around to calling its
             // callback; we have to invoke the ready listener directly.
-            if (testMode && readyListener != null) {
-                readyListener.onReady(this);
+            if (testMode && mapReadyListener != null) {
+                mapReadyListener.onReady(this);
             }
         });
     }
@@ -218,7 +235,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
             map.setStyle(getStyleBuilder(), style -> {
+                // See addTo() above for why we add this placeholder layer.
+                style.addLayer(new BackgroundLayer(PLACEHOLDER_LAYER_ID)
+                    .withProperties(backgroundColor("rgba(0, 0, 0, 0)")));
+                lineManager = createLineManager();
+                symbolManager = createSymbolManager();
+
                 loadReferenceOverlay();
+                initLocationComponent();
+
+                if (mapReadyListener != null && getActivity() != null) {
+                    mapReadyListener.onReady(this);
+                }
             });
         }
     }
@@ -474,7 +502,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             .withLatLng(toLatLng(point))
             .withIconImage(addIconImage(R.drawable.ic_map_point))
             .withIconSize(1f)
-            .withZIndex(10)
+            .withSymbolSortKey(10f)
             .withDraggable(draggable)
             .withTextOpacity(0f)
         );
@@ -615,35 +643,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
         return tileSet;
     }
-    
+
     private void addOverlayLayer(Layer layer) {
-        // If there is a LocationComponent, it will have added some layers to the
-        // style.  The SymbolManager and LineManager also add their own layers
-        // where they place their symbols and lines.  We need to insert the new
-        // overlay just under all these upper layers to keep it from covering up
-        // the crosshairs, the point markers, and the traced lines.
-        Set<String> upperLayerIds = ImmutableSet.of(
-            SymbolManager.ID_GEOJSON_LAYER,
-            LineManager.ID_GEOJSON_LAYER,
-
-            // These are exactly the layer IDs defined in LocationComponentConstants,
-            // but unfortunately we can't refer to them because it's package-private.
-            "mapbox-location-shadow-layer",
-            "mapbox-location-foreground-layer",
-            "mapbox-location-background-layer",
-            "mapbox-location-accuracy-layer",
-            "mapbox-location-bearing-layer"
-        );
-
-        for (Layer l : map.getStyle().getLayers()) {
-            if (upperLayerIds.contains(l.getId())) {
-                // We've found the first (lowest) upper layer; insert just below it.
-                map.getStyle().addLayerBelow(layer, l.getId());
-                return;
-            }
-        }
-        // No upper layers were found, so let's put the overlay on top.
-        map.getStyle().addLayer(layer);
+        // The overlay goes just below the placeholder layer, so it will be just
+        // under the location, symbol, and line layers, but above everything else.
+        map.getStyle().addLayerBelow(layer, PLACEHOLDER_LAYER_ID);
     }
 
     private void addOverlaySource(Source source) {
