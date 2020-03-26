@@ -39,7 +39,7 @@ public class AdminPasswordDialogFragmentTest {
 
     @Test
     public void enteringPassword_andClickingOK_callsOnCorrectAdminPasswordWithAction() {
-        TestActivityScenario<MockAdminPasswordDialogCallback> activityScenario = TestActivityScenario.launch(MockAdminPasswordDialogCallback.class);
+        TestActivityScenario<SpyAdminPasswordDialogCallbackActivity> activityScenario = TestActivityScenario.launch(SpyAdminPasswordDialogCallbackActivity.class);
         activityScenario.onActivity(activity -> {
             AdminPasswordDialogFragment fragment = createFragment();
             fragment.show(activity.getSupportFragmentManager(), "tag");
@@ -55,7 +55,7 @@ public class AdminPasswordDialogFragmentTest {
 
     @Test
     public void afterRecreating_enteringPassword_andClickingOK_callsOnCorrectAdminPasswordWithAction() {
-        TestActivityScenario<MockAdminPasswordDialogCallback> activityScenario = TestActivityScenario.launch(MockAdminPasswordDialogCallback.class);
+        TestActivityScenario<SpyAdminPasswordDialogCallbackActivity> activityScenario = TestActivityScenario.launch(SpyAdminPasswordDialogCallbackActivity.class);
         activityScenario.onActivity(activity -> {
             AdminPasswordDialogFragment fragment = createFragment();
             fragment.show(activity.getSupportFragmentManager(), "tag");
@@ -99,7 +99,7 @@ public class AdminPasswordDialogFragmentTest {
         }
     }
 
-    private static class MockAdminPasswordDialogCallback extends FragmentActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback  {
+    private static class SpyAdminPasswordDialogCallbackActivity extends FragmentActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback  {
 
         private AdminPasswordDialogFragment.Action onCorrectAdminPasswordCalledWith;
 
