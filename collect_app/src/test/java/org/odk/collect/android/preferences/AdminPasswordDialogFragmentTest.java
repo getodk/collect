@@ -18,6 +18,7 @@ import org.robolectric.annotation.LooperMode;
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.preferences.AdminPasswordDialogFragment.ARG_ACTION;
 import static org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action.STORAGE_MIGRATION;
 import static org.robolectric.Shadows.shadowOf;
@@ -50,6 +51,24 @@ public class AdminPasswordDialogFragmentTest {
             shadowOf(getMainLooper()).idle();
 
             assertThat(activity.onCorrectAdminPasswordCalledWith, equalTo(STORAGE_MIGRATION));
+            assertThat(activity.onIncorrectAdminPasswordCalled, equalTo(false));
+        });
+    }
+
+    @Test
+    public void enteringIncorrectPassword_andClickingOK_callsOnInCorrectAdminPassword() {
+        TestActivityScenario<SpyAdminPasswordDialogCallbackActivity> activityScenario = TestActivityScenario.launch(SpyAdminPasswordDialogCallbackActivity.class);
+        activityScenario.onActivity(activity -> {
+            AdminPasswordDialogFragment fragment = createFragment();
+            fragment.show(activity.getSupportFragmentManager(), "tag");
+            shadowOf(getMainLooper()).idle();
+
+            fragment.getInput().setText("not the password");
+            ((AlertDialog) fragment.getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+            shadowOf(getMainLooper()).idle();
+
+            assertThat(activity.onCorrectAdminPasswordCalledWith, nullValue());
+            assertThat(activity.onIncorrectAdminPasswordCalled, equalTo(true));
         });
     }
 
@@ -71,6 +90,7 @@ public class AdminPasswordDialogFragmentTest {
             shadowOf(getMainLooper()).idle();
 
             assertThat(activity.onCorrectAdminPasswordCalledWith, equalTo(STORAGE_MIGRATION));
+            assertThat(activity.onIncorrectAdminPasswordCalled, equalTo(false));
         });
     }
 
@@ -102,6 +122,7 @@ public class AdminPasswordDialogFragmentTest {
     private static class SpyAdminPasswordDialogCallbackActivity extends FragmentActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback  {
 
         private AdminPasswordDialogFragment.Action onCorrectAdminPasswordCalledWith;
+        private boolean onIncorrectAdminPasswordCalled;
 
         @Override
         public void onCorrectAdminPassword(AdminPasswordDialogFragment.Action action) {
@@ -110,7 +131,7 @@ public class AdminPasswordDialogFragmentTest {
 
         @Override
         public void onIncorrectAdminPassword() {
-
+            onIncorrectAdminPasswordCalled = true;
         }
     }
 }
