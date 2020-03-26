@@ -154,6 +154,13 @@ public final class DialogUtils {
         return alertDialog;
     }
 
+    /**
+     * It can be a bad idea to interact with Fragment instances. As much as possible we
+     * should be using arguments (for static data the dialog needs), Dagger (for dependencies) or
+     * ViewModel (for non static data) to get things into fragments so as to avoid crashes or
+     * weirdness when they are recreated.
+     */
+    @Deprecated
     @Nullable
     public static <T extends DialogFragment> T getDialog(Class<T> dialogClass, FragmentManager fragmentManager) {
         return (T) fragmentManager.findFragmentByTag(dialogClass.getName());
