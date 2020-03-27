@@ -611,6 +611,15 @@ public class FileUtils {
         }
     }
 
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
+    public static String simplifyScopedStoragePath(String path) {
+        if (path != null && path.startsWith("/storage/emulated/0/")) {
+            return "/sdcard/" + path.substring("/storage/emulated/0/".length());
+        }
+
+        return path;
+    }
+
     /** Checks whether /sdcard points to the same place as getExternalStorageDirectory(). */
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     @SuppressFBWarnings(

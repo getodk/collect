@@ -276,4 +276,14 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("set-geopoint-before"));
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
     }
+
+    @Test
+    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
+    public void simplifyScopedStoragePathTest() {
+        assertThat(FileUtils.simplifyScopedStoragePath(null), is(nullValue()));
+        assertThat(FileUtils.simplifyScopedStoragePath(""), is(""));
+        assertThat(FileUtils.simplifyScopedStoragePath("blahblahblah"), is("blahblahblah"));
+        assertThat(FileUtils.simplifyScopedStoragePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers"), is("/sdcard/Android/data/org.odk.collect.android/files/layers"));
+        assertThat(FileUtils.simplifyScopedStoragePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("/sdcard/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
+    }
 }

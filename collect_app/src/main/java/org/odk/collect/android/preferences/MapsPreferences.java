@@ -162,7 +162,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         items.add(new Item(null, getString(R.string.none), ""));
         for (File file : getSupportedLayerFiles(cftor)) {
             String path = storageStateProvider.isScopedStorageUsed()
-                    ? File.separator + StorageSubdirectory.LAYERS.getDirectoryName() + File.separator + storagePathProvider.getRelativeMapLayerPath(FileUtils.simplifyPath(file))
+                    ? FileUtils.simplifyScopedStoragePath(file.getPath())
                     : FileUtils.simplifyPath(file);
             String value = storageStateProvider.isScopedStorageUsed()
                     ? storagePathProvider.getRelativeMapLayerPath(file.getAbsolutePath())
@@ -191,7 +191,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         referenceLayerPref.setItems(items);
 
         String layerDir = storageStateProvider.isScopedStorageUsed()
-                ? File.separator + StorageSubdirectory.LAYERS.getDirectoryName()
+                ? FileUtils.simplifyScopedStoragePath(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS))
                 : FileUtils.simplifyPath(new File(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS)));
         referenceLayerPref.setDialogCaption(context.getString(
             items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
