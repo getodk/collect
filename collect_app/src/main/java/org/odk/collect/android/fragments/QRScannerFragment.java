@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import timber.log.Timber;
 
@@ -46,6 +47,12 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
     DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
     private BeepManager beepManager;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -139,7 +146,7 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
 
     @Override
     public void onPauseFragment() {
-        barcodeScannerView.pause();
+        barcodeScannerView.pauseAndWait();
     }
 
     @Override

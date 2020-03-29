@@ -13,8 +13,6 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.adapters.TabAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fragments.QRScannerFragment;
-import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.listeners.ViewPagerListener;
 import org.odk.collect.android.utilities.FileUtils;
@@ -50,35 +48,21 @@ public class QRCodeTabs extends CollectAbstractActivity {
         ViewPager viewPager = (ViewPager) this.findViewById(R.id.viewPager);
         TabLayout tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
         adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new QRScannerFragment(), "Scan");
-        adapter.addFragment(new ShowQRCodeFragment(), "QR code");
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             public void onPageSelected(int position) {
-                ViewPagerListener fragmentToShow = (ViewPagerListener) adapter.getItem(position);
+                ViewPagerListener fragmentToShow = (ViewPagerListener) adapter.getFragment(position);
                 fragmentToShow.onResumeFragment();
 
-                ViewPagerListener fragmentToHide = (ViewPagerListener) adapter.getItem(currentPosition);
+                ViewPagerListener fragmentToHide = (ViewPagerListener) adapter.getFragment(currentPosition);
                 fragmentToHide.onPauseFragment();
 
                 currentPosition = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
         tabLayout.setupWithViewPager(viewPager);
         this.updateShareIntent();
     }
-
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
