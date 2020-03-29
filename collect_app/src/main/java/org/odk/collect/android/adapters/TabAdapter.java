@@ -25,7 +25,7 @@ public class TabAdapter extends FragmentPagerAdapter  {
             case 1:
                 return new ShowQRCodeFragment();
             default:
-                // should never occur
+                // should never reach here
                 return null;
         }
 

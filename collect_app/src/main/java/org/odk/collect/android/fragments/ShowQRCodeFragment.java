@@ -39,6 +39,7 @@ import com.google.zxing.NotFoundException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.ViewPagerListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -166,7 +167,10 @@ public class ShowQRCodeFragment extends Fragment implements ViewPagerListener {
 
             dialog = new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.include_password_dialog)
-                    .setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked)
+                    .setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> {
+                        checkedItems[which] = isChecked;
+                        analytics.logEvent(AnalyticsEvents.CONFIGURE_QR_CODE, items[which]);
+                    })
                     .setCancelable(false)
                     .setPositiveButton(R.string.generate, (dialog, which) -> {
                         generateCode();

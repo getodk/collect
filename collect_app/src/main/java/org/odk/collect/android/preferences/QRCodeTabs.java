@@ -52,10 +52,14 @@ public class QRCodeTabs extends CollectAbstractActivity {
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             public void onPageSelected(int position) {
                 ViewPagerListener fragmentToShow = (ViewPagerListener) adapter.getFragment(position);
-                fragmentToShow.onResumeFragment();
+                if (fragmentToShow != null) {
+                    fragmentToShow.onResumeFragment();
+                }
 
                 ViewPagerListener fragmentToHide = (ViewPagerListener) adapter.getFragment(currentPosition);
-                fragmentToHide.onPauseFragment();
+                if (fragmentToHide != null) {
+                    fragmentToHide.onPauseFragment();
+                }
 
                 currentPosition = position;
             }
