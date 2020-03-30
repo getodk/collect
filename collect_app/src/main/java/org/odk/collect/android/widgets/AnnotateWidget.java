@@ -65,7 +65,7 @@ public class AnnotateWidget extends BaseImageWidget {
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         addCurrentImageToLayout();
-        if (errorLoadingImage) {
+        if (binaryName == null || imageView == null || imageView.getVisibility() == GONE) {
             annotateButton.setEnabled(false);
         }
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
@@ -79,9 +79,7 @@ public class AnnotateWidget extends BaseImageWidget {
         chooseButton = createSimpleButton(getContext(), R.id.choose_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_image), getAnswerFontSize(), this);
 
         annotateButton = createSimpleButton(getContext(), R.id.markup_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.markup_image), getAnswerFontSize(), this);
-        if (binaryName == null) {
-            annotateButton.setEnabled(false);
-        }
+
         annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
 
         answerLayout.addView(captureButton);
