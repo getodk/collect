@@ -31,6 +31,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
@@ -159,6 +160,8 @@ public interface AppDependencyComponent {
     void inject(FormHierarchyActivity formHierarchyActivity);
 
     void inject(FormManagementPreferences formManagementPreferences);
+
+    void inject(IdentityPreferences identityPreferences);
 
     SmsManager smsManager();
 

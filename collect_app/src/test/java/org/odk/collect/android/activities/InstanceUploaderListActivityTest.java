@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -64,7 +65,7 @@ public class InstanceUploaderListActivityTest {
         }
 
         @Override
-        public Analytics providesAnalytics(Application application) {
+        public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
             return tracker;
         }
 

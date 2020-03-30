@@ -23,6 +23,7 @@ import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
@@ -79,7 +80,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
             }
 
             @Override
-            public Analytics providesAnalytics(Application application) {
+            public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
                 return analytics;
             }
         });
