@@ -42,7 +42,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -54,7 +54,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.formentry.javarosawrapper.FormIndexUtils.getPreviousLevel;
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_FORM_CONTROLLER_EVENT;
 
 public class FormHierarchyActivity extends CollectAbstractActivity {

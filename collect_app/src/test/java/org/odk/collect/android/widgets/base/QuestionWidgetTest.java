@@ -10,7 +10,7 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.ItemsetWidgetTest;

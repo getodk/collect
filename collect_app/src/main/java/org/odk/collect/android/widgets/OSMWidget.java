@@ -23,7 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 

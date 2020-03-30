@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.support.RobolectricHelpers;

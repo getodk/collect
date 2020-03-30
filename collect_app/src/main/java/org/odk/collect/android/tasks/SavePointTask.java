@@ -23,7 +23,7 @@ import android.os.AsyncTask;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.SavePointListener;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;
 

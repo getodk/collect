@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
 

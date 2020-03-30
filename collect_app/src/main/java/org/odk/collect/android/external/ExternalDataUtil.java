@@ -33,7 +33,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;
 import java.io.FileNotFoundException;

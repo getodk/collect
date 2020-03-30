@@ -6,7 +6,7 @@ import android.os.SystemClock;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -30,7 +30,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 

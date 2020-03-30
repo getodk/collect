@@ -5,7 +5,7 @@ import android.location.Location;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;

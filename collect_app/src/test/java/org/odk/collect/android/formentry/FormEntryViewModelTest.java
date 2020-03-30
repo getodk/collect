@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.IOException;

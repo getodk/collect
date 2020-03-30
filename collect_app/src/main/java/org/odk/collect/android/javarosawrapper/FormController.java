@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.formentry.javarosawrapper;
+package org.odk.collect.android.javarosawrapper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,8 +67,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.formentry.javarosawrapper.FormIndexUtils.getPreviousLevel;
-import static org.odk.collect.android.formentry.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
 
 /**

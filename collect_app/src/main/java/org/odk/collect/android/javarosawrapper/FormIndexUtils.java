@@ -1,4 +1,4 @@
-package org.odk.collect.android.formentry.javarosawrapper;
+package org.odk.collect.android.javarosawrapper;
 
 import androidx.annotation.Nullable;
 

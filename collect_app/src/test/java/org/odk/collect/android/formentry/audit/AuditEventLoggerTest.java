@@ -21,7 +21,7 @@ import android.location.Location;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
 import java.util.ArrayList;

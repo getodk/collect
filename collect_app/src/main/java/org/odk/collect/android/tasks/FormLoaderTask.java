@@ -42,7 +42,7 @@ import org.odk.collect.android.external.ExternalDataReader;
 import org.odk.collect.android.external.ExternalDataReaderImpl;
 import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ZipUtils;

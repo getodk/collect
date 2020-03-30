@@ -56,7 +56,7 @@ import org.odk.collect.android.audio.PlaybackFailedException;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;

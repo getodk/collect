@@ -19,7 +19,7 @@ import android.widget.Button;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 
 /**
  * Displays the structure of a form along with the answers for the current instance. Disables all

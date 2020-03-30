@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.preferences.AdminKeys;

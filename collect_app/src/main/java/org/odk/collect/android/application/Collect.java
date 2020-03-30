@@ -39,7 +39,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
-import org.odk.collect.android.formentry.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
