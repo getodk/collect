@@ -896,13 +896,12 @@ public class FormController {
      */
     public void jumpToNewRepeatPrompt() {
         FormIndex repeatGroupIndex = getRepeatGroupIndex(getFormIndex(), getFormDef());
-        String repeatRef = repeatGroupIndex.getReference().toString(false);
-        String testRef = "";
+        Integer depth = repeatGroupIndex.getDepth();
+        Integer promptDepth = null;
 
-        // There may be nested repeat groups within this group; skip over those.
-        while (!repeatRef.equals(testRef)) {
+        while (!depth.equals(promptDepth)) {
             stepToNextEventType(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
-            testRef = getFormIndex().getReference().toString(false);
+            promptDepth = getFormIndex().getDepth();
         }
     }
 
