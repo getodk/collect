@@ -16,7 +16,7 @@ public class FormIndexUtils {
     /**
      * Used to find one level up from the formIndex. That is, if you're at 5_0, 1 (the second question
      * in a repeating group), this method will return a FormIndex of 5_0 (the start of the repeating
-     * group). If your at index 16 or 5_0, this will return null;
+     * group). If you're at index 16 or 5_0, this will return null
      */
     @Nullable
     public static FormIndex getPreviousLevel(FormIndex index) {
