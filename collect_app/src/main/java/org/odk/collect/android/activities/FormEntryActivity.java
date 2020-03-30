@@ -430,6 +430,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, changesReasonViewModelFactory)
                 .get(FormSaveViewModel.class);
 
+        formSaveViewModel.setAnalytics(analytics);
         formSaveViewModel.getSavedResult().observe(this, this::handleSaveResult);
     }
 

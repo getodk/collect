@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.formentry.audit.AuditUtils;
@@ -41,6 +42,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     @Nullable
     private AsyncTask saveTask;
 
+    private Analytics analytics;
+
     public FormSaveViewModel(Clock clock, FormSaver formSaver) {
         this.clock = clock;
         this.formSaver = formSaver;
@@ -49,6 +52,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     public void setFormController(FormController formController) {
         this.formController = formController;
         this.auditEventLogger = formController.getAuditEventLogger();
+    }
+
+    public void setAnalytics(Analytics analytics) {
+        this.analytics = analytics;
     }
 
     public void editingForm() {
@@ -122,7 +129,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             public void onComplete(SaveToDiskResult saveToDiskResult) {
                 handleTaskResult(saveToDiskResult, saveRequest);
             }
-        }).execute();
+        }, analytics).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
@@ -261,12 +268,14 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         private final Listener listener;
         private final FormController formController;
+        private final Analytics analytics;
 
-        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener) {
+        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener, Analytics analytics) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
             this.formController = formController;
+            this.analytics = analytics;
         }
 
         @Override
@@ -274,7 +283,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return formSaver.save(saveRequest.uri, formController,
                     saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
-                    this::publishProgress
+                    this::publishProgress, analytics
             );
         }
 
