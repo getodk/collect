@@ -2,17 +2,18 @@ package org.odk.collect.android.formentry;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.LooperMode;
 import org.robolectric.fakes.RoboMenu;
 import org.robolectric.fakes.RoboMenuItem;
 
@@ -25,7 +26,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
+@LooperMode(LooperMode.Mode.PAUSED)
 public class FormEntryMenuDelegateTest {
 
     private FormEntryMenuDelegate formEntryMenuDelegate;

@@ -24,13 +24,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOC
 
 public class FormEntryMenuDelegate implements MenuDelegate {
 
-    private final AppCompatActivity context;
+    private final AppCompatActivity activity;
     private final FormControllerProvider formControllerProvider;
     private final AnswersProvider answersProvider;
     private final FormIndexAnimationHandler formIndexAnimationHandler;
 
-    public FormEntryMenuDelegate(AppCompatActivity context, FormControllerProvider formControllerProvider, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler) {
-        this.context = context;
+    public FormEntryMenuDelegate(AppCompatActivity activity, FormControllerProvider formControllerProvider, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler) {
+        this.activity = activity;
         this.formControllerProvider = formControllerProvider;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
@@ -70,7 +70,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
                 .setEnabled(useability);
 
         if (formController != null && formController.currentFormCollectsBackgroundLocation()
-                && PlayServicesUtil.isGooglePlayServicesAvailable(context)) {
+                && PlayServicesUtil.isGooglePlayServicesAvailable(activity)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
@@ -89,8 +89,8 @@ public class FormEntryMenuDelegate implements MenuDelegate {
                 return true;
 
             case R.id.menu_preferences:
-                Intent pref = new Intent(context, PreferencesActivity.class);
-                context.startActivity(pref);
+                Intent pref = new Intent(activity, PreferencesActivity.class);
+                activity.startActivity(pref);
                 return true;
 
             case R.id.track_location:
@@ -101,16 +101,21 @@ public class FormEntryMenuDelegate implements MenuDelegate {
         return false;
     }
 
+    @Override
+    public void invalidateOptionsMenu() {
+        activity.invalidateOptionsMenu();
+    }
+
     private FormEntryViewModel getFormEntryViewModel() {
-        return ViewModelProviders.of(context).get(FormEntryViewModel.class);
+        return ViewModelProviders.of(activity).get(FormEntryViewModel.class);
     }
 
     private FormSaveViewModel getFormSaveViewModel() {
-        return ViewModelProviders.of(context).get(FormSaveViewModel.class);
+        return ViewModelProviders.of(activity).get(FormSaveViewModel.class);
     }
 
     private BackgroundLocationViewModel getBackgroundLocationViewModel() {
-        return ViewModelProviders.of(context).get(BackgroundLocationViewModel.class);
+        return ViewModelProviders.of(activity).get(BackgroundLocationViewModel.class);
     }
 
     private boolean isInRepeat() {

@@ -102,8 +102,6 @@ import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
-import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
@@ -113,6 +111,8 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
+import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -143,6 +143,7 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -290,7 +291,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     MediaLoadingFragment mediaLoadingFragment;
-    private FormEntryMenuDelegate optionsMenuDelegate;
+    private MenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
 
     @Override
@@ -358,7 +359,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         initToolbar();
 
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
-        optionsMenuDelegate = new FormEntryMenuDelegate(
+        menuDelegate = new FormEntryMenuDelegate(
                 this,
                 this::getFormController,
                 () -> getCurrentViewIfODKView().getAnswers(),
@@ -527,7 +528,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
-            supportInvalidateOptionsMenu();
             Intent intent = getIntent();
             if (intent != null) {
                 loadFromIntent(intent);
@@ -1002,14 +1002,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        optionsMenuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        optionsMenuDelegate.onPrepareOptionsMenu(menu);
+        menuDelegate.onPrepareOptionsMenu(menu);
 
         if (getFormController() != null && getFormController().currentFormCollectsBackgroundLocation()
                 && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
@@ -1020,7 +1020,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (optionsMenuDelegate.onOptionsItemSelected(item)) {
+        if (menuDelegate.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -1181,7 +1181,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return newly created View
      */
     private View createView(int event, boolean advancingPage) {
-        invalidateOptionsMenu();
         releaseOdkView();
 
         FormController formController = getFormController();
@@ -1579,6 +1578,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * the progress bar.
      */
     public void showView(View next, AnimationType from) {
+        menuDelegate.invalidateOptionsMenu();
+
         // disable notifications...
         if (inAnimation != null) {
             inAnimation.setAnimationListener(null);
@@ -2349,7 +2350,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.destroy();
 
                 Collect.getInstance().setFormController(formController);
-                supportInvalidateOptionsMenu();
                 backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
