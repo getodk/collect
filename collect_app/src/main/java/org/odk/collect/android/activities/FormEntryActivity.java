@@ -332,11 +332,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupViewModels();
-
-        setContentView(R.layout.form_entry);
-
         Collect.getInstance().getComponent().inject(this);
+        setupViewModels();
+        setContentView(R.layout.form_entry);
 
         compositeDisposable
                 .add(eventBus
