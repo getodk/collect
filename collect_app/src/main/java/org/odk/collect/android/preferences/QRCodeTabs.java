@@ -37,7 +37,6 @@ public class QRCodeTabs extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
     private final String[] fragmentTitleList = {"Scan", "QR Code"};
 
-    private TabAdapter adapter;
     private Intent shareIntent;
 
     @Override
@@ -47,7 +46,7 @@ public class QRCodeTabs extends CollectAbstractActivity {
         initToolbar();
         ViewPager2 viewPager = (ViewPager2) this.findViewById(R.id.viewPager);
         TabLayout tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
-        adapter = new TabAdapter(this);
+        TabAdapter adapter = new TabAdapter(this);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
