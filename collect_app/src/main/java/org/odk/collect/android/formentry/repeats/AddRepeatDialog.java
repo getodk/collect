@@ -14,7 +14,7 @@ public class AddRepeatDialog {
 
     private AddRepeatDialog() {}
 
-    public static void show(Context context, String groupName, Listener listener) {
+    public static void show(Context context, String groupLabel, Listener listener) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         DialogInterface.OnClickListener repeatListener = (dialog, i) -> {
             switch (i) {
@@ -28,7 +28,7 @@ public class AddRepeatDialog {
         };
 
         alertDialog.setMessage(context.getString(R.string.add_repeat_question,
-                groupName));
+                groupLabel));
 
         alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.add_repeat),
                 repeatListener);
