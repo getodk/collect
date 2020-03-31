@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.logic.FormController;
@@ -57,11 +58,12 @@ public class FormSaveViewModelTest {
         formController = mock(FormController.class);
         logger = mock(AuditEventLogger.class);
         formSaver = mock(FormSaver.class);
+        Analytics analytics = mock(Analytics.class);
 
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver);
+        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics);
         viewModel.setFormController(formController);
     }
 

@@ -42,20 +42,17 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     @Nullable
     private AsyncTask saveTask;
 
-    private Analytics analytics;
+    private final Analytics analytics;
 
-    public FormSaveViewModel(Clock clock, FormSaver formSaver) {
+    public FormSaveViewModel(Clock clock, FormSaver formSaver, Analytics analytics) {
         this.clock = clock;
         this.formSaver = formSaver;
+        this.analytics = analytics;
     }
 
     public void setFormController(FormController formController) {
         this.formController = formController;
         this.auditEventLogger = formController.getAuditEventLogger();
-    }
-
-    public void setAnalytics(Analytics analytics) {
-        this.analytics = analytics;
     }
 
     public void editingForm() {
@@ -305,11 +302,19 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public static class Factory implements ViewModelProvider.Factory {
+        private Analytics analytics;
+
+        public Factory() {
+        }
+
+        public Factory(Analytics analytics) {
+            this.analytics = analytics;
+        }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver());
+            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics);
         }
     }
 }
