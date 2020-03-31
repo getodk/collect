@@ -37,7 +37,6 @@ public class FormEntryViewModelTest {
         formController = mock(FormController.class);
         startingIndex = new FormIndex(null, 0, 0, new TreeReference());
         when(formController.getFormIndex()).thenReturn(startingIndex);
-        when(formController.indexIsInFieldList()).thenReturn(false);
         when(formController.getCurrentFormIdentifierHash()).thenReturn("formIdentifierHash");
 
         viewModel = new FormEntryViewModel(analytics);
@@ -46,27 +45,16 @@ public class FormEntryViewModelTest {
 
     @Test
     public void addRepeat_stepsToNextScreenEvent() throws Exception {
-        when(formController.indexIsInFieldList()).thenReturn(false);
-
         viewModel.addRepeat(true);
         verify(formController).stepToNextScreenEvent();
     }
 
     @Test
     public void addRepeat_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithMessage() throws Exception {
-        when(formController.indexIsInFieldList()).thenReturn(false);
         when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.addRepeat(true);
         assertThat(viewModel.getError().getValue(), equalTo("OH NO"));
-    }
-
-    @Test
-    public void addRepeat_whenInFieldList_doesNotStepToNextScreenEvent() throws Exception {
-        when(formController.indexIsInFieldList()).thenReturn(true);
-
-        viewModel.addRepeat(true);
-        verify(formController, never()).stepToNextScreenEvent();
     }
 
     @Test

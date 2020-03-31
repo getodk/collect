@@ -60,12 +60,10 @@ public class FormEntryViewModel extends ViewModel {
 
         formController.newRepeat();
 
-        if (!formController.indexIsInFieldList()) {
-            try {
-                formController.stepToNextScreenEvent();
-            } catch (JavaRosaException exception) {
-                error.setValue(exception.getCause().getMessage());
-            }
+        try {
+            formController.stepToNextScreenEvent();
+        } catch (JavaRosaException exception) {
+            error.setValue(exception.getCause().getMessage());
         }
     }
 

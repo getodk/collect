@@ -20,7 +20,8 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 @RunWith(AndroidJUnit4.class)
 public class AddRepeatTest {
 
-    private static final String FORM = "one-question-repeat.xml";
+    private static final String ONE_QUESTION_REPEAT = "one-question-repeat.xml";
+    private static final String FIELD_LIST_REPEAT = "field-list-repeat.xml";
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -30,13 +31,14 @@ public class AddRepeatTest {
                     Manifest.permission.READ_PHONE_STATE
             ))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(FORM));
+            .around(new CopyFormRule(ONE_QUESTION_REPEAT))
+            .around(new CopyFormRule(FIELD_LIST_REPEAT));
 
     @Rule
     public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Test
-    public void swipingToNextAfterARepeat_andClickingAdd_addsAnotherRepeat() {
+    public void whenInRepeat_swipingNext_andClickingAdd_addsAnotherRepeat() {
         new MainMenuPage(rule)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
@@ -46,12 +48,22 @@ public class AddRepeatTest {
     }
 
     @Test
-    public void swipingToNextAfterARepeat_andClickingDoNotAdd_leavesRepeatGroup() {
+    public void whenInRepeat_swipingNext_andClickingDoNotAdd_leavesRepeatGroup() {
         new MainMenuPage(rule)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
                 .clickOnDoNotAdd(new EndOfFormPage("One Question Repeat", rule));
+    }
+
+    @Test
+    public void whenInRepeat_thatIsAFieldList_swipingNext_andClickingAdd_addsAnotherRepeat() {
+        new MainMenuPage(rule)
+                .startBlankForm("Field-List Repeat")
+                .assertText("Person > 1")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .assertText("Person > 2");
     }
 
     @Test
