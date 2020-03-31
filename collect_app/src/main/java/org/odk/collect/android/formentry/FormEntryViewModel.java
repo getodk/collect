@@ -33,7 +33,7 @@ public class FormEntryViewModel extends ViewModel {
     }
 
     public FormIndex getCurrentIndex() {
-        return getFormController().getFormIndex();
+        return formController.getFormIndex();
     }
 
     public LiveData<String> getError() {
@@ -41,27 +41,27 @@ public class FormEntryViewModel extends ViewModel {
     }
 
     public void promptForNewRepeat() {
-        FormIndex index = getFormController().getFormIndex();
+        FormIndex index = formController.getFormIndex();
         jumpBackIndex = index;
 
-        getFormController().jumpToNewRepeatPrompt();
+        formController.jumpToNewRepeatPrompt();
     }
 
     public void addRepeat(boolean fromPrompt) {
         if (jumpBackIndex != null) {
             jumpBackIndex = null;
-            analytics.logEvent(ADD_REPEAT, "Inline");
+            analytics.logEvent(ADD_REPEAT, "Inline", formController.getCurrentFormIdentifierHash());
         } else if (fromPrompt) {
-            analytics.logEvent(ADD_REPEAT, "Prompt");
+            analytics.logEvent(ADD_REPEAT, "Prompt", formController.getCurrentFormIdentifierHash());
         } else {
-            analytics.logEvent(ADD_REPEAT, "Hierarchy");
+            analytics.logEvent(ADD_REPEAT, "Hierarchy", formController.getCurrentFormIdentifierHash());
         }
 
-        getFormController().newRepeat();
+        formController.newRepeat();
 
-        if (!getFormController().indexIsInFieldList()) {
+        if (!formController.indexIsInFieldList()) {
             try {
-                getFormController().stepToNextScreenEvent();
+                formController.stepToNextScreenEvent();
             } catch (JavaRosaException exception) {
                 error.setValue(exception.getCause().getMessage());
             }
@@ -71,14 +71,14 @@ public class FormEntryViewModel extends ViewModel {
     public void cancelRepeatPrompt() {
         analytics.logEvent(ADD_REPEAT, "InlineDecline");
 
-        FormController formController = getFormController();
+        FormController formController = this.formController;
 
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
         } else {
             try {
-                getFormController().stepToNextScreenEvent();
+                this.formController.stepToNextScreenEvent();
             } catch (JavaRosaException exception) {
                 error.setValue(exception.getCause().getMessage());
             }
@@ -87,10 +87,6 @@ public class FormEntryViewModel extends ViewModel {
 
     public void errorDisplayed() {
         error.setValue(null);
-    }
-
-    private FormController getFormController() {
-        return formController;
     }
 
     public static class Factory implements ViewModelProvider.Factory {

@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.robolectric.RobolectricTestRunner;
@@ -37,6 +38,7 @@ public class FormEntryViewModelTest {
         startingIndex = new FormIndex(null, 0, 0, new TreeReference());
         when(formController.getFormIndex()).thenReturn(startingIndex);
         when(formController.indexIsInFieldList()).thenReturn(false);
+        when(formController.getCurrentFormIdentifierHash()).thenReturn("formIdentifierHash");
 
         viewModel = new FormEntryViewModel(analytics);
         viewModel.formLoaded(formController);
@@ -70,27 +72,27 @@ public class FormEntryViewModelTest {
     @Test
     public void addRepeat_sendsAddRepeatPromptAnalyticsEvent() {
         viewModel.addRepeat(true);
-        verify(analytics, only()).logEvent("AddRepeat", "Prompt");
+        verify(analytics, only()).logEvent(AnalyticsEvents.ADD_REPEAT, "Prompt", "formIdentifierHash");
     }
 
     @Test
     public void addRepeat_whenFromPromptIsFalse_sendsAddHierarchyAnalyticsEvent() {
         viewModel.addRepeat(false);
-        verify(analytics, only()).logEvent("AddRepeat", "Hierarchy");
+        verify(analytics, only()).logEvent(AnalyticsEvents.ADD_REPEAT, "Hierarchy", "formIdentifierHash");
     }
 
     @Test
     public void promptForNewRepeat_thenAddRepeat_sendsAddRepeatInlineAnalyticsEvent() {
         viewModel.promptForNewRepeat();
         viewModel.addRepeat(true);
-        verify(analytics, only()).logEvent("AddRepeat", "Inline");
+        verify(analytics, only()).logEvent(AnalyticsEvents.ADD_REPEAT, "Inline", "formIdentifierHash");
     }
 
     @Test
     public void promptForNewRepeat_thenCancelRepeatPrompt_sendsAddRepeatInlineDeclineAnalyticsEvent() {
         viewModel.promptForNewRepeat();
         viewModel.cancelRepeatPrompt();
-        verify(analytics, only()).logEvent("AddRepeat", "InlineDecline");
+        verify(analytics, only()).logEvent(AnalyticsEvents.ADD_REPEAT, "InlineDecline", "formIdentifierHash");
     }
 
     @Test

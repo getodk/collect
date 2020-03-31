@@ -8,7 +8,7 @@ public class AnalyticsEvents {
 
     /**
      * Used to measure how popular different methods of adding repeats are. The "action" should
-     * describe the way the repeat was added.
+     * describe the way the repeat was added. The label should be the form hash identifier.
      */
     public static final String ADD_REPEAT = "AddRepeat";
 
