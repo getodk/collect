@@ -6,6 +6,7 @@ import android.telephony.SmsManager;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
@@ -13,6 +14,7 @@ import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -26,8 +28,10 @@ import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
@@ -150,6 +154,14 @@ public interface AppDependencyComponent {
     void inject(AutoSendWorker autoSendWorker);
 
     void inject(StorageMigrationDialog storageMigrationDialog);
+
+    void inject(SplashScreenActivity splashScreenActivity);
+
+    void inject(FormHierarchyActivity formHierarchyActivity);
+
+    void inject(FormManagementPreferences formManagementPreferences);
+
+    void inject(IdentityPreferences identityPreferences);
 
     SmsManager smsManager();
 

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.logic.FormController;
@@ -57,11 +58,12 @@ public class FormSaveViewModelTest {
         formController = mock(FormController.class);
         logger = mock(AuditEventLogger.class);
         formSaver = mock(FormSaver.class);
+        Analytics analytics = mock(Analytics.class);
 
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver);
+        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics);
         viewModel.setFormController(formController);
     }
 
@@ -78,10 +80,10 @@ public class FormSaveViewModelTest {
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(formSaver).save(any(), any(), anyBoolean(), anyBoolean(), any(), any());
+        verify(formSaver).save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any());
 
         Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable(); // Run any other queued tasks
-        verify(formSaver, times(1)).save(any(), any(), anyBoolean(), anyBoolean(), any(), any());
+        verify(formSaver, times(1)).save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any());
     }
 
     @Test
@@ -370,7 +372,7 @@ public class FormSaveViewModelTest {
         saveToDiskResult.setSaveResult(result, true);
         saveToDiskResult.setSaveErrorMessage(message);
 
-        when(formSaver.save(any(), any(), anyBoolean(), anyBoolean(), any(), any())).thenReturn(saveToDiskResult);
+        when(formSaver.save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any())).thenReturn(saveToDiskResult);
         Robolectric.getBackgroundThreadScheduler().runOneTask();
     }
 }

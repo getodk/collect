@@ -332,11 +332,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupViewModels();
-
-        setContentView(R.layout.form_entry);
-
         Collect.getInstance().getComponent().inject(this);
+        setupViewModels();
+        setContentView(R.layout.form_entry);
 
         compositeDisposable
                 .add(eventBus
@@ -425,7 +423,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        FormSaveViewModel.Factory changesReasonViewModelFactory = new FormSaveViewModel.Factory();
+        FormSaveViewModel.Factory changesReasonViewModelFactory = new FormSaveViewModel.Factory(analytics);
         formSaveViewModel = ViewModelProviders
                 .of(this, changesReasonViewModelFactory)
                 .get(FormSaveViewModel.class);
@@ -1634,7 +1632,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        Collect.getInstance().logRemoteAnalytics(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
+                        analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
                         saveForm(false, false, null, false);
                         autoSaved = true;
