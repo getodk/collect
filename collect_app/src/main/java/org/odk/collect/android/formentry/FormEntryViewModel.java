@@ -16,10 +16,11 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
 
 public class FormEntryViewModel extends ViewModel {
 
-    private FormController formController;
 
     private final Analytics analytics;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
+
+    private FormController formController;
 
     @Nullable
     private FormIndex jumpBackIndex;
@@ -41,9 +42,7 @@ public class FormEntryViewModel extends ViewModel {
     }
 
     public void promptForNewRepeat() {
-        FormIndex index = formController.getFormIndex();
-        jumpBackIndex = index;
-
+        jumpBackIndex = formController.getFormIndex();
         formController.jumpToNewRepeatPrompt();
     }
 
@@ -69,7 +68,7 @@ public class FormEntryViewModel extends ViewModel {
     }
 
     public void cancelRepeatPrompt() {
-        analytics.logEvent(ADD_REPEAT, "InlineDecline");
+        analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
 
         FormController formController = this.formController;
 
