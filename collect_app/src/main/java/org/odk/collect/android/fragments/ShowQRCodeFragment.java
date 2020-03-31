@@ -41,7 +41,6 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.ViewPagerListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.QRCodeTabs;
@@ -71,7 +70,7 @@ import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
-public class ShowQRCodeFragment extends Fragment implements ViewPagerListener {
+public class ShowQRCodeFragment extends Fragment {
 
     private static final int SELECT_PHOTO = 111;
 
@@ -97,7 +96,6 @@ public class ShowQRCodeFragment extends Fragment implements ViewPagerListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-        ((CollectAbstractActivity) getActivity()).initToolbar(getString(R.string.configure_via_qr_code));
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -251,15 +249,5 @@ public class ShowQRCodeFragment extends Fragment implements ViewPagerListener {
             keys.add(KEY_PASSWORD);
         }
         return keys;
-    }
-
-    @Override
-    public void onPauseFragment() {
-
-    }
-
-    @Override
-    public void onResumeFragment() {
-
     }
 }

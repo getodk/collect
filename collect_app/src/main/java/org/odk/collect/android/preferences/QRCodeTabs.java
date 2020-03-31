@@ -14,7 +14,6 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.adapters.TabAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
-import org.odk.collect.android.listeners.ViewPagerListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
@@ -24,53 +23,45 @@ import java.io.File;
 
 import timber.log.Timber;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
 public class QRCodeTabs extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
+    private final String[] fragmentTitleList = {"Scan", "QR Code"};
 
     private TabAdapter adapter;
     private Intent shareIntent;
-
-    private int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qrcode_tab);
         initToolbar();
-        ViewPager viewPager = (ViewPager) this.findViewById(R.id.viewPager);
+        ViewPager2 viewPager = (ViewPager2) this.findViewById(R.id.viewPager);
         TabLayout tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
-        adapter = new TabAdapter(getSupportFragmentManager());
+        adapter = new TabAdapter(this);
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            public void onPageSelected(int position) {
-                ViewPagerListener fragmentToShow = (ViewPagerListener) adapter.getFragment(position);
-                if (fragmentToShow != null) {
-                    fragmentToShow.onResumeFragment();
-                }
 
-                ViewPagerListener fragmentToHide = (ViewPagerListener) adapter.getFragment(currentPosition);
-                if (fragmentToHide != null) {
-                    fragmentToHide.onPauseFragment();
-                }
-
-                currentPosition = position;
+        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                tab.setText(fragmentTitleList[position]);
             }
-        });
-        tabLayout.setupWithViewPager(viewPager);
+        }).attach();
         this.updateShareIntent();
     }
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.qr_code));
+        setTitle(getString(R.string.configure_via_qr_code));
         setSupportActionBar(toolbar);
     }
 
