@@ -25,6 +25,7 @@ public class FormEntryViewModel extends ViewModel {
     @Nullable
     private FormIndex jumpBackIndex;
 
+    @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Analytics analytics) {
         this.analytics = analytics;
     }
@@ -41,6 +42,7 @@ public class FormEntryViewModel extends ViewModel {
         return error;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void promptForNewRepeat() {
         jumpBackIndex = formController.getFormIndex();
         formController.jumpToNewRepeatPrompt();
@@ -96,6 +98,7 @@ public class FormEntryViewModel extends ViewModel {
             this.analytics = analytics;
         }
 
+        @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
