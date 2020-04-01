@@ -45,7 +45,8 @@ public class FormEntryMenuDelegateTest {
         formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
         formSaveViewModel = mockViewModelProvider(activity, FormSaveViewModel.class).get(FormSaveViewModel.class);
 
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> formController, answersProvider, mock(FormIndexAnimationHandler.class));
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, answersProvider, mock(FormIndexAnimationHandler.class));
+        formEntryMenuDelegate.formLoaded(formController);
     }
 
     @Test
@@ -72,7 +73,8 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormControllerIsNull_hidesAddRepeat() {
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, () -> null, answersProvider, mock(FormIndexAnimationHandler.class));
+        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, answersProvider, mock(FormIndexAnimationHandler.class));
+        formEntryMenuDelegate.formLoaded(null);
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);

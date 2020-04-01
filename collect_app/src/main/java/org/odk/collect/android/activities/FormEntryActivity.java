@@ -55,7 +55,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
@@ -143,7 +142,6 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -291,7 +289,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     MediaLoadingFragment mediaLoadingFragment;
-    private MenuDelegate menuDelegate;
+    private FormEntryMenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
 
     @Override
@@ -361,7 +359,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
         menuDelegate = new FormEntryMenuDelegate(
                 this,
-                this::getFormController,
                 () -> getCurrentViewIfODKView().getAnswers(),
                 formIndexAnimationHandler
         );
@@ -430,6 +427,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 showIfNotShowing(IdentifyUserPromptDialogFragment.class, getSupportFragmentManager());
             }
         });
+
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
                 finish();
@@ -455,7 +453,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void formControllerAvailable(FormController formController) {
-        identityPromptViewModel.setFormController(formController);
+        menuDelegate.formLoaded(formController);
+        identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
     }

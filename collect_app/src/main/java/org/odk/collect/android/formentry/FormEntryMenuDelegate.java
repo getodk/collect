@@ -5,14 +5,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -22,18 +23,24 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
-public class FormEntryMenuDelegate implements MenuDelegate {
+public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormController {
 
     private final AppCompatActivity activity;
-    private final FormControllerProvider formControllerProvider;
     private final AnswersProvider answersProvider;
     private final FormIndexAnimationHandler formIndexAnimationHandler;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, FormControllerProvider formControllerProvider, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler) {
+    @Nullable
+    private FormController formController;
+
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler) {
         this.activity = activity;
-        this.formControllerProvider = formControllerProvider;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
+    }
+
+    @Override
+    public void formLoaded(FormController formController) {
+        this.formController = formController;
     }
 
     @Override
@@ -43,8 +50,6 @@ public class FormEntryMenuDelegate implements MenuDelegate {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        FormController formController = formControllerProvider.getFormController();
-
         boolean useability;
 
         useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID);
@@ -119,8 +124,6 @@ public class FormEntryMenuDelegate implements MenuDelegate {
     }
 
     private boolean isInRepeat() {
-        FormController formController = formControllerProvider.getFormController();
-
         if (formController != null) {
             return formController.indexContainsRepeatableGroup();
         } else {

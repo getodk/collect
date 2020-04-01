@@ -14,7 +14,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
 
-public class FormEntryViewModel extends ViewModel {
+public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
 
     private final Analytics analytics;
@@ -30,6 +30,7 @@ public class FormEntryViewModel extends ViewModel {
         this.analytics = analytics;
     }
 
+    @Override
     public void formLoaded(FormController formController) {
         this.formController = formController;
     }
