@@ -34,10 +34,12 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     private final Clock clock;
     private final FormSaver formSaver;
-    private FormController formController;
 
     private String reason = "";
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
+
+    @Nullable
+    private FormController formController;
 
     @Nullable
     private AsyncTask saveTask;
@@ -56,10 +58,18 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public void editingForm() {
+        if (formController == null) {
+            return;
+        }
+
         formController.getAuditEventLogger().setEditing(true);
     }
 
     public void saveAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
+        if (formController == null) {
+            return;
+        }
+
         try {
             formController.saveAllScreenAnswers(answers, false);
         } catch (JavaRosaException ignored) {
@@ -70,7 +80,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
-        if (isSaving()) {
+        if (isSaving() || formController == null) {
             return;
         }
 
@@ -92,7 +102,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     public boolean cancel() {
-        return saveTask.cancel(true);
+        if (saveTask != null) {
+            return saveTask.cancel(true);
+        } else {
+            return false;
+        }
     }
 
     public void setReason(@NonNull String reason) {
@@ -100,7 +114,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public boolean saveReason() {
-        if (reason == null || isBlank(reason)) {
+        if (reason == null || isBlank(reason) || formController == null) {
             return false;
         }
 
@@ -134,6 +148,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
+        if (formController == null) {
+            return;
+        }
+
         switch (taskResult.getSaveResult()) {
             case SAVED:
             case SAVED_AND_EXIT: {
@@ -184,7 +202,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private boolean requiresReasonToSave() {
-        return formController.getAuditEventLogger().isEditing()
+        return formController != null
+                && formController.getAuditEventLogger().isEditing()
                 && formController.getAuditEventLogger().isChangeReasonRequired()
                 && formController.getAuditEventLogger().isChangesMade();
     }
@@ -306,6 +325,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             this.analytics = analytics;
         }
 
+        @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

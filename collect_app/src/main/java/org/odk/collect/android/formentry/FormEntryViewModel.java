@@ -20,6 +20,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private final Analytics analytics;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
+    @Nullable
     private FormController formController;
 
     @Nullable
@@ -35,8 +36,13 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.formController = formController;
     }
 
+    @Nullable
     public FormIndex getCurrentIndex() {
-        return formController.getFormIndex();
+        if (formController != null) {
+            return formController.getFormIndex();
+        } else {
+            return null;
+        }
     }
 
     public LiveData<String> getError() {
@@ -45,11 +51,19 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     @SuppressWarnings("WeakerAccess")
     public void promptForNewRepeat() {
+        if (formController == null) {
+            return;
+        }
+
         jumpBackIndex = formController.getFormIndex();
         formController.jumpToNewRepeatPrompt();
     }
 
     public void addRepeat(boolean fromPrompt) {
+        if (formController == null) {
+            return;
+        }
+
         if (jumpBackIndex != null) {
             jumpBackIndex = null;
             analytics.logEvent(ADD_REPEAT, "Inline", formController.getCurrentFormIdentifierHash());
@@ -69,6 +83,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void cancelRepeatPrompt() {
+        if (formController == null) {
+            return;
+        }
+
         analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
 
         FormController formController = this.formController;

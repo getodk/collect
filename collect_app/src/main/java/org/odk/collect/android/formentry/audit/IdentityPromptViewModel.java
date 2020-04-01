@@ -49,7 +49,10 @@ public class IdentityPromptViewModel extends ViewModel implements RequiresFormCo
     }
 
     public void done() {
-        auditEventLogger.setUser(identity);
+        if (auditEventLogger != null) {
+            auditEventLogger.setUser(identity);
+        }
+        
         updateRequiresIdentity();
     }
 

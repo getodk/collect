@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry;
 
+import androidx.annotation.Nullable;
+
 import org.javarosa.core.model.FormIndex;
 
 /**
@@ -15,7 +17,11 @@ public class FormIndexAnimationHandler {
         this.listener = listener;
     }
 
-    public void handle(FormIndex index) {
+    public void handle(@Nullable FormIndex index) {
+        if (index == null) {
+            return;
+        }
+
         if (lastIndex == null) {
             listener.refreshCurrentView();
         } else {
