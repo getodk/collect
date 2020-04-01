@@ -111,10 +111,26 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     @Test
-    public void whenAChoiceIsBlank_itIsShownAsBlank() {
+    public void whenAChoiceValueIsBlank_itIsShownAsBlank() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withSelectChoices(asList(
                         new SelectChoice("1", "")
+                ))
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
+        assertThat(innerText(widget.getChoicesList().getChildAt(0)), equalTo(""));
+    }
+
+    @Test
+    public void whenAChoiceValueIsNull_itIsShownAsBlank() {
+        SelectChoice selectChoice = new SelectChoice(); // The two arg constructor protects against null values
+        selectChoice.setTextID("1");
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(asList(
+                        selectChoice
                 ))
                 .build();
 
