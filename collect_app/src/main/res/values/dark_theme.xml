@@ -73,6 +73,6 @@
     </style>
 
     <style name="Theme.Collect.Dark.Dialog" parent="android:Theme.Material.Dialog">
-        <item name="android:colorAccent">#57C4C2</item>
+        <item name="android:colorAccent">?attr/colorSecondary</item>
     </style>
 </resources>

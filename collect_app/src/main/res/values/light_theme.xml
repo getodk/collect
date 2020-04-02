@@ -64,7 +64,7 @@
     </style>
 
     <style name="Theme.Collect.BaseLight.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/blue_500</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Light" parent="Widget.AppCompat.Light.SearchView">
@@ -72,6 +72,6 @@
     </style>
 
     <style name="Theme.Collect.Light.Dialog" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:colorAccent">@color/blue_500</item>
+        <item name="android:colorAccent">?attr/colorSecondary</item>
     </style>
 </resources>
