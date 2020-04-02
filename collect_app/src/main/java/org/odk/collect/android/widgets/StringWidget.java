@@ -117,6 +117,7 @@ public class StringWidget extends QuestionWidget {
         for (int i = 0; i < questionWidgetContainer.getChildCount(); i++) {
             View child = questionWidgetContainer.getChildAt(i);
             if (child.getId() != R.id.answer_container) {
+                child.setId(getId());
                 activity.registerForContextMenu(child);
             }
         }
