@@ -61,9 +61,13 @@ public class AddRepeatTest {
         new MainMenuPage(rule)
                 .startBlankForm("Field-List Repeat")
                 .assertText("Person > 1")
+                .assertText("What is their age?")
+                .assertText("What is their name?")
                 .swipeToNextQuestionWithRepeatGroup("Person")
                 .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
-                .assertText("Person > 2");
+                .assertText("Person > 2")
+                .assertText("What is their age?")
+                .assertText("What is their name?");
     }
 
     @Test

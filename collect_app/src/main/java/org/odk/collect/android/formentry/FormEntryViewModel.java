@@ -74,11 +74,13 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
 
         formController.newRepeat();
-
-        try {
-            formController.stepToNextScreenEvent();
-        } catch (JavaRosaException exception) {
-            error.setValue(exception.getCause().getMessage());
+        
+        if (!formController.indexIsInFieldList()) {
+            try {
+                formController.stepToNextScreenEvent();
+            } catch (JavaRosaException exception) {
+                error.setValue(exception.getCause().getMessage());
+            }
         }
     }
 
@@ -88,7 +90,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
 
         analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
-        
+
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;

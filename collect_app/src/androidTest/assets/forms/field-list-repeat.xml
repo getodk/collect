@@ -7,18 +7,23 @@
                 <data id="field_list_repeat">
                     <person>
                         <age/>
+                        <name/>
                     </person>
                 </data>
             </instance>
-            <bind nodeset="age" type="int"/>
+            <bind nodeset="/data/person/age" type="int"/>
+            <bind nodeset="/data/person/name" type="string"/>
         </model>
     </h:head>
     <h:body>
-        <group ref="/data/person" appearance="field-list">
+        <group ref="/data/person">
             <label>Person</label>
-            <repeat nodeset="/data/person">
+            <repeat nodeset="/data/person" appearance="field-list">
                 <input ref="/data/person/age">
                     <label>What is their age?</label>
+                </input>
+                <input ref="/data/person/name">
+                    <label>What is their name?</label>
                 </input>
             </repeat>
         </group>
