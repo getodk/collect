@@ -88,9 +88,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
 
         analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
-
-        FormController formController = this.formController;
-
+        
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
