@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Application;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -36,15 +37,14 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
-import static org.robolectric.shadows.ShadowView.innerText;
 
 /**
  * @author James Knight
@@ -111,32 +111,19 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     @Test
-    public void whenAChoiceValueIsBlank_itIsShownAsBlank() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("1", "")
-                ))
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-        assertThat(innerText(widget.getChoicesList().getChildAt(0)), equalTo(""));
-    }
-
-    @Test
-    public void whenAChoiceValueIsNull_itIsShownAsBlank() {
+    public void whenAChoiceValueIsNull_selecting_doesNotSetAnswer() {
         SelectChoice selectChoice = new SelectChoice(); // The two arg constructor protects against null values
         selectChoice.setTextID("1");
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        selectChoice
-                ))
+                .withSelectChoices(asList(selectChoice))
                 .build();
 
         SelectOneWidget widget = getWidget();
         populateRecyclerView(widget);
-        assertThat(innerText(widget.getChoicesList().getChildAt(0)), equalTo(""));
+
+        clickChoice(widget, 0);
+        assertThat(widget.getAnswer(), nullValue());
     }
 
     @Test
@@ -188,6 +175,14 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 return analytics;
             }
         });
+    }
+
+    private static void clickChoice(SelectOneWidget widget, int index) {
+        ((AudioVideoImageTextLabel) getChoiceView(widget, index).getChildAt(0)).getLabelTextView().performClick();
+    }
+
+    private static ViewGroup getChoiceView(SelectOneWidget widget, int index) {
+        return (ViewGroup) widget.getChoicesList().getChildAt(index);
     }
 
     private static final List<Pair<String, String>> REFERENCES = asList(
