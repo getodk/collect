@@ -32,7 +32,6 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -112,11 +111,12 @@ public class StringWidget extends QuestionWidget {
      * to long-press to paste or perform other text editing functions.
      */
     @Override
-    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
-        ViewGroup questionWidgetContainer = (ViewGroup) getChildAt(0);
-        for (int i = 0; i < questionWidgetContainer.getChildCount(); i++) {
-            View child = questionWidgetContainer.getChildAt(i);
-            if (child.getId() != R.id.answer_container) {
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity, ViewGroup viewGroup) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                registerToClearAnswerOnLongPress(activity, (ViewGroup) child);
+            } else if (!(child instanceof EditText)) {
                 child.setId(getId());
                 activity.registerForContextMenu(child);
             }
