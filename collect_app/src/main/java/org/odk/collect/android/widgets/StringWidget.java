@@ -23,6 +23,7 @@ import android.text.method.TextKeyListener;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -111,9 +113,11 @@ public class StringWidget extends QuestionWidget {
      */
     @Override
     protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
-        for (int i = 0; i < getChildCount(); i++) {
-            if (!(getChildAt(i) instanceof EditText)) {
-                activity.registerForContextMenu(getChildAt(i));
+        ViewGroup questionWidgetContainer = (ViewGroup) getChildAt(0);
+        for (int i = 0; i < questionWidgetContainer.getChildCount(); i++) {
+            View child = questionWidgetContainer.getChildAt(i);
+            if (child.getId() != R.id.answer_container) {
+                activity.registerForContextMenu(child);
             }
         }
     }
