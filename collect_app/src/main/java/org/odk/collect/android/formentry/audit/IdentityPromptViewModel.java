@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.odk.collect.android.logic.FormController;
+
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class IdentityPromptViewModel extends ViewModel {
@@ -15,6 +17,7 @@ public class IdentityPromptViewModel extends ViewModel {
     @Nullable
     private AuditEventLogger auditEventLogger;
     private String identity = "";
+    private String formName;
 
     public IdentityPromptViewModel() {
         updateRequiresIdentity();
@@ -32,8 +35,9 @@ public class IdentityPromptViewModel extends ViewModel {
         return identity;
     }
 
-    public void setAuditEventLogger(AuditEventLogger auditEventLogger) {
-        this.auditEventLogger = auditEventLogger;
+    public void setFormController(FormController formController) {
+        this.formName = formController.getFormTitle();
+        this.auditEventLogger = formController.getAuditEventLogger();
         updateRequiresIdentity();
     }
 
@@ -58,5 +62,9 @@ public class IdentityPromptViewModel extends ViewModel {
 
     private static boolean userIsValid(String user) {
         return user != null && !user.isEmpty() && !isBlank(user);
+    }
+
+    public String getFormTitle() {
+        return formName;
     }
 }

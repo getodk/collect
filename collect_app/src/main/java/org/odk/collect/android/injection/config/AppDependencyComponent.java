@@ -27,6 +27,7 @@ import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
@@ -154,6 +155,8 @@ public interface AppDependencyComponent {
     void inject(AutoSendWorker autoSendWorker);
 
     void inject(StorageMigrationDialog storageMigrationDialog);
+
+    void inject(AdminPasswordDialogFragment adminPasswordDialogFragment);
 
     void inject(SplashScreenActivity splashScreenActivity);
 

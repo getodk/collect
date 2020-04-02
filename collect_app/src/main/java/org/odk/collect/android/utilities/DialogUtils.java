@@ -23,12 +23,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -151,25 +154,38 @@ public final class DialogUtils {
         return alertDialog;
     }
 
-    public static <T extends DialogFragment> T showIfNotShowing(T newDialog, FragmentManager fragmentManager) {
+    /**
+     * It can be a bad idea to interact with Fragment instances. As much as possible we
+     * should be using arguments (for static data the dialog needs), Dagger (for dependencies) or
+     * ViewModel (for non static data) to get things into fragments so as to avoid crashes or
+     * weirdness when they are recreated.
+     */
+    @Deprecated
+    @Nullable
+    public static <T extends DialogFragment> T getDialog(Class<T> dialogClass, FragmentManager fragmentManager) {
+        return (T) fragmentManager.findFragmentByTag(dialogClass.getName());
+    }
+
+    public static <T extends DialogFragment> void showIfNotShowing(Class<T> dialogClass, FragmentManager fragmentManager) {
+        showIfNotShowing(dialogClass, null, fragmentManager);
+    }
+
+    public static <T extends DialogFragment> void showIfNotShowing(Class<T> dialogClass, @Nullable Bundle args, FragmentManager fragmentManager) {
         if (fragmentManager.isStateSaved()) {
-            return newDialog;
+            return;
         }
 
-        String tag = newDialog.getClass().getName();
+        String tag = dialogClass.getName();
         T existingDialog = (T) fragmentManager.findFragmentByTag(tag);
 
         if (existingDialog == null) {
+            T newDialog = createNewInstance(dialogClass, args);
             newDialog.show(fragmentManager.beginTransaction(), tag);
 
             // We need to execute this transaction. Otherwise a follow up call to this method
             // could happen before the Fragment exists in the Fragment Manager and so the
             // call to findFragmentByTag would return null and result in second dialog being show.
             fragmentManager.executePendingTransactions();
-
-            return newDialog;
-        } else {
-            return existingDialog;
         }
     }
 
@@ -177,6 +193,18 @@ public final class DialogUtils {
         DialogFragment existingDialog = (DialogFragment) fragmentManager.findFragmentByTag(dialogClazz.getName());
         if (existingDialog != null) {
             existingDialog.dismissAllowingStateLoss();
+        }
+    }
+
+    @NotNull
+    private static <T extends DialogFragment> T createNewInstance(Class<T> dialogClass, Bundle args) {
+        try {
+            T instance = dialogClass.newInstance();
+            instance.setArguments(args);
+            return instance;
+        } catch (IllegalAccessException | InstantiationException e) {
+            // These would mean we have a non zero arg constructor for a Fragment
+            throw new RuntimeException(e);
         }
     }
 }

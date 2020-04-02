@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.preferences;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,35 +14,29 @@ import androidx.fragment.app.DialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 
-public class AdminPasswordDialog extends DialogFragment {
+import javax.inject.Inject;
 
-    public interface AdminPasswordDialogCallback {
-        void onCorrectAdminPassword(Action action);
-        void onIncorrectAdminPassword();
-    }
+public class AdminPasswordDialogFragment extends DialogFragment {
+
+    public static final String ARG_ACTION = "ACTION";
 
     public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION, SCAN_QR_CODE }
 
+    private EditText input;
     private AdminPasswordDialogCallback callback;
 
-    private final Action action;
-
-    private final AdminPasswordProvider adminPasswordProvider;
-
-    public static AdminPasswordDialog create(AdminPasswordProvider adminPasswordProvider, Action action) {
-        return new AdminPasswordDialog(adminPasswordProvider, action);
-    }
-
-    private AdminPasswordDialog(AdminPasswordProvider adminPasswordProvider, Action action) {
-        this.adminPasswordProvider = adminPasswordProvider;
-        this.action = action;
-    }
+    @Inject
+    AdminPasswordProvider adminPasswordProvider;
 
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
+
+        DaggerUtils.getComponent(context).inject(this);
+
         if (context instanceof AdminPasswordDialogCallback) {
             callback = (AdminPasswordDialogCallback) context;
         }
@@ -62,7 +56,7 @@ public class AdminPasswordDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View dialogView = getActivity().getLayoutInflater().inflate(R.layout.admin_password_dialog_layout, null);
         CheckBox checkBox = dialogView.findViewById(R.id.checkBox);
-        EditText input = dialogView.findViewById(R.id.editText);
+        input = dialogView.findViewById(R.id.editText);
 
         checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
             if (!checkBox.isChecked()) {
@@ -77,7 +71,7 @@ public class AdminPasswordDialog extends DialogFragment {
                 .setTitle(getString(R.string.enter_admin_password))
                 .setPositiveButton(getString(R.string.ok), (dialog, whichButton) -> {
                             if (adminPasswordProvider.getAdminPassword().equals(input.getText().toString())) {
-                                callback.onCorrectAdminPassword(action);
+                                callback.onCorrectAdminPassword((Action) getArguments().getSerializable("ACTION"));
                             } else {
                                 callback.onIncorrectAdminPassword();
                             }
@@ -85,5 +79,14 @@ public class AdminPasswordDialog extends DialogFragment {
                         })
                 .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> dismiss())
                 .create();
+    }
+
+    public EditText getInput() {
+        return input;
+    }
+
+    public interface AdminPasswordDialogCallback {
+        void onCorrectAdminPassword(Action action);
+        void onIncorrectAdminPassword();
     }
 }

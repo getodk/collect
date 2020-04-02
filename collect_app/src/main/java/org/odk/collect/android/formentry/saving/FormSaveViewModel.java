@@ -182,7 +182,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
-    public LiveData<SaveResult> getSavedResult() {
+    public LiveData<SaveResult> getSaveResult() {
         return saveResult;
     }
 
@@ -195,6 +195,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 && auditEventLogger.isEditing()
                 && auditEventLogger.isChangeReasonRequired()
                 && auditEventLogger.isChangesMade();
+    }
+
+    public String getFormName() {
+        return formController.getFormTitle();
     }
 
     public static class SaveResult {

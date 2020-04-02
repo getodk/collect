@@ -11,7 +11,10 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.IdlingResourceRule;
+import org.odk.collect.android.support.IntentServiceIdlingResource;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.StorageMigrationDialogPage;
@@ -31,6 +34,7 @@ public class StorageMigrationTest {
             ))
             .around(new ResetStateRule(false))
             .around(new CopyFormRule("formWithExternalFiles.xml", Arrays.asList("formWithExternalFiles-media/itemsets.csv", "formWithExternalFiles-media/fruits.xml", "formWithExternalFiles-media/fruits.csv", "formWithExternalFiles-media/last-saved.xml"), true))
+            .around(new IdlingResourceRule(new IntentServiceIdlingResource(StorageMigrationService.SERVICE_NAME)))
             .around(rule);
 
     @Test
@@ -144,3 +148,4 @@ public class StorageMigrationTest {
                 .rotateToPortrait(new StorageMigrationDialogPage(rule));
     }
 }
+
