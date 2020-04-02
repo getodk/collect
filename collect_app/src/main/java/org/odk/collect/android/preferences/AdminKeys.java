@@ -25,45 +25,41 @@ public final class AdminKeys {
     public static final String KEY_DELETE_SAVED                 = "delete_saved";
     public static final String KEY_QR_CODE_SCANNER              = "qr_code_scanner";
 
-    // form entry
-    public static final String KEY_SAVE_MID                     = "save_mid";
-    public static final String KEY_JUMP_TO                      = "jump_to";
-    public static final String KEY_CHANGE_LANGUAGE              = "change_language";
-    public static final String KEY_ACCESS_SETTINGS              = "access_settings";
-    public static final String KEY_SAVE_AS                      = "save_as";
-    public static final String KEY_MARK_AS_FINALIZED            = "mark_as_finalized";
-
-    // server
-    static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
-    static final String KEY_IMPORT_SETTINGS                     = "import_settings";
     private static final String KEY_CHANGE_SERVER               = "change_server";
-    private static final String KEY_CHANGE_SUBMISSION_TRANSPORT = "change_submission_transport";
-    private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
-    // client
+    private static final String KEY_APP_THEME                   = "change_app_theme";
+    private static final String KEY_APP_LANGUAGE                = "change_app_language";
+    private static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
+    private static final String KEY_NAVIGATION                  = "change_navigation";
+    private static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
+
+    static final String KEY_MAPS                                = "maps";
+
     private static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     private static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
     private static final String KEY_HIDE_OLD_FORM_VERSIONS      = "hide_old_form_versions";
-    private static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
+    private static final String KEY_AUTOSEND                    = "change_autosend";
+    private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     private static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
+    private static final String KEY_CONSTRAINT_BEHAVIOR         = "change_constraint_behavior";
     private static final String KEY_HIGH_RESOLUTION             = "high_resolution";
     private static final String KEY_IMAGE_SIZE                  = "image_size";
     private static final String KEY_GUIDANCE_HINT               = "guidance_hint";
-    private static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
-    private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
-    private static final String KEY_APP_LANGUAGE                = "change_app_language";
-    private static final String KEY_APP_THEME                   = "change_app_theme";
-
-    private static final String KEY_AUTOSEND                    = "change_autosend";
-
-    private static final String KEY_NAVIGATION                  = "change_navigation";
-    static final String KEY_CONSTRAINT_BEHAVIOR                 = "change_constraint_behavior";
-
-    static final String KEY_MAPS                        = "maps";
-
+    private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
     private static final String KEY_ANALYTICS                   = "analytics";
+
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
+    public static final String KEY_ACCESS_SETTINGS              = "access_settings";
+    public static final String KEY_CHANGE_LANGUAGE              = "change_language";
+    public static final String KEY_JUMP_TO                      = "jump_to";
+    public static final String KEY_SAVE_MID                     = "save_mid";
+    public static final String KEY_SAVE_AS                      = "save_as";
+    public static final String KEY_MARK_AS_FINALIZED            = "mark_as_finalized";
+
+    static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
+    static final String KEY_IMPORT_SETTINGS                     = "import_settings";
+    private static final String KEY_CHANGE_SUBMISSION_TRANSPORT = "change_submission_transport";
     static final String ALLOW_OTHER_WAYS_OF_EDITING_FORM        = "allow_other_ways_of_editing_form";
 
     /**

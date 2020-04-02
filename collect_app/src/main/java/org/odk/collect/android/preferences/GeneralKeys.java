@@ -8,50 +8,21 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public final class GeneralKeys {
+    // server_preferences.xml
+    public static final String KEY_PROTOCOL                 = "protocol";
 
     // aggregate_preferences.xml
     public static final String KEY_SERVER_URL               = "server_url";
     public static final String KEY_USERNAME                 = "username";
     public static final String KEY_PASSWORD                 = "password";
 
-    // form_management_preferences.xml
-    public static final String KEY_AUTOSEND                 = "autosend";
-    public static final String KEY_DELETE_AFTER_SEND        = "delete_send";
-    public static final String KEY_COMPLETED_DEFAULT        = "default_completed";
-    public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
-    public static final String KEY_HIGH_RESOLUTION          = "high_resolution";
-    public static final String KEY_IMAGE_SIZE               = "image_size";
-    public static final String KEY_GUIDANCE_HINT            = "guidance_hint";
-    public static final String KEY_INSTANCE_SYNC            = "instance_sync";
-    public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
-    public static final String KEY_AUTOMATIC_UPDATE         = "automatic_update";
-    public static final String KEY_HIDE_OLD_FORM_VERSIONS   = "hide_old_form_versions";
-    public static final String KEY_BACKGROUND_LOCATION      = "background_location";
-
-    // form_metadata_preferences.xml
-    public static final String KEY_METADATA_USERNAME        = "metadata_username";
-    public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
-    public static final String KEY_METADATA_EMAIL           = "metadata_email";
-    public static final String KEY_INSTALL_ID               = "metadata_installid";
-
-    // google_preferences.xml
-    public static final String KEY_SELECTED_GOOGLE_ACCOUNT  = "selected_google_account";
-    public static final String KEY_GOOGLE_SHEETS_URL        = "google_sheets_url";
-
-    // identity_preferences.xml
-    static final String KEY_FORM_METADATA                   = "form_metadata";
-    public static final String KEY_ANALYTICS                = "analytics";
-
     // other_preferences.xml
     public static final String KEY_FORMLIST_URL             = "formlist_url";
     public static final String KEY_SUBMISSION_URL           = "submission_url";
 
-    // server_preferences.xml
-    public static final String KEY_PROTOCOL                 = "protocol";
-    public static final String KEY_SMS_GATEWAY              = "sms_gateway";
-    public static final String KEY_SUBMISSION_TRANSPORT_TYPE = "submission_transport_type";
-    public static final String KEY_TRANSPORT_PREFERENCE      = "submission_transport_preference";
-    public static final String KEY_SMS_PREFERENCE            = "sms_preference";
+    // google_preferences.xml
+    public static final String KEY_SELECTED_GOOGLE_ACCOUNT  = "selected_google_account";
+    public static final String KEY_GOOGLE_SHEETS_URL        = "google_sheets_url";
 
     // user_interface_preferences.xml
     public static final String KEY_APP_THEME                = "appTheme";
@@ -62,21 +33,38 @@ public final class GeneralKeys {
     public static final String KEY_SPLASH_PATH              = "splashPath";
 
     // map_preferences.xml
-    public static final String CATEGORY_BASEMAP             = "category_basemap";
     public static final String KEY_BASEMAP_SOURCE           = "basemap_source";
-    public static final String BASEMAP_SOURCE_GOOGLE        = "google";
-    public static final String BASEMAP_SOURCE_MAPBOX        = "mapbox";
-    public static final String BASEMAP_SOURCE_OSM           = "osm";
-    public static final String BASEMAP_SOURCE_USGS          = "usgs";
-    public static final String BASEMAP_SOURCE_STAMEN        = "stamen";
-    public static final String BASEMAP_SOURCE_CARTO         = "carto";
 
-    public static final String KEY_REFERENCE_LAYER          = "reference_layer";
-
+    // basemap styles
     public static final String KEY_GOOGLE_MAP_STYLE         = "google_map_style";
     public static final String KEY_MAPBOX_MAP_STYLE         = "mapbox_map_style";
     public static final String KEY_USGS_MAP_STYLE           = "usgs_map_style";
     public static final String KEY_CARTO_MAP_STYLE          = "carto_map_style";
+
+    public static final String KEY_REFERENCE_LAYER          = "reference_layer";
+
+    // form_management_preferences.xml
+    public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
+    public static final String KEY_AUTOMATIC_UPDATE         = "automatic_update";
+    public static final String KEY_HIDE_OLD_FORM_VERSIONS   = "hide_old_form_versions";
+    public static final String KEY_AUTOSEND                 = "autosend";
+    public static final String KEY_DELETE_AFTER_SEND        = "delete_send";
+    public static final String KEY_COMPLETED_DEFAULT        = "default_completed";
+    public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
+    public static final String KEY_HIGH_RESOLUTION          = "high_resolution";
+    public static final String KEY_IMAGE_SIZE               = "image_size";
+    public static final String KEY_GUIDANCE_HINT            = "guidance_hint";
+    public static final String KEY_INSTANCE_SYNC            = "instance_sync";
+
+    // identity_preferences.xml
+    public static final String KEY_ANALYTICS                = "analytics";
+
+    // form_metadata_preferences.xml
+    public static final String KEY_METADATA_USERNAME        = "metadata_username";
+    public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
+    public static final String KEY_METADATA_EMAIL           = "metadata_email";
+
+    static final String KEY_FORM_METADATA                   = "form_metadata";
 
     // other keys
     public static final String KEY_LAST_VERSION             = "lastVersion";
@@ -85,8 +73,9 @@ public final class GeneralKeys {
 
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
-    static final String KEY_AUTOSEND_WIFI                   = "autosend_wifi";
-    static final String KEY_AUTOSEND_NETWORK                = "autosend_network";
+    public static final String KEY_INSTALL_ID               = "metadata_installid";
+
+    public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 
     // values
     public static final String NAVIGATION_SWIPE             = "swipe";
@@ -94,6 +83,25 @@ public final class GeneralKeys {
     public static final String NAVIGATION_BUTTONS           = "buttons";
     private static final String AUTOSEND_OFF                = "off";
     private static final String GUIDANCE_HINT_OFF           = "no";
+    static final String KEY_AUTOSEND_WIFI                   = "autosend_wifi";
+    static final String KEY_AUTOSEND_NETWORK                = "autosend_network";
+
+    // basemap section
+    public static final String CATEGORY_BASEMAP             = "category_basemap";
+
+    // basemap source values
+    public static final String BASEMAP_SOURCE_GOOGLE        = "google";
+    public static final String BASEMAP_SOURCE_MAPBOX        = "mapbox";
+    public static final String BASEMAP_SOURCE_OSM           = "osm";
+    public static final String BASEMAP_SOURCE_USGS          = "usgs";
+    public static final String BASEMAP_SOURCE_STAMEN        = "stamen";
+    public static final String BASEMAP_SOURCE_CARTO         = "carto";
+
+    // Not currently used
+    public static final String KEY_SMS_GATEWAY              = "sms_gateway";
+    public static final String KEY_SUBMISSION_TRANSPORT_TYPE = "submission_transport_type";
+    public static final String KEY_TRANSPORT_PREFERENCE      = "submission_transport_preference";
+    public static final String KEY_SMS_PREFERENCE            = "sms_preference";
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
