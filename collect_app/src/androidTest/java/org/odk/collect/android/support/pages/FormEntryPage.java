@@ -240,4 +240,20 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withText(R.string.quit_entry)).check(matches(isDisplayed()));
         return this;
     }
+
+    public FormEntryPage longPressOnView(int id, int index) {
+        onView(withIndex(withId(id), index)).perform(longClick());
+        return this;
+    }
+
+    public FormEntryPage longPressOnView(String text) {
+        onView(withText(text)).perform(longClick());
+        return this;
+    }
+
+    public FormEntryPage removeResponse() {
+        onView(withText(R.string.clear_answer)).perform(click());
+        onView(withText(R.string.discard_answer)).perform(click());
+        return this;
+    }
 }

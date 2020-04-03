@@ -108,6 +108,7 @@ public abstract class QuestionWidget
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
+        setId(View.generateViewId());
         this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
@@ -138,7 +139,7 @@ public abstract class QuestionWidget
         }
 
         if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
-            registerToClearAnswerOnLongPress((FormEntryActivity) context);
+            registerToClearAnswerOnLongPress((FormEntryActivity) context, this);
         }
     }
 
@@ -408,7 +409,7 @@ public abstract class QuestionWidget
      * user long presses on it. Widget subclasses may override this if some or all of their
      * components need to intercept long presses.
      */
-    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity, ViewGroup viewGroup) {
         activity.registerForContextMenu(this);
     }
 

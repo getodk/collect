@@ -23,6 +23,7 @@ import android.text.method.TextKeyListener;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -110,10 +111,14 @@ public class StringWidget extends QuestionWidget {
      * to long-press to paste or perform other text editing functions.
      */
     @Override
-    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity) {
-        for (int i = 0; i < getChildCount(); i++) {
-            if (!(getChildAt(i) instanceof EditText)) {
-                activity.registerForContextMenu(getChildAt(i));
+    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity, ViewGroup viewGroup) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                registerToClearAnswerOnLongPress(activity, (ViewGroup) child);
+            } else if (!(child instanceof EditText)) {
+                child.setId(getId());
+                activity.registerForContextMenu(child);
             }
         }
     }

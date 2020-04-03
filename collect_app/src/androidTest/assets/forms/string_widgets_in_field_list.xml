@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>fl</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="stringwidgets">
+                    <my-group>
+                        <question1 />
+                        <question2 />
+                    </my-group>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/my-group/question1" type="string" />
+            <bind nodeset="/data/my-group/question2" type="int" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <group appearance="field-list" ref="/data/my-group">
+            <label>My group</label>
+            <input ref="/data/my-group/question1">
+                <label>Question1</label>
+            </input>
+            <input ref="/data/my-group/question2">
+                <label>Question2</label>
+            </input>
+        </group>
+    </h:body>
+</h:html>
