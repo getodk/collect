@@ -32,6 +32,7 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -114,7 +115,10 @@ public class StringWidget extends QuestionWidget {
     protected void registerToClearAnswerOnLongPress(FormEntryActivity activity, ViewGroup viewGroup) {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             View child = viewGroup.getChildAt(i);
-            if (child instanceof ViewGroup) {
+            if (child.getId() == R.id.help_layout) {
+                child.setId(getId());
+                activity.registerForContextMenu(child);
+            } else if (child instanceof ViewGroup) {
                 registerToClearAnswerOnLongPress(activity, (ViewGroup) child);
             } else if (!(child instanceof EditText)) {
                 child.setId(getId());
