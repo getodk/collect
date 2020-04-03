@@ -67,7 +67,7 @@ public class ThemeUtilsTests {
         assertEquals(themeUtils.getAppTheme(), R.style.Theme_Collect_Light);
         assertEquals(themeUtils.getSettingsTheme(), R.style.Theme_Collect_Settings_Light);
         assertEquals(themeUtils.getBottomDialogTheme(), R.style.Theme_Collect_MaterialDialogSheet_Light);
-        assertEquals(themeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Light_Dialog);
+        assertEquals(themeUtils.getMaterialDialogTheme(), R.style.Theme_Collect_Light_Dialog);
         assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Light_Dialog);
     }
 
@@ -77,7 +77,7 @@ public class ThemeUtilsTests {
         assertEquals(themeUtils.getAppTheme(), R.style.Theme_Collect_Dark);
         assertEquals(themeUtils.getSettingsTheme(), R.style.Theme_Collect_Settings_Dark);
         assertEquals(themeUtils.getBottomDialogTheme(), R.style.Theme_Collect_MaterialDialogSheet_Dark);
-        assertEquals(themeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Dialog);
+        assertEquals(themeUtils.getMaterialDialogTheme(), R.style.Theme_Collect_Dark_Dialog);
         assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Dialog);
     }
 

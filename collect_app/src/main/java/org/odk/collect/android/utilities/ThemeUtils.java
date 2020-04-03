@@ -67,9 +67,9 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getMaterialDialogTheme() {
-        return isDarkTheme() ?
-                android.R.style.Theme_Material_Dialog :
-                android.R.style.Theme_Material_Light_Dialog;
+        return isDarkTheme()
+                ? R.style.Theme_Collect_Dark_Dialog
+                : R.style.Theme_Collect_Light_Dialog;
     }
 
     @StyleRes

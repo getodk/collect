@@ -71,4 +71,8 @@
     <style name="Widget.Collect.SearchView.Dark" parent="Widget.AppCompat.SearchView">
         <item name="searchHintIcon">@null</item>
     </style>
+
+    <style name="Theme.Collect.Dark.Dialog" parent="android:Theme.Material.Dialog">
+        <item name="android:colorAccent">?attr/colorSecondary</item>
+    </style>
 </resources>
