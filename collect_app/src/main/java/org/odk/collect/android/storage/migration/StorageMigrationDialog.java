@@ -1,6 +1,7 @@
 package org.odk.collect.android.storage.migration;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,11 +15,13 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
+import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
@@ -133,7 +136,13 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     private void showMoreDetails() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://forum.opendatakit.org/t/25268"));
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException | SecurityException e) {
+            intent = new Intent(getContext(), WebViewActivity.class);
+            intent.putExtra(CustomTabHelper.OPEN_URL, "https://forum.opendatakit.org/t/25268");
+            startActivity(intent);
+        }
     }
 
     private void disableDialog() {
