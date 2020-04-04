@@ -23,7 +23,7 @@ public class TabAdapter extends FragmentStateAdapter {
                 return new ShowQRCodeFragment();
             default:
                 // should never reach here
-                return null;
+                throw new IllegalArgumentException("Fragment position out of bounds");
         }
     }
 

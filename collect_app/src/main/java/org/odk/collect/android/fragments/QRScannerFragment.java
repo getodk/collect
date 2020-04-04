@@ -48,12 +48,6 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
     private BeepManager beepManager;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
         beepManager = new BeepManager(getActivity());
