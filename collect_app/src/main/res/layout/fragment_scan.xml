@@ -21,5 +21,6 @@
         android:padding="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/turn_on_flashlight" />
+        android:text="@string/turn_on_flashlight"
+        android:layout_margin="@dimen/margin_large"/>
 </RelativeLayout>

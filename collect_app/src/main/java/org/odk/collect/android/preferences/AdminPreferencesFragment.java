@@ -140,7 +140,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     break;
 
                 case KEY_IMPORT_SETTINGS:
-                    Intent pref = new Intent(getActivity(), QRCodeTabs.class);
+                    Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
                     startActivity(pref);
                     break;
                 case "save_legacy_settings":

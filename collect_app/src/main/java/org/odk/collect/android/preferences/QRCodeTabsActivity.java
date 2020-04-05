@@ -33,7 +33,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
-public class QRCodeTabs extends CollectAbstractActivity {
+public class QRCodeTabsActivity extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
     private final String[] fragmentTitleList = {"Scan", "QR Code"};
 

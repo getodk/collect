@@ -15,6 +15,7 @@ package org.odk.collect.android.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,7 +43,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.QRCodeTabs;
+import org.odk.collect.android.preferences.QRCodeTabsActivity;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -90,6 +91,10 @@ public class ShowQRCodeFragment extends Fragment {
 
     @Inject
     public Analytics analytics;
+    @Inject
+    public AdminSharedPreferences adminSharedPreferences;
+    @Inject
+    public GeneralSharedPreferences generalSharedPreferences;
 
     @Nullable
     @Override
@@ -98,16 +103,16 @@ public class ShowQRCodeFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-        passwordsSet[0] = !((String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW)).isEmpty();
-        passwordsSet[1] = !((String) GeneralSharedPreferences.getInstance().get(KEY_PASSWORD)).isEmpty();
+        passwordsSet[0] = !((String) adminSharedPreferences.get(KEY_ADMIN_PW)).isEmpty();
+        passwordsSet[1] = !((String) generalSharedPreferences.get(KEY_PASSWORD)).isEmpty();
         generateCode();
         return view;
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        DaggerUtils.getComponent(activity).inject(this);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     private void generateCode() {
@@ -216,7 +221,7 @@ public class ShowQRCodeFragment extends Fragment {
                             String response = QRCodeUtils.decodeFromBitmap(bitmap);
                             if (response != null) {
                                 qrCodeFound = true;
-                                QRCodeTabs.applySettings(getActivity(), response);
+                                QRCodeTabsActivity.applySettings(getActivity(), response);
                             }
                         }
                     }
