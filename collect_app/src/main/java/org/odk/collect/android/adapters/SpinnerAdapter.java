@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.FontSizeProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
@@ -40,7 +40,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
         setBackgroundColor(convertView);
 
         TextView tv = convertView.findViewById(android.R.id.text1);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, FontSizeProvider.getQuestionFontsize());
         tv.setPadding(20, 10, 10, 10);
         tv.setText(position == items.length - 1
                 ? parent.getContext().getString(R.string.clear_answer)
@@ -69,7 +69,7 @@ public class SpinnerAdapter extends ArrayAdapter<CharSequence> {
         }
 
         TextView tv = convertView.findViewById(android.R.id.text1);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, FontSizeProvider.getQuestionFontsize());
         tv.setPadding(10, 10, 10, 10);
         tv.setText(items[position]);
 
