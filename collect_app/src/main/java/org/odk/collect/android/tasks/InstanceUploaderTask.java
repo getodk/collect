@@ -150,7 +150,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
      * finalized form is written messages to {@link #messagesByInstanceId}. In the case of an
      * authentication request from the server, {@link #authRequestingServer} is set instead.
      */
-    static class Outcome {
+    public static class Outcome {
         /**
          * The URI for the server that requested authentication when the latest finalized form was
          * attempted to be sent. This URI may not match the server specified in the app settings or
@@ -160,7 +160,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
          * When this field is set, the overall submission attempt is halted so that the user can be
          * asked for credentials. Once credentials are provided, the submission attempt resumes.
          */
-        Uri authRequestingServer;
+        public Uri authRequestingServer;
 
 
         /**
@@ -176,6 +176,6 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
          * TODO: Consider mapping to something machine-readable like a message ID or status ID
          * instead of a mix of localized and non-localized user-facing strings.
          */
-        HashMap<String, String> messagesByInstanceId = new HashMap<>();
+        public HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 }

@@ -35,7 +35,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.test.FormLoadingUtils;
+import org.odk.collect.android.support.FormLoadingUtils;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -49,7 +49,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.odk.collect.android.support.CollectHelpers.waitForFormController;
-import static org.odk.collect.android.test.FormLoadingUtils.ALL_WIDGETS_FORM;
+import static org.odk.collect.android.support.FormLoadingUtils.ALL_WIDGETS_FORM;
 
 /**
  * Tests that visibility of the next and back buttons is correctly linked to the navigation

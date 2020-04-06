@@ -1,4 +1,4 @@
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.instrumented.tasks;
 
 import android.Manifest;
 
@@ -12,6 +12,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.tasks.FormLoaderTask;
 
 import java.io.File;
 import java.util.Arrays;

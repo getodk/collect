@@ -13,7 +13,7 @@ import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
-import org.odk.collect.android.test.FormLoadingUtils;
+import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.security.SecureRandom;
@@ -25,7 +25,7 @@ import timber.log.Timber;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
-import static org.odk.collect.android.test.FormLoadingUtils.ALL_WIDGETS_FORM;
+import static org.odk.collect.android.support.FormLoadingUtils.ALL_WIDGETS_FORM;
 
 /**
  * Generates submissions and then checks to see if the device runs out of memory

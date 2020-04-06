@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.test;
+package org.odk.collect.android.support;
 
 import android.content.ContentValues;
 
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
-import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
 

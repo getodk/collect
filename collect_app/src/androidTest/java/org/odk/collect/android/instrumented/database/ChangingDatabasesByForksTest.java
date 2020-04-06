@@ -10,7 +10,7 @@ import org.odk.collect.android.instrumented.database.helpers.SqlLiteHelperTest;
 import java.io.File;
 import java.io.IOException;
 
-import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 public class ChangingDatabasesByForksTest extends SqlLiteHelperTest {
 

@@ -39,7 +39,7 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.test.FormLoadingUtils;
+import org.odk.collect.android.support.FormLoadingUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,7 +72,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
-import static org.odk.collect.android.test.CustomMatchers.withIndex;
+import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
 public class FieldListUpdateTest {
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";

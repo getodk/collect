@@ -1,4 +1,4 @@
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.instrumented.tasks;
 
 import android.net.Uri;
 
@@ -11,7 +11,9 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.test.MockedServerTest;
+import org.odk.collect.android.tasks.InstanceServerUploaderTask;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.support.MockedServerTest;
 
 import java.io.File;
 
@@ -21,10 +23,10 @@ import okhttp3.mockwebserver.RecordedRequest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.test.TestUtils.assertMatches;
-import static org.odk.collect.android.test.TestUtils.cleanUpTempFiles;
-import static org.odk.collect.android.test.TestUtils.createTempFile;
-import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
+import static org.odk.collect.android.support.TestUtils.assertMatches;
+import static org.odk.collect.android.support.TestUtils.cleanUpTempFiles;
+import static org.odk.collect.android.support.TestUtils.createTempFile;
+import static org.odk.collect.android.support.TestUtils.resetInstancesContentProvider;
 
 public class InstanceServerUploaderTaskTest extends MockedServerTest {
 

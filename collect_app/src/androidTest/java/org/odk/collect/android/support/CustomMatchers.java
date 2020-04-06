@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.test;
+package org.odk.collect.android.support;
 
 import android.view.View;
 import android.widget.SeekBar;

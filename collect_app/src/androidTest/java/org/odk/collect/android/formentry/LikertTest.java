@@ -12,7 +12,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.test.FormLoadingUtils;
+import org.odk.collect.android.support.FormLoadingUtils;
 
 import java.util.Collections;
 
@@ -28,7 +28,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
-import static org.odk.collect.android.test.CustomMatchers.withIndex;
+import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
 public class LikertTest {
     private static final String LIKERT_TEST_FORM = "likert_test.xml";

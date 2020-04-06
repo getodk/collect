@@ -1,4 +1,4 @@
-package org.odk.collect.android.test;
+package org.odk.collect.android.support;
 
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
@@ -15,8 +15,8 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-import static org.odk.collect.android.test.TestUtils.backupPreferences;
-import static org.odk.collect.android.test.TestUtils.restorePreferences;
+import static org.odk.collect.android.support.TestUtils.backupPreferences;
+import static org.odk.collect.android.support.TestUtils.restorePreferences;
 
 public abstract class MockedServerTest {
     private Map<String, ?> prefsBackup;

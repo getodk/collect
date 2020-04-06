@@ -82,7 +82,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private ExternalDataManager externalDataManager;
     private FormDef formDef;
 
-    protected static class FECWrapper {
+    public static class FECWrapper {
         FormController controller;
         boolean usedSavepoint;
 
@@ -91,7 +91,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             this.usedSavepoint = usedSavepoint;
         }
 
-        protected FormController getController() {
+        public FormController getController() {
             return controller;
         }
 

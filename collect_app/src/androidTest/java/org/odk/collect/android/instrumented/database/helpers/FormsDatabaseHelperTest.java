@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
 import static org.odk.collect.android.instrumented.database.helpers.FormsDatabaseHelperTest.Action.DOWNGRADE;
 import static org.odk.collect.android.instrumented.database.helpers.FormsDatabaseHelperTest.Action.UPGRADE;
-import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
 public class FormsDatabaseHelperTest extends SqlLiteHelperTest {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.settings;
+package org.odk.collect.android.instrumented.settings;
 
 import android.graphics.Bitmap;
 import androidx.test.runner.AndroidJUnit4;
