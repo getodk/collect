@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.instrumented.utilities;
 
 import org.javarosa.core.model.FormIndex;
 import org.junit.Test;

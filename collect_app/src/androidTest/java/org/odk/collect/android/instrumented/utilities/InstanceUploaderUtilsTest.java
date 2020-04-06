@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.instrumented.utilities;
 
 import android.Manifest;
 
@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,11 +15,11 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -41,7 +42,7 @@ public class InstanceUploaderUtilsTest {
     @Test
     public void getUploadResultMessageTest() {
         fillTestDatabase();
-        assertEquals(getExpectedResultMsg(), InstanceUploaderUtils.getUploadResultMessage(ApplicationProvider.getApplicationContext(), getTestUploadResult()));
+        Assert.assertEquals(getExpectedResultMsg(), InstanceUploaderUtils.getUploadResultMessage(ApplicationProvider.getApplicationContext(), getTestUploadResult()));
         instancesDao.deleteInstancesDatabase();
     }
 

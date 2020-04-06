@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.instrumented.utilities;
 
 import android.content.Context;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.utilities.DateTimeUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -73,7 +75,7 @@ public class DateTimeUtilsTest {
         calendar.set(1991, 9, 20, 14, 0, 0);
         Date date = calendar.getTime();
 
-        assertEquals("Oct 20, 1991", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, false, context));
+        Assert.assertEquals("Oct 20, 1991", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, false, context));
         assertEquals("Oct 20, 1991, 14:00", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, true, context));
 
         assertEquals("9 Tikimt 1984 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, ethiopianDatePickerDetails, false, context));
