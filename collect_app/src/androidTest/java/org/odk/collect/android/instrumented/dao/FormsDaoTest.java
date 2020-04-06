@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.dao;
+package org.odk.collect.android.instrumented.dao;
 
 import android.database.Cursor;
 
@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
