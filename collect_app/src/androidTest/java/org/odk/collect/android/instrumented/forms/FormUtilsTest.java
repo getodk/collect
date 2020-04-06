@@ -1,4 +1,4 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.android.instrumented.forms;
 
 import android.Manifest;
 
@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.forms.FormUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CopyFormRule;
