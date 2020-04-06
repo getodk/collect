@@ -205,8 +205,8 @@ public class InstanceServerUploader extends InstanceUploader {
                     if (messageParser.isValid()) {
                         exception = new UploadException(FAIL + messageParser.getMessageResponse());
                     } else {
-                        exception = new UploadException(FAIL + postResult.getReasonPhrase()
-                                + " (" + responseCode + ") at " + urlString);
+                        Timber.i(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                        exception = new UploadException("Failed to upload. Please make sure the form is configured to accept submissions on the server");
                     }
 
                 }
