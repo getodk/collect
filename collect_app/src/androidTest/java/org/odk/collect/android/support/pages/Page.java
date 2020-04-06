@@ -123,9 +123,15 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {
-        onView(withText(message))
-                .inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
+        try {
+            onView(withText(message))
+                    .inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView()))))
+                    .check(matches(isDisplayed()));
+        } catch (RuntimeException e) {
+            // The exception we get out of this is really misleading so cleaning it up here
+            throw new RuntimeException("No Toast with text \"" + message + "\" shown on screen!");
+        }
+
 
         return (T) this;
     }
