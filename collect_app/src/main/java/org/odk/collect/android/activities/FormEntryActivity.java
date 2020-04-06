@@ -1092,6 +1092,28 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return true;
     }
 
+    // The method saves questions one by one in order to support calculations in field-list groups
+    private void saveAnswersForCurrentScreen(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
+        FormController formController = getFormController();
+        ODKView currentView = getCurrentViewIfODKView();
+        if (formController == null || currentView == null) {
+            return;
+        }
+
+        int index = 0;
+        for (Map.Entry<FormIndex, IAnswerData> answer : currentView.getAnswers().entrySet()) {
+            // Questions with calculates will have their answers updated as the questions they depend on are saved
+            if (!isQuestionRecalculated(mutableQuestionsBeforeSave[index], immutableQuestionsBeforeSave.get(index))) {
+                try {
+                    formController.saveOneScreenAnswer(answer.getKey(), answer.getValue(), false);
+                } catch (JavaRosaException e) {
+                    Timber.w(e);
+                }
+            }
+            index++;
+        }
+    }
+
     /**
      * Clears the answer on the screen.
      */
@@ -2808,10 +2830,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
         }
 
-        // Re-evaluate the form with the newly-changed value and store questions in a map by FormIndex
-        // to later quickly match questions that are still relevant with the corresponding question
-        // before saving.
-        saveAnswersForCurrentScreen(false);
+        saveAnswersForCurrentScreen(questionsBeforeSave, immutableQuestionsBeforeSave);
+
         FormEntryPrompt[] questionsAfterSave = Collect.getInstance().getFormController().getQuestionPrompts();
 
         Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
@@ -2860,6 +2880,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         false, targetIndex));
             }
         }
+    }
+
+    // If an answer has changed after saving one of previous answers that means it has been recalculated automatically
+    private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
+        return !(mutableQuestionBeforeSave.getAnswerText() == null && immutableQuestionBeforeSave.getAnswerText() == null
+                || mutableQuestionBeforeSave.getAnswerText().equals(immutableQuestionBeforeSave.getAnswerText()));
     }
 
     /**

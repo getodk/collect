@@ -803,23 +803,26 @@ public class FormController {
                                                  boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
-                // Within a group, you can only save for question events
-                if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
-                    int saveStatus;
-                    IAnswerData answer = answers.get(index);
-                    if (evaluateConstraints) {
-                        saveStatus = answerQuestion(index, answer);
-                        if (saveStatus != FormEntryController.ANSWER_OK) {
-                            return new FailedConstraint(index, saveStatus);
-                        }
-                    } else {
-                        saveAnswer(index, answer);
-                    }
-                } else {
-                    Timber.w("Attempted to save an index referencing something other than a question: %s",
-                            index.getReference().toString());
-                }
+                saveOneScreenAnswer(index, answers.get(index), evaluateConstraints);
             }
+        }
+        return null;
+    }
+
+    public FailedConstraint saveOneScreenAnswer(FormIndex index, IAnswerData answer, boolean evaluateConstraints) throws JavaRosaException {
+        // Within a group, you can only save for question events
+        if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
+            if (evaluateConstraints) {
+                int saveStatus = answerQuestion(index, answer);
+                if (saveStatus != FormEntryController.ANSWER_OK) {
+                    return new FailedConstraint(index, saveStatus);
+                }
+            } else {
+                saveAnswer(index, answer);
+            }
+        } else {
+            Timber.w("Attempted to save an index referencing something other than a question: %s",
+                    index.getReference().toString());
         }
         return null;
     }
