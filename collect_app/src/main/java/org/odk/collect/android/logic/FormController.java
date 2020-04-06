@@ -803,9 +803,18 @@ public class FormController {
                                                  boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
-                saveOneScreenAnswer(index, answers.get(index), evaluateConstraints);
+                FailedConstraint failedConstraint = saveOneScreenAnswer(
+                        index,
+                        answers.get(index),
+                        evaluateConstraints
+                );
+
+                if (failedConstraint != null) {
+                    return failedConstraint;
+                }
             }
         }
+
         return null;
     }
 
