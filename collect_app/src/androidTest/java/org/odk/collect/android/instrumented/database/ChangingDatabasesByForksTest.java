@@ -1,11 +1,11 @@
-package org.odk.collect.android.database;
+package org.odk.collect.android.instrumented.database;
 
 import org.junit.Test;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
-import org.odk.collect.android.database.helpers.SqlLiteHelperTest;
+import org.odk.collect.android.instrumented.database.helpers.SqlLiteHelperTest;
 
 import java.io.File;
 import java.io.IOException;

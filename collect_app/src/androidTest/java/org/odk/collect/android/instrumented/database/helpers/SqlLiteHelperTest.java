@@ -1,4 +1,4 @@
-package org.odk.collect.android.database.helpers;
+package org.odk.collect.android.instrumented.database.helpers;
 
 import android.Manifest;
 import android.database.sqlite.SQLiteOpenHelper;

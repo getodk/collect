@@ -1,4 +1,4 @@
-package org.odk.collect.android.database.helpers;
+package org.odk.collect.android.instrumented.database.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
@@ -22,8 +23,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
-import static org.odk.collect.android.database.helpers.FormsDatabaseHelperTest.Action.DOWNGRADE;
-import static org.odk.collect.android.database.helpers.FormsDatabaseHelperTest.Action.UPGRADE;
+import static org.odk.collect.android.instrumented.database.helpers.FormsDatabaseHelperTest.Action.DOWNGRADE;
+import static org.odk.collect.android.instrumented.database.helpers.FormsDatabaseHelperTest.Action.UPGRADE;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)

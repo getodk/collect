@@ -55,7 +55,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 8;
 
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
@@ -67,7 +67,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
         LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH};
 
-    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V8;
+    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V8;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
