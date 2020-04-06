@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.utilities;
+package org.odk.collect.android.instrumented.utilities;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 
 import java.util.List;
 

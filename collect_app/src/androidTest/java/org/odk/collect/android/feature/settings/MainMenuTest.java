@@ -1,4 +1,4 @@
-package org.odk.collect.android.settings;
+package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
 

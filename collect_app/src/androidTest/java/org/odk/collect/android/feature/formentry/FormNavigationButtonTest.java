@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.formentry;
+package org.odk.collect.android.feature.formentry;
 
 import android.Manifest;
 

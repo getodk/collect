@@ -1,4 +1,4 @@
-package org.odk.collect.android.formentry.audit;
+package org.odk.collect.android.feature.formentry.audit;
 
 import android.Manifest;
 

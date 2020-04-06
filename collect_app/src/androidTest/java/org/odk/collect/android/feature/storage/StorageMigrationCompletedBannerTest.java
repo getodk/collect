@@ -1,4 +1,4 @@
-package org.odk.collect.android.storage;
+package org.odk.collect.android.feature.storage;
 
 import android.Manifest;
 

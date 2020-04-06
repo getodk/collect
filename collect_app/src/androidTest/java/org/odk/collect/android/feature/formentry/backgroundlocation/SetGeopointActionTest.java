@@ -1,4 +1,4 @@
-package org.odk.collect.android.formentry.backgroundlocation;
+package org.odk.collect.android.feature.formentry.backgroundlocation;
 
 import android.Manifest;
 
