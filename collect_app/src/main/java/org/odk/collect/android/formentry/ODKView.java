@@ -392,7 +392,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         launchIntentButton.setId(View.generateViewId());
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                FontSizeProvider.getQuestionFontsize() + 2);
+                FontSizeProvider.getQuestionFontSize() + 2);
         launchIntentButton.setPadding(20, 20, 20, 20);
         launchIntentButton.setLayoutParams(params);
 

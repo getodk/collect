@@ -368,7 +368,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             showPreviousView();
         });
 
-        questionFontSize = FontSizeProvider.getQuestionFontsize();
+        questionFontSize = FontSizeProvider.getQuestionFontSize();
 
         if (savedInstanceState == null) {
             mediaLoadingFragment = new MediaLoadingFragment();
@@ -2088,8 +2088,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void adjustFontSize() {
-        if (questionFontSize != FontSizeProvider.getQuestionFontsize()) {
-            questionFontSize = FontSizeProvider.getQuestionFontsize();
+        if (questionFontSize != FontSizeProvider.getQuestionFontSize()) {
+            questionFontSize = FontSizeProvider.getQuestionFontSize();
             refreshCurrentView();
         }
     }

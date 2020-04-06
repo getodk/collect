@@ -50,7 +50,7 @@ public class CustomNumberPicker extends NumberPicker {
 
     private void updateView(View view) {
         if (view instanceof EditText) {
-            ((EditText) view).setTextSize(FontSizeProvider.getQuestionFontsize());
+            ((EditText) view).setTextSize(FontSizeProvider.getQuestionFontSize());
         }
     }
 }

@@ -142,7 +142,7 @@ public final class GeneralKeys {
         // user_interface_preferences.xml
         hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");
-        hashMap.put(KEY_FONT_SIZE,                  FontSizeProvider.DEFAULT_FONTSIZE);
+        hashMap.put(KEY_FONT_SIZE,                  String.valueOf(FontSizeProvider.DEFAULT_FONT_SIZE));
         hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));

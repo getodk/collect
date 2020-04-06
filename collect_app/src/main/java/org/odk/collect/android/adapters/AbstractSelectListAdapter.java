@@ -144,7 +144,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     abstract CompoundButton createButton(int index, ViewGroup parent);
 
     void setUpButton(TextView button, int index) {
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, FontSizeProvider.getQuestionFontsize());
+        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, FontSizeProvider.getQuestionFontSize());
         button.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
