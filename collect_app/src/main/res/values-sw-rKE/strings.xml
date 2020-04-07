@@ -59,8 +59,7 @@
   <string name="list_failed_with_error">Uanishaji wa fomu haukufaulu. %s.</string>
   <string name="loading_form">Fomu inawekwa</string>
   <string name="load_remote_form_error">Tatizo katika kuchukua fomu!</string>
-  <string name="location_provider_accuracy">Ukitumia %1$s. Usahihi ni %2$s m.</string>
-  <string name="location_accuracy">Usahihi ni %1$s m</string>
+    <string name="location_accuracy">Usahihi ni %1$s m</string>
   <string name="manage_files">Ondoa fomu iliyo hifadhiwa</string>
   <string name="mark_finished">sahihisha fomu kama iliyo kamilika</string>
   <string name="noselect_error">Samahani, hujachagua fomu yoyote!</string>

@@ -62,8 +62,7 @@
   <string name="list_failed_with_error">Det er oppstått en feil. %s.</string>
   <string name="loading_form">Henter skjema</string>
   <string name="load_remote_form_error">Det er oppstått en feil</string>
-  <string name="location_provider_accuracy">Bruker %1$s. Nøyaktighet er %2$s m.</string>
-  <string name="location_accuracy">Nøyaktigheten er %1$s m</string>
+    <string name="location_accuracy">Nøyaktigheten er %1$s m</string>
   <string name="manage_files">Slett lagret skjema</string>
   <string name="mark_finished">Kryss skjema som ferdig</string>
   <string name="noselect_error">Beklager, du har ikke valgt skjema!</string>

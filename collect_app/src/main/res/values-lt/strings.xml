@@ -57,8 +57,7 @@
   <string name="list_failed_with_error">Nepavyko gauti formų sąrašo. %s.</string>
   <string name="loading_form">Įkeliama forma</string>
   <string name="load_remote_form_error">Klaida nuskaitant formų sąrašą</string>
-  <string name="location_provider_accuracy">Naudojama %1$s. Tikslumas yra %2$s m.</string>
-  <string name="location_accuracy">Tikslumas yra %1$s m</string>
+    <string name="location_accuracy">Tikslumas yra %1$s m</string>
   <string name="manage_files">Ištrinti užpildytą formą</string>
   <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
   <string name="noselect_error">Deja, Jūs nepažymėjote jokių formų!</string>

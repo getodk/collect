@@ -77,7 +77,6 @@
   <string name="list_failed_with_error">فشلت لائحة عرض النماذج. %s</string>
   <string name="loading_form">تحميل الاستمارة</string>
   <string name="load_remote_form_error">خطأ في جلب لائحة النماذج.</string>
-  <string name="location_provider_accuracy">استخدام %1$s. الدقة هي %2$s متر.</string>
   <string name="location_accuracy">الدقة هي is %1$s متر</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>
   <string name="mark_finished">حدد الاستمارة كاستمارة منتهية</string>

@@ -62,7 +62,6 @@
   <string name="list_failed_with_error">ফরম সাজানো ব্যর্থ হয়েছে। %s.</string>
   <string name="loading_form">ফরম লোড হচ্ছে </string>
   <string name="load_remote_form_error">ফরম এর তালিকা পেতে ত্রুটি পাওয়া গেছে।</string>
-  <string name="location_provider_accuracy">এখানে ব্যবহৃত %1$s. যার যথাযথতা হল %2$s m.</string>
   <string name="location_accuracy">যথাযথতা মান %1$s m.</string>
   <string name="manage_files">সংরক্ষিত ফরম মুছে দিন </string>
   <string name="mark_finished">ফরম চূড়ান্ত হিসেবে চিন্হিত করুন </string>

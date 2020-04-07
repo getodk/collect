@@ -72,8 +72,7 @@
   <string name="list_failed_with_error">फारमको सूची निकाल्न सकिएन | %s</string>
   <string name="loading_form">फारम लोड हुदैछ |</string>
   <string name="load_remote_form_error">फारम सूची प्राप्त गर्न असफल</string>
-  <string name="location_provider_accuracy">%1$s प्रयोग गर्दा, सटिकता %2$s m छ |</string>
-  <string name="location_accuracy">सटिकता %1$s m छ |</string>
+    <string name="location_accuracy">सटिकता %1$s m छ |</string>
   <string name="manage_files">संचित फारम डिलिट गर्न</string>
   <string name="mark_finished">फारामलाई अन्तिम रुप दिइएको अंकित गर्नुहोस् </string>
   <string name="noselect_error">कुनै एक फारम छान्नुहोस् </string>

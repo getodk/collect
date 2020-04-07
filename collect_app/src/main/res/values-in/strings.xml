@@ -74,8 +74,7 @@
   <string name="list_failed_with_error">Pendataan formulir gagal. %s.</string>
   <string name="loading_form">Sedang memuat formulir</string>
   <string name="load_remote_form_error">Terjadi kesalahan saat mengambil daftar fromulir</string>
-  <string name="location_provider_accuracy">Dengan %1$s. Tingkat akurasi %2$s meter.</string>
-  <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
+    <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="manage_files">Hapus formulir</string>
   <string name="mark_finished">Tandai formulir ini telah siap kirim</string>
   <string name="noselect_error">Maaf, anda belum memilih formulir!</string>

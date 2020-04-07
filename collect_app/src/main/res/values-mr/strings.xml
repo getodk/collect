@@ -64,8 +64,7 @@
   <string name="list_failed_with_error">फॉर्म सूची अयशस्वी.%s.</string>
   <string name="loading_form">फॉर्म लोड होत आहे</string>
   <string name="load_remote_form_error">प्रपत्र यादी प्राप्त करताना त्रुटी</string>
-  <string name="location_provider_accuracy">%1$s वापरून अचूकता  %2$s मी आहे.</string>
-  <string name="location_accuracy">अचूकता %1$s मी आहे</string>
+    <string name="location_accuracy">अचूकता %1$s मी आहे</string>
   <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
   <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
   <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>

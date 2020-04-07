@@ -77,7 +77,6 @@
   <string name="list_failed_with_error">Výpis dotazníku selhal. %s.</string>
   <string name="loading_form">Načítám dotazník</string>
   <string name="load_remote_form_error">Chyba při načítání seznamu dotazníků</string>
-  <string name="location_provider_accuracy">Používám %1$s. Přesnost: %2$s m.</string>
   <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="manage_files">Smazat uložený dotazník</string>
   <string name="mark_finished">Označit dotazník jako dokončený</string>

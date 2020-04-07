@@ -77,7 +77,6 @@
   <string name="list_failed_with_error">Error al listar formularios. %s.</string>
   <string name="loading_form">Cargando Formulario</string>
   <string name="load_remote_form_error">Error Obteniendo Listado de Formularios</string>
-  <string name="location_provider_accuracy">Usando %1$s. Precision es de %2$s m.</string>
   <string name="location_accuracy">Precision es de %1$s m</string>
   <string name="manage_files">Borrar Formularios Guardados</string>
   <string name="mark_finished">Marcar el formulario como finalizado</string>

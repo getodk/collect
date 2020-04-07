@@ -61,8 +61,7 @@
   <string name="list_failed_with_error">Ukukleliswa kwamafomu akuphumelelanga. %s.</string>
   <string name="loading_form">Kufakwa ifomu</string>
   <string name="load_remote_form_error">Iphutha ekutholeni uhlu lwamafomu</string>
-  <string name="location_provider_accuracy">Ukusebenzisa %1$s. ukucophelela %2$s m.</string>
-  <string name="location_accuracy">Ukucophelela %1s% m</string>
+    <string name="location_accuracy">Ukucophelela %1s% m</string>
   <string name="manage_files">Susa ifomu elongiwe</string>
   <string name="mark_finished">Bonisa ukuthi ifomu liphothuliwe</string>
   <string name="noselect_error">Uxolo, alikho ifomu olikhethile</string>

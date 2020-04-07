@@ -73,8 +73,7 @@
   <string name="list_failed_with_error">Kreiranje seznama obrazcev ni uspelo. %s.</string>
   <string name="loading_form">Nalagam obrazec</string>
   <string name="load_remote_form_error">Napaka pri pridobivanju seznama obrazcev</string>
-  <string name="location_provider_accuracy">Uporabljam %1$s. Natančnost je %2$s m.</string>
-  <string name="location_accuracy">Natančnost je %1$s m</string>
+    <string name="location_accuracy">Natančnost je %1$s m</string>
   <string name="manage_files">Briši shranjen obrazec</string>
   <string name="mark_finished">Označi obrazec kot zaključen</string>
   <string name="noselect_error">Niste izbrali obrazca!</string>

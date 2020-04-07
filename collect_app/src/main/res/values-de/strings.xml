@@ -77,7 +77,6 @@
   <string name="list_failed_with_error">Formularauflistung gescheitert. %s.</string>
   <string name="loading_form">Formular wird geladen</string>
   <string name="load_remote_form_error">Fehler bei der Formularauflistung</string>
-  <string name="location_provider_accuracy">Verwendung von %1$s. Genauigkeit beträgt %2$s m.</string>
   <string name="location_accuracy">Genauigkeit beträgt %1$s m</string>
   <string name="manage_files">Formulare löschen</string>
   <string name="mark_finished">Formular als vollständig markieren</string>

@@ -69,8 +69,7 @@
   <string name="list_failed_with_error">Listimi i formularit dështoi. 1%s</string>
   <string name="loading_form">Duke ngarkuar formularin</string>
   <string name="load_remote_form_error">Gabim në ngarkimin e listës së formularëve</string>
-  <string name="location_provider_accuracy">Duke përdorur %1$s. Saktësia është %2$s m.</string>
-  <string name="location_accuracy">Saktësia është %1$s m</string>
+    <string name="location_accuracy">Saktësia është %1$s m</string>
   <string name="manage_files">Fshi formularin e ruajtur</string>
   <string name="mark_finished">Shëno formularin si të përfunduar</string>
   <string name="noselect_error">Ndjesë, ju nuk keni përzgjedhur asnjë formular</string>
