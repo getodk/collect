@@ -19,7 +19,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.MenuDelegate;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
@@ -75,7 +75,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 .setEnabled(useability);
 
         if (formController != null && formController.currentFormCollectsBackgroundLocation()
-                && PlayServicesUtil.isGooglePlayServicesAvailable(activity)) {
+                && new PlayServicesChecker().isGooglePlayServicesAvailable(activity)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));

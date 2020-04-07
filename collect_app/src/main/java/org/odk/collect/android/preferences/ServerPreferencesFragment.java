@@ -45,7 +45,7 @@ import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -225,11 +225,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         selectedGoogleAccountPreference.setSummary(accountsManager.getLastSelectedAccountIfValid());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (allowClickSelectedGoogleAccountPreference) {
-                if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
+                if (new PlayServicesChecker().isGooglePlayServicesAvailable(getActivity())) {
                     allowClickSelectedGoogleAccountPreference = false;
                     requestAccountsPermission();
                 } else {
-                    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
+                    new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(getActivity());
                 }
             }
             return true;

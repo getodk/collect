@@ -47,6 +47,7 @@ import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
@@ -182,7 +183,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         myLocationOverlay.setDirectionArrow(crosshairs, crosshairs);
         myLocationOverlay.setPersonHotspot(crosshairs.getWidth() / 2.0f, crosshairs.getHeight() / 2.0f);
 
-        locationClient = LocationClientProvider.getClient(getActivity());
+        locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker());
         locationClient.setListener(this);
 
         new Handler().postDelayed(() -> {
@@ -395,7 +396,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
-            locationClient = LocationClientProvider.getClient(getActivity());
+            locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker());
             locationClient.setListener(this);
         }
         if (enable) {

@@ -2,11 +2,11 @@ package org.odk.collect.android;
 
 import android.content.Context;
 
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
 
-@Implements(PlayServicesUtil.class)
+@Implements(PlayServicesChecker.class)
 public abstract class ShadowPlayServicesUtil {
 
     @Implementation
