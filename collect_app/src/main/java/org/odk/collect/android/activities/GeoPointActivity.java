@@ -27,12 +27,15 @@ import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.view.Window;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -40,7 +43,6 @@ import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
@@ -102,7 +104,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         setTitle(getString(R.string.get_location));
 
-        locationClient = LocationClientProvider.getClient(this);
+        locationClient = LocationClientProvider.getClient(this, new PlayServicesChecker());
         if (locationClient.canSetUpdateIntervals()) {
             locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
         }

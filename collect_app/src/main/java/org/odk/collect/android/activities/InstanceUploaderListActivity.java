@@ -56,7 +56,7 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.List;
@@ -359,12 +359,12 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                 // if it's Sheets, start the Sheets uploader
                 // first make sure we have a google account selected
 
-                if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                if (new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
                     Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
                     i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
                     startActivityForResult(i, INSTANCE_UPLOADER);
                 } else {
-                    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
+                    new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(this);
                 }
             } else {
                 // otherwise, do the normal aggregate/other thing.

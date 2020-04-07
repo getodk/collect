@@ -65,7 +65,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -229,11 +229,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                             GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                     Intent i = null;
                     if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                        if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                        if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
                             i = new Intent(getApplicationContext(),
                                     GoogleDriveActivity.class);
                         } else {
-                            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                            new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
                             return;
                         }
                     } else {
