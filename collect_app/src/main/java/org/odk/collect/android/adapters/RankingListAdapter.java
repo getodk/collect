@@ -31,7 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.utilities.FontSizeProvider;
+import org.odk.collect.android.utilities.QuestionFontSizeProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -83,7 +83,7 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
         ItemViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.rank_item_text);
-            textView.setTextSize(FontSizeProvider.getQuestionFontSize());
+            textView.setTextSize(QuestionFontSizeProvider.getQuestionFontSize());
             themeUtils = new ThemeUtils(itemView.getContext());
         }
 

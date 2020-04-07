@@ -41,7 +41,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FontSizeProvider;
+import org.odk.collect.android.utilities.QuestionFontSizeProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -148,7 +148,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
                 ? new AppCompatRadioButton(getContext())
                 : new AppCompatCheckBox(getContext());
 
-        item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, FontSizeProvider.getQuestionFontSize());
+        item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeProvider.getQuestionFontSize());
         item.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), items.get(index)));
         item.setTag(items.indexOf(items.get(index)));
         item.setGravity(isRTL() ? Gravity.END : Gravity.START);
