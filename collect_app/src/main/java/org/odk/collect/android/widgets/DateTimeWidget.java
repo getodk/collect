@@ -42,8 +42,8 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget, Widg
     public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
 
-        dateWidget = new DateWidget(context, prompt);
-        timeWidget = new TimeWidget(context, prompt);
+        dateWidget = new DateWidget(context, prompt, true);
+        timeWidget = new TimeWidget(context, prompt, true);
 
         dateWidget.getAudioVideoImageTextLabel().getLabelTextView().setVisibility(GONE);
         dateWidget.getHelpTextLayout().setVisibility(GONE);
