@@ -77,8 +77,7 @@
   <string name="list_failed_with_error">フォームが一覧できませんでした。 %s。</string>
   <string name="loading_form">フォームのロード中</string>
   <string name="load_remote_form_error">フォーム一覧の取得中にエラー</string>
-  <string name="location_provider_accuracy">%1$s を使用しています。精度は %2$s mです。</string>
-  <string name="location_accuracy">精度は %1$s mです</string>
+    <string name="location_accuracy">精度は %1$s mです</string>
   <string name="manage_files">保存されたフォームを削除</string>
   <string name="mark_finished">フォームを確定済にします</string>
   <string name="noselect_error">申し訳ありません、フォームが選択されていません!</string>

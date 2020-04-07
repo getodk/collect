@@ -74,8 +74,7 @@
   <string name="list_failed_with_error">Складання списку не вдалося. %s.</string>
   <string name="loading_form">Завантаження анкети</string>
   <string name="load_remote_form_error">Помилка отримання списку анкет</string>
-  <string name="location_provider_accuracy">Використання %1$s. Точність %2$s м.</string>
-  <string name="location_accuracy">Точність %1$s м</string>
+    <string name="location_accuracy">Точність %1$s м</string>
   <string name="manage_files">Видалити збережену анкету</string>
   <string name="mark_finished">Позначити анкету як завершену</string>
   <string name="noselect_error">Вибачте, Ви не обрали жодної анкети!</string>

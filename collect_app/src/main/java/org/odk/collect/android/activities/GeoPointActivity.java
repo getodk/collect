@@ -63,7 +63,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     private LocationClient locationClient;
     private Location location;
 
-    private double locationAccuracy;
+    private double targetAccuracy;
 
     private int locationCount;
     private int numberOfAvailableSatellites;
@@ -94,10 +94,10 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         Intent intent = getIntent();
 
-        locationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
+        targetAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
             if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
-                locationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
+                targetAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
                         GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
             }
         }
@@ -212,7 +212,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         locationDialog.setCancelable(false); // taping outside the dialog doesn't cancel
         locationDialog.setIndeterminate(true);
-        locationDialog.setIcon(android.R.drawable.ic_dialog_info);
         locationDialog.setTitle(getString(R.string.getting_location));
         dialogMessage = getString(R.string.please_wait_long);
 
@@ -280,16 +279,12 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
             Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
 
             if (locationCount > 1) {
-                dialogMessage = getProviderAccuracyMessage(location);
-
-                if (location.getAccuracy() <= locationAccuracy) {
+                if (location.getAccuracy() <= targetAccuracy) {
                     returnLocation();
                 }
-
-            } else {
-                dialogMessage = getAccuracyMessage(location);
             }
 
+            dialogMessage = getAccuracyMessage(location) + "\n\n" + getProviderMessage(location);
             updateDialogMessage();
         } else {
             Timber.i("onLocationChanged(%d)", locationCount);
@@ -318,11 +313,11 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     }
 
     public String getAccuracyMessage(@NonNull Location location) {
-        return getString(R.string.location_accuracy, location.getAccuracy());
+        return getString(R.string.location_accuracy, truncateDouble(location.getAccuracy()));
     }
 
-    public String getProviderAccuracyMessage(@NonNull Location location) {
-        return getString(R.string.location_provider_accuracy, GeoUtils.capitalizeGps(location.getProvider()), truncateDouble(location.getAccuracy()));
+    public String getProviderMessage(@NonNull Location location) {
+        return getString(R.string.location_provider, GeoUtils.capitalizeGps(location.getProvider()));
     }
 
     public String getResultStringForLocation(@NonNull Location location) {

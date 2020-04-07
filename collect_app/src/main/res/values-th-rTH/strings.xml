@@ -61,8 +61,7 @@
   <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
   <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
   <string name="load_remote_form_error">มีข้อผิดพลาด ไม่สามารถแสดงรายการแบบสำรวจได้</string>
-  <string name="location_provider_accuracy">รับพิกัดผ่าน %1$s ค่าความแม่นยำที่ %2$s เมตร</string>
-  <string name="location_accuracy">ความแม่นยำ %1$s เมตร</string>
+    <string name="location_accuracy">ความแม่นยำ %1$s เมตร</string>
   <string name="manage_files">ลบแบบสำรวจที่บันทึกไว้</string>
   <string name="mark_finished">ทำเครื่องหมายแบบสำรวจว่าเสร็จเรียบร้อยแล้ว</string>
   <string name="noselect_error">ขออภัย ท่านยังไม่ได้เลือกแบบสำรวจ</string>

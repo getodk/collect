@@ -64,7 +64,6 @@
   <string name="list_failed_with_error">Error al llistar formularis. %s.</string>
   <string name="loading_form">Carregant formulari</string>
   <string name="load_remote_form_error">Error al demanar la llista de formularis</string>
-  <string name="location_provider_accuracy">Usant %1$s. Precisió de %2$s m.</string>
   <string name="location_accuracy">Precisió de %1$s m</string>
   <string name="manage_files">Eliminar formulari desat</string>
   <string name="mark_finished">Marcar formulari com completat</string>
