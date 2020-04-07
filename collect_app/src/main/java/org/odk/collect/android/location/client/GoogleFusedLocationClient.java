@@ -6,6 +6,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -15,18 +18,14 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 /**
- * An implementation of {@link LocationClient} that uses Google Play
- * Services to retrieve the User's location.
+ * An implementation of {@link LocationClient} that uses Google Play Services to retrieve the
+ * User's location.
  * <p>
- * Should be used whenever there Google Play Services is present.
- * <p>
- * Package-private, use {@link LocationClientProvider} to retrieve the correct
- * {@link LocationClient}.
+ * Should be used whenever there Google Play Services is present. In general, use
+ * {@link LocationClientProvider} to retrieve a configured {@link LocationClient}.
  */
 public class GoogleFusedLocationClient
         extends BaseLocationClient
@@ -43,6 +42,12 @@ public class GoogleFusedLocationClient
      */
     private static final long DEFAULT_FASTEST_UPDATE_INTERVAL = 2500;
 
+    /**
+     * Although FusedLocationProviderApi is deprecated, FusedLocationProviderClient which is
+     * supposed to replace it doesn't work until Google Play Services 11.6.0, released Nov 2017.
+     * Some of our users have really slow connections and old versions of Play Services so we should
+     * wait to switch APIs.
+     */
     @NonNull
     private final FusedLocationProviderApi fusedLocationProviderApi;
 
