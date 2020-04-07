@@ -1,4 +1,4 @@
-package org.odk.collect.android.externalintents;
+package org.odk.collect.android.feature.externalintents;
 
 import junit.framework.Assert;
 

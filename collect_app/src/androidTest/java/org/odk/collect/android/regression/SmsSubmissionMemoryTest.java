@@ -1,4 +1,4 @@
-package org.odk.collect.android;
+package org.odk.collect.android.regression;
 
 import android.app.Activity;
 
