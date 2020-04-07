@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:3.6.2'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'org.ow2.asm:asm:7.3.1' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.5'
@@ -46,14 +46,19 @@ task checkTests(type: GradleBuild) {
     tasks = ['testDebugUnitTest', 'connectedDebugAndroidTest']
 }
 
-task checkFeatures(type: GradleBuild) {
+task checkFeature(type: GradleBuild) {
     tasks = ["connectedDebugAndroidTest"]
-    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.notPackage": "org.odk.collect.android.regression"]
+    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.feature"]
 }
 
 task checkRegression(type: GradleBuild) {
     tasks = ["connectedDebugAndroidTest"]
     startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.regression"]
+}
+
+task checkInstrumented(type: GradleBuild) {
+    tasks = ["connectedDebugAndroidTest"]
+    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.instrumented"]
 }
 
 ext {
