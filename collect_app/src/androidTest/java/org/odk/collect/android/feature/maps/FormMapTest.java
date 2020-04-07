@@ -1,4 +1,4 @@
-package org.odk.collect.android;
+package org.odk.collect.android.feature.maps;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.pages.MainMenuPage;

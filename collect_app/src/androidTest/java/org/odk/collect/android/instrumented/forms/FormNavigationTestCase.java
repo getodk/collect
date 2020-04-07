@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android;
+package org.odk.collect.android.instrumented.forms;
 
 import org.javarosa.core.model.FormDef;
 import org.junit.Test;

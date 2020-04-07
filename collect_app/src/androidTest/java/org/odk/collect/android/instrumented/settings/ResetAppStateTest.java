@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android;
+package org.odk.collect.android.instrumented.settings;
 
 import android.Manifest;
 import android.content.ContentValues;

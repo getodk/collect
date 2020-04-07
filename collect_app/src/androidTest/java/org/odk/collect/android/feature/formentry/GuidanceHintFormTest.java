@@ -1,8 +1,9 @@
-package org.odk.collect.android;
+package org.odk.collect.android.feature.formentry;
 
 import android.Manifest;
 import android.text.TextUtils;
 
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -13,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -66,7 +68,7 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceHint_ShouldBeHiddenByDefault() {
-        onView(withId(R.id.guidance_text_view)).check(matches(not(isDisplayed())));
+        onView(ViewMatchers.withId(R.id.guidance_text_view)).check(matches(not(isDisplayed())));
     }
 
     @Test
