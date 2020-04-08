@@ -1,6 +1,5 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.qr;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,12 +9,7 @@ import android.view.MenuItem;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.adapters.TabAdapter;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -31,8 +25,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
-
 public class QRCodeTabsActivity extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
     private final String[] fragmentTitleList = {"Scan", "QR Code"};
@@ -46,7 +38,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         initToolbar();
         ViewPager2 viewPager = (ViewPager2) this.findViewById(R.id.viewPager);
         TabLayout tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
-        TabAdapter adapter = new TabAdapter(this);
+        QRCodeTabsAdapter adapter = new QRCodeTabsAdapter(this);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -104,25 +96,5 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void applySettings(Activity activity, String content) {
-        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
-            @Override
-            public void onSuccess() {
-                Collect.getInstance().initializeJavaRosa();
-                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
-                final LocaleHelper localeHelper = new LocaleHelper();
-                localeHelper.updateLocale(activity);
-                startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
-            }
 
-            @Override
-            public void onFailure(Exception exception) {
-                if (exception instanceof GeneralSharedPreferences.ValidationException) {
-                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
-                } else {
-                    Timber.e(exception);
-                }
-            }
-        });
-    }
 }

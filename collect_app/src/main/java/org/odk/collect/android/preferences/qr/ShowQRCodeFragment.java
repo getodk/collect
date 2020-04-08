@@ -11,7 +11,7 @@
  * the License.
  */
 
-package org.odk.collect.android.fragments;
+package org.odk.collect.android.preferences.qr;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,7 +43,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.QRCodeTabsActivity;
+import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -221,7 +221,7 @@ public class ShowQRCodeFragment extends Fragment {
                             String response = QRCodeUtils.decodeFromBitmap(bitmap);
                             if (response != null) {
                                 qrCodeFound = true;
-                                QRCodeTabsActivity.applySettings(getActivity(), response);
+                                SettingsUtils.applySettings(getActivity(), response);
                             }
                         }
                     }

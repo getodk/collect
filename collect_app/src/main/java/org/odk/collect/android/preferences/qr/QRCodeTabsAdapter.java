@@ -1,15 +1,12 @@
-package org.odk.collect.android.adapters;
+package org.odk.collect.android.preferences.qr;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import org.odk.collect.android.fragments.QRScannerFragment;
-import org.odk.collect.android.fragments.ShowQRCodeFragment;
-
-public class TabAdapter extends FragmentStateAdapter {
-    public TabAdapter(FragmentActivity fa) {
+public class QRCodeTabsAdapter extends FragmentStateAdapter {
+    public QRCodeTabsAdapter(FragmentActivity fa) {
         super(fa);
     }
 

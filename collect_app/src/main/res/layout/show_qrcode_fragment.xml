@@ -40,7 +40,7 @@
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FEE29F"
+        android:background="?colorError"
         android:gravity="center"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
@@ -53,7 +53,7 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:src="@android:drawable/ic_dialog_alert"
-            android:tint="#8F6601"
+            android:tint="?colorOnError"
             />
 
         <TextView
@@ -65,7 +65,7 @@
             android:textSize="15sp"
             android:gravity="center_vertical"
             android:text="@string/qrcode_with_both_passwords"
-            android:textColor="#000000"
+            android:textColor="?colorOnError"
             />
 
     </LinearLayout>
