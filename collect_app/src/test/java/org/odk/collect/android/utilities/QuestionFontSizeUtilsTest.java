@@ -10,16 +10,16 @@ import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 
 @RunWith(RobolectricTestRunner.class)
-public class QuestionFontSizeProviderTest {
+public class QuestionFontSizeUtilsTest {
 
     @Test
     public void whenFontSizeNotSpecified_shouldReturnDefaultValue() {
-        assertThat(QuestionFontSizeProvider.getQuestionFontSize(), is(QuestionFontSizeProvider.DEFAULT_FONT_SIZE));
+        assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(QuestionFontSizeUtils.DEFAULT_FONT_SIZE));
     }
 
     @Test
     public void whenFontSizeSpecified_shouldReturnSelectedValue() {
         GeneralSharedPreferences.getInstance().save(KEY_FONT_SIZE, "30");
-        assertThat(QuestionFontSizeProvider.getQuestionFontSize(), is(30));
+        assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(30));
     }
 }

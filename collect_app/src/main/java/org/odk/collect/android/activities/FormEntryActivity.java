@@ -141,7 +141,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.QuestionFontSizeProvider;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
@@ -368,7 +368,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             showPreviousView();
         });
 
-        questionFontSize = QuestionFontSizeProvider.getQuestionFontSize();
+        questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
 
         if (savedInstanceState == null) {
             mediaLoadingFragment = new MediaLoadingFragment();
@@ -2088,8 +2088,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void adjustFontSize() {
-        if (questionFontSize != QuestionFontSizeProvider.getQuestionFontSize()) {
-            questionFontSize = QuestionFontSizeProvider.getQuestionFontSize();
+        if (questionFontSize != QuestionFontSizeUtils.getQuestionFontSize()) {
+            questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
             refreshCurrentView();
         }
     }

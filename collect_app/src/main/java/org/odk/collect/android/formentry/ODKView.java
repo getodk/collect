@@ -60,7 +60,7 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.utilities.QuestionFontSizeProvider;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -392,7 +392,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         launchIntentButton.setId(View.generateViewId());
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                QuestionFontSizeProvider.getQuestionFontSize() + 2);
+                QuestionFontSizeUtils.getQuestionFontSize() + 2);
         launchIntentButton.setPadding(20, 20, 20, 20);
         launchIntentButton.setLayoutParams(params);
 

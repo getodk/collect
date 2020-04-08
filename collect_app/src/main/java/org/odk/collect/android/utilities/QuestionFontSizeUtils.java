@@ -4,10 +4,10 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 
-public class QuestionFontSizeProvider {
+public class QuestionFontSizeUtils {
     public static final int DEFAULT_FONT_SIZE = 21;
 
-    private QuestionFontSizeProvider() {
+    private QuestionFontSizeUtils() {
 
     }
 
