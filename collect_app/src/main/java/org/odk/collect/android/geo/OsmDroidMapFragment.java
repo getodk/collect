@@ -151,7 +151,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override public void applyConfig(Bundle config) {
         webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
         String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
-        referenceLayerFile = path != null ? new File(path) : null;
+        referenceLayerFile = (path != null && new File(path).exists()) ? new File(path) : null;
         if (map != null) {
             map.setTileSource(webMapService.asOnlineTileSource());
             loadReferenceOverlay();

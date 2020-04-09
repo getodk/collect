@@ -232,7 +232,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @Override public void applyConfig(Bundle config) {
         styleUrl = config.getString(KEY_STYLE_URL);
         String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
-        referenceLayerFile = path != null ? new File(path) : null;
+        referenceLayerFile = (path != null && new File(path).exists()) ? new File(path) : null;
         if (map != null) {
             map.setStyle(getStyleBuilder(), style -> {
                 // See addTo() above for why we add this placeholder layer.
