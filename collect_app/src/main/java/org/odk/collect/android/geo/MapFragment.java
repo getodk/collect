@@ -16,11 +16,14 @@ package org.odk.collect.android.geo;
 
 import android.os.Bundle;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+
+import org.odk.collect.android.storage.StoragePathProvider;
 
 /**
  * Interface for a Fragment that renders a map view.  The plan is to have one
@@ -205,5 +208,12 @@ public interface MapFragment {
 
     interface FeatureListener {
         void onFeature(int featureId);
+    }
+
+    default File getReferenceLayerFile(Bundle config) {
+        String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
+        return path != null && new File(path).exists()
+                ? new File(path)
+                : null;
     }
 }
