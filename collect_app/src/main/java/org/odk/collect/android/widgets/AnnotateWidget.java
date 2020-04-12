@@ -65,9 +65,7 @@ public class AnnotateWidget extends BaseImageWidget {
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         addCurrentImageToLayout();
-        if (binaryName == null || imageView == null || imageView.getVisibility() == GONE) {
-            annotateButton.setEnabled(false);
-        }
+        adjustAnnotateButtonAvailability();
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
@@ -147,6 +145,12 @@ public class AnnotateWidget extends BaseImageWidget {
             case R.id.choose_image:
                 imageCaptureHandler.chooseImage(R.string.annotate_image);
                 break;
+        }
+    }
+
+    private void adjustAnnotateButtonAvailability() {
+        if (binaryName == null || imageView == null || imageView.getVisibility() == GONE) {
+            annotateButton.setEnabled(false);
         }
     }
 
