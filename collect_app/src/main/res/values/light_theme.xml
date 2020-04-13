@@ -7,14 +7,16 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Collect.BaseLight" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Collect.BaseLight" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!--Material theme attributes-->
         <item name="colorPrimary">#E0E0E0</item>
         <item name="colorSecondary">#2196F3</item>
         <item name="colorError">@color/red_500</item>
 
+        <item name="colorPrimaryDark">#878787</item>
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
+
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOnPrimary">#000000</item>
         <item name="colorOnSecondary">#000000</item>
@@ -22,6 +24,7 @@
         <item name="colorOnError">#000000</item>
         <item name="colorOnSurface">#000000</item>
         <item name="scrimBackground">@color/mtrl_scrim_color</item>
+
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
         <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
