@@ -56,6 +56,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
     private String url;
     private boolean useSpinner;
     private AppCompatSpinner urlSpinner;
+    private ArrayAdapter<CharSequence> urlAdapter;
     ArrayList<String> urlValues;
 
     @Override
@@ -76,6 +77,13 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
             urlValues = new ArrayList<> ();
             urlValues.add("https://app.kontrolid.org");        // https://app.kontrolid.org
             urlValues.add("https://app.kontrolid.com");        // https://app.kontrolid.com
+
+            // Add the choices to the Spinner
+            urlAdapter = ArrayAdapter.createFromResource(this,
+                    R.array.smap_kontrolid_servers,
+                    android.R.layout.simple_spinner_dropdown_item);
+            urlAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+            urlSpinner.setAdapter(urlAdapter);
 
             // Set the initial value
             for(int i = 0; i < urlValues.size(); i++) {
