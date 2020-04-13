@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -71,7 +73,7 @@ public class WidgetViewUtils {
     }
 
     public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, int answerFontSize, QuestionWidget listener) {
-        final Button button = new Button(context);
+        final MaterialButton button = new MaterialButton(context);
 
         if (readOnly) {
             button.setVisibility(GONE);
