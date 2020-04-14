@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences;
 
-import android.app.AlertDialog;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
@@ -9,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
@@ -123,6 +125,12 @@ public class AdminPasswordDialogFragmentTest {
 
         private AdminPasswordDialogFragment.Action onCorrectAdminPasswordCalledWith;
         private boolean onIncorrectAdminPasswordCalled;
+
+        @Override
+        protected void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setTheme(R.style.Theme_AppCompat); // Needed for androidx.appcompat.app.AlertDialog
+        }
 
         @Override
         public void onCorrectAdminPassword(AdminPasswordDialogFragment.Action action) {
