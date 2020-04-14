@@ -1,14 +1,17 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.Window;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+
+import org.odk.collect.android.R;
 
 import timber.log.Timber;
 
@@ -20,6 +23,7 @@ public class ProgressDialogFragment extends DialogFragment {
 
     private static final String TITLE = "title";
     private static final String MESSAGE = "message";
+    private View dialogView;
 
     /**
      * Override to have something cancelled when the ProgressDialog's cancel button is pressed
@@ -38,7 +42,7 @@ public class ProgressDialogFragment extends DialogFragment {
     public void setTitle(String title) {
         setArgument(title, TITLE);
 
-        ProgressDialog dialog = (ProgressDialog) getDialog();
+        AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
             setupView(dialog);
         }
@@ -47,7 +51,7 @@ public class ProgressDialogFragment extends DialogFragment {
     public void setMessage(String message) {
         setArgument(message, MESSAGE);
 
-        ProgressDialog dialog = (ProgressDialog) getDialog();
+        AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
             setupView(dialog);
         }
@@ -76,11 +80,10 @@ public class ProgressDialogFragment extends DialogFragment {
 
         setRetainInstance(true);
 
-        ProgressDialog dialog = new ProgressDialog(getActivity(), getTheme());
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
-        dialog.setIndeterminate(true);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialogView = getLayoutInflater().inflate(R.layout.progress_dialog, null, false);
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create();
 
         setupView(dialog);
         return dialog;
@@ -103,13 +106,13 @@ public class ProgressDialogFragment extends DialogFragment {
         super.onDestroyView();
     }
 
-    private void setupView(@NonNull ProgressDialog dialog) {
+    private void setupView(@NonNull AlertDialog dialog) {
         if (getArguments() != null && getArguments().getString(TITLE) != null) {
             dialog.setTitle(getArguments().getString(TITLE));
         }
 
         if (getArguments() != null && getArguments().getString(MESSAGE) != null) {
-            dialog.setMessage(getArguments().getString(MESSAGE));
+            ((TextView) dialogView.findViewById(R.id.message)).setText(getArguments().getString(MESSAGE));
         }
 
         if (getCancelButtonText() != null) {
@@ -130,5 +133,9 @@ public class ProgressDialogFragment extends DialogFragment {
 
     public interface Cancellable {
         boolean cancel();
+    }
+
+    public View getDialogView() {
+        return dialogView;
     }
 }

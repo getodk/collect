@@ -1,74 +1,49 @@
 package org.odk.collect.android.fragments.dialogs;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.TestActivityScenario;
+import org.robolectric.annotation.LooperMode;
 
+import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
+import static org.robolectric.shadows.ShadowView.innerText;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
+@LooperMode(PAUSED)
 public class ProgressDialogFragmentTest {
 
-    private FragmentManager fragmentManager;
+    private TestActivityScenario<DialogFragmentTestActivity> activityScenario;
 
     @Before
     public void setup() {
-        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
-        fragmentManager = activity.getSupportFragmentManager();
-    }
-
-    @Test
-    public void setMessage_updatesMessage() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.show(fragmentManager, "TAG");
-
-        fragment.setMessage("blah");
-        CharSequence message = shadowOf((ProgressDialog) fragment.getDialog()).getMessage();
-        assertThat(message, equalTo("blah"));
-    }
-
-    @Test
-    public void setMessage_beforeDialogExists_setsMessageWhenDialogShown() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.setMessage("blah");
-
-        fragment.show(fragmentManager, "TAG");
-        CharSequence message = shadowOf((ProgressDialog) fragment.getDialog()).getMessage();
-        assertThat(message, equalTo("blah"));
-    }
-
-    @Test
-    public void restoringFragment_retainsMessage() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.show(fragmentManager, "TAG");
-        fragment.setMessage("blah");
-
-        ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
-        restoredFragment.setArguments(fragment.getArguments());
-        restoredFragment.show(fragmentManager, "TAG");
-        CharSequence message = shadowOf((ProgressDialog) restoredFragment.getDialog()).getMessage();
-        assertThat(message, equalTo("blah"));
+        activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity.class);
     }
 
     @Test
     public void setTitle_updatesTitle() {
         ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.show(fragmentManager, "TAG");
+        AlertDialog dialog = createAndShow(fragment);
 
         fragment.setTitle("blah");
-        CharSequence message = shadowOf((ProgressDialog) fragment.getDialog()).getTitle();
+        CharSequence message = shadowOf(dialog).getTitle();
         assertThat(message, equalTo("blah"));
     }
 
@@ -77,22 +52,62 @@ public class ProgressDialogFragmentTest {
         ProgressDialogFragment fragment = new ProgressDialogFragment();
         fragment.setTitle("blah");
 
-        fragment.show(fragmentManager, "TAG");
-        CharSequence message = shadowOf((ProgressDialog) fragment.getDialog()).getTitle();
+        AlertDialog dialog = createAndShow(fragment);
+        CharSequence message = shadowOf(dialog).getTitle();
         assertThat(message, equalTo("blah"));
     }
 
     @Test
     public void restoringFragment_retainsTitle() {
         ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.show(fragmentManager, "TAG");
+        createAndShow(fragment);
         fragment.setTitle("blah");
 
         ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
         restoredFragment.setArguments(fragment.getArguments());
-        restoredFragment.show(fragmentManager, "TAG");
-        CharSequence message = shadowOf((ProgressDialog) restoredFragment.getDialog()).getTitle();
+        AlertDialog restoredDialog = createAndShow(restoredFragment);
+        CharSequence message = shadowOf(restoredDialog).getTitle();
         assertThat(message, equalTo("blah"));
+    }
+
+    @Test
+    public void whenMessageNotSet_showsProgressBar() {
+        ProgressDialogFragment fragment = new ProgressDialogFragment();
+        createAndShow(fragment);
+
+        View dialogView = fragment.getDialogView();
+        assertThat(dialogView.findViewById(R.id.progress_bar).getVisibility(), is(View.VISIBLE));
+    }
+
+    @Test
+    public void setMessage_updatesMessage() {
+        ProgressDialogFragment fragment = new ProgressDialogFragment();
+        createAndShow(fragment);
+        View dialogView = fragment.getDialogView();
+
+        fragment.setMessage("blah");
+        assertThat(innerText(dialogView), equalTo("blah"));
+    }
+
+    @Test
+    public void setMessage_beforeDialogExists_setsMessageWhenDialogShown() {
+        ProgressDialogFragment fragment = new ProgressDialogFragment();
+        fragment.setMessage("blah");
+        createAndShow(fragment);
+
+        assertThat(innerText(fragment.getDialogView()), equalTo("blah"));
+    }
+
+    @Test
+    public void restoringFragment_retainsMessage() {
+        ProgressDialogFragment fragment = new ProgressDialogFragment();
+        createAndShow(fragment);
+        fragment.setMessage("blah");
+
+        ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
+        restoredFragment.setArguments(fragment.getArguments());
+        createAndShow(restoredFragment);
+        assertThat(innerText(fragment.getDialogView()), equalTo("blah"));
     }
 
     @Test
@@ -100,7 +115,9 @@ public class ProgressDialogFragmentTest {
         ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);
         ProgressDialogFragment fragment = new TestProgressDialogFragment(cancellable);
 
-        fragment.onCancel(fragment.getDialog());
+        AlertDialog dialog = createAndShow(fragment);
+
+        fragment.onCancel(dialog);
         verify(cancellable).cancel();
     }
 
@@ -108,12 +125,23 @@ public class ProgressDialogFragmentTest {
     public void whenThereIsCancelButtonText_clickingCancel_dismissesAndCallsCancelOnCancellable() {
         ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);
         ProgressDialogFragment fragment = new TestProgressDialogFragment(cancellable);
-        fragment.show(fragmentManager, "TAG");
-        ProgressDialog dialog = (ProgressDialog) fragment.getDialog();
+
+        AlertDialog dialog = createAndShow(fragment);
 
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+        shadowOf(getMainLooper()).idle();
+
         verify(cancellable).cancel();
         assertThat(dialog.isShowing(), equalTo(false));
+    }
+
+    private AlertDialog createAndShow(ProgressDialogFragment fragment) {
+        activityScenario.onActivity(activity -> {
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+        });
+
+        return (AlertDialog) fragment.getDialog();
     }
 
     public static class TestProgressDialogFragment extends ProgressDialogFragment {
@@ -132,6 +160,15 @@ public class ProgressDialogFragmentTest {
         @Override
         protected Cancellable getCancellable() {
             return cancellable;
+        }
+    }
+
+    private static class DialogFragmentTestActivity extends FragmentActivity {
+
+        @Override
+        protected void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setTheme(R.style.Theme_AppCompat); // Needed for androidx.appcompat.app.AlertDialog
         }
     }
 }
