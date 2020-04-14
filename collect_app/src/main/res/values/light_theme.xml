@@ -79,16 +79,6 @@
         <item name="spinnerItemBackgroundColor">#F9F9F9</item>
     </style>
 
-    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
-        <item name="buttonBarNegativeButtonStyle">@style/AlertDialogButton</item>
-        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogButton</item>
-        <item name="buttonBarNeutralButtonStyle">@style/AlertDialogButton</item>
-    </style>
-
-    <style name="AlertDialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">?colorSecondary</item>
-    </style>
-
     <style name="Widget.Collect.SearchView.Light" parent="Widget.AppCompat.Light.SearchView">
         <item name="searchHintIcon">@null</item>
     </style>
