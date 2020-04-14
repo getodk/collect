@@ -39,109 +39,146 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void setTitle_updatesTitle() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        AlertDialog dialog = createAndShow(fragment);
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
 
-        fragment.setTitle("blah");
-        CharSequence message = shadowOf(dialog).getTitle();
-        assertThat(message, equalTo("blah"));
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            fragment.setTitle("blah");
+            CharSequence message = shadowOf(fragment.getDialog()).getTitle();
+            assertThat(message, equalTo("blah"));
+        });
     }
 
     @Test
     public void setTitle_beforeDialogExists_setsTitleWhenDialogShown() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.setTitle("blah");
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
+            fragment.setTitle("blah");
 
-        AlertDialog dialog = createAndShow(fragment);
-        CharSequence message = shadowOf(dialog).getTitle();
-        assertThat(message, equalTo("blah"));
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            CharSequence message = shadowOf(fragment.getDialog()).getTitle();
+            assertThat(message, equalTo("blah"));
+        });
     }
 
     @Test
     public void restoringFragment_retainsTitle() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        createAndShow(fragment);
-        fragment.setTitle("blah");
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
 
-        ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
-        restoredFragment.setArguments(fragment.getArguments());
-        AlertDialog restoredDialog = createAndShow(restoredFragment);
-        CharSequence message = shadowOf(restoredDialog).getTitle();
-        assertThat(message, equalTo("blah"));
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            fragment.setTitle("blah");
+
+            ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
+            restoredFragment.setArguments(fragment.getArguments());
+
+            restoredFragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
+            CharSequence message = shadowOf(restoredDialog).getTitle();
+            assertThat(message, equalTo("blah"));
+        });
     }
 
     @Test
     public void whenMessageNotSet_showsProgressBar() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        createAndShow(fragment);
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
 
-        View dialogView = fragment.getDialogView();
-        assertThat(dialogView.findViewById(R.id.progress_bar).getVisibility(), is(View.VISIBLE));
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            View dialogView = fragment.getDialogView();
+            assertThat(dialogView.findViewById(R.id.progress_bar).getVisibility(), is(View.VISIBLE));
+        });
     }
 
     @Test
     public void setMessage_updatesMessage() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        createAndShow(fragment);
-        View dialogView = fragment.getDialogView();
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
 
-        fragment.setMessage("blah");
-        assertThat(innerText(dialogView), equalTo("blah"));
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            View dialogView = fragment.getDialogView();
+
+            fragment.setMessage("blah");
+            assertThat(innerText(dialogView), equalTo("blah"));
+        });
     }
 
     @Test
     public void setMessage_beforeDialogExists_setsMessageWhenDialogShown() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.setMessage("blah");
-        createAndShow(fragment);
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
+            fragment.setMessage("blah");
 
-        assertThat(innerText(fragment.getDialogView()), equalTo("blah"));
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            assertThat(innerText(fragment.getDialogView()), equalTo("blah"));
+        });
     }
 
     @Test
     public void restoringFragment_retainsMessage() {
-        ProgressDialogFragment fragment = new ProgressDialogFragment();
-        createAndShow(fragment);
-        fragment.setMessage("blah");
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
+            fragment.setMessage("blah");
 
-        ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
-        restoredFragment.setArguments(fragment.getArguments());
-        createAndShow(restoredFragment);
-        assertThat(innerText(fragment.getDialogView()), equalTo("blah"));
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
+            restoredFragment.setArguments(fragment.getArguments());
+
+            restoredFragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+            assertThat(innerText(restoredFragment.getDialogView()), equalTo("blah"));
+        });
     }
 
     @Test
     public void cancelling_callsCancelOnCancellable() {
-        ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);
-        ProgressDialogFragment fragment = new TestProgressDialogFragment(cancellable);
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);
+            ProgressDialogFragment fragment = new TestProgressDialogFragment(cancellable);
 
-        AlertDialog dialog = createAndShow(fragment);
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
 
-        fragment.onCancel(dialog);
-        verify(cancellable).cancel();
+            AlertDialog dialog = (AlertDialog) fragment.getDialog();
+
+            fragment.onCancel(dialog);
+            verify(cancellable).cancel();
+        });
     }
 
     @Test
     public void whenThereIsCancelButtonText_clickingCancel_dismissesAndCallsCancelOnCancellable() {
-        ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);
-        ProgressDialogFragment fragment = new TestProgressDialogFragment(cancellable);
-
-        AlertDialog dialog = createAndShow(fragment);
-
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
-        shadowOf(getMainLooper()).idle();
-
-        verify(cancellable).cancel();
-        assertThat(dialog.isShowing(), equalTo(false));
-    }
-
-    private AlertDialog createAndShow(ProgressDialogFragment fragment) {
         activityScenario.onActivity(activity -> {
+            ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);
+            ProgressDialogFragment fragment = new TestProgressDialogFragment(cancellable);
+
             fragment.show(activity.getSupportFragmentManager(), "TAG");
             shadowOf(getMainLooper()).idle();
-        });
 
-        return (AlertDialog) fragment.getDialog();
+            AlertDialog dialog = (AlertDialog) fragment.getDialog();
+
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+            shadowOf(getMainLooper()).idle();
+
+            verify(cancellable).cancel();
+            assertThat(dialog.isShowing(), equalTo(false));
+        });
     }
 
     public static class TestProgressDialogFragment extends ProgressDialogFragment {
