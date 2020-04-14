@@ -78,8 +78,6 @@ public class ProgressDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        setRetainInstance(true);
-
         dialogView = getLayoutInflater().inflate(R.layout.progress_dialog, null, false);
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -95,15 +93,6 @@ public class ProgressDialogFragment extends DialogFragment {
         if (cancellable != null) {
             cancellable.cancel();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        Dialog dialog = getDialog();
-        if (dialog != null && getRetainInstance()) {
-            dialog.setDismissMessage(null);
-        }
-        super.onDestroyView();
     }
 
     private void setupView(@NonNull AlertDialog dialog) {
@@ -123,12 +112,12 @@ public class ProgressDialogFragment extends DialogFragment {
         }
     }
 
-    private void setArgument(String title, String title2) {
+    private void setArgument(String key, String value) {
         if (getArguments() == null) {
             setArguments(new Bundle());
         }
 
-        getArguments().putString(title2, title);
+        getArguments().putString(value, key);
     }
 
     public interface Cancellable {

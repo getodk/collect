@@ -66,28 +66,6 @@ public class ProgressDialogFragmentTest {
     }
 
     @Test
-    public void restoringFragment_retainsTitle() {
-        activityScenario.onActivity(activity -> {
-            ProgressDialogFragment fragment = new ProgressDialogFragment();
-
-            fragment.show(activity.getSupportFragmentManager(), "TAG");
-            shadowOf(getMainLooper()).idle();
-
-            fragment.setTitle("blah");
-
-            ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
-            restoredFragment.setArguments(fragment.getArguments());
-
-            restoredFragment.show(activity.getSupportFragmentManager(), "TAG");
-            shadowOf(getMainLooper()).idle();
-
-            AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
-            CharSequence message = shadowOf(restoredDialog).getTitle();
-            assertThat(message, equalTo("blah"));
-        });
-    }
-
-    @Test
     public void whenMessageNotSet_showsProgressBar() {
         activityScenario.onActivity(activity -> {
             ProgressDialogFragment fragment = new ProgressDialogFragment();
@@ -129,24 +107,6 @@ public class ProgressDialogFragmentTest {
     }
 
     @Test
-    public void restoringFragment_retainsMessage() {
-        activityScenario.onActivity(activity -> {
-            ProgressDialogFragment fragment = new ProgressDialogFragment();
-            fragment.setMessage("blah");
-
-            fragment.show(activity.getSupportFragmentManager(), "TAG");
-            shadowOf(getMainLooper()).idle();
-
-            ProgressDialogFragment restoredFragment = new ProgressDialogFragment();
-            restoredFragment.setArguments(fragment.getArguments());
-
-            restoredFragment.show(activity.getSupportFragmentManager(), "TAG");
-            shadowOf(getMainLooper()).idle();
-            assertThat(innerText(restoredFragment.getDialogView()), equalTo("blah"));
-        });
-    }
-
-    @Test
     public void cancelling_callsCancelOnCancellable() {
         activityScenario.onActivity(activity -> {
             ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);
@@ -178,6 +138,24 @@ public class ProgressDialogFragmentTest {
 
             verify(cancellable).cancel();
             assertThat(dialog.isShowing(), equalTo(false));
+        });
+    }
+
+    @Test
+    public void whenActivityIsRecreated_titleAndMessageAreRetained() {
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            fragment.setTitle("I AM TITLE");
+            fragment.setMessage("I AM MESSAGE");
+        });
+
+        activityScenario.recreate();
+
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = (ProgressDialogFragment) activity.getSupportFragmentManager().findFragmentByTag("TAG");
+            assertThat(shadowOf(fragment.getDialog()).getTitle(), equalTo("I AM TITLE"));
+            assertThat(innerText(fragment.getDialogView()), equalTo("I AM MESSAGE"));
         });
     }
 
