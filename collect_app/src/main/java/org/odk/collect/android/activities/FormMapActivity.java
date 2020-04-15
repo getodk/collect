@@ -17,16 +17,23 @@ package org.odk.collect.android.activities;
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Window;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
@@ -65,6 +72,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     private FormMapViewModel viewModel;
+    private BottomSheetBehavior bottomSheet;
 
     @Inject
     MapProvider mapProvider;
@@ -114,6 +122,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
+        bottomSheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
+        bottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
@@ -243,14 +253,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
                 break;
             case OPEN_READ_ONLY:
-                startActivity(getViewOnlyFormInstanceIntentFor(featureId));
+                showSummary(featureId, true);
                 break;
             case OPEN_EDIT:
-                if (canEditSaved) {
-                    startActivity(getEditFormInstanceIntentFor(featureId));
-                } else {
-                    startActivity(getViewOnlyFormInstanceIntentFor(featureId));
-                }
+                showSummary(featureId, canEditSaved);
                 break;
         }
     }
@@ -306,5 +312,53 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 return R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;
+    }
+
+    private void showSummary(int featureId, boolean canEdit) {
+        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
+        if (mappableFormInstance == null) {
+            return;
+        }
+
+        String instanceName = mappableFormInstance.getInstanceNme();
+        String instanceStatus = mappableFormInstance.getStatus();
+        String instanceLastStatusChangeDate = new SimpleDateFormat("dd:MM:yy HH:mm:ss", Locale.getDefault()).format(mappableFormInstance.getLastStatusChangeDate());
+
+        ((TextView) findViewById(R.id.submission_name)).setText(instanceName);
+        ((TextView) findViewById(R.id.status_text)).setText(instanceStatus);
+        ((TextView) findViewById(R.id.last_access_time)).setText(instanceLastStatusChangeDate);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        Drawable fabImage = ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility);
+        fab.setImageDrawable(fabImage);
+        fab.setOnClickListener(v -> {
+            if (canEdit) {
+                startActivity(getEditFormInstanceIntentFor(featureId));
+            } else {
+                startActivity(getViewOnlyFormInstanceIntentFor(featureId));
+            }
+        });
+
+        Drawable statusIcon = null;
+        switch (instanceStatus) {
+            case InstanceProviderAPI.STATUS_INCOMPLETE:
+                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_saved);
+                break;
+            case InstanceProviderAPI.STATUS_COMPLETE:
+                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_finalized);
+                break;
+            case InstanceProviderAPI.STATUS_SUBMITTED:
+                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_submited);
+                break;
+            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
+                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_submission_failed);
+                break;
+        }
+
+        ImageView statusImage = findViewById(R.id.status_icon);
+        statusImage.setImageDrawable(statusIcon);
+        statusImage.setBackground(null);
+
+        bottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }
