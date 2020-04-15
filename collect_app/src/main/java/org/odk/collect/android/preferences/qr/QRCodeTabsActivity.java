@@ -14,7 +14,13 @@ import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import androidx.annotation.NonNull;
@@ -25,10 +31,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
+
 public class QRCodeTabsActivity extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
     private static String[] fragmentTitleList;
-
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Intent shareIntent;
 
     @Override
@@ -79,11 +88,30 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     }
 
     @Override
+    public void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_share:
                 if (shareIntent != null) {
-                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+                    if (new File(QRCodeUtils.getQrCodeFilepath()).exists()) {
+                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+                    } else {
+                        Collection<String> keys = new ArrayList<>();
+                        keys.add(KEY_ADMIN_PW);
+                        keys.add(KEY_PASSWORD);
+                        Disposable disposable = QRCodeUtils.getQRCodeGeneratorObservable(keys)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(bitmap -> {
+                                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+                                }, Timber::e);
+                        compositeDisposable.add(disposable);
+                    }
                 }
                 return true;
             case R.id.menu_item_scan_sd_card:

@@ -102,7 +102,6 @@ public class ShowQRCodeFragment extends Fragment {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        setRetainInstance(true);
         passwordsSet[0] = !((String) adminSharedPreferences.get(KEY_ADMIN_PW)).isEmpty();
         passwordsSet[1] = !((String) generalSharedPreferences.get(KEY_PASSWORD)).isEmpty();
         generateCode();
