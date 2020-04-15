@@ -27,7 +27,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class QRCodeTabsActivity extends CollectAbstractActivity {
     private static final int SELECT_PHOTO = 111;
-    private final String[] fragmentTitleList = {"Scan", "QR Code"};
+    private static String[] fragmentTitleList;
 
     private Intent shareIntent;
 
@@ -36,6 +36,10 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qrcode_tab);
         initToolbar();
+
+        fragmentTitleList = new String[]{getString(R.string.scan_qr_code_fragment_title),
+                getString(R.string.view_qr_code_fragment_title)};
+
         ViewPager2 viewPager = (ViewPager2) this.findViewById(R.id.viewPager);
         TabLayout tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
         QRCodeTabsAdapter adapter = new QRCodeTabsAdapter(this);
