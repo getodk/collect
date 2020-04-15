@@ -8,9 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="28dp"
-        android:background="@android:color/white"
-        android:elevation="4dp"
+        android:layout_marginTop="@dimen/margin_large"
+        android:background="?colorSurface"
         android:orientation="vertical"
         android:paddingTop="@dimen/margin_standard">
 
@@ -18,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="56dp">
+            android:paddingStart="@dimen/margin_extra_large"
+            android:paddingEnd="@dimen/margin_extra_large">
 
             <TextView
                 android:id="@+id/submission_name"
@@ -30,8 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="@dimen/margin_standard"
-                android:alpha="0.12"
-                android:background="@android:color/black" />
+                android:background="?colorPrimary" />
         </LinearLayout>
 
         <LinearLayout
@@ -49,6 +48,7 @@
                 android:id="@+id/status_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?primaryTextColor"
                 android:layout_marginStart="@dimen/margin_standard" />
 
         </LinearLayout>
@@ -68,6 +68,7 @@
                 android:id="@+id/last_access_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?primaryTextColor"
                 android:layout_marginStart="@dimen/margin_standard" />
 
         </LinearLayout>
