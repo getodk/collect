@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,10 +29,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -47,6 +46,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.material.MaterialBanner;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
@@ -57,8 +57,8 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.preferences.Transport;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -68,8 +68,8 @@ import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -122,16 +122,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     public Analytics analytics;
 
     @BindView(R.id.storageMigrationBanner)
-    LinearLayout storageMigrationBanner;
-
-    @BindView(R.id.storageMigrationBannerText)
-    TextView storageMigrationBannerText;
-
-    @BindView(R.id.storageMigrationBannerDismissButton)
-    Button storageMigrationBannerDismissButton;
-
-    @BindView(R.id.storageMigrationBannerLearnMoreButton)
-    Button storageMigrationBannerLearnMoreButton;
+    MaterialBanner storageMigrationBanner;
 
     @BindView(R.id.version_sha)
     TextView versionSHAView;
@@ -641,16 +632,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
     }
 
-    public void onStorageMigrationBannerDismiss(View view) {
-        storageMigrationBanner.setVisibility(View.GONE);
-        storageMigrationRepository.clearResult();
-    }
-
-    public void onStorageMigrationBannerLearnMoreClick(View view) {
-        showStorageMigrationDialog();
-        getContentResolver().unregisterContentObserver(contentObserver);
-    }
-
     private void onStorageMigrationFinish(StorageMigrationResult result) {
         if (result == StorageMigrationResult.SUCCESS) {
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
@@ -681,15 +662,21 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void displayStorageMigrationBanner() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
-        storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
-        storageMigrationBannerDismissButton.setVisibility(View.GONE);
+        storageMigrationBanner.setText(getString(R.string.scoped_storage_banner_text));
+        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_learn_more));
+        storageMigrationBanner.setAction(() -> {
+            showStorageMigrationDialog();
+            getContentResolver().unregisterContentObserver(contentObserver);
+        });
     }
 
     private void displayBannerWithSuccessStorageMigrationResult() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBannerText.setText(R.string.storage_migration_completed);
-        storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
-        storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
+        storageMigrationBanner.setText(getString(R.string.storage_migration_completed));
+        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_dismiss));
+        storageMigrationBanner.setAction(() -> {
+            storageMigrationBanner.setVisibility(View.GONE);
+            storageMigrationRepository.clearResult();
+        });
     }
 }

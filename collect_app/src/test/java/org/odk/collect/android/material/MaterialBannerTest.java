@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static android.view.View.inflate;
@@ -31,13 +32,16 @@ public class MaterialBannerTest {
     }
 
     @Test
-    public void hasTextAndActionTextAttrs() {
+    public void hasCustomAttrs() {
         MaterialBanner banner = (MaterialBanner) inflate(activity, R.layout.material_banner_attr_test, null);
 
         assertThat(innerText(banner.findViewById(R.id.text)), is("text attribute value"));
 
         Button button = banner.findViewById(R.id.button);
         assertThat(button.getText(), is("actionText attribute value"));
+
+        int textColor = button.getCurrentTextColor();
+        assertThat(textColor, is(new ThemeUtils(activity).getColorSecondary()));
     }
 
     @Test

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 public class MaterialBanner extends FrameLayout {
     public MaterialBanner(@NonNull Context context) {
@@ -53,25 +54,29 @@ public class MaterialBanner extends FrameLayout {
     }
 
     private void applyAttributes(Context context, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaterialBanner);
-        for (int i = 0; i < a.length(); i++) {
-            switch (a.getIndex(i)) {
-                case R.styleable.MaterialBanner_text: {
-                    setText(a.getString(i));
-                    break;
-                }
+        TypedArray array = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.MaterialBanner,
+                0, 0);
 
-                case R.styleable.MaterialBanner_actionText: {
-                    setActionText(a.getString(i));
-                    break;
-                }
-            }
+
+        if (array.getString(R.styleable.MaterialBanner_text) != null) {
+            setText(array.getString(R.styleable.MaterialBanner_text));
         }
 
-        a.recycle();
+        if (array.getString(R.styleable.MaterialBanner_actionText) != null) {
+            setActionText(array.getString(R.styleable.MaterialBanner_actionText));
+        }
+
+        if (array.getBoolean(R.styleable.MaterialBanner_secondaryActionColor, false)) {
+            Button button = findViewById(R.id.button);
+            button.setTextColor(new ThemeUtils(getContext()).getColorSecondary());
+        }
+
+        array.recycle();
     }
 
-    interface OnActionListener {
+    public interface OnActionListener {
         void onAction();
     }
 }

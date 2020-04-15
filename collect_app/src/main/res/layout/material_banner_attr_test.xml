@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     custom:text="text attribute value"
-    custom:actionText="actionText attribute value">
+    custom:actionText="actionText attribute value"
+    custom:secondaryActionColor="true">
 
 </org.odk.collect.android.material.MaterialBanner>
