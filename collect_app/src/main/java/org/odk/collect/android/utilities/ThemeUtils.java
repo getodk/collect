@@ -60,7 +60,14 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getSettingsTheme() {
-        return isDarkTheme() ? R.style.Theme_Collect_Settings_Dark : R.style.Theme_Collect_Settings_Light;
+        String theme = getPrefsTheme();
+        if (theme.equals(context.getString(R.string.app_theme_dark))) {
+            return R.style.Theme_Collect_Settings_Dark;
+        } else if (theme.equals(context.getString(R.string.app_theme_magenta))) {
+            return R.style.Theme_Collect_Settings_Magenta;
+        } else {
+            return R.style.Theme_Collect_Settings_Light;
+        }
     }
 
     @StyleRes
