@@ -1,0 +1,77 @@
+package org.odk.collect.android.material;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.odk.collect.android.R;
+
+public class MaterialBanner extends FrameLayout {
+    public MaterialBanner(@NonNull Context context) {
+        super(context);
+        init(context, null);
+    }
+
+    public MaterialBanner(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs);
+    }
+
+    public MaterialBanner(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        View.inflate(context, R.layout.material_banner, this);
+
+        if (attrs != null) {
+            applyAttributes(context, attrs);
+        }
+    }
+
+    public void setText(String text) {
+        TextView textView = findViewById(R.id.text);
+        textView.setText(text);
+    }
+
+    public void setActionText(String actionTitle) {
+        Button button = findViewById(R.id.button);
+        button.setText(actionTitle);
+    }
+
+    public void setAction(OnActionListener listener) {
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(v -> listener.onAction());
+    }
+
+    private void applyAttributes(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaterialBanner);
+        for (int i = 0; i < a.length(); i++) {
+            switch (a.getIndex(i)) {
+                case R.styleable.MaterialBanner_text: {
+                    setText(a.getString(i));
+                    break;
+                }
+
+                case R.styleable.MaterialBanner_actionText: {
+                    setActionText(a.getString(i));
+                    break;
+                }
+            }
+        }
+
+        a.recycle();
+    }
+
+    interface OnActionListener {
+        void onAction();
+    }
+}

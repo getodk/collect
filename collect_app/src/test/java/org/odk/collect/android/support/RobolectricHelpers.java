@@ -51,7 +51,7 @@ public class RobolectricHelpers {
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz, int theme) {
         ActivityController<T> activity = Robolectric.buildActivity(clazz);
-        activity.get().setTheme(theme); // Needed so attrs are available
+        activity.get().setTheme(theme);
 
         return activity.setup().get();
     }
@@ -62,7 +62,7 @@ public class RobolectricHelpers {
 
     public static <T extends FragmentActivity> ActivityController<T> buildThemedActivity(Class<T> clazz) {
         ActivityController<T> activity = Robolectric.buildActivity(clazz);
-        activity.get().setTheme(R.style.Theme_Collect_Light); // Needed so attrs are available
+        activity.get().setTheme(R.style.Theme_Collect_Light);
 
         return activity;
     }
