@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -73,7 +74,9 @@ public class WidgetViewUtils {
     }
 
     public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, int answerFontSize, QuestionWidget listener) {
-        final MaterialButton button = new MaterialButton(context);
+        final MaterialButton button = (MaterialButton) LayoutInflater
+                .from(context)
+                .inflate(R.layout.widget_answer_button, null, false);
 
         if (readOnly) {
             button.setVisibility(GONE);
@@ -81,7 +84,6 @@ public class WidgetViewUtils {
             button.setId(withId);
             button.setText(text);
             button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            button.setPadding(20, 20, 20, 20);
 
             TableLayout.LayoutParams params = new TableLayout.LayoutParams();
             params.setMargins(7, 5, 7, 5);

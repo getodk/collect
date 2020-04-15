@@ -36,7 +36,7 @@ the specific language governing permissions and limitations under the License.
             android:lineSpacingMultiplier="1.2"
             android:paddingTop="10dp"
             android:paddingBottom="20dp"
-            android:textColor="?primaryTextColor"
+            android:textColor="?colorOnSurface"
             android:textSize="21sp"
             android:textStyle="bold" />
 
@@ -47,7 +47,7 @@ the specific language governing permissions and limitations under the License.
             android:gravity="start"
             android:lineSpacingMultiplier="1.2"
             android:text="@string/save_form_as"
-            android:textColor="?primaryTextColor"
+            android:textColor="?colorOnSurface"
             android:textSize="21sp" />
 
         <EditText

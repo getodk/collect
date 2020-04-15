@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/margin_large"
     android:paddingRight="@dimen/margin_large"
     android:paddingStart="@dimen/margin_large"
-    android:textColor="?primaryTextColor"
+    android:textColor="?colorOnSurface"
     android:textSize="@dimen/text_size_small"
     tools:drawableLeft="@drawable/ic_save"
     tools:drawableStart="@drawable/ic_save"

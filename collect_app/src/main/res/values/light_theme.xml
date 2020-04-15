@@ -7,16 +7,14 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Collect.BaseLight" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Collect.BaseLight" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Material theme attributes-->
         <item name="colorPrimary">#E0E0E0</item>
         <item name="colorSecondary">#2196F3</item>
         <item name="colorError">@color/red_500</item>
 
-        <item name="colorPrimaryDark">#878787</item>
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
-
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOnPrimary">#000000</item>
         <item name="colorOnSecondary">#000000</item>
@@ -24,40 +22,24 @@
         <item name="colorOnError">#000000</item>
         <item name="colorOnSurface">#000000</item>
         <item name="scrimBackground">@color/mtrl_scrim_color</item>
-
-        <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
-        </item>
-        <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2
-        </item>
-        <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3
-        </item>
-        <item name="textAppearanceHeadline4">@style/TextAppearance.MaterialComponents.Headline4
-        </item>
-        <item name="textAppearanceHeadline5">@style/TextAppearance.MaterialComponents.Headline5
-        </item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MaterialComponents.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MaterialComponents.Headline5</item>
         <item name="textAppearanceHeadline6">@style/TextAppearance.Collect.Headline6</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.Collect.Subtitle1</item>
-        <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2
-        </item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2</item>
         <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
         <item name="textAppearanceBody2">@style/TextAppearance.Collect.Body2</item>
         <item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
         <item name="textAppearanceButton">@style/TextAppearance.Collect.Button</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
 
-        <item name="shapeAppearanceSmallComponent">
-            @style/ShapeAppearance.MaterialComponents.SmallComponent
-        </item>
-        <item name="shapeAppearanceMediumComponent">
-            @style/ShapeAppearance.MaterialComponents.MediumComponent
-        </item>
-        <item name="shapeAppearanceLargeComponent">
-            @style/ShapeAppearance.MaterialComponents.LargeComponent
-        </item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MaterialComponents.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MaterialComponents.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MaterialComponents.LargeComponent</item>
         <!--/Material theme attributes-->
-
-        <!-- Needed so dialogs use secondary color for buttons -->
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
 
         <item name="primaryTextColor">?attr/colorOnSurface</item>
         <item name="secondaryTextColor">#99000000</item>
@@ -69,6 +51,7 @@
         <item name="colorAccent">@color/blue_500</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
+        <item name="alertDialogTheme">@style/Theme.Collect.BaseLight.Dialog.Alert</item>
         <item name="searchViewStyle">@style/Widget.Collect.SearchView.Light</item>
         <item name="iconColor">#000000</item>
         <item name="dividerColor">#1e000000</item>
@@ -77,6 +60,11 @@
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
         <item name="spinnerItemBackgroundColor">#F9F9F9</item>
+
+    </style>
+
+    <style name="Theme.Collect.BaseLight.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">?attr/colorSecondary</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Light" parent="Widget.AppCompat.Light.SearchView">
