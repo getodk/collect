@@ -88,7 +88,6 @@
 
     <include
         android:id="@+id/submission_summary"
-        layout="@layout/submission_summary_layout"
-        android:visibility="gone"/>
+        layout="@layout/submission_summary_layout" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
