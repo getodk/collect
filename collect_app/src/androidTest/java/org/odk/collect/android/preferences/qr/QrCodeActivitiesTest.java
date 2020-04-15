@@ -14,15 +14,25 @@ import org.odk.collect.android.R;
 @RunWith(AndroidJUnit4.class)
 public class QrCodeActivitiesTest {
     @Test
-    public void test() {
+    public void testScanner() {
         FragmentScenario<QRScannerFragment> fs =
                 FragmentScenario.launchInContainer(QRScannerFragment.class,
                         new Bundle(),
                         R.style.Theme_MaterialComponents,
                         new FragmentFactory());
 
-        fs.onFragment(new QrCodeFragmentAction());
+        fs.onFragment(new QrCodeScannerFragmentAction());
+    }
 
+    @Test
+    public void testView() {
+        FragmentScenario<ShowQRCodeFragment> fs =
+                FragmentScenario.launchInContainer(ShowQRCodeFragment.class,
+                        new Bundle(),
+                        R.style.Theme_MaterialComponents,
+                        new FragmentFactory());
+
+        fs.onFragment(new ShowQrFragmentAction());
     }
 
 
