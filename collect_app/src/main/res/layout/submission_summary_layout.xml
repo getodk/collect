@@ -52,26 +52,6 @@
                 android:layout_marginStart="@dimen/margin_standard" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/margin_standard">
-
-            <ImageButton
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_access_time" />
-
-            <TextView
-                android:id="@+id/last_access_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?primaryTextColor"
-                android:layout_marginStart="@dimen/margin_standard" />
-
-        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

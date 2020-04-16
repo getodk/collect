@@ -11,6 +11,7 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import timber.log.Timber;
@@ -167,8 +168,8 @@ public class FormMapViewModel extends ViewModel {
             return instanceName;
         }
 
-        public Long getLastStatusChangeDate() {
-            return lastStatusChangeDate;
+        public Date getLastStatusChangeDate() {
+            return new Date(lastStatusChangeDate);
         }
 
         public String getStatus() {

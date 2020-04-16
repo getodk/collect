@@ -49,6 +49,7 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -322,11 +323,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         String instanceName = mappableFormInstance.getInstanceNme();
         String instanceStatus = mappableFormInstance.getStatus();
-        String instanceLastStatusChangeDate = new SimpleDateFormat("dd:MM:yy HH:mm:ss", Locale.getDefault()).format(mappableFormInstance.getLastStatusChangeDate());
+        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, instanceStatus, mappableFormInstance.getLastStatusChangeDate());
 
         ((TextView) findViewById(R.id.submission_name)).setText(instanceName);
-        ((TextView) findViewById(R.id.status_text)).setText(instanceStatus);
-        ((TextView) findViewById(R.id.last_access_time)).setText(instanceLastStatusChangeDate);
+        ((TextView) findViewById(R.id.status_text)).setText(instanceLastStatusChangeDate);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         Drawable fabImage = ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility);
