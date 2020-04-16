@@ -1,4 +1,4 @@
-package org.odk.collect.android.material;
+package org.opendatakit.collect.material;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,9 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ThemeUtils;
+import static org.opendatakit.collect.material.ContextUtils.getAttributeValue;
 
+/**
+ * Provides an implementation of Material's "Banner" (https://material.io/components/banners) as no
+ * implementation currently exists in the Material Components framework
+ */
 public class MaterialBanner extends FrameLayout {
     public MaterialBanner(@NonNull Context context) {
         super(context);
@@ -70,7 +73,7 @@ public class MaterialBanner extends FrameLayout {
 
         if (array.getBoolean(R.styleable.MaterialBanner_secondaryActionColor, false)) {
             Button button = findViewById(R.id.button);
-            button.setTextColor(new ThemeUtils(getContext()).getColorSecondary());
+            button.setTextColor(getAttributeValue(getContext(), R.attr.colorSecondary));
         }
 
         array.recycle();

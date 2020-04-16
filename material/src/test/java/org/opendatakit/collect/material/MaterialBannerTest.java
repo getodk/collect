@@ -1,39 +1,38 @@
-package org.odk.collect.android.material;
+package org.opendatakit.collect.material;
 
+import android.content.Context;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static android.view.View.inflate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.odk.collect.android.support.RobolectricHelpers.buildThemedActivity;
+import static org.mockito.Mockito.*;
 import static org.robolectric.shadows.ShadowView.innerText;
 
 @RunWith(RobolectricTestRunner.class)
 public class MaterialBannerTest {
 
     private MaterialBanner banner;
-    private AppCompatActivity activity;
+    private Context context;
 
     @Before
     public void setup() {
-        activity = buildThemedActivity(AppCompatActivity.class).get();
-        banner = new MaterialBanner(activity);
+        context = ApplicationProvider.getApplicationContext();
+        context.setTheme(R.style.Theme_MaterialComponents); // Needed for material theme attributes
+
+        banner = new MaterialBanner(context);
     }
 
     @Test
     public void hasCustomAttrs() {
-        MaterialBanner banner = (MaterialBanner) inflate(activity, R.layout.material_banner_attr_test, null);
+        MaterialBanner banner = (MaterialBanner) inflate(context, R.layout.material_banner_attr_test, null);
 
         assertThat(innerText(banner.findViewById(R.id.text)), is("text attribute value"));
 
@@ -41,7 +40,7 @@ public class MaterialBannerTest {
         assertThat(button.getText(), is("actionText attribute value"));
 
         int textColor = button.getCurrentTextColor();
-        assertThat(textColor, is(new ThemeUtils(activity).getColorSecondary()));
+        assertThat(textColor, is(ContextUtils.getAttributeValue(context, R.attr.colorSecondary)));
     }
 
     @Test

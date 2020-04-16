@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/margin_small">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.Collect.Body2"
+            android:padding="8dp"
+            android:textAppearance="?textAppearanceBody2"
             tools:text="Celiac butcher drinking vinegar, tattooed banh mi brunch mixtape iceland migas direct trade sartorial squid disrupt." />
 
         <com.google.android.material.button.MaterialButton
