@@ -1,4 +1,4 @@
-package org.odk.collect.android.material;
+package org.opendatakit.collect.material;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -11,16 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
-import org.odk.collect.android.R;
-
 /**
  * Provides an implementation of Material's "Full Screen Dialog"
  * (https://material.io/components/dialogs/#full-screen-dialog) as no implementation currently
  * exists in the Material Components framework
  */
 public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
-
-    private Toolbar toolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,19 +55,19 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> {
-            onCloseClicked();
-        });
+        if (getToolbar() != null) {
+            getToolbar().setNavigationOnClickListener(v -> {
+                onCloseClicked();
+            });
+        }
     }
 
     protected abstract void onCloseClicked();
 
     protected abstract void onBackPressed();
 
-    protected Toolbar getToolbar() {
-        return toolbar;
-    }
+    @Nullable
+    protected abstract Toolbar getToolbar();
 
     protected boolean shouldShowSoftKeyboard() {
         return false;

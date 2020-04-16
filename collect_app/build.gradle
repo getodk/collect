@@ -292,6 +292,7 @@ dependencies {
     }
 
     implementation project(':nbi-stubs')
+    implementation project(':material')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.1"
