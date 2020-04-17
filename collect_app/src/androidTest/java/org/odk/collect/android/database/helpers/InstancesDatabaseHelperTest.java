@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -52,7 +53,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
     @Parameterized.Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
-        return Arrays.asList(new Object[][] {
+        return Arrays.asList(new Object[][]{
                 {"Downgrading from version with extra column drops that column", "instances_v7000_added_fakeColumn.db"},
                 {"Downgrading from version with missing column adds that column", "instances_v7000_removed_jrVersion.db"},
 
@@ -64,6 +65,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     }
 
     @Test
+    @Ignore("Flakey. Should be replaced at a Robolectric level probably")
     public void testMigration() throws IOException {
         copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
         InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
