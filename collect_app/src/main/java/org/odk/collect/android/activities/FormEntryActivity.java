@@ -90,10 +90,9 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.formentry.QuitFormDialog;
+import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
@@ -134,7 +133,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
-import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -143,7 +141,6 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -210,7 +207,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         AudioControllerView.SwipableParent {
 
     // Defines for FormEntryActivity
-    private static final boolean EXIT = true;
+    public static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
@@ -1920,58 +1917,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * saving
      */
     private void createQuitDialog() {
-        alertDialog = QuitFormDialog.show(this, getFormController(), new QuitFormDialog.Listener() {
-            @Override
-            public void onSaveChangedClicked() {
-                saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
-                alertDialog.dismiss();
-            }
-
-            @Override
-            public void onIgnoreChangesClicked() {
-                // close all open databases of external data.
-                ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
-                if (manager != null) {
-                    manager.close();
-                }
-
-                FormController formController = getFormController();
-                if (formController != null) {
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
-                }
-                removeTempInstance();
-                MediaManager.INSTANCE.revertChanges();
-                finishAndReturnInstance();
-
-                alertDialog.dismiss();
-            }
-        });
-    }
-
-    // Cleanup when user exits a form without saving
-    private void removeTempInstance() {
-        FormController formController = getFormController();
-
-        if (formController != null && formController.getInstanceFile() != null) {
-            SaveFormToDisk.removeSavepointFiles(formController.getInstanceFile().getName());
-
-            // if it's not already saved, erase everything
-            if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
-                // delete media first
-                String instanceFolder = formController.getInstanceFile().getParent();
-                Timber.i("Attempting to delete: %s", instanceFolder);
-                File file = formController.getInstanceFile().getParentFile();
-                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
-                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
-                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
-
-                Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
-                        images, audio, video);
-                FileUtils.purgeMediaPath(instanceFolder);
-            }
-        } else {
-            Timber.w("null returned by getFormController()");
-        }
+        showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
     }
 
     @Nullable
@@ -2553,7 +2499,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Returns the instance that was just filled out to the calling activity, if
      * requested.
      */
-    private void finishAndReturnInstance() {
+    public void finishAndReturnInstance() {
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form
