@@ -8,10 +8,10 @@ import android.preference.Preference;
 import org.odk.collect.android.R;
 
 class SplashClickListener implements Preference.OnPreferenceClickListener {
-    private final UserInterfacePreferences preferencesFragment;
+    private final UserInterfacePreferencesFragment preferencesFragment;
     private final Preference splashPathPreference;
 
-    SplashClickListener(UserInterfacePreferences preferenceFragment, Preference splashPathPreference) {
+    SplashClickListener(UserInterfacePreferencesFragment preferenceFragment, Preference splashPathPreference) {
         this.preferencesFragment = preferenceFragment;
         this.splashPathPreference = splashPathPreference;
     }
@@ -19,7 +19,7 @@ class SplashClickListener implements Preference.OnPreferenceClickListener {
     private void launchImageChooser() {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
-        preferencesFragment.startActivityForResult(i, UserInterfacePreferences.IMAGE_CHOOSER);
+        preferencesFragment.startActivityForResult(i, UserInterfacePreferencesFragment.IMAGE_CHOOSER);
     }
 
     @Override

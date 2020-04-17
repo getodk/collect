@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -25,11 +26,16 @@ import android.provider.MediaStore;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.version.VersionInformation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeMap;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -42,18 +48,27 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class UserInterfacePreferences extends BasePreferenceFragment {
+public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
 
-    public static UserInterfacePreferences newInstance(boolean adminMode) {
+    @Inject
+    VersionInformation versionInformation;
+
+    public static UserInterfacePreferencesFragment newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
 
-        UserInterfacePreferences userInterfacePreferences = new UserInterfacePreferences();
-        userInterfacePreferences.setArguments(bundle);
+        UserInterfacePreferencesFragment userInterfacePreferencesFragment = new UserInterfacePreferencesFragment();
+        userInterfacePreferencesFragment.setArguments(bundle);
 
-        return userInterfacePreferences;
+        return userInterfacePreferencesFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -72,7 +87,13 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         final ListPreference pref = (ListPreference) findPreference(KEY_APP_THEME);
 
         if (pref != null) {
+            if (!versionInformation.isRelease()) {
+                CharSequence[] entries = pref.getEntries();
+                pref.setEntries(Arrays.copyOfRange(entries, 0, entries.length - 1));
 
+                CharSequence[] entryValues = pref.getEntryValues();
+                pref.setEntryValues(Arrays.copyOfRange(entryValues, 0, entryValues.length - 1));
+            }
 
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener((preference, newValue) -> {

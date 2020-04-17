@@ -27,10 +27,6 @@ public class VersionInformation {
         }
     }
 
-    public String getVersionDescription() {
-        return versionDescriptionProvider.getVersionDescription();
-    }
-
     @Nullable
     public String getCommitSHA() {
          String[] components = getVersionDescriptionComponents();
@@ -61,16 +57,12 @@ public class VersionInformation {
         return getVersionDescriptionComponents().length == 1;
     }
 
-    public boolean isBetaRelease() {
-        return isBeta() && getVersionDescriptionComponents().length == 2;
+    private boolean isBeta() {
+        return versionDescriptionProvider.getVersionDescription().contains("beta");
     }
 
     public boolean isDirty() {
         return versionDescriptionProvider.getVersionDescription().contains("dirty");
-    }
-
-    private boolean isBeta() {
-        return versionDescriptionProvider.getVersionDescription().contains("beta");
     }
 
     private String[] getVersionDescriptionComponents() {

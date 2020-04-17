@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.version.VersionInformation;
@@ -88,10 +87,16 @@ public class MainMenuViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
+        private final VersionInformation versionInformation;
+
+        public Factory(VersionInformation versionInformation) {
+            this.versionInformation = versionInformation;
+        }
+
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(new VersionInformation(() -> BuildConfig.VERSION_NAME), AdminSharedPreferences.getInstance());
+            return (T) new MainMenuViewModel(versionInformation, AdminSharedPreferences.getInstance());
         }
     }
 }
