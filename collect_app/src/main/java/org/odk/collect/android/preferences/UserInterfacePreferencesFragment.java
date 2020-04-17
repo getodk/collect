@@ -87,7 +87,7 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
         final ListPreference pref = (ListPreference) findPreference(KEY_APP_THEME);
 
         if (pref != null) {
-            if (!versionInformation.isRelease()) {
+            if (versionInformation.isRelease()) {
                 CharSequence[] entries = pref.getEntries();
                 pref.setEntries(Arrays.copyOfRange(entries, 0, entries.length - 1));
 
