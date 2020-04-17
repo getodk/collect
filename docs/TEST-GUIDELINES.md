@@ -1,8 +1,8 @@
 # Test guidelines
 
-Automated tests are very important for building software. They let us add, modify and understand the code in our app with confidence and can prevent us from making mistakes that could end up effecting people collecting data in the field.
+Automated tests are very important for building software. They let us add, modify and understand the code in our app with confidence and can prevent us from making mistakes that could end up affecting people collecting data in the field.
 
-Almost any Pull Request for Collect will require a set of tests along with its code changes. Otherwise there will be nothing to ensure that that code continues to work or exist in the future. By far easiest way to make sure you have tests for the changes you're making is to follow a [TDD](https://en.wikipedia.org/wiki/Test-driven_development) style of development and write a test before each change/addition to the code.
+Almost any Pull Request for Collect will require a set of tests along with its code changes. Otherwise there will be nothing to ensure that that code continues to work or exist in the future. We recommend when working on Collect code you follow a [TDD](https://en.wikipedia.org/wiki/Test-driven_development) style of development and write a test before each change/addition to the code.
 
 ## Different kinds of tests
 
@@ -10,7 +10,7 @@ Although testing different components/features will often require different kind
 
 ### JUnit tests
 
-Plain old standard JUnit tests. All the tests in Collect use JUnit in someway but these tests don't use Android specific frameworks (like Espresso/Robolectric) These live in `collect_app/src/test/java`. Often they'll be focused on testing one object and will mock/fake/stub its dependencies (referred to as "unit testing") but some will test internal "APIs" (such as our Open Rosa server abstraction). The key to writing these kinds of tests is that they should not involve or depend on the Android framework. JUnit tests are run in the JVM.
+Plain old standard JUnit tests. All the tests in Collect use JUnit in someway but these tests don't use Android specific frameworks (like Espresso/Robolectric) These live in `collect_app/src/test/java`. Often they'll be focused on testing one object and will mock/fake/stub its dependencies (referred to as "unit testing") but some will test internal "APIs" (such as our Open Rosa server abstraction). The key to writing these kinds of tests is that they should not involve or depend on the Android framework. JUnit tests are run on the JVM.
 
 ### Robolectric tests
 
