@@ -72,6 +72,8 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         final ListPreference pref = (ListPreference) findPreference(KEY_APP_THEME);
 
         if (pref != null) {
+
+
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
