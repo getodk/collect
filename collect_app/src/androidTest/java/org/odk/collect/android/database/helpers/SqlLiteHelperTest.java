@@ -1,10 +1,26 @@
 package org.odk.collect.android.database.helpers;
 
+import android.Manifest;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.test.rule.GrantPermissionRule;
+
+import org.junit.Rule;
+import org.junit.rules.RuleChain;
 import org.junit.runners.Parameterized;
+import org.odk.collect.android.support.ResetStateRule;
 
 public abstract class SqlLiteHelperTest {
+
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE)
+            )
+            .around(new ResetStateRule());
+
     @Parameterized.Parameter
     public String description;
 
