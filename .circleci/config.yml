@@ -170,7 +170,7 @@ jobs:
           name: Run integration tests
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              echo "y" | gcloud alpha firebase test android run \
+              echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
               --num-uniform-shards=50 \
               --app collect_app/build/outputs/apk/debug/*.apk \
