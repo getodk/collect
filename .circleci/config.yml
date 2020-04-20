@@ -181,17 +181,17 @@ jobs:
               --directories-to-pull /sdcard --timeout 30m
             fi
           no_output_timeout: 60m
-#       - run:
-#           name: Copy integration test results
-#           command: |
-#             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
-#               mkdir firebase
-#               gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
-#             fi
-#       - *persist_firebase_workspace
-#       - store_test_results:
-#           path: firebase/
-#           destination: /firebase/
+       - run:
+           name: Copy integration test results
+           command: |
+             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
+               mkdir firebase
+               gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
+             fi
+       - *persist_firebase_workspace
+       - store_test_results:
+           path: firebase/
+           destination: /firebase/
 
   ## Submit JaCoCo coverage report
 
@@ -243,11 +243,11 @@ workflows:
           filters:
             branches:
               only: master
-#       - report_coverage:
-#           requires:
-#             - test_unit
-#             - test_instrumented
-#           # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
-#           filters:
-#             branches:
-#               only: master
+       - report_coverage:
+           requires:
+             - test_unit
+             - test_instrumented
+           # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+           filters:
+             branches:
+               only: master
