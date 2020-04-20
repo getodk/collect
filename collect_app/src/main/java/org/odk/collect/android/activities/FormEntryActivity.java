@@ -207,7 +207,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         AudioControllerView.SwipableParent {
 
     // Defines for FormEntryActivity
-    public static final boolean EXIT = true;
+    private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
@@ -2499,7 +2499,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Returns the instance that was just filled out to the calling activity, if
      * requested.
      */
-    public void finishAndReturnInstance() {
+    private void finishAndReturnInstance() {
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form

@@ -235,6 +235,9 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public String getFormName() {
+        if (formController == null) {
+            return null;
+        }
         return formController.getFormTitle();
     }
 

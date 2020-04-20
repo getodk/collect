@@ -113,6 +113,7 @@ public class QuitFormDialogFragment extends DialogFragment {
                             getActivity().getString(R.string.quit_application, title))
                     .setPositiveButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
                         dialog.cancel();
+                        dismiss();
                     })
                     .setView(listView)
                     .create();
