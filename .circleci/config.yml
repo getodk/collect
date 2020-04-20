@@ -161,7 +161,7 @@ jobs:
       - run:
           name: Authorize gcloud
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               gcloud config set project api-project-322300403941
               echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
               gcloud auth activate-service-account --key-file client-secret.json
@@ -181,17 +181,17 @@ jobs:
               --directories-to-pull /sdcard --timeout 30m
             fi
           no_output_timeout: 60m
-      - run:
-          name: Copy integration test results
-          command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              mkdir firebase
-              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
-            fi
-      - *persist_firebase_workspace
-      - store_test_results:
-          path: firebase/
-          destination: /firebase/
+#       - run:
+#           name: Copy integration test results
+#           command: |
+#             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
+#               mkdir firebase
+#               gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
+#             fi
+#       - *persist_firebase_workspace
+#       - store_test_results:
+#           path: firebase/
+#           destination: /firebase/
 
   ## Submit JaCoCo coverage report
 
@@ -208,7 +208,7 @@ jobs:
       - run:
           name: Move Firebase coverage report
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Pixel2-27-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
             fi
       - run:
@@ -243,11 +243,11 @@ workflows:
           filters:
             branches:
               only: master
-      - report_coverage:
-          requires:
-            - test_unit
-            - test_instrumented
-          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
-          filters:
-            branches:
-              only: master
+#       - report_coverage:
+#           requires:
+#             - test_unit
+#             - test_instrumented
+#           # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+#           filters:
+#             branches:
+#               only: master
