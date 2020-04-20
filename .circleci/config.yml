@@ -161,7 +161,7 @@ jobs:
       - run:
           name: Authorize gcloud
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               gcloud config set project api-project-322300403941
               echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
               gcloud auth activate-service-account --key-file client-secret.json
@@ -169,7 +169,7 @@ jobs:
       - run:
           name: Run integration tests
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               echo "y" | gcloud alpha firebase test android run \
               --type instrumentation \
               --num-uniform-shards=50 \
@@ -184,7 +184,7 @@ jobs:
       - run:
           name: Copy integration test results
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               mkdir firebase
               gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
             fi
@@ -208,7 +208,7 @@ jobs:
       - run:
           name: Move Firebase coverage report
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Pixel2-27-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
             fi
       - run:
