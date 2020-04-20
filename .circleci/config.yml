@@ -73,7 +73,7 @@ references:
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:
-      - image: google/cloud-sdk:289.0.0
+      - image: google/cloud-sdk:273.0.0
 
 jobs:
 
