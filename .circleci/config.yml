@@ -243,11 +243,11 @@ workflows:
           filters:
             branches:
               only: master
-      - report_coverage:
-          requires:
-            - test_unit
-            - test_instrumented
-          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
-          filters:
-            branches:
-              only: master
+#      - report_coverage:
+#          requires:
+#            - test_unit
+#            - test_instrumented
+#          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+#          filters:
+#            branches:
+#              only: master
