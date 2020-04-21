@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.LooperMode;
@@ -29,7 +30,7 @@ public class QuitFormDialogFragmentTest {
 
     @Before
     public void setup() {
-        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
+        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new QuitFormDialogFragment();
     }
