@@ -18,9 +18,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 @RunWith(RobolectricTestRunner.class)
-@LooperMode(LooperMode.Mode.PAUSED)
+@LooperMode(PAUSED)
 public class QuitFormDialogFragmentTest {
 
     private FragmentManager fragmentManager;
@@ -44,8 +45,8 @@ public class QuitFormDialogFragmentTest {
     @Test
     public void dismiss_shouldDismissTheDialog() {
         dialogFragment.show(fragmentManager, "tag");
-        fragmentManager.executePendingTransactions();
         dialogFragment.dismiss();
+        fragmentManager.executePendingTransactions();
 
         Dialog dialog = ShadowDialog.getLatestDialog();
         assertFalse(dialog.isShowing());

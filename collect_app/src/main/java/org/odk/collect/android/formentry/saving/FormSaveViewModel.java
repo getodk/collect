@@ -89,7 +89,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     // Cleanup when user exits a form without saving
     public void removeTempInstance() {
-
         if (formController != null && formController.getInstanceFile() != null) {
             SaveFormToDisk.removeSavepointFiles(formController.getInstanceFile().getName());
 
@@ -107,8 +106,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                         images, audio, video);
                 FileUtils.purgeMediaPath(instanceFolder);
             }
-        } else {
-            Timber.w("null returned by getFormController()");
         }
     }
 

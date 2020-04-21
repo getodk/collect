@@ -80,7 +80,7 @@ the specific language governing permissions and limitations under the License.
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
-        android:theme="@style/Theme.AppCompat.Light">
+        android:theme="@style/Theme.AppCompat">
 
         <provider
             android:name="androidx.core.content.FileProvider"
