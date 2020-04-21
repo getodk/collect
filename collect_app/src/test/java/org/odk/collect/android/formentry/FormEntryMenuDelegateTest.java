@@ -31,7 +31,6 @@ import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelPr
 public class FormEntryMenuDelegateTest {
 
     private FormEntryMenuDelegate formEntryMenuDelegate;
-    private FormController formController;
     private AppCompatActivity activity;
     private FormEntryViewModel formEntryViewModel;
     private AnswersProvider answersProvider;
@@ -40,7 +39,7 @@ public class FormEntryMenuDelegateTest {
     @Before
     public void setup() {
         activity = RobolectricHelpers.createThemedActivity(AppCompatActivity.class, R.style.Theme_AppCompat);
-        formController = mock(FormController.class);
+        FormController formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
         formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
         formSaveViewModel = mockViewModelProvider(activity, FormSaveViewModel.class).get(FormSaveViewModel.class);
@@ -51,7 +50,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_inRepeatQuestion_showsAddRepeat() {
-        when(formController.indexContainsRepeatableGroup()).thenReturn(true);
+        when(formEntryViewModel.canAddRepeat()).thenReturn(true);
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -62,7 +61,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_notInRepeatQuestion_hidesAddRepeat() {
-        when(formController.indexContainsRepeatableGroup()).thenReturn(false);
+        when(formEntryViewModel.canAddRepeat()).thenReturn(false);
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);

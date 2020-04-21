@@ -7,12 +7,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.GroupDef;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
@@ -105,6 +108,16 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public void errorDisplayed() {
         error.setValue(null);
+    }
+
+    public boolean canAddRepeat() {
+        if (formController != null && formController.indexContainsRepeatableGroup()) {
+            FormDef formDef = formController.getFormDef();
+            FormIndex repeatGroupIndex = getRepeatGroupIndex(formController.getFormIndex(), formDef);
+            return !((GroupDef) formDef.getChild(repeatGroupIndex)).noAddRemove;
+        } else {
+            return false;
+        }
     }
 
     public static class Factory implements ViewModelProvider.Factory {

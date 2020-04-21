@@ -81,7 +81,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
         }
 
-        menu.findItem(R.id.menu_add_repeat).setVisible(isInRepeat());
+        menu.findItem(R.id.menu_add_repeat).setVisible(getFormEntryViewModel().canAddRepeat());
     }
 
     @Override
@@ -121,13 +121,5 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
     private BackgroundLocationViewModel getBackgroundLocationViewModel() {
         return ViewModelProviders.of(activity).get(BackgroundLocationViewModel.class);
-    }
-
-    private boolean isInRepeat() {
-        if (formController != null) {
-            return formController.indexContainsRepeatableGroup();
-        } else {
-            return false;
-        }
     }
 }

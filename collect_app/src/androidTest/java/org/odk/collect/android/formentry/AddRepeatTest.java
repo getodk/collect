@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -17,11 +18,16 @@ import org.odk.collect.android.support.pages.EndOfFormPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
 @RunWith(AndroidJUnit4.class)
 public class AddRepeatTest {
 
     private static final String ONE_QUESTION_REPEAT = "one-question-repeat.xml";
     private static final String FIELD_LIST_REPEAT = "field-list-repeat.xml";
+    private static final String FIXED_COUNT_REPEAT = "fixed-count-repeat.xml";
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -32,7 +38,8 @@ public class AddRepeatTest {
             ))
             .around(new ResetStateRule())
             .around(new CopyFormRule(ONE_QUESTION_REPEAT))
-            .around(new CopyFormRule(FIELD_LIST_REPEAT));
+            .around(new CopyFormRule(FIELD_LIST_REPEAT))
+            .around(new CopyFormRule(FIXED_COUNT_REPEAT));
 
     @Rule
     public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
@@ -96,6 +103,14 @@ public class AddRepeatTest {
                 .clickPlus("Person")
                 .clickOnDoNotAdd(new FormEntryPage("One Question Repeat", rule))
                 .assertText("Person > 1");
+    }
+
+    @Test
+    public void whenInRepeatWithFixedCount_noPlusButtonAppears() {
+        new MainMenuPage(rule)
+                .startBlankForm("Fixed Count Repeat");
+
+        onView(withId(R.id.menu_add_repeat)).check(doesNotExist());
     }
 
     @Test
