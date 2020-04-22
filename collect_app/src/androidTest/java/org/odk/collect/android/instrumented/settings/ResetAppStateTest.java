@@ -34,7 +34,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.osmdroid.config.Configuration;
 
@@ -67,18 +67,18 @@ public class ResetAppStateTest {
     @Before
     public void setUp() throws IOException {
         resetAppState(Arrays.asList(
-                ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
-                ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,
-                ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
+                ApplicationResetter.ResetAction.RESET_PREFERENCES, ApplicationResetter.ResetAction.RESET_INSTANCES,
+                ApplicationResetter.ResetAction.RESET_FORMS, ApplicationResetter.ResetAction.RESET_LAYERS,
+                ApplicationResetter.ResetAction.RESET_CACHE, ApplicationResetter.ResetAction.RESET_OSM_DROID
         ));
     }
 
     @After
     public void tearDown() throws IOException {
         resetAppState(Arrays.asList(
-                ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
-                ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,
-                ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
+                ApplicationResetter.ResetAction.RESET_PREFERENCES, ApplicationResetter.ResetAction.RESET_INSTANCES,
+                ApplicationResetter.ResetAction.RESET_FORMS, ApplicationResetter.ResetAction.RESET_LAYERS,
+                ApplicationResetter.ResetAction.RESET_CACHE, ApplicationResetter.ResetAction.RESET_OSM_DROID
         ));
     }
 
@@ -88,7 +88,7 @@ public class ResetAppStateTest {
         webCredentialsUtils.saveCredentials("https://opendatakit.appspot.com/", "admin", "admin");
 
         setupTestSettings();
-        resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
+        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_PREFERENCES));
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         assertEquals(settings.getString(GeneralKeys.KEY_USERNAME, ""), "");
@@ -106,7 +106,7 @@ public class ResetAppStateTest {
         saveTestFormFiles();
         setupTestFormsDatabase();
         createTestItemsetsDatabaseFile();
-        resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_FORMS));
+        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_FORMS));
         assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
         assertFalse(new File(storagePathProvider.getDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").exists());
     }
@@ -115,33 +115,33 @@ public class ResetAppStateTest {
     public void resetInstancesTest() throws IOException {
         saveTestInstanceFiles();
         setupTestInstancesDatabase();
-        resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_INSTANCES));
+        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_INSTANCES));
         assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
     }
 
     @Test
     public void resetLayersTest() throws IOException {
         saveTestLayerFiles();
-        resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_LAYERS));
+        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_LAYERS));
         assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS));
     }
 
     @Test
     public void resetCacheTest() throws IOException {
         saveTestCacheFiles();
-        resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_CACHE));
+        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_CACHE));
         assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.CACHE));
     }
 
     @Test
     public void resetOSMDroidTest() throws IOException {
         saveTestOSMDroidFiles();
-        resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_OSM_DROID));
+        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_OSM_DROID));
         assertFolderEmpty(Configuration.getInstance().getOsmdroidTileCache().getPath());
     }
 
     private void resetAppState(List<Integer> resetActions) {
-        List<Integer> failedResetActions = new ResetUtility().reset(InstrumentationRegistry.getTargetContext(), resetActions);
+        List<Integer> failedResetActions = new ApplicationResetter().reset(InstrumentationRegistry.getTargetContext(), resetActions);
         assertEquals(0, failedResetActions.size());
     }
 
