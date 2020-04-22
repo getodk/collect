@@ -17,8 +17,6 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,7 +29,8 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.ApplicationInitializer;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -63,12 +62,15 @@ public class SplashScreenActivity extends Activity {
     @Inject
     Analytics analytics;
 
+    @Inject
+    ApplicationInitializer applicationInitializer;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Collect.getInstance().getComponent().inject(this);
+        DaggerUtils.getComponent(this).inject(this);
 
         new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
@@ -101,36 +103,12 @@ public class SplashScreenActivity extends Activity {
 
         // get the shared preferences object
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // get the package info object with version number
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo =
-                    getPackageManager().getPackageInfo(getPackageName(),
-                            PackageManager.GET_META_DATA);
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.e(e, "Unable to get package info");
-        }
-
-        boolean firstRun = sharedPreferences.getBoolean(GeneralKeys.KEY_FIRST_RUN, true);
         boolean showSplash =
                 sharedPreferences.getBoolean(GeneralKeys.KEY_SHOW_SPLASH, false);
         String splashPath = (String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH);
 
-        // if you've increased version code, then update the version number and set firstRun to true
-        if (sharedPreferences.getLong(GeneralKeys.KEY_LAST_VERSION, 0)
-                < packageInfo.versionCode) {
-            editor.putLong(GeneralKeys.KEY_LAST_VERSION, packageInfo.versionCode);
-            editor.apply();
-
-            firstRun = true;
-        }
-
-        // do all the first run things
-        if (firstRun || showSplash) {
-            editor.putBoolean(GeneralKeys.KEY_FIRST_RUN, false);
-            editor.commit();
+        if (applicationInitializer.isFirstRun() || showSplash) {
             startSplashScreen(splashPath);
 
             if (showSplash) {

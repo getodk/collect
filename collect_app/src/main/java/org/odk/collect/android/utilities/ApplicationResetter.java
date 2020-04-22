@@ -38,7 +38,6 @@ public class ApplicationResetter {
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
 
     public List<Integer> reset(Context context, List<Integer> resetActions) {
-
         failedResetActions = new ArrayList<>();
         failedResetActions.addAll(resetActions);
 

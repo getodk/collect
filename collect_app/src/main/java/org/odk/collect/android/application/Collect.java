@@ -20,18 +20,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
-
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobManagerCreateException;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
-import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -41,25 +32,18 @@ import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
-import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -91,7 +75,7 @@ public class Collect extends Application {
     UserAgentProvider userAgentProvider;
 
     @Inject
-    public CollectJobCreator collectJobCreator;
+    ApplicationInitializer applicationInitializer;
 
     @Inject
     MetaSharedPreferencesProvider metaSharedPreferencesProvider;
@@ -155,42 +139,15 @@ public class Collect extends Application {
         singleton = this;
 
         setupDagger();
+        applicationInitializer.initializePreferences();
+        applicationInitializer.initializeFrameworks();
+        applicationInitializer.initializeLocale();
         fixGoogleBug154855417();
-
-        NotificationUtils.createNotificationChannel(singleton);
 
         registerReceiver(new SmsSentBroadcastReceiver(), new IntentFilter(SMS_SEND_ACTION));
         registerReceiver(new SmsNotificationReceiver(), new IntentFilter(SMS_NOTIFICATION_ACTION));
 
-        try {
-            JobManager
-                    .create(this)
-                    .addJobCreator(collectJobCreator);
-        } catch (JobManagerCreateException e) {
-            Timber.e(e);
-        }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        FormMetadataMigrator.migrate(prefs);
-        PrefMigrator.migrateSharedPrefs();
-        AutoSendPreferenceMigrator.migrate();
-
-        reloadSharedPreferences();
-
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        JodaTimeAndroid.init(this);
-
-        defaultSysLanguage = Locale.getDefault().getLanguage();
-        new LocaleHelper().updateLocale(this);
-
         initializeJavaRosa();
-
-        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
-            Timber.plant(new CrashReportingTree());
-        } else {
-            Timber.plant(new Timber.DebugTree());
-        }
-
         setupOSMDroid();
         setupStrictMode();
         initMapProviders();
@@ -248,22 +205,6 @@ public class Collect extends Application {
         }
     }
 
-    private static class CrashReportingTree extends Timber.Tree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
-                return;
-            }
-
-            FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
-            crashlytics.log((priority == Log.ERROR ? "E/" : "W/") + tag + ": " + message);
-
-            if (t != null && priority == Log.ERROR) {
-                crashlytics.recordException(t);
-            }
-        }
-    }
-
     public void initializeJavaRosa() {
         PropertyManager mgr = new PropertyManager(this);
 
@@ -273,12 +214,6 @@ public class Collect extends Application {
         }
 
         FormController.initializeJavaRosa(mgr);
-    }
-
-    // This method reloads shared preferences in order to load default values for new preferences
-    private void reloadSharedPreferences() {
-        GeneralSharedPreferences.getInstance().reloadPreferences();
-        AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
     public AppDependencyComponent getComponent() {

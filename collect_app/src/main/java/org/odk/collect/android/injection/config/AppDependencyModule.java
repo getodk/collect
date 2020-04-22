@@ -12,6 +12,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
+import org.odk.collect.android.application.ApplicationInitializer;
 import org.odk.collect.android.backgroundwork.CollectBackgroundWorkManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -285,6 +286,12 @@ public class AppDependencyModule {
     @Provides
     public VersionInformation providesVersionInformation() {
         return new VersionInformation(() -> BuildConfig.VERSION_NAME);
+    }
+
+    @Provides
+    @Singleton
+    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator) {
+        return new ApplicationInitializer(application, collectJobCreator);
     }
 
     @Provides
