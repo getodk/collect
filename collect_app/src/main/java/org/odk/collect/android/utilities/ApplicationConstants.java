@@ -103,7 +103,7 @@ public class ApplicationConstants {
     }
 
     public abstract static class Namespaces {
-        static final String XML_OPENROSA_NAMESPACE = "http://openrosa.org/xforms";
+        public static final String XML_OPENROSA_NAMESPACE = "http://openrosa.org/xforms";
         public static final String XML_OPENDATAKIT_NAMESPACE = "http://www.opendatakit.org/xforms";
     }
 }
