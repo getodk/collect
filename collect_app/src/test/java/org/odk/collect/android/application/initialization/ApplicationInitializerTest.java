@@ -1,4 +1,4 @@
-package org.odk.collect.android.application;
+package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
 import android.content.Context;

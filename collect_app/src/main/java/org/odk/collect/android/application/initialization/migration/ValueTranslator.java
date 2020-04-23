@@ -1,14 +1,11 @@
 package org.odk.collect.android.application.initialization.migration;
 
 import android.content.SharedPreferences;
-
-import org.odk.collect.android.preferences.PrefMigrator;
-
 import java.util.Map;
 
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.put;
 
-public class ValueTranslator implements PrefMigrator.Migration {
+public class ValueTranslator implements Migration {
 
     private final String oldValue;
     private String newValue;

@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.application.initialization;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -10,10 +10,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PrefMigrator.Migration;
+import org.odk.collect.android.application.initialization.migration.Migration;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
 
 @RunWith(RobolectricTestRunner.class)
 public class PrefMigratorTest {
@@ -22,43 +26,43 @@ public class PrefMigratorTest {
 
     // Renames a couple of keys.
     private static final Migration[] RENAMERS = {
-        PrefMigrator.renameKey("colour").toKey("couleur"),
-        PrefMigrator.renameKey("vegetable").toKey("legume")
+        renameKey("colour").toKey("couleur"),
+        renameKey("vegetable").toKey("legume")
     };
 
     // Renames a couple of keys, also translating their values.
     private static final Migration[] TRANSLATORS = {
-        PrefMigrator.translateKey("colour").toKey("couleur")
+        translateKey("colour").toKey("couleur")
             .fromValue("red").toValue("rouge")
             .fromValue("green").toValue("vert"),
-        PrefMigrator.translateKey("vegetable").toKey("legume")
+        translateKey("vegetable").toKey("legume")
             .fromValue("tomato").toValue("tomate")
             .fromValue("eggplant").toValue("aubergine")
     };
 
     // Splits a key into two more specialized keys with less qualified values.
     private static final Migration[] KEY_SPLITTER = {
-        PrefMigrator.translateKey("fruit").toKey("pear")
+        translateKey("fruit").toKey("pear")
             .fromValue("pear_anjou").toValue("anjou")
             .fromValue("pear_bartlett").toValue("bartlett"),
-        PrefMigrator.translateKey("fruit").toKey("melon")
+        translateKey("fruit").toKey("melon")
             .fromValue("melon_cantaloupe").toValue("cantaloupe")
             .fromValue("melon_watermelon").toValue("watermelon")
     };
 
     // Merges two keys into one more general key with more qualified values.
     private static final Migration[] KEY_MERGER = {
-        PrefMigrator.translateKey("pear").toKey("fruit")
+        translateKey("pear").toKey("fruit")
             .fromValue("anjou").toValue("pear_anjou")
             .fromValue("bartlett").toValue("pear_bartlett"),
-        PrefMigrator.translateKey("melon").toKey("fruit")
+        translateKey("melon").toKey("fruit")
             .fromValue("cantaloupe").toValue("melon_cantaloupe")
             .fromValue("watermelon").toValue("melon_watermelon")
     };
 
     // Produces new values based on a combination of the values of two keys.
     private static final Migration[] COMBINER = {
-        PrefMigrator.combineKeys("red", "blue")
+        combineKeys("red", "blue")
             .withValues(true, true).toPairs("mix", "purple")
             .withValues(true, false).toPairs("mix", "red")
             .withValues(true, null).toPairs("mix", "red")
@@ -68,7 +72,7 @@ public class PrefMigratorTest {
 
     // Uses the value of one key to modify the value of another.
     private static final Migration[] COMBINER_MODIFIER = {
-        PrefMigrator.combineKeys("vehicle", "fast")
+        combineKeys("vehicle", "fast")
             .withValues("bicycle", true).toPairs("vehicle", "fast_bicycle")
             .withValues("car", true).toPairs("vehicle", "fast_car")
     };

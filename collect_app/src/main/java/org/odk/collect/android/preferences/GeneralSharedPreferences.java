@@ -15,6 +15,7 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
@@ -138,6 +139,10 @@ public class GeneralSharedPreferences {
 
     public static boolean isAutoSendEnabled() {
         return !getInstance().get(GeneralKeys.KEY_AUTOSEND).equals("off");
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 
     public static class ValidationException extends RuntimeException {

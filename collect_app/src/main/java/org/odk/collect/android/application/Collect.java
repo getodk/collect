@@ -26,6 +26,7 @@ import androidx.multidex.MultiDex;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.geo.MapboxUtils;

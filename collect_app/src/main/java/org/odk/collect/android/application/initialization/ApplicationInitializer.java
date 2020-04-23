@@ -1,4 +1,4 @@
-package org.odk.collect.android.application;
+package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -16,13 +16,13 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaKeys;
-import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 
@@ -48,13 +48,13 @@ public class ApplicationInitializer {
         this.metaSharedPreferences = metaSharedPreferences;
     }
 
-    void initializePreferences() {
+    public void initializePreferences() {
         performMigrations();
         reloadSharedPreferences();
         setRunningVersion();
     }
 
-    void initializeFrameworks() {
+    public void initializeFrameworks() {
         NotificationUtils.createNotificationChannel(context);
 
         try {
@@ -76,7 +76,7 @@ public class ApplicationInitializer {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    void initializeLocale() {
+    public void initializeLocale() {
         Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(context);
     }
