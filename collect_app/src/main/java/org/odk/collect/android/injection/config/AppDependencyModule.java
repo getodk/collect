@@ -3,7 +3,6 @@ package org.odk.collect.android.injection.config;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
@@ -193,9 +192,16 @@ public class AppDependencyModule {
     }
 
     @Provides
-    InstallIDProvider providesInstallIDProvider(Context context) {
-        SharedPreferences prefs = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
-        return new SharedPreferencesInstallIDProvider(prefs, KEY_INSTALL_ID);
+    MetaSharedPreferencesProvider providesMetaSharedPreferencesProvider(Context context) {
+        return new MetaSharedPreferencesProvider(context);
+    }
+
+    @Provides
+    InstallIDProvider providesInstallIDProvider(MetaSharedPreferencesProvider metaSharedPreferencesProvider) {
+        return new SharedPreferencesInstallIDProvider(
+                metaSharedPreferencesProvider.getMetaSharedPreferences(),
+                KEY_INSTALL_ID
+        );
     }
 
     @Provides
@@ -290,8 +296,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator) {
-        return new ApplicationInitializer(application, collectJobCreator);
+    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, MetaSharedPreferencesProvider metaSharedPreferencesProvider) {
+        return new ApplicationInitializer(application, collectJobCreator, metaSharedPreferencesProvider.getMetaSharedPreferences());
     }
 
     @Provides

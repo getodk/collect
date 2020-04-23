@@ -20,8 +20,8 @@ import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PrefMigrator;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -34,6 +34,7 @@ public class ApplicationInitializer {
 
     private final Application context;
     private final CollectJobCreator collectJobCreator;
+    private final SharedPreferences metaSharedPreferences;
 
     private boolean firstRun;
 
@@ -41,9 +42,10 @@ public class ApplicationInitializer {
         return firstRun;
     }
 
-    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator) {
+    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, SharedPreferences metaSharedPreferences) {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
+        this.metaSharedPreferences = metaSharedPreferences;
     }
 
     void initializePreferences() {
@@ -80,11 +82,6 @@ public class ApplicationInitializer {
     }
 
     private void setRunningVersion() {
-        // get the shared preferences object
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // get the package info object with version number
         PackageInfo packageInfo = null;
         try {
             packageInfo =
@@ -94,19 +91,16 @@ public class ApplicationInitializer {
             Timber.e(e, "Unable to get package info");
         }
 
-        firstRun = sharedPreferences.getBoolean(GeneralKeys.KEY_FIRST_RUN, true);
+        firstRun = metaSharedPreferences.getBoolean(MetaKeys.KEY_FIRST_RUN, true);
+        metaSharedPreferences.edit().putBoolean(MetaKeys.KEY_FIRST_RUN, false).apply();
 
-        // if you've increased version code, then update the version number and set firstRun to true
-        if (sharedPreferences.getLong(GeneralKeys.KEY_LAST_VERSION, 0)
-                < packageInfo.versionCode) {
-            editor.putLong(GeneralKeys.KEY_LAST_VERSION, packageInfo.versionCode);
-            editor.apply();
+        if (metaSharedPreferences.getLong(MetaKeys.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
+            metaSharedPreferences.edit()
+                    .putLong(MetaKeys.KEY_LAST_VERSION, packageInfo.versionCode)
+                    .apply();
 
             firstRun = true;
         }
-
-        editor.putBoolean(GeneralKeys.KEY_FIRST_RUN, false);
-        editor.commit();
     }
 
     private void reloadSharedPreferences() {
