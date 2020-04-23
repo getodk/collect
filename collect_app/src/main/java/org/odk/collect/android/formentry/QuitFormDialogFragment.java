@@ -38,76 +38,72 @@ public class QuitFormDialogFragment extends DialogFragment {
     private FormSaveViewModel viewModel;
     private final ViewModelProvider.Factory viewModelFactory = new FormSaveViewModel.Factory();
 
-    private ListView listView;
-    private String title;
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(FormSaveViewModel.class);
-
-        title = viewModel.getFormName();
-        if (title == null) {
-            title = context.getString(R.string.no_form_loaded);
-        }
-
-        List<IconMenuItem> items;
-        if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
-                    new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
-        } else {
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
-        }
-
-        listView = DialogUtils.createActionListView(context);
-
-        final IconMenuListAdapter adapter = new IconMenuListAdapter(context, items);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            IconMenuItem item = (IconMenuItem) adapter.getItem(position);
-
-            if (item.getTextResId() == R.string.keep_changes) {
-                viewModel.saveForm(getActivity().getIntent().getData(), InstancesDaoHelper.isInstanceComplete(false),
-                        null, true);
-
-            } else {
-                ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
-                if (manager != null) {
-                    manager.close();
-                }
-
-                if (viewModel.getAuditEventLogger() != null) {
-                    viewModel.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
-                }
-
-                viewModel.removeTempInstance();
-                MediaManager.INSTANCE.revertChanges();
-
-                String action = getActivity().getIntent().getAction();
-                if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
-                    // caller is waiting on a picked form
-                    Uri uri = InstancesDaoHelper.getLastInstanceUri(viewModel.getAbsoluteInstancePath());
-                    if (uri != null) {
-                        getActivity().setResult(RESULT_OK, new Intent().setData(uri));
-                    }
-                }
-                getActivity().finish();
-            }
-
-            if (getDialog() != null) {
-                getDialog().dismiss();
-            }
-        });
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-        setRetainInstance(true);
         AlertDialog alertDialog = (AlertDialog) getDialog();
 
         if (alertDialog == null) {
+
+            String title = viewModel.getFormName();
+            if (title == null) {
+                title = getActivity().getString(R.string.no_form_loaded);
+            }
+
+            List<IconMenuItem> items;
+            if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
+                items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
+                        new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
+            } else {
+                items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
+            }
+
+            ListView listView = DialogUtils.createActionListView(getActivity());
+
+            final IconMenuListAdapter adapter = new IconMenuListAdapter(getActivity(), items);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
+
+                if (item.getTextResId() == R.string.keep_changes) {
+                    viewModel.saveForm(getActivity().getIntent().getData(), InstancesDaoHelper.isInstanceComplete(false),
+                            null, true);
+
+                } else {
+                    ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+                    if (manager != null) {
+                        manager.close();
+                    }
+
+                    if (viewModel.getAuditEventLogger() != null) {
+                        viewModel.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
+                    }
+
+                    viewModel.removeTempInstance();
+                    MediaManager.INSTANCE.revertChanges();
+
+                    String action = getActivity().getIntent().getAction();
+                    if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
+                        // caller is waiting on a picked form
+                        Uri uri = InstancesDaoHelper.getLastInstanceUri(viewModel.getAbsoluteInstancePath());
+                        if (uri != null) {
+                            getActivity().setResult(RESULT_OK, new Intent().setData(uri));
+                        }
+                    }
+                    getActivity().finish();
+                }
+
+                if (getDialog() != null) {
+                    getDialog().dismiss();
+                }
+            });
             alertDialog = new AlertDialog.Builder(getActivity())
                     .setTitle(
                             getActivity().getString(R.string.quit_application, title))
@@ -118,18 +114,6 @@ public class QuitFormDialogFragment extends DialogFragment {
                     .setView(listView)
                     .create();
         }
-
         return alertDialog;
     }
-
-    @Override
-    public void onDestroyView() {
-        AlertDialog dialog = (AlertDialog) getDialog();
-        if (dialog != null && getRetainInstance()) {
-            dialog.setDismissMessage(null);
-            dialog.dismiss();
-        }
-        super.onDestroyView();
-    }
-
 }
