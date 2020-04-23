@@ -402,7 +402,7 @@ public class AudioPlayerViewModelTest {
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
         viewModel.play(new Clip("clip1", "file://missing.mp3"));
 
-        viewModel.dismissError();
+        viewModel.errorDisplayed();
         assertThat(error.getValue(), equalTo(null));
     }
 

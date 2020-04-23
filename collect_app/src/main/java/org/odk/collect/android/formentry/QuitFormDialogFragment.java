@@ -12,18 +12,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.common.collect.ImmutableList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -31,17 +32,24 @@ import org.odk.collect.android.utilities.MediaManager;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static android.app.Activity.RESULT_OK;
 
 public class QuitFormDialogFragment extends DialogFragment {
 
+    @Inject
+    Analytics analytics;
+
     private FormSaveViewModel viewModel;
-    private final ViewModelProvider.Factory viewModelFactory = new FormSaveViewModel.Factory();
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(FormSaveViewModel.class);
+        DaggerUtils.getComponent(context).inject(this);
+
+        viewModel = new ViewModelProvider(requireActivity(), new FormSaveViewModel.Factory(analytics))
+                .get(FormSaveViewModel.class);
     }
 
     @NonNull

@@ -20,6 +20,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
@@ -165,6 +167,10 @@ public interface AppDependencyComponent {
     void inject(FormManagementPreferences formManagementPreferences);
 
     void inject(IdentityPreferences identityPreferences);
+
+    void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
+
+    void inject(QuitFormDialogFragment quitFormDialogFragment);
 
     SmsManager smsManager();
 

@@ -4,18 +4,15 @@
         <h:title>One Question</h:title>
         <model>
             <instance>
-                <basic id="one_question">
-                    <name>
-                        <first/>
-                    </name>
+                <data id="one_question">
                     <age/>
-                </basic>
+                </data>
             </instance>
             <bind nodeset="age" type="int"/>
         </model>
     </h:head>
     <h:body>
-        <input ref="age">
+        <input ref="/data/age">
             <label>what is your age</label>
         </input>
     </h:body>

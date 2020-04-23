@@ -13,7 +13,7 @@ import org.mockito.InOrder;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
@@ -21,6 +21,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -64,7 +65,16 @@ public class FormSaveViewModelTest {
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
         viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics);
-        viewModel.setFormController(formController);
+        viewModel.formLoaded(formController);
+    }
+
+    @Test
+    public void saveAnswersForScreen_flushesAuditLoggerAfterSaving() throws Exception {
+        viewModel.saveAnswersForScreen(new HashMap<>());
+
+        InOrder verifier = inOrder(formController, logger);
+        verifier.verify(formController).saveAllScreenAnswers(any(), anyBoolean());
+        verifier.verify(logger).flush();
     }
 
     @Test

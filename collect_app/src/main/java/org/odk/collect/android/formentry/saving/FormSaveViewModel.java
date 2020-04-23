@@ -10,13 +10,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
+import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.formentry.audit.AuditUtils;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
@@ -27,21 +31,19 @@ import org.odk.collect.utilities.Clock;
 import java.io.File;
 
 import timber.log.Timber;
+import java.util.HashMap;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
-public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable {
+public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController {
 
     private final Clock clock;
     private final FormSaver formSaver;
 
     private String reason = "";
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
-
-    @Nullable
-    private AuditEventLogger auditEventLogger;
 
     @Nullable
     private FormController formController;
@@ -57,25 +59,39 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         this.analytics = analytics;
     }
 
-    public void setFormController(FormController formController) {
+    @Override
+    public void formLoaded(FormController formController) {
         this.formController = formController;
-        this.auditEventLogger = formController.getAuditEventLogger();
     }
 
     public void editingForm() {
-        if (auditEventLogger != null) {
-            auditEventLogger.setEditing(true);
-        }
-    }
-
-    public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
-        if (isSaving()) {
+        if (formController == null) {
             return;
         }
 
-        if (auditEventLogger != null) {
-            auditEventLogger.flush();
+        formController.getAuditEventLogger().setEditing(true);
+    }
+
+    public void saveAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
+        if (formController == null) {
+            return;
         }
+
+        try {
+            formController.saveAllScreenAnswers(answers, false);
+        } catch (JavaRosaException ignored) {
+            // ignored
+        }
+
+        formController.getAuditEventLogger().flush();
+    }
+
+    public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
+        if (isSaving() || formController == null) {
+            return;
+        }
+
+        formController.getAuditEventLogger().flush();
 
         SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
 
@@ -120,7 +136,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     public boolean cancel() {
-        return saveTask.cancel(true);
+        if (saveTask != null) {
+            return saveTask.cancel(true);
+        } else {
+            return false;
+        }
     }
 
     public void setReason(@NonNull String reason) {
@@ -128,13 +148,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public boolean saveReason() {
-        if (reason == null || isBlank(reason)) {
+        if (reason == null || isBlank(reason) || formController == null) {
             return false;
         }
 
-        if (auditEventLogger != null) {
-            auditEventLogger.logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, clock.getCurrentTime(), reason);
-        }
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, clock.getCurrentTime(), reason);
 
         if (saveResult.getValue() != null) {
             SaveRequest request = saveResult.getValue().request;
@@ -164,22 +182,24 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
+        if (formController == null) {
+            return;
+        }
+
         switch (taskResult.getSaveResult()) {
             case SAVED:
             case SAVED_AND_EXIT: {
-                if (auditEventLogger != null) {
-                    auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, clock.getCurrentTime());
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, clock.getCurrentTime());
 
-                    if (saveRequest.viewExiting) {
-                        if (saveRequest.shouldFinalize) {
-                            auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.getCurrentTime());
-                            auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.getCurrentTime());
-                        } else {
-                            auditEventLogger.logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.getCurrentTime());
-                        }
+                if (saveRequest.viewExiting) {
+                    if (saveRequest.shouldFinalize) {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.getCurrentTime());
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.getCurrentTime());
                     } else {
-                        AuditUtils.logCurrentScreen(formController, auditEventLogger, clock.getCurrentTime());
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.getCurrentTime());
                     }
+                } else {
+                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.getCurrentTime());
                 }
 
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveRequest, taskResult.getSaveErrorMessage()));
@@ -187,29 +207,20 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             }
 
             case SaveFormToDisk.SAVE_ERROR: {
-                if (auditEventLogger != null) {
-                    auditEventLogger.logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.getCurrentTime());
-                }
-
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.getCurrentTime());
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
 
             case SaveFormToDisk.ENCRYPTION_ERROR: {
-                if (auditEventLogger != null) {
-                    auditEventLogger.logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.getCurrentTime());
-                }
-
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.getCurrentTime());
                 saveResult.setValue(new SaveResult(SaveResult.State.FINALIZE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
 
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY: {
-                if (auditEventLogger != null) {
-                    auditEventLogger.logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
-                }
-
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
                 saveResult.setValue(new SaveResult(SaveResult.State.CONSTRAINT_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
@@ -225,10 +236,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private boolean requiresReasonToSave() {
-        return auditEventLogger != null
-                && auditEventLogger.isEditing()
-                && auditEventLogger.isChangeReasonRequired()
-                && auditEventLogger.isChangesMade();
+        return formController != null
+                && formController.getAuditEventLogger().isEditing()
+                && formController.getAuditEventLogger().isChangeReasonRequired()
+                && formController.getAuditEventLogger().isChangesMade();
     }
 
     public String getFormName() {
@@ -347,15 +358,15 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public static class Factory implements ViewModelProvider.Factory {
-        private Analytics analytics;
 
-        public Factory() {
-        }
+        private final Analytics analytics;
+
 
         public Factory(Analytics analytics) {
             this.analytics = analytics;
         }
 
+        @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

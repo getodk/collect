@@ -19,6 +19,7 @@ package org.odk.collect.android.formentry;
 import android.content.Context;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 
 public class FormLoadingDialogFragment extends ProgressDialogFragment {

@@ -2,7 +2,7 @@ package org.odk.collect.android.formentry.audit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;
@@ -17,9 +17,10 @@ public class IdentityPromptViewModelTest {
         FormController formController = mock(FormController.class);
         AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
+
         IdentityPromptViewModel viewModel = new IdentityPromptViewModel();
 
-        viewModel.setFormController(formController);
+        viewModel.formLoaded(formController);
         viewModel.setIdentity("Picard");
         viewModel.done();
         verify(auditEventLogger).setUser("Picard");

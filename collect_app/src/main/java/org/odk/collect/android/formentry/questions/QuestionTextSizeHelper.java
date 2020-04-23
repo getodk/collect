@@ -1,4 +1,4 @@
-package org.odk.collect.android.formentry;
+package org.odk.collect.android.formentry.questions;
 
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 

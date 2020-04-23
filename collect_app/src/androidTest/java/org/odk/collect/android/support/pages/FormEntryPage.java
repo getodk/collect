@@ -112,11 +112,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage swipeOnText(String text) {
-        onView(withClassName(endsWith("EditText"))).check(matches(withText(text))).perform(swipeLeft());
-        return this;
-    }
-
     public FormEntryPage clickWidgetButton() {
         onView(withId(R.id.simple_button)).perform(click());
         return this;
@@ -241,6 +236,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public AddNewRepeatDialog clickPlus(String repeatName) {
+        onView(withId(R.id.menu_add_repeat)).perform(click());
+        return new AddNewRepeatDialog(repeatName, rule);
+    }
+
     public FormEntryPage longPressOnView(int id, int index) {
         onView(withIndex(withId(id), index)).perform(longClick());
         return this;
@@ -255,5 +255,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withText(R.string.clear_answer)).perform(click());
         onView(withText(R.string.discard_answer)).perform(click());
         return this;
+    }
+
+    public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        return new AddNewRepeatDialog(repeatName, rule);
     }
 }
