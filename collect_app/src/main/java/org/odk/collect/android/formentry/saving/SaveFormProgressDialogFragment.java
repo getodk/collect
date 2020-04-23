@@ -1,26 +1,32 @@
-package org.odk.collect.android.formentry;
+package org.odk.collect.android.formentry.saving;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.android.injection.DaggerUtils;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
 
 public class SaveFormProgressDialogFragment extends ProgressDialogFragment {
+
+    @Inject
+    Analytics analytics;
 
     private FormSaveViewModel viewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
 
-        viewModel = ViewModelProviders
-                .of(requireActivity(), new FormSaveViewModel.Factory())
+        viewModel = new ViewModelProvider(requireActivity(), new FormSaveViewModel.Factory(analytics))
                 .get(FormSaveViewModel.class);
 
         setCancelable(false);

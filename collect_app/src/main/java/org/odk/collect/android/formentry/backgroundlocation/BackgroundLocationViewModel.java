@@ -2,8 +2,14 @@ package org.odk.collect.android.formentry.backgroundlocation;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.location.client.GoogleLocationClient;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
 /**
  * Ensures that background location tracking continues throughout the activity lifecycle. Builds
@@ -54,6 +60,21 @@ public class BackgroundLocationViewModel extends ViewModel {
     }
 
     public void backgroundLocationPreferenceToggled() {
+        GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
         locationManager.backgroundLocationPreferenceToggled();
+    }
+
+    public static class Factory implements ViewModelProvider.Factory {
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.equals(BackgroundLocationViewModel.class)) {
+                GoogleLocationClient googleLocationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
+
+                BackgroundLocationManager locationManager =
+                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());
+                return (T) new BackgroundLocationViewModel(locationManager);
+            }
+            return null;
+        }
     }
 }

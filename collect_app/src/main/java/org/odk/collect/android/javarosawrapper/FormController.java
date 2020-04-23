@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.javarosawrapper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,6 +67,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
 
 /**
@@ -585,21 +587,6 @@ public class FormController {
     }
 
     /**
-     * used to go up one level in the formIndex. That is, if you're at 5_0, 1 (the second question
-     * in a repeating group), this method will return a FormInex of 5_0 (the start of the repeating
-     * group). If your at index 16 or 5_0, this will return null;
-     *
-     * @return index
-     */
-    public FormIndex stepIndexOut(FormIndex index) {
-        if (index.isTerminal()) {
-            return null;
-        } else {
-            return new FormIndex(stepIndexOut(index.getNextLevel()), index);
-        }
-    }
-
-    /**
      * Move the current form index to the index of the previous question in the form.
      * Step backward out of repeats and groups as needed. If the resulting question
      * is itself within a field-list, move upward to the group or repeat defining that
@@ -714,20 +701,20 @@ public class FormController {
 
         // Step out once to begin with if we're coming from a question.
         if (getEvent() == FormEntryController.EVENT_QUESTION) {
-            index = stepIndexOut(index);
+            index = getPreviousLevel(index);
         }
 
         // Save where we started from.
         FormIndex startIndex = index;
 
         // Step out once more no matter what.
-        index = stepIndexOut(index);
+        index = getPreviousLevel(index);
 
         // Step out of any group indexes that are present, unless they're visible.
         while (index != null
                 && getEvent(index) == FormEntryController.EVENT_GROUP
                 && !isDisplayableGroup(index)) {
-            index = stepIndexOut(index);
+            index = getPreviousLevel(index);
         }
 
         if (index == null) {
@@ -740,7 +727,7 @@ public class FormController {
                 // We were at a question, so stepping back brought us to either:
                 // The beginning, or the start of a displayable group. So we need to step
                 // out again to go past the group.
-                index = stepIndexOut(index);
+                index = getPreviousLevel(index);
                 if (index == null) {
                     jumpToIndex(FormIndex.createBeginningOfFormIndex());
                 } else {
@@ -902,6 +889,20 @@ public class FormController {
      */
     public int jumpToIndex(FormIndex index) {
         return formEntryController.jumpToIndex(index);
+    }
+
+    /**
+     * Jumps to the next prompt for a repeated instance of the group referenced by the current FormIndex.
+     */
+    public void jumpToNewRepeatPrompt() {
+        FormIndex repeatGroupIndex = getRepeatGroupIndex(getFormIndex(), getFormDef());
+        Integer depth = repeatGroupIndex.getDepth();
+        Integer promptDepth = null;
+
+        while (!depth.equals(promptDepth)) {
+            stepToNextEventType(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
+            promptDepth = getFormIndex().getDepth();
+        }
     }
 
     /**

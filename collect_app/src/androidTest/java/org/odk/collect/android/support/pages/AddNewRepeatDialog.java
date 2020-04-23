@@ -24,12 +24,12 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
         return this;
     }
 
-    public FormEntryPage clickOnAdd(FormEntryPage destination) {
+    public <D extends Page<D>> D clickOnAdd(D destination) {
         clickOnString(R.string.add_repeat);
         return destination;
     }
 
-    public FormEntryPage clickOnDoNotAdd(FormEntryPage destination) {
+    public <D extends Page<D>> D clickOnDoNotAdd(D destination) {
         clickOnString(R.string.dont_add_repeat);
         return destination;
     }
