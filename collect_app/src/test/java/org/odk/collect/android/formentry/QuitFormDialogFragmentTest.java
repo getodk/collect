@@ -21,6 +21,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -69,6 +70,7 @@ public class QuitFormDialogFragmentTest {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) dialogFragment.getDialog();
 
+        assertNotNull(dialog );
         assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getVisibility(), equalTo(GONE));
         assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(VISIBLE));
         assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getText(),
