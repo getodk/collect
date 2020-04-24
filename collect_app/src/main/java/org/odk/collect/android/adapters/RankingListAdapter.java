@@ -30,6 +30,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -82,7 +83,7 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
         ItemViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.rank_item_text);
-            textView.setTextSize(Collect.getQuestionFontsize());
+            textView.setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
             themeUtils = new ThemeUtils(itemView.getContext());
         }
 

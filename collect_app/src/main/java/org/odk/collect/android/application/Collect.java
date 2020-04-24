@@ -65,7 +65,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
@@ -76,10 +75,6 @@ import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
  * @author carlhartung
  */
 public class Collect extends Application {
-
-    public static final String DEFAULT_FONTSIZE = "21";
-    public static final int DEFAULT_FONTSIZE_INT = 21;
-
     public static String defaultSysLanguage;
     private static Collect singleton;
 
@@ -96,16 +91,6 @@ public class Collect extends Application {
 
     public static Collect getInstance() {
         return singleton;
-    }
-
-    public static int getQuestionFontsize() {
-        // For testing:
-        Collect instance = Collect.getInstance();
-        if (instance == null) {
-            return Collect.DEFAULT_FONTSIZE_INT;
-        }
-
-        return Integer.parseInt(String.valueOf(GeneralSharedPreferences.getInstance().get(KEY_FONT_SIZE)));
     }
 
     /**

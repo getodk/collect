@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
 public class CustomNumberPicker extends NumberPicker {
 
@@ -50,7 +50,7 @@ public class CustomNumberPicker extends NumberPicker {
 
     private void updateView(View view) {
         if (view instanceof EditText) {
-            ((EditText) view).setTextSize(Collect.getQuestionFontsize());
+            ((EditText) view).setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
         }
     }
 }

@@ -38,10 +38,10 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -148,7 +148,7 @@ public abstract class BaseGridWidget extends ItemsWidget implements MultiChoiceW
                 ? new AppCompatRadioButton(getContext())
                 : new AppCompatCheckBox(getContext());
 
-        item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
+        item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
         item.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), items.get(index)));
         item.setTag(items.indexOf(items.get(index)));
         item.setGravity(isRTL() ? Gravity.END : Gravity.START);

@@ -38,7 +38,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.R.string;
 import org.odk.collect.android.adapters.RankingListAdapter;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
 
 import java.io.Serializable;
@@ -131,7 +131,7 @@ public class RankingWidgetDialog extends DialogFragment {
             FrameLayout positionLayout = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.ranking_item, positionsLayout, false);
             TextView textView = positionLayout.findViewById(R.id.rank_item_text);
             textView.setText(String.valueOf(items.indexOf(item) + 1));
-            textView.setTextSize(Collect.getQuestionFontsize());
+            textView.setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
 
             positionsLayout.addView(positionLayout);
         }
