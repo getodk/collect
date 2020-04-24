@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ChangingServerUrlUtils {
-    static final String KNOWN_URL_LIST = "knownUrlList";
+    public static final String KNOWN_URL_LIST = "knownUrlList";
 
     private ChangingServerUrlUtils() {
     }

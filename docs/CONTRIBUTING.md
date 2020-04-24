@@ -16,6 +16,8 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Read our [code style guidelines](CODE-GUIDELINES.md). 
 
+1. Read our documentation on [automated testing](TEST-GUIDELINES.md).
+
 1. If you're going to be working on adding or changing any `QuestionWidget` objects it's a good idea to read our docs on [them](WIDGETS.md).
 
 1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment).

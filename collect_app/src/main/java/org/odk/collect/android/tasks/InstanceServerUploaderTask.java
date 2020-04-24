@@ -58,7 +58,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     }
 
     @Override
-    protected Outcome doInBackground(Long... instanceIdsToUpload) {
+    public Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
 
         InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, new HashMap<>());

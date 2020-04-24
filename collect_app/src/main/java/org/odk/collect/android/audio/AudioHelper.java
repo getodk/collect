@@ -110,8 +110,8 @@ public class AudioHelper {
         return viewModel.getError();
     }
 
-    public void dismissError() {
-        viewModel.dismissError();
+    public void errorDisplayed() {
+        viewModel.errorDisplayed();
     }
 
     private void registerLifecycleCallbacks(FragmentActivity activity, LifecycleOwner lifecycleOwner) {

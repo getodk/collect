@@ -27,7 +27,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.test.FormActivityTestRule;
+import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
 import java.text.DecimalFormat;
@@ -64,8 +64,8 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.test.CustomMatchers.withProgress;
-import static org.odk.collect.android.test.FormLoadingUtils.ALL_WIDGETS_FORM;
+import static org.odk.collect.android.support.CustomMatchers.withProgress;
+import static org.odk.collect.android.support.FormLoadingUtils.ALL_WIDGETS_FORM;
 
 /**
  * Integration test that runs through a form with all question types.

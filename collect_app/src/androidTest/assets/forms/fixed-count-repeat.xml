@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<h:html xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>Fixed Count Repeat</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation lang="English (en)">
+                    <text id="/data/person:label">
+                        <value>Person</value>
+                    </text>
+                    <text id="/data/person/age:label">
+                        <value>What is their age?</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="Fixed Repeat">
+                    <person_count />
+                    <person jr:template="">
+                        <age />
+                    </person>
+                    <person>
+                        <age />
+                    </person>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind calculate="2" nodeset="/data/person_count" readonly="true()" type="string" />
+            <bind nodeset="/data/person/age" type="int" />
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/person">
+            <label ref="jr:itext('/data/person:label')" />
+            <repeat nodeset="/data/person" jr:count=" /data/person_count ">
+                <input ref="/data/person/age">
+                    <label ref="jr:itext('/data/person/age:label')" />
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

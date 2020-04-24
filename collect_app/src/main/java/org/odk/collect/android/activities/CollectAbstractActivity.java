@@ -17,6 +17,7 @@
 package org.odk.collect.android.activities;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
@@ -84,6 +85,14 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(new LocaleHelper().updateLocale(base));
+    }
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (overrideConfiguration != null) {
+            overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
     }
 
     public void initToolbar(CharSequence title) {
