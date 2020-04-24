@@ -16,15 +16,21 @@
 
 package org.odk.collect.android.instrumented.utilities;
 
+import android.Manifest;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
 
 import static junit.framework.Assert.assertEquals;
@@ -33,7 +39,6 @@ import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class CustomSQLiteQueryExecutionTest {
-
     private static final String DATABASE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + "/test.db";
     private static final String TEST_TABLE_NAME = "testTable";
     private static final String TEST_TABLE_NAME_2 = "testTable2";
@@ -41,6 +46,14 @@ public class CustomSQLiteQueryExecutionTest {
     private final String[] tableColumns = {"_id", "col1", "col2", "col3"};
 
     private SQLiteDatabase sqLiteDatabase;
+
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(GrantPermissionRule.grant(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            )
+            .around(new ResetStateRule());
 
     @Before
     public void setUp() {
