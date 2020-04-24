@@ -54,9 +54,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.
 
 @RunWith(AndroidJUnit4.class)
 public class ImageConverterTest {
-
-    private static final String TEST_DIR = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator;
-    private static final String TEST_IMAGE_PATH = TEST_DIR + "testImage.jpg";
+    private static final String TEST_IMAGE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator + "testImage.jpg";
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -68,8 +66,7 @@ public class ImageConverterTest {
 
     @Before
     public void setUp() {
-        File wallpaperDirectory = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator);
-        wallpaperDirectory.mkdirs();
+        new File(TEST_IMAGE_PATH).getParentFile().mkdirs();
     }
 
     @Test
