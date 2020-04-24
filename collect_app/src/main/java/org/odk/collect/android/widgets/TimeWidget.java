@@ -64,8 +64,11 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     private boolean nullAnswer;
 
     public TimeWidget(Context context, final QuestionDetails prompt) {
-        super(context, prompt);
+        this(context, prompt, false);
+    }
 
+    public TimeWidget(Context context, QuestionDetails prompt, boolean isPartOfDateTimeWidget) {
+        super(context, prompt, !isPartOfDateTimeWidget);
         createTimeButton();
         timeTextView = createAnswerTextView(getContext(), getAnswerFontSize());
         createTimePickerDialog();

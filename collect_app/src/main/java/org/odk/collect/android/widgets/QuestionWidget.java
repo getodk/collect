@@ -106,6 +106,10 @@ public abstract class QuestionWidget
     public Analytics analytics;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
+        this(context, questionDetails, true);
+    }
+
+    public QuestionWidget(Context context, QuestionDetails questionDetails, boolean registerForContextMenu) {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
@@ -138,7 +142,7 @@ public abstract class QuestionWidget
             addAnswerView(answerView);
         }
 
-        if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
+        if (registerForContextMenu && context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context, this);
         }
     }
