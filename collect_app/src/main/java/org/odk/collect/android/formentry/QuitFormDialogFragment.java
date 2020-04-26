@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -41,7 +42,7 @@ public class QuitFormDialogFragment extends DialogFragment {
     @Inject
     Analytics analytics;
 
-    private FormSaveViewModel viewModel;
+    @VisibleForTesting private FormSaveViewModel viewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -59,12 +60,6 @@ public class QuitFormDialogFragment extends DialogFragment {
         AlertDialog alertDialog = (AlertDialog) getDialog();
 
         if (alertDialog == null) {
-
-            String title = viewModel.getFormName();
-            if (title == null) {
-                title = getActivity().getString(R.string.no_form_loaded);
-            }
-
             List<IconMenuItem> items;
             if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
                 items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
@@ -113,8 +108,7 @@ public class QuitFormDialogFragment extends DialogFragment {
                 }
             });
             alertDialog = new AlertDialog.Builder(getActivity())
-                    .setTitle(
-                            getActivity().getString(R.string.quit_application, title))
+                    .setTitle(getTitle(viewModel))
                     .setPositiveButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
                         dialog.cancel();
                         dismiss();
@@ -123,5 +117,18 @@ public class QuitFormDialogFragment extends DialogFragment {
                     .create();
         }
         return alertDialog;
+    }
+
+    public String getTitle(FormSaveViewModel formSaveViewModel) {
+        String title =  formSaveViewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded)
+                : formSaveViewModel.getFormName();
+        return getActivity().getString(R.string.quit_application, title);
+    }
+
+    public void setTitle() {
+        AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null) {
+            dialog.setTitle(getTitle(viewModel));
+        }
     }
 }
