@@ -132,7 +132,6 @@ public class Collect extends Application {
     @Inject
     public
     CollectJobCreator collectJobCreator;
->>>>>>> merge_master
 
     public static Collect getInstance() {
         return singleton;

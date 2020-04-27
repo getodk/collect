@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.ProgressDialog;
+import android.app.ProgressDialog;     // smap
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -26,8 +26,8 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.preference.PreferenceManager;
+import android.os.Looper;    // smap
+import android.preference.PreferenceManager; // smap
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -45,12 +45,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -71,7 +68,6 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -80,7 +76,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.data.StringData;   // smap
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -88,8 +84,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.IconMenuListAdapter;
-import org.odk.collect.android.adapters.model.IconMenuItem;
+//import org.odk.collect.android.analytics.Analytics;    // smap commented
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.dao.FormsDao;
@@ -100,7 +95,7 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.external.handler.SmapRemoteDataItem;
+import org.odk.collect.android.external.handler.SmapRemoteDataItem;    // smap
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialog;
@@ -125,7 +120,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
-import org.odk.collect.android.listeners.SmapRemoteListener;
+import org.odk.collect.android.listeners.SmapRemoteListener;    // smap
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.location.client.GoogleLocationClient;
 import org.odk.collect.android.logic.FormController;
@@ -139,7 +134,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.taskModel.FormRestartDetails;
+import org.odk.collect.android.taskModel.FormRestartDetails;    // smap
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -189,8 +184,8 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
-import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
+//import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;  // smap commented
+//import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;    // smap commented
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -228,7 +223,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
     public static final String BEARING_RESULT = "BEARING_RESULT";
     public static final String GEOSHAPE_RESULTS = "GEOSHAPE_RESULTS";
-    public static final String GEOTRACE_RESULTS = "GEOTRACE_RESULTS";
     public static final String NFC_RESULT = "NFC_RESULT";               // smap
     public static final String ANSWER_KEY = "ANSWER_KEY";
 
@@ -294,9 +288,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // used to limit forward/backward swipes to one per question
     private boolean beenSwiped;
-
-    private final Object saveDialogLock = new Object();
-
     private FormLoaderTask formLoaderTask;
 
     private TextView nextButton;
@@ -332,6 +323,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     RxEventBus eventBus;
+
+    //@Inject    // smap commented
+    //Analytics analytics;    // smap commented
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1729,6 +1723,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
                         // Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());  // smap comment out
+
                         saveForm(false, false, null, false, true);        // smap add "save message" as true
                         autoSaved = true;
                     }
@@ -1912,7 +1907,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     // but if you want save in the background, can't be current screen
-    private boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
+    public boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
                              boolean current,
                              boolean saveMessage) {   // smap make public add saveMessage
         // save current answer
@@ -1931,11 +1926,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return true;
     }
 
-    private void handleSaveResult(FormSaveViewModel.SaveResult result, long taskId, boolean showSaveMsg) {        // smap added taskId and showSaveMsg
+    private void handleSaveResult(FormSaveViewModel.SaveResult result) {        // smap added taskId and showSaveMsg
         if (result == null) {
             return;
         }
-        mTaskId = taskId;                // smap
+        mTaskId = result.getTaskId();                // smap
         switch (result.getState()) {
             case CHANGE_REASON_REQUIRED:
                 ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
@@ -1957,7 +1952,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case SAVED:
-                if(showSaveMsg) {	// smap
+                if(result.getShowSavedMessage()) {	// smap
                     ToastUtils.showShortToast(R.string.data_saved_ok);
                 }
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
@@ -2468,6 +2463,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formLoaderTask = null;
                 t.cancel(true);
                 t.destroy();
+
                 Collect.getInstance().setFormController(formController);
                 supportInvalidateOptionsMenu();
                 backgroundLocationViewModel.formFinishedLoading();
@@ -2650,7 +2646,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    @Override
     public void onProgressStep(String stepMessage) {
         DialogUtils.showIfNotShowing(
                 new FormLoadingDialogFragment(),
