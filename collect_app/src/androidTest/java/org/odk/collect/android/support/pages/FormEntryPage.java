@@ -76,6 +76,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage swipeToEndScreen() {
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        onView(withText(getTranslatedString(R.string.save_enter_data_description, formName))).check(matches(isDisplayed()));
+
+        return this;
+    }
+
     public ErrorDialog swipeToNextQuestionWithError() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
         return new ErrorDialog(rule);
