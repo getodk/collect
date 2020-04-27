@@ -13,18 +13,19 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.pages.BlankFormSearchPage;
-import org.odk.collect.android.espressoutils.pages.ExitFormDialog;
-import org.odk.collect.android.espressoutils.pages.FillBlankFormPage;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
-import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.BlankFormSearchPage;
+import org.odk.collect.android.support.pages.ExitFormDialog;
+import org.odk.collect.android.support.pages.FillBlankFormPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,12 +40,12 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
 public class FillBlankFormTest extends BaseRegressionTest {
-    @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE)
+        @Rule
+        public RuleChain copyFormChain = RuleChain
+                .outerRule(GrantPermissionRule.grant(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
             .around(new CopyFormRule("All_widgets.xml"))
@@ -69,7 +70,15 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("Birds-encrypted.xml"))
             .around(new CopyFormRule("validate.xml"))
             .around(new CopyFormRule("event-odk-new-repeat.xml"))
-            .around(new CopyFormRule("multiple-events.xml"));
+            .around(new CopyFormRule("multiple-events.xml"))
+            .around(new CopyFormRule("CalcTest.xml"))
+            .around(new CopyFormRule("3403.xml", Arrays.asList("staff_list.csv", "staff_rights.csv")))
+            .around(new CopyFormRule("CalcTest.xml"))
+            .around(new CopyFormRule("search_and_select.xml"))
+            .around(new CopyFormRule("select_one_external.xml"))
+            .around(new CopyFormRule("fieldlist-updates_nocsv.xml"))
+            .around(new CopyFormRule("nested-repeats-complex.xml"))
+            .around(new CopyFormRule("repeat_group_form.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -135,13 +144,13 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickSaveAndExit()
 
                 .startBlankForm("1560_IntegerData")
-                .checkIsTextDisplayed("5")
+                .assertText("5")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("5")
+                .assertText("5")
                 .clickSaveAndExit()
 
                 .startBlankForm("1560_IntegerData_instanceID")
-                .checkIsTextDisplayed("5")
+                .assertText("5")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }
@@ -151,16 +160,16 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         //TestCase41
         new MainMenuPage(rule)
-                .startBlankFormWithRepeatGroup("formulaire_adherent")
-                .clickOnAddGroup(new FormEntryPage("formulaire_adherent", rule))
+                .startBlankFormWithRepeatGroup("formulaire_adherent", "Ajouté une observation")
+                .clickOnAdd(new FormEntryPage("formulaire_adherent", rule))
                 .clickOnText("Plante")
                 .inputText("Abi")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("Abies")
+                .assertText("Abies")
                 .swipeToPreviousQuestion()
                 .inputText("Abr")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("Abrotanum alpestre");
+                .assertText("Abrotanum alpestre");
     }
 
     @Test
@@ -177,7 +186,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnSortByButton()
-                .checkIsTextDisplayed("Sortieren nach");
+                .assertText("Sortieren nach");
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.title))
@@ -232,15 +241,15 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickOnText("Mountain pine beetle")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("2018-COE-MPB-001 @ Wellington")
+                .assertText("2018-COE-MPB-001 @ Wellington")
                 .swipeToPreviousQuestion()
                 .clickOnText("Invasive alien species")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("2018-COE-IAS-e-001 @ Coronation")
+                .assertText("2018-COE-IAS-e-001 @ Coronation")
                 .swipeToPreviousQuestion()
                 .clickOnText("Longhorn beetles")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("2018-COE-LGH-M-001 @ Acheson")
+                .assertText("2018-COE-LGH-M-001 @ Acheson")
                 .clickOnText("2018-COE-LGH-L-004 @ Acheson")
                 .swipeToNextQuestion()
                 .clickOnText("No")
@@ -277,34 +286,34 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .startBlankForm("different-search-appearances")
                 .clickOnText("Mango")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("The fruit mango pulled from csv")
+                .assertText("The fruit mango pulled from csv")
                 .swipeToNextQuestion()
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
                 .inputText("w")
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Wolf")
-                .checkIsTextDisplayed("Warthog")
+                .assertText("Wolf")
+                .assertText("Warthog")
                 .clickOnText("Wolf")
                 .swipeToNextQuestion()
                 .inputText("r")
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Warthog")
-                .checkIsTextDisplayed("Raccoon")
-                .checkIsTextDisplayed("Rabbit")
+                .assertText("Warthog")
+                .assertText("Raccoon")
+                .assertText("Rabbit")
                 .closeSoftKeyboard()
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("r")
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Oranges")
-                .checkIsTextDisplayed("Strawberries")
+                .assertText("Oranges")
+                .assertText("Strawberries")
                 .clickOnText("Oranges")
                 .swipeToNextQuestion()
                 .inputText("n")
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Mango")
-                .checkIsTextDisplayed("Oranges")
+                .assertText("Mango")
+                .assertText("Oranges")
                 .clickOnText("Mango")
                 .swipeToNextQuestion()
                 .clickOnText("Mango")
@@ -315,29 +324,29 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .inputText("w")
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Wolf")
-                .checkIsTextDisplayed("Warthog")
+                .assertText("Wolf")
+                .assertText("Warthog")
                 .clickOnText("Wolf")
                 .clickOnText("Warthog")
                 .swipeToNextQuestion()
                 .inputText("r")
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Warthog")
-                .checkIsTextDisplayed("Raccoon")
-                .checkIsTextDisplayed("Rabbit")
+                .assertText("Warthog")
+                .assertText("Raccoon")
+                .assertText("Rabbit")
                 .clickOnText("Raccoon")
                 .clickOnText("Rabbit")
                 .swipeToNextQuestion()
                 .inputText("m")
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Mango")
+                .assertText("Mango")
                 .clickOnText("Mango")
                 .swipeToNextQuestion()
                 .inputText("n")
                 .closeSoftKeyboard()
                 .closeSoftKeyboard()
-                .checkIsTextDisplayed("Mango")
-                .checkIsTextDisplayed("Oranges")
+                .assertText("Mango")
+                .assertText("Oranges")
                 .clickOnText("Mango")
                 .clickOnText("Oranges")
                 .swipeToNextQuestion()
@@ -437,7 +446,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickGoToArrow()
-                .checkIsTextDisplayed("n1")
+                .assertText("n1")
                 .checkIfTextDoesNotExist("t1")
                 .checkIfTextDoesNotExist("t2");
     }
@@ -519,8 +528,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToPreviousQuestion()
                 .swipeToPreviousQuestion()
                 .clickGoToArrow()
-                .checkIsTextDisplayed("a, c")
-                .checkIsTextDisplayed("b, d")
+                .assertText("a, c")
+                .assertText("b, d")
                 .clickJumpEndButton()
                 .clickGoToArrow();
     }
@@ -564,31 +573,31 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .inputText("3")
                 .swipeToNextQuestion()
                 .clickOnAddGroup()
-                .checkIsTextDisplayed("1")
+                .assertText("1")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("5")
-                .swipeToNextQuestion()
-                .clickOnAddGroup()
-                .checkIsTextDisplayed("2")
-                .swipeToNextQuestion()
-                .checkIsTextDisplayed("5")
+                .assertText("5")
                 .swipeToNextQuestion()
                 .clickOnAddGroup()
-                .checkIsTextDisplayed("3")
+                .assertText("2")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("5")
+                .assertText("5")
                 .swipeToNextQuestion()
                 .clickOnAddGroup()
-                .checkIsTextDisplayed("4")
+                .assertText("3")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("5")
+                .assertText("5")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .assertText("4")
+                .swipeToNextQuestion()
+                .assertText("5")
                 .swipeToNextQuestion()
                 .clickOnDoNotAddGroup()
                 .inputText("2")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("1")
+                .assertText("1")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("2")
+                .assertText("2")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
@@ -602,13 +611,169 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase51
         new MainMenuPage(rule)
                 .startBlankForm("Space-separated event list")
-                .checkIsTextDisplayed("cheese")
+                .assertText("cheese")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("more cheese")
+                .assertText("more cheese")
                 .swipeToNextQuestion()
-                .checkIsTextDisplayed("5")
+                .assertText("5")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }
 
+    @Test
+    public void when_chooseAnswer_should_beVisibleInNextQuestion() {
+        //TestCase52
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("CalcTest", "Fishing gear type")
+                .clickOnAdd(new FormEntryPage("CalcTest", rule))
+                .clickOnText("Gillnet")
+                .swipeToNextQuestion()
+                .assertText("* 7.2 What is the size of the mesh for the Gillnet ?")
+                .swipeToPreviousQuestion()
+                .clickOnText("Seinenet")
+                .swipeToNextQuestion()
+                .assertText("* 7.2 What is the size of the mesh for the Seinenet ?");
+    }
+
+    @Test
+    public void when_scrollQuestionsList_should_questionsNotDisappear() {
+        //TestCase54
+        new MainMenuPage(rule)
+                .startBlankForm("3403_ODK Version 1.23.3 Tester")
+                .clickOnText("New Farmer Registration")
+                .scrollToAndClickText("Insemination")
+                .scrollToAndAssertText("New Farmer Registration");
+    }
+
+    @Test
+    public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
+        //TestCase55
+        new MainMenuPage(rule)
+                .startBlankForm("search_and_select")
+                .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre.csv is missing.")
+                .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre2.csv is missing.")
+                .swipeToNextQuestion()
+                .clickSaveAndExit()
+
+                .startBlankForm("cascading select test")
+                .clickOnText("Texas")
+                .swipeToNextQuestion()
+                .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .swipeToNextQuestion()
+                .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .swipeToNextQuestion(4)
+                .clickSaveAndExit()
+
+                .startBlankForm("fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnElementInHierarchy(14)
+                .clickOnText("Source15")
+                .assertText("File: /storage/emulated/0/odk/forms/fieldlist-updates_nocsv-media/fruits.csv is missing.")
+                .swipeToNextQuestion()
+                .clickSaveAndExit();
+    }
+
+    @Test
+    public void changedName_shouldNotDisappearAfterScreenRotation() {
+        //TestCase13
+        new MainMenuPage(rule)
+                .startBlankForm("All widgets")
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .clickOnId(R.id.save_name)
+                .inputText("submission")
+                .closeSoftKeyboard()
+                .rotateToLandscape(new FormEntryPage("All widgets", rule))
+                .assertText("submission")
+                .rotateToPortrait(new FormEntryPage("All widgets", rule))
+                .assertText("submission");
+    }
+
+    @Test
+    public void backwardButton_shouldNotBeClickableOnTheFirstFormPage() {
+        //TestCase14
+        new MainMenuPage(rule)
+                .startBlankForm("All widgets")
+                .checkAreNavigationButtonsNotDisplayed()
+                .clickOptionsIcon()
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickNavigation()
+                .clickUseNavigationButtons()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed()
+                .rotateToLandscape(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed()
+                .rotateToPortrait(new FormEntryPage("All widgets", rule))
+                .checkBackNavigationButtonIsNotsDisplayed()
+                .checkNextNavigationButtonIsDisplayed();
+    }
+
+    @Test
+    public void groups_shouldBeVisibleInHierarchyView() {
+        //TestCase28
+        new MainMenuPage(rule)
+                .startBlankForm("nested-repeats-complex")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("La")
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("Le")
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .inputText("Be")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroup()
+                .clickOnAddGroup()
+                .inputText("Bu")
+                .swipeToNextQuestion()
+                .clickOnDoNotAddGroup()
+                .clickGoToArrow()
+                .clickOnText("Friends")
+                .checkListSizeInHierarchy(1)
+                .clickOnElementInHierarchy(0)
+                .clickOnText("Pets")
+                .checkListSizeInHierarchy(2)
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("Enemies")
+                .checkListSizeInHierarchy(1);
+    }
+
+    @Test
+    public void hierachyView_shouldNotChangeAfterScreenRotation() {
+        //TestCase29
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group", rule))
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToLandscape(new FormEntryPage("Repeat Group", rule))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToPortrait(new FormEntryPage("Repeat Group", rule))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
+
+    @Test
+    public void when_openHierarchyViewFromLastPage_should_mainGroupViewBeVisible() {
+        //TestCase30
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group", rule))
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .checkIsFormEndScreenVisible()
+                .clickGoToArrow()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
 }

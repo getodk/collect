@@ -16,11 +16,17 @@ package org.odk.collect.android.geo;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -33,6 +39,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -41,8 +48,10 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -52,10 +61,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.FragmentActivity;
+import javax.inject.Inject;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
@@ -67,8 +74,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     // Bundle keys understood by applyConfig().
     static final String KEY_MAP_TYPE = "MAP_TYPE";
-    static final String KEY_REFERENCE_LAYER = "REFERENCE_LAYER";
 
+    @Inject
+    MapProvider mapProvider;
     private GoogleMap map;
     private Marker locationCrosshairs;
     private Circle accuracyCircle;
@@ -143,21 +151,26 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
+    @Override public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
     @Override public void onStart() {
         super.onStart();
-        MapProvider.onMapFragmentStart(this);
+        mapProvider.onMapFragmentStart(this);
         enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
         enableLocationUpdates(false);
-        MapProvider.onMapFragmentStop(this);
+        mapProvider.onMapFragmentStop(this);
         super.onStop();
     }
 
     @Override public void applyConfig(Bundle config) {
         mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        String path = config.getString(KEY_REFERENCE_LAYER);
+        String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
         referenceLayerFile = path != null ? new File(path) : null;
         if (map != null) {
             map.setMapType(mapType);
@@ -462,7 +475,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
             referenceOverlay = this.map.addTileOverlay(new TileOverlayOptions().tileProvider(
                 new GoogleMapsMapBoxOfflineTileProvider(referenceLayerFile)
             ));
+            setLabelsVisibility("off");
+        } else {
+            setLabelsVisibility("on");
         }
+    }
+
+    private void setLabelsVisibility(String state) {
+        String style = String.format(" [ { featureType: all, elementType: labels, stylers: [ { visibility: %s } ] } ]", state);
+        map.setMapStyle(new MapStyleOptions(style));
     }
 
     private LatLngBounds expandBounds(LatLngBounds bounds, double factor) {

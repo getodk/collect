@@ -36,6 +36,7 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
@@ -53,6 +54,8 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
 /**
@@ -64,8 +67,8 @@ import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.D
  */
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDateSetListener, BinaryWidget {
-    private Button dateButton;
-    private TextView dateTextView;
+    Button dateButton;
+    TextView dateTextView;
 
     boolean isNullAnswer;
 
@@ -75,14 +78,14 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     public DateWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        createWidget();
+        createWidget(context);
     }
 
-    protected void createWidget() {
+    protected void createWidget(Context context) {
         datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
-        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
-        dateTextView = getAnswerTextView();
-        addViews();
+        dateButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_date), getAnswerFontSize(), this);
+        dateTextView = createAnswerTextView(getContext(), getAnswerFontSize());
+        addViews(context);
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
             setDateToCurrent();
@@ -147,12 +150,12 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         return isNullAnswer;
     }
 
-    private void addViews() {
+    private void addViews(Context context) {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(dateButton);
         linearLayout.addView(dateTextView);
-        addAnswerView(linearLayout);
+        addAnswerView(linearLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     protected void setDateToCurrent() {
@@ -218,9 +221,7 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     private int getTheme() {
         int theme = 0;
-        // https://github.com/opendatakit/collect/issues/1424
-        // https://github.com/opendatakit/collect/issues/1367
-        if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (!isBrokenSamsungDevice()) {
             theme = themeUtils.getMaterialDialogTheme();
         }
         if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
@@ -233,7 +234,6 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
     // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
     private boolean isBrokenSamsungDevice() {
         return Build.MANUFACTURER.equalsIgnoreCase("samsung")
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 

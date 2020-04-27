@@ -22,11 +22,11 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.http.CaseInsensitiveHeaders;
-import org.odk.collect.android.http.openrosa.HttpHeadResult;
-import org.odk.collect.android.http.openrosa.HttpPostResult;
-import org.odk.collect.android.http.openrosa.OpenRosaConstants;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
+import org.odk.collect.android.openrosa.HttpHeadResult;
+import org.odk.collect.android.openrosa.HttpPostResult;
+import org.odk.collect.android.openrosa.OpenRosaConstants;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -162,7 +162,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // submission files on disk.  In this case, upload the submission.xml and all the files in
         // the directory. This means the plaintext files and the encrypted files will be sent to the
         // server and the server will have to figure out what to do with them.
-        File instanceFile = new File(instance.getInstanceFilePath());
+        File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if (submissionFile.exists()) {
             Timber.w("submission.xml will be uploaded instead of %s", instanceFile.getAbsolutePath());

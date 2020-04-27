@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -36,13 +36,13 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
                 .startBlankForm("numberInCSV")
                 .swipeToNextQuestion()
                 .clickOnText("Venda de animais")
-                .checkIsTextDisplayed("1a")
+                .assertText("1a")
                 .swipeToNextQuestion()
                 .clickOnText("Vendas agrícolas")
-                .checkIsTextDisplayed("2a")
+                .assertText("2a")
                 .swipeToNextQuestion()
                 .clickOnText("Pensão")
-                .checkIsTextDisplayed("3a")
+                .assertText("3a")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickSaveAndExit();

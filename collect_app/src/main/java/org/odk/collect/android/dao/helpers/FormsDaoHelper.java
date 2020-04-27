@@ -18,6 +18,7 @@ import android.database.Cursor;
 
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 public final class FormsDaoHelper {
 
@@ -41,7 +42,7 @@ public final class FormsDaoHelper {
         try (Cursor c = formsDao.getFormsCursor(selection, selectionArgs)) {
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                formPath = new StoragePathProvider().getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
             }
         }
         return formPath;

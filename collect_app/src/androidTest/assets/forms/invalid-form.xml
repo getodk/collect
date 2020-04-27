@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <h:head>
+      <h:title>invalid-form</h:title>
+      <model>
+         <itext>
+            <translation lang="English">
+               <text id="/asasas/q2:label">
+                  <value>label::English</value>
+               </text>
+               <text id="/asasas/q1:label">
+                  <value>label::English</value>
+               </text>
+            </translation>
+         </itext>
+         <instance>
+            <asasas id="asasas">
+               <q1 />
+               <q2 />
+               <meta>
+                  <instanceID />
+               </meta>
+            </asasas>
+         </instance>
+         <bind nodeset="/asasas/q1" type="int" />
+         <bind nodeset="/asasas/q2" relevant=" /asasas/q2 =1" type="int" />
+         <bind jr:preload="uid" nodeset="/asasas/meta/instanceID" readonly="true()" type="string" />
+      </model>
+   </h:head>
+   <h:body>
+      <input ref="/asasas/q1">
+         <label ref="jr:itext('/asasas/q1:label')" />
+      </input>
+      <input ref="/asasas/q2">
+         <label ref="jr:itext('/asasas/q2:label')" />
+      </input>
+   </h:body>
+</h:html>

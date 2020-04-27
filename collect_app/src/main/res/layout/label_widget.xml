@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/question_widget_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel
+        android:id="@+id/question_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/center"
+        tools:ignore="RtlHardcoded" />
+
+    <FrameLayout
+        android:id="@+id/help_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/question_label"
+        android:orientation="vertical">
+
+        <include layout="@layout/help_layout" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:id="@+id/list_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/center"
+        android:gravity="end"
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
+
+    </LinearLayout>
+
+</RelativeLayout>

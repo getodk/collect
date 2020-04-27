@@ -9,7 +9,8 @@ the specific language governing permissions and limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.odk.collect.android">
+    package="org.odk.collect.android"
+    tools:ignore="GoogleAppIndexingWarning">
 
     <uses-feature
         android:name="android.hardware.location"
@@ -42,7 +43,7 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.NFC" />  <!-- smap -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- Removed in API 23 -->
@@ -62,17 +63,8 @@ the specific language governing permissions and limitations under the License.
     <uses-feature
         android:name="android.hardware.screen.portrait"
         android:required="false" />
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
-    <!--
-    for Maps v2 functionality, want:
-    <uses-feature android:glEsVersion="0x00020000" android:required="false"/>
-    uses-feature android:glEsVersion="0x00020000" android:required="false"
-    BUT, the gl setting is not modified by the required parameter, so
-    do not declare anything here - detect capabilities at runtime.
-    -->
 
+    <!-- smap -->
     <permission
           android:name="org.smap.smapTask.android.permission.MAPS_RECEIVE"
           android:protectionLevel="signature" />
@@ -88,6 +80,7 @@ the specific language governing permissions and limitations under the License.
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
+    <!-- smap replace icon with ic_launcher -->
     <application
         android:name=".application.Collect"
         android:icon="@mipmap/ic_launcher"
@@ -95,7 +88,8 @@ the specific language governing permissions and limitations under the License.
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -117,11 +111,14 @@ the specific language governing permissions and limitations under the License.
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <!-- smap add trace provider -->
         <provider
             android:name="org.odk.collect.android.provider.TraceProvider"
             android:authorities="org.smap.smapTask.android.provider.trace"
             android:exported="true" />
 
+        <!-- smap add main activity -->
         <activity
             android:name=".activities.SmapMain"
             android:configChanges="locale|orientation|screenSize"
@@ -129,6 +126,10 @@ the specific language governing permissions and limitations under the License.
 
         <activity android:name=".activities.SmapLoginActivity" />
 
+        <activity android:name=".activities.ScanQRCodeActivity"
+            android:screenOrientation="portrait"
+            />
+        <!-- smap add app_name to label -->
         <activity
             android:name=".activities.FormEntryActivity"
             android:configChanges="orientation"
@@ -165,8 +166,10 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
+        <activity android:name=".preferences.FormMetadataPreferencesActivity" />
         <activity android:name=".activities.FormHierarchyActivity" />
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
+        <!-- smap add survey notes -->
         <activity android:name="org.odk.collect.android.activities.SurveyNotesActivity" />
         <activity android:name=".activities.GeoPointActivity" />
         <activity
@@ -177,22 +180,23 @@ the specific language governing permissions and limitations under the License.
             android:configChanges="orientation" />
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
+        <!-- smap add NFC -->
         <activity
             android:name="org.odk.collect.android.activities.NFCActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.SplashScreenActivity"
             android:theme="@android:style/Theme.Dialog" />
+        <!-- smap add task status -->
         <activity
             android:name=".activities.SmapTaskStatusActivity"
             android:label="@string/app_name"
             android:noHistory="true" />
         <activity android:name=".activities.CaptureSelfieActivity" />
-        <activity android:name=".activities.CaptureSelfieActivityNewApi" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
 
+        <!-- smap add network receiver -->
         <receiver
             android:name=".receivers.NetworkReceiver"
             android:enabled="true">
@@ -273,8 +277,6 @@ the specific language governing permissions and limitations under the License.
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
-
         <!--
              ******************External API, DO NOT CHANGE BEFORE DISCUSSING***********************
              * The providers and activities below are available for external applications to      *
@@ -296,8 +298,9 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormEntryActivity"
-            android:targetActivity=".activities.FormEntryActivity">
-            <intent-filter tools:ignore="AppLinkUrlError">
+            android:targetActivity=".activities.FormEntryActivity"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
 
@@ -310,8 +313,9 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.InstanceChooserList"
-            android:targetActivity=".activities.InstanceChooserList">
-            <intent-filter tools:ignore="AppLinkUrlError">
+            android:targetActivity=".activities.InstanceChooserList"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
 
@@ -323,8 +327,9 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormChooserList"
-            android:targetActivity=".activities.FormChooserListActivity">
-            <intent-filter tools:ignore="AppLinkUrlError">
+            android:targetActivity=".activities.FormChooserListActivity"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="android.intent.action.PICK" />
@@ -388,5 +393,10 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".storage.migration.StorageMigrationService"
+            android:exported="false" />
+
     </application>
 </manifest>

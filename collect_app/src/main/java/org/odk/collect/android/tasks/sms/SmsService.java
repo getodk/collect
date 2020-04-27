@@ -23,6 +23,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
@@ -47,6 +48,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_MESSAGE_ID;
@@ -108,9 +110,10 @@ public class SmsService {
         try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs)) {
             if (results.getCount() > 0) {
                 results.moveToPosition(-1);
+                StoragePathProvider storagePathProvider = new StoragePathProvider();
                 while (results.moveToNext()) {
-                    String filePath = results.getString(results
-                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                    String filePath = storagePathProvider.getAbsoluteInstanceFilePath(results.getString(results
+                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                     String instanceId = results.getString(results.getColumnIndex(InstanceColumns._ID));
                     String displayName = results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                     String formId = results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID));
@@ -343,7 +346,7 @@ public class SmsService {
                 }
             }
 
-            Collect.getInstance().logRemoteAnalytics("Submission", "SMS", Collect.getFormIdentifierHash(formId, formVersion));
+            Collect.getInstance().logRemoteAnalytics(SUBMISSION, "SMS", Collect.getFormIdentifierHash(formId, formVersion));
         }
     }
 

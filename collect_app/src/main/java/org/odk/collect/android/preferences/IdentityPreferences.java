@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import androidx.annotation.Nullable;
@@ -44,10 +45,7 @@ public class IdentityPreferences extends BasePreferenceFragment {
 
         // initAnalyticsPref();  // smap
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
-            getActivity().getFragmentManager().beginTransaction()
-                    .replace(R.id.container, new FormMetadataFragment())
-                    .addToBackStack(null)
-                    .commit();
+            startActivity(new Intent(getActivity(), FormMetadataPreferencesActivity.class));
             return true;
         });
 

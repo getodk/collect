@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
  * limitations under the License.
  */
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -34,7 +33,6 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -67,7 +65,6 @@ import timber.log.Timber;
 /*https://github.com/googlesamples/android-Camera2Video/blob/master/Application/src/main/java/com/
  example/android/camera2video/Camera2VideoFragment.java*/
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class Camera2VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 

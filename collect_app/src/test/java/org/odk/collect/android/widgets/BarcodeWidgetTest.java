@@ -1,17 +1,24 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 /**
  * @author James Knight
@@ -62,5 +69,19 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
         stubAllRuntimePermissionsGranted(false);
 
         assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.simple_button));
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getWidget().getBarcodeButton.getVisibility(), is(View.GONE));
+    }
+  
+    public void stripInvalidCharacters() {
+        Assert.assertEquals("all valid", BarcodeWidget.stripInvalidCharacters("all valid"));
+        Assert.assertEquals("control char ()", BarcodeWidget.stripInvalidCharacters("control char (\b)"));
+        Assert.assertEquals("unicode surrogate fragment ()", BarcodeWidget.stripInvalidCharacters("unicode surrogate fragment (\ud800)"));
+        Assert.assertNull(BarcodeWidget.stripInvalidCharacters(null));
     }
 }

@@ -43,7 +43,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
+import static org.odk.collect.android.preferences.GeneralKeys.DEFAULTS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SHOW_SPLASH;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
@@ -104,9 +104,9 @@ public class QrCodeTest {
     private void assertPreferenceHaveDefaultValue(String[] keys, boolean shouldBeDefault) {
         for (String key : keys) {
             if (shouldBeDefault) {
-                assertEquals(GENERAL_KEYS.get(key), preferences.get(key));
+                assertEquals(DEFAULTS.get(key), preferences.get(key));
             } else {
-                assertNotEquals(GENERAL_KEYS.get(key), preferences.get(key));
+                assertNotEquals(DEFAULTS.get(key), preferences.get(key));
             }
         }
     }

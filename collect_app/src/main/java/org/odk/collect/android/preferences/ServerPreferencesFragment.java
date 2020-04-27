@@ -22,7 +22,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import androidx.appcompat.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -33,11 +32,11 @@ import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.services.NotificationRegistrationService;
@@ -59,6 +58,9 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_CUSTOM_ENDPOINT;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
@@ -87,10 +89,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
     @Inject
-    CollectServerClient collectServerClient;
+    OpenRosaAPIClient openRosaAPIClient;
 
     @Inject
     GoogleAccountsManager accountsManager;
+
+    @Inject
+    Analytics analytics;
 
     /*
     private ListPreference transportPreference;
@@ -117,9 +122,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         urlDropdownSetup();
 
-        // TODO: use just 'serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);' once minSdkVersion is >= 21
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(null, null,
-                AppCompatResources.getDrawable(getActivity(), R.drawable.ic_arrow_drop_down), null);
+        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
         serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
@@ -142,7 +145,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         maskPasswordSummary(passwordPreference.getText());
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
-
+        serverUrlPreference.setOnPreferenceClickListener(preference -> {
+            serverUrlPreference.getEditText().requestFocus();
+            return true;
+        });
+        usernamePreference.setOnPreferenceClickListener(preference -> {
+            usernamePreference.getEditText().requestFocus();
+            return true;
+        });
+        passwordPreference.setOnPreferenceClickListener(preference -> {
+            passwordPreference.getEditText().requestFocus();
+            return true;
+        });
         //setupTransportPreferences();
         //getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));  smap
         //getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));          smap
@@ -217,6 +231,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
                 new ControlCharacterFilter(), new WhitespaceFilter()
         });
+
+        googleSheetsUrlPreference.setOnPreferenceClickListener(preference -> {
+            googleSheetsUrlPreference.getEditText().requestFocus();
+            return true;
+        });
+
         initAccountPreferences();
         //setupTransportPreferences();
         getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
@@ -237,10 +257,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         formListUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         formListUrlPreference.setSummary(formListUrlPreference.getText());
         formListUrlPreference.getEditText().setFilters(filters);
+        formListUrlPreference.setOnPreferenceClickListener(preference -> {
+            formListUrlPreference.getEditText().requestFocus();
+            return true;
+        });
 
         submissionUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         submissionUrlPreference.setSummary(submissionUrlPreference.getText());
         submissionUrlPreference.getEditText().setFilters(filters);
+        submissionUrlPreference.setOnPreferenceClickListener(preference -> {
+            submissionUrlPreference.getEditText().requestFocus();
+            return true;
+        });
     }
 
     public void initAccountPreferences() {
@@ -368,6 +396,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                     if (Validator.isUrlValid(url)) {
                         preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+
+                        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
+                        analytics.logEvent(SET_FALLBACK_SHEETS_URL, urlHash);
                     } else if (url.length() == 0) {
                         preference.setSummary(getString(R.string.google_sheets_url_hint));
                     } else {
@@ -389,6 +420,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 case KEY_FORMLIST_URL:
                 case KEY_SUBMISSION_URL:
                     preference.setSummary(newValue.toString());
+
+                    String customEndpointId = FileUtils.getMd5Hash(new ByteArrayInputStream(newValue.toString().getBytes()));
+                    String action = preference.getKey() + " " + customEndpointId;
+                    analytics.logEvent(SET_CUSTOM_ENDPOINT, action);
                     break;
             }
             return true;
@@ -419,7 +454,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String urlHash = FileUtils.getMd5Hash(
                 new ByteArrayInputStream(url.getBytes()));
 
-        // Collect.getInstance().logRemoteAnalytics("SetServer", scheme + " " + host, urlHash);  // smap comment out
+        // analytics.logEvent(SET_SERVER, scheme + " " + host, urlHash);    // smap comment out
     }
 
     private void maskPasswordSummary(String password) {
@@ -508,4 +543,5 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     public void doBack() {
         runGoogleAccountValidation();
     }
+
 }

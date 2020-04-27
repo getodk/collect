@@ -84,8 +84,8 @@ public class RankingWidgetDialog extends DialogFragment {
                 ? getArguments().getSerializable(ITEMS)
                 : savedInstanceState.getSerializable(ITEMS));
         formIndex = (FormIndex) (savedInstanceState == null
-                        ? getArguments().getSerializable(FORM_INDEX)
-                        : savedInstanceState.getSerializable(FORM_INDEX));
+                ? getArguments().getSerializable(FORM_INDEX)
+                : savedInstanceState.getSerializable(FORM_INDEX));
     }
 
     @Override

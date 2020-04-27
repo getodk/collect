@@ -50,14 +50,15 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.RegexUtils;
-import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.utilities.FormNameUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -116,7 +117,7 @@ public class FormController {
 
         public InstanceMetadata(String instanceId, String instanceName, AuditConfig auditConfig) {
             this.instanceId = instanceId;
-            this.instanceName = RegexUtils.normalizeFormName(instanceName, false);
+            this.instanceName = FormNameUtils.normalizeFormName(instanceName, false);
             this.auditConfig = auditConfig;
         }
     }
@@ -316,6 +317,22 @@ public class FormController {
      */
     public String getFormTitle() {
         return formEntryController.getModel().getFormTitle();
+    }
+
+    /**
+     * Gets a unique, privacy-preserving identifier for the current form.
+     *
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public String getCurrentFormIdentifierHash() {
+        String formIdentifier = "";
+
+        if (getFormDef() != null) {
+            String formID = getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+            formIdentifier = getFormTitle() + " " + formID;
+        }
+
+        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     /**

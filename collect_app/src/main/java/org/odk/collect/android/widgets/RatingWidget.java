@@ -26,13 +26,14 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 
 public class RatingWidget extends QuestionWidget {
 
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
 
-    private final GridLayout gridLayout;
-    private Integer answer;
+    final GridLayout gridLayout;
+    Integer answer;
 
     public RatingWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
@@ -56,7 +57,7 @@ public class RatingWidget extends QuestionWidget {
             }
         }
 
-        addAnswerView(gridLayout);
+        addAnswerView(gridLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     private void renderGrid(Context context, int numberOfStars, int columns, int rows) {

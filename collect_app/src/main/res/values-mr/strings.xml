@@ -2,10 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">संकेतशब्द दर्शवा</string>
   <string name="activity_not_found">हाताळण्यासाठी कोणतीही गतिविधी आढळली नाही: %s</string>
-  <string name="add_another">गट जोडा</string>
-  <string name="add_another_repeat">दुसरा गट \"%s\" जोडायचा का?</string>
-  <string name="add_repeat">एक नवीन गट \"%s\" जोडायचा का?</string>
-  <string name="add_repeat_no">जोडू नका </string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="cancel">रद्द करा</string>
   <string name="cancel_loading_form">रद्द करा</string>
   <string name="cancel_location">रद्द करा</string>
@@ -43,8 +40,6 @@
   <string name="do_not_change">रद्द करा</string>
   <string name="do_not_exit">रद्द करा</string>
   <string name="do_not_save">बदलांकडे दुर्लक्ष करा</string>
-  <string name="entering_repeat">गट जोडा</string>
-  <string name="entering_repeat_ask">नवीन गट जोडायचा?</string>
   <string name="enter_data">रिक्त फॉर्म भरा</string>
   <string name="enter_data_button">रिक्त फॉर्म भरा</string>
   <string name="error_occured">त्रुटी झाले</string>
@@ -66,15 +61,11 @@
   <string name="jump_to_beginning">सुरू करण्यासाठी जा</string>
   <string name="jump_to_end">संम्पतही कडे जा </string>
   <string name="jump_to_previous">वर जा</string>
-  <string name="leave_repeat_yes">जोडू नका </string>
-  <string name="leaving_repeat_ask">अधिक गट जोडायचा का ?</string>
   <string name="list_failed_with_error">फॉर्म सूची अयशस्वी.%s.</string>
   <string name="loading_form">फॉर्म लोड होत आहे</string>
   <string name="load_remote_form_error">प्रपत्र यादी प्राप्त करताना त्रुटी</string>
   <string name="location_provider_accuracy">%1$s वापरून अचूकता  %2$s मी आहे.</string>
   <string name="location_accuracy">अचूकता %1$s मी आहे</string>
-  <string name="main_menu">मुख्य मेनू</string>
-  <string name="main_menu_details">डेटा संकलन सोपे केले …</string>
   <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
   <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
   <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>
@@ -198,7 +189,6 @@
   <string name="autosend">स्वयं पाठवा</string>
   <string name="found_in_main">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
   <string name="found_in_settings">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
-  <string name="save_preferences">डिस्कवर सेटिंग्ज जतन करा</string>
   <string name="form_forward">पुढे</string>
   <string name="navigation">नेव्हिगेशन</string>
   <string name="swipe_navigation">क्षैतिज स्वाइप वापरा</string>
@@ -386,8 +376,6 @@
   <string name="select_time">वेळेची निवड करा</string>
   <string name="no_date_selected">तारीख निवडली नाही</string>
   <string name="no_time_selected">वेळ निवडला नाही</string>
-  <string name="import_settings">आयात / निर्यात सेटिंग्ज</string>
-  <string name="qr_code">क्यूआर कोड</string>
   <string name="scan_qrcode">इतर डिव्हाइसवरून कोड स्कॅन करा</string>
   <string name="successfully_imported_settings">सेटिंग्ज यशस्वीपणे आयात केली</string>
   <string name="encoding_max_limit">कमाल वर्ण मर्यादेपर्यंत पोहोचले: सर्व सेटिंग्जसाठी क्यूआर कोड व्युत्पन्न करणे शक्य नाही</string>
@@ -399,7 +387,6 @@
   <string name="qrcode_without_passwords">या क्यूआर कोडमध्ये आपले प्रशासक किंवा सर्व्हर संकेतशब्द नसतात. \n (संकेतशब्द जोडण्यासाठी टॅप करा)</string>
   <string name="qrcode_with_admin_password">हा क्यूआर कोड आपला प्रशासक संकेतशब्द समाविष्ट करतो. कृपया काळजीपूर्वक वागणूक द्या. \n (संकेतशब्द काढण्यासाठी टॅप करा)</string>
   <string name="qrcode_with_server_password">हा क्यूआर कोड आपला सर्व्हर पासवर्ड समाविष्टीत आहे. \n (संकेतशब्द काढण्यासाठी टॅप करा)</string>
-  <string name="import_export_settings">आयात / निर्यात सेटिंग्ज</string>
   <string name="qrcode_scanner_prompt">आयतमध्ये क्यूआर कोड ठेवा</string>
   <string name="server_password">सर्व्हर पासवर्ड</string>
   <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>

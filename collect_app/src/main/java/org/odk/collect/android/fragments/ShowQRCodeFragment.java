@@ -21,9 +21,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,11 +31,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -54,9 +52,10 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.activities.ScanQRCodeActivity;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -66,6 +65,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,9 +79,9 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SCAN_QR_CODE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
-import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 public class ShowQRCodeFragment extends Fragment {
 
@@ -99,16 +100,25 @@ public class ShowQRCodeFragment extends Fragment {
     private Intent shareIntent;
     private AlertDialog dialog;
 
+    @Inject
+    public Analytics analytics;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-        ((CollectAbstractActivity) getActivity()).initToolbar(getString(R.string.import_export_settings));
+        ((CollectAbstractActivity) getActivity()).initToolbar(getString(R.string.configure_via_qr_code));
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         setRetainInstance(true);
         generateCode();
         return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        DaggerUtils.getComponent(activity).inject(this);
     }
 
     private void generateCode() {
@@ -154,29 +164,16 @@ public class ShowQRCodeFragment extends Fragment {
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         Uri uri =
-                FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", new File(QR_CODE_FILEPATH));
+                FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", new File(QRCodeUtils.getQrCodeFilepath()));
         FileUtils.grantFileReadPermissions(shareIntent, uri, getActivity());
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
     }
 
     @OnClick(R.id.btnScan)
     void scanButtonClicked() {
-        new PermissionUtils().requestCameraPermission(getActivity(), new PermissionListener() {
-            @Override
-            public void granted() {
-                IntentIntegrator.forFragment(ShowQRCodeFragment.this)
-                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                        .setBeepEnabled(true)
-                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-                        .setOrientationLocked(false)
-                        .setPrompt(getString(R.string.qrcode_scanner_prompt))
-                        .initiateScan();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
+        analytics.logEvent(SCAN_QR_CODE, "Settings");
+        Intent i = new Intent(getActivity(), ScanQRCodeActivity.class);
+        startActivity(i);
     }
 
     @OnClick(R.id.btnSelect)
@@ -216,23 +213,6 @@ public class ShowQRCodeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-
-        if (result != null) {
-            if (result.getContents() == null) {
-                // request was canceled...
-                Timber.i("QR code scanning cancelled");
-            } else {
-                try {
-                    applySettings(CompressionUtils.decompress(result.getContents()));
-                } catch (IOException | DataFormatException | IllegalArgumentException e) {
-                    Timber.e(e);
-                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
-                }
-                return;
-            }
-        }
-
         if (requestCode == SELECT_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
@@ -247,7 +227,7 @@ public class ShowQRCodeFragment extends Fragment {
                             String response = QRCodeUtils.decodeFromBitmap(bitmap);
                             if (response != null) {
                                 qrCodeFound = true;
-                                applySettings(response);
+                                ScanQRCodeActivity.applySettings(getActivity(), response);
                             }
                         }
                     }
@@ -267,32 +247,6 @@ public class ShowQRCodeFragment extends Fragment {
         }
     }
 
-    private void applySettings(String content) {
-        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
-            @Override
-            public void onSuccess() {
-                Collect.getInstance().initializeJavaRosa();
-                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
-                getActivity().finish();
-                final LocaleHelper localeHelper = new LocaleHelper();
-                localeHelper.updateLocale(getActivity());
-
-        	Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
-        	getActivity().startActivity(intent);
-        	// MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-                if (exception instanceof GeneralSharedPreferences.ValidationException) {
-                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
-                } else {
-                    Timber.e(exception);
-                }
-            }
-        });
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.settings_menu, menu);
@@ -305,25 +259,6 @@ public class ShowQRCodeFragment extends Fragment {
             case R.id.menu_item_share:
                 if (shareIntent != null) {
                     startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
-                }
-                return true;
-            case R.id.menu_save_preferences:
-                File writeDir = new File(Collect.SETTINGS);
-                if (!writeDir.exists()) {
-                    if (!writeDir.mkdirs()) {
-                        ToastUtils.showShortToast("Error creating directory "
-                                + writeDir.getAbsolutePath());
-                        return false;
-                    }
-                }
-
-                File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
-                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
-                if (success) {
-                    ToastUtils.showLongToast("Settings successfully written to "
-                            + dst.getAbsolutePath());
-                } else {
-                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
                 }
                 return true;
         }

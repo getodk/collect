@@ -7,11 +7,8 @@
   <string name="signature_capture">Ambil tanda tangan</string>
   <string name="view_video">Lihat video</string>
   <string name="choose_audio">Pilih suara</string>
-  <string name="add_another">Tambah grup</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_another_menu">Tambah lainnya</string>
-  <string name="add_another_repeat">Tambah grup \"%s\" lainnya?</string>
-  <string name="add_repeat">Tambah grup \"%s\" baru?</string>
-  <string name="add_repeat_no">Tidak usah ditambahkan</string>
   <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
@@ -51,8 +48,6 @@
   <string name="do_not_change">Batal</string>
   <string name="do_not_exit">Batal</string>
   <string name="do_not_save">Abaikan perubahan</string>
-  <string name="entering_repeat">Tambah grup</string>
-  <string name="entering_repeat_ask">Tambah grup baru?</string>
   <string name="enter_data">Isi formulir kosong</string>
   <string name="enter_data_button">Isi formulir kosong</string>
   <string name="error_occured">Terjadi kesalahan</string>
@@ -76,15 +71,11 @@
   <string name="jump_to_beginning">Awal</string>
   <string name="jump_to_end">Akhir</string>
   <string name="jump_to_previous">Atas</string>
-  <string name="leave_repeat_yes">Batal</string>
-  <string name="leaving_repeat_ask">Tambahkan grup lagi?</string>
   <string name="list_failed_with_error">Pendataan formulir gagal. %s.</string>
   <string name="loading_form">Sedang memuat formulir</string>
   <string name="load_remote_form_error">Terjadi kesalahan saat mengambil daftar fromulir</string>
   <string name="location_provider_accuracy">Dengan %1$s. Tingkat akurasi %2$s meter.</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
-  <string name="main_menu">Menu Utama</string>
-  <string name="main_menu_details">Pengumpulan data menjadi lebih mudah…</string>
   <string name="manage_files">Hapus formulir</string>
   <string name="mark_finished">Tandai formulir ini telah siap kirim</string>
   <string name="noselect_error">Maaf, anda belum memilih formulir!</string>
@@ -214,7 +205,6 @@
   <string name="autosend">Kirim otomatis</string>
   <string name="found_in_main">Hapus centang untuk menyembunyikan dari Menu Utama</string>
   <string name="found_in_settings">Hapus centang untuk menyembunyikan dari Pengaturan Umum</string>
-  <string name="save_preferences">Simpan Pengaturan ke Disk</string>
   <string name="form_forward">Lanjut</string>
   <string name="navigation">Navigasi</string>
   <string name="swipe_navigation">Gunakan sapuan mendatar</string>
@@ -431,8 +421,6 @@
   <string name="select_time">Pilih waktu</string>
   <string name="no_date_selected">Tanggal tidak dipilih</string>
   <string name="no_time_selected">Waktu tidak dipilih</string>
-  <string name="import_settings">Pengaturan Impor/Expor</string>
-  <string name="qr_code">QR code</string>
   <string name="scan_qrcode">Pindai kode dari perangkat lain</string>
   <string name="successfully_imported_settings">Pengaturan berhasil diimpor</string>
   <string name="encoding_max_limit">Batas karakter maksimum tercapai: QR code tidak dapat dibuat untuk seluruh pengaturan</string>
@@ -444,7 +432,6 @@
   <string name="qrcode_without_passwords">QR code ini tidak berisi password admin atau server Anda. \n(Ketuk untuk menambahkan kata sandi)</string>
   <string name="qrcode_with_admin_password">QR code ini termasuk password admin anda. Tolong perlakukan dengan hati-hati. \n(Ketuk untuk menghapus kata sandinya)</string>
   <string name="qrcode_with_server_password">QR code ini menyertakan kata sandi server Anda. \n(Ketuk untuk menghapus sandi)</string>
-  <string name="import_export_settings">Pengaturan Impor/Expor</string>
   <string name="qrcode_scanner_prompt">Tempatkan QR code dalam kotak</string>
   <string name="barcode_scanner_prompt">Posisikan barcode ke dalam kotak</string>
   <string name="server_password">Sandi penyedia</string>

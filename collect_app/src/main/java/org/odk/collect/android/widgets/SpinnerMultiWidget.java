@@ -28,6 +28,7 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -36,14 +37,13 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 /**
  * SpinnerMultiWidget, like SelectMultiWidget handles multiple selection fields using checkboxes,
  * but the user clicks a button to see the checkboxes. The goal is to be more compact. If images,
- * audio, or video are specified in the select answers they are ignored. WARNING: There is a bug in
- * android versions previous to 2.0 that affects this widget. You can find the report here:
- * http://code.google.com/p/android/issues/detail?id=922 This bug causes text to be white in alert
- * boxes, which makes the select options invisible in this widget. For this reason, this widget
- * should not be used on phones with android versions lower than 2.0.
+ * audio, or video are specified in the select answers they are ignored.
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
@@ -74,7 +74,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         answerItems = new String[items.size()];
         styledAnswerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
-        button = getSimpleButton(context.getString(R.string.select_answer));
+        button = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), context.getString(R.string.select_answer), getAnswerFontSize(), this);
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
@@ -82,7 +82,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
             styledAnswerItems[i] = StringUtils.textToHtml(answerItems[i]);
         }
 
-        selectionText = getAnswerTextView();
+        selectionText = createAnswerTextView(getContext(), getAnswerFontSize());
         selectionText.setVisibility(View.GONE);
 
         // Fill in previous answers
@@ -110,7 +110,7 @@ public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, Mul
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(button);
         answerLayout.addView(selectionText);
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
 
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }

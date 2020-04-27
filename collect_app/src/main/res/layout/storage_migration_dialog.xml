@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical">
+
+    <include layout="@layout/material_full_screen_dialog_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottomBar"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_standard">
+
+                <TextView
+                    android:id="@+id/errorText"
+                    style="@style/TextAppearance.Collect.Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_large"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/messageText1"
+                    style="@style/TextAppearance.Collect.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/storage_migration_dialog_message1" />
+
+                <TextView
+                    android:id="@+id/messageText2"
+                    style="@style/TextAppearance.Collect.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/storage_migration_dialog_message2" />
+
+                <TextView
+                    android:id="@+id/messageText3"
+                    style="@style/TextAppearance.Collect.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/storage_migration_dialog_message3" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/moreDetailsButton"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/storage_migration_more_details"
+                    android:textColor="?colorSecondary"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="@dimen/margin_standard" />
+
+                <LinearLayout
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    </ProgressBar>
+
+                    <TextView
+                        style="@style/TextAppearance.Collect.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/storage_migration_progress_msg"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:gravity="center_horizontal"/>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shadow_up"
+            android:layout_above="@+id/bottomBar"/>
+
+        <LinearLayout
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_alignParentBottom="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/cancel"
+                android:textColor="?colorSecondary"
+                android:paddingTop="12dp"
+                android:paddingBottom="@dimen/margin_small" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/migrateButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/migrate"
+                android:textColor="?colorSecondary"
+                android:paddingTop="12dp"
+                android:paddingBottom="@dimen/margin_small" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

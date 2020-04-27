@@ -11,6 +11,17 @@ public final class TestInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public Instance getBy(long databaseId) {
+        for (Instance instance : instances) {
+            if (instance.getDatabaseId() == databaseId) {
+                return instance;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public List<Instance> getAllBy(String formId) {
         List<Instance> result = new ArrayList<>();
 
@@ -28,7 +39,7 @@ public final class TestInstancesRepository implements InstancesRepository {
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {
-            if (instance.getInstanceFilePath().equals(instancePath)) {
+            if (instance.getAbsoluteInstanceFilePath().equals(instancePath)) {
                 result.add(instance);
             }
         }
@@ -44,9 +55,9 @@ public final class TestInstancesRepository implements InstancesRepository {
         instances.add(instance);
     }
 
-    public void removeInstanceById(int databaseId) {
+    public void removeInstanceById(Long databaseId) {
         for (int i = 0; i < instances.size(); i++) {
-            if (instances.get(i).getDatabaseId() == databaseId) {
+            if (instances.get(i).getDatabaseId().equals(databaseId)) {
                 instances.remove(i);
                 return;
             }

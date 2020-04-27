@@ -20,7 +20,7 @@ public class ChangingDatabasesByForksTest extends SqlLiteHelperTest {
         new FormsDao().getFormsCursor();
 
         // a fork changes our forms.db downgrading it
-        copyFileFromAssets("database" + File.separator + "forms_v4.db", FormsDatabaseHelper.DATABASE_PATH);
+        copyFileFromAssets("database" + File.separator + "forms_v4.db", FormsDatabaseHelper.getDatabasePath());
 
         // the change should be detected and handled, app shouldn't crash
         new FormsDao().getFormsCursor();
@@ -32,7 +32,7 @@ public class ChangingDatabasesByForksTest extends SqlLiteHelperTest {
         new InstancesDao().getSentInstancesCursor();
 
         // a fork changes our instances.db downgrading it
-        copyFileFromAssets("database" + File.separator + "instances_v3.db", InstancesDatabaseHelper.DATABASE_PATH);
+        copyFileFromAssets("database" + File.separator + "instances_v3.db", InstancesDatabaseHelper.getDatabasePath());
 
         // the change should be detected and handled, app shouldn't crash
         new InstancesDao().getSentInstancesCursor();

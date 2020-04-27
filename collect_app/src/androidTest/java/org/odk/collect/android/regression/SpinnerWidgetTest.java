@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -36,7 +36,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
                 .clickOnString(R.string.select_one)
                 .clickOnAreaWithIndex("TextView", 2)
                 .clickOnText("c")
-                .checkIsTextDisplayed("c")
+                .assertText("c")
                 .checkIfTextDoesNotExist("a")
                 .checkIfTextDoesNotExist("b")
                 .pressBack(new FormEntryPage("selectOneMinimal", rule))

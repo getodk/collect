@@ -17,16 +17,17 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -39,37 +40,19 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.views.ODKView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
 
-/**
- * Displays the structure of a form along with the answers for the current instance. Different form
- * elements are displayed in the following ways:
- * - Questions each take up a row with their full label shown and their answers below
- * - Non-repeat groups are not represented at all
- * - Repeat groups are initially shown as a "header" which takes you to a "picker" when tapped,
- *   revealing instances of that repeat
- * - Repeat instances are displayed with their label and index (e.g. `My group (1)`)
- *
- * Tapping on a repeat instance shows all the questions in that repeat instance using the display
- * rules above.
- *
- * Tapping on a question sets the app-wide current question to that question and terminates the
- * activity, returning to {@link FormEntryActivity}.
- *
- * Although the user gets the impression of navigating "into" a repeat, the view is refreshed in
- * {@link #refreshView()} rather than another activity/fragment being added to the back stack.
- *
- * Buttons at the bottom of the screen allow users to navigate the form.
- */
+import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_FORM_CONTROLLER_EVENT;
+
 public class FormHierarchyActivity extends CollectAbstractActivity {
     /**
      * The questions and repeats at the current level.
@@ -142,7 +125,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         if (formController == null) {
             finish();
             Timber.w("FormController is null");
-            Collect.getInstance().logNullFormControllerEvent("FormHierarchyActivity");
+            Collect.getInstance().logRemoteAnalytics(NULL_FORM_CONTROLLER_EVENT, "FormHierarchyActivity", null);
             return;
         }
 
@@ -296,7 +279,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     void configureButtons(FormController formController) {
         jumpBeginningButton.setOnClickListener(v -> {
-            formController.getAuditEventLogger().exitView();
+            formController.getAuditEventLogger().flush();
             formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
             setResult(RESULT_OK);
@@ -304,7 +287,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         });
 
         jumpEndButton.setOnClickListener(v -> {
-            formController.getAuditEventLogger().exitView();
+            formController.getAuditEventLogger().flush();
             formController.jumpToIndex(FormIndex.createEndOfFormIndex());
 
             setResult(RESULT_OK);
@@ -782,7 +765,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     public void onBackPressed() {
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null) {
-            formController.getAuditEventLogger().exitView();
+            formController.getAuditEventLogger().flush();
             formController.jumpToIndex(startIndex);
         }
 

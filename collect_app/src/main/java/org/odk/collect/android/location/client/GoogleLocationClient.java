@@ -5,8 +5,6 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,6 +15,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 /**
@@ -48,9 +48,6 @@ public class GoogleLocationClient
 
     @NonNull
     private final GoogleApiClient googleApiClient;
-
-    @Nullable
-    private LocationClientListener locationClientListener;
 
     @Nullable
     private LocationListener locationListener;
@@ -132,11 +129,6 @@ public class GoogleLocationClient
     }
 
     @Override
-    public void setListener(@Nullable LocationClientListener locationClientListener) {
-        this.locationClientListener = locationClientListener;
-    }
-
-    @Override
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
@@ -189,15 +181,15 @@ public class GoogleLocationClient
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (locationClientListener != null) {
-            locationClientListener.onClientStart();
+        if (getListener() != null) {
+            getListener().onClientStart();
         }
     }
 
     @Override
     public void onConnectionSuspended(int cause) {
-        if (locationClientListener != null) {
-            locationClientListener.onClientStop();
+        if (getListener() != null) {
+            getListener().onClientStop();
         }
     }
 
@@ -205,8 +197,8 @@ public class GoogleLocationClient
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (locationClientListener != null) {
-            locationClientListener.onClientStartFailure();
+        if (getListener() != null) {
+            getListener().onClientStartFailure();
         }
     }
 

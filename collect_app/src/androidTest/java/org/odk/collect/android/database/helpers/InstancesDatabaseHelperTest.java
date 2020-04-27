@@ -21,12 +21,13 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.DATABASE_PATH;
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.test.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
 public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
+    private static final String DATABASE_PATH = InstancesDatabaseHelper.getDatabasePath();
+
     @Parameterized.Parameter
     public String description;
 

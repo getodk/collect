@@ -33,6 +33,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -144,18 +146,24 @@ public class InstanceProvider extends ContentProvider {
     private DatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
-            Collect.createODKDirs();
+            new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
             databaseHelper = null;
-            Timber.e(e);    // smap
         }
-
-        if (databaseHelper != null) {
-            return databaseHelper;
+        boolean databaseNeedsUpgrade = InstancesDatabaseHelper.databaseNeedsUpgrade();
+        if (dbHelper == null || (databaseNeedsUpgrade && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (databaseNeedsUpgrade) {
+                InstancesDatabaseHelper.databaseMigrationStarted();
+            }
+            recreateDatabaseHelper();
         }
         databaseHelper = new DatabaseHelper(DATABASE_NAME);     // smap instance of InstanceDatabaseHelper
 
         return databaseHelper;
+    }
+
+    public static void recreateDatabaseHelper() {
+        dbHelper = new InstancesDatabaseHelper();
     }
 
     @Override
@@ -327,24 +335,49 @@ public class InstanceProvider extends ContentProvider {
         }
         int count = 0;
 
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
-        switch (URI_MATCHER.match(uri)) {
-            case INSTANCES:
-                Cursor del = null;
-                try {
-                    del = this.query(uri, null, where, whereArgs, null);
-                    if (del != null && del.getCount() > 0) {
-                        del.moveToFirst();
-                        do {
-                            String instanceFile = del.getString(
-                                    del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                            File instanceDir = (new File(instanceFile)).getParentFile();
-                            deleteAllFilesInDirectory(instanceDir);
-                        } while (del.moveToNext());
+            switch (URI_MATCHER.match(uri)) {
+                case INSTANCES:
+                    Cursor del = null;
+                    try {
+                        del = this.query(uri, null, where, whereArgs, null);
+                        if (del != null && del.getCount() > 0) {
+                            del.moveToFirst();
+                            do {
+                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(del.getString(
+                                        del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
+                                File instanceDir = (new File(instanceFile)).getParentFile();
+                                deleteAllFilesInDirectory(instanceDir);
+                            } while (del.moveToNext());
+                        }
+                    } finally {
+                        if (del != null) {
+                            del.close();
+                        }
                     }
-                } finally {
-                    if (del != null) {
-                        del.close();
+                    count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
+                    break;
+
+                case INSTANCE_ID:
+                    String instanceId = uri.getPathSegments().get(1);
+
+                    Cursor c = null;
+                    String status = null;
+                    try {
+                        c = this.query(uri, null, where, whereArgs, null);
+                        if (c != null && c.getCount() > 0) {
+                            c.moveToFirst();
+                            status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                            do {
+                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(c.getString(
+                                        c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
+                                File instanceDir = (new File(instanceFile)).getParentFile();
+                                deleteAllFilesInDirectory(instanceDir);
+                            } while (c.moveToNext());
+                        }
+                    } finally {
+                        if (c != null) {
+                            c.close();
+                        }
                     }
                 }
                 count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);

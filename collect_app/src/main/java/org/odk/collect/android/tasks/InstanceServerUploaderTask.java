@@ -17,7 +17,7 @@ package org.odk.collect.android.tasks;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.UploadAuthRequestedException;
@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 
 /**
  * Background task for uploading completed forms.
@@ -75,7 +77,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
 
-                //Collect.getInstance().logRemoteAnalytics("Submission", "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion())); // smap comment out
+                // Collect.getInstance().logRemoteAnalytics(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));  // smap comment out
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to

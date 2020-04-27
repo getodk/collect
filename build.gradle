@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath 'com.google.gms:google-services:4.3.2'
+        classpath 'com.google.gms:google-services:4.3.3'
         classpath 'org.ow2.asm:asm:7.2' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.5'
         classpath 'io.fabric.tools:gradle:1.31.2'
@@ -49,6 +49,6 @@ task checkTests(type: GradleBuild) {
 
 ext {
     leakyCanaryVersion = '1.6.3'
-    daggerVersion = '2.25.2'
+    daggerVersion = '2.25.3'
     okhttp3Version = '3.12.5' //newer versions require minSdkVersion >= 21
 }

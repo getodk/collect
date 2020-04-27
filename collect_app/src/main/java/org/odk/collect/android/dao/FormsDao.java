@@ -24,6 +24,7 @@ import android.provider.BaseColumns;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +161,7 @@ public class FormsDao {
             try {
                 if (cursor.moveToFirst()) {
                     int formMediaPathColumnIndex = cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH);
-                    formMediaPath = cursor.getString(formMediaPathColumnIndex);
+                    formMediaPath = new StoragePathProvider().getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex));
                 }
             } finally {
                 cursor.close();
@@ -171,7 +172,7 @@ public class FormsDao {
 
     public Cursor getFormsCursorForFormFilePath(String formFilePath) {
         String selection = FormsColumns.FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {formFilePath};
+        String[] selectionArgs = {new StoragePathProvider().getFormDbPath(formFilePath)};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }

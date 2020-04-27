@@ -2,23 +2,25 @@ package org.odk.collect.android.regression;
 
 import android.Manifest;
 
+import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.pages.AdminSettingsPage;
-import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.AdminSettingsPage;
+import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.ResetApplicationDialog;
 
 //Issue NODK-240
-public class ResetApplicationTest extends BaseRegressionTest {
-    @Rule
-    public RuleChain ruleChain = RuleChain
-            .outerRule(new ResetStateRule());
+public class ResetApplicationTest {
+
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -28,7 +30,25 @@ public class ResetApplicationTest extends BaseRegressionTest {
                     Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("All_widgets.xml"));
+            .around(new CopyFormRule("All_widgets.xml"))
+            .around(rule);
+
+    @Test
+    public void when_rotateScreen_should_resetDialogNotDisappear() {
+        //TestCase1
+        new MainMenuPage(rule)
+                .clickOnMenu()
+                .clickAdminSettings()
+                .clickOnResetApplication()
+                .checkIsStringDisplayed(R.string.reset_settings_dialog_title)
+                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .rotateToLandscape(new ResetApplicationDialog(rule))
+                .checkIsStringDisplayed(R.string.reset_settings_dialog_title)
+                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .rotateToPortrait(new ResetApplicationDialog(rule))
+                .checkIsStringDisplayed(R.string.reset_settings_dialog_title)
+                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset);
+    }
 
     @Test
     public void savedAndBlankForms_shouldBeReset() {
@@ -39,7 +59,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .clickJumpEndButton()
                 .clickSaveAndExit()
                 .clickEditSavedForm()
-                .checkIsTextDisplayed("All widgets")
+                .assertText("All widgets")
                 .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
                 .clickAdminSettings()
@@ -55,6 +75,32 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .pressBack(new MainMenuPage(rule))
                 .clickEditSavedForm()
                 .checkIfTextDoesNotExist("All widgets");
+    }
+
+    @Test
+    public void adminSettings_shouldBeReset() {
+        //TestCase2
+        new MainMenuPage(rule)
+                .clickOnMenu()
+                .clickAdminSettings()
+                .openUserSettings()
+                .uncheckServerOption()
+                .pressBack(new AdminSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .checkIfServerOptionIsNotDisplayed()
+                .pressBack(new MainMenuPage(rule))
+                .clickOnMenu()
+                .clickAdminSettings()
+                .clickOnResetApplication()
+                .clickOnString(R.string.reset_settings)
+                .clickOnString(R.string.reset_settings_button_reset)
+                .clickOKOnDialog();
+        new MainMenuPage(rule)
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .checkIfServerOptionIsDisplayed();
     }
 
     @Test
@@ -78,7 +124,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
-                .checkIsTextDisplayed("español")
+                .assertText("español")
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
@@ -113,7 +159,7 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .checkIfMarkFinishedIsNotSelected()
+                .assertMarkFinishedIsNotSelected()
                 .clickSaveAndExit()
                 .clickOnMenu()
                 .clickAdminSettings()
@@ -131,33 +177,8 @@ public class ResetApplicationTest extends BaseRegressionTest {
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .checkIfMarkFinishedIsSelected()
+                .assertMarkFinishedIsSelected()
                 .clickSaveAndExit();
     }
 
-    @Test
-    public void adminSettings_shouldBeReset() {
-        //TestCase2
-        new MainMenuPage(rule)
-                .clickOnMenu()
-                .clickAdminSettings()
-                .openUserSettings()
-                .uncheckServerOption()
-                .pressBack(new AdminSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .checkIfServerOptionIsNotDisplayed()
-                .pressBack(new MainMenuPage(rule))
-                .clickOnMenu()
-                .clickAdminSettings()
-                .clickOnResetApplication()
-                .clickOnString(R.string.reset_settings)
-                .clickOnString(R.string.reset_settings_button_reset)
-                .clickOKOnDialog();
-        new MainMenuPage(rule)
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .checkIfServerOptionIsDisplayed();
-    }
 }

@@ -42,6 +42,11 @@ public class CustomWebView extends WebView {
         return super.onTouchEvent(event);
     }
 
+    public void setClickable(boolean enabled) {
+        setOnTouchListener((v, event) -> !enabled);
+        super.setClickable(enabled);
+    }
+
     public boolean suppressFlingGesture() {
         return suppressFlingGesture;
     }

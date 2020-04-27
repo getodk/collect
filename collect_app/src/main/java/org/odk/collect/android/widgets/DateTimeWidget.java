@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.Gravity;
 import android.widget.LinearLayout;
 
 import org.javarosa.core.model.data.DateTimeData;
@@ -37,13 +36,11 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 @SuppressLint("ViewConstructor")
 public class DateTimeWidget extends QuestionWidget implements BinaryWidget, WidgetValueChangedListener {
 
-    private DateWidget dateWidget;
-    private TimeWidget timeWidget;
+    DateWidget dateWidget;
+    TimeWidget timeWidget;
 
     public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-
-        setGravity(Gravity.START);
 
         dateWidget = new DateWidget(context, prompt);
         timeWidget = new TimeWidget(context, prompt);

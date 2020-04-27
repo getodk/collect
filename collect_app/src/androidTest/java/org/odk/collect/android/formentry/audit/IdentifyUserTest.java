@@ -11,8 +11,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.espressoutils.pages.IdentifyUserPromptPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.IdentifyUserPromptPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -84,7 +84,7 @@ public class IdentifyUserTest {
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Blah")
                 .rotateToLandscape(new IdentifyUserPromptPage("Identify User", rule))
-                .checkIsTextDisplayed("Blah");
+                .assertText("Blah");
     }
 
     @Test

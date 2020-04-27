@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
-import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -35,7 +35,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
         //TestCase1
         new MainMenuPage(rule)
                 .startBlankForm("required")
-                .checkIsTextDisplayed("* Foo")
+                .assertText("* Foo")
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage(rule), rule))
                 .clickIgnoreChanges();

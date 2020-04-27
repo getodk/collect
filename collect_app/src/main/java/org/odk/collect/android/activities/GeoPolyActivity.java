@@ -28,10 +28,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.VisibleForTesting;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -43,7 +46,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.VisibleForTesting;
+import javax.inject.Inject;
 
 public class GeoPolyActivity extends BaseGeoMapActivity {
     public static final String ANSWER_KEY = "answer";
@@ -63,6 +66,9 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     private ScheduledFuture schedulerHandler;
 
     private OutputMode outputMode;
+
+    @Inject
+    MapProvider mapProvider;
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalAnswerString = "";
@@ -107,6 +113,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
+
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
@@ -127,7 +135,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         setContentView(R.layout.geopoly_layout);
 
         Context context = getApplicationContext();
-        MapProvider.createMapFragment(context)
+        mapProvider.createMapFragment(context)
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 

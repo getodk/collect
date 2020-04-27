@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.forms;
 
+import org.odk.collect.android.storage.StoragePathProvider;
+
 /**
  * A form definition stored on the device.
  *
@@ -105,7 +107,7 @@ public final class Form {
         }
 
         public Builder formFilePath(String formFilePath) {
-            this.formFilePath = formFilePath;
+            this.formFilePath = new StoragePathProvider().getFormDbPath(formFilePath);
             return this;
         }
 
@@ -130,12 +132,12 @@ public final class Form {
         }
 
         public Builder jrCacheFilePath(String jrCacheFilePath) {
-            this.jrCacheFilePath = jrCacheFilePath;
+            this.jrCacheFilePath = new StoragePathProvider().getCacheDbPath(jrCacheFilePath);
             return this;
         }
 
         public Builder formMediaPath(String formMediaPath) {
-            this.formMediaPath = formMediaPath;
+            this.formMediaPath = new StoragePathProvider().getFormDbPath(formMediaPath);
             return this;
         }
 
@@ -191,6 +193,10 @@ public final class Form {
 
     public String getFormFilePath() {
         return formFilePath;
+    }
+
+    public String getAbsoluteFormFilePath() {
+        return new StoragePathProvider().getAbsoluteFormFilePath(formFilePath);
     }
 
     public String getSubmissionUri() {

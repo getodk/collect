@@ -39,7 +39,7 @@ public class ExternalCsvSearchTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(EXTERNAL_CSV_SEARCH_FORM, Collections.singletonList("external-csv-search-produce.csv")));
+            .around(new CopyFormRule(EXTERNAL_CSV_SEARCH_FORM, Collections.singletonList("external-csv-search-produce.csv"), true));
 
     @Test
     public void simpleSearchStatement_ShouldDisplayAllCsvChoices() {

@@ -22,13 +22,14 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.utilities.DeviceDetailsProvider;
+import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +44,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.utilities.PermissionUtils.isReadPhoneStatePermissionGranted;
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -74,6 +74,12 @@ public class PropertyManager implements IPropertyManager {
     @Inject
     RxEventBus eventBus;
 
+    @Inject
+    DeviceDetailsProvider deviceDetailsProvider;
+
+    @Inject
+    PermissionUtils permissionUtils;
+
     public String getName() {
         return "Property Manager";
     }
@@ -92,14 +98,17 @@ public class PropertyManager implements IPropertyManager {
         Timber.i("calling constructor");
 
         Collect.getInstance().getComponent().inject(this);
+        reload(context);
+    }
+
+    public PropertyManager reload(Context context) {
         try {
             // Device-defined properties
-            TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            IdAndPrefix idp = findDeviceId(context, telMgr);
+            IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
             putProperty(PROPMGR_DEVICE_ID,     idp.prefix,          idp.id);
-            putProperty(PROPMGR_PHONE_NUMBER, SCHEME_TEL, telMgr.getLine1Number());
-            putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         telMgr.getSubscriberId());
-            putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    telMgr.getSimSerialNumber());
+            putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
+            putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         deviceDetailsProvider.getSubscriberId());
+            putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    deviceDetailsProvider.getSimSerialNumber());
         } catch (SecurityException e) {
             Timber.e(e);
         }
@@ -109,12 +118,14 @@ public class PropertyManager implements IPropertyManager {
         initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
         initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
         initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
+
+        return this;
     }
 
     // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
-    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) throws SecurityException {
+    private IdAndPrefix findDeviceId(Context context, DeviceDetailsProvider deviceDetailsProvider) throws SecurityException {
         final String androidIdName = Settings.Secure.ANDROID_ID;
-        String deviceId = null;
+        String deviceId = deviceDetailsProvider.getDeviceId();
         // start smap - this will result in deviceId not being set first time it is called
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             deviceId = telephonyManager.getDeviceId();
@@ -180,7 +191,7 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public String getSingularProperty(String propertyName) {
-        if (!isReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
+        if (!permissionUtils.isReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
             eventBus.post(new ReadPhoneStatePermissionRxEvent());
         }
 

@@ -1,11 +1,12 @@
 package org.odk.collect.android.location.client;
 
 import android.location.Location;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * An interface for classes that allow monitoring and retrieving the User's Location.
@@ -45,7 +46,8 @@ public interface LocationClient {
 
     /**
      * Sets the {@link LocationClientListener} which will receive status updates
-     * for the LocationClient.
+     * for the LocationClient.  The LocationClient should hold only a WeakReference
+     * to the listener so that it does not cause a memory leak.
      *
      * @param locationClientListener The new {@link LocationClientListener}.
      */

@@ -8,8 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -107,12 +107,12 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_another)
+                .clickOnString(R.string.add_repeat)
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_another)
+                .clickOnString(R.string.add_repeat)
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat_no)
-                .clickOnString(R.string.add_repeat_no)
+                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroup()
                 .clickGoToArrow();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
@@ -135,14 +135,14 @@ public class FormHierarchyTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_another)
+                .clickOnString(R.string.add_repeat)
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_another)
+                .clickOnString(R.string.add_repeat)
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_another)
+                .clickOnString(R.string.add_repeat)
                 .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat_no)
-                .clickOnString(R.string.add_repeat_no)
+                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroup()
                 .clickGoToArrow()
                 .clickOnText("Repeat Group 1")
                 .clickOnText("Repeat Group 1 > 1")
@@ -152,6 +152,6 @@ public class FormHierarchyTest extends BaseRegressionTest {
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
 
-        page.checkIsTextDisplayed("Repeat Group 1_1 > 1");
+        page.assertText("Repeat Group 1_1 > 1");
     }
 }

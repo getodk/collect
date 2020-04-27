@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
-import org.odk.collect.android.espressoutils.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -40,7 +40,7 @@ public class FormValidationTest extends BaseRegressionTest {
                 .clickJumpEndButton()
                 .clickSaveAndExitWhenValidationErrorIsExpected()
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
-                .checkIsTextDisplayed("Integer")
+                .assertText("Integer")
                 .putTextOnIndex(0, "Aaaaa")
                 .clickGoToArrow()
                 .clickJumpEndButton()
@@ -54,8 +54,8 @@ public class FormValidationTest extends BaseRegressionTest {
         new MainMenuPage(rule)
                 .startBlankForm("OnePageFormShort")
                 .clickGoToArrow()
-                .checkIsTextDisplayed("YY MM")
-                .checkIsTextDisplayed("YY")
+                .assertText("YY MM")
+                .assertText("YY")
                 .pressBack(new FormEntryPage("OnePageFormShort", rule))
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("OnePageFormShort", new MainMenuPage(rule), rule))

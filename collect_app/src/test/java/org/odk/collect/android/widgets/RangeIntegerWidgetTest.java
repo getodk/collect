@@ -9,7 +9,6 @@ import org.odk.collect.android.widgets.base.RangeWidgetTest;
 /**
  * @author James Knight
  */
-
 public class RangeIntegerWidgetTest extends RangeWidgetTest<RangeIntegerWidget, IntegerData> {
 
     @NonNull

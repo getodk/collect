@@ -14,9 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,34 +24,44 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import androidx.appcompat.widget.Toolbar;
-import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 //import com.google.android.gms.analytics.GoogleAnalytics;  // smap
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.migration.StorageMigrationDialog;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.storage.migration.StorageMigrationResult;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -65,8 +73,13 @@ import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SCAN_QR_CODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
 /**
@@ -76,10 +89,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity {
-
-    private static final int PASSWORD_DIALOG = 1;
-
+public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialog.AdminPasswordDialogCallback {
     private static final boolean EXIT = true;
     // buttons
     private Button manageFilesButton;
@@ -88,7 +98,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Button reviewDataButton;
     private Button getFormsButton;
     private AlertDialog alertDialog;
-    private SharedPreferences adminPreferences;
+    private MenuItem qrcodeScannerMenuItem;
     private int completedCount;
     private int savedCount;
     private int viewSentCount;
@@ -98,21 +108,51 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
-    // private static boolean DO_NOT_EXIT = false;
+    @Inject
+    public Analytics analytics;
 
-    public static void startActivityAndCloseAllOthers(Activity activity) {
-        activity.startActivity(new Intent(activity, MainMenuActivity.class));
-        activity.overridePendingTransition(0, 0);
-        activity.finishAffinity();
-    }
+    @BindView(R.id.storageMigrationBanner)
+    LinearLayout storageMigrationBanner;
+
+    @BindView(R.id.storageMigrationBannerText)
+    TextView storageMigrationBannerText;
+
+    @BindView(R.id.storageMigrationBannerDismissButton)
+    Button storageMigrationBannerDismissButton;
+
+    @BindView(R.id.storageMigrationBannerLearnMoreButton)
+    Button storageMigrationBannerLearnMoreButton;
+
+    @BindView(R.id.version_sha)
+    TextView versionSHAView;
+
+    @Inject
+    StorageMigrationRepository storageMigrationRepository;
+
+    @Inject
+    StorageStateProvider storageStateProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
+
+    @Inject
+    AdminPasswordProvider adminPasswordProvider;
+    private MainMenuViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Collect.getInstance().getComponent().inject(this);
         setContentView(R.layout.main_menu);
+        ButterKnife.bind(this);
+        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory()).get(MainMenuViewModel.class);
+
         initToolbar();
+        DaggerUtils.getComponent(this).inject(this);
 
         disableSmsIfNeeded();
+
+        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -214,25 +254,25 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         });
 
+        String versionSHA = viewModel.getVersionCommitDescription();
+        if (versionSHA != null) {
+            versionSHAView.setText(versionSHA);
+        } else {
+            versionSHAView.setVisibility(View.GONE);
+        }
+
         // must be at the beginning of any activity that can be called from an
         // external intent
         Timber.i("Starting up, creating directories");
         try {
-            Collect.createODKDirs();
+            new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
 
-        {
-            // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
-            mainMenuMessageLabel.setText(Collect.getInstance()
-                    .getVersionedAppName());
-        }
-
-        File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
+        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
             boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
@@ -258,15 +298,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-
-        adminPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.main_menu));
-        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -275,10 +306,13 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         countSavedForms();
         updateButtons();
-        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
-                contentObserver);
+        if (!storageMigrationRepository.isMigrationBeingPerformed()) {
+            getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, contentObserver);
+        }
 
         setButtonsVisibility();
+        invalidateOptionsMenu();
+        setUpStorageMigrationBanner();
     }
 
     private void setButtonsVisibility() {
@@ -357,14 +391,36 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     @Override
+    public void onDestroy() {
+        storageMigrationRepository.clearResult();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        qrcodeScannerMenuItem = menu.findItem(R.id.menu_configure_qr_code);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        qrcodeScannerMenuItem.setVisible(this.getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0).getBoolean(AdminKeys.KEY_QR_CODE_SCANNER, true));
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_configure_qr_code:
+                analytics.logEvent(SCAN_QR_CODE, "MainMenu");
+
+                if (adminPasswordProvider.isAdminPasswordSet()) {
+                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.SCAN_QR_CODE), getSupportFragmentManager());
+                } else {
+                    startActivity(new Intent(this, ScanQRCodeActivity.class));
+                }
+                return true;
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
@@ -372,16 +428,20 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 startActivity(new Intent(this, PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
-                String pw = adminPreferences.getString(
-                        AdminKeys.KEY_ADMIN_PW, "");
-                if ("".equalsIgnoreCase(pw)) {
-                    startActivity(new Intent(this, AdminPreferencesActivity.class));
+                if (adminPasswordProvider.isAdminPasswordSet()) {
+                    DialogUtils.showIfNotShowing(AdminPasswordDialog.create(adminPasswordProvider, AdminPasswordDialog.Action.ADMIN_SETTINGS), getSupportFragmentManager());
                 } else {
-                    showDialog(PASSWORD_DIALOG);
+                    startActivity(new Intent(this, AdminPreferencesActivity.class));
                 }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(String.format("%s %s", getString(R.string.app_name), viewModel.getVersion()));
+        setSupportActionBar(toolbar);
     }
 
     private void countSavedForms() {
@@ -445,66 +505,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PASSWORD_DIALOG:
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                final AlertDialog passwordDialog = builder.create();
-                passwordDialog.setTitle(getString(R.string.enter_admin_password));
-                LayoutInflater inflater = this.getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialogbox_layout, null);
-                passwordDialog.setView(dialogView, 20, 10, 20, 10);
-                final CheckBox checkBox = dialogView.findViewById(R.id.checkBox);
-                final EditText input = dialogView.findViewById(R.id.editText);
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (!checkBox.isChecked()) {
-                            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        } else {
-                            input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        }
-                    }
-                });
-                passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
-                        getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                String value = input.getText().toString();
-                                String pw = adminPreferences.getString(
-                                        AdminKeys.KEY_ADMIN_PW, "");
-                                if (pw.compareTo(value) == 0) {
-                                    Intent i = new Intent(getApplicationContext(),
-                                            AdminPreferencesActivity.class);
-                                    startActivity(i);
-                                    input.setText("");
-                                    passwordDialog.dismiss();
-                                } else {
-                                    ToastUtils.showShortToast(R.string.admin_password_incorrect);
-                                }
-                            }
-                        });
-
-                passwordDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
-                        getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int which) {
-                                input.setText("");
-                            }
-                        });
-
-                passwordDialog.getWindow().setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                return passwordDialog;
-
-        }
-        return null;
     }
 
     private void updateButtons() {
@@ -587,6 +587,28 @@ public class MainMenuActivity extends CollectAbstractActivity {
         return res;
     }
 
+    @Override
+    public void onCorrectAdminPassword(AdminPasswordDialog.Action action) {
+        switch (action) {
+            case ADMIN_SETTINGS:
+                startActivity(new Intent(this, AdminPreferencesActivity.class));
+                break;
+            case STORAGE_MIGRATION:
+                DialogUtils
+                        .showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager())
+                        .startStorageMigration();
+                break;
+            case SCAN_QR_CODE:
+                startActivity(new Intent(this, ScanQRCodeActivity.class));
+                break;
+        }
+    }
+
+    @Override
+    public void onIncorrectAdminPassword() {
+        ToastUtils.showShortToast(R.string.admin_password_incorrect);
+    }
+
     /*
      * Used to prevent memory leaks
      */
@@ -641,5 +663,46 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     .create()
                     .show();
         }
+    }
+
+    public void onStorageMigrationBannerDismiss(View view) {
+        storageMigrationBanner.setVisibility(View.GONE);
+        storageMigrationRepository.clearResult();
+    }
+
+    public void onStorageMigrationBannerLearnMoreClick(View view) {
+        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
+        getContentResolver().unregisterContentObserver(contentObserver);
+    }
+
+    private void onStorageMigrationFinish(StorageMigrationResult result) {
+        if (result == StorageMigrationResult.SUCCESS) {
+            DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
+            displayBannerWithSuccessStorageMigrationResult();
+        } else {
+            DialogUtils
+                    .showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager())
+                    .handleMigrationError(result);
+        }
+    }
+
+    private void setUpStorageMigrationBanner() {
+        if (!storageStateProvider.isScopedStorageUsed()) {
+            displayStorageMigrationBanner();
+        }
+    }
+
+    private void displayStorageMigrationBanner() {
+        storageMigrationBanner.setVisibility(View.VISIBLE);
+        storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
+        storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
+        storageMigrationBannerDismissButton.setVisibility(View.GONE);
+    }
+
+    private void displayBannerWithSuccessStorageMigrationResult() {
+        storageMigrationBanner.setVisibility(View.VISIBLE);
+        storageMigrationBannerText.setText(R.string.storage_migration_completed);
+        storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
+        storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
     }
 }

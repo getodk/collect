@@ -39,6 +39,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,10 +56,8 @@ import io.reactivex.Observable;
 import timber.log.Timber;
 
 public class QRCodeUtils {
-    public static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.png";
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
-    static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + SETTINGS_MD5_FILE;
 
     private QRCodeUtils() {
     }
@@ -120,14 +120,14 @@ public class QRCodeUtils {
             Bitmap bitmap = null;
 
             // check if settings directory exists, if not then create one
-            File writeDir = new File(Collect.SETTINGS);
+            File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
             if (!writeDir.exists()) {
                 if (!writeDir.mkdirs()) {
                     Timber.e("Error creating directory " + writeDir.getAbsolutePath());
                 }
             }
 
-            File mdCacheFile = new File(MD5_CACHE_PATH);
+            File mdCacheFile = new File(getMd5CachePath());
             if (mdCacheFile.exists()) {
                 byte[] cachedMessageDigest = FileUtils.read(mdCacheFile);
 
@@ -139,7 +139,7 @@ public class QRCodeUtils {
                     Timber.i("Loading QRCode from the disk...");
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    bitmap = FileUtils.getBitmap(QR_CODE_FILEPATH, options);
+                    bitmap = FileUtils.getBitmap(getQrCodeFilepath(), options);
                     shouldWriteToDisk = false;
                 }
             }
@@ -157,8 +157,8 @@ public class QRCodeUtils {
 
                 // Save the QRCode to disk
                 if (shouldWriteToDisk) {
-                    Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
-                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
+                    Timber.i("Saving QR Code to disk... : " + getQrCodeFilepath());
+                    FileUtils.saveBitmapToFile(bitmap, getQrCodeFilepath());
 
                     FileUtils.write(mdCacheFile, messageDigest);
                     Timber.i("Updated %s file contents", SETTINGS_MD5_FILE);
@@ -168,5 +168,13 @@ public class QRCodeUtils {
                 emitter.onComplete();
             }
         });
+    }
+
+    public static String getQrCodeFilepath() {
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS) + File.separator + "collect-settings.png";
+    }
+
+    static String getMd5CachePath() {
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS) + File.separator + SETTINGS_MD5_FILE;
     }
 }

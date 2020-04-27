@@ -15,9 +15,14 @@ import static org.mockito.Mockito.when;
 
 public class MockFormEntryPromptBuilder {
 
-    private final FormEntryPrompt prompt = mock(FormEntryPrompt.class);
+    private final FormEntryPrompt prompt;
 
     public MockFormEntryPromptBuilder() {
+        this(mock(FormEntryPrompt.class));
+    }
+
+    public MockFormEntryPromptBuilder(FormEntryPrompt prompt) {
+        this.prompt = prompt;
         when(prompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(prompt.getIndex().toString()).thenReturn("0, 0");
         when(prompt.getFormElement()).thenReturn(mock(IFormElement.class));
@@ -28,8 +33,18 @@ public class MockFormEntryPromptBuilder {
         return this;
     }
 
+    public MockFormEntryPromptBuilder withReadOnly(boolean readOnly) {
+        when(prompt.isReadOnly()).thenReturn(readOnly);
+        return this;
+    }
+
     public MockFormEntryPromptBuilder withAudioURI(String audioURI) {
         when(prompt.getAudioText()).thenReturn(audioURI);
+        return this;
+    }
+
+    public MockFormEntryPromptBuilder withImageURI(String imageURI) {
+        when(prompt.getImageText()).thenReturn(imageURI);
         return this;
     }
 
@@ -72,7 +87,15 @@ public class MockFormEntryPromptBuilder {
     public MockFormEntryPromptBuilder withAnswerDisplayText(String text) {
         IAnswerData answer = mock(IAnswerData.class);
         when(answer.getDisplayText()).thenReturn(text);
+        when(prompt.getAnswerText()).thenReturn(text);
         when(prompt.getAnswerValue()).thenReturn(answer);
+
+        return this;
+    }
+
+    public MockFormEntryPromptBuilder withAnswer(IAnswerData answer) {
+        when(prompt.getAnswerValue()).thenReturn(answer);
+        when(prompt.getAnswerText()).thenCallRealMethod();
 
         return this;
     }

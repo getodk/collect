@@ -6,7 +6,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -24,8 +25,8 @@ public class ItemsetDbAdapter {
     private static final int DATABASE_VERSION = 2;
 
     private static final String ITEMSET_TABLE = "itemsets";
-    private static final String KEY_ITEMSET_HASH = "hash";
-    private static final String KEY_PATH = "path";
+    public static final String KEY_ITEMSET_HASH = "hash";
+    public static final String KEY_PATH = "path";
 
     private static final String CREATE_ITEMSET_TABLE =
             "CREATE TABLE IF NOT EXISTS " + ITEMSET_TABLE + " (_id integer primary key autoincrement, "
@@ -38,7 +39,7 @@ public class ItemsetDbAdapter {
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper() {
-            super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+            super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override
@@ -116,7 +117,7 @@ public class ItemsetDbAdapter {
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_ITEMSET_HASH, formHash);
-        cv.put(KEY_PATH, path);
+        cv.put(KEY_PATH, new StoragePathProvider().getFormDbPath(path));
         db.insert(ITEMSET_TABLE, null, cv);
 
         return true;
@@ -134,23 +135,6 @@ public class ItemsetDbAdapter {
         }
         db.insert(DATABASE_TABLE + tableName, null, cv);
         return true;
-    }
-
-    public boolean tableExists(String tableName) {
-        // select name from sqlite_master where type = 'table'
-        String selection = "type=? and name=?";
-        String[] selectionArgs = {
-                "table", DATABASE_TABLE + tableName
-        };
-        Cursor c = db.query("sqlite_master", null, selection, selectionArgs,
-                null, null, null);
-        boolean exists = false;
-        if (c.getCount() == 1) {
-            exists = true;
-        }
-        c.close();
-        return exists;
-
     }
 
     public void beginTransaction() {
@@ -173,7 +157,7 @@ public class ItemsetDbAdapter {
         // and remove the entry from the itemsets table
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-                path
+                new StoragePathProvider().getFormDbPath(path)
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
@@ -181,17 +165,26 @@ public class ItemsetDbAdapter {
     public Cursor getItemsets(String path) {
         String selection = KEY_PATH + "=?";
         String[] selectionArgs = {
-                path
+                new StoragePathProvider().getFormDbPath(path)
         };
         return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
     }
 
+    public Cursor getItemsets() {
+        return db.query(ITEMSET_TABLE, null, null, null, null, null, null);
+    }
+
+    public void update(ContentValues values, String where, String[] whereArgs) {
+        db.update(ITEMSET_TABLE, values, where, whereArgs);
+    }
+
     public void delete(String path) {
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
         Cursor c = getItemsets(path);
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
+                String table = getMd5FromString(storagePathProvider.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(KEY_PATH))));
                 db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
@@ -199,7 +192,7 @@ public class ItemsetDbAdapter {
 
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-                path
+                storagePathProvider.getFormDbPath(path)
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }

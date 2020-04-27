@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<h:html
+	xmlns="http://www.w3.org/2002/xforms"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:jr="http://openrosa.org/javarosa"
+	xmlns:odk="http://www.opendatakit.org/xforms"
+	xmlns:orx="http://openrosa.org/xforms"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>CalcTest</h:title>
+		<model>
+			<instance>
+				<f9b8151086797041b0c935152c991891fd87d4ca id="CalcTest" version="2019043001">
+					<GearTypes jr:template="">
+						<Gear_ID/>
+						<Gear_IDLabel/>
+						<MeshSize_ID/>
+						<calc_Mesh/>
+						<calc_MG/>
+						<Note1/>
+					</GearTypes>
+					<Note2/>
+					<Note3/>
+					<meta>
+						<instanceID/>
+					</meta>
+				</f9b8151086797041b0c935152c991891fd87d4ca>
+			</instance>
+			<bind nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Gear_ID" required="true()" type="select1"/>
+			<bind calculate="if(string-length( ../Gear_ID )!=0,jr:choice-name( ../Gear_ID ,' ../Gear_ID '),'above equipment')" nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Gear_IDLabel" required="true()" type="string"/>
+			<bind nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/MeshSize_ID" required="true()" type="select1"/>
+			<bind calculate="if(string-length( ../MeshSize_ID )!=0,jr:choice-name( ../MeshSize_ID ,' ../MeshSize_ID '),'mm ')" nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/calc_Mesh" required="true()" type="string"/>
+			<bind calculate="concat( ../calc_Mesh ,' ', ../Gear_IDLabel )" nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/calc_MG" required="true()" type="string"/>
+			<bind nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Note1" readonly="true()" type="string"/>
+			<bind nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/Note2" readonly="true()" type="string"/>
+			<bind nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/Note3" readonly="true()" type="string"/>
+			<bind jr:preload="uid" nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<group ref="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes">
+			<label>Fishing gear type</label>
+			<repeat nodeset="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes">
+				<select1 ref="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Gear_ID">
+					<label>7.1 Select the type of fishing equipment used today to catch the fish present</label>
+					<item>
+						<label>Gillnet</label>
+						<value>1</value>
+					</item>
+					<item>
+						<label>Seinenet</label>
+						<value>2</value>
+					</item>
+				</select1>
+				<select1 ref="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/MeshSize_ID">
+					<label>7.2 What is the size of the mesh for the &lt;span style=&quot;color:red&quot;&gt;
+						<output value=" ../Gear_IDLabel "/>&lt;/span&gt; ?
+					</label>
+					<item>
+						<label>20 mm</label>
+						<value>1</value>
+					</item>
+					<item>
+						<label>25 mm</label>
+						<value>2</value>
+					</item>
+					<item>
+						<label>30 mm</label>
+						<value>3</value>
+					</item>
+					<item>
+						<label>35 mm</label>
+						<value>4</value>
+					</item>
+					<item>
+						<label>40 mm</label>
+						<value>5</value>
+					</item>
+					<item>
+						<label>45 mm</label>
+						<value>6</value>
+					</item>
+					<item>
+						<label>50 mm</label>
+						<value>7</value>
+					</item>
+					<item>
+						<label>55 mm</label>
+						<value>8</value>
+					</item>
+					<item>
+						<label>60 mm</label>
+						<value>9</value>
+					</item>
+					<item>
+						<label>65 mm</label>
+						<value>10</value>
+					</item>
+					<item>
+						<label>70 mm</label>
+						<value>11</value>
+					</item>
+					<item>
+						<label>75 mm</label>
+						<value>12</value>
+					</item>
+					<item>
+						<label>80 mm</label>
+						<value>13</value>
+					</item>
+					<item>
+						<label>85 mm</label>
+						<value>14</value>
+					</item>
+					<item>
+						<label>90 mm</label>
+						<value>15</value>
+					</item>
+					<item>
+						<label>95 mm</label>
+						<value>16</value>
+					</item>
+					<item>
+						<label>100 mm</label>
+						<value>17</value>
+					</item>
+				</select1>
+				<input ref="/f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Note1">
+					<label>GearCode: 
+						<output value=" ../Gear_ID "/> MeshCode: 
+						<output value=" ../MeshSize_ID "/> GearNameCalculated:
+						<output value=" ../Gear_IDLabel "/>
+					</label>
+				</input>
+			</repeat>
+		</group>
+		<input ref="/f9b8151086797041b0c935152c991891fd87d4ca/Note2">
+			<label>GearCode: 
+				<output value=" /f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Gear_ID "/> MeshCode: 
+				<output value=" /f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/MeshSize_ID "/> GearNameCalculated:
+				<output value=" /f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Gear_IDLabel "/>
+			</label>
+		</input>
+		<input ref="/f9b8151086797041b0c935152c991891fd87d4ca/Note3">
+			<label>GearNameCalculated:
+				<output value=" /f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/Gear_IDLabel "/> Gear Mesh Calc: 
+				<output value=" /f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/calc_Mesh "/> Gear Mesh Name Calc:
+				<output value=" /f9b8151086797041b0c935152c991891fd87d4ca/GearTypes/calc_MG "/>
+			</label>
+		</input>
+	</h:body>
+</h:html>

@@ -36,9 +36,11 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -48,9 +50,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements BinaryWidget {
-    private final Button getBearingButton;
+    final Button getBearingButton;
     private final boolean isSensorAvailable;
-    private final EditText answer;
+    final EditText answer;
     private final Drawable textBackground;
 
     public BearingWidget(Context context, QuestionDetails questionDetails) {
@@ -65,7 +67,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         textBackground = answer.getBackground();
         answer.setBackground(null);
 
-        getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
+        getBearingButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.get_bearing), getAnswerFontSize(), this);
 
         answerLayout.addView(getBearingButton);
         answerLayout.addView(answer);
@@ -78,7 +80,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             }
             setBinaryData(s);
         }
-        addAnswerView(answerLayout);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     @Override

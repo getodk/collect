@@ -7,11 +7,8 @@
   <string name="signature_capture">Elektronski potpis</string>
   <string name="view_video">Pogledaj video</string>
   <string name="choose_audio">Izaberi zvučni zapis</string>
-  <string name="add_another">Dodaj grupu</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_another_menu">Dodaj još</string>
-  <string name="add_another_repeat">Dodaj \"%s\" grupi?</string>
-  <string name="add_repeat">Dodaj novi \"%s\" grupi?</string>
-  <string name="add_repeat_no">Ne dodaji nove elemente</string>
   <string name="cancel">Odustani</string>
   <string name="cancel_loading_form">Odustani</string>
   <string name="cancel_location">Odustani</string>
@@ -51,8 +48,6 @@
   <string name="do_not_change">Odustani</string>
   <string name="do_not_exit">Odustani</string>
   <string name="do_not_save">Zanemari promjene</string>
-  <string name="entering_repeat">Dodaj grupu</string>
-  <string name="entering_repeat_ask">Dodaj novu grupu?</string>
   <string name="enter_data">Popuni prazan formular</string>
   <string name="enter_data_button">Popuni prazan formular</string>
   <string name="error_occured">Greška</string>
@@ -76,15 +71,11 @@
   <string name="jump_to_beginning">Idi na početak</string>
   <string name="jump_to_end">Idi na kraj</string>
   <string name="jump_to_previous">Idi gore</string>
-  <string name="leave_repeat_yes">Ne dodaji nove elemente</string>
-  <string name="leaving_repeat_ask">Dodaj još jednu grupu?</string>
   <string name="list_failed_with_error">Prikazivanje dostupnih formulara nije uspjelo. %s.</string>
   <string name="loading_form">Učitavanje formulara</string>
   <string name="load_remote_form_error">Greška u pristupu formularima na serveru</string>
   <string name="location_provider_accuracy">Koristim %1$s. Preciznost %2$s m.</string>
   <string name="location_accuracy">Preciznost %1$s m</string>
-  <string name="main_menu">Glavni meni</string>
-  <string name="main_menu_details">Prikupljanje podataka je pojednostavljeno…</string>
   <string name="manage_files">Obriši sačuvani formular</string>
   <string name="mark_finished">Označi formular kao završen</string>
   <string name="noselect_error">Niste odabrali nijedan formular!</string>
@@ -215,7 +206,6 @@
   <string name="autosend">Automatski otpremi</string>
   <string name="found_in_main">Uklonite oznaku da biste isključili iz glavnog menija</string>
   <string name="found_in_settings">Uklonite oznaku da biste isključili iz opštih podešavanja</string>
-  <string name="save_preferences">Sačuvajte podešavanja na disk</string>
   <string name="form_forward">Sledeće</string>
   <string name="form_backward">Nazad</string>
   <string name="navigation">Navigacija</string>
@@ -464,8 +454,6 @@
   <string name="select_time">Odaberi vrijeme</string>
   <string name="no_date_selected">Datum nije odabran</string>
   <string name="no_time_selected">Vrijeme nije odabrano</string>
-  <string name="import_settings">Podešavanja preuzimanja/otpremanja podataka</string>
-  <string name="qr_code">QR kod</string>
   <string name="scan_qrcode">Skeniraj kod sa drugog uređaja</string>
   <string name="successfully_imported_settings">Podešavanja su uspješno preuzeta</string>
   <string name="encoding_max_limit">Dostignut je maksimalan broj karaktera: QR kod ne može biti generisan za sva podešavanja</string>
@@ -477,7 +465,6 @@
   <string name="qrcode_without_passwords">Ovaj QR kod ne sadrži administratorske i serverske lozinke. \n(Klikni kako bi dodao-la lozinke)</string>
   <string name="qrcode_with_admin_password">Ovaj QR kod sadrži administratorske i serverske lozinke. Molim da ga tretirate povjerljivo. \n(Klikni kako bi uklonio-la lozinke)</string>
   <string name="qrcode_with_server_password">Ovaj QR kod sadrži serverske lozinke. \n(Klikni kako bi uklonio-la lozinku)</string>
-  <string name="import_export_settings">Podešavanja preuzimanja i otpremanja</string>
   <string name="qrcode_scanner_prompt">Postavi QR kod unutar kocke</string>
   <string name="barcode_scanner_prompt">Postavi barkod unutar kocke</string>
   <string name="server_password">Server lozinka</string>

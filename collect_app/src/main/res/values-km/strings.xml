@@ -7,10 +7,11 @@
   <string name="signature_capture">ថតហត្ថលេខា</string>
   <string name="view_video">បង្ហាញវីដេអូ</string>
   <string name="choose_audio">ជ្រើសរើសសម្លេង</string>
-  <string name="add_another">បន្ថែម​ក្រុម</string>
-  <string name="add_another_repeat">បន្ថែម​ក្រុម \"%s\" មួយ​ទៀត?</string>
-  <string name="add_repeat">បន្ថែម​ក្រុម \"%s\" ថ្មី​មួយ?</string>
-  <string name="add_repeat_no">កុំ​បន្ថែម</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">បន្ថែម \"%s\"?</string>
+  <string name="add_repeat">បន្ថែម</string>
+  <string name="dont_add_repeat">កុំបន្ថែម</string>
+  <string name="add_another_menu">បន្ថែមមួយផ្សេងទៀត</string>
   <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
@@ -50,8 +51,6 @@
   <string name="do_not_change">បោះបង់</string>
   <string name="do_not_exit">បោះបង់</string>
   <string name="do_not_save">បោះបង់ការផ្លាស់ប្តូរ</string>
-  <string name="entering_repeat">បន្ថែម​ក្រុម</string>
-  <string name="entering_repeat_ask">បន្ថែម​ក្រុម​មួយ​ទៀត?</string>
   <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
   <string name="enter_data_button">បំពេញសំណុំបែបបទទទេ</string>
   <string name="error_occured">មានបញ្ហាបានកើតឡើង</string>
@@ -75,15 +74,11 @@
   <string name="jump_to_beginning">ទៅកន្លែងចាប់ផ្តើម</string>
   <string name="jump_to_end">ទៅកន្លែងបញ្ចប់</string>
   <string name="jump_to_previous">ទៅឡើង</string>
-  <string name="leave_repeat_yes">កុំ​បន្ថែម</string>
-  <string name="leaving_repeat_ask">បន្ថែមក្នុងក្រុមមួយទៀត?</string>
   <string name="list_failed_with_error">ការធ្វើបញ្ជីសំណុំបែបបទបរាជ័យ %s ។</string>
   <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
   <string name="load_remote_form_error">បញ្ហានៃការទាញបញ្ជីសំណុំបែបបទ</string>
   <string name="location_provider_accuracy">កំពុងប្រើប្រាស់ %1$s. ភាពត្រឹមត្រូវគឺ %2$s ម៉ែត្រ.</string>
   <string name="location_accuracy">ភាព​ត្រឹមត្រូវគឺ %1$s ម៉ែត្រ</string>
-  <string name="main_menu">ម៉ឺនុយ​មេ</string>
-  <string name="main_menu_details">ការប្រមូលទិន្នន័យកាន់តែមានភាពងាយស្រួល</string>
   <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
   <string name="mark_finished">សម្គាល់សំណុំបែបបទថាបានបញ្ចប់</string>
   <string name="noselect_error">សុំទោស, អ្នកមិនបានជ្រើសរើសសំណុំបែបបទណាមួយទេ!</string>
@@ -103,6 +98,7 @@
   <string name="quit_application">ចាកចេញ %s</string>
   <string name="quit_entry">រក្សា​ទុក​សំណុំ​បែប​បទ​ និង​ចាក​ចេញ</string>
   <string name="refresh">ធ្វើឲ្យថ្មីឡើងវិញ</string>
+  <string name="group_label">ក្រុម</string>
   <string name="replace_barcode">ជំនួសបារកូដ</string>
   <string name="required_answer_error">សុំទោស, ការឆ្លើយតបនេះទាមទារ</string>
   <string name="review_data">កែប្រែសំណុំ​បែប​បទ​ដែលបានរក្សាទុក</string>
@@ -211,8 +207,8 @@
   <string name="autosend">ផ្ញើចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
   <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
-  <string name="save_preferences">រក្សាទុកការកំណត់ទៅកាន់ថាស</string>
   <string name="form_forward">បន្ទាប់</string>
+  <string name="form_backward">ត្រឡប់ក្រោយ</string>
   <string name="navigation">ការ​ស្វែង​រកផ្លូវ</string>
   <string name="swipe_navigation">ប្រើការកកិតដេក</string>
   <string name="buttons_navigation">ប្រើប៊ូតុង ទៅមុខ/ថយក្រោយ</string>
@@ -292,6 +288,7 @@
   <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
   <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">ផែនទី</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -302,6 +299,8 @@
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">ផែនទីមូលដ្ឋាន</string>
+  <string name="basemap_source">ប្រភព</string>
+  <string name="map_style_label">%s រចនាបទផែនទី</string>
   <string name="streets">ផ្លូវ</string>
   <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
   <string name="hybrid">ផែនទីកូនកាត់</string>
@@ -319,6 +318,10 @@
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
   <string name="clear">លុ​បចេញ</string>
+  <string name="none">គ្មាន</string>
+  <plurals name="number_of_meters">
+    <item quantity="other">%d ម៉ែត្រ</item>
+  </plurals>
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
@@ -420,8 +423,6 @@
   <string name="select_time">ជ្រើសរើសម៉ោង</string>
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="no_time_selected">មិនបានជ្រើសរើសម៉ោង</string>
-  <string name="import_settings">ការ​កំណត់​ នាំចូល/នាំចេញ</string>
-  <string name="qr_code">QR Code</string>
   <string name="scan_qrcode">ស្កេន​កូដ​ចេញ​ឧបករណ៍​ផ្សេង​ទៀត​</string>
   <string name="successfully_imported_settings">បាន​នាំ​ចូល​ការ​កំណត់​ដោយ​ជោគ​ជ័យ</string>
   <string name="encoding_max_limit">តួអក្សរ​ដល់​ដែន​កំណត់​អតិបរមា​: លេខកូដ​ QR ​មិន​អាច​បង្កើត​តាម​ការកំណត់​ទាំងអស់​</string>
@@ -433,7 +434,6 @@
   <string name="qrcode_without_passwords">លេខ​កូដ​ QR នេះ​ពុំ​មាន​ពាក្យ​សម្ងាត់​អ្នក​គ្រប់គ្រង និង​ម៉ាស៊ីនមេ​របស់​អ្នក​។ \n (ប៉ះ​ដើម្បី​ដាក់​ពាក្យ​សម្ងាត់​)</string>
   <string name="qrcode_with_admin_password">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​អ្នក​គ្រប់គ្រង​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
   <string name="qrcode_with_server_password">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​​ម៉ាស៊ីនមេ​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
-  <string name="import_export_settings">ការកំណត់ ការនាំចូល/នាំចេញ</string>
   <string name="qrcode_scanner_prompt">ដាក់​លេខ​កូដ QR នៅ​ក្នុង​ប្រអប់​ចតុកោណ</string>
   <string name="barcode_scanner_prompt">សូមដាក់បារកូដនៅក្នុងប្រអប់ចតុកោណកែង</string>
   <string name="server_password">ពាក្យសម្ងាត់​ម៉ាស៊ីន​មេ</string>
@@ -565,9 +565,18 @@
   <string name="not_a_directory">%s មានរួច, ប៉ុន្តែ​ពុំមែន​ជាថត​ឯក​សារ</string>
   <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
+  <string name="sms_invalid_phone_number">លេខទូរស័ព្ទមិន​ត្រឹម​ត្រូវ!</string>
   <!--Sms submission-->
   <string name="transport_type_sms">សារ</string>
   <string name="transport_type_both">ជ្រើសរើសនៅពេលផ្ញើ</string>
   <string name="rank_items">ចំណាត់ថ្នាក់ធាតុ</string>
   <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
+  <string name="notification_channel_name">ការជូនដំណឹង​ជាទូទៅ</string>
+  <string name="go_to_settings">ទៅកាន់ការកំណត់</string>
+  <string name="track_location">តាមដានទីតាំង</string>
+  <string name="open_file">បើក​ឯកសារ</string>
+  <string name="close">បិទ</string>
+  <string name="reason_for_changes">ហេតុផលនៃការផ្លាស់ប្តូរ</string>
+  <string name="reason">ហេតុផល</string>
+  <string name="save">រក្សាទុក</string>
 </resources>

@@ -90,7 +90,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             throw new UploadException(Collect.getInstance().getString(R.string.google_sheets_encrypted_message));
         }
 
-        File instanceFile = new File(instance.getInstanceFilePath());
+        File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
         if (!instanceFile.exists()) {
             throw new UploadException(FAIL + "instance XML file does not exist!");
         }
@@ -105,7 +105,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 throw new UploadException(Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
             }
             Form form = forms.get(0);
-            String formFilePath = form.getFormFilePath();
+            String formFilePath = form.getAbsoluteFormFilePath();
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
             setUpSpreadsheet(spreadsheetUrl);
@@ -252,7 +252,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private String uploadMediaFile(Instance instance, String fileName) throws UploadException {
-        File instanceFile = new File(instance.getInstanceFilePath());
+        File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
         String filePath = instanceFile.getParentFile() + "/" + fileName;
         File toUpload = new File(filePath);
 

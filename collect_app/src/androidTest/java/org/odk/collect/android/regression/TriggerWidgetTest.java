@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.espressoutils.pages.GeneralSettingsPage;
-import org.odk.collect.android.espressoutils.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -39,7 +39,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("Guidance Form Sample")
-                .checkIsTextDisplayed("Guidance text")
+                .assertText("Guidance text")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
 
@@ -58,7 +58,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
                 .startBlankForm("Guidance Form Sample")
                 .checkIsIdDisplayed(R.id.help_icon)
                 .clickOnText("TriggerWidget")
-                .checkIsTextDisplayed("Guidance text")
+                .assertText("Guidance text")
                 .swipeToNextQuestion()
                 .clickSaveAndExit();
     }

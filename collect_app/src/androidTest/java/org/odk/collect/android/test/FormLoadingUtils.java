@@ -22,9 +22,11 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -45,42 +47,45 @@ public class FormLoadingUtils {
     }
 
     /**
-     * Copies a form with the given file name and given associated media from the given assets
-     * folder to the SD Card where it will be loaded by {@link FormLoaderTask}.
+     * Copies a form with the given file name and given associated media to the SD Card where it
+     * will be loaded by {@link FormLoaderTask}.
      */
-    public static void copyFormToSdCard(String formFilename, List<String> mediaFilenames) throws IOException {
-        Collect.createODKDirs();
+    public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase) throws IOException {
+        new StorageInitializer().createOdkDirsOnStorage();
+        ReferenceManager.instance().reset();
 
         String pathname = copyForm(formFilename);
-        if (mediaFilenames != null) {
-            copyFormMediaFiles(formFilename, mediaFilenames);
+        if (mediaFilePaths != null) {
+            copyFormMediaFiles(formFilename, mediaFilePaths);
         }
 
-        setupReferenceManagerForForm(ReferenceManager.instance(), FileUtils.getFormMediaDir(new File(pathname)));
-        saveFormToDatabase(new File(pathname));
+        if (copyToDatabase) {
+            setupReferenceManagerForForm(ReferenceManager.instance(), FileUtils.getFormMediaDir(new File(pathname)));
+            saveFormToDatabase(new File(pathname));
+        }
     }
 
     /**
-     * Copies a form with the given file name from the from the given assets folder to the SD Card
-     * where it will be loaded by {@link FormLoaderTask}.
+     * Copies a form with the given file name to the SD Card where it will be loaded by
+     * {@link FormLoaderTask}.
      */
-    public static void copyFormToSdCard(String formFilename) throws IOException {
-        copyFormToSdCard(formFilename, null);
+    public static void copyFormToStorage(String formFilename) throws IOException {
+            copyFormToStorage(formFilename, null, false);
     }
 
     private static void saveFormToDatabase(File outFile) {
         Map<String, String> formInfo = FileUtils.getMetadataFromFormDefinition(outFile);
         final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH,          outFile.getAbsolutePath());
-        v.put(FormsColumns.FORM_MEDIA_PATH,         FileUtils.constructMediaPath(outFile.getAbsolutePath()));
-        v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
-        v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
-        v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
-        v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
-        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-        v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsColumns.AUTO_SEND,               formInfo.get(FileUtils.AUTO_SEND));
-        //v.put(FormsColumns.GEOMETRY_XPATH,          formInfo.get(FileUtils.GEOMETRY_XPATH));  // smap
+        v.put(FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(outFile.getAbsolutePath()));
+        v.put(FormsColumns.FORM_MEDIA_PATH, new StoragePathProvider().getFormDbPath(FileUtils.constructMediaPath(outFile.getAbsolutePath())));
+        v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
+        v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
+        v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
+        v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
+        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+        v.put(FormsColumns.AUTO_DELETE, formInfo.get(FileUtils.AUTO_DELETE));
+        v.put(FormsColumns.AUTO_SEND, formInfo.get(FileUtils.AUTO_SEND));
+        // v.put(FormsColumns.GEOMETRY_XPATH, formInfo.get(FileUtils.GEOMETRY_XPATH));   // smap
 
         new FormsDao().saveForm(v);
     }
@@ -90,17 +95,23 @@ public class FormLoadingUtils {
     }
 
     private static String copyForm(String formFilename) throws IOException {
-        String pathname = Collect.FORMS_PATH + "/" + formFilename;
+        String pathname = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }
 
-    private static void copyFormMediaFiles(String formFilename, List<String> mediaFilenames) throws IOException {
-        String mediaPathName = Collect.FORMS_PATH + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+    private static void copyFormMediaFiles(String formFilename, List<String> mediaFilePaths) throws IOException {
+        String mediaPathName = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
-        for (String mediaFilename : mediaFilenames) {
-            copyFileFromAssets("media/" + mediaFilename, mediaPathName + mediaFilename);
+        for (String mediaFilePath : mediaFilePaths) {
+            copyFileFromAssets("media/" + mediaFilePath, mediaPathName + getMediaFileName(mediaFilePath));
         }
+    }
+
+    private static String getMediaFileName(String mediaFilePath) {
+        return mediaFilePath.contains(File.separator)
+                ? mediaFilePath.substring(mediaFilePath.indexOf(File.separator) + 1)
+                : mediaFilePath;
     }
 }

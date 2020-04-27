@@ -6,11 +6,8 @@
   <string name="signature_capture">Firmos</string>
   <string name="view_video">Shih videon</string>
   <string name="choose_audio">Përzgjidh audio</string>
-  <string name="add_another">Shto grup</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_another_menu">Shto një tjetër</string>
-  <string name="add_another_repeat">Shto një grup tjetër \"%s\"?</string>
-  <string name="add_repeat">Shto një grup tjetër \"%s\"?</string>
-  <string name="add_repeat_no">Mos shto</string>
   <string name="cancel">Anullo</string>
   <string name="cancel_loading_form">Anullo</string>
   <string name="cancel_location">Anullo</string>
@@ -50,8 +47,6 @@
   <string name="do_not_change">Anullo</string>
   <string name="do_not_exit">Anullo</string>
   <string name="do_not_save">Injoro ndryshimet</string>
-  <string name="entering_repeat">Shto grup</string>
-  <string name="entering_repeat_ask">Shto grup të ri?</string>
   <string name="enter_data">Mbush formular bosh</string>
   <string name="enter_data_button">Mbush formular bosh</string>
   <string name="error_occured">Ndodhi një gabim</string>
@@ -71,15 +66,11 @@
   <string name="jump_to_beginning">Shko në fillim</string>
   <string name="jump_to_end">Shko në fund</string>
   <string name="jump_to_previous">Shko sipër</string>
-  <string name="leave_repeat_yes">Mos shto</string>
-  <string name="leaving_repeat_ask">Shto një grup të ri?</string>
   <string name="list_failed_with_error">Listimi i formularit dështoi. 1%s</string>
   <string name="loading_form">Duke ngarkuar formularin</string>
   <string name="load_remote_form_error">Gabim në ngarkimin e listës së formularëve</string>
   <string name="location_provider_accuracy">Duke përdorur %1$s. Saktësia është %2$s m.</string>
   <string name="location_accuracy">Saktësia është %1$s m</string>
-  <string name="main_menu">Menuja kryesore</string>
-  <string name="main_menu_details">Mbledhja e të dhënave, e thjeshtëzuar…</string>
   <string name="manage_files">Fshi formularin e ruajtur</string>
   <string name="mark_finished">Shëno formularin si të përfunduar</string>
   <string name="noselect_error">Ndjesë, ju nuk keni përzgjedhur asnjë formular</string>
@@ -202,7 +193,6 @@
   <string name="autosend">Dërgo automatikisht</string>
   <string name="found_in_main">Hiq përzgjedhjen për ta fshehur nga Menuja Kryesore</string>
   <string name="found_in_settings">Hiq përzgjedhjen për ta fshehur nga Parametrat e Përgjithshëm</string>
-  <string name="save_preferences">Ruaj parametrat në disk</string>
   <string name="form_forward">Tjetra</string>
   <string name="navigation">Navigim</string>
   <string name="swipe_navigation">Përdor prekjen horizontale në ekran</string>
@@ -386,8 +376,6 @@
   <string name="select_time">Zgjidh orën</string>
   <string name="no_date_selected">Data nuk është përzgjedhur</string>
   <string name="no_time_selected">Ora nuk është përzgjedhur</string>
-  <string name="import_settings">Parametrat e eksportimit dhe importimit</string>
-  <string name="qr_code">Kod QR</string>
   <string name="scan_qrcode">Skano kodin nga një aparat tjetër</string>
   <string name="successfully_imported_settings">Parametrat u importuan me sukses</string>
   <string name="encoding_max_limit">U arrit limiti maksimal i karaktereve: Kodi QR nuk mund të gjenerohet për të gjithë parametrat. </string>
@@ -399,7 +387,6 @@
   <string name="qrcode_without_passwords">Ky kod QR nuk përmban fjalëkalimet e server-it apo të administratorit. \n(Shto fjalëkalimet)</string>
   <string name="qrcode_with_admin_password">Ky kod QR përmban fjalëkalimin e administratorit. Lutemi, trajtojeni me kujdes. \n(Hiq fjalëkalimin)</string>
   <string name="qrcode_with_server_password">Ky kod QR përmban fajlëkalimin e server-it tuaj. \n(Hiq fjalëkalimin)</string>
-  <string name="import_export_settings">Parametrat e importit dhe eksportit</string>
   <string name="qrcode_scanner_prompt">Vendos kodin QR brenda katrorit</string>
   <string name="barcode_scanner_prompt">Vendos barcode-in brenda drejtkëndëshit</string>
   <string name="server_password">Fjalëkalimi i serverit</string>

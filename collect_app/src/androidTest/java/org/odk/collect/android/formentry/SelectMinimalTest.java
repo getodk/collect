@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.espressoutils.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.test.FormLoadingUtils;
@@ -29,22 +29,22 @@ public class SelectMinimalTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("select_minimal.xml"));
+            .around(new CopyFormRule("select_minimal.xml", true));
 
     @Test
     public void longLabelsShouldBeDisplayed() {
         new FormEntryPage("Select minimal", activityTestRule)
                 .clickOnText("Select One Answer")
-        .checkIsTextDisplayed("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
-        .checkIsTextDisplayed("Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget")
+        .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
+        .assertText("Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget")
         .clickOnText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
-        .checkIsTextDisplayed("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
+        .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
         .swipeToNextQuestion()
         .showSpinnerMultipleDialog()
-        .checkIsTextDisplayed("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
-        .checkIsTextDisplayed("Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget")
+        .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
+        .assertText("Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget")
         .clickOnText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
         .clickOKOnDialog()
-        .checkIsTextDisplayed("Selected: Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel");
+        .assertText("Selected: Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel");
     }
 }

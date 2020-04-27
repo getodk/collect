@@ -27,7 +27,10 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
 /**
  * <p>Use the ODK Sensors framework to print data to a connected printer.</p>
@@ -114,20 +117,20 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  */
 public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
-    private final Button launchIntentButton;
+    final Button launchIntentButton;
 
     public ExPrinterWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
-        launchIntentButton = getSimpleButton(buttonText);
+        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), buttonText, getAnswerFontSize(), this);
 
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
         printLayout.addView(launchIntentButton);
-        addAnswerView(printLayout);
+        addAnswerView(printLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {

@@ -44,7 +44,7 @@ public class LikertTest {
                     Manifest.permission.CAMERA)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(LIKERT_TEST_FORM, Collections.singletonList("famous.jpg")));
+            .around(new CopyFormRule(LIKERT_TEST_FORM, Collections.singletonList("famous.jpg"), true));
 
     @Test
     public void allText_canClick() {
