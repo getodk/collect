@@ -26,7 +26,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.opendatakit.collect.material.MaterialFullScreenDialogFragment;
+import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 import javax.inject.Inject;
 

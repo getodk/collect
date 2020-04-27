@@ -1,4 +1,4 @@
-package org.opendatakit.collect.material;
+package org.odk.collect.material;
 
 import android.content.Context;
 import android.util.TypedValue;

@@ -1,4 +1,4 @@
-package org.opendatakit.collect.material;
+package org.odk.collect.material;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static org.opendatakit.collect.material.ContextUtils.getAttributeValue;
+import static org.odk.collect.material.ContextUtils.getAttributeValue;
 
 /**
  * Provides an implementation of Material's "Banner" (https://material.io/components/banners) as no

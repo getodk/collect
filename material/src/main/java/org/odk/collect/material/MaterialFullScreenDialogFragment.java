@@ -1,4 +1,4 @@
-package org.opendatakit.collect.material;
+package org.odk.collect.material;
 
 import android.app.Dialog;
 import android.os.Bundle;
