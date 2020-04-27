@@ -16,6 +16,7 @@ import android.util.Log;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.TraceProviderAPI.TraceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import timber.log.Timber;
 
@@ -41,7 +42,7 @@ public class TraceProvider extends ContentProvider {
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 
         DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+            super(new StoragePathProvider().getStorageRootDirPath(), databaseName, null, DATABASE_VERSION);
         }
 
 
