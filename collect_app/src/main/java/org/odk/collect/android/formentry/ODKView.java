@@ -69,7 +69,6 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.AudioWidget;
 import org.odk.collect.android.widgets.BarcodeWidget;
 import org.odk.collect.android.widgets.ExStringWidget;

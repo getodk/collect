@@ -57,7 +57,12 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
-    public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
+    public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting,
+                         long taskId,
+                         String formPath,
+                         String surveyNotes,
+                         boolean canUpdate,
+                         boolean saveMessage) {		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
         if (isSaving()) {
             return;
         }
@@ -69,10 +74,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
 
         if (!requiresReasonToSave()) {
-            this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
-            saveToDisk(saveRequest);
+            this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, false));  // smap add isComplete false
+            saveToDisk(saveRequest, taskId, formPath, surveyNotes, canUpdate, saveMessage);	// smap added task, formPath, surveyNotes, canUpdate, saveMessage
+
         } else {
-            this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
+            this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest, false));     // smap add isComplete false
         }
     }
 
@@ -89,7 +95,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         this.reason = reason;
     }
 
-    public boolean saveReason() {
+    public boolean saveReason( long taskId,
+                               String formPath,
+                               String surveyNotes,
+                               boolean canUpdate,
+                               boolean saveMessage) {		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
         if (reason == null || isBlank(reason)) {
             return false;
         }
@@ -100,8 +110,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         if (saveResult.getValue() != null) {
             SaveRequest request = saveResult.getValue().request;
-            saveResult.setValue(new SaveResult(SaveResult.State.SAVING, request));
-            saveToDisk(request);
+            saveResult.setValue(new SaveResult(SaveResult.State.SAVING, request, false));   // smap add isComplete false
+            saveToDisk(request, taskId, formPath, surveyNotes, canUpdate, saveMessage);	// smap added task, formPath, surveyNotes, canUpdate, saveMessage
         }
 
         return true;
@@ -111,18 +121,25 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         return reason;
     }
 
-    private void saveToDisk(SaveRequest saveRequest) {
+    private void saveToDisk(SaveRequest saveRequest,
+                            long taskId,
+                            String formPath,
+                            String surveyNotes,
+                            boolean canUpdate,
+                            boolean saveMessage) {		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
+
         saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
-                saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
+                saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress, false));     // smap add isComplete false
             }
 
             @Override
             public void onComplete(SaveToDiskResult saveToDiskResult) {
                 handleTaskResult(saveToDiskResult, saveRequest);
             }
-        }).execute();
+        }, taskId, formPath, surveyNotes, canUpdate, saveMessage		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
+        ).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
@@ -144,7 +161,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                     }
                 }
 
-                saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveRequest, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveRequest, taskResult.getSaveErrorMessage(), taskResult.isComplete()));  // smap add isComplete
                 break;
             }
 
@@ -153,7 +170,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.getCurrentTime());
                 }
 
-                saveResult.setValue(new SaveResult(SaveResult.State.SAVE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.SAVE_ERROR, saveRequest, taskResult.getSaveErrorMessage(), taskResult.isComplete()));   // smap add isComplete
                 break;
             }
 
@@ -162,7 +179,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.getCurrentTime());
                 }
 
-                saveResult.setValue(new SaveResult(SaveResult.State.FINALIZE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.FINALIZE_ERROR, saveRequest, taskResult.getSaveErrorMessage(), taskResult.isComplete()));   // smap add isComplete
                 break;
             }
 
@@ -172,7 +189,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
                 }
 
-                saveResult.setValue(new SaveResult(SaveResult.State.CONSTRAINT_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
+                saveResult.setValue(new SaveResult(SaveResult.State.CONSTRAINT_ERROR, saveRequest, taskResult.getSaveErrorMessage(), taskResult.isComplete()));     // smap add isComplete
                 break;
             }
         }
@@ -198,12 +215,13 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         private final State state;
         private final String message;
         private final SaveRequest request;
+        private boolean isComplete;     // smap
 
-        SaveResult(State state, SaveRequest request) {
-            this(state, request, null);
+        SaveResult(State state, SaveRequest request, boolean isComplete) {  // smap add isComplete
+            this(state, request, null, isComplete); // smap add isComplete
         }
 
-        SaveResult(State state, SaveRequest request, String message) {
+        SaveResult(State state, SaveRequest request, String message, boolean isComplete) {      // smap add isComplete
             this.state = state;
             this.message = message;
             this.request = request;
@@ -228,6 +246,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         public SaveRequest getRequest() {
             return request;
+        }
+
+        // smap
+        public boolean isComplete() {
+            return isComplete;
         }
     }
 
@@ -262,11 +285,30 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         private final Listener listener;
         private final FormController formController;
 
-        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener) {
-            this.saveRequest = saveRequest;
-            this.formSaver = formSaver;
-            this.listener = listener;
-            this.formController = formController;
+        // start smap
+        long taskId;
+        String formPath;
+        String surveyNotes;
+        boolean canUpdate;
+        boolean saveMessage;
+        // end smap
+
+
+            SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener,
+                     long taskId, String formPath, String surveyNotes, boolean canUpdate, boolean saveMessage) {		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
+
+                this.saveRequest = saveRequest;
+                this.formSaver = formSaver;
+                this.listener = listener;
+                this.formController = formController;
+
+                // start smap
+                this.taskId = taskId;
+                this.formPath = formPath;
+                this.surveyNotes = surveyNotes;
+                this.canUpdate = canUpdate;
+                this.saveMessage = saveMessage;
+                // end smap
         }
 
         @Override
@@ -274,8 +316,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return formSaver.save(saveRequest.uri, formController,
                     saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
-                    this::publishProgress
-            );
+                    this::publishProgress,
+                    taskId, formPath, surveyNotes, canUpdate, saveMessage);		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
         }
 
         @Override

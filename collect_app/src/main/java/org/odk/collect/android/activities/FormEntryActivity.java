@@ -90,7 +90,6 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.dao.FormsDao;
@@ -333,9 +332,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     RxEventBus eventBus;
-
-    @Inject
-    Analytics analytics;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1927,25 +1923,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit);
+        String surveyNotes = getFormController().getSurveyNotes();   // Smap
+        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit,
+                mTaskId, formPath, surveyNotes, mCanUpdate, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
+
 
         return true;
-    }
-
-    private void save(boolean complete, String updatedSaveName, boolean exitAfter, boolean saveMessage) {
-        synchronized (saveDialogLock) {
-            String surveyNotes = getFormController().getSurveyNotes();   // Smap
-
-            saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exitAfter, complete,
-                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
-            saveToDiskTask.setFormSavedListener(this);
-            autoSaved = true;
-            if(!this.isFinishing()) {   // smap
-                showDialog(SAVING_DIALOG);
-            }
-            // show dialog before we execute...
-           saveToDiskTask.execute();
-	}
     }
 
     private void handleSaveResult(FormSaveViewModel.SaveResult result, long taskId, boolean showSaveMsg) {        // smap added taskId and showSaveMsg
@@ -1981,7 +1964,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 showShortToast(R.string.data_saved_ok);
 
                 if (result.getRequest().viewExiting()) {
-                    /* Smap use broadcase not autoworker to refresh
+                    /* Smap use broadcast not autoworker to refresh
                     if (result.getRequest().shouldFinalize()) {
                         // Request auto-send if app-wide auto-send is enabled or the form that was just
                         // finalized specifies that it should always be auto-sent.
@@ -2017,7 +2000,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 showLongToast(String.format(getString(R.string.encryption_error_message),
                         result.getMessage()));
-                finishAndReturnInstance();
+                finishAndReturnInstance(result.isComplete());
                 formSaveViewModel.resumeFormEntry();
                 break;
 
@@ -2070,7 +2053,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 removeTempInstance();
                 MediaManager.INSTANCE.revertChanges();
-                finishAndReturnInstance();
+                finishAndReturnInstance(false);     // smap add isComplete false
 
                 alertDialog.dismiss();
             }

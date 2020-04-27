@@ -99,26 +99,18 @@ public class SaveFormToDisk {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-<<<<<<< HEAD:collect_app/src/main/java/org/odk/collect/android/tasks/SaveToDiskTask.java
-    public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName,
-        long taskId, String formPath, String surveyNotes, boolean canUpdate, boolean saveMessage) {		// smap added assignment_id, formPath, formDetail
-        this.uri = uri;
-        save = saveAndExit;
-        this.markCompleted = markCompleted;
-        instanceName = updatedName;
-        mTaskId = taskId;  // smap
-        mFormPath = formPath; // smap
-        mSurveyNotes = surveyNotes; // smap
-        this.canUpdate = canUpdate; // smap
-        this.saveMessage = saveMessage; // smap
-=======
-    public SaveFormToDisk(FormController formController, boolean saveAndExit, boolean shouldFinalize, String updatedName, Uri uri) {
+    public SaveFormToDisk(FormController formController, boolean saveAndExit, boolean shouldFinalize, String updatedName, Uri uri,
+            long taskId, String formPath, String surveyNotes, boolean canUpdate, boolean saveMessage) {		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
         this.formController = formController;
         this.uri = uri;
         this.saveAndExit = saveAndExit;
         this.shouldFinalize = shouldFinalize;
         this.instanceName = updatedName;
->>>>>>> merge_master:collect_app/src/main/java/org/odk/collect/android/tasks/SaveFormToDisk.java
+        mTaskId = taskId;  // smap
+        mFormPath = formPath; // smap
+        mSurveyNotes = surveyNotes; // smap
+        this.canUpdate = canUpdate; // smap
+        this.saveMessage = saveMessage; // smap
     }
 
     @Nullable
@@ -156,11 +148,8 @@ public class SaveFormToDisk {
         }
 
         try {
-<<<<<<< HEAD:collect_app/src/main/java/org/odk/collect/android/tasks/SaveToDiskTask.java
-    	    exportData(markCompleted);     // smap
-=======
+
             exportData(shouldFinalize, progressListener);
->>>>>>> merge_master:collect_app/src/main/java/org/odk/collect/android/tasks/SaveFormToDisk.java
 
             if (formController.getInstanceFile() != null) {
                 removeSavepointFiles(formController.getInstanceFile().getName());
@@ -197,19 +186,13 @@ public class SaveFormToDisk {
         if (canUpdate && instanceName != null) {       // smap
             values.put(InstanceColumns.DISPLAY_NAME, instanceName);
         }
-<<<<<<< HEAD:collect_app/src/main/java/org/odk/collect/android/tasks/SaveToDiskTask.java
+
         if(canUpdate) {
-            if (incomplete || !markCompleted) {
+            if (incomplete || !shouldFinalize) {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
             } else {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
             }
-=======
-        if (incomplete || !shouldFinalize) {
-            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-        } else {
-            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
->>>>>>> merge_master:collect_app/src/main/java/org/odk/collect/android/tasks/SaveFormToDisk.java
         }
 
         FormController formController = Collect.getInstance().getFormController();
@@ -217,7 +200,7 @@ public class SaveFormToDisk {
 
         // Smap Start
         if(canUpdate) {
-            if (markCompleted) {
+            if (shouldFinalize) {
                 values.put(InstanceColumns.T_TASK_STATUS, "complete");
             } else {
                 values.put(InstanceColumns.T_TASK_STATUS, "accepted");
@@ -312,13 +295,8 @@ public class SaveFormToDisk {
                         submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
                     }
 
-<<<<<<< HEAD:collect_app/src/main/java/org/odk/collect/android/tasks/SaveToDiskTask.java
-	                // add missing fields into values
-	                values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
-=======
                     // add missing fields into values
                     values.put(InstanceColumns.INSTANCE_FILE_PATH, new StoragePathProvider().getInstanceDbPath(instancePath));
->>>>>>> merge_master:collect_app/src/main/java/org/odk/collect/android/tasks/SaveFormToDisk.java
                     values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
 	                if (instanceName != null) {
 	                    values.put(InstanceColumns.DISPLAY_NAME, instanceName);
