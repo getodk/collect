@@ -99,7 +99,7 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                if (!pref.getEntry().equals(entry)) {
+                if (pref.getEntry() == null || !pref.getEntry().equals(entry)) {
                     preference.setSummary(entry);
                     startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 }
