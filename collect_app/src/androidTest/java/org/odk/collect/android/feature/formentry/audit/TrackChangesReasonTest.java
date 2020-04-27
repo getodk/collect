@@ -3,21 +3,22 @@ package org.odk.collect.android.feature.formentry.audit;
 import android.Manifest;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FeatureTestRule;
+import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackChangesReasonTest {
@@ -25,8 +26,7 @@ public class TrackChangesReasonTest {
     private static final String TRACK_CHANGES_REASON_ON_EDIT_FORM = "track-changes-reason-on-edit.xml";
     private static final String NO_TRACK_CHANGES_REASON_FORM = "no-track-changes-reason.xml";
 
-    @Rule
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+    public FeatureTestRule rule = new FeatureTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -36,7 +36,11 @@ public class TrackChangesReasonTest {
             ))
             .around(new ResetStateRule())
             .around(new CopyFormRule(TRACK_CHANGES_REASON_ON_EDIT_FORM))
-            .around(new CopyFormRule(NO_TRACK_CHANGES_REASON_FORM));
+            .around(new CopyFormRule(NO_TRACK_CHANGES_REASON_FORM))
+            .around(rule);
+
+    @Rule
+    public TestRule screenshotFailRule = new ScreenshotOnFailureTestRule();
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andEnteringReason_andClickingSave_returnsToMainMenu() {
