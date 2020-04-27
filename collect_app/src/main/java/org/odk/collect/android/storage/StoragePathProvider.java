@@ -52,7 +52,7 @@ public class StoragePathProvider {
     }
 
     public String getUnscopedStorageRootDirPath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "odk";
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "fieldTask";  // smap
     }
 
     public String getUnscopedStorageDirPath(StorageSubdirectory subdirectory) {
@@ -143,8 +143,8 @@ public class StoragePathProvider {
         if (path == null) {
             return null;
         }
-        if (path.startsWith("/sdcard/odk/layers")) {
-            return path.substring("/sdcard/odk/layers".length() + 1);
+        if (path.startsWith("/sdcard/fieldTask/layers")) {    // smap
+            return path.substring("/sdcard/fieldTask/layers".length() + 1);   // smap
         } else if (path.startsWith(getUnscopedStorageDirPath(StorageSubdirectory.LAYERS))) {
             return path.substring(getUnscopedStorageDirPath(StorageSubdirectory.LAYERS).length() + 1);
         } else if (path.startsWith(getScopedStorageDirPath(StorageSubdirectory.LAYERS))) {

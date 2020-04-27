@@ -32,9 +32,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -113,7 +114,7 @@ public class InstanceProvider extends ContentProvider {
     private static class DatabaseHelper extends ODKSQLiteOpenHelper {
 
         DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+            super(new StoragePathProvider().getStorageRootDirPath(), databaseName, null, DATABASE_VERSION);
         }
 
 
@@ -149,21 +150,15 @@ public class InstanceProvider extends ContentProvider {
             new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
             databaseHelper = null;
+            Timber.e(e);    // smap
         }
-        boolean databaseNeedsUpgrade = InstancesDatabaseHelper.databaseNeedsUpgrade();
-        if (dbHelper == null || (databaseNeedsUpgrade && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
-            if (databaseNeedsUpgrade) {
-                InstancesDatabaseHelper.databaseMigrationStarted();
-            }
-            recreateDatabaseHelper();
+
+        if (databaseHelper != null) {
+            return databaseHelper;
         }
         databaseHelper = new DatabaseHelper(DATABASE_NAME);     // smap instance of InstanceDatabaseHelper
 
         return databaseHelper;
-    }
-
-    public static void recreateDatabaseHelper() {
-        dbHelper = new InstancesDatabaseHelper();
     }
 
     @Override
@@ -335,49 +330,24 @@ public class InstanceProvider extends ContentProvider {
         }
         int count = 0;
 
-            switch (URI_MATCHER.match(uri)) {
-                case INSTANCES:
-                    Cursor del = null;
-                    try {
-                        del = this.query(uri, null, where, whereArgs, null);
-                        if (del != null && del.getCount() > 0) {
-                            del.moveToFirst();
-                            do {
-                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(del.getString(
-                                        del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
-                                File instanceDir = (new File(instanceFile)).getParentFile();
-                                deleteAllFilesInDirectory(instanceDir);
-                            } while (del.moveToNext());
-                        }
-                    } finally {
-                        if (del != null) {
-                            del.close();
-                        }
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
+        switch (URI_MATCHER.match(uri)) {
+            case INSTANCES:
+                Cursor del = null;
+                try {
+                    del = this.query(uri, null, where, whereArgs, null);
+                    if (del != null && del.getCount() > 0) {
+                        del.moveToFirst();
+                        do {
+                            String instanceFile = del.getString(
+                                    del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                            File instanceDir = (new File(instanceFile)).getParentFile();
+                            deleteAllFilesInDirectory(instanceDir);
+                        } while (del.moveToNext());
                     }
-                    count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
-                    break;
-
-                case INSTANCE_ID:
-                    String instanceId = uri.getPathSegments().get(1);
-
-                    Cursor c = null;
-                    String status = null;
-                    try {
-                        c = this.query(uri, null, where, whereArgs, null);
-                        if (c != null && c.getCount() > 0) {
-                            c.moveToFirst();
-                            status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-                            do {
-                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(c.getString(
-                                        c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
-                                File instanceDir = (new File(instanceFile)).getParentFile();
-                                deleteAllFilesInDirectory(instanceDir);
-                            } while (c.moveToNext());
-                        }
-                    } finally {
-                        if (c != null) {
-                            c.close();
-                        }
+                } finally {
+                    if (del != null) {
+                        del.close();
                     }
                 }
                 count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
@@ -560,7 +530,7 @@ public class InstanceProvider extends ContentProvider {
         // onDowngrade in Collect v1.22 always failed to clean up the temporary table so remove it now.
         // Going from v1.23 to v1.22 and back to v1.23 will result in instance status information
         // being lost.
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(db)
                 .dropIfExists(temporaryTableName)
                 .end();
@@ -570,7 +540,7 @@ public class InstanceProvider extends ContentProvider {
         // Only select columns from the existing table that are also relevant to v13
         columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V16)));
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(db)
                 .insertInto(temporaryTableName)
                 .columnsForInsert(columnNamesPrev.toArray(new String[0]))
@@ -579,12 +549,12 @@ public class InstanceProvider extends ContentProvider {
                 .from(INSTANCES_TABLE_NAME)
                 .end();
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(db)
                 .dropIfExists(INSTANCES_TABLE_NAME)
                 .end();
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(db)
                 .renameTable(temporaryTableName)
                 .to(INSTANCES_TABLE_NAME)

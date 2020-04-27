@@ -31,9 +31,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -74,7 +75,7 @@ public class FormsProvider extends ContentProvider {
         private static final String MODEL_VERSION = "modelVersion";
 
         DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+            super(new StoragePathProvider().getStorageRootDirPath(), databaseName, null, DATABASE_VERSION);
         }
 
         @Override
@@ -107,7 +108,7 @@ public class FormsProvider extends ContentProvider {
         String temporaryTable = FORMS_TABLE_NAME + "_tmp";
         List<String> columnNamesPrev = getFormColumnNames(db);
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(db)
                 .renameTable(FORMS_TABLE_NAME)
                 .to(temporaryTable)
@@ -115,7 +116,7 @@ public class FormsProvider extends ContentProvider {
 
         createFormsTableLatest(db);
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(db)
                 .insertInto(FORMS_TABLE_NAME)
                 .columnsForInsert(columnNamesPrev.toArray(new String[0]))
@@ -124,7 +125,7 @@ public class FormsProvider extends ContentProvider {
                 .from(temporaryTable)
                 .end();
 
-        CustomSQLiteQueryBuilder
+        CustomSQLiteQueryExecutor
                 .begin(db)
                 .dropIfExists(temporaryTable)
                 .end();
@@ -174,10 +175,6 @@ public class FormsProvider extends ContentProvider {
         }
         mDbHelper = new DatabaseHelper(DATABASE_NAME);      // smap
         return mDbHelper;
-    }
-
-    public static void recreateDatabaseHelper() {
-        dbHelper = new FormsDatabaseHelper();
     }
 
     @Override
@@ -275,12 +272,12 @@ public class FormsProvider extends ContentProvider {
                     + " must be specified.");
         }
 
-            // Normalize the file path.
-            // (don't trust the requester).
+        // Normalize the file path.
+        // (don't trust the requester).
             StoragePathProvider storagePathProvider = new StoragePathProvider();
             String filePath = storagePathProvider.getAbsoluteFormFilePath(values.getAsString(FormsColumns.FORM_FILE_PATH));
-            File form = new File(filePath);
-            filePath = form.getAbsolutePath(); // normalized
+        File form = new File(filePath);
+        filePath = form.getAbsolutePath(); // normalized
             values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getFormDbPath(filePath));
 
         Long now = System.currentTimeMillis();
@@ -308,26 +305,25 @@ public class FormsProvider extends ContentProvider {
                 values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(FileUtils.constructMediaPath(filePath)));
             }
 
-            SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
-            // first try to see if a record with this filename already exists...
-            String[] projection = {FormsColumns._ID, FormsColumns.FORM_FILE_PATH};
+        // first try to see if a record with this filename already exists...
+        String[] projection = {FormsColumns._ID, FormsColumns.FORM_FILE_PATH};
             String[] selectionArgs = {storagePathProvider.getFormDbPath(filePath)};
-            String selection = FormsColumns.FORM_FILE_PATH + "=?";
-            Cursor c = null;
-            try {
-                c = db.query(FORMS_TABLE_NAME, projection, selection,
-                        selectionArgs, null, null, null);
-                if (c.getCount() > 0) {
-                    // already exists
-                    throw new SQLException("FAILED Insert into " + uri
-                            + " -- row already exists for form definition file: "
-                            + filePath);
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
+        String selection = FormsColumns.FORM_FILE_PATH + "=?";
+        Cursor c = null;
+        try {
+            c = db.query(FORMS_TABLE_NAME, projection, selection,
+                    selectionArgs, null, null, null);
+            if (c.getCount() > 0) {
+                // already exists
+                throw new SQLException("FAILED Insert into " + uri
+                        + " -- row already exists for form definition file: "
+                        + filePath);
+            }
+        } finally {
+            if (c != null) {
+                c.close();
             }
         }
 
@@ -385,10 +381,8 @@ public class FormsProvider extends ContentProvider {
             return 0;
         }
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        int count = 0;
-        FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
-        if (formsDatabaseHelper != null) {
-            SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
+        int count;
 
             switch (URI_MATCHER.match(uri)) {
             case FORMS:
@@ -396,22 +390,17 @@ public class FormsProvider extends ContentProvider {
                 try {
                     del = this.query(uri, null, where, whereArgs, null);
                         if (del != null && del.getCount() > 0) {
-                            del.moveToFirst();
-                            do {
-                                deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(del
-                                        .getString(del
-                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                                String formFilePath = storagePathProvider.getAbsoluteFormFilePath(del.getString(del
-                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                                deleteFileOrDir(formFilePath);
-                                deleteFileOrDir(storagePathProvider.getAbsoluteFormFilePath(del.getString(del
-                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
-                            } while (del.moveToNext());
-                        }
-                    } finally {
-                        if (del != null) {
-                            del.close();
-                        }
+                        del.moveToFirst();
+                        do {
+                            deleteFileOrDir(del
+                                    .getString(del
+                                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                            String formFilePath = del.getString(del
+                                    .getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                            deleteFileOrDir(formFilePath);
+                            deleteFileOrDir(del.getString(del
+                                    .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                        } while (del.moveToNext());
                     }
                 } finally {
                     if (del != null) {
@@ -429,28 +418,28 @@ public class FormsProvider extends ContentProvider {
                     c = this.query(uri, null, where, whereArgs, null);
                     // This should only ever return 1 record.
                         if (c != null && c.getCount() > 0) {
-                            c.moveToFirst();
-                            do {
+                        c.moveToFirst();
+                        do {
                                 deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(c.getString(c
                                         .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
                                 String formFilePath = storagePathProvider.getAbsoluteFormFilePath(c.getString(c
                                         .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                                deleteFileOrDir(formFilePath);
+                            deleteFileOrDir(formFilePath);
                                 deleteFileOrDir(storagePathProvider.getAbsoluteFormFilePath(c.getString(c
                                         .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
 
-                                try {
-                                    // get rid of the old tables
-                                    ItemsetDbAdapter ida = new ItemsetDbAdapter();
-                                    ida.open();
-                                    ida.delete(c.getString(c
-                                            .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
-                                            + "/itemsets.csv");
-                                    ida.close();
-                                } catch (Exception e) {
-                                    // if something else is accessing the provider this may not exist
-                                    // so catch it and move on.
-                                }
+                            try {
+                                // get rid of the old tables
+                                ItemsetDbAdapter ida = new ItemsetDbAdapter();
+                                ida.open();
+                                ida.delete(c.getString(c
+                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
+                                        + "/itemsets.csv");
+                                ida.close();
+                            } catch (Exception e) {
+                                // if something else is accessing the provider this may not exist
+                                // so catch it and move on.
+                            }
 
                         } while (c.moveToNext());
                     }
@@ -485,57 +474,47 @@ public class FormsProvider extends ContentProvider {
             return 0;
         }
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count = 0;
-        FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
-        if (formsDatabaseHelper != null) {
-            SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
-            switch (URI_MATCHER.match(uri)) {
-                case FORMS:
-                    // don't let users manually update md5
-                    if (values.containsKey(FormsColumns.MD5_HASH)) {
-                        values.remove(FormsColumns.MD5_HASH);
-                    }
-                    // if values contains path, then all filepaths and md5s will get
-                    // updated
-                    // this probably isn't a great thing to do.
-                    if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+        switch (URI_MATCHER.match(uri)) {
+            case FORMS:
+                // don't let users manually update md5
+                if (values.containsKey(FormsColumns.MD5_HASH)) {
+                    values.remove(FormsColumns.MD5_HASH);
+                }
+                // if values contains path, then all filepaths and md5s will get
+                // updated
+                // this probably isn't a great thing to do.
+                if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
                         String formFile = storagePathProvider.getAbsoluteFormFilePath(values
                                 .getAsString(FormsColumns.FORM_FILE_PATH));
-                        values.put(FormsColumns.MD5_HASH,
-                                FileUtils.getMd5Hash(new File(formFile)));
-                    }
+                    values.put(FormsColumns.MD5_HASH,
+                            FileUtils.getMd5Hash(new File(formFile)));
+                }
 
                 Cursor c = null;
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
 
-                        if (c != null && c.getCount() > 0) {
-                            c.moveToPosition(-1);
-                            while (c.moveToNext()) {
-                                // before updating the paths, delete all the files
-                                if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+                    if (c != null && c.getCount() > 0) {
+                        c.moveToPosition(-1);
+                        while (c.moveToNext()) {
+                            // before updating the paths, delete all the files
+                            if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
                                     String newFile = storagePathProvider.getAbsoluteFormFilePath(values
                                             .getAsString(FormsColumns.FORM_FILE_PATH));
                                     String delFile = storagePathProvider.getAbsoluteFormFilePath(c
-                                            .getString(c
+                                        .getString(c
                                                     .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                                     if (!newFile.equalsIgnoreCase(delFile)) {
-                                        deleteFileOrDir(delFile);
-                                    }
-
-                                    // either way, delete the old cache because we'll
-                                    // calculate a new one.
-                                    deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(c
-                                            .getString(c
-                                                    .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
+                                    deleteFileOrDir(delFile);
                                 }
 
                                 // either way, delete the old cache because we'll
                                 // calculate a new one.
-                                deleteFileOrDir(c
+                                    deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(c
                                         .getString(c
-                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                                                    .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
                             }
                         }
                     }
@@ -565,17 +544,17 @@ public class FormsProvider extends ContentProvider {
                             values.remove(FormsColumns.MD5_HASH);
                         }
 
-                            // the order here is important (jrcache needs to be before
-                            // form file)
-                            // because we update the jrcache file if there's a new form
-                            // file
-                            if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
+                        // the order here is important (jrcache needs to be before
+                        // form file)
+                        // because we update the jrcache file if there's a new form
+                        // file
+                        if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
                                 deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(update
-                                        .getString(update
+                                    .getString(update
                                                 .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                            }
+                        }
 
-                            if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+                        if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
                                 String formFile = storagePathProvider.getAbsoluteFormFilePath(values
                                         .getAsString(FormsColumns.FORM_FILE_PATH));
                                 String oldFile = storagePathProvider.getAbsoluteFormFilePath(update.getString(update
@@ -641,7 +620,7 @@ public class FormsProvider extends ContentProvider {
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath(), FORMS);
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath() + "/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath(), NEWEST_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath().replaceAll("^/+", ""), NEWEST_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
