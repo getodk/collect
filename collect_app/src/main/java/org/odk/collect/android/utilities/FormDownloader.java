@@ -21,14 +21,12 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.logic.PropertyManager;
@@ -44,7 +42,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,9 +51,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
-import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
-import static org.odk.collect.android.utilities.FileUtils.write;
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 
 public class FormDownloader {
 
@@ -139,9 +134,7 @@ public class FormDownloader {
             throw new TaskCancelledException();
         }
 
-        // use a temporary media path until everything is ok.
-        String tempMediaPath = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE),
-                String.valueOf(System.currentTimeMillis())).getAbsolutePath();
+        String tempMediaPath = null;
         String orgTempMediaPath = null;     // smap
         final String finalMediaPath;
         String orgMediaPath = null;          // smap
@@ -162,6 +155,9 @@ public class FormDownloader {
             message += "\n";
 
             if (fd.getManifestUrl() != null) {
+                // use a temporary media path until everything is ok.
+                tempMediaPath = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE),
+                        String.valueOf(System.currentTimeMillis())).getAbsolutePath();
                 orgTempMediaPath = new File(tempMediaPath + "_org").getAbsolutePath();      // smap
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
@@ -181,7 +177,7 @@ public class FormDownloader {
             // do not download additional forms.
             throw e;
         } catch (Exception e) {
-            return message + getExceptionMessage(e);
+            message += getExceptionMessage(e);
         }
 
         if (stateListener != null && stateListener.isTaskCanceled()) {
@@ -194,23 +190,17 @@ public class FormDownloader {
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
-
-                // Add a stub last-saved instance to the tmp media directory so it will be resolved
-                // when parsing a form definition with last-saved reference
-                File tmpLastSaved = new File(tempMediaPath, LAST_SAVED_FILENAME);
-                write(tmpLastSaved, STUB_XML.getBytes(Charset.forName("UTF-8")));
-                ReferenceManager.instance().reset();
-                ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(tempMediaPath));
-                ReferenceManager.instance().addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
+                // If the form definition includes attachments, set up the reference manager in case
+                // one of them defines a secondary instance (required to build a FormDef)
+                if (tempMediaPath != null) {
+                    setupReferenceManagerForForm(ReferenceManager.instance(), new File(tempMediaPath));
+                }
 
                 parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
-                ReferenceManager.instance().reset();
-                FileUtils.deleteAndReport(tmpLastSaved);
-
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
-                return message + e.getMessage();
+                message += e.getMessage();
             }
         }
 
@@ -358,7 +348,7 @@ public class FormDownloader {
                 cursor.moveToFirst();
                 uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
                         cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
-                mediaPath = new StoragePathProvider().getAbsoluteFormFilePath(cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                mediaPath = cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
             }
         }
 
@@ -368,8 +358,8 @@ public class FormDownloader {
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath,
                             boolean tasks_only, String source, String project) {    // smap add tasks_only, source project
         final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH,          new StoragePathProvider().getFormDbPath(formFile.getAbsolutePath()));
-        v.put(FormsColumns.FORM_MEDIA_PATH,         new StoragePathProvider().getFormDbPath(mediaPath));
+        v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
+        v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
         v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
         v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
         v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
@@ -390,22 +380,25 @@ public class FormDownloader {
      */
     FileResult downloadXform(String formName, String url, boolean download, String formPath)      // smap add download flag and formPath
             throws IOException, TaskCancelledException, Exception {
+
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+
         // clean up friendly form name...
-        String rootName = FormNameUtils.formatFilenameFromFormName(formName);
+        String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
+        rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
+        rootName = rootName.trim();
+
+        File f = null;
 
         boolean isNew = false;      // smap
         if(download) {             // smap
             // proposed name of xml file...
-            StoragePathProvider storagePathProvider = new StoragePathProvider();
             String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
             int i = 2;
-            File f = new File(path);
-            while (f.exists()) {
-                path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + "_" + i + ".xml";
             f = new File(path);
 
             while (f.exists()) {
-                path = Collect.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
+                path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + "_" + i + ".xml";
                 f = new File(path);
                 i++;
             }
@@ -429,7 +422,7 @@ public class FormDownloader {
                 FileUtils.deleteAndReport(f);
 
                 // set the file returned to the file we already had
-                String existingPath = storagePathProvider.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                 f = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }
@@ -441,7 +434,7 @@ public class FormDownloader {
 
         } else {
             if(formPath == null) {
-                f = new File(Collect.FORMS_PATH + File.separator + rootName + ".xml");   // smap
+                f = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml");   // smap
             } else {
                 f = new File(formPath);     // smap
             }
@@ -483,7 +476,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = openRosaAPIClient.getFile(downloadUrl, null, credentials);	// smap credentials flag
+                    is = openRosaAPIClient.getFile(downloadUrl, null);
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];

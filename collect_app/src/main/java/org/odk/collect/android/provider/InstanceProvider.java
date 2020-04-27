@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -142,7 +143,7 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-    private DatabaseHelper databaseHelper;
+    private static DatabaseHelper databaseHelper;
 
     private DatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -159,6 +160,10 @@ public class InstanceProvider extends ContentProvider {
         databaseHelper = new DatabaseHelper(DATABASE_NAME);     // smap instance of InstanceDatabaseHelper
 
         return databaseHelper;
+    }
+
+    public static void recreateDatabaseHelper() {
+        databaseHelper = new DatabaseHelper(DATABASE_NAME);
     }
 
     @Override

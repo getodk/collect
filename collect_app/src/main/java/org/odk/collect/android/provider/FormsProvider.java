@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -159,7 +160,7 @@ public class FormsProvider extends ContentProvider {
     }
 
 
-    private DatabaseHelper mDbHelper;
+    private static DatabaseHelper mDbHelper;
 
     private DatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -173,8 +174,12 @@ public class FormsProvider extends ContentProvider {
         if (mDbHelper != null) {
             return mDbHelper;
         }
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);      // smap
+        mDbHelper = new DatabaseHelper(DATABASE_NAME);
         return mDbHelper;
+    }
+
+    public static void recreateDatabaseHelper() {
+        mDbHelper = new DatabaseHelper(DATABASE_NAME);
     }
 
     @Override
