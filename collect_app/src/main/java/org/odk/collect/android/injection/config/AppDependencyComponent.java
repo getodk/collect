@@ -47,7 +47,6 @@ import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.Utilities;
-import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 

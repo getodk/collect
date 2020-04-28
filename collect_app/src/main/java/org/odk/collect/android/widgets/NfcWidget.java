@@ -43,6 +43,8 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 
 /**
  * Widget that allows user to scan NFC Id;s and add them to the form.
@@ -64,7 +66,7 @@ public class NfcWidget extends QuestionWidget implements BinaryWidget {
 		params.setMargins(7, 5, 7, 5);
 
 		// set button formatting
-		mGetNfcButton = getSimpleButton(getContext().getString(R.string.smap_read_nfc));
+		mGetNfcButton = createSimpleButton(getContext(), View.generateViewId(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.smap_read_nfc), getAnswerFontSize(), this);
         mGetNfcButton.setEnabled(!questionDetails.getPrompt().isReadOnly());
 
 		// launch nfc capture intent on click

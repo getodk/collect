@@ -22,6 +22,7 @@ import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -40,10 +41,11 @@ import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
 /**
  * Launch another form
@@ -103,7 +105,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
         // set text formatting
         answer = new EditText(context);
-        answer.setId(ViewIds.generateViewId());
+        answer.setId(View.generateViewId());
         answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
@@ -141,7 +143,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
             buttonText += " " + mfd.formName;
         }
 
-        launchIntentButton = getSimpleButton(buttonText);
+        launchIntentButton = createSimpleButton(getContext(), View.generateViewId(), getFormEntryPrompt().isReadOnly(), buttonText, getAnswerFontSize(), this);
         launchIntentButton.setEnabled(validForm && !readOnlyOverride);
 
         // set text formatting
@@ -162,14 +164,6 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(answer);
         answerLayout.addView(launching);
         addAnswerView(answerLayout);
-
-        /*
-        if(appearance != null && appearance.contains("auto")) {
-            launchIntentButton.performClick();
-            launchIntentButton.setVisibility(GONE);
-            launching.setVisibility(VISIBLE);
-        }
-        */
 
     }
 

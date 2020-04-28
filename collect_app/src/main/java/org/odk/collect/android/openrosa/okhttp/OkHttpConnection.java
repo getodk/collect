@@ -1,23 +1,12 @@
 package org.odk.collect.android.openrosa.okhttp;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;        // smap
+import com.google.gson.GsonBuilder; // smap
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.CaseInsensitiveEmptyHeaders;
-import org.odk.collect.android.http.CaseInsensitiveHeaders;
-import org.odk.collect.android.http.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.http.openrosa.HttpGetResult;
-import org.odk.collect.android.http.openrosa.HttpHeadResult;
-import org.odk.collect.android.http.openrosa.HttpPostResult;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.http.openrosa.OpenRosaServerClient;
-import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
@@ -26,12 +15,13 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaServerClient;
+import org.odk.collect.android.taskModel.TaskResponse;    // smap
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayOutputStream;    // smap
 import java.io.File;
-import java.io.IOException;
+import java.io.IOException;    // smap
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -41,7 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import okhttp3.FormBody;
+import okhttp3.FormBody;    // smap
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -56,7 +46,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";     // smap
     private static final String GZIP_CONTENT_ENCODING = "gzip";                 // smap
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
-    private static final String HTTP_CONTENT_TYPE_JSON = "application/json";
 
     private final OkHttpOpenRosaServerClientProvider clientFactory;
 
@@ -88,13 +77,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             discardEntityBytes(response);
             Timber.i("Error: %s (%s at %s", response.message(), String.valueOf(statusCode), uri.toString());
 
-            String errMsg = response.message() +  " : " + String.valueOf(statusCode) +  " : " + uri.toString();
-            //String errMsg = Collect
-            //        .getInstance()
-            //        .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
-
-
-            Timber.e(errMsg);
+            String errMsg = response.message() +  " : " + String.valueOf(statusCode) +  " : " + uri.toString();     // smap
             throw new Exception(errMsg);    // smap
             //return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);    // smap
         }
@@ -276,7 +259,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         ResponseBody body = response.body();
         if (body != null) {
             try (InputStream is = body.byteStream()) {
-
                 while (is.read() != -1) {
                     // loop until all bytes read
                 }

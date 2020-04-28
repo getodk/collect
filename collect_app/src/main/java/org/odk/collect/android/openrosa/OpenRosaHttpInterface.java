@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.taskModel.TaskResponse;
-import org.odk.collect.android.utilities.ResponseMessageParser;
 
 import java.io.File;
 import java.io.IOException;
