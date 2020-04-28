@@ -49,7 +49,7 @@ public class EncryptedFormTest {
     public void instanceOfEncryptedForm_cantBeEditedWhenFinalized() {
         rule.mainMenu()
                 .startBlankForm("encrypted")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok)
                 .clickEditSavedForm()
@@ -62,7 +62,7 @@ public class EncryptedFormTest {
     public void instanceOfEncryptedFormWithoutInstanceID_failsFinalizationWithMessage() {
         rule.mainMenu()
                 .startBlankForm("encrypted-no-instanceID")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
                 .clickEditSavedForm()

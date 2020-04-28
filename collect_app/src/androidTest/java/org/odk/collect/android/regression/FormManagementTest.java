@@ -48,6 +48,7 @@ public class FormManagementTest extends BaseRegressionTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new FormEntryPage("OnePageFormValid", rule))
                 .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExitWithError()
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15");
     }
@@ -65,7 +66,7 @@ public class FormManagementTest extends BaseRegressionTest {
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("hints textq")
                 .assertText("1 very very very very very very very very very very long text")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -84,7 +85,7 @@ public class FormManagementTest extends BaseRegressionTest {
                 .checkIsIdDisplayed(R.id.help_icon)
                 .clickOnText("Hint 1")
                 .assertText("1 very very very very very very very very very very long text")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 

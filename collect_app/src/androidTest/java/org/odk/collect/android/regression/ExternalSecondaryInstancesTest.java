@@ -38,7 +38,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
                 .clickOnText("b")
                 .swipeToNextQuestion()
                 .clickOnText("ba")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -51,7 +51,7 @@ public class ExternalSecondaryInstancesTest extends BaseRegressionTest {
                 .clickOnText("c")
                 .swipeToNextQuestion()
                 .clickOnText("ca")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 }

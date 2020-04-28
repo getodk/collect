@@ -40,7 +40,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("Guidance Form Sample")
                 .assertText("Guidance text")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
 
     }
@@ -59,7 +59,7 @@ public class TriggerWidgetTest extends BaseRegressionTest {
                 .checkIsIdDisplayed(R.id.help_icon)
                 .clickOnText("TriggerWidget")
                 .assertText("Guidance text")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 }

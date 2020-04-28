@@ -43,7 +43,7 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
                 .clickOnText("Pensão")
                 .assertText("3a")
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 }

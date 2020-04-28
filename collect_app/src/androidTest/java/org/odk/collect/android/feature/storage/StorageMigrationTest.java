@@ -59,7 +59,7 @@ public class StorageMigrationTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .clickLearnMoreButton()
                 .clickMigrate()
@@ -79,7 +79,7 @@ public class StorageMigrationTest {
                 .assertText("Plum", "Cherry")
                 .swipeToNextQuestion()
                 .assertText("The fruit Cherry from pulldata function")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
 
         // Fill another form
@@ -93,7 +93,7 @@ public class StorageMigrationTest {
                 .swipeToNextQuestion()
                 .clickOnText("Cherry")
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -112,7 +112,7 @@ public class StorageMigrationTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .clickLearnMoreButton()
                 .assertStorageMigrationContentWithSavedFormsIsVisible();
