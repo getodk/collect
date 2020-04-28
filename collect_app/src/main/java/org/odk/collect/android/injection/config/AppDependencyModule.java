@@ -138,14 +138,12 @@ public class AppDependencyModule {
         );
     }
 
-/* smap
     @Provides
     @Singleton
     public Analytics providesAnalytics(Application application) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
         return new FirebaseAnalytics(firebaseAnalyticsInstance);
     }
-    */
 
     @Provides
     public PermissionUtils providesPermissionUtils() {

@@ -179,7 +179,7 @@ public interface AppDependencyComponent {
 
     ReferenceManager referenceManager();
 
-    //Analytics analytics();
+    Analytics analytics();
 
     GeneralSharedPreferences generalSharedPreferences();
 
