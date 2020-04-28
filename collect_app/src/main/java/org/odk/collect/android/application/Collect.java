@@ -36,6 +36,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
@@ -197,6 +198,7 @@ public class Collect extends Application {
 
     private void initMapProviders() {
         new com.google.android.gms.maps.MapView(this).onCreate(null);
+        MapboxUtils.initMapbox();
     }
 
     private void setupDagger() {

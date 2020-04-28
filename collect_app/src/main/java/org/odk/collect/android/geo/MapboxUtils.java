@@ -14,7 +14,7 @@ public class MapboxUtils {
     }
 
     /** Attempts to initialize Mapbox; returns the singleton Mapbox if successful. */
-    static Mapbox initMapbox() {
+    public static Mapbox initMapbox() {
         if (initAttempted) {
             return mapbox;
         }
