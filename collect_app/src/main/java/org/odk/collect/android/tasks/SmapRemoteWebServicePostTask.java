@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.SmapRemoteListener;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;

@@ -4,9 +4,9 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.openrosa.HttpCredentials;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.SmapLoginListener;
+import org.odk.collect.android.openrosa.HttpCredentials;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.net.URI;

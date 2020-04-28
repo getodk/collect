@@ -68,6 +68,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.taskModel.NfcTrigger;
@@ -200,8 +202,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
 
         // Get settings if available in a file
-        File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
+        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
             SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
@@ -713,7 +716,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         if(!mPaused || force) {
             String surveyNotes = null;
-            String formPath = Collect.FORMS_PATH + entry.taskForm;
+            String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + entry.taskForm;
             String instancePath = entry.instancePath;
             long taskId = entry.id;
             String status = entry.taskStatus;

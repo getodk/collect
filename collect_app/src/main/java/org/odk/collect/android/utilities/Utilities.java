@@ -30,13 +30,15 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
-import org.odk.collect.android.http.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.InstanceXML;
 
 import java.io.File;
@@ -100,7 +102,7 @@ public class Utilities {
 
     public static String getOrgMediaPath() {
         String source = getSource();
-        return Collect.FORMS_PATH + File.separator + "smap_media" + File.separator + source;
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS)  + File.separator + "smap_media" + File.separator + source;
     }
 
     public static TaskEntry getTaskWithIdOrPath(long id, String instancePath) {

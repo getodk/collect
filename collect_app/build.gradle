@@ -32,7 +32,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(21)
         targetSdkVersion(28)
-        versionCode(6090)
+        versionCode(6100)
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
@@ -56,35 +56,35 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.90"
+            versionName "6.100"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.90-plan"
+            versionName "6.100-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.90-kontrolid"
+            versionName "6.100-kontrolid"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.90-supply"
+            versionName "6.100-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.90-seracis"
+            versionName "6.100-seracis"
         }
         meqa {
             applicationId "org.smap.smapTask.android.meqa"
-            versionName "6.90-meqa"
+            versionName "6.100-meqa"
         }
         atempi {
             applicationId "org.smap.smapTask.android.atempi"
-            versionName "6.90-atempi"
+            versionName "6.100-atempi"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.90-pop"
+            versionName "6.100-pop"
         }
     }
 

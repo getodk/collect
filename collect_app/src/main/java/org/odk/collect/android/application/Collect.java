@@ -21,13 +21,13 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.location.Location;       // smap
 import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
@@ -68,6 +68,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -97,8 +98,6 @@ import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
  */
 public class Collect extends Application {
 
-    public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
-            + File.separator + "fieldTask";   // smap
     public static final String DEFAULT_FONTSIZE = "21";
     public static final int DEFAULT_FONTSIZE_INT = 21;
 
@@ -449,7 +448,7 @@ public class Collect extends Application {
     }
 
     public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
-        firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+    //    firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);       // smap disable
     }
 
     private static class CrashReportingTree extends Timber.Tree {
