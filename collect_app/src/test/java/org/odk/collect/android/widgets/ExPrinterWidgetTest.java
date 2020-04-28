@@ -39,7 +39,7 @@ public class ExPrinterWidgetTest extends QuestionWidgetTest<ExPrinterWidget, IAn
     @Override
     // ExPrintWidget is and exceptional widget that doesn't return any answer
     public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        IAnswerData newAnswer = getWidget().getAnswer();
+        IAnswerData newAnswer = getSpyWidget().getAnswer();
         assertNull(newAnswer);
     }
 
@@ -47,6 +47,6 @@ public class ExPrinterWidgetTest extends QuestionWidgetTest<ExPrinterWidget, IAn
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().launchIntentButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().launchIntentButton.getVisibility(), is(View.GONE));
     }
 }

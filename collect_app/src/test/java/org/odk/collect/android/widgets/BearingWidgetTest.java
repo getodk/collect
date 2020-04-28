@@ -55,6 +55,6 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().getBearingButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().getBearingButton.getVisibility(), is(View.GONE));
     }
 }

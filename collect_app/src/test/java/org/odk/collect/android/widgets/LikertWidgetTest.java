@@ -58,13 +58,13 @@ public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOne
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        for (int i = 0; i < getWidget().view.getChildCount(); i++) {
-            LinearLayout optionView = (LinearLayout) getWidget().view.getChildAt(0);
+        for (int i = 0; i < getSpyWidget().view.getChildCount(); i++) {
+            LinearLayout optionView = (LinearLayout) getSpyWidget().view.getChildAt(0);
             assertThat(optionView.getVisibility(), is(View.VISIBLE));
             assertThat(optionView.isEnabled(), is(Boolean.FALSE));
         }
 
-        for (Map.Entry<RadioButton, String> radioButtonStringEntry : getWidget().buttonsToName.entrySet()) {
+        for (Map.Entry<RadioButton, String> radioButtonStringEntry : getSpyWidget().buttonsToName.entrySet()) {
             assertThat(((RadioButton) ((Map.Entry) radioButtonStringEntry).getKey()).getVisibility(), is(View.VISIBLE));
             assertThat(((RadioButton) ((Map.Entry) radioButtonStringEntry).getKey()).isEnabled(), is(Boolean.FALSE));
         }

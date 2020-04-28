@@ -90,7 +90,7 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
                 ))
                 .build();
 
-        GridWidget widget = getActualWidget();
+        GridWidget widget = getWidget();
 
         widget.onItemClick(0);
         verify(audioHelper).play(new Clip("i am index 0", REFERENCES.get(0).second));
@@ -114,7 +114,7 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
                 ))
                 .build();
 
-        getActualWidget();
+        getWidget();
         verify(analytics).logEvent("Prompt", "AudioChoiceGrid", "formAnalyticsID");
     }
 
@@ -132,7 +132,7 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
                 ))
                 .build();
 
-        GridWidget widget = getActualWidget();
+        GridWidget widget = getWidget();
         widget.onItemClick(0);
 
         verify(audioHelper, never()).play(any());
@@ -148,7 +148,7 @@ public class GridWidgetTest extends GeneralSelectOneWidgetTest<GridWidget> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        for (View view : getWidget().itemViews) {
+        for (View view : getSpyWidget().itemViews) {
             assertThat(view.getVisibility(), is(View.VISIBLE));
             assertThat(view.isEnabled(), is(Boolean.FALSE));
         }

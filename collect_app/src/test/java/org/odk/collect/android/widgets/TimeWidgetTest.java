@@ -45,7 +45,7 @@ public class TimeWidgetTest extends GeneralDateTimeWidgetTest<TimeWidget, TimeDa
 
     @Test
     public void updatingTheDateAndTimeWidgetsShouldUpdateTheAnswer() {
-        TimeWidget widget = getWidget();
+        TimeWidget widget = getSpyWidget();
 
         DateTime dateTime = getNextDateTime();
         widget.updateTime(dateTime);
@@ -60,6 +60,6 @@ public class TimeWidgetTest extends GeneralDateTimeWidgetTest<TimeWidget, TimeDa
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().timeButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().timeButton.getVisibility(), is(View.GONE));
     }
 }

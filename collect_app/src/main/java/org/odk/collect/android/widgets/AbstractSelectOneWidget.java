@@ -18,6 +18,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import org.javarosa.core.model.FormIndex;
@@ -53,6 +55,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
     private String selectedValue;
     private final boolean autoAdvance;
     SelectOneListAdapter adapter;
+    private RecyclerView recyclerView;
 
     public AbstractSelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
         super(context, questionDetails);
@@ -96,7 +99,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext(), autoAdvance);
 
         if (items != null) {
-            RecyclerView recyclerView = setUpRecyclerView();
+            recyclerView = setUpRecyclerView();
             recyclerView.setAdapter(adapter);
             answerLayout.addView(recyclerView);
             adjustRecyclerViewSize(adapter, recyclerView);
@@ -154,5 +157,9 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         button.setChecked(isSelected);
 
         adapter.onCheckedChanged(button, isSelected);
+    }
+
+    public ViewGroup getChoicesList() {
+        return recyclerView;
     }
 }

@@ -152,7 +152,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
     @Test
     public void getAnswerShouldReflectWhichSelectionWasMade() {
-        ItemsetWidget widget = getWidget();
+        ItemsetWidget widget = getSpyWidget();
         assertNull(widget.getAnswer());
 
         int randomIndex = Math.abs(random.nextInt()) % widget.getChoiceCount();
@@ -167,9 +167,9 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
 
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
         assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
     }
 

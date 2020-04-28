@@ -32,7 +32,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
     public void callingClearShouldRemoveTheExistingAnswer() {
         super.callingClearShouldRemoveTheExistingAnswer();
 
-        W widget = getWidget();
+        W widget = getSpyWidget();
         assertEquals(widget.getAnswerText(), "");
     }
 
@@ -41,7 +41,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
     public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
         super.getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer();
 
-        W widget = getWidget();
+        W widget = getSpyWidget();
         IAnswerData answer = widget.getAnswer();
 
         assertEquals(widget.getAnswerText(), answer.getDisplayText());
@@ -52,7 +52,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         // Make sure it starts null:
         super.getAnswerShouldReturnNullIfPromptDoesNotHaveExistingAnswer();
 
-        W widget = getWidget();
+        W widget = getSpyWidget();
         IAnswerData answer = getNextAnswer();
 
         when(widget.getAnswerText()).thenReturn(answer.getDisplayText());
@@ -65,7 +65,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().answerText.getVisibility(), is(View.VISIBLE));
-        assertThat(getWidget().answerText.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().answerText.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().answerText.isEnabled(), is(Boolean.FALSE));
     }
 }

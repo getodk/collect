@@ -45,7 +45,7 @@ public class RatingWidgetTest extends QuestionWidgetTest<RatingWidget, IntegerDa
 
     @Override
     public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        getWidget().answer = (Integer) answer.getValue();
+        getSpyWidget().answer = (Integer) answer.getValue();
         super.getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer();
     }
 
@@ -53,9 +53,9 @@ public class RatingWidgetTest extends QuestionWidgetTest<RatingWidget, IntegerDa
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        for (int i = 0; i < getWidget().gridLayout.getChildCount(); i++) {
-            assertThat(getWidget().gridLayout.getChildAt(i).getVisibility(), is(View.VISIBLE));
-            assertThat(getWidget().gridLayout.getChildAt(i).isEnabled(), is(Boolean.FALSE));
+        for (int i = 0; i < getSpyWidget().gridLayout.getChildCount(); i++) {
+            assertThat(getSpyWidget().gridLayout.getChildAt(i).getVisibility(), is(View.VISIBLE));
+            assertThat(getSpyWidget().gridLayout.getChildAt(i).isEnabled(), is(Boolean.FALSE));
         }
     }
 }
