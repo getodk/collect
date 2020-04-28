@@ -44,6 +44,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
 
 
 /**
@@ -84,7 +85,7 @@ public class NfcWidget extends QuestionWidget implements BinaryWidget {
 		});
 
 		// set text formatting
-		mStringAnswer = getCenteredAnswerTextView();
+		mStringAnswer = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
 
 		String s = questionDetails.getPrompt().getAnswerText();
 		if (s != null) {

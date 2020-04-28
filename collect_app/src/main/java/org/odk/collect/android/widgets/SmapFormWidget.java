@@ -243,7 +243,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id, mfd.formName));
 
         // 3. Save and exit current form
-        Collect.getInstance().getFormEntryActivity().saveDataToDisk(true, false,
+        Collect.getInstance().getFormEntryActivity().saveForm(true, false,
                 null, false, false);
     }
 
