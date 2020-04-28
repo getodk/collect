@@ -1,12 +1,14 @@
 package org.odk.collect.android.support.pages;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.support.ActivityHelpers;
 
 import androidx.test.espresso.Espresso;
@@ -16,12 +18,10 @@ import androidx.test.rule.ActivityTestRule;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.containsString;
 
-public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage>{
+public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage> {
     public QRCodeTabsActivityPage(ActivityTestRule rule) {
         super(rule);
     }
@@ -42,8 +42,8 @@ public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage>{
         return this;
     }
 
-    public QRCodeTabsActivityPage assertImageViewShowsImage(int resource) {
-        onView(withId(resource)).check(matches(DrawableMatcher.withDrawable(DrawableMatcher.ANY)));
+    public QRCodeTabsActivityPage assertImageViewShowsImage(int resourceid, Bitmap image) {
+        onView(withId(resourceid)).check(matches(DrawableMatcher.withBitmap(image)));
         return this;
     }
 
@@ -53,25 +53,27 @@ public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage>{
     }
 
     private static class DrawableMatcher {
-        private static final int ANY = -2;
-        private static final int NONE = -1;
-
-        private static Matcher<View> withDrawable(int match) {
+        private static Matcher<View> withBitmap(Bitmap match) {
             return new BoundedMatcher<View, ImageView>(ImageView.class) {
                 @Override
                 public void describeTo(Description description) {
-                    description.appendText("expected " + match);
+                    description.appendText("bitmaps did not match");
                 }
 
                 @Override
-                protected boolean matchesSafely(ImageView item) {
-                    if (match == NONE) {
-                        return item.getDrawable() == null;
-                    } else if (match == ANY) {
-                        return item.getDrawable() != null;
+                protected boolean matchesSafely(ImageView imageView) {
+                    Drawable drawable = imageView.getDrawable();
+                    if (drawable == null && match == null) {
+                        return true;
+                    } else if (drawable != null && match == null) {
+                        return false;
+                    } else if (drawable == null && match != null) {
+                        return false;
                     }
 
-                    return false;
+                    Bitmap actual = ((BitmapDrawable) drawable).getBitmap();
+
+                    return actual.sameAs(match);
                 }
             };
         }

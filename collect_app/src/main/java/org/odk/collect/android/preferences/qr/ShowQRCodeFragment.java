@@ -95,6 +95,8 @@ public class ShowQRCodeFragment extends Fragment {
     public AdminSharedPreferences adminSharedPreferences;
     @Inject
     public GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    public QRCodeGenerator qrCodeGenerator;
 
     @Nullable
     @Override
@@ -119,7 +121,7 @@ public class ShowQRCodeFragment extends Fragment {
         ivQRCode.setVisibility(GONE);
         setPasswordWarning();
 
-        Disposable disposable = QRCodeUtils.getQRCodeGeneratorObservable(getSelectedPasswordKeys())
+        Disposable disposable = qrCodeGenerator.generateQRCode(getSelectedPasswordKeys())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bitmap -> {

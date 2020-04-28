@@ -4,14 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.os.Bundle;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
-import androidx.fragment.app.FragmentFactory;
-import androidx.fragment.app.testing.FragmentScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
+import dagger.Provides;
+import io.reactivex.Observable;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,24 +21,27 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.QRCodeTabsActivityPage;
+
+import java.util.Collection;
 
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.filterEquals;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static org.hamcrest.Matchers.not;
 
 
 @RunWith(AndroidJUnit4.class)
 public class QrCodeActivitiesTest {
+    // drawable resource that will act as "qr code" in this test
+    private final int checkerBackgroundDrawableId = R.drawable.checker_background;
+
     @Rule
-    public IntentsTestRule<QRCodeTabsActivity> rule = new IntentsTestRule<>(QRCodeTabsActivity.class);
+    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -46,7 +50,25 @@ public class QrCodeActivitiesTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_PHONE_STATE
             ))
-            .around(new ResetStateRule());
+            .around(new ResetStateRule(new AppDependencyModule() {
+                @Override
+                @Provides
+                public QRCodeGenerator providesQRCodeGenerator() {
+                    return new QRCodeGenerator() {
+                        @Override
+                        public Observable<Bitmap> generateQRCode(Collection<String> selectedPasswordKeys) {
+                            return Observable.create(emitter -> {
+                                Bitmap bitmap =
+                                        BitmapFactory.decodeResource(
+                                                ApplicationProvider.getApplicationContext().getResources(),
+                                                checkerBackgroundDrawableId);
+                                emitter.onNext(bitmap);
+                                emitter.onComplete();
+                            });
+                        }
+                    };
+                }
+            }));
 
     @Before
     public void stubAllExternalIntents() {
@@ -56,27 +78,34 @@ public class QrCodeActivitiesTest {
     }
 
     @Test
-    public void testScanner() {
-        new QRCodeTabsActivityPage(rule)
+    public void checkQRScannerIsInitiated() {
+        new MainMenuPage(rule)
                 .assertOnPage()
+                .clickOnMenu()
+                .clickConfigureQR()
                 .clickScanFragment()
                 .checkIsIdDisplayed(R.id.zxing_barcode_surface);
     }
 
     @Test
-    public void testView() {
-        new QRCodeTabsActivityPage(rule)
+    public void checkQRCodeImageViewDisplaysImage() {
+        new MainMenuPage(rule)
                 .assertOnPage()
+                .clickOnMenu()
+                .clickConfigureQR()
                 .clickViewQRFragment()
-                .checkIsIdDisplayed(R.id.ivQRcode)
-                .checkIfElementIsGone(R.id.progressBar)
-                .assertImageViewShowsImage(R.id.ivQRcode);
-
+                .assertImageViewShowsImage(R.id.ivQRcode, BitmapFactory.decodeResource(
+                        ApplicationProvider.getApplicationContext().getResources(),
+                        checkerBackgroundDrawableId
+                ));
     }
 
     @Test
-    public void testPressImportQRCode() {
-        new QRCodeTabsActivityPage(rule)
+    public void pressImportQRCode() {
+        new MainMenuPage(rule)
+                .assertOnPage()
+                .clickOnMenu()
+                .clickConfigureQR()
                 .clickOnMenu()
                 .clickOnString(R.string.import_qrcode_sd);
         
@@ -85,12 +114,13 @@ public class QrCodeActivitiesTest {
     }
 
     @Test
-    public void testPressShareQRCode() {
-        new QRCodeTabsActivityPage(rule)
+    public void pressShareQRCode() {
+        new MainMenuPage(rule)
+                .assertOnPage()
+                .clickOnMenu()
+                .clickConfigureQR()
                 .clickOnId(R.id.menu_item_share);
 
         intended(hasAction(Intent.ACTION_CHOOSER));
     }
-
-
 }

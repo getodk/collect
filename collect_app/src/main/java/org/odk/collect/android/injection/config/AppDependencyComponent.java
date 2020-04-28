@@ -25,6 +25,7 @@ import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.preferences.qr.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -148,6 +149,8 @@ public interface AppDependencyComponent {
     void inject(MapboxMapFragment mapFragment);
 
     void inject(MainMenuActivity mainMenuActivity);
+
+    void inject(QRCodeTabsActivity qrCodeTabsActivity);
 
     void inject(ShowQRCodeFragment showQRCodeFragment);
 

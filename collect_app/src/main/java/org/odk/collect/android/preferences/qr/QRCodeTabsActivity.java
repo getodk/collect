@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -31,6 +32,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import javax.inject.Inject;
+
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
@@ -40,9 +43,13 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Intent shareIntent;
 
+    @Inject
+    QRCodeGenerator qrCodeGenerator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
         setContentView(R.layout.qrcode_tab);
         initToolbar();
 
@@ -80,6 +87,22 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
     }
 
+    private void startShareQRCodeIntent() {
+        if (new File(QRCodeUtils.getQrCodeFilepath()).exists()) {
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+        } else {
+            Collection<String> keys = new ArrayList<>();
+            keys.add(KEY_ADMIN_PW);
+            keys.add(KEY_PASSWORD);
+            Disposable disposable = qrCodeGenerator.generateQRCode(keys)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(bitmap -> {
+                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+                    }, Timber::e);
+            compositeDisposable.add(disposable);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,20 +121,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_share:
                 if (shareIntent != null) {
-                    if (new File(QRCodeUtils.getQrCodeFilepath()).exists()) {
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
-                    } else {
-                        Collection<String> keys = new ArrayList<>();
-                        keys.add(KEY_ADMIN_PW);
-                        keys.add(KEY_PASSWORD);
-                        Disposable disposable = QRCodeUtils.getQRCodeGeneratorObservable(keys)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(bitmap -> {
-                                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
-                                }, Timber::e);
-                        compositeDisposable.add(disposable);
-                    }
+                    this.startShareQRCodeIntent();
                 }
                 return true;
             case R.id.menu_item_scan_sd_card:
