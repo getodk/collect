@@ -44,18 +44,10 @@ public class StorageMigrationCompletedBannerTest {
             .around(rule);
 
     @Test
-    public void when_storageMigrationCompleted_should_bannerBeVisibleAndPersistScreenRotation() {
+    public void when_storageMigrationCompleted_should_bannerBeVisibleAndDisappearsAfterScreenRotation() {
         new MainMenuPage(rule)
                 .assertStorageMigrationCompletedBannerIsDisplayed()
                 .rotateToLandscape(new MainMenuPage(rule))
-                .assertStorageMigrationCompletedBannerIsDisplayed()
-                .rotateToPortrait(new MainMenuPage(rule))
-                .assertStorageMigrationCompletedBannerIsDisplayed()
-                .clickDismissButton()
-                .assertStorageMigrationCompletedBannerIsNotDisplayed()
-                .rotateToLandscape(new MainMenuPage(rule))
-                .assertStorageMigrationCompletedBannerIsNotDisplayed()
-                .rotateToPortrait(new MainMenuPage(rule))
                 .assertStorageMigrationCompletedBannerIsNotDisplayed();
     }
 
