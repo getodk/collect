@@ -40,7 +40,7 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
                 .checkIfTextDoesNotExist("a")
                 .checkIfTextDoesNotExist("b")
                 .pressBack(new FormEntryPage("selectOneMinimal", rule))
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 }

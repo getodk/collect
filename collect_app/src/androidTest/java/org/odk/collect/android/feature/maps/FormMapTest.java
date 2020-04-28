@@ -79,7 +79,7 @@ public class FormMapTest {
                 .inputText("Foo")
                 .swipeToNextQuestion()
                 .clickWidgetButton()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExitBackToMap()
                 .assertText(oneInstanceString);
     }

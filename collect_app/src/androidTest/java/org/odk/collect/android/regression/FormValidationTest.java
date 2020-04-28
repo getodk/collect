@@ -38,7 +38,7 @@ public class FormValidationTest extends BaseRegressionTest {
                 .putTextOnIndex(0, "A")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExitWhenValidationErrorIsExpected()
+                .clickSaveAndExitWithError()
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
                 .assertText("Integer")
                 .putTextOnIndex(0, "Aaaaa")

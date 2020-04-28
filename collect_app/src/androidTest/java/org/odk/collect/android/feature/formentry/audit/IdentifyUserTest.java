@@ -42,7 +42,7 @@ public class IdentifyUserTest {
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
                 .clickKeyboardEnter()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -53,7 +53,7 @@ public class IdentifyUserTest {
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
                 .clickKeyboardEnter()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .clickEditSavedForm()
                 .clickOnFormWithIdentityPrompt("Identify User");
@@ -100,7 +100,7 @@ public class IdentifyUserTest {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnForm("Identify User False")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 }

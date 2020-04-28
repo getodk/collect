@@ -175,7 +175,7 @@ public class TrackChangesReasonTest {
                 .clickOnForm("Track Changes Reason")
                 .clickGoToStart()
                 .closeSoftKeyboard()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -204,7 +204,7 @@ public class TrackChangesReasonTest {
                 .clickOnForm("Normal Form")
                 .clickGoToStart()
                 .inputText("Nothing much!")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 }

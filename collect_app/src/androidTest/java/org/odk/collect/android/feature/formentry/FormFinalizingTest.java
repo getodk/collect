@@ -39,7 +39,7 @@ public class FormFinalizingTest {
         new MainMenuPage(rule)
                 .assertNumberOfFinalizedForms(0)
                 .startBlankForm("One Question")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .assertNumberOfFinalizedForms(1);
     }
@@ -49,7 +49,7 @@ public class FormFinalizingTest {
         new MainMenuPage(rule)
                 .assertNumberOfFinalizedForms(0)
                 .startBlankForm("One Question")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickMarkAsFinalized()
                 .assertMarkFinishedIsNotSelected()
                 .clickSaveAndExit()
