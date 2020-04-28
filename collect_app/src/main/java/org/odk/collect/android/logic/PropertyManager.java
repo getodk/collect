@@ -126,12 +126,6 @@ public class PropertyManager implements IPropertyManager {
     private IdAndPrefix findDeviceId(Context context, DeviceDetailsProvider deviceDetailsProvider) throws SecurityException {
         final String androidIdName = Settings.Secure.ANDROID_ID;
         String deviceId = deviceDetailsProvider.getDeviceId();
-        // start smap - this will result in deviceId not being set first time it is called
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            deviceId = telephonyManager.getDeviceId();
-        }
-        // end smap
-
         String scheme = null;
 
         if (deviceId != null) {

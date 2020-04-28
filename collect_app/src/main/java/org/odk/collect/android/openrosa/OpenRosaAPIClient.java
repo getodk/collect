@@ -74,8 +74,8 @@ public class OpenRosaAPIClient {
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
-    public InputStream getFile(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
-        return fetch(downloadUrl, contentType).getInputStream();
+    public InputStream getFile(@NonNull String downloadUrl, @Nullable final String contentType, boolean credentials) throws Exception {
+        return fetch(downloadUrl, contentType, credentials).getInputStream();   // smap add credentials
     }
 
     /**

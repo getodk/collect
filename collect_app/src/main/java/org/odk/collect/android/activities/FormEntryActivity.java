@@ -1933,7 +1933,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mTaskId = result.getTaskId();                // smap
         switch (result.getState()) {
             case CHANGE_REASON_REQUIRED:
-                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment.create(getFormController().getFormTitle());
+                String surveyNotes = getFormController().getSurveyNotes();   // Smap
+                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment
+                        .create(getFormController().getFormTitle(),
+                                mTaskId, formPath, surveyNotes, mCanUpdate);    // smap add taskId, formPath, canUpdate
                 DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
                 break;
 

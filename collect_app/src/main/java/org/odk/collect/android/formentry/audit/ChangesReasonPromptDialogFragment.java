@@ -22,14 +22,27 @@ import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
     private static final String ARG_FORM_NAME = "ArgFormName";
+    private static final String ARG_SMAP_TASK_ID = "ArgSmapTaskId";               // smap
+    private static final String ARG_SMAP_FORM_PATH = "ArgSmapTaskId";             // smap
+    private static final String ARG_SMAP_SURVEY_NOTES = "ArgSmapSurveyNotes";     // smap
+    private static final String ARG_SMAP_CAN_UPDATE = "ArgSmapCanUpdate";         // smap
+    private static final String ARG_SMAP_SAVE_MESSAGE = "ArgSmapSaveMessage";     // smap
     private FormSaveViewModel viewModel;
 
     public ViewModelProvider.Factory viewModelFactory = new FormSaveViewModel.Factory();
 
-    public static ChangesReasonPromptDialogFragment create(String formName) {
+    public static ChangesReasonPromptDialogFragment create(String formName,
+                 long taskId, String formPath, String surveyNotes, boolean canUpdate, boolean saveMessage) {  // smap
         ChangesReasonPromptDialogFragment fragment = new ChangesReasonPromptDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ChangesReasonPromptDialogFragment.ARG_FORM_NAME, formName);
+        // smap start
+        bundle.putLong(ChangesReasonPromptDialogFragment.ARG_SMAP_TASK_ID, taskId);
+        bundle.putString(ChangesReasonPromptDialogFragment.ARG_SMAP_FORM_PATH, formPath);
+        bundle.putString(ChangesReasonPromptDialogFragment.ARG_SMAP_SURVEY_NOTES, surveyNotes);
+        bundle.putBoolean(ChangesReasonPromptDialogFragment.ARG_SMAP_CAN_UPDATE, canUpdate);
+        bundle.putBoolean(ChangesReasonPromptDialogFragment.ARG_SMAP_SAVE_MESSAGE, saveMessage);
+        // smap end
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -68,7 +81,12 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         });
 
         toolbar.setOnMenuItemClickListener(item -> {
-            if (viewModel.saveReason()) {
+            if (viewModel.saveReason(
+                    getArguments().getLong(ARG_SMAP_TASK_ID),            // smap
+                    getArguments().getString(ARG_SMAP_FORM_PATH),        // smap
+                    getArguments().getString(ARG_SMAP_SURVEY_NOTES),     // smap
+                    getArguments().getBoolean(ARG_SMAP_CAN_UPDATE),      // smap
+                    getArguments().getBoolean(ARG_SMAP_SAVE_MESSAGE))) {  // smap
                 dismiss();
             }
 
