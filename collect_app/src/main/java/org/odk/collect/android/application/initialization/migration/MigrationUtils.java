@@ -52,6 +52,11 @@ public class MigrationUtils {
         return new KeyCombiner(oldKeys);
     }
 
+    public static KeyMover moveKey(String key) {
+        return new KeyMover(key);
+    }
+
+
     /** Removes an old key and sets a new key. */
     @SuppressLint("ApplySharedPref")
     static void replace(SharedPreferences prefs, String oldKey, String newKey, Object newValue) {

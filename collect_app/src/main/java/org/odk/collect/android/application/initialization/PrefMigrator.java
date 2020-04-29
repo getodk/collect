@@ -23,11 +23,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STY
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 /** Migrates old preference keys and values to new ones. */
-public class PrefMigrator {
+class PrefMigrator {
 
     private PrefMigrator() { } // prevent instantiation
 
-    static final Migration[] MIGRATIONS = {
+    private static final Migration[] MIGRATIONS = {
         translateKey("map_sdk_behavior").toKey(KEY_BASEMAP_SOURCE)
             .fromValue("google_maps").toValue("google")
             .fromValue("mapbox_maps").toValue("mapbox"),
@@ -75,7 +75,7 @@ public class PrefMigrator {
             translateValue("other_protocol").toValue("odk_default").forKey("protocol")
     };
 
-    static final Migration[] ADMIN_MIGRATIONS = {
+    private static final Migration[] ADMIN_MIGRATIONS = {
         // When either the map SDK or the basemap selection were previously
         // hidden, we want to hide the entire Maps preference screen.
         translateKey("show_map_sdk").toKey("maps")
@@ -84,14 +84,14 @@ public class PrefMigrator {
             .fromValue(false).toValue(false)
     };
 
-    public static void migrate(SharedPreferences prefs, Migration... migrations) {
+    static void migrateSharedPrefs() {
+        migrate(GeneralSharedPreferences.getInstance().getSharedPreferences(), MIGRATIONS);
+        migrate(AdminSharedPreferences.getInstance().getSharedPreferences(), ADMIN_MIGRATIONS);
+    }
+
+    private static void migrate(SharedPreferences prefs, Migration... migrations) {
         for (Migration migration : migrations) {
             migration.apply(prefs);
         }
-    }
-
-    public static void migrateSharedPrefs() {
-        migrate(GeneralSharedPreferences.getInstance().getSharedPreferences(), MIGRATIONS);
-        migrate(AdminSharedPreferences.getInstance().getSharedPreferences(), ADMIN_MIGRATIONS);
     }
 }
