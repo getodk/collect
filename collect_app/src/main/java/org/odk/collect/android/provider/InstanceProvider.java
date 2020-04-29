@@ -51,17 +51,10 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static android.provider.BaseColumns._ID;
-
+import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
-
-
-    private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 16;		// smap
-    private static final String INSTANCES_TABLE_NAME = "instances";
-
     private static HashMap<String, String> sInstancesProjectionMap;
 
     private static final int INSTANCES = 1;
@@ -69,101 +62,29 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    private static final String[] COLUMN_NAMES_V16 = new String[] {
-            _ID,
-            InstanceColumns.DISPLAY_NAME,
-            InstanceColumns.SUBMISSION_URI,
-            InstanceColumns.CAN_EDIT_WHEN_COMPLETE,
-            InstanceColumns.INSTANCE_FILE_PATH,
-            InstanceColumns.JR_FORM_ID,
-            InstanceColumns.JR_VERSION,
-            InstanceColumns.STATUS,
-            InstanceColumns.LAST_STATUS_CHANGE_DATE,
-            InstanceColumns.DELETED_DATE,
-            InstanceColumns.SOURCE,             // smap
-            InstanceColumns.FORM_PATH,          // smap
-            InstanceColumns.ACT_LON,            // smap
-            InstanceColumns.ACT_LAT,            // smap
-            InstanceColumns.SCHED_LON,          // smap
-            InstanceColumns.SCHED_LAT,          // smap
-            InstanceColumns.T_TITLE,            // smap
-            InstanceColumns.T_SCHED_START,      // smap
-            InstanceColumns.T_SCHED_FINISH,      // smap
-            InstanceColumns.T_ACT_START,        // smap
-            InstanceColumns.T_ACT_FINISH,       // smap
-            InstanceColumns.T_ADDRESS,          // smap
-            InstanceColumns.GEOMETRY,             // smap
-            InstanceColumns.GEOMETRY_TYPE,        // smap
-            InstanceColumns.T_IS_SYNC,          // smap
-            InstanceColumns.T_ASS_ID,           // smap
-            InstanceColumns.T_TASK_STATUS,      // smap
-            InstanceColumns.T_TASK_COMMENT,     // smap
-            InstanceColumns.T_REPEAT,           // smap
-            InstanceColumns.T_UPDATEID,         // smap
-            InstanceColumns.T_LOCATION_TRIGGER, // smap
-            InstanceColumns.T_SURVEY_NOTES,     // smap
-            InstanceColumns. UUID,               // smap
-            InstanceColumns.T_UPDATED,          // smap
-            InstanceColumns.T_SHOW_DIST,        // smap
-            InstanceColumns.T_HIDE              // smap
+    private static InstancesDatabaseHelper dbHelper;
 
-    };
-
-    /**
-     * This class helps open, create, and upgrade the database file.
-     */
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
-
-        DatabaseHelper(String databaseName) {
-            super(new StoragePathProvider().getStorageRootDirPath(), databaseName, null, DATABASE_VERSION);
-        }
-
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            createInstancesTableV16(db, INSTANCES_TABLE_NAME);
-        }
-
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        	int initialVersion = oldVersion;
-
-            if (oldVersion < 16) {
-                try {
-                    moveInstancesTableToVersion16(db);
-                } catch(Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to database version 13");
-                    e.printStackTrace();
-                }
-            }
-            Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
-                    initialVersion, newVersion);
-        }
-    }
-
-    private static DatabaseHelper databaseHelper;
-
-    private DatabaseHelper getDbHelper() {
+    private synchronized InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
-            databaseHelper = null;
-            Timber.e(e);    // smap
+            return null;
         }
 
-        if (databaseHelper != null) {
-            return databaseHelper;
+        boolean databaseNeedsUpgrade = InstancesDatabaseHelper.databaseNeedsUpgrade();
+        if (dbHelper == null || (databaseNeedsUpgrade && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (databaseNeedsUpgrade) {
+                InstancesDatabaseHelper.databaseMigrationStarted();
         }
-        databaseHelper = new DatabaseHelper(DATABASE_NAME);     // smap instance of InstanceDatabaseHelper
+            recreateDatabaseHelper();
+        }
 
-        return databaseHelper;
+        return dbHelper;
     }
 
     public static void recreateDatabaseHelper() {
-        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        dbHelper = new InstancesDatabaseHelper();
     }
 
     @Override
@@ -174,7 +95,7 @@ public class InstanceProvider extends ContentProvider {
         }
 
         // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
+        InstancesDatabaseHelper h = getDbHelper();
         return h != null;
     }
 
@@ -203,12 +124,15 @@ public class InstanceProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        // Get the database and run the query
-        SQLiteDatabase db = getDbHelper().getReadableDatabase();
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor c = null;
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
+            c = qb.query(instancesDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
 
-        // Tell the cursor what uri to watch, so it knows when its source data changes
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+            // Tell the cursor what uri to watch, so it knows when its source data changes
+            c.setNotificationUri(getContext().getContentResolver(), uri);
+        }
+
         return c;
     }
 
@@ -237,6 +161,8 @@ public class InstanceProvider extends ContentProvider {
             return null;
         }
 
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
         ContentValues values;
         if (initialValues != null) {
             values = new ContentValues(initialValues);
@@ -255,12 +181,12 @@ public class InstanceProvider extends ContentProvider {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
             }
 
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
-        long rowId = db.insert(INSTANCES_TABLE_NAME, null, values);
+            long rowId = instancesDatabaseHelper.getWritableDatabase().insert(INSTANCES_TABLE_NAME, null, values);
         if (rowId > 0) {
             Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(instanceUri, null);
             return instanceUri;
+        }
         }
 
         throw new SQLException("Failed to insert into the instances database.");
@@ -334,8 +260,10 @@ public class InstanceProvider extends ContentProvider {
             return 0;
         }
         int count = 0;
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
+            SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
 
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
                 Cursor del = null;
@@ -344,8 +272,8 @@ public class InstanceProvider extends ContentProvider {
                     if (del != null && del.getCount() > 0) {
                         del.moveToFirst();
                         do {
-                            String instanceFile = del.getString(
-                                    del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(del.getString(
+                                        del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                             File instanceDir = (new File(instanceFile)).getParentFile();
                             deleteAllFilesInDirectory(instanceDir);
                         } while (del.moveToNext());
@@ -369,8 +297,8 @@ public class InstanceProvider extends ContentProvider {
                         c.moveToFirst();
                         status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                         do {
-                            String instanceFile = c.getString(
-                                    c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(c.getString(
+                                        c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
                             File instanceDir = (new File(instanceFile)).getParentFile();
                             deleteAllFilesInDirectory(instanceDir);
                         } while (c.moveToNext());
@@ -426,6 +354,8 @@ public class InstanceProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
+        }
+
         return count;
     }
 
@@ -435,10 +365,16 @@ public class InstanceProvider extends ContentProvider {
             return 0;
         }
         int count = 0;
-
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
+            SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
 
         Long now = System.currentTimeMillis();
+
+            // Make sure that the fields are all set
+            if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
+                values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+            }
 
             // Don't update last status change date if an instance is being deleted
             if (values.containsKey(InstanceColumns.DELETED_DATE)) {
@@ -457,7 +393,7 @@ public class InstanceProvider extends ContentProvider {
                     if (whereArgs == null || whereArgs.length == 0) {
                         newWhereArgs = new String[] {instanceId};
                     } else {
-                        newWhereArgs = new String[(whereArgs.length + 1)];
+                        newWhereArgs = new String[whereArgs.length + 1];
                         newWhereArgs[0] = instanceId;
                         System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
                     }
@@ -476,6 +412,8 @@ public class InstanceProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
+        }
+
         return count;
     }
 
@@ -524,99 +462,5 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY, InstanceColumns.GEOMETRY);
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY_TYPE);
 
-    }
-
-
-    private static void moveInstancesTableToVersion16(SQLiteDatabase db) {
-        List<String> columnNamesPrev = getInstancesColumnNames(db);
-
-        String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
-
-        // onDowngrade in Collect v1.22 always failed to clean up the temporary table so remove it now.
-        // Going from v1.23 to v1.22 and back to v1.23 will result in instance status information
-        // being lost.
-        CustomSQLiteQueryExecutor
-                .begin(db)
-                .dropIfExists(temporaryTableName)
-                .end();
-
-        createInstancesTableV16(db, temporaryTableName);
-
-        // Only select columns from the existing table that are also relevant to v13
-        columnNamesPrev.retainAll(new ArrayList<>(Arrays.asList(COLUMN_NAMES_V16)));
-
-        CustomSQLiteQueryExecutor
-                .begin(db)
-                .insertInto(temporaryTableName)
-                .columnsForInsert(columnNamesPrev.toArray(new String[0]))
-                .select()
-                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
-                .from(INSTANCES_TABLE_NAME)
-                .end();
-
-        CustomSQLiteQueryExecutor
-                .begin(db)
-                .dropIfExists(INSTANCES_TABLE_NAME)
-                .end();
-
-        CustomSQLiteQueryExecutor
-                .begin(db)
-                .renameTable(temporaryTableName)
-                .to(INSTANCES_TABLE_NAME)
-                .end();
-    }
-
-    private static void createInstancesTableV16(SQLiteDatabase db, String name) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
-                + _ID + " integer primary key, "
-                + InstanceColumns.DISPLAY_NAME + " text not null, "
-                + InstanceColumns.SUBMISSION_URI + " text, "
-                + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-                + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-                + InstanceColumns.JR_FORM_ID + " text not null, "
-                + InstanceColumns.JR_VERSION + " text, "
-                + InstanceColumns.STATUS + " text not null, "
-                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                + InstanceColumns.DELETED_DATE + " date, "
-                + InstanceColumns.SOURCE + " text, "		    // smap
-                + InstanceColumns.FORM_PATH + " text, "		    // smap
-                + InstanceColumns.ACT_LON + " double, "		    // smap
-                + InstanceColumns.ACT_LAT + " double, "		    // smap
-                + InstanceColumns.SCHED_LON + " double, "		// smap
-                + InstanceColumns.SCHED_LAT + " double, "		// smap
-                + InstanceColumns.T_TITLE + " text, "		    // smap
-                + InstanceColumns.T_SCHED_START + " long, "		// smap
-                + InstanceColumns.T_SCHED_FINISH + " long, "	// smap
-                + InstanceColumns.T_ACT_START + " long, "		// smap
-                + InstanceColumns.T_ACT_FINISH + " long, "		// smap
-                + InstanceColumns.T_ADDRESS + " text, "		    // smap
-                + InstanceColumns.GEOMETRY + " text, "		    // smap
-                + InstanceColumns.GEOMETRY_TYPE + " text, "		// smap
-                + InstanceColumns.T_IS_SYNC + " text, "		    // smap
-                + InstanceColumns.T_ASS_ID + " long, "		    // smap
-                + InstanceColumns.T_TASK_STATUS + " text, "		// smap
-                + InstanceColumns.T_TASK_COMMENT + " text, "    // smap
-                + InstanceColumns.T_REPEAT + " integer, "		// smap
-                + InstanceColumns.T_UPDATEID + " text, "		// smap
-                + InstanceColumns.T_LOCATION_TRIGGER + " text, " // smap
-                + InstanceColumns.T_SURVEY_NOTES + " text, "    // smap
-                + InstanceColumns.UUID + " text, "		        // smap
-                + InstanceColumns.T_UPDATED + " integer, "      // smap
-                + InstanceColumns.T_SHOW_DIST + " integer, "    // smap
-                + InstanceColumns.T_HIDE + " integer, "         // smap
-
-
-                + "displaySubtext text "   // Smap keep for downgrading
-                + ");");
-    }
-
-    static List<String> getInstancesColumnNames(SQLiteDatabase db) {
-        String[] columnNames;
-        try (Cursor c = db.query(INSTANCES_TABLE_NAME, null, null, null, null, null, null)) {
-            columnNames = c.getColumnNames();
-        }
-
-        // Build a full-featured ArrayList rather than the limited array-backed List from asList
-        return new ArrayList<>(Arrays.asList(columnNames));
     }
 }
