@@ -10,74 +10,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.application.initialization.migration.Migration;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
 
 @RunWith(RobolectricTestRunner.class)
 public class PrefMigratorTest {
 
     private SharedPreferences prefs;
 
-    // Renames a couple of keys.
-    private static final Migration[] RENAMERS = {
-        renameKey("colour").toKey("couleur"),
-        renameKey("vegetable").toKey("legume")
-    };
-
-    // Renames a couple of keys, also translating their values.
-    private static final Migration[] TRANSLATORS = {
-        translateKey("colour").toKey("couleur")
-            .fromValue("red").toValue("rouge")
-            .fromValue("green").toValue("vert"),
-        translateKey("vegetable").toKey("legume")
-            .fromValue("tomato").toValue("tomate")
-            .fromValue("eggplant").toValue("aubergine")
-    };
-
-    // Splits a key into two more specialized keys with less qualified values.
-    private static final Migration[] KEY_SPLITTER = {
-        translateKey("fruit").toKey("pear")
-            .fromValue("pear_anjou").toValue("anjou")
-            .fromValue("pear_bartlett").toValue("bartlett"),
-        translateKey("fruit").toKey("melon")
-            .fromValue("melon_cantaloupe").toValue("cantaloupe")
-            .fromValue("melon_watermelon").toValue("watermelon")
-    };
-
-    // Merges two keys into one more general key with more qualified values.
-    private static final Migration[] KEY_MERGER = {
-        translateKey("pear").toKey("fruit")
-            .fromValue("anjou").toValue("pear_anjou")
-            .fromValue("bartlett").toValue("pear_bartlett"),
-        translateKey("melon").toKey("fruit")
-            .fromValue("cantaloupe").toValue("melon_cantaloupe")
-            .fromValue("watermelon").toValue("melon_watermelon")
-    };
-
-    // Produces new values based on a combination of the values of two keys.
-    private static final Migration[] COMBINER = {
-        combineKeys("red", "blue")
-            .withValues(true, true).toPairs("mix", "purple")
-            .withValues(true, false).toPairs("mix", "red")
-            .withValues(true, null).toPairs("mix", "red")
-            .withValues(false, true).toPairs("mix", "blue")
-            .withValues(null, true).toPairs("mix", "blue")
-    };
-
-    // Uses the value of one key to modify the value of another.
-    private static final Migration[] COMBINER_MODIFIER = {
-        combineKeys("vehicle", "fast")
-            .withValues("bicycle", true).toPairs("vehicle", "fast_bicycle")
-            .withValues("car", true).toPairs("vehicle", "fast_car")
-    };
-
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         prefs = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
     }
 
@@ -101,155 +45,8 @@ public class PrefMigratorTest {
         assertEquals(pairs.length / 2, prefs.getAll().size());
     }
 
-    @Test public void renamerShouldRenameKeys() {
-        initPrefs(
-            "colour", "red",
-            "vegetable", "eggplant"
-        );
-        PrefMigrator.migrate(prefs, RENAMERS);
-        assertPrefs(
-            "couleur", "red",
-            "legume", "eggplant"
-        );
-    }
-
-    @Test public void translatorShouldTranslateValues() {
-        initPrefs(
-            "colour", "red",
-            "vegetable", "eggplant"
-        );
-        PrefMigrator.migrate(prefs, TRANSLATORS);
-        assertPrefs(
-            "couleur", "rouge",
-            "legume", "aubergine"
-        );
-    }
-
-    @Test public void translatorShouldNotTouchUnknownValues() {
-        initPrefs(
-            "colour", "blue",
-            "vegetable", "eggplant"
-        );
-        PrefMigrator.migrate(prefs, TRANSLATORS);
-        assertPrefs(
-            "colour", "blue",
-            "legume", "aubergine"
-        );
-    }
-
-    @Test public void renamerSouldNotReplaceExistingNewKeys() {
-        initPrefs(
-            "colour", "red",
-            "vegetable", "eggplant",
-            "couleur", "bleu",
-            "legume", "tomate",
-            "network", true,
-            "connection", "wifi"
-        );
-        PrefMigrator.migrate(prefs, RENAMERS);
-        assertPrefs(
-            "colour", "red",
-            "vegetable", "eggplant",
-            "couleur", "bleu",
-            "legume", "tomate",
-            "network", true,
-            "connection", "wifi"
-        );
-    }
-
-    @Test public void translatorShouldNotReplaceExistingNewKeys() {
-        initPrefs(
-            "colour", "red",
-            "vegetable", "eggplant",
-            "couleur", "bleu",
-            "legume", "tomate",
-            "network", true,
-            "connection", "wifi"
-        );
-        PrefMigrator.migrate(prefs, TRANSLATORS);
-        assertPrefs(
-            "colour", "red",
-            "vegetable", "eggplant",
-            "couleur", "bleu",
-            "legume", "tomate",
-            "network", true,
-            "connection", "wifi"
-        );
-    }
-
-    @Test public void translatorShouldSplitKeyAccordingToValue() {
-        initPrefs("fruit", "pear_anjou");
-        PrefMigrator.migrate(prefs, KEY_SPLITTER);
-        assertPrefs("pear", "anjou");
-
-        initPrefs("fruit", "melon_watermelon");
-        PrefMigrator.migrate(prefs, KEY_SPLITTER);
-        assertPrefs("melon", "watermelon");
-    }
-
-    @Test public void translatorShouldMergeKeys() {
-        initPrefs("pear", "anjou");
-        PrefMigrator.migrate(prefs, KEY_MERGER);
-        assertPrefs("fruit", "pear_anjou");
-
-        initPrefs("melon", "watermelon");
-        PrefMigrator.migrate(prefs, KEY_MERGER);
-        assertPrefs("fruit", "melon_watermelon");
-    }
-
-    @Test public void combinerShouldCombineKeys() {
-        initPrefs("red", true, "blue", false);
-        PrefMigrator.migrate(prefs, COMBINER);
-        assertPrefs("mix", "red");
-
-        initPrefs("red", false, "blue", true);
-        PrefMigrator.migrate(prefs, COMBINER);
-        assertPrefs("mix", "blue");
-
-        initPrefs("red", true, "blue", true);
-        PrefMigrator.migrate(prefs, COMBINER);
-        assertPrefs("mix", "purple");
-
-        initPrefs("red", false);
-        PrefMigrator.migrate(prefs, COMBINER);
-        assertPrefs("red", false);
-
-        initPrefs("red", false, "blue", false);
-        PrefMigrator.migrate(prefs, COMBINER);
-        assertPrefs("red", false, "blue", false);
-
-        initPrefs("red", true);
-        PrefMigrator.migrate(prefs, COMBINER);
-        assertPrefs("mix", "red");
-
-        initPrefs("blue", true);
-        PrefMigrator.migrate(prefs, COMBINER);
-        assertPrefs("mix", "blue");
-    }
-
-    @Test public void combinerShouldModifyKey() {
-        initPrefs("vehicle", "bicycle");
-        PrefMigrator.migrate(prefs, COMBINER_MODIFIER);
-        assertPrefs("vehicle", "bicycle");
-
-        initPrefs("vehicle", "bicycle", "fast", true);
-        PrefMigrator.migrate(prefs, COMBINER_MODIFIER);
-        assertPrefs("vehicle", "fast_bicycle");
-
-        initPrefs("vehicle", "car");
-        PrefMigrator.migrate(prefs, COMBINER_MODIFIER);
-        assertPrefs("vehicle", "car");
-
-        initPrefs("vehicle", "car", "fast", true);
-        PrefMigrator.migrate(prefs, COMBINER_MODIFIER);
-        assertPrefs("vehicle", "fast_car");
-
-        initPrefs("vehicle", "airplane", "fast", true);
-        PrefMigrator.migrate(prefs, COMBINER_MODIFIER);
-        assertPrefs("vehicle", "airplane", "fast", true);
-    }
-
-    @Test public void shouldMigrateGoogleMapSettings() {
+    @Test
+    public void shouldMigrateGoogleMapSettings() {
         initPrefs("map_sdk_behavior", "google_maps", "map_basemap_behavior", "streets");
         PrefMigrator.migrateSharedPrefs();
         assertPrefs("basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_NORMAL));
@@ -267,7 +64,8 @@ public class PrefMigratorTest {
         assertPrefs("basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_HYBRID));
     }
 
-    @Test public void shouldMigrateMapboxMapSettings() {
+    @Test
+    public void shouldMigrateMapboxMapSettings() {
         initPrefs("map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_streets");
         PrefMigrator.migrateSharedPrefs();
         assertPrefs("basemap_source", "mapbox", "mapbox_map_style", Style.MAPBOX_STREETS);
@@ -293,7 +91,8 @@ public class PrefMigratorTest {
         assertPrefs("basemap_source", "mapbox", "mapbox_map_style", Style.OUTDOORS);
     }
 
-    @Test public void shouldMigrateOsmMapSettings() {
+    @Test
+    public void shouldMigrateOsmMapSettings() {
         initPrefs("map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
         PrefMigrator.migrateSharedPrefs();
         assertPrefs("basemap_source", "osm");
@@ -323,7 +122,8 @@ public class PrefMigratorTest {
         assertPrefs("basemap_source", "carto", "carto_map_style", "dark_matter");
     }
 
-    @Test public void shouldMigrateAdminSettings() {
+    @Test
+    public void shouldMigrateAdminSettings() {
         prefs = AdminSharedPreferences.getInstance().getSharedPreferences();
 
         initPrefs("unrelated", "value");

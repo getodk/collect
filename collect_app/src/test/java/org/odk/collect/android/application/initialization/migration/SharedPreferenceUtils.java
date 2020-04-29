@@ -4,13 +4,13 @@ import android.content.SharedPreferences;
 
 import static org.junit.Assert.assertEquals;
 
-public class SharedPreferenceUtils {
+class SharedPreferenceUtils {
 
     private SharedPreferenceUtils() {
 
     }
 
-    public static void initPrefs(SharedPreferences prefs, Object... pairs) {
+    static void initPrefs(SharedPreferences prefs, Object... pairs) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
         for (int i = 0; i + 1 < pairs.length; i += 2) {
@@ -27,7 +27,7 @@ public class SharedPreferenceUtils {
         editor.commit();
     }
 
-    public static void assertPrefs(SharedPreferences prefs, Object... pairs) {
+    static void assertPrefs(SharedPreferences prefs, Object... pairs) {
         for (int i = 0; i + 1 < pairs.length; i += 2) {
             assertEquals(pairs[i + 1], prefs.getAll().get(pairs[i]));
         }
