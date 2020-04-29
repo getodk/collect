@@ -476,7 +476,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = openRosaAPIClient.getFile(downloadUrl, null);
+                    is = openRosaAPIClient.getFile(downloadUrl, null, true);
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];

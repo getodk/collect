@@ -1936,7 +1936,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 String surveyNotes = getFormController().getSurveyNotes();   // Smap
                 ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment
                         .create(getFormController().getFormTitle(),
-                                mTaskId, formPath, surveyNotes, mCanUpdate);    // smap add taskId, formPath, canUpdate
+                                mTaskId, formPath, surveyNotes, mCanUpdate, false);    // smap
                 DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
                 break;
 

@@ -37,6 +37,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.R;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.lang.reflect.Type;
@@ -157,7 +159,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
 
                     boolean canComplete = Utilities.canComplete(taskEntry.taskStatus);
                     String taskForm = taskEntry.taskForm;
-                    String formPath = Collect.FORMS_PATH + taskForm;
+                    String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + taskForm;
                     String instancePath = taskEntry.instancePath;
 
                     if(canComplete) {

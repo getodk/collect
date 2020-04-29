@@ -18,6 +18,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -145,7 +147,7 @@ public final class TaskUtils {
             String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").
                     format(Calendar.getInstance().getTime());
             String formBase = formName.substring(0, formName.lastIndexOf('.'));
-            String path = Collect.INSTANCES_PATH + formBase + "_" + time;
+            String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + formBase + "_" + time;
             if (FileUtils.createFolder(path)) {
                 instanceFile = path + "/" + formBase + "_" + time + ".xml";
                 if(contents != null) {

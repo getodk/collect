@@ -25,6 +25,8 @@ import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.STFileUtils;
 
@@ -405,7 +407,7 @@ public class ManageForm {
 	                        .format(Calendar.getInstance().getTime());
             String file =
                 formPath.substring(formPath.lastIndexOf('/') + 1, formPath.lastIndexOf('.'));
-            String path = Collect.INSTANCES_PATH + "/" + file + "_" + time + "_" + assignmentId;
+            String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + "/" + file + "_" + time + "_" + assignmentId;
             if (FileUtils.createFolder(path)) {
                 instancePath = path + "/" + file + "_" + time + "_" + assignmentId + ".xml";
             }

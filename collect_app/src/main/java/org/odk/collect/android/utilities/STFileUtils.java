@@ -26,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 
 /**
@@ -147,7 +149,7 @@ public final class STFileUtils {
 	        String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").
 	        		format(Calendar.getInstance().getTime());
 	        String formBase = formName.substring(0, formName.lastIndexOf('.'));
-	        String path = Collect.INSTANCES_PATH + formBase + "_" + time;
+	        String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + formBase + "_" + time;
 	        if (FileUtils.createFolder(path)) {
 	            instanceFile = path + "/" + formBase + "_" + time + ".xml";
 	            if(contents != null) {
