@@ -29,11 +29,11 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
-import org.odk.collect.android.receivers.NetworkReceiver;
-import org.odk.collect.android.tasks.DownloadTasksTask;
-import org.odk.collect.android.tasks.SmapLoginTask;
-import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;
-import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
+import org.odk.collect.android.receivers.NetworkReceiver;               // smap
+import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
+import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
+import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
+import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;          // smap
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -46,7 +46,7 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.Utilities;
+import org.odk.collect.android.utilities.Utilities;     // smap
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 

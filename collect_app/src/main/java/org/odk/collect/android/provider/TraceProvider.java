@@ -20,6 +20,8 @@ import org.odk.collect.android.storage.StoragePathProvider;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
+
 /**
  *
  */
@@ -84,12 +86,14 @@ public class TraceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        if (!areStoragePermissionsGranted(getContext())) {
+            Timber.i("Read and write permissions are required for this content provider to function.");
+            return false;
+        }
+
         // must be at the beginning of any activity that can be called from an external intent
         DatabaseHelper h = getDbHelper();
-        if ( h == null ) {
-        	return false;
-        }
-        return true;
+        return h != null;
     }
 
     @Override

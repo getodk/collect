@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -35,11 +36,17 @@ import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -69,13 +76,18 @@ import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.storage.migration.StorageMigrationDialog;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
@@ -86,6 +98,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -93,10 +106,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
@@ -142,6 +158,38 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     private Intent mLocationServiceIntent = null;
     private LocationService mLocationService = null;
+
+    /*
+     * Start scoped storage
+     */
+    private int savedCount;
+    private final SmapMain.IncomingHandler handler = new SmapMain.IncomingHandler();
+    private final SmapMain.MyContentObserver contentObserver = new SmapMain.MyContentObserver();
+    @BindView(R.id.storageMigrationBanner)
+    LinearLayout storageMigrationBanner;
+
+    @BindView(R.id.storageMigrationBannerText)
+    TextView storageMigrationBannerText;
+
+    @BindView(R.id.storageMigrationBannerDismissButton)
+    Button storageMigrationBannerDismissButton;
+
+    @BindView(R.id.storageMigrationBannerLearnMoreButton)
+    Button storageMigrationBannerLearnMoreButton;
+
+    @BindView(R.id.version_sha)
+    TextView versionSHAView;
+
+    @Inject
+    StorageMigrationRepository storageMigrationRepository;
+
+    @Inject
+    StorageStateProvider storageStateProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
+
+    // End scoped storage
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -1018,4 +1066,66 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         super.onPause();
     }
 
+    /*
+     * Migration to scoped storage
+     */
+    /**
+     * notifies us that something changed
+     */
+    private class MyContentObserver extends ContentObserver {
+
+        MyContentObserver() {
+            super(null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            handler.sendEmptyMessage(0);
+        }
+    }
+
+    static class IncomingHandler extends Handler {
+    }
+
+    public void onStorageMigrationBannerDismiss(View view) {
+        storageMigrationBanner.setVisibility(View.GONE);
+        storageMigrationRepository.clearResult();
+    }
+
+    public void onStorageMigrationBannerLearnMoreClick(View view) {
+        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
+        getContentResolver().unregisterContentObserver(contentObserver);
+    }
+
+    private void onStorageMigrationFinish(StorageMigrationResult result) {
+        if (result == StorageMigrationResult.SUCCESS) {
+            DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
+            displayBannerWithSuccessStorageMigrationResult();
+        } else {
+            DialogUtils
+                    .showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager())
+                    .handleMigrationError(result);
+        }
+    }
+
+    private void setUpStorageMigrationBanner() {
+        if (!storageStateProvider.isScopedStorageUsed()) {
+            displayStorageMigrationBanner();
+        }
+    }
+
+    private void displayStorageMigrationBanner() {
+        storageMigrationBanner.setVisibility(View.VISIBLE);
+        storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
+        storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
+        storageMigrationBannerDismissButton.setVisibility(View.GONE);
+    }
+
+    private void displayBannerWithSuccessStorageMigrationResult() {
+        storageMigrationBanner.setVisibility(View.VISIBLE);
+        storageMigrationBannerText.setText(R.string.storage_migration_completed);
+        storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
+        storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
+    }
 }

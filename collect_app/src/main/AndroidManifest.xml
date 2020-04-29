@@ -112,12 +112,6 @@ the specific language governing permissions and limitations under the License.
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
-        <!-- smap add trace provider -->
-        <provider
-            android:name="org.odk.collect.android.provider.TraceProvider"
-            android:authorities="org.smap.smapTask.android.provider.trace"
-            android:exported="true" />
-
         <!-- smap add main activity -->
         <activity
             android:name=".activities.SmapMain"
@@ -294,6 +288,11 @@ the specific language governing permissions and limitations under the License.
         <provider
             android:name=".provider.InstanceProvider"
             android:authorities="org.odk.collect.android.provider.odk.instances.smap"
+            android:exported="true" />
+        <!-- smap add trace provider -->
+        <provider
+            android:name="org.odk.collect.android.provider.TraceProvider"
+            android:authorities="org.smap.smapTask.android.provider.trace"
             android:exported="true" />
 
         <activity-alias
