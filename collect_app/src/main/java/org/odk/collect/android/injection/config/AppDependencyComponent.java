@@ -13,6 +13,7 @@ import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -120,6 +121,8 @@ public interface AppDependencyComponent {
     void inject(AuthDialogUtility authDialogUtility);
 
     void inject(FormDownloadList formDownloadList);
+
+    void inject(SmapMain smapMain);                                             // smap
 
     void inject(DownloadTasksTask downloadTasksTask);                           // smap
 

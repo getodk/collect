@@ -57,6 +57,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
@@ -113,6 +114,7 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
@@ -161,7 +163,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     /*
      * Start scoped storage
-     */
+     *
     private int savedCount;
     private final SmapMain.IncomingHandler handler = new SmapMain.IncomingHandler();
     private final SmapMain.MyContentObserver contentObserver = new SmapMain.MyContentObserver();
@@ -177,9 +179,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @BindView(R.id.storageMigrationBannerLearnMoreButton)
     Button storageMigrationBannerLearnMoreButton;
 
-    @BindView(R.id.version_sha)
-    TextView versionSHAView;
-
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
@@ -190,6 +189,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     StoragePathProvider storagePathProvider;
 
     // End scoped storage
+    */
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -203,7 +203,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.smap_main_layout);
+        //ButterKnife.bind(this);  // banner
         initToolbar();
+
+        // DaggerUtils.getComponent(this).inject(this);  // banner
 
         String[] tabNames = {getString(R.string.smap_forms), getString(R.string.smap_tasks), getString(R.string.smap_map)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
@@ -339,6 +342,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             }
         }
 
+        // setUpStorageMigrationBanner();      // banner StorageMigration
     }
 
     @Override
@@ -1068,10 +1072,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     /*
      * Migration to scoped storage
-     */
-    /**
-     * notifies us that something changed
-     */
+     *
     private class MyContentObserver extends ContentObserver {
 
         MyContentObserver() {
@@ -1128,4 +1129,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
         storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
     }
+
+     */
 }
