@@ -11,12 +11,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.helpers.SmapTraceDatabaseHelper;
 import org.odk.collect.android.provider.TraceProviderAPI.TraceColumns;
-import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageInitializer;
 
 import timber.log.Timber;
 
@@ -27,61 +25,36 @@ import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermis
  */
 public class TraceProvider extends ContentProvider {
 
-    private static final String t = "TraceProvider";
-
-    private static final String DATABASE_NAME = "trace.db";
-    private static final int DATABASE_VERSION = 2;
-    private static final String TABLE_NAME = "trace";
-
     private static final int TRACES = 1;
     private static final int TRACE_ID = 2;
 
+    private static final String TABLE_NAME = "trace";
+
     private static final UriMatcher sUriMatcher;
 
-    /**
-     * This class helps open, create, and upgrade the database file.
-     */
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+    private static SmapTraceDatabaseHelper dbHelper;
 
-        DatabaseHelper(String databaseName) {
-            super(new StoragePathProvider().getStorageRootDirPath(), databaseName, null, DATABASE_VERSION);
+    private synchronized SmapTraceDatabaseHelper getDbHelper() {
+        // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
+        try {
+            new StorageInitializer().createOdkDirsOnStorage();
+        } catch (RuntimeException e) {
+            return null;
         }
 
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-           db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
-               + TraceColumns._ID + " integer primary key, "
-               + TraceColumns.SOURCE + " text, "
-               + TraceColumns.LAT + " double not null, "
-               + TraceColumns.LON + " double not null, "
-               + TraceColumns.TIME + " long not null "
-               + ");");
+        boolean databaseNeedsUpgrade = SmapTraceDatabaseHelper.databaseNeedsUpgrade();
+        if (dbHelper == null || (databaseNeedsUpgrade && !SmapTraceDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (databaseNeedsUpgrade) {
+                SmapTraceDatabaseHelper.databaseMigrationStarted();
+            }
+            recreateDatabaseHelper();
         }
 
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        	int initialVersion = oldVersion;
-        	if ( oldVersion == 1 ) {
-        		db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " +
-        					TraceColumns.SOURCE + " text;");
-        	}
-
-            Log.w(t, "Successfully upgraded traces database from version " + initialVersion + " to " + newVersion
-                    + ", without destroying all the old data");
-        }
+        return dbHelper;
     }
 
-    private DatabaseHelper mDbHelper;
-
-    private DatabaseHelper getDbHelper() {
-
-        if (mDbHelper != null) {
-        	return mDbHelper;
-        }
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
-        return mDbHelper;
+    public static void recreateDatabaseHelper() {
+        dbHelper = new SmapTraceDatabaseHelper();
     }
 
     @Override
@@ -92,9 +65,10 @@ public class TraceProvider extends ContentProvider {
         }
 
         // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
+        SmapTraceDatabaseHelper h = getDbHelper();
         return h != null;
     }
+
 
     @Override
     public Cursor query(Uri uri, String[] projection, String where, String[] selectionArgs,
