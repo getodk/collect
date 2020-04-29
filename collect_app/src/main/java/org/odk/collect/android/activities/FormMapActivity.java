@@ -32,7 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.chip.Chip;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
@@ -328,10 +328,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
         ((TextView) findViewById(R.id.submission_name)).setText(instanceName);
         ((TextView) findViewById(R.id.status_text)).setText(instanceLastStatusChangeDate);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        Drawable fabImage = ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility);
-        fab.setImageDrawable(fabImage);
-        fab.setOnClickListener(v -> {
+        Chip openFormChip = findViewById(R.id.openFormChip);
+        openFormChip.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
+        openFormChip.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
+        openFormChip.setOnClickListener(v -> {
             if (canEdit) {
                 startActivity(getEditFormInstanceIntentFor(featureId));
             } else {
