@@ -21,6 +21,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.database.DatabaseContext;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.SQLiteUtils;
@@ -46,6 +47,9 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAN
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.PROJECT;       // smap
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.TASKS_ONLY;    // smap
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SOURCE;        // smap
 
 /**
  * This class helps open, create, and upgrade the database file.
@@ -54,7 +58,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    static final int DATABASE_VERSION = 8;
+    static final int DATABASE_VERSION = 15;     // smap
 
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
@@ -65,7 +69,16 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
         SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
         //LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH}; // smap
-        LAST_DETECTED_FORM_VERSION_HASH};   // smap
+        LAST_DETECTED_FORM_VERSION_HASH};
+
+    private static final String[] COLUMN_NAMES_V15 = {_ID, DISPLAY_NAME, DESCRIPTION,
+            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+            //LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH}; // smap
+            LAST_DETECTED_FORM_VERSION_HASH,
+            PROJECT,
+            TASKS_ONLY,
+            SOURCE};
 
     static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V8;
 
@@ -110,7 +123,11 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                     upgradeToVersion8(db);
                     break;
                 default:
-                    Timber.i("Unknown version %s", oldVersion);
+                    // Timber.i("Unknown version %d", oldVersion); // smap commented
+                    // smap start
+                    if(oldVersion < 15) {
+                        upgradeToVersion15(db);
+                    }
             }
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
@@ -273,6 +290,15 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         //SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");   // smap
     }
 
+    // smap
+    private void upgradeToVersion15(SQLiteDatabase db) {
+        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
+        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
+        createFormsTableV15(db);
+        SQLiteUtils.copyRows(db, temporaryTable, COLUMN_NAMES_V15, FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, temporaryTable);
+    }
+
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
@@ -332,6 +358,34 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + AUTO_DELETE + " text, "
                 + LAST_DETECTED_FORM_VERSION_HASH + " text);");   // smap
                 //+ GEOMETRY_XPATH + " text);");  // smap
+    }
+
+    // smap
+    private static void createFormsTableV15(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null, "
+                + DATE + " integer not null, " // milliseconds
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + LAST_DETECTED_FORM_VERSION_HASH + " text,"
+                //+ GEOMETRY_XPATH + " text,"  // smap
+                + PROJECT + " text,"
+                + TASKS_ONLY + " text,"
+                + SOURCE + " text,"
+
+                + "displaySubtext text "   // Smap keep for downgrading
+                +");");
     }
 
     public static void databaseMigrationStarted() {

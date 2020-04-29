@@ -51,14 +51,9 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
-
-    private static final String t = "FormsProvider";
-
-    private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 15;    // smap must be greater than 8 (the odk version)
-    private static final String FORMS_TABLE_NAME = "forms";
-
     private static HashMap<String, String> sFormsProjectionMap;
+
+    public static final String FORMS_TABLE_NAME = "forms";
 
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
@@ -67,119 +62,29 @@ public class FormsProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    /**
-     * This class helps open, create, and upgrade the database file.
-     */
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
-        // These exist in database versions 2 and 3, but not in 4...
-        private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
-        private static final String MODEL_VERSION = "modelVersion";
+    private static FormsDatabaseHelper dbHelper;
 
-        DatabaseHelper(String databaseName) {
-            super(new StoragePathProvider().getStorageRootDirPath(), databaseName, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            onCreateNamed(db);
-        }
-
-        private void onCreateNamed(SQLiteDatabase db) {
-            createFormsTableLatest(db);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            int initialVersion = oldVersion;
-
-            if (oldVersion < DATABASE_VERSION) {
-                try {
-                    upgradeToVersionLatest(db);
-                } catch (Exception e) {
-                    // Catch errors, its possible the user upgraded then downgraded
-                    Timber.w("Error in upgrading to forms database version 13");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // smap
-    private static void upgradeToVersionLatest(SQLiteDatabase db) {
-        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        List<String> columnNamesPrev = getFormColumnNames(db);
-
-        CustomSQLiteQueryExecutor
-                .begin(db)
-                .renameTable(FORMS_TABLE_NAME)
-                .to(temporaryTable)
-                .end();
-
-        createFormsTableLatest(db);
-
-        CustomSQLiteQueryExecutor
-                .begin(db)
-                .insertInto(FORMS_TABLE_NAME)
-                .columnsForInsert(columnNamesPrev.toArray(new String[0]))
-                .select()
-                .columnsForSelect(columnNamesPrev.toArray(new String[0]))
-                .from(temporaryTable)
-                .end();
-
-        CustomSQLiteQueryExecutor
-                .begin(db)
-                .dropIfExists(temporaryTable)
-                .end();
-    }
-
-    private static void createFormsTableLatest(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
-                + FormsColumns._ID + " integer primary key, "
-                + FormsColumns.DISPLAY_NAME + " text not null, "
-                + FormsColumns.DESCRIPTION + " text, "
-                + FormsColumns.JR_FORM_ID + " text not null, "
-                + FormsColumns.JR_VERSION + " text, "
-                + FormsColumns.MD5_HASH + " text not null, "
-                + FormsColumns.DATE + " integer not null, " // milliseconds
-                + FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                + FormsColumns.FORM_FILE_PATH + " text not null, "
-                + FormsColumns.LANGUAGE + " text, "
-                + FormsColumns.SUBMISSION_URI + " text, "
-                + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                + FormsColumns.JRCACHE_FILE_PATH + " text not null, "
-                + FormsColumns.AUTO_SEND + " text, "
-                + FormsColumns.AUTO_DELETE + " text, "
-                + FormsColumns.LAST_DETECTED_FORM_VERSION_HASH + " text,"
-                //+ FormsColumns.GEOMETRY_XPATH + " text,"  // smap
-                + FormsColumns.PROJECT + " text,"
-                + FormsColumns.TASKS_ONLY + " text,"
-                + FormsColumns.SOURCE + " text,"
-
-                + "displaySubtext text "   // Smap keep for downgrading
-                +");");
-    }
-
-
-    private static DatabaseHelper mDbHelper;
-
-    private DatabaseHelper getDbHelper() {
+    private synchronized FormsDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
-            mDbHelper = null;
             return null;
         }
 
-        if (mDbHelper != null) {
-            return mDbHelper;
+        boolean databaseNeedsUpgrade = FormsDatabaseHelper.databaseNeedsUpgrade();
+        if (dbHelper == null || (databaseNeedsUpgrade && !FormsDatabaseHelper.isDatabaseBeingMigrated())) {
+            if (databaseNeedsUpgrade) {
+                FormsDatabaseHelper.databaseMigrationStarted();
         }
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
-        return mDbHelper;
+            recreateDatabaseHelper();
+        }
+
+        return dbHelper;
     }
 
     public static void recreateDatabaseHelper() {
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
+        dbHelper = new FormsDatabaseHelper();
     }
 
     @Override
@@ -191,7 +96,7 @@ public class FormsProvider extends ContentProvider {
         }
 
         // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
+        FormsDatabaseHelper h = getDbHelper();
         return h != null;
     }
 
