@@ -68,8 +68,6 @@ public final class GeneralKeys {
     static final String KEY_FORM_METADATA                   = "form_metadata";
 
     // other keys
-    public static final String KEY_LAST_VERSION             = "lastVersion";
-    public static final String KEY_FIRST_RUN                = "firstRun";
     public static final String KEY_SCOPED_STORAGE_USED      = "scoped_storage_used";
     public static final String KEY_MAPBOX_INITIALIZED       = "mapbox_initialized";
     public static final String KEY_GOOGLE_BUG_154855417_FIXED = "google_bug_154855417_fixed";
@@ -154,8 +152,6 @@ public final class GeneralKeys {
     }
 
     static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
-            KEY_LAST_VERSION,
-            KEY_FIRST_RUN,
             KEY_METADATA_MIGRATED,
             KEY_AUTOSEND_WIFI,
             KEY_AUTOSEND_NETWORK,
