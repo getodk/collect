@@ -109,11 +109,11 @@ jobs:
       - run:
           name: Assemble debug build
           command: |
-            ./gradlew assembleDebug -PdisablePreDex
+            ./gradlew -PenableJacoco=true assembleDebug -PdisablePreDex
       - run:
           name: Assemble test build
           command: |
-            ./gradlew assembleDebugAndroidTest -PdisablePreDex
+            ./gradlew -PenableJacoco=true assembleDebugAndroidTest -PdisablePreDex
       - run:
           name: Run code quality checks
           #           When running the plain lint target, it will execute by default for all flavors.
@@ -143,7 +143,7 @@ jobs:
           command: ./gradlew androidDependencies
       - run:
           name: Run unit tests
-          command: ./gradlew testDebugUnitTest
+          command: ./gradlew -PenableJacoco=true testDebugUnitTest
       - *save_tests_cache
       - *persist_debug_workspace
       - store_artifacts:
@@ -213,7 +213,7 @@ jobs:
             fi
       - run:
           name: Generate JaCoCo report
-          command: ./gradlew -PciBuild=true jacocoTestReport
+          command: ./gradlew -PciBuild=true -PenableJacoco=true jacocoTestReport
       - run:
           name: Upload coverage report to CodeCov
           command: bash <(curl -s https://codecov.io/bash)
