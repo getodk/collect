@@ -65,6 +65,9 @@ public class SplashScreenActivity extends Activity {
     @Inject
     ApplicationInitializer applicationInitializer;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,7 @@ public class SplashScreenActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         DaggerUtils.getComponent(this).inject(this);
 
-        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
+        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
