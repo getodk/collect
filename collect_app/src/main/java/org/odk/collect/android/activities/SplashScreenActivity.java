@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
@@ -182,25 +183,6 @@ public class SplashScreenActivity extends Activity {
             customSplashView.setVisibility(View.VISIBLE);
         }
 
-        // create a thread that counts up to the timeout
-        Thread t = new Thread() {
-            int count;
-
-            @Override
-            public void run() {
-                try {
-                    super.run();
-                    while (count < SPLASH_TIMEOUT) {
-                        sleep(100);
-                        count += 100;
-                    }
-                } catch (Exception e) {
-                    Timber.e(e);
-                } finally {
-                    endSplashScreen();
-                }
-            }
-        };
-        t.start();
+        new Handler().postDelayed(this::endSplashScreen, SPLASH_TIMEOUT);
     }
 }
