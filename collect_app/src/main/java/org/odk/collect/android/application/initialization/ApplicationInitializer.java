@@ -35,6 +35,8 @@ public class ApplicationInitializer {
     private final Application context;
     private final CollectJobCreator collectJobCreator;
     private final SharedPreferences metaSharedPreferences;
+    private final GeneralSharedPreferences generalSharedPreferences;
+    private final AdminSharedPreferences adminSharedPreferences;
 
     private boolean firstRun;
 
@@ -46,6 +48,9 @@ public class ApplicationInitializer {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
         this.metaSharedPreferences = metaSharedPreferences;
+
+        generalSharedPreferences = GeneralSharedPreferences.getInstance();
+        adminSharedPreferences = AdminSharedPreferences.getInstance();
     }
 
     public void initializePreferences() {
@@ -68,7 +73,7 @@ public class ApplicationInitializer {
         JodaTimeAndroid.init(context);
 
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
-                Timber.plant(new CrashReportingTree());
+            Timber.plant(new CrashReportingTree());
         } else {
             Timber.plant(new Timber.DebugTree());
         }
@@ -104,14 +109,20 @@ public class ApplicationInitializer {
     }
 
     private void reloadSharedPreferences() {
-        GeneralSharedPreferences.getInstance().reloadPreferences();
-        AdminSharedPreferences.getInstance().reloadPreferences();
+        generalSharedPreferences.reloadPreferences();
+        adminSharedPreferences.reloadPreferences();
     }
 
     private void performMigrations() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         FormMetadataMigrator.migrate(prefs);
-        PrefMigrator.migrateSharedPrefs();
+
+        new PrefMigrator(
+                generalSharedPreferences.getSharedPreferences(),
+                adminSharedPreferences.getSharedPreferences(),
+                metaSharedPreferences)
+                .migrate();
+
         AutoSendPreferenceMigrator.migrate();
     }
 
