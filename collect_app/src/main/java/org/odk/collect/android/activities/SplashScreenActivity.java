@@ -16,11 +16,9 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
@@ -68,6 +66,9 @@ public class SplashScreenActivity extends Activity {
     @Inject
     PermissionUtils permissionUtils;
 
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,12 +105,8 @@ public class SplashScreenActivity extends Activity {
 
         setContentView(R.layout.splash_screen);
 
-        // get the shared preferences object
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        boolean showSplash =
-                sharedPreferences.getBoolean(GeneralKeys.KEY_SHOW_SPLASH, false);
-        String splashPath = (String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH);
+        boolean showSplash = generalSharedPreferences.getBoolean(GeneralKeys.KEY_SHOW_SPLASH, false);
+        String splashPath = (String) generalSharedPreferences.get(KEY_SPLASH_PATH);
 
         if (applicationInitializer.isFirstRun() || showSplash) {
             startSplashScreen(splashPath);
@@ -175,14 +172,14 @@ public class SplashScreenActivity extends Activity {
     private void startSplashScreen(String path) {
 
         // add items to the splash screen here. makes things less distracting.
-        ImageView iv = findViewById(R.id.splash);
-        LinearLayout ll = findViewById(R.id.splash_default);
+        ImageView customSplashView = findViewById(R.id.splash);
+        LinearLayout defaultSplashView = findViewById(R.id.splash_default);
 
-        File f = new File(path);
-        if (f.exists()) {
-            iv.setImageBitmap(decodeFile(f));
-            ll.setVisibility(View.GONE);
-            iv.setVisibility(View.VISIBLE);
+        File customSplash = new File(path);
+        if (customSplash.exists()) {
+            customSplashView.setImageBitmap(decodeFile(customSplash));
+            defaultSplashView.setVisibility(View.GONE);
+            customSplashView.setVisibility(View.VISIBLE);
         }
 
         // create a thread that counts up to the timeout
