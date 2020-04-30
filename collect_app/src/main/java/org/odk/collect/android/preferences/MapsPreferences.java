@@ -131,7 +131,13 @@ public class MapsPreferences extends BasePreferenceFragment {
             populateReferenceLayerPref();
             return false;
         });
-        updateReferenceLayerSummary(referenceLayerPref.getValue());
+        if (referenceLayerPref.getValue() == null
+                || new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath(referenceLayerPref.getValue())).exists()) {
+            updateReferenceLayerSummary(referenceLayerPref.getValue());
+        } else {
+            referenceLayerPref.setValue(null);
+            updateReferenceLayerSummary(null);
+        }
         referenceLayerPref.setOnPreferenceChangeListener((preference, newValue) -> {
             updateReferenceLayerSummary(newValue);
             return true;
