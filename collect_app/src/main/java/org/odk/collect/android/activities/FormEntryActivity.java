@@ -1876,9 +1876,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         alertDialog.setCancelable(false);
         alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         beenSwiped = false;
-        if (!this.isFinishing()) {     // smap only show dialog if the activity is not finishing
             alertDialog.show();
-        }
     }
 
     /**
@@ -1998,7 +1996,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 showLongToast(String.format(getString(R.string.encryption_error_message),
                         result.getMessage()));
-                finishAndReturnInstance(result.isComplete());
+                finishAndReturnInstance(result.isComplete());   // smap add isComplete
                 formSaveViewModel.resumeFormEntry();
                 break;
 
@@ -2301,7 +2299,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else {
             if (formController == null) {
                 // there is no formController -- fire MainMenu activity?
-                startActivity(new Intent(this, SmapMain.class));            // smap
+                startActivity(new Intent(this, SmapMain.class));    // smap
+                finish();
                 return;
             }
         }

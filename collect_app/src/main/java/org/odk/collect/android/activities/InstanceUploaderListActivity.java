@@ -32,7 +32,6 @@ import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 //import com.google.android.gms.analytics.Tracker;      smap
 import androidx.annotation.NonNull;
@@ -59,6 +58,7 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.List;

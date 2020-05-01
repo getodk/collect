@@ -53,7 +53,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.NFCActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -295,10 +294,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 new Handler().postDelayed(() -> {
                     widgets.get(0).getAudioVideoImageTextLabel().playVideo();
                 }, 150);
-                played = true;
+                played = true;    // smap
             }
         }
-        return played;
+        return played;     // smap
     }
 
     private ScreenContext getScreenContext() {

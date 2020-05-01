@@ -159,8 +159,6 @@ public class SplashScreenActivity extends Activity {
     }
 
     private void endSplashScreen() {
-
-        // launch new activity and close splash screen
         startActivity(new Intent(SplashScreenActivity.this, SmapMain.class));  //smap
         finish();
     }

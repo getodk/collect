@@ -41,17 +41,6 @@ import com.google.zxing.NotFoundException;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
-import org.odk.collect.android.activities.SmapMain;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.ActionListener;
-import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
-import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.activities.ScanQRCodeActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -246,6 +235,7 @@ public class ShowQRCodeFragment extends Fragment {
             }
         }
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

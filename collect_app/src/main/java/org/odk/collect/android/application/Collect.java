@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
