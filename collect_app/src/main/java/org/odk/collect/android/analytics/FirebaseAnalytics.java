@@ -4,24 +4,24 @@ import android.os.Bundle;
 
 public class FirebaseAnalytics implements Analytics {
 
-    private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;
+    //private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;  // smap
 
     public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics) {
-        this.firebaseAnalytics = firebaseAnalytics;
+        //this.firebaseAnalytics = firebaseAnalytics;   // smap
     }
 
     @Override
     public void logEvent(String category, String action) {
-        Bundle bundle = new Bundle();
-        bundle.putString("action", action);
-        firebaseAnalytics.logEvent(category, bundle);
+        //Bundle bundle = new Bundle();     // smap
+        //bundle.putString("action", action);
+        //firebaseAnalytics.logEvent(category, bundle);
     }
 
     @Override
     public void logEvent(String category, String action, String label) {
-        Bundle bundle = new Bundle();
-        bundle.putString("action", action);
-        bundle.putString("label", label);
-        firebaseAnalytics.logEvent(category, bundle);
+        //Bundle bundle = new Bundle();     //smap
+        //bundle.putString("action", action);
+        //bundle.putString("label", label);
+        //firebaseAnalytics.logEvent(category, bundle);
     }
 }

@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import androidx.appcompat.widget.AppCompatCheckBox;

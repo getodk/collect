@@ -40,7 +40,6 @@ import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.services.NotificationRegistrationService;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -54,8 +53,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Locale;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_CUSTOM_ENDPOINT;

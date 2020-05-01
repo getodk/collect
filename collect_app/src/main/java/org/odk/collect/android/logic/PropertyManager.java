@@ -14,10 +14,8 @@
 
 package org.odk.collect.android.logic;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
@@ -38,7 +36,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import androidx.core.app.ActivityCompat;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
