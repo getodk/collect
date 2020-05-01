@@ -77,7 +77,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
 
-                // Collect.getInstance().logRemoteAnalytics(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));  // smap comment out
+                Collect.getInstance().logRemoteAnalytics(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to
@@ -93,7 +93,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     }
 
     @Override
-    public void onPostExecute(Outcome outcome) {
+    public void onPostExecute(Outcome outcome) {    // smap
         super.onPostExecute(outcome);
 
         // Clear temp credentials

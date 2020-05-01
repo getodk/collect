@@ -42,14 +42,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -148,7 +146,6 @@ public class SaveFormToDisk {
         }
 
         try {
-
             exportData(shouldFinalize, progressListener);
 
             if (formController.getInstanceFile() != null) {
@@ -181,12 +178,10 @@ public class SaveFormToDisk {
      * the instance currently managed by the {@link FormController}.
      */
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted, boolean canUpdate) {   // smap add canUpdate
-    	String source = null;       // smap
         ContentValues values = new ContentValues();
         if (canUpdate && instanceName != null) {       // smap
             values.put(InstanceColumns.DISPLAY_NAME, instanceName);
         }
-
         if(canUpdate) {
             if (incomplete || !shouldFinalize) {
                 values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
@@ -332,13 +327,9 @@ public class SaveFormToDisk {
     /**
      * Extracts geometry information from the given xpath path in the given instance.
      *
-<<<<<<< HEAD:collect_app/src/main/java/org/odk/collect/android/tasks/SaveToDiskTask.java
-    * parsing the geometry and converting it to GeoJSON.
-=======
      * Returns a ContentValues object with values set for InstanceColumns.GEOMETRY and
      * InstanceColumns.GEOMETRY_TYPE. Those value are null if anything goes wrong with
      * parsing the geometry and converting it to GeoJSON.
->>>>>>> merge_master:collect_app/src/main/java/org/odk/collect/android/tasks/SaveFormToDisk.java
      *
      * Returns null if the given XPath path is null.
      */

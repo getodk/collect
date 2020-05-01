@@ -30,7 +30,6 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -476,7 +475,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = openRosaAPIClient.getFile(downloadUrl, null, true);
+                    is = openRosaAPIClient.getFile(downloadUrl, null, true);    // smap add credentials
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];

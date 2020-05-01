@@ -167,7 +167,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
      * so a File object would be presented.
      *
      * @param object Uri or File of the chosen file.
-     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
      */
     @Override
     public void setBinaryData(Object object) {
@@ -219,10 +218,10 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {    // smap
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
-        } else if (selfie || nochoose(getFormEntryPrompt())) {
+        } else if (selfie || nochoose(getFormEntryPrompt())) {   // smap
             chooseButton.setVisibility(View.GONE);
         }
     }

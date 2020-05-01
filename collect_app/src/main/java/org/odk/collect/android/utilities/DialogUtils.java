@@ -25,8 +25,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.ListView;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;

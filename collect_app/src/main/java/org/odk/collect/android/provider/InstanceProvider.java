@@ -30,23 +30,17 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
-import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -220,7 +214,7 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-    public void deleteAllFilesInDirectory(File directory) {
+    private void deleteAllFilesInDirectory(File directory) {
         if (directory.exists()) {
             // do not delete the directory if it might be an
             // ODK Tables instance data directory. Let ODK Tables
@@ -309,12 +303,16 @@ public class InstanceProvider extends ContentProvider {
                     }
                 }
 
-                // smap we are only ever going to update the status
-                //We are going to update the status, if the form is submitted
-                //We will not delete the record in table but we will delete the file
-                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {      // smap
+                // Keep sent instance database rows but delete corresponding files
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+
+                    // Geometry fields represent data inside the form which can be very
+                    // sensitive so they are removed on delete.
+                    cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                    cv.put(InstanceColumns.GEOMETRY, (String) null);
+
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                 } else {
                     // smap Update the deleted date and also change the assignment status to closed
@@ -461,6 +459,5 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY, InstanceColumns.GEOMETRY);
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY_TYPE);
-
     }
 }

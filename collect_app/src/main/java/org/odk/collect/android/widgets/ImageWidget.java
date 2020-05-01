@@ -144,10 +144,10 @@ public class ImageWidget extends BaseImageWidget {
     }
 
     private void hideButtonsIfNeeded(String appearance) {
-        if (getFormEntryPrompt().isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {    // smap
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
-        } else if (selfie || nochoose(getFormEntryPrompt())) {
+        } else if (selfie || nochoose(getFormEntryPrompt())) {   // smap
             chooseButton.setVisibility(View.GONE);
         }
     }

@@ -143,7 +143,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
      * so a File object would be presented.
      *
      * @param object Uri or File of the chosen file.
-     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
      */
     @Override
     public void setBinaryData(Object object) {
@@ -198,10 +197,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {        // smap
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
-        } else if(nochoose(getFormEntryPrompt())) {
+        } else if(nochoose(getFormEntryPrompt())) {     // smap - use nochoose function
             chooseButton.setVisibility(View.GONE);
         }
     }

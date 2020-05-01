@@ -14,16 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.util.Base64;
-import android.view.ViewGroup;
-import android.widget.*;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
-
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Button;
@@ -103,9 +93,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String response = (String) answer;
-        if (response != null) {      // smap It looks like the answer is not set to null even if no barcode captured, however it seems prudent to check
-            response = response.replaceAll("\\p{C}", " ");      // smap replace with a space
-        }
         stringAnswer.setText(stripInvalidCharacters(response));
 
         widgetValueChanged();
@@ -117,7 +104,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         if (data == null) {
             return null;
         }
-        return data.replaceAll("\\p{C}", "");
+        return data.replaceAll("\\p{C}", " ");   // smap replace with a space
     }
 
     @Override
