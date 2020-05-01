@@ -214,7 +214,7 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-    private void deleteAllFilesInDirectory(File directory) {
+    public void deleteAllFilesInDirectory(File directory) {     // smap make public
         if (directory.exists()) {
             // do not delete the directory if it might be an
             // ODK Tables instance data directory. Let ODK Tables

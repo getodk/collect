@@ -23,7 +23,7 @@
             style="@style/Widget.Collect.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_launcher_foreground"
+            app:navigationIcon="@mipmap/ic_launcher"
             tools:title="ODK Collect" />
 
     </com.google.android.material.appbar.AppBarLayout>
