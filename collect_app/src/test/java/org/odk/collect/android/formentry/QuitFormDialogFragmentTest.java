@@ -78,19 +78,15 @@ public class QuitFormDialogFragmentTest {
     }
 
     @Test
-    public void shouldRetainDialogOnOrientationChange() {
+    public void restoringFragment_retainsTitle() {
         dialogFragment.show(fragmentManager, "tag");
-
-        assertThat(dialogFragment.getActivity(), equalTo(activity));
-        assertEquals(ShadowDialog.getLatestDialog(), dialogFragment.getDialog());
-        assertTrue(ShadowDialog.getLatestDialog().isShowing());
-        dialogFragment.dismiss();
+        dialogFragment.setTitle();
 
         QuitFormDialogFragment restoredFragment = new QuitFormDialogFragment();
         restoredFragment.show(fragmentManager, "TAG");
+        restoredFragment.setTitle();
 
-        assertThat(restoredFragment.getActivity(), equalTo(activity));
-        assertEquals(ShadowDialog.getLatestDialog(), restoredFragment.getDialog());
-        assertTrue(ShadowDialog.getLatestDialog().isShowing());
+        assertEquals(shadowOf(dialogFragment.getDialog()).getTitle(),
+                shadowOf(restoredFragment.getDialog()).getTitle());
     }
 }

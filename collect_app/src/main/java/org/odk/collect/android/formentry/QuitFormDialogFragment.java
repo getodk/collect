@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -42,7 +41,7 @@ public class QuitFormDialogFragment extends DialogFragment {
     @Inject
     Analytics analytics;
 
-    @VisibleForTesting private FormSaveViewModel viewModel;
+    private FormSaveViewModel viewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -57,65 +56,63 @@ public class QuitFormDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-        AlertDialog alertDialog = (AlertDialog) getDialog();
 
-        if (alertDialog == null) {
-            List<IconMenuItem> items;
-            if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
-                items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
-                        new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
+        List<IconMenuItem> items;
+        if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
+                    new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
+        } else {
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
+        }
+
+        ListView listView = DialogUtils.createActionListView(getActivity());
+
+        final IconMenuListAdapter adapter = new IconMenuListAdapter(getActivity(), items);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            IconMenuItem item = (IconMenuItem) adapter.getItem(position);
+
+            if (item.getTextResId() == R.string.keep_changes) {
+                viewModel.saveForm(getActivity().getIntent().getData(), InstancesDaoHelper.isInstanceComplete(false),
+                        null, true);
+
             } else {
-                items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
+                ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+                if (manager != null) {
+                    manager.close();
+                }
+
+                if (viewModel.getAuditEventLogger() != null) {
+                    viewModel.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
+                }
+
+                viewModel.removeTempInstance();
+                MediaManager.INSTANCE.revertChanges();
+
+                String action = getActivity().getIntent().getAction();
+                if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
+                    // caller is waiting on a picked form
+                    Uri uri = InstancesDaoHelper.getLastInstanceUri(viewModel.getAbsoluteInstancePath());
+                    if (uri != null) {
+                        getActivity().setResult(RESULT_OK, new Intent().setData(uri));
+                    }
+                }
+                getActivity().finish();
             }
 
-            ListView listView = DialogUtils.createActionListView(getActivity());
+            if (getDialog() != null) {
+                getDialog().dismiss();
+            }
+        });
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(getTitle(viewModel))
+                .setPositiveButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
+                    dialog.cancel();
+                    dismiss();
+                })
+                .setView(listView)
+                .create();
 
-            final IconMenuListAdapter adapter = new IconMenuListAdapter(getActivity(), items);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
-
-                if (item.getTextResId() == R.string.keep_changes) {
-                    viewModel.saveForm(getActivity().getIntent().getData(), InstancesDaoHelper.isInstanceComplete(false),
-                            null, true);
-
-                } else {
-                    ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
-                    if (manager != null) {
-                        manager.close();
-                    }
-
-                    if (viewModel.getAuditEventLogger() != null) {
-                        viewModel.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
-                    }
-
-                    viewModel.removeTempInstance();
-                    MediaManager.INSTANCE.revertChanges();
-
-                    String action = getActivity().getIntent().getAction();
-                    if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
-                        // caller is waiting on a picked form
-                        Uri uri = InstancesDaoHelper.getLastInstanceUri(viewModel.getAbsoluteInstancePath());
-                        if (uri != null) {
-                            getActivity().setResult(RESULT_OK, new Intent().setData(uri));
-                        }
-                    }
-                    getActivity().finish();
-                }
-
-                if (getDialog() != null) {
-                    getDialog().dismiss();
-                }
-            });
-            alertDialog = new AlertDialog.Builder(getActivity())
-                    .setTitle(getTitle(viewModel))
-                    .setPositiveButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
-                        dialog.cancel();
-                        dismiss();
-                    })
-                    .setView(listView)
-                    .create();
-        }
         return alertDialog;
     }
 
