@@ -59,7 +59,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
+import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 
 /**
  * Add dependency providers here (annotated with @Provides)

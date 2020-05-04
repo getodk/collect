@@ -74,7 +74,6 @@ public final class GeneralKeys {
 
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
-    public static final String KEY_INSTALL_ID               = "metadata_installid";
 
     public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 

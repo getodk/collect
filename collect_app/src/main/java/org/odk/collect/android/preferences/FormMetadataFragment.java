@@ -27,9 +27,9 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 
 public class FormMetadataFragment extends PreferenceFragmentCompat {
 
