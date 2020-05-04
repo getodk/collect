@@ -12,19 +12,6 @@ import static org.hamcrest.Matchers.equalTo;
 public class MainMenuViewModelTest {
 
     @Test
-    public void version_whenRelease_returnsSemanticVersionWithPrefix() {
-        MainMenuViewModel viewModel = new MainMenuViewModel(new VersionInformation(() -> "v1.1.7"));
-        assertThat(viewModel.getVersion(), equalTo("v1.1.7"));
-    }
-
-    @Test
-    public void version_whenDirtyRelease_returnsSemanticVersionWithPrefix() {
-        MainMenuViewModel viewModel = new MainMenuViewModel(new VersionInformation(() -> "v1.1.7-dirty"));
-
-        assertThat(viewModel.getVersion(), equalTo("v1.1.7"));
-    }
-
-    @Test
     public void version_whenBetaRelease_returnsSemanticVersionWithPrefix_andBetaVersion() {
         MainMenuViewModel viewModel = new MainMenuViewModel(new VersionInformation(() -> "v1.23.0-beta.1"));
         assertThat(viewModel.getVersion(), equalTo("v1.23.0 Beta 1"));
@@ -40,12 +27,6 @@ public class MainMenuViewModelTest {
     public void version_whenBetaTag_returnsSemanticVersionWithPrefix_andBetaVersion() {
         MainMenuViewModel viewModel = new MainMenuViewModel(new VersionInformation(() -> "v1.23.0-beta.1-181-ge51d004d4"));
         assertThat(viewModel.getVersion(), equalTo("v1.23.0 Beta 1"));
-    }
-
-    @Test
-    public void version_whenReleaseTag_returnsSemanticVersionWithPrefix() {
-        MainMenuViewModel viewModel = new MainMenuViewModel(new VersionInformation(() -> "v1.23.0-181-ge51d004d4"));
-        assertThat(viewModel.getVersion(), equalTo("v1.23.0"));
     }
 
     @Test
