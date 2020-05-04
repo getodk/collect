@@ -57,6 +57,9 @@ public class QuitFormDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
+        String title =  viewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded)
+                : viewModel.getFormName();
+
         List<IconMenuItem> items;
         if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
             items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
@@ -104,28 +107,14 @@ public class QuitFormDialogFragment extends DialogFragment {
                 getDialog().dismiss();
             }
         });
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(getTitle(viewModel))
-                .setPositiveButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
+
+        return new AlertDialog.Builder(getActivity())
+                .setTitle(title)
+                .setNegativeButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
                     dialog.cancel();
                     dismiss();
                 })
                 .setView(listView)
                 .create();
-
-        return alertDialog;
-    }
-
-    public String getTitle(FormSaveViewModel formSaveViewModel) {
-        String title =  formSaveViewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded)
-                : formSaveViewModel.getFormName();
-        return getActivity().getString(R.string.quit_application, title);
-    }
-
-    public void setTitle() {
-        AlertDialog dialog = (AlertDialog) getDialog();
-        if (dialog != null) {
-            dialog.setTitle(getTitle(viewModel));
-        }
     }
 }
