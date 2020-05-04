@@ -109,13 +109,11 @@ public class SplashScreenActivity extends Activity {
         boolean showSplash = generalSharedPreferences.getBoolean(GeneralKeys.KEY_SHOW_SPLASH, false);
         String splashPath = (String) generalSharedPreferences.get(KEY_SPLASH_PATH);
 
-        if (applicationInitializer.isFirstRun() || showSplash) {
+        if (showSplash) {
             startSplashScreen(splashPath);
 
-            if (showSplash) {
-                String splashPathHash = FileUtils.getMd5Hash(new ByteArrayInputStream(splashPath.getBytes()));
-                analytics.logEvent(SHOW_SPLASH_SCREEN, splashPathHash, "");
-            }
+            String splashPathHash = FileUtils.getMd5Hash(new ByteArrayInputStream(splashPath.getBytes()));
+            analytics.logEvent(SHOW_SPLASH_SCREEN, splashPathHash, "");
         } else {
             endSplashScreen();
         }

@@ -8,7 +8,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.application.initialization.migration.Migration;
 
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.removeKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateValue;
@@ -97,8 +97,8 @@ class PrefMigrator {
 
                 translateValue("other_protocol").toValue("odk_default").forKey("protocol"),
 
-                moveKey("firstRun").toPreferences(metaSharedPreferences),
-                moveKey("lastVersion").toPreferences(metaSharedPreferences)
+                removeKey("firstRun"),
+                removeKey("lastVersion")
         };
     }
 

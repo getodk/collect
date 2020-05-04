@@ -2,8 +2,6 @@ package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -22,7 +20,6 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 
@@ -38,12 +35,6 @@ public class ApplicationInitializer {
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    private boolean firstRun;
-
-    public boolean isFirstRun() {
-        return firstRun;
-    }
-
     public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, SharedPreferences metaSharedPreferences) {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
@@ -56,7 +47,6 @@ public class ApplicationInitializer {
     public void initializePreferences() {
         performMigrations();
         reloadSharedPreferences();
-        setRunningVersion();
     }
 
     public void initializeFrameworks() {
@@ -84,28 +74,6 @@ public class ApplicationInitializer {
     public void initializeLocale() {
         Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(context);
-    }
-
-    private void setRunningVersion() {
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo =
-                    context.getPackageManager().getPackageInfo(context.getPackageName(),
-                            PackageManager.GET_META_DATA);
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.e(e, "Unable to get package info");
-        }
-
-        firstRun = metaSharedPreferences.getBoolean(MetaKeys.KEY_FIRST_RUN, true);
-        metaSharedPreferences.edit().putBoolean(MetaKeys.KEY_FIRST_RUN, false).apply();
-
-        if (metaSharedPreferences.getLong(MetaKeys.KEY_LAST_VERSION, 0) < packageInfo.versionCode) {
-            metaSharedPreferences.edit()
-                    .putLong(MetaKeys.KEY_LAST_VERSION, packageInfo.versionCode)
-                    .apply();
-
-            firstRun = true;
-        }
     }
 
     private void reloadSharedPreferences() {

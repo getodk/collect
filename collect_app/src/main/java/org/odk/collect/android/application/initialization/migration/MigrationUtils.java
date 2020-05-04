@@ -56,6 +56,9 @@ public class MigrationUtils {
         return new KeyMover(key);
     }
 
+    public static Migration removeKey(String key) {
+        return prefs -> prefs.edit().remove(key).apply();
+    }
 
     /** Removes an old key and sets a new key. */
     @SuppressLint("ApplySharedPref")

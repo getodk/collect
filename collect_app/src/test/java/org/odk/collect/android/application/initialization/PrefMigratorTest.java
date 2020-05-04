@@ -140,10 +140,6 @@ public class PrefMigratorTest {
         new PrefMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
 
         assertPrefsEmpty(generalPrefs);
-        assertPrefs(metaPrefs,
-                "first_run", true,
-                "last_version", 1L
-        );
     }
 
     @Test

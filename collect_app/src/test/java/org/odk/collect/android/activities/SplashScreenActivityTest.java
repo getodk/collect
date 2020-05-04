@@ -31,7 +31,6 @@ import java.io.File;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -84,18 +83,7 @@ public class SplashScreenActivityTest {
     }
 
     @Test
-    public void whenFirstRun_showsSplashScreen() {
-        when(applicationInitializer.isFirstRun()).thenReturn(true);
-
-        ActivityScenario<SplashScreenActivity> scenario = ActivityScenario.launch(SplashScreenActivity.class);
-        assertThat(scenario.getState(), is(Lifecycle.State.RESUMED));
-        scenario.onActivity(activity -> {
-            assertThat(activity.findViewById(R.id.splash_default).getVisibility(), is(View.VISIBLE));
-        });
-    }
-
-    @Test
-    public void whenShowSplashScreenEnabled_alwaysShowsSplashScreen() {
+    public void whenShowSplashScreenEnabled_showSplashScreen() {
         generalSharedPreferences.getSharedPreferences()
                 .edit()
                 .putBoolean(GeneralKeys.KEY_SHOW_SPLASH, true)
