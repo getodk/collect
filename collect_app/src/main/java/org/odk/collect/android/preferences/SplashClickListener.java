@@ -1,9 +1,10 @@
 package org.odk.collect.android.preferences;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.Preference;
+
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.preference.Preference;
 
 import org.odk.collect.android.R;
 

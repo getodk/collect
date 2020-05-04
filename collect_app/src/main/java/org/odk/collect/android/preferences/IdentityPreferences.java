@@ -14,14 +14,13 @@
 
 package org.odk.collect.android.preferences;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.analytics.Analytics;
 
 import javax.inject.Inject;
 
@@ -51,7 +50,7 @@ public class IdentityPreferences extends BasePreferenceFragment {
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
-                startActivity(new Intent(getActivity(), FormMetadataPreferencesActivity.class));
+                AndroidXPreferencesActivity.start(getActivity(), FormMetadataFragment.class);
                 return true;
             }
             return false;

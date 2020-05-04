@@ -66,7 +66,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                     basePreferenceFragment = ServerPreferences.newInstance(adminMode);
                     break;
                 case "user_interface":
-                    basePreferenceFragment = UserInterfacePreferencesFragment.newInstance(adminMode);
+                    AndroidXPreferencesActivity.start(getActivity(), UserInterfacePreferencesFragment.class);
                     break;
                 case "maps":
                     basePreferenceFragment = MapsPreferences.newInstance(adminMode);
