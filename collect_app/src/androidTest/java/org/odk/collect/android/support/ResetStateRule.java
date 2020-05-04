@@ -1,6 +1,7 @@
 package org.odk.collect.android.support;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -67,7 +68,8 @@ public class ResetStateRule implements TestRule {
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
             PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
             context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
-            new MetaSharedPreferencesProvider(context).getMetaSharedPreferences().edit().clear().commit();
+            SharedPreferences metaSharedPreferences = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
+            metaSharedPreferences.edit().clear().commit();
 
             // Reset the app in both the old and new storage locations (just nuke dirs)
             List<Integer> resetActions = Arrays.asList(

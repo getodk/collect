@@ -515,6 +515,7 @@ public class FileUtils {
         if (newOptions.inSampleSize <= 0) {
             newOptions.inSampleSize = 1;
         }
+
         Bitmap bitmap;
         try {
             bitmap = BitmapFactory.decodeFile(path, originalOptions);

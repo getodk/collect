@@ -13,6 +13,7 @@ import org.odk.collect.utilities.BackgroundWorkManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -26,7 +27,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYE
 public class StorageMigratorTest {
 
     private StorageMigrator storageMigrator;
-    private final StoragePathProvider storagePathProvider = spy(StoragePathProvider.class);
+    private final StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);
     private final StorageStateProvider storageStateProvider = mock(StorageStateProvider.class);
     private final StorageEraser storageEraser = mock(StorageEraser.class);
     private final StorageMigrationRepository storageMigrationRepository = mock(StorageMigrationRepository.class);
@@ -151,6 +152,7 @@ public class StorageMigratorTest {
         doReturn(true).when(storageStateProvider).isEnoughSpaceToPerformMigration(storagePathProvider);
         doReturn(true).when(storageMigrator).moveAppDataToScopedStorage();
         doReturn(true).when(storageMigrator).migrateDatabasePaths();
+        doReturn("countries/countries-raster.mbtiles").when(storagePathProvider).getRelativeMapLayerPath(any());
 
         storageMigrator.performStorageMigration();
 

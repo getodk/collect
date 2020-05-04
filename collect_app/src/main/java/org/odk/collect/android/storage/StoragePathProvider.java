@@ -7,6 +7,7 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 
 public class StoragePathProvider {
+
     private StorageStateProvider storageStateProvider;
 
     public StoragePathProvider() {

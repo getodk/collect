@@ -1,28 +1,39 @@
 package org.odk.collect.android.storage;
 
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.StatFs;
 
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.application.Collect;
 
 import java.io.File;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SCOPED_STORAGE_USED;
+import static org.odk.collect.android.preferences.MetaKeys.KEY_SCOPED_STORAGE_USED;
 
 public class StorageStateProvider {
 
+    private final SharedPreferences metaSharedPreferences;
+
+    public StorageStateProvider() {
+        metaSharedPreferences = Collect.getInstance().getComponent().metaSharedPreferencesProvider().getMetaSharedPreferences();
+    }
+
     public boolean isScopedStorageUsed() {
-        return GeneralSharedPreferences.getInstance().getBoolean(KEY_SCOPED_STORAGE_USED, false);
+        return metaSharedPreferences.getBoolean(KEY_SCOPED_STORAGE_USED, false);
     }
 
     public void enableUsingScopedStorage() {
-        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, true);
+        metaSharedPreferences.edit()
+                .putBoolean(KEY_SCOPED_STORAGE_USED, true)
+                .apply();
     }
 
     public void disableUsingScopedStorage() {
-        GeneralSharedPreferences.getInstance().save(KEY_SCOPED_STORAGE_USED, false);
+        metaSharedPreferences.edit()
+                .putBoolean(KEY_SCOPED_STORAGE_USED, false)
+                .apply();
     }
 
     boolean isStorageMounted() {
