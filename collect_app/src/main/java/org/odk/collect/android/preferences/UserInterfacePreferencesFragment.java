@@ -96,11 +96,7 @@ public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
 
         if (pref != null) {
             if (versionInformation.isRelease()) {
-                CharSequence[] entries = pref.getEntries();
-                pref.setEntries(Arrays.copyOfRange(entries, 0, entries.length - 1));
-
-                CharSequence[] entryValues = pref.getEntryValues();
-                pref.setEntryValues(Arrays.copyOfRange(entryValues, 0, entryValues.length - 1));
+                hideExperimentalThemes(pref);
             }
 
             pref.setSummary(pref.getEntry());
@@ -114,6 +110,14 @@ public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+    }
+
+    private void hideExperimentalThemes(ListPreference pref) {
+        CharSequence[] entries = pref.getEntries();
+        pref.setEntries(Arrays.copyOfRange(entries, 0, entries.length - 1));
+
+        CharSequence[] entryValues = pref.getEntryValues();
+        pref.setEntryValues(Arrays.copyOfRange(entryValues, 0, entryValues.length - 1));
     }
 
     private void initNavigationPrefs() {
