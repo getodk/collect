@@ -135,7 +135,8 @@ public class PrefMigratorTest {
         initPrefs(generalPrefs,
                 "firstRun", true,
                 "lastVersion", 1L,
-                "scoped_storage_used", true
+                "scoped_storage_used", true,
+                "metadata_migrated", true
         );
 
         new PrefMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();

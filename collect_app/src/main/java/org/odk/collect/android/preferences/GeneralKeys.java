@@ -71,9 +71,6 @@ public final class GeneralKeys {
     public static final String KEY_MAPBOX_INITIALIZED       = "mapbox_initialized";
     public static final String KEY_GOOGLE_BUG_154855417_FIXED = "google_bug_154855417_fixed";
 
-    /** Whether any existing username and email values have been migrated to form metadata */
-    static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
-
     public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 
     // values
@@ -150,8 +147,7 @@ public final class GeneralKeys {
     }
 
     static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
-            KEY_METADATA_MIGRATED,
-            KEY_AUTOSEND_WIFI,
+            KEY_AUTOSEND_WIFI, // Rewrite these in migration framework
             KEY_AUTOSEND_NETWORK,
             KEY_MAPBOX_INITIALIZED
     );

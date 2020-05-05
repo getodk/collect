@@ -2,7 +2,6 @@ package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -18,7 +17,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -82,9 +80,6 @@ public class ApplicationInitializer {
     }
 
     private void performMigrations() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        FormMetadataMigrator.migrate(prefs);
-
         new PrefMigrator(
                 generalSharedPreferences.getSharedPreferences(),
                 adminSharedPreferences.getSharedPreferences(),
