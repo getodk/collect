@@ -11,6 +11,13 @@ import androidx.preference.PreferenceFragmentCompat;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 
+/**
+ * Hosts preferences screens extending {@link PreferenceFragmentCompat} rather than the deprecated
+ * {@link androidx.preference.PreferenceFragment}. Once we've moved over ever Fragment we should be
+ * able to either only use this Activity or convert the existing preference Activity classes to
+ * use the new AndroidX preference framework.
+ */
+
 public class AndroidXPreferencesActivity extends CollectAbstractActivity {
 
     private static final String KEY_EXTRA_FRAGMENT = "key_extra_fragment";
