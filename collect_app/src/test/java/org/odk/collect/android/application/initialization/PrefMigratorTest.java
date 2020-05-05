@@ -134,12 +134,16 @@ public class PrefMigratorTest {
     public void migratesMetaKeysToMetaPrefs() {
         initPrefs(generalPrefs,
                 "firstRun", true,
-                "lastVersion", 1L
+                "lastVersion", 1L,
+                "scoped_storage_used", true
         );
 
         new PrefMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
 
         assertPrefsEmpty(generalPrefs);
+        assertPrefs(metaPrefs,
+                "scoped_storage_used", true
+        );
     }
 
     @Test

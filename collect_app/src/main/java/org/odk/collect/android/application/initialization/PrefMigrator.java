@@ -8,6 +8,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.application.initialization.migration.Migration;
 
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.removeKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
@@ -40,7 +41,7 @@ class PrefMigrator {
     void migrate() {
         migrate(generalSharedPreferences, getGeneralMigrations());
         migrate(metaSharedPreferences, getMetaMigrations());
-        migrate(adminSharedPreferences, ADMIN_MIGRATIONS);
+        migrate(adminSharedPreferences, getAdminMigrations());
     }
 
     private static void migrate(SharedPreferences prefs, Migration... migrations) {
@@ -98,23 +99,27 @@ class PrefMigrator {
                 translateValue("other_protocol").toValue("odk_default").forKey("protocol"),
 
                 removeKey("firstRun"),
-                removeKey("lastVersion")
+                removeKey("lastVersion"),
+
+                moveKey("scoped_storage_used").toPreferences(metaSharedPreferences)
         };
     }
 
     private Migration[] getMetaMigrations() {
-        return new Migration[] {
+        return new Migration[]{
                 renameKey("firstRun").toKey("first_run"),
                 renameKey("lastVersion").toKey("last_version")
         };
     }
 
-    private static final Migration[] ADMIN_MIGRATIONS = {
-            // When either the map SDK or the basemap selection were previously
-            // hidden, we want to hide the entire Maps preference screen.
-            translateKey("show_map_sdk").toKey("maps")
-                    .fromValue(false).toValue(false),
-            translateKey("show_map_basemap").toKey("maps")
-                    .fromValue(false).toValue(false)
-    };
+    private Migration[] getAdminMigrations() {
+        return new Migration[]{
+                // When either the map SDK or the basemap selection were previously
+                // hidden, we want to hide the entire Maps preference screen.
+                translateKey("show_map_sdk").toKey("maps")
+                        .fromValue(false).toValue(false),
+                translateKey("show_map_basemap").toKey("maps")
+                        .fromValue(false).toValue(false)
+        };
+    }
 }
