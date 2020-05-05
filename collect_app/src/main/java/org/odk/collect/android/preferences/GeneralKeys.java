@@ -4,8 +4,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 public final class GeneralKeys {
@@ -145,13 +143,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
         return hashMap;
     }
-
-    static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
-            KEY_AUTOSEND_WIFI, // Rewrite these in migration framework
-            KEY_AUTOSEND_NETWORK,
-            KEY_MAPBOX_INITIALIZED
-    );
-
+    
     public static final HashMap<String, Object> DEFAULTS = getHashMap();
 
     private GeneralKeys() {

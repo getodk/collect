@@ -115,10 +115,7 @@ public class GeneralSharedPreferences {
 
     public void clear() {
         for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
-            String key = prefs.getKey();
-            if (!GeneralKeys.KEYS_WE_SHOULD_NOT_RESET.contains(key)) {
-                reset(key);
-            }
+            reset(prefs.getKey());
         }
     }
 
