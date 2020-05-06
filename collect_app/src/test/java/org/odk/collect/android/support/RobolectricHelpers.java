@@ -111,4 +111,14 @@ public class RobolectricHelpers {
             }
         });
     }
+
+    public static <V> ViewModelProvider mockViewModelProvider(FragmentActivity activity, final Class<V> viewModelClass) {
+        return ViewModelProviders.of(activity, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) mock(viewModelClass);
+            }
+        });
+    }
 }
