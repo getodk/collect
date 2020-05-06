@@ -4,6 +4,5 @@
         <attr name="iconColor" format="color" />
         <attr name="dividerColor" format="color" />
         <attr name="dividerCompat" format="reference" />
-        <attr name="spinnerItemBackgroundColor" format="color" />
     </declare-styleable>
 </resources>

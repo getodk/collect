@@ -56,7 +56,6 @@
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
-        <item name="spinnerItemBackgroundColor">#F9F9F9</item>
 
     </style>
 
