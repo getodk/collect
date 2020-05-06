@@ -12,7 +12,6 @@ import com.google.zxing.WriterException;
 
 import androidx.core.content.FileProvider;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -20,7 +19,6 @@ import androidx.test.rule.GrantPermissionRule;
 import dagger.Provides;
 import io.reactivex.Observable;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,16 +42,12 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtras;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.not;
 
 import static org.junit.Assert.assertTrue;
@@ -162,7 +156,7 @@ public class ConfigureWithQRCodeTest {
 
     // StubQRCodeGenerator is a class that is injected during this test
     // to verify that the QRCode is generated and shown to user correctly
-    private static class StubQRCodeGenerator implements QRCodeGenerator{
+    private static class StubQRCodeGenerator implements QRCodeGenerator {
         private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
 
         @Override

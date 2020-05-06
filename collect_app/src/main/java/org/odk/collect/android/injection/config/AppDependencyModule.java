@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
@@ -47,18 +46,14 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.utilities.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
-
-import java.util.Collection;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
