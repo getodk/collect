@@ -6,7 +6,9 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class ServerSettingsPage extends Page<ServerSettingsPage> {
 
@@ -40,4 +42,8 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
         return this;
     }
 
+    public ServerSettingsPage clickOnURL() {
+        onView(withText(getTranslatedString(R.string.server_url))).perform(click());
+        return this;
+    }
 }

@@ -121,5 +121,15 @@ public class MainMenuPage extends Page<MainMenuPage> {
         getInstrumentation().runOnMainSync(() -> rule.getActivity().recreate());
         return this;
     }
+
+    public GetBlankFormPage clickGetBlankForm() {
+        onView(withText(getTranslatedString(R.string.get_forms))).perform(click());
+        return new GetBlankFormPage(rule);
+    }
+
+    public SendFinalizedFormPage clickSendFinalizedForm(int formCount) {
+        onView(withText(getTranslatedString(R.string.send_data_button, formCount))).perform(click());
+        return new SendFinalizedFormPage(rule);
+    }
 }
 
