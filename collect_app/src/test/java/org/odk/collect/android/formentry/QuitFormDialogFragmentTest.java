@@ -23,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -56,9 +57,24 @@ public class QuitFormDialogFragmentTest {
     }
 
     @Test
-    public void shouldShowCorrectTitle() {
+    public void shouldShowCorrectTitle_whenNoFormIsLoaded() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        String title =  formSaveViewModel.getFormName() == null ? activity.getString(R.string.no_form_loaded)
+                : formSaveViewModel.getFormName();
+        TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
+
+        assertThat(dialogTitle.getText().toString(), equalTo(title));
+    }
+
+
+    @Test
+    public void shouldShowCorrectTitle_whenFormIsLoaded() {
+        when(formSaveViewModel.getFormName()).thenReturn("blah");
+
+        dialogFragment.show(fragmentManager, "TAG");
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+
         String title =  formSaveViewModel.getFormName() == null ? activity.getString(R.string.no_form_loaded)
                 : formSaveViewModel.getFormName();
         TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
