@@ -66,7 +66,6 @@ public class CaptionedListPreference extends ListPreference {
 
     @Override
     protected void onPrepareDialogBuilder(android.app.AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
         // Selecting an item will close the dialog, so we don't need the "OK" button.
         builder.setPositiveButton(null, null);
     }
