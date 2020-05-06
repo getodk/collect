@@ -157,8 +157,6 @@ public class ConfigureWithQRCodeTest {
     // StubQRCodeGenerator is a class that is injected during this test
     // to verify that the QRCode is generated and shown to user correctly
     private static class StubQRCodeGenerator implements QRCodeGenerator {
-        private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
-
         @Override
         public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
             // don't use this in this test, so okay to return null
@@ -174,7 +172,7 @@ public class ConfigureWithQRCodeTest {
                                 CHECKER_BACKGROUND_DRAWABLE_ID);
                 emitter.onNext(bitmap);
 
-                // save bitmap to test-collect-settings.png
+                // save bitmap to test that shareQRCode generates bitmap if file not there
                 FileUtils.saveBitmapToFile(bitmap, getQrCodeFilepath());
                 emitter.onComplete();
             });
@@ -187,7 +185,8 @@ public class ConfigureWithQRCodeTest {
 
         @Override
         public String getMd5CachePath() {
-            return new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS) + File.separator + SETTINGS_MD5_FILE;
+            // don't use this in this test, so okay to return null
+            return null;
         }
     }
 }

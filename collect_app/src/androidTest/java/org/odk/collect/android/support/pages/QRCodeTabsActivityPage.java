@@ -52,6 +52,7 @@ public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage> {
         return this;
     }
 
+    // Matcher class to match the contents of a ImageView and compare with a bitmap
     private static class DrawableMatcher {
         private static Matcher<View> withBitmap(Bitmap match) {
             return new BoundedMatcher<View, ImageView>(ImageView.class) {
