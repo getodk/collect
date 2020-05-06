@@ -80,7 +80,5 @@ the License.
                 android:text="@string/download" />
 
         </LinearLayout>
-
     </RelativeLayout>
-
 </RelativeLayout>
