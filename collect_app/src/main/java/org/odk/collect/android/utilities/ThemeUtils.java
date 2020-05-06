@@ -137,8 +137,8 @@ public final class ThemeUtils {
     }
 
     @ColorInt
-    public int getRankItemColor() {
-        return getAttributeValue(R.attr.rankItemColor);
+    public int getColorPrimary() {
+        return getAttributeValue(R.attr.colorPrimary);
     }
 
     @ColorInt
