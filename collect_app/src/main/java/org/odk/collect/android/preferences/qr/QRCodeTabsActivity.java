@@ -82,13 +82,13 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         Uri uri =
-                FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(QRCodeUtils.getQrCodeFilepath()));
+                FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(qrCodeGenerator.getQrCodeFilepath()));
         FileUtils.grantFileReadPermissions(shareIntent, uri, this);
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
     }
 
     private void startShareQRCodeIntent() {
-        if (new File(QRCodeUtils.getQrCodeFilepath()).exists()) {
+        if (new File(qrCodeGenerator.getQrCodeFilepath()).exists()) {
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
         } else {
             Collection<String> keys = new ArrayList<>();

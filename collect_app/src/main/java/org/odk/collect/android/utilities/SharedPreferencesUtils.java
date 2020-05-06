@@ -42,7 +42,7 @@ public final class SharedPreferencesUtils {
 
     }
 
-    static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
+    public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
         Collection<String> keys = new ArrayList<>(passwordKeys);
         keys.addAll(DEFAULTS.keySet());
         JSONObject sharedPrefJson = getModifiedPrefs(keys);

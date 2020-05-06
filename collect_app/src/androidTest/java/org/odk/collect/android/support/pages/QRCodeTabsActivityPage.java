@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.support.ActivityHelpers;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.rule.ActivityTestRule;
 
