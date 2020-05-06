@@ -253,7 +253,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
                 break;
             case OPEN_READ_ONLY:
-                showSummary(featureId, true);
+                showSummary(featureId, false);
                 break;
             case OPEN_EDIT:
                 showSummary(featureId, canEditSaved);
