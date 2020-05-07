@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -60,9 +59,6 @@ public class SplashScreenActivity extends Activity {
 
     @Inject
     Analytics analytics;
-
-    @Inject
-    ApplicationInitializer applicationInitializer;
 
     @Inject
     PermissionUtils permissionUtils;
