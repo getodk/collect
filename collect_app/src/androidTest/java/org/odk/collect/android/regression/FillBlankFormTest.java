@@ -669,7 +669,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnElementInHierarchy(14)
-                .clickOnText("Source15")
+                .clickOnQuestion("Source15")
                 .assertText("File: /storage/emulated/0/odk/forms/fieldlist-updates_nocsv-media/fruits.csv is missing.")
                 .swipeToEndScreen()
                 .clickSaveAndExit();

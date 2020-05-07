@@ -8,12 +8,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.regression.BaseRegressionTest;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
+import org.odk.collect.android.support.pages.FormHierarchyPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -53,7 +53,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2944
     public void notRelevantRepeatGroupsShouldNotBeVisibleInHierarchy() {
-        final FormEntryPage page = new MainMenuPage(rule)
+        final FormHierarchyPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy2")
                 .inputText("2")
                 .clickGoToArrow();
@@ -99,7 +99,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2936
     public void repeatGroupsShouldBeVisibleAsAppropriate() {
-        FormEntryPage page = new MainMenuPage(rule)
+        FormHierarchyPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy3")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
@@ -127,7 +127,7 @@ public class FormHierarchyTest extends BaseRegressionTest {
     @Test
     //https://github.com/opendatakit/collect/issues/2942
     public void deletingLastGroupShouldNotBreakHierarchy() {
-        FormEntryPage page = new MainMenuPage(rule)
+        FormHierarchyPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy3")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
