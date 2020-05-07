@@ -28,11 +28,16 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class FormDownloadListViewModel extends ViewModel {
-    private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
+    private HashMap<String, FormDetails> formDetailsByFormId = new HashMap<>();
 
+    /**
+     * List of forms from the formList response. The map acts like a DisplayableForm object with
+     * values for each component that shows up in the form list UI. See
+     * FormDownloadListActivity.formListDownloadingComplete for keys.
+     */
     private final ArrayList<HashMap<String, String>> formList = new ArrayList<>();
 
-    private final LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
+    private final LinkedHashSet<String> selectedFormIds = new LinkedHashSet<>();
 
     private String alertTitle;
     private String progressDialogMsg;
@@ -52,16 +57,16 @@ public class FormDownloadListViewModel extends ViewModel {
     private String password;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
 
-    public HashMap<String, FormDetails> getFormNamesAndURLs() {
-        return formNamesAndURLs;
+    public HashMap<String, FormDetails> getFormDetailsByFormId() {
+        return formDetailsByFormId;
     }
 
-    public void setFormNamesAndURLs(HashMap<String, FormDetails> formNamesAndURLs) {
-        this.formNamesAndURLs = formNamesAndURLs;
+    public void setFormDetailsByFormId(HashMap<String, FormDetails> formDetailsByFormId) {
+        this.formDetailsByFormId = formDetailsByFormId;
     }
 
-    public void clearFormNamesAndURLs() {
-        formNamesAndURLs.clear();
+    public void clearFormDetailsByFormId() {
+        formDetailsByFormId.clear();
     }
 
     public String getAlertTitle() {
@@ -120,20 +125,20 @@ public class FormDownloadListViewModel extends ViewModel {
         formList.add(index, item);
     }
 
-    public LinkedHashSet<String> getSelectedForms() {
-        return selectedForms;
+    public LinkedHashSet<String> getSelectedFormIds() {
+        return selectedFormIds;
     }
 
-    public void addSelectedForm(String form) {
-        selectedForms.add(form);
+    public void addSelectedFormId(String selectedFormId) {
+        selectedFormIds.add(selectedFormId);
     }
 
-    public void removeSelectedForm(String form) {
-        selectedForms.remove(form);
+    public void removeSelectedFormId(String selectedFormId) {
+        selectedFormIds.remove(selectedFormId);
     }
 
-    public void clearSelectedForms() {
-        selectedForms.clear();
+    public void clearSelectedFormIds() {
+        selectedFormIds.clear();
     }
 
     public boolean isDownloadOnlyMode() {

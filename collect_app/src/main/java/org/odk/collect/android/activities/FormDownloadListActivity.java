@@ -205,10 +205,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             public void onClick(View v) {
                 downloadButton.setEnabled(toggleChecked(listView));
                 toggleButtonLabel(toggleButton, listView);
-                viewModel.clearSelectedForms();
+                viewModel.clearSelectedFormIds();
                 if (listView.getCheckedItemCount() == listView.getCount()) {
                     for (HashMap<String, String> map : viewModel.getFormList()) {
-                        viewModel.addSelectedForm(map.get(FORMDETAIL_KEY));
+                        viewModel.addSelectedFormId(map.get(FORMDETAIL_KEY));
                     }
                 }
             }
@@ -262,7 +262,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 }
                 downloadFormsTask = null;
             }
-        } else if (viewModel.getFormNamesAndURLs().isEmpty()
+        } else if (viewModel.getFormDetailsByFormId().isEmpty()
                 && getLastCustomNonConfigurationInstance() == null
                 && !viewModel.wasLoadingCanceled()) {
             // first time, so get the formlist
@@ -288,9 +288,9 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
 
         if (listView.isItemChecked(position)) {
-            viewModel.addSelectedForm(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
+            viewModel.addSelectedFormId(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         } else {
-            viewModel.removeSelectedForm(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
+            viewModel.removeSelectedFormId(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         }
     }
 
@@ -306,7 +306,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 finish();
             }
         } else {
-            viewModel.clearFormNamesAndURLs();
+            viewModel.clearFormDetailsByFormId();
             if (progressDialog != null) {
                 // This is needed because onPrepareDialog() is broken in 1.6.
                 progressDialog.setMessage(viewModel.getProgressDialogMsg());
@@ -368,10 +368,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
         sortList();
         if (listView.getAdapter() == null) {
-            listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, viewModel.getFormNamesAndURLs()));
+            listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, viewModel.getFormDetailsByFormId()));
         } else {
             FormDownloadListAdapter formDownloadListAdapter = (FormDownloadListAdapter) listView.getAdapter();
-            formDownloadListAdapter.setFromIdsToDetails(viewModel.getFormNamesAndURLs());
+            formDownloadListAdapter.setFromIdsToDetails(viewModel.getFormDetailsByFormId());
             formDownloadListAdapter.notifyDataSetChanged();
         }
         toggleButton.setEnabled(!filteredFormList.isEmpty());
@@ -385,7 +385,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         for (int i = 0; i < listView.getCount(); i++) {
             HashMap<String, String> item =
                     (HashMap<String, String>) listView.getAdapter().getItem(i);
-            if (viewModel.getSelectedForms().contains(item.get(FORMDETAIL_KEY))) {
+            if (viewModel.getSelectedFormIds().contains(item.get(FORMDETAIL_KEY))) {
                 listView.setItemChecked(i, true);
             }
         }
@@ -415,7 +415,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             if (sba.get(i, false)) {
                 HashMap<String, String> item =
                         (HashMap<String, String>) listView.getAdapter().getItem(i);
-                filesToDownload.add(viewModel.getFormNamesAndURLs().get(item.get(FORMDETAIL_KEY)));
+                filesToDownload.add(viewModel.getFormDetailsByFormId().get(item.get(FORMDETAIL_KEY)));
             }
         }
 
@@ -502,8 +502,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         try (Cursor formCursor = new FormsDao().getFormsCursorForFormId(formId)) {
             return formCursor != null && formCursor.getCount() == 0 // form does not already exist locally
-                    || viewModel.getFormNamesAndURLs().get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
-                    || viewModel.getFormNamesAndURLs().get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
+                    || viewModel.getFormDetailsByFormId().get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
+                    || viewModel.getFormDetailsByFormId().get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
         }
     }
 
@@ -519,14 +519,14 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             HashMap<String, String> item = filteredFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY))) {
                 ls.setItemChecked(idx, true);
-                viewModel.addSelectedForm(item.get(FORMDETAIL_KEY));
+                viewModel.addSelectedFormId(item.get(FORMDETAIL_KEY));
             }
         }
     }
 
     /*
      * Called when the form list has finished downloading. results will either contain a set of
-     * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
+     * <form_id, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
         progressDialog.dismiss();
@@ -563,14 +563,14 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
             // Everything worked. Clear the list and add the results.
-            viewModel.setFormNamesAndURLs(result);
+            viewModel.setFormDetailsByFormId(result);
 
             viewModel.clearFormList();
 
-            ArrayList<String> ids = new ArrayList<>(viewModel.getFormNamesAndURLs().keySet());
+            ArrayList<String> ids = new ArrayList<>(viewModel.getFormDetailsByFormId().keySet());
             for (int i = 0; i < result.size(); i++) {
                 String formDetailsKey = ids.get(i);
-                FormDetails details = viewModel.getFormNamesAndURLs().get(formDetailsKey);
+                FormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
 
                 if (!displayOnlyUpdatedForms || (details.isNewerFormVersionAvailable() || details.areNewerMediaFilesAvailable())) {
                     HashMap<String, String> item = new HashMap<>();
@@ -590,7 +590,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                         for (j = 0; j < viewModel.getFormList().size(); j++) {
                             HashMap<String, String> compareMe = viewModel.getFormList().get(j);
                             String name = compareMe.get(FORMNAME);
-                            if (name.compareTo(viewModel.getFormNamesAndURLs().get(ids.get(i)).getFormName()) > 0) {
+                            if (name.compareTo(viewModel.getFormDetailsByFormId().get(ids.get(i)).getFormName()) > 0) {
                                 break;
                             }
                         }
@@ -614,7 +614,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
                 ArrayList<FormDetails> filesToDownload  = new ArrayList<>();
 
-                for (FormDetails formDetails: viewModel.getFormNamesAndURLs().values()) {
+                for (FormDetails formDetails: viewModel.getFormDetailsByFormId().values()) {
                     String formId = formDetails.getFormId();
 
                     if (viewModel.getFormResults().containsKey(formId)) {
