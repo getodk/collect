@@ -141,8 +141,7 @@
   <string name="edit_prompt">ခ်က္ျခင္းျပင္ဆင္ရန္</string>
   <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">အျခား</string>
-  <string name="font_size_extra_large">အလြန္ႀကီး</string>
+    <string name="font_size_extra_large">အလြန္ႀကီး</string>
   <string name="font_size_large">အႀကီး</string>
   <string name="font_size_medium">အလယ္အလတ္</string>
   <string name="font_size_small">ေသး</string>

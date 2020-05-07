@@ -134,8 +134,7 @@
   <string name="edit_prompt">ແກ້ໄຂຈຸດທີ່ເລືອກ</string>
   <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">ອື່ນໆ</string>
-  <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
+    <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
   <string name="font_size_large">ຂະໜາດໃຫຍ່</string>
   <string name="font_size_medium">ຂະໜາດປານກາງ</string>
   <string name="font_size_small">ຂະໜາດນ້ອຍ</string>
@@ -227,8 +226,7 @@
   <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
   <string name="modified_on_date_at_time">\'ດັດແກ້ວັນທີ\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
   <string name="aggregate_preferences">ການຕັ້ງຄ່າ ODK Aggregate</string>
-  <string name="other_preferences">ການຕັ້ງຄ່າ platform ອື່ນໆ</string>
-  <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
+    <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>

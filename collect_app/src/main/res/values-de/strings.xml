@@ -163,8 +163,7 @@
   <string name="edit_prompt">Eingabe ändern</string>
   <string name="selected_google_account_text">Google-Konto</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Andere</string>
-  <string name="font_size_extra_large">Sehr gross</string>
+    <string name="font_size_extra_large">Sehr gross</string>
   <string name="font_size_large">Groß</string>
   <string name="font_size_medium">Mittel</string>
   <string name="font_size_small">Klein</string>
@@ -267,8 +266,7 @@
   <string name="sms_submission_preferences">SMS-Einsendungseinstellungen</string>
   <string name="submission_transport">Einsendungsübertragung (erweitert)</string>
   <string name="submission_transport_types_title">Einsendung über</string>
-  <string name="other_preferences">Andere Plattform-Einstellungen</string>
-  <string name="google_preferences">Google-Sheets-Einstellungen</string>
+    <string name="google_preferences">Google-Sheets-Einstellungen</string>
   <string name="google_sheets_url_hint">Formulare müssen eine Speicherort-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
   <string name="drive_get_file">Lade %1$s und Mediendateien.</string>
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>

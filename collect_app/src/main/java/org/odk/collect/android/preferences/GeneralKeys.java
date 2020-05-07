@@ -17,7 +17,7 @@ public final class GeneralKeys {
     public static final String KEY_USERNAME                 = "username";
     public static final String KEY_PASSWORD                 = "password";
 
-    // other_preferences.xml
+    // custom_server_paths_preferences.xmlreferences.xml
     public static final String KEY_FORMLIST_URL             = "formlist_url";
     public static final String KEY_SUBMISSION_URL           = "submission_url";
 
@@ -132,7 +132,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_GOOGLE_SHEETS_URL,          "");
         // identity_preferences.xml
         hashMap.put(KEY_ANALYTICS,                  true);
-        // other_preferences.xml
+        // custom_server_paths_preferenceshs_preferences.xml
         hashMap.put(KEY_FORMLIST_URL,               Collect.getInstance().getString(R.string.default_odk_formlist));
         hashMap.put(KEY_SUBMISSION_URL,             Collect.getInstance().getString(R.string.default_odk_submission));
         // server_preferences.xml

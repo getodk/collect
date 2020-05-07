@@ -10,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CopyFormRule;
@@ -19,6 +18,7 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.StubOpenRosaServer;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.ServerSettingsPage;
 import org.odk.collect.utilities.UserAgentProvider;
 
 @RunWith(AndroidJUnit4.class)
@@ -53,15 +53,15 @@ public class CustomServerPathsTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openServerSettings()
-                .clickOnServerType()
-                .clickOnString(R.string.server_platform_other)
                 .clickOnURL()
                 .inputText(server.getURL())
                 .clickOKOnDialog()
+                .clickCustomServerPaths()
                 .clickFormListPath()
                 .inputText("/customPath")
                 .clickOKOnDialog()
                 .assertText("/customPath")
+                .pressBack(new ServerSettingsPage(rule))
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
 
@@ -81,15 +81,15 @@ public class CustomServerPathsTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openServerSettings()
-                .clickOnServerType()
-                .clickOnString(R.string.server_platform_other)
                 .clickOnURL()
                 .inputText(server.getURL())
                 .clickOKOnDialog()
+                .clickCustomServerPaths()
                 .clickSubmissionPath()
                 .inputText("/customPath")
                 .clickOKOnDialog()
                 .assertText("/customPath")
+                .pressBack(new ServerSettingsPage(rule))
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
 

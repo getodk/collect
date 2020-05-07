@@ -162,8 +162,7 @@
   <string name="edit_prompt">កែប្រែ Prompt</string>
   <string name="selected_google_account_text">គណនី Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">ផ្សេងៗ</string>
-  <string name="font_size_extra_large">ធំបំផុត</string>
+    <string name="font_size_extra_large">ធំបំផុត</string>
   <string name="font_size_large">ធំ</string>
   <string name="font_size_medium">មធ្បម</string>
   <string name="font_size_small">តូច</string>
@@ -262,8 +261,7 @@
   <string name="go_shared">ចែក​រំលែក​ជាមួយ​ខ្ញុំ</string>
   <string name="modified_on_date_at_time">\'កែប្រែនៅថ្ងៃ\' EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <string name="aggregate_preferences">ការកំណត់របស់ ODK Aggregate</string>
-  <string name="other_preferences">ការកំណត់លើ platform ដទៃ</string>
-  <string name="google_preferences">ការកំណត់សន្លឹក Google</string>
+    <string name="google_preferences">ការកំណត់សន្លឹក Google</string>
   <string name="google_sheets_url_hint">ទម្រង់​ត្រូវតែ​កំណត់ URLក្នុងការបញ្ជូន​។ ប្រសិន​មិន​បាន​កំណត់, URL នេះ​នឹង​ត្រូវ​បាន​ប្រើប្រាស់។</string>
   <string name="drive_get_file">កំពុង​ទទួល​ %1$s និង ឯកសារមេឌៀ</string>
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>

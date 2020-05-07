@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class ServerSettingsPage extends Page<ServerSettingsPage> {
 
-    ServerSettingsPage(ActivityTestRule rule) {
+    public ServerSettingsPage(ActivityTestRule rule) {
         super(rule);
     }
 
@@ -32,18 +32,13 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
         return this;
     }
 
-    public ServerSettingsPage clickFormListPath() {
-        onData(PreferenceMatchers.withKey("formlist_url")).perform(click());
-        return this;
-    }
-
-    public ServerSettingsPage clickSubmissionPath() {
-        onData(PreferenceMatchers.withKey("submission_url")).perform(click());
-        return this;
-    }
-
     public ServerSettingsPage clickOnURL() {
         onView(withText(getTranslatedString(R.string.server_url))).perform(click());
         return this;
+    }
+
+    public CustomServerPathsPage clickCustomServerPaths() {
+        onView(withText(getTranslatedString(R.string.legacy_custom_server_paths))).perform(click());
+        return new CustomServerPathsPage(rule).assertOnPage();
     }
 }

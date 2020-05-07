@@ -124,8 +124,7 @@
   <string name="edit_prompt">ویرایش عاجل</string>
   <string name="selected_google_account_text">حساب کاربری گوگل</string>
   <string name="server_platform_odk_aggregate">مجموعه ODK</string>
-  <string name="server_platform_other">دیگر</string>
-  <string name="font_size_extra_large">بسیار بزرگ</string>
+    <string name="font_size_extra_large">بسیار بزرگ</string>
   <string name="font_size_large">بزرگ</string>
   <string name="font_size_medium">متوسط</string>
   <string name="font_size_small">کوچک</string>

@@ -162,8 +162,7 @@
   <string name="edit_prompt">Inmatningstext</string>
   <string name="selected_google_account_text">Google-konto</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Övrig</string>
-  <string name="font_size_extra_large">Extra stor</string>
+    <string name="font_size_extra_large">Extra stor</string>
   <string name="font_size_large">Stor</string>
   <string name="font_size_medium">Mellan</string>
   <string name="font_size_small">Liten</string>
@@ -266,8 +265,7 @@
   <string name="sms_submission_preferences">Inställningar för att skicka formulär med SMS</string>
   <string name="submission_transport">Transport för uppladdning (avancerat)</string>
   <string name="submission_transport_types_title">Skicka formulär via</string>
-  <string name="other_preferences">Övriga plattformsinställningar</string>
-  <string name="google_preferences">Google Sheets inställningar</string>
+    <string name="google_preferences">Google Sheets inställningar</string>
   <string name="google_sheets_url_hint">Formulären måste ange en uppladdnings-URL. Om dem inte gör det används denna URL.</string>
   <string name="drive_get_file">Hämtar %1$s och mediafiler.</string>
   <string name="no_google_account">Inget Google-konto valt!</string>

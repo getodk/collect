@@ -151,8 +151,7 @@ Escolher Imagem</string>
   <string name="edit_prompt">Editar Prompt</string>
   <string name="selected_google_account_text">Conta Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Outro</string>
-  <string name="font_size_extra_large">Extra Grande</string>
+    <string name="font_size_extra_large">Extra Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Média</string>
   <string name="font_size_small">Pequena</string>
@@ -253,8 +252,7 @@ Escolher Imagem</string>
   <string name="sms_submission_preferences">Parâmetros de envio SMS</string>
   <string name="submission_transport">Transporte envio (avançado)</string>
   <string name="submission_transport_types_title">Enviar submissões por</string>
-  <string name="other_preferences">Configurações de outras plataformas.</string>
-  <string name="google_preferences">Configurações Planilhas Google</string>
+    <string name="google_preferences">Configurações Planilhas Google</string>
   <string name="google_sheets_url_hint">Os formulários devem configurar um envio. Se não foram, esta URL será utilizada.</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>

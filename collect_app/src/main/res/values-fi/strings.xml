@@ -163,8 +163,7 @@
   <string name="edit_prompt">Vastauksen muokkaus</string>
   <string name="selected_google_account_text">Google-tili</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Muu</string>
-  <string name="font_size_extra_large">Erittäin suuri</string>
+    <string name="font_size_extra_large">Erittäin suuri</string>
   <string name="font_size_large">Suuri</string>
   <string name="font_size_medium">Keskikokoinen</string>
   <string name="font_size_small">Pieni</string>
@@ -267,8 +266,7 @@
   <string name="sms_submission_preferences">SMS lähetysasetukset</string>
   <string name="submission_transport">Lähetyksen välitys (lisäasetukset)</string>
   <string name="submission_transport_types_title">Minkä kautta lähetetään</string>
-  <string name="other_preferences">Muut alustan asetukset</string>
-  <string name="google_preferences">Google Sheets -asetukset</string>
+    <string name="google_preferences">Google Sheets -asetukset</string>
   <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
   <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>

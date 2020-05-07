@@ -1,4 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:key="@string/server_preferences"
@@ -19,6 +19,12 @@
             android:key="password"
             android:title="@string/password" />
     </PreferenceCategory>
+
+    <Preference
+        android:key="custom_server_paths"
+        android:persistent="false"
+        android:title="@string/legacy_custom_server_paths" />
+
     <PreferenceCategory
         android:key="submission_transport_preference"
         android:title="@string/submission_transport">

@@ -160,8 +160,7 @@
   <string name="edit_prompt">Ubah risalah</string>
   <string name="selected_google_account_text">Akun Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Lainnya</string>
-  <string name="font_size_extra_large">Sangat besar</string>
+    <string name="font_size_extra_large">Sangat besar</string>
   <string name="font_size_large">Besar</string>
   <string name="font_size_medium">Sedang</string>
   <string name="font_size_small">Kecil</string>
@@ -262,8 +261,7 @@
   <string name="sms_submission_preferences">Pengaturan pengiriman SMS</string>
   <string name="submission_transport">Pengiriman (Mahir)</string>
   <string name="submission_transport_types_title">Pengiriman melalui</string>
-  <string name="other_preferences">Pengaturan platform lainnya</string>
-  <string name="google_preferences">Pengaturan Google Sheets</string>
+    <string name="google_preferences">Pengaturan Google Sheets</string>
   <string name="google_sheets_url_hint">Tautan pengajuan harus ditetapkan pada formulir. Jika tidak, tautan ini yang akan digunakan.</string>
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>

@@ -164,8 +164,7 @@
   <string name="edit_prompt">Editar entrada</string>
   <string name="selected_google_account_text">Cuenta de Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Otro</string>
-  <string name="font_size_extra_large">Extra Grande</string>
+    <string name="font_size_extra_large">Extra Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Medio</string>
   <string name="font_size_small">Pequeño</string>
@@ -269,8 +268,7 @@
   <string name="sms_submission_preferences">Ajustes para envío de SMS</string>
   <string name="submission_transport">Envío de transporte (avanzado)</string>
   <string name="submission_transport_types_title">Hacer envíos vía</string>
-  <string name="other_preferences">Ajustes de Otras Plataformas</string>
-  <string name="google_preferences">Características de Google Sheets</string>
+    <string name="google_preferences">Características de Google Sheets</string>
   <string name="google_sheets_url_hint">Los formularios deben establecer una URL para envio. Si no lo hacen, se usará la siguiente URL</string>
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>

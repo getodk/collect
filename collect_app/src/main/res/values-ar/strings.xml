@@ -163,8 +163,7 @@
   <string name="edit_prompt">تعديل التوجيه</string>
   <string name="selected_google_account_text">حساب جوجل</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">أخرى</string>
-  <string name="font_size_extra_large">كبير جدا</string>
+    <string name="font_size_extra_large">كبير جدا</string>
   <string name="font_size_large">كبير</string>
   <string name="font_size_medium">متوسط</string>
   <string name="font_size_small">صغير</string>
@@ -267,8 +266,7 @@
   <string name="sms_submission_preferences">إعدادات إرسال SMS</string>
   <string name="submission_transport">نقل الارسال (متقدم)</string>
   <string name="submission_transport_types_title">إرسال الاستمارات عبر</string>
-  <string name="other_preferences">اعدادات البرنامج الاخرى</string>
-  <string name="google_preferences">اعدادات صفحات الجوجل</string>
+    <string name="google_preferences">اعدادات صفحات الجوجل</string>
   <string name="google_sheets_url_hint">يجب أن تقوم الاستمارات بتعيين رابط للارسال. إذا لم يفعلوا ذلك، فسيتم استخدام عنوان الرابط هذا.</string>
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>

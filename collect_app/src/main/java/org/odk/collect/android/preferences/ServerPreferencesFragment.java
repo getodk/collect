@@ -18,7 +18,6 @@ package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
-import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -32,6 +31,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
+
+import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
@@ -135,9 +136,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             addAggregatePreferences();
         } else if (value.equals(getString(R.string.protocol_google_sheets))) {
             addGooglePreferences();
-        } else {
-            // other
-            addOtherPreferences();
         }
     }
 
@@ -192,6 +190,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         //setupTransportPreferences();
         getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
         getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
+
+        findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
+            AndroidXPreferencesActivity.start(getActivity(), CustomServerPathsFragment.class);
+            return true;
+        });
     }
 
     public void addGooglePreferences() {
@@ -221,34 +224,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         //setupTransportPreferences();
         getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
         getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
-    }
-
-    public void addOtherPreferences() {
-        addAggregatePreferences();
-        addPreferencesFromResource(R.xml.other_preferences);
-
-        formListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
-        submissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
-
-        InputFilter[] filters = {new ControlCharacterFilter(), new WhitespaceFilter()};
-
-        serverUrlPreference.getEditText().setFilters(filters);
-
-        formListUrlPreference.setOnPreferenceChangeListener(createChangeListener());
-        formListUrlPreference.setSummary(formListUrlPreference.getText());
-        formListUrlPreference.getEditText().setFilters(filters);
-        formListUrlPreference.setOnPreferenceClickListener(preference -> {
-            formListUrlPreference.getEditText().requestFocus();
-            return true;
-        });
-
-        submissionUrlPreference.setOnPreferenceChangeListener(createChangeListener());
-        submissionUrlPreference.setSummary(submissionUrlPreference.getText());
-        submissionUrlPreference.getEditText().setFilters(filters);
-        submissionUrlPreference.setOnPreferenceClickListener(preference -> {
-            submissionUrlPreference.getEditText().requestFocus();
-            return true;
-        });
     }
 
     public void initAccountPreferences() {

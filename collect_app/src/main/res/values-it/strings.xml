@@ -163,8 +163,7 @@
   <string name="edit_prompt">Modifica Prompt</string>
   <string name="selected_google_account_text">Account Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Altro</string>
-  <string name="font_size_extra_large">Molto Grande</string>
+    <string name="font_size_extra_large">Molto Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Media</string>
   <string name="font_size_small">Piccolo</string>
@@ -267,8 +266,7 @@
   <string name="sms_submission_preferences">Parametri sottomissione SMS</string>
   <string name="submission_transport">Modalità Sottomissione (avanzata)</string>
   <string name="submission_transport_types_title">Manda sottomissione con</string>
-  <string name="other_preferences">Altre impostazioni piattaforma</string>
-  <string name="google_preferences">Impostazioni di Google Sheets</string>
+    <string name="google_preferences">Impostazioni di Google Sheets</string>
   <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>

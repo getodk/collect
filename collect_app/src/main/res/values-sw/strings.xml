@@ -163,8 +163,7 @@
   <string name="edit_prompt">Hariri prompt</string>
   <string name="selected_google_account_text">Akaunti ya Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Nyingine</string>
-  <string name="font_size_extra_large">Kubwa sana</string>
+    <string name="font_size_extra_large">Kubwa sana</string>
   <string name="font_size_large">Kubwa</string>
   <string name="font_size_medium">Kati</string>
   <string name="font_size_small">Ndogo</string>
@@ -267,8 +266,7 @@
   <string name="sms_submission_preferences">Mipangilio ya uwasilishaji wa ujumbe</string>
   <string name="submission_transport"> Uwasilishaji wa usafiri (kiwango cha juu)</string>
   <string name="submission_transport_types_title">Tuma fomu pitia</string>
-  <string name="other_preferences">Mipangilio ya majukwaa  mengine</string>
-  <string name="google_preferences">Mipangilio ya karatasi za google</string>
+    <string name="google_preferences">Mipangilio ya karatasi za google</string>
   <string name="google_sheets_url_hint">Fomu lazima iwe na URL ya uwasilishaji. Kama haina, hii URL itatumika.</string>
   <string name="drive_get_file">Inachukuwa %1$s na mafaili ya midia.</string>
   <string name="no_google_account">Hakuna akaunti ya Google Iliyochaguliwa!</string>

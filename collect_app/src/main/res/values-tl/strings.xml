@@ -130,8 +130,7 @@
   <string name="edit_prompt">Pamatnugutan ang Udyok</string>
   <string name="selected_google_account_text">Google Account</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Other</string>
-  <string name="font_size_extra_large">Labis na Malaki</string>
+    <string name="font_size_extra_large">Labis na Malaki</string>
   <string name="font_size_large">Malaki</string>
   <string name="font_size_medium">Katamtaman</string>
   <string name="font_size_small">Maliit</string>

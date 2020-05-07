@@ -160,8 +160,7 @@
   <string name="edit_prompt">ప్రాంప్ట్ సవరించండి</string>
   <string name="selected_google_account_text">గూగుల్ ఖాతా</string>
   <string name="server_platform_odk_aggregate">ఓడీకే మొత్తం</string>
-  <string name="server_platform_other">ఇతర</string>
-  <string name="font_size_extra_large">చాలా పెద్దది</string>
+    <string name="font_size_extra_large">చాలా పెద్దది</string>
   <string name="font_size_large">పెద్ద</string>
   <string name="font_size_medium">మధ్యస్థం </string>
   <string name="font_size_small">చిన్న</string>
@@ -264,8 +263,7 @@
   <string name="sms_submission_preferences">SMS సబ్మిషన్ సెట్టింగులు</string>
   <string name="submission_transport">సబ్మిషన్ రవాణా (అడ్వాన్సుడ్)</string>
   <string name="submission_transport_types_title">సబ్మిషన్ పంపండి వయా</string>
-  <string name="other_preferences">ఇతర ప్లాట్‌ఫాం సెట్టింగ్‌లు</string>
-  <string name="google_preferences">గూగుల్ షీట్స్ సెట్టింగ్‌లు</string>
+    <string name="google_preferences">గూగుల్ షీట్స్ సెట్టింగ్‌లు</string>
   <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>
   <string name="drive_get_file">గెట్టింగ్ %1$sమరియు మీడియా ఫైల్స్.</string>
   <string name="no_google_account"> గూగుల్ ఖాతా ఎంచుకోబడలేదు</string>

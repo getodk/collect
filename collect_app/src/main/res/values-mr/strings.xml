@@ -144,8 +144,7 @@
   <string name="edit_prompt">सूचना संपादित करा</string>
   <string name="selected_google_account_text">गूगल खाते</string>
   <string name="server_platform_odk_aggregate">ओडीके एकत्र</string>
-  <string name="server_platform_other">इतर</string>
-  <string name="font_size_extra_large">जास्त मोठं</string>
+    <string name="font_size_extra_large">जास्त मोठं</string>
   <string name="font_size_large">मोठा</string>
   <string name="font_size_medium">मध्यम</string>
   <string name="font_size_small">लहान</string>
@@ -241,8 +240,7 @@
   <string name="go_shared">माझ्यासह शेअर केलेले</string>
   <string name="modified_on_date_at_time">\'सुधारित\' वर EEE, d MMM, yyyy \'at\' HH: mm</string>
   <string name="aggregate_preferences">ओडीक एकत्रित सेटिंग्ज</string>
-  <string name="other_preferences">इतर प्लॅटफॉर्म सेटिंग्ज</string>
-  <string name="google_preferences">गूगल पत्रक सेटिंग्ज</string>
+    <string name="google_preferences">गूगल पत्रक सेटिंग्ज</string>
   <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>

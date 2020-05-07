@@ -160,8 +160,7 @@
   <string name="edit_prompt">Редагувати запит</string>
   <string name="selected_google_account_text">Обліковий запис Google</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Інше</string>
-  <string name="font_size_extra_large">Дуже великий</string>
+    <string name="font_size_extra_large">Дуже великий</string>
   <string name="font_size_large">Великий</string>
   <string name="font_size_medium">Середній</string>
   <string name="font_size_small">Маленький</string>
@@ -264,8 +263,7 @@
   <string name="sms_submission_preferences">Налаштування повідомлень</string>
   <string name="submission_transport">Транспортування відправлень (розширені)</string>
   <string name="submission_transport_types_title">Надіслати відправлення через</string>
-  <string name="other_preferences">Налаштування інших платформ</string>
-  <string name="google_preferences">Налаштування Google Сторінок</string>
+    <string name="google_preferences">Налаштування Google Сторінок</string>
   <string name="google_sheets_url_hint">URL для відправки має бути зазначено в анкетах. Інакше, буде використано цей URL.</string>
   <string name="drive_get_file">Отримання %1$s та медіа файлів.</string>
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>

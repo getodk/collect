@@ -160,8 +160,7 @@
   <string name="edit_prompt">Uredi Prompt</string>
   <string name="selected_google_account_text">Google korisnički nalog</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Ostalo</string>
-  <string name="font_size_extra_large">Veoma veliko</string>
+    <string name="font_size_extra_large">Veoma veliko</string>
   <string name="font_size_large">Veliko</string>
   <string name="font_size_medium">Srednje</string>
   <string name="font_size_small">Malo</string>
@@ -264,8 +263,7 @@
   <string name="sms_submission_preferences">Podešavanja SMS otpremanja </string>
   <string name="submission_transport">Transport otpremanja (napredno)</string>
   <string name="submission_transport_types_title">Pošalji otpremanja preko</string>
-  <string name="other_preferences">Ostala podešavanja platforme</string>
-  <string name="google_preferences">Podešavanja Google Sheets-a</string>
+    <string name="google_preferences">Podešavanja Google Sheets-a</string>
   <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
   <string name="drive_get_file">Preuzimam %1$s i medija sadržaje.</string>
   <string name="no_google_account">Google nalog nije odabran!</string>

@@ -149,8 +149,7 @@
   <string name="edit_prompt">Prompt को संशोधित करें</string>
   <string name="selected_google_account_text">गूगल अकाउंट</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">अन्य</string>
-  <string name="font_size_extra_large">ज्यादा बड़ा</string>
+    <string name="font_size_extra_large">ज्यादा बड़ा</string>
   <string name="font_size_large">बड़ा</string>
   <string name="font_size_medium">मझला</string>
   <string name="font_size_small">छोटा</string>
@@ -246,8 +245,7 @@
   <string name="go_shared">मेरे साथ साझा किया हुआ </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'पर संशोधित\' HH:mm \'पर\' </string>
   <string name="aggregate_preferences">ODK Aggregate सेटिंग्स</string>
-  <string name="other_preferences">अन्य प्लेटफ़ॉर्म सेटिंग्स</string>
-  <string name="google_preferences">गुगल सीट सेटिंग</string>
+    <string name="google_preferences">गुगल सीट सेटिंग</string>
   <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>
   <string name="drive_get_file"> %1$sऔर मीडिया फाइलों को प्राप्त कर रहा है.</string>
   <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
