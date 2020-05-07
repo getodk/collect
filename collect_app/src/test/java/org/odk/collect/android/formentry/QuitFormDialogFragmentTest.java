@@ -60,11 +60,9 @@ public class QuitFormDialogFragmentTest {
     public void shouldShowCorrectTitle_whenNoFormIsLoaded() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        String title =  formSaveViewModel.getFormName() == null ? activity.getString(R.string.no_form_loaded)
-                : formSaveViewModel.getFormName();
         TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
 
-        assertThat(dialogTitle.getText().toString(), equalTo(title));
+        assertThat(dialogTitle.getText().toString(), equalTo(activity.getString(R.string.no_form_loaded)));
     }
 
 
@@ -74,12 +72,9 @@ public class QuitFormDialogFragmentTest {
 
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-
-        String title =  formSaveViewModel.getFormName() == null ? activity.getString(R.string.no_form_loaded)
-                : formSaveViewModel.getFormName();
         TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
 
-        assertThat(dialogTitle.getText().toString(), equalTo(title));
+        assertThat(dialogTitle.getText().toString(), equalTo("blah"));
     }
 
     @Test
