@@ -20,7 +20,9 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
@@ -64,10 +66,10 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_GATEWAY;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_PREFERENCE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_TRANSPORT_PREFERENCE;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-public class ServerPreferencesFragment extends BasePreferenceFragment implements
-        View.OnTouchListener, OnBackPressedListener {
+public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     protected EditTextPreference serverUrlPreference;
@@ -76,23 +78,68 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     //protected ExtendedEditTextPreference smsGatewayPreference;
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
+
+    @Inject
+    OpenRosaAPIClient openRosaAPIClient;
+    @Inject
+    GoogleAccountsManager accountsManager;
+    @Inject
+    Analytics analytics;
+
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
-    @Inject
-    OpenRosaAPIClient openRosaAPIClient;
+    public static ServerPreferencesFragment newInstance(boolean adminMode) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
 
-    @Inject
-    GoogleAccountsManager accountsManager;
+        ServerPreferencesFragment serverPreferencesFragment = new ServerPreferencesFragment();
+        serverPreferencesFragment.setArguments(bundle);
 
-    @Inject
-    Analytics analytics;
+        return serverPreferencesFragment;
+    }
 
-    /*
-    private ListPreference transportPreference;
-    private ExtendedPreferenceCategory smsPreferenceCategory;
-    */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.server_preferences);
+
+        initProtocolPrefs();
+    }
+
+    private void initProtocolPrefs() {
+        ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
+
+        protocolPref.setSummary(protocolPref.getEntry());
+        protocolPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (preference.getKey().equals(KEY_PROTOCOL)) {
+                String stringValue = (String) newValue;
+                ListPreference lpref = (ListPreference) preference;
+                String oldValue = lpref.getValue();
+                lpref.setValue(stringValue);
+
+                if (!newValue.equals(oldValue)) {
+                    getPreferenceScreen().removeAll();
+                    addPreferencesFromResource(R.xml.server_preferences);
+                    initProtocolPrefs();
+                    removeDisabledPrefs();
+                }
+            }
+            return true;
+        });
+
+        CharSequence value = protocolPref.getValue();
+        if (value == null || value.equals(getString(R.string.protocol_odk_default))) {
+            setDefaultAggregatePaths();
+            addAggregatePreferences();
+        } else if (value.equals(getString(R.string.protocol_google_sheets))) {
+            addGooglePreferences();
+        } else {
+            // other
+            addOtherPreferences();
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -146,58 +193,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
         getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
     }
-
-    /*
-    public void setupTransportPreferences() {
-        transportPreference = (ListPreference) findPreference(KEY_SUBMISSION_TRANSPORT_TYPE);
-        transportPreference.setOnPreferenceChangeListener(createTransportChangeListener());
-        transportPreference.setSummary(transportPreference.getEntry());
-
-        smsPreferenceCategory = (ExtendedPreferenceCategory) findPreference(KEY_SMS_PREFERENCE);
-
-        smsGatewayPreference = (ExtendedEditTextPreference) findPreference(KEY_SMS_GATEWAY);
-
-        smsGatewayPreference.setOnPreferenceChangeListener(createChangeListener());
-        smsGatewayPreference.setSummary(smsGatewayPreference.getText());
-        smsGatewayPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
-
-        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-
-        boolean smsEnabled = !transport.equals(Transport.Internet);
-        smsGatewayPreference.setEnabled(smsEnabled);
-        smsPreferenceCategory.setEnabled(smsEnabled);
-    }
-
-    private Preference.OnPreferenceChangeListener createTransportChangeListener() {
-        return (preference, newValue) -> {
-            if (preference.getKey().equals(KEY_SUBMISSION_TRANSPORT_TYPE)) {
-                String stringValue = (String) newValue;
-                ListPreference pref = (ListPreference) preference;
-                String oldValue = pref.getValue();
-
-                if (!newValue.equals(oldValue)) {
-                    pref.setValue(stringValue);
-
-                    Transport transport = Transport.fromPreference(newValue);
-
-                    boolean smsEnabled = !transport.equals(Transport.Internet);
-                    smsGatewayPreference.setEnabled(smsEnabled);
-                    smsPreferenceCategory.setEnabled(smsEnabled);
-
-                    if (transport.equals(Transport.Internet)) {
-                        transportPreference.setSummary(R.string.transport_type_internet);
-                    } else if (transport.equals(Transport.Sms)) {
-                        transportPreference.setSummary(R.string.transport_type_sms);
-                    } else {
-                        transportPreference.setSummary(R.string.transport_type_both);
-                    }
-                }
-            }
-            return true;
-        };
-    }
-    */
 
     public void addGooglePreferences() {
         addPreferencesFromResource(R.xml.google_preferences);
@@ -492,7 +487,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         }
     }
     */
-
     private void runGoogleAccountValidation() {
         String account = (String) GeneralSharedPreferences.getInstance().get(KEY_SELECTED_GOOGLE_ACCOUNT);
         String protocol = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
@@ -521,5 +515,4 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     public void doBack() {
         runGoogleAccountValidation();
     }
-
 }

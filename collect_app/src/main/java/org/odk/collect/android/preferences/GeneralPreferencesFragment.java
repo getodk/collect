@@ -63,7 +63,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
             boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
             switch (preference.getKey()) {
                 case "protocol":
-                    basePreferenceFragment = ServerPreferences.newInstance(adminMode);
+                    basePreferenceFragment = ServerPreferencesFragment.newInstance(adminMode);
                     break;
                 case "user_interface":
                     AndroidXPreferencesActivity.start(getActivity(), UserInterfacePreferencesFragment.class);
