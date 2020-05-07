@@ -17,7 +17,6 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -30,11 +29,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.DriveListItem;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -82,7 +78,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.VISIBLE);
-                formUpdateAlert.setVisibility(isNewVersion(item) ? View.VISIBLE : View.GONE);
+                formUpdateAlert.setVisibility(item.isNewerVersion() ? View.VISIBLE : View.GONE);
             } else {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_folder);
                 imageView.setImageDrawable(d);
@@ -110,16 +106,5 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         }
         holder.onBind(items.get(position));
         return view;
-    }
-
-    private boolean isNewVersion(DriveListItem item) {
-        FormsDao formsDao = new FormsDao();
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + File.separator + item.getName());
-        if (cursor != null && cursor.moveToFirst()) {
-            Long lastModifiedLocal = new File(Collect.FORMS_PATH + File.separator + item.getName()).lastModified();
-            Long lastModifiedServer = item.getDate().getValue();
-            return lastModifiedServer > lastModifiedLocal;
-        }
-        return false;
     }
 }

@@ -35,6 +35,7 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     private final int type;
 
     private boolean selected;
+    private boolean isAnUpdate;
 
     public static final int FILE = 1;
     public static final int DIR = 2;
@@ -89,6 +90,14 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public void setNewerVersion(boolean isAnUpdate) {
+        this.isAnUpdate = isAnUpdate;
+    }
+
+    public boolean isNewerVersion() {
+        return isAnUpdate;
     }
 
     public int compareTo(DriveListItem o) {
