@@ -788,9 +788,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     private boolean isNewerFormVersionAvailable(DriveListItem item) {
         FormsDao formsDao = new FormsDao();
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + File.separator + item.getName());
+        Cursor cursor = formsDao.getFormsCursorForFormFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
         if (cursor != null && cursor.moveToFirst()) {
-            Long lastModifiedLocal = new File(Collect.FORMS_PATH + File.separator + item.getName()).lastModified();
+            Long lastModifiedLocal = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
             Long lastModifiedServer = item.getDate().getValue();
             return lastModifiedServer > lastModifiedLocal;
         }
@@ -813,7 +813,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
 
                 for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
-                    File localMediaFile = new File(Collect.FORMS_PATH + File.separator + mediaDirName + File.separator + mediaFile.getName());
+                    File localMediaFile = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
                     if (!localMediaFile.exists()) {
                         return true;
                     } else {
