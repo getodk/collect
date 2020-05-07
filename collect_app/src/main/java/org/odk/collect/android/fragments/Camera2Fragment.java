@@ -643,7 +643,8 @@ public class Camera2Fragment extends Fragment
                                 previewRequest = previewRequestBuilder.build();
                                 captureSession.setRepeatingRequest(previewRequest,
                                         captureCallback, backgroundHandler);
-                                textureView.setOnClickListener(Camera2Fragment.this);
+
+                                getActivity().runOnUiThread(() -> textureView.setOnClickListener(Camera2Fragment.this));
                             } catch (CameraAccessException e) {
                                 Timber.e(e);
                             }
