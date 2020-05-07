@@ -49,7 +49,26 @@ public class ApplicationInitializer {
 
     public void initializeFrameworks() {
         NotificationUtils.createNotificationChannel(context);
+        initializeJobManager();
+        JodaTimeAndroid.init(context);
+        initializeLogging();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
+    public void initializeLocale() {
+        Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
+        new LocaleHelper().updateLocale(context);
+    }
+
+    private void initializeLogging() {
+        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
+            Timber.plant(new CrashReportingTree());
+        } else {
+            Timber.plant(new Timber.DebugTree());
+        }
+    }
+
+    private void initializeJobManager() {
         try {
             JobManager
                     .create(context)
@@ -57,21 +76,6 @@ public class ApplicationInitializer {
         } catch (JobManagerCreateException e) {
             Timber.e(e);
         }
-
-        JodaTimeAndroid.init(context);
-
-        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
-            Timber.plant(new CrashReportingTree());
-        } else {
-            Timber.plant(new Timber.DebugTree());
-        }
-
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
-
-    public void initializeLocale() {
-        Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
-        new LocaleHelper().updateLocale(context);
     }
 
     private void reloadSharedPreferences() {
