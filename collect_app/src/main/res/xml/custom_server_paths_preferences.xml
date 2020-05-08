@@ -7,6 +7,7 @@
         android:inputType="textNoSuggestions"
         android:key="formlist_url"
         android:title="@string/formlist_url"
+        app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
@@ -14,6 +15,7 @@
         android:inputType="textNoSuggestions"
         android:key="submission_url"
         android:title="@string/submission_url"
+        app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

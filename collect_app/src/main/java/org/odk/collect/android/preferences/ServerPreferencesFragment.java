@@ -64,9 +64,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_GATEWAY;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_PREFERENCE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_TRANSPORT_PREFERENCE;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
@@ -187,9 +185,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             passwordPreference.getEditText().requestFocus();
             return true;
         });
-        //setupTransportPreferences();
-        getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
-        getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
 
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
             AndroidXPreferencesActivity.start(getActivity(), CustomServerPathsFragment.class);
@@ -221,9 +216,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         });
 
         initAccountPreferences();
-        //setupTransportPreferences();
-        getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
-        getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
     }
 
     public void initAccountPreferences() {
