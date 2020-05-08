@@ -261,8 +261,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Delat med mig</string>
   <string name="modified_on_date_at_time">\'Ändrad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate inställningar</string>
-  <string name="sms_submission_preferences">Inställningar för att skicka formulär med SMS</string>
+    <string name="sms_submission_preferences">Inställningar för att skicka formulär med SMS</string>
   <string name="submission_transport">Transport för uppladdning (avancerat)</string>
   <string name="submission_transport_types_title">Skicka formulär via</string>
     <string name="google_preferences">Google Sheets inställningar</string>

@@ -254,8 +254,7 @@
   <string name="go_drive">مائی ڈرائیو</string>
   <string name="go_shared">میرے ساتھ شیئر کیا ہوا</string>
   <string name="modified_on_date_at_time"> EEE, MMM dd, yyyy\'کو\' HH:mm \'پر موڈیفائی کیا گیا\'</string>
-  <string name="aggregate_preferences">او ڈی کے اگریگیٹ سیٹینگز</string>
-  <string name="sms_submission_preferences">ایس ایم ایس جمع کرنے کی سیٹینگز</string>
+    <string name="sms_submission_preferences">ایس ایم ایس جمع کرنے کی سیٹینگز</string>
   <string name="submission_transport">سبمشن ٹرانسپورٹ (ایڈوانسڈ)</string>
   <string name="submission_transport_types_title">کے ذریعے جمع کرائیں</string>
     <string name="google_preferences">گوگل شیٹ کی سیٹنگز</string>

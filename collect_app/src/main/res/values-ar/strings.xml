@@ -262,8 +262,7 @@
   <string name="go_drive">المحرك الخاص بي</string>
   <string name="go_shared">مشاركة معي</string>
   <string name="modified_on_date_at_time">\'تم التعديل ب \' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
-  <string name="aggregate_preferences">اعدادات  ODK Aggregate</string>
-  <string name="sms_submission_preferences">إعدادات إرسال SMS</string>
+    <string name="sms_submission_preferences">إعدادات إرسال SMS</string>
   <string name="submission_transport">نقل الارسال (متقدم)</string>
   <string name="submission_transport_types_title">إرسال الاستمارات عبر</string>
     <string name="google_preferences">اعدادات صفحات الجوجل</string>

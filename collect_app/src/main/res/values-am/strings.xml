@@ -184,7 +184,6 @@
   <string name="google_drive">ጉግል Drive</string>
   <string name="go_drive">የእኔ Drive</string>
   <string name="go_shared">ከእኔ ጋር የተጋሩ</string>
-  <string name="aggregate_preferences">ODK Aggregate ቅንጅቶች</string>
     <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
   <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>

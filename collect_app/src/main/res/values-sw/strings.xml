@@ -262,8 +262,7 @@
   <string name="go_drive">Hifadhi yangu</string>
   <string name="go_shared">Imeshirikishwa na mimi</string>
   <string name="modified_on_date_at_time">\'Imerekebishwa\' EEE, MMM dd, yyyy \'katika\' HH:mm</string>
-  <string name="aggregate_preferences">Mipangilio ya ODK kwa ujumla</string>
-  <string name="sms_submission_preferences">Mipangilio ya uwasilishaji wa ujumbe</string>
+    <string name="sms_submission_preferences">Mipangilio ya uwasilishaji wa ujumbe</string>
   <string name="submission_transport"> Uwasilishaji wa usafiri (kiwango cha juu)</string>
   <string name="submission_transport_types_title">Tuma fomu pitia</string>
     <string name="google_preferences">Mipangilio ya karatasi za google</string>

@@ -236,8 +236,7 @@
   <string name="high_resolution_summary">Mundëso regjistrimin video me rezolucion të lartë</string>
   <string name="go_shared">Ndarë me mua</string>
   <string name="modified_on_date_at_time">\'Modifikuar më\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <string name="aggregate_preferences">Parametrat e ODK Aggregate</string>
-  <string name="sms_submission_preferences">Parametrat për të dërguar SMS</string>
+    <string name="sms_submission_preferences">Parametrat për të dërguar SMS</string>
     <string name="google_preferences">Parametrat e Google Sheets</string>
   <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>

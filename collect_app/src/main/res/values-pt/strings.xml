@@ -248,8 +248,7 @@ Escolher Imagem</string>
   <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>
   <string name="modified_on_date_at_time">\'Modificado em\' EEE, MMM dd, yyyy \'às\' HH:mm</string>
-  <string name="aggregate_preferences">Configurações do Agregador ODK.</string>
-  <string name="sms_submission_preferences">Parâmetros de envio SMS</string>
+    <string name="sms_submission_preferences">Parâmetros de envio SMS</string>
   <string name="submission_transport">Transporte envio (avançado)</string>
   <string name="submission_transport_types_title">Enviar submissões por</string>
     <string name="google_preferences">Configurações Planilhas Google</string>

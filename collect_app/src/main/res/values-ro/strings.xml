@@ -229,7 +229,6 @@
   <string name="go_drive">Discul meu</string>
   <string name="go_shared">Partajate cu mine</string>
   <string name="modified_on_date_at_time">\'Modificat în\' EEE, dd MMM yyyy \'la\' HH:mm</string>
-  <string name="aggregate_preferences">Setări ODK Aggregate</string>
     <string name="google_preferences">Setări Google Sheets</string>
   <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
   <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>

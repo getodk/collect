@@ -257,8 +257,7 @@
   <string name="go_drive">Drive saya</string>
   <string name="go_shared">Berbagi dengan saya</string>
   <string name="modified_on_date_at_time">\'dirubah pada tanggal\' EEE, MMM dd, yyyy \'di jam\' HH:mm</string>
-  <string name="aggregate_preferences">Pengaturan ODK Aggregate</string>
-  <string name="sms_submission_preferences">Pengaturan pengiriman SMS</string>
+    <string name="sms_submission_preferences">Pengaturan pengiriman SMS</string>
   <string name="submission_transport">Pengiriman (Mahir)</string>
   <string name="submission_transport_types_title">Pengiriman melalui</string>
     <string name="google_preferences">Pengaturan Google Sheets</string>

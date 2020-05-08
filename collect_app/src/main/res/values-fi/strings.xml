@@ -262,8 +262,7 @@
   <string name="go_drive">Oma Drive</string>
   <string name="go_shared">Minun kanssani jaetut</string>
   <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate -asetukset</string>
-  <string name="sms_submission_preferences">SMS lähetysasetukset</string>
+    <string name="sms_submission_preferences">SMS lähetysasetukset</string>
   <string name="submission_transport">Lähetyksen välitys (lisäasetukset)</string>
   <string name="submission_transport_types_title">Minkä kautta lähetetään</string>
     <string name="google_preferences">Google Sheets -asetukset</string>

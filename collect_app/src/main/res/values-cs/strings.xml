@@ -262,8 +262,7 @@
   <string name="go_drive">Můj disk</string>
   <string name="go_shared">Sdíleno se mnou</string>
   <string name="modified_on_date_at_time">\'Upraveno v \' EEE, dd MMM, yyyy \'v\' HH:mm</string>
-  <string name="aggregate_preferences">Nastavení ODK Aggregate</string>
-  <string name="sms_submission_preferences">Nastavení odesílání SMS</string>
+    <string name="sms_submission_preferences">Nastavení odesílání SMS</string>
   <string name="submission_transport">Odeslání zásilky (pokročilé)</string>
   <string name="submission_transport_types_title">Odeslání přes</string>
     <string name="google_preferences">Nastavení tabulky Google</string>

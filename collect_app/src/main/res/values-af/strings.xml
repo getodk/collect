@@ -227,7 +227,6 @@
   <string name="go_drive">My Skyf</string>
   <string name="go_shared">Met my gedeel</string>
   <string name="modified_on_date_at_time">\'Verander op\' EEE, MMM dd, yyyy \'om\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate verstellings</string>
   <string name="drive_get_file">Besig om %1$s en media leêrs te haal.</string>
   <string name="no_google_account">Geen Google rekening geselekteer nie!</string>
   <string name="notification_error">Fout met vertoon van kennisgewing teks</string>

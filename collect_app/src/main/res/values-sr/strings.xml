@@ -259,8 +259,7 @@
   <string name="go_drive">Moj Drive</string>
   <string name="go_shared">Podijeljeno sa mnom</string>
   <string name="modified_on_date_at_time">\'Modifikovano na\' EEE, MMM dd, yyyy \'u\' HH:mm</string>
-  <string name="aggregate_preferences">Podešavanja ODK Aggregate servera</string>
-  <string name="sms_submission_preferences">Podešavanja SMS otpremanja </string>
+    <string name="sms_submission_preferences">Podešavanja SMS otpremanja </string>
   <string name="submission_transport">Transport otpremanja (napredno)</string>
   <string name="submission_transport_types_title">Pošalji otpremanja preko</string>
     <string name="google_preferences">Podešavanja Google Sheets-a</string>

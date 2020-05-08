@@ -262,8 +262,7 @@
   <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
   <string name="modified_on_date_at_time">\'Zmieniony\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <string name="aggregate_preferences">Ustawienia ODK Aggregate</string>
-  <string name="sms_submission_preferences">Ustawienia przesyłania SMSów</string>
+    <string name="sms_submission_preferences">Ustawienia przesyłania SMSów</string>
   <string name="submission_transport">Przesyłanie zgłoszeń (zaawansowane)</string>
   <string name="submission_transport_types_title">Przesyłaj zgłoszenia poprzez</string>
     <string name="google_preferences">Ustawienia Google Sheets</string>

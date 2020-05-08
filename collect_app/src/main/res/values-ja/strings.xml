@@ -262,8 +262,7 @@
   <string name="go_drive">マイ ドライブ</string>
   <string name="go_shared">私と共有</string>
   <string name="modified_on_date_at_time">yyyy/MM/dd HH:mm \'に変更しました\'</string>
-  <string name="aggregate_preferences">ODK Aggregate 設定</string>
-  <string name="sms_submission_preferences">SMS 送信設定</string>
+    <string name="sms_submission_preferences">SMS 送信設定</string>
   <string name="submission_transport">送信トランスポート (詳細)</string>
   <string name="submission_transport_types_title">送信…</string>
     <string name="google_preferences">Google スプレッドシート設定</string>

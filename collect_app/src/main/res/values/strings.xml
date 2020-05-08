@@ -269,7 +269,6 @@
     <string name="go_drive">My Drive</string>
     <string name="go_shared">Shared with Me</string>
     <string name="modified_on_date_at_time">\'Modified on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="aggregate_preferences">ODK Aggregate settings</string>
     <string name="sms_submission_preferences">SMS submission settings</string>
     <string name="submission_transport">Submission transport (advanced)</string>
     <string name="submission_transport_types_title">Send submissions via</string>

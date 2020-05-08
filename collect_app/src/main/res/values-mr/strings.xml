@@ -239,7 +239,6 @@
   <string name="go_drive">माझे ड्राइव्ह</string>
   <string name="go_shared">माझ्यासह शेअर केलेले</string>
   <string name="modified_on_date_at_time">\'सुधारित\' वर EEE, d MMM, yyyy \'at\' HH: mm</string>
-  <string name="aggregate_preferences">ओडीक एकत्रित सेटिंग्ज</string>
     <string name="google_preferences">गूगल पत्रक सेटिंग्ज</string>
   <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>

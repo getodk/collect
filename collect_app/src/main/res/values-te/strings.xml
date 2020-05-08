@@ -259,8 +259,7 @@
   <string name="go_drive">నా డ్రైవ్</string>
   <string name="go_shared">నాతో పంచుకున్నవి </string>
   <string name="modified_on_date_at_time">\'సవరించిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm </string>
-  <string name="aggregate_preferences">ODK మొత్తం సెట్టింగ్‌లు</string>
-  <string name="sms_submission_preferences">SMS సబ్మిషన్ సెట్టింగులు</string>
+    <string name="sms_submission_preferences">SMS సబ్మిషన్ సెట్టింగులు</string>
   <string name="submission_transport">సబ్మిషన్ రవాణా (అడ్వాన్సుడ్)</string>
   <string name="submission_transport_types_title">సబ్మిషన్ పంపండి వయా</string>
     <string name="google_preferences">గూగుల్ షీట్స్ సెట్టింగ్‌లు</string>

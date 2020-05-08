@@ -255,8 +255,7 @@
   <string name="go_drive">मेरो ड्राइभ</string>
   <string name="go_shared">म संग साझा गरिएको </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'को\' HH:mm \'मा परिवर्तन गरिएको\'</string>
-  <string name="aggregate_preferences">ODK एग्रीगेट सेटिङ्स</string>
-  <string name="sms_submission_preferences">SMS सेटिङहरू</string>
+    <string name="sms_submission_preferences">SMS सेटिङहरू</string>
   <string name="submission_transport_types_title">फारमहरू कसरी पठाउने?</string>
     <string name="google_preferences">गुगल सिट्स सेटिङ्स</string>
   <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>

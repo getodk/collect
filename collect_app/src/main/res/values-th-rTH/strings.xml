@@ -225,7 +225,6 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">แบ่งปันกับฉัน</string>
   <string name="modified_on_date_at_time">\'แก้ไขเมื่อ\' EEE, MMM dd, yyy \'เวลา\' HH:mm</string>
-  <string name="aggregate_preferences">ตั้งค่า ODK Aggregate</string>
     <string name="google_preferences">การตั้งค่า Google Sheets</string>
   <string name="drive_get_file">ได้รับ %1$s และไฟล์ภาพและเสียง</string>
   <string name="no_google_account">ไม่ได้เลือกบัญชีผู้ใช้งาน Google</string>

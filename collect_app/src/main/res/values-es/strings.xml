@@ -264,8 +264,7 @@
   <string name="go_drive">Mi Drive</string>
   <string name="go_shared">Compartido conmigo</string>
   <string name="modified_on_date_at_time">\'Modificado el\' EEE, MMM dd, yyyy \'a las\' HH:mm</string>
-  <string name="aggregate_preferences">Ajustes de ODK Aggregate</string>
-  <string name="sms_submission_preferences">Ajustes para envío de SMS</string>
+    <string name="sms_submission_preferences">Ajustes para envío de SMS</string>
   <string name="submission_transport">Envío de transporte (avanzado)</string>
   <string name="submission_transport_types_title">Hacer envíos vía</string>
     <string name="google_preferences">Características de Google Sheets</string>

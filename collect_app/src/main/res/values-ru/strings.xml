@@ -259,8 +259,7 @@
   <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
-  <string name="aggregate_preferences">ODK AGGREGATE НАСТРОЙКИ</string>
-  <string name="sms_submission_preferences">НАСТРОЙКИ SMS</string>
+    <string name="sms_submission_preferences">НАСТРОЙКИ SMS</string>
   <string name="submission_transport">СПОСОБ ВЫГРУЗКИ</string>
   <string name="submission_transport_types_title">Выгружать результаты через</string>
     <string name="google_preferences">НАСТРОЙКИ GOOGLE ТАБЛИЦ</string>
