@@ -231,7 +231,13 @@ public class SplashScreenActivity extends Activity {
     }
 
     private void initMapBox() {
-        MapView mapView = findViewById(R.id.mapView);
-        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
+        // This "one weird trick" lets us initialize MapBox at app start when the internet is
+        // most likely to be available. This is annoyingly needed for offline tiles to work.
+        try {
+            MapView mapView = getLayoutInflater().inflate(R.layout.mapbox_init, null).findViewById(R.id.mapView);
+            mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
+        } catch (Exception ignored) {
+            // This will crash on devices where the arch for MapBox is not included
+        }
     }
 }
