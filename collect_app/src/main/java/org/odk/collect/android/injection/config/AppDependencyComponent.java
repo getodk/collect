@@ -37,6 +37,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -154,6 +155,8 @@ public interface AppDependencyComponent {
     void inject(QRCodeTabsActivity qrCodeTabsActivity);
 
     void inject(ShowQRCodeFragment showQRCodeFragment);
+
+    void inject(StorageInitializer storageInitializer);
 
     void inject(StorageMigrationService storageMigrationService);
 

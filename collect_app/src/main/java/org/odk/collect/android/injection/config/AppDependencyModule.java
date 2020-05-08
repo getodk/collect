@@ -34,6 +34,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.preferences.qr.ObservableQRCodeGenerator;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.migration.StorageEraser;
@@ -175,6 +176,12 @@ public class AppDependencyModule {
     @Singleton
     public StorageMigrationRepository providesStorageMigrationRepository() {
         return new StorageMigrationRepository();
+    }
+
+    @Provides
+    @Singleton
+    public StorageInitializer providesStorageInitializer() {
+        return new StorageInitializer();
     }
 
     @Provides
