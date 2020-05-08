@@ -29,6 +29,9 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.Style;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -83,6 +86,7 @@ public class SplashScreenActivity extends Activity {
                 }
 
                 init();
+                initMapBox();
             }
 
             @Override
@@ -224,5 +228,10 @@ public class SplashScreenActivity extends Activity {
             }
         };
         t.start();
+    }
+
+    private void initMapBox() {
+        MapView mapView = findViewById(R.id.mapView);
+        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
     }
 }

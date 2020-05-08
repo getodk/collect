@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 University of Washington
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -13,73 +12,63 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true">
 
-    <include layout="@layout/app_bar_layout"/>
+    <include layout="@layout/app_bar_layout" />
 
     <LinearLayout
-            android:id="@+id/buttonholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:weightSum="3">
+        android:id="@+id/buttonholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
-        <Button
-                android:id="@+id/back_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="12dp"
-                android:text="@string/go_back"
-                android:textAllCaps="false"
-                android:textSize="16sp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/back_button"
+            style="@style/Widget.Collect.Button.BottomOption"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
+            android:text="@string/go_back" />
 
-        <Button
-                android:id="@+id/download_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:padding="12dp"
-                android:text="@string/download_selected"
-                android:textAllCaps="false"
-                android:textSize="16sp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/download_button"
+            style="@style/Widget.Collect.Button.BottomOption"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
+            android:enabled="false"
+            android:text="@string/download_selected" />
 
-        <Button
-                android:id="@+id/root_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="12dp"
-                android:text="@string/go_shared"
-                android:textAllCaps="false"
-                android:textSize="16sp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/root_button"
+            style="@style/Widget.Collect.Button.BottomOption"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
+            android:text="@string/go_shared" />
 
     </LinearLayout>
 
     <ListView
-            android:id="@android:id/list"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/buttonholder"
-            android:layout_below="@id/appBarLayout"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"
-            android:divider="?dividerCompat"/>
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttonholder"
+        android:layout_below="@id/appBarLayout"
+        android:clipToPadding="false"
+        android:divider="?dividerCompat"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical" />
 
     <TextView
-            android:id="@android:id/empty"
-            android:layout_above="@+id/buttonholder"
-            android:layout_below="@id/appBarLayout"
-            style="@style/Widget.Collect.TextView.Empty"
-            android:text="@string/google_search_browse"/>
+        android:id="@android:id/empty"
+        style="@style/Widget.Collect.TextView.Empty"
+        android:layout_above="@+id/buttonholder"
+        android:layout_below="@id/appBarLayout"
+        android:text="@string/google_search_browse" />
 
 </RelativeLayout>

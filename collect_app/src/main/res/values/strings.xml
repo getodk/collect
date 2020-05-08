@@ -657,6 +657,7 @@
     <string name="app_theme">Theme</string>
     <string name="theme_light">Light theme</string>
     <string name="theme_dark">Dark theme</string>
+    <string name="theme_magenta">Magenta theme (experimental)</string>
     <string name="cannot_create_directory">Cannot create directory: %s</string>
     <string name="not_a_directory">%s exists, but is not a directory</string>
     <string name="location_metadata">Satellites available: %1$d/24\n\nTime elapsed: %2$s</string>

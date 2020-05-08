@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -69,6 +69,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.version.VersionInformation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -143,6 +144,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Inject
     AdminPasswordProvider adminPasswordProvider;
 
+    @Inject
+    VersionInformation versionInformation;
+
     private MainMenuViewModel viewModel;
 
     @Override
@@ -151,7 +155,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         Collect.getInstance().getComponent().inject(this);
         setContentView(R.layout.main_menu);
         ButterKnife.bind(this);
-        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory()).get(MainMenuViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory(versionInformation)).get(MainMenuViewModel.class);
 
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);
@@ -455,7 +459,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         alertDialog.show();
     }
 

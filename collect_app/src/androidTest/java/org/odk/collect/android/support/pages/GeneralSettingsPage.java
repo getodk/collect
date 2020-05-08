@@ -28,30 +28,9 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return this;
     }
 
-    public GeneralSettingsPage clickOnUserInterface() {
+    public UserInterfacePage clickOnUserInterface() {
         onData(PreferenceMatchers.withKey("user_interface")).perform(click());
-        return this;
-    }
-
-    public GeneralSettingsPage clickOnLanguage() {
-        onData(PreferenceMatchers.withKey("app_language")).perform(click());
-        return this;
-    }
-
-    public GeneralSettingsPage clickOnSelectedLanguage(String language) {
-        onView(withText(language)).perform(ViewActions.scrollTo());
-        onView(withText(language)).perform(click());
-        return this;
-    }
-
-    public GeneralSettingsPage clickNavigation() {
-        clickOnString(R.string.navigation);
-        return this;
-    }
-
-    public GeneralSettingsPage clickUseSwipesAndButtons() {
-        clickOnString(R.string.swipe_buttons_navigation);
-        return this;
+        return new UserInterfacePage(rule).assertOnPage();
     }
 
     public GeneralSettingsPage openFormManagement() {
@@ -116,11 +95,6 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return this;
     }
 
-    public GeneralSettingsPage clickOnTheme() {
-        onData(PreferenceMatchers.withKey("appTheme")).perform(click());
-        return this;
-    }
-
     public GeneralSettingsPage clickOnAutoSend() {
         onData(PreferenceMatchers.withKey("autosend")).perform(click());
         return this;
@@ -136,10 +110,4 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         onView(withText("Server")).check(doesNotExist());
         return this;
     }
-
-    public GeneralSettingsPage clickUseNavigationButtons() {
-        clickOnString(R.string.buttons_navigation);
-        return this;
-    }
-
 }

@@ -9,4 +9,8 @@
         <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
     </style>
 
+    <style name="Theme.Collect.Activity.FormEntryActivity.Magenta" parent="Theme.Collect.Magenta">
+        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
+    </style>
+
 </resources>

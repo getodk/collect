@@ -14,7 +14,7 @@ public class MapboxUtils {
     }
 
     /** Attempts to initialize Mapbox; returns the singleton Mapbox if successful. */
-    static Mapbox initMapbox() {
+    public static Mapbox initMapbox() {
         if (initAttempted) {
             return mapbox;
         }
@@ -23,6 +23,7 @@ public class MapboxUtils {
             // To use the Mapbox base maps, we have to initialize the Mapbox SDK with
             // an access token. Configure this token in collect_app/secrets.properties.
             mapbox = Mapbox.getInstance(Collect.getInstance(), BuildConfig.MAPBOX_ACCESS_TOKEN);
+            Mapbox.setConnected(true);
         } catch (Exception | Error e) {
             // To keep our APK from getting too big, we decided to include the
             // Mapbox native library only for the most common binary architectures.

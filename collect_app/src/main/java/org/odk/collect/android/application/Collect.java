@@ -36,6 +36,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
@@ -184,6 +185,7 @@ public class Collect extends Application {
         }
 
         setupOSMDroid();
+        initMapProviders();
 
         // Force inclusion of scoped storage strings so they can be translated
         Timber.i("%s %s", getString(R.string.scoped_storage_banner_text),
@@ -192,6 +194,11 @@ public class Collect extends Application {
 
     protected void setupOSMDroid() {
         org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
+    }
+
+    private void initMapProviders() {
+        new com.google.android.gms.maps.MapView(this).onCreate(null);
+        MapboxUtils.initMapbox();
     }
 
     private void setupDagger() {

@@ -15,6 +15,7 @@ package org.odk.collect.android.preferences.qr;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,7 +31,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
-import androidx.fragment.app.Fragment;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;

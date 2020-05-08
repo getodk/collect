@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -660,7 +660,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), quitListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         viewModel.setAlertDialogMsg(message);
         viewModel.setAlertTitle(title);

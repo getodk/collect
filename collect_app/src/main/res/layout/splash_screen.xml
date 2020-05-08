@@ -7,6 +7,12 @@
     android:orientation="vertical"
     android:padding="10dip">
 
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:visibility="invisible"/>
+
     <ImageView
         android:id="@+id/splash"
         android:layout_width="wrap_content"

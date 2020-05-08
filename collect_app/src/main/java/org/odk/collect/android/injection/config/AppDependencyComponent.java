@@ -36,6 +36,7 @@ import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -169,6 +170,8 @@ public interface AppDependencyComponent {
     void inject(FormManagementPreferences formManagementPreferences);
 
     void inject(IdentityPreferences identityPreferences);
+
+    void inject(UserInterfacePreferencesFragment userInterfacePreferencesFragment);
 
     void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
 

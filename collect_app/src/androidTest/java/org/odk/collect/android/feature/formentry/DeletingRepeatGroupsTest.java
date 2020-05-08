@@ -15,6 +15,7 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.pages.FormHierarchyPage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -63,7 +64,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfFirstRepeatInHierarchy_deletesFirstRepeat() {
-        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+        FormHierarchyPage page = new FormEntryPage("repeatGroups", activityTestRule)
                 .clickGoToArrow()
                 .clickGoUpIcon();
 
@@ -81,7 +82,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfMiddleRepeatInHierarchy_deletesMiddleRepeat() {
-        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+        FormHierarchyPage page = new FormEntryPage("repeatGroups", activityTestRule)
                 .clickGoToArrow()
                 .clickGoUpIcon();
 
@@ -99,7 +100,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfLastRepeatInHierarchy_deletesLastRepeat() {
-        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+        FormHierarchyPage page = new FormEntryPage("repeatGroups", activityTestRule)
                 .clickGoToArrow()
                 .clickGoUpIcon();
 
@@ -123,7 +124,7 @@ public class DeletingRepeatGroupsTest {
                 .clickGoUpIcon()
                 .clickOnText("repeatGroupFieldList")
                 .clickOnText("repeatGroupFieldList > 1")
-                .clickOnText("number1")
+                .clickOnQuestion("number1")
                 .deleteGroup("number1")
                 .assertText("2");
     }
@@ -136,7 +137,7 @@ public class DeletingRepeatGroupsTest {
                 .clickGoUpIcon()
                 .clickOnText("repeatGroupFieldList")
                 .clickOnText("repeatGroupFieldList > 2")
-                .clickOnText("number1")
+                .clickOnQuestion("number1")
                 .deleteGroup("number1")
                 .assertText("3");
     }
@@ -149,14 +150,14 @@ public class DeletingRepeatGroupsTest {
                 .clickGoUpIcon()
                 .clickOnText("repeatGroupFieldList")
                 .clickOnText("repeatGroupFieldList > 4")
-                .clickOnText("number1")
+                .clickOnQuestion("number1")
                 .deleteGroup("number1")
                 .checkIsStringDisplayed(R.string.quit_entry);
     }
 
     @Test
     public void requestingDeletionOfFirstRepeatWithFieldListInHierarchy_deletesFirstRepeat() {
-        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+        FormHierarchyPage page = new FormEntryPage("repeatGroups", activityTestRule)
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickGoUpIcon()
@@ -175,7 +176,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfMiddleRepeatWithFieldListInHierarchy_deletesMiddleRepeat() {
-        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+        FormHierarchyPage page = new FormEntryPage("repeatGroups", activityTestRule)
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickGoUpIcon()
@@ -193,7 +194,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfLastRepeatWithFieldListInHierarchy_deletesLastRepeat() {
-        FormEntryPage page = new FormEntryPage("repeatGroups", activityTestRule)
+        FormHierarchyPage page = new FormEntryPage("repeatGroups", activityTestRule)
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickGoUpIcon()
