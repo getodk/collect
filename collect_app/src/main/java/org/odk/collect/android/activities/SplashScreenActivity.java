@@ -236,7 +236,7 @@ public class SplashScreenActivity extends Activity {
         try {
             MapView mapView = getLayoutInflater().inflate(R.layout.mapbox_init, null).findViewById(R.id.mapView);
             mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
-        } catch (Exception ignored) {
+        } catch (Exception | Error ignored) {
             // This will crash on devices where the arch for MapBox is not included
         }
     }
