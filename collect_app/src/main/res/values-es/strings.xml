@@ -264,11 +264,7 @@
   <string name="go_drive">Mi Drive</string>
   <string name="go_shared">Compartido conmigo</string>
   <string name="modified_on_date_at_time">\'Modificado el\' EEE, MMM dd, yyyy \'a las\' HH:mm</string>
-    <string name="sms_submission_preferences">Ajustes para envío de SMS</string>
-  <string name="submission_transport">Envío de transporte (avanzado)</string>
-  <string name="submission_transport_types_title">Hacer envíos vía</string>
-    <string name="google_preferences">Características de Google Sheets</string>
-  <string name="google_sheets_url_hint">Los formularios deben establecer una URL para envio. Si no lo hacen, se usará la siguiente URL</string>
+    <string name="google_sheets_url_hint">Los formularios deben establecer una URL para envio. Si no lo hacen, se usará la siguiente URL</string>
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
@@ -641,9 +637,7 @@
   <string name="instance_upload_cancelled">Cargue de Instancia cancelada</string>
   <string name="hide_old_form_versions_setting_title">Ocultar formularios anteriores </string>
   <string name="hide_old_form_versions_setting_summary">Sólo la versión mas nueva aparecerá en Llenar Nuevo Formulario</string>
-  <string name="sms_pref_dialog_title">Teléfono de destino</string>
-  <string name="sms_pref_title">Teléfono de destino</string>
-  <string name="sms_invalid_phone_number">¡Número de teléfono inválido!</string>
+    <string name="sms_invalid_phone_number">¡Número de teléfono inválido!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a no recepción\'</string>
   <string name="sms_no_number">\'Fallo en\' EEE, MMM dd, yyyy \'at\' HH:mm \': Falta número telefónico\'</string>
@@ -660,10 +654,7 @@
   <string name="sms_submission_queued">En cola para envío</string>
   <string name="sms_submissions_notif_title">SMS enviados</string>
   <string name="sms_submissions_notif_description">Varios formularios están siendo enviados actualmente.</string>
-  <string name="transport_type_internet">Wifi/Datos (recomendado)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Seleccionar al Enviar</string>
-  <string name="rank_items">Ranking de Items</string>
+    <string name="rank_items">Ranking de Items</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
   <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>

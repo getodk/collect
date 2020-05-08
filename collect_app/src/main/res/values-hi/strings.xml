@@ -244,8 +244,7 @@
   <string name="go_drive">माई ड्राइव</string>
   <string name="go_shared">मेरे साथ साझा किया हुआ </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'पर संशोधित\' HH:mm \'पर\' </string>
-    <string name="google_preferences">गुगल सीट सेटिंग</string>
-  <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>
+    <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>
   <string name="drive_get_file"> %1$sऔर मीडिया फाइलों को प्राप्त कर रहा है.</string>
   <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
   <string name="google_set_account">आपने गूगल शीत को अपने सर्वर के रूप में चुना है, कृपया जारी रखने से पहले सामान्य सेटिंग में संबंधित  गूगल अकाउंट का चयन करें</string>

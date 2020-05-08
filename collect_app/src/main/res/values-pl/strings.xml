@@ -262,11 +262,7 @@
   <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
   <string name="modified_on_date_at_time">\'Zmieniony\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-    <string name="sms_submission_preferences">Ustawienia przesyłania SMSów</string>
-  <string name="submission_transport">Przesyłanie zgłoszeń (zaawansowane)</string>
-  <string name="submission_transport_types_title">Przesyłaj zgłoszenia poprzez</string>
-    <string name="google_preferences">Ustawienia Google Sheets</string>
-  <string name="google_sheets_url_hint">Formularze muszą ustawić URL przesyłania. Jeśli nie, ten adres URL zostanie użyty.</string>
+    <string name="google_sheets_url_hint">Formularze muszą ustawić URL przesyłania. Jeśli nie, ten adres URL zostanie użyty.</string>
   <string name="drive_get_file">Pobieram %1$s i pliki medialne.</string>
   <string name="no_google_account">Nie wybrałeś konta Google!</string>
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
@@ -642,9 +638,7 @@
   <string name="instance_upload_cancelled">Przesyłanie zostało anulowane</string>
   <string name="hide_old_form_versions_setting_title">Ukryj stare wersje formularzy</string>
   <string name="hide_old_form_versions_setting_summary">Tylko najnowsza wersja pojawi się w Wypełnij Pusty Formularz</string>
-  <string name="sms_pref_dialog_title">Docelowy numer telefonu</string>
-  <string name="sms_pref_title">Docelowy numer telefonu</string>
-  <string name="sms_invalid_phone_number">Nieprawidłowy numer telefonu!</string>
+    <string name="sms_invalid_phone_number">Nieprawidłowy numer telefonu!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu braku zasięgu.\'</string>
   <string name="sms_no_number">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu braku numeru telefonu.\'</string>
@@ -663,10 +657,7 @@
   <string name="sms_submission_queued">W kolejce do przesłania.</string>
   <string name="sms_submissions_notif_title">Przesyłanie SMSów</string>
   <string name="sms_submissions_notif_description">Obcenie przesyłanych jest kilka formularzy.</string>
-  <string name="transport_type_internet">Wifi/Dane pakietowe (zalecane)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Wybierz przy wysyłaniu</string>
-  <string name="rank_items">Uszereguj pozycje</string>
+    <string name="rank_items">Uszereguj pozycje</string>
   <string name="loading_form_failed">Wystąpił błąd w trakcie ładowania formularza. Spróbuj ponownie,</string>
   <string name="missing_google_account_dialog_title">Nie wybrano konta Google</string>
   <string name="missing_google_account_dialog_desc">By przesłać formularz poprzez Arkusze Google, zapisz swoje konto Google w ustawieniach serwera.</string>

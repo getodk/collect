@@ -261,11 +261,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Delat med mig</string>
   <string name="modified_on_date_at_time">\'Ändrad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
-    <string name="sms_submission_preferences">Inställningar för att skicka formulär med SMS</string>
-  <string name="submission_transport">Transport för uppladdning (avancerat)</string>
-  <string name="submission_transport_types_title">Skicka formulär via</string>
-    <string name="google_preferences">Google Sheets inställningar</string>
-  <string name="google_sheets_url_hint">Formulären måste ange en uppladdnings-URL. Om dem inte gör det används denna URL.</string>
+    <string name="google_sheets_url_hint">Formulären måste ange en uppladdnings-URL. Om dem inte gör det används denna URL.</string>
   <string name="drive_get_file">Hämtar %1$s och mediafiler.</string>
   <string name="no_google_account">Inget Google-konto valt!</string>
   <string name="google_set_account">Du har valt Google Sheets som din server, vänligen välj motsvarande Google-konto under allmänna inställningar innan du fortsätter</string>
@@ -591,9 +587,7 @@ Dela ODK Collect med dem.</string>
   <string name="sms_submission_queued">Köad för uppladdning</string>
   <string name="sms_submissions_notif_title">Skicka med SMS</string>
   <string name="sms_submissions_notif_description">Flera formulär håller just nu på att laddas upp</string>
-  <string name="transport_type_internet">WiFi/Mobildata (rekommenderas)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="loading_form_failed">Ett fel uppstod vid laddning av formuläret. Var vänlig och försök igen.</string>
+    <string name="loading_form_failed">Ett fel uppstod vid laddning av formuläret. Var vänlig och försök igen.</string>
   <string name="missing_google_account_dialog_title">Google-konto är inte inställt</string>
   <string name="notification_channel_name">Allmäna notifieringar</string>
   <string name="open_file">Öppna fil</string>

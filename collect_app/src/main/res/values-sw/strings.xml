@@ -262,11 +262,7 @@
   <string name="go_drive">Hifadhi yangu</string>
   <string name="go_shared">Imeshirikishwa na mimi</string>
   <string name="modified_on_date_at_time">\'Imerekebishwa\' EEE, MMM dd, yyyy \'katika\' HH:mm</string>
-    <string name="sms_submission_preferences">Mipangilio ya uwasilishaji wa ujumbe</string>
-  <string name="submission_transport"> Uwasilishaji wa usafiri (kiwango cha juu)</string>
-  <string name="submission_transport_types_title">Tuma fomu pitia</string>
-    <string name="google_preferences">Mipangilio ya karatasi za google</string>
-  <string name="google_sheets_url_hint">Fomu lazima iwe na URL ya uwasilishaji. Kama haina, hii URL itatumika.</string>
+    <string name="google_sheets_url_hint">Fomu lazima iwe na URL ya uwasilishaji. Kama haina, hii URL itatumika.</string>
   <string name="drive_get_file">Inachukuwa %1$s na mafaili ya midia.</string>
   <string name="no_google_account">Hakuna akaunti ya Google Iliyochaguliwa!</string>
   <string name="google_set_account">Umechagua karatasi za Google kama seva yako, tafadhali chagua akaunti ya Google inayoshabiliana katika mpangilio wa jumla kabla ya kuendelea</string>
@@ -605,9 +601,7 @@
   <string name="instance_upload_cancelled">Mfano wa kupakia umesitishwa</string>
   <string name="hide_old_form_versions_setting_title">Ficha matoleo ya fomu za zamani</string>
   <string name="hide_old_form_versions_setting_summary">Toleo jipya zaidi pekee itaonekana katika kujaza fomu tupu</string>
-  <string name="sms_pref_dialog_title">Nambari ya simu ya fikio</string>
-  <string name="sms_pref_title">Nambari ya simu ya fikio</string>
-  <string name="sms_invalid_phone_number">Namba ya simu batili!</string>
+    <string name="sms_invalid_phone_number">Namba ya simu batili!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Imeshidwa\' EEE, MMM dd, yyyy, \'muda\' HH:mm \'kutokana na kutokuwa na mpokeaji\'</string>
   <string name="sms_no_number">\'Imeshidwa\' EEE, MMM dd, yyyy, \'muda\' HH:mm \'kutokana na kutokuwa na namba ya simu.\'</string>
@@ -620,10 +614,7 @@
   <string name="sms_submission_queued">Inasubiri kuwasilishwa.</string>
   <string name="sms_submissions_notif_title">Uwasilishaji wa meseji</string>
   <string name="sms_submissions_notif_description">Fomu mbalimbali zinawasilishwa kwa sasa.</string>
-  <string name="transport_type_internet">WiFi/Simu (inapendekezwa)</string>
-  <string name="transport_type_sms">Ujumbe wa maneno</string>
-  <string name="transport_type_both">Chagua katika Kutuma</string>
-  <string name="rank_items">Pangilia vitu</string>
+    <string name="rank_items">Pangilia vitu</string>
   <string name="loading_form_failed">Tatizo limetokea wakati wa kupakua fomu. Tafadhali jaribu tena.</string>
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>

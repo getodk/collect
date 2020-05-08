@@ -252,8 +252,7 @@
   <string name="go_drive">Mijn Drive</string>
   <string name="go_shared">Gedeeld met mij</string>
   <string name="modified_on_date_at_time">\'Gewijzigd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
-    <string name="google_preferences">Google Sheets instellingen</string>
-  <string name="no_google_account">Geen Google account geselecteerd!</string>
+    <string name="no_google_account">Geen Google account geselecteerd!</string>
   <string name="odk_auto_note">ODK automatische verzendresultaten</string>
   <string name="odk_auto_download_notification_title">ODK automatische downloadresultaten</string>
   <string name="delete_after_send">Verwijderen na versturen</string>
@@ -333,8 +332,7 @@
   <string name="sms_invalid_phone_number">Onjuist telefoonnummer! </string>
   <!--Sms submission-->
   <string name="sms_no_message">Dit formulier heeft geen vragen met SMS tags. </string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="notification_channel_name">Algemene notificaties</string>
+    <string name="notification_channel_name">Algemene notificaties</string>
   <string name="go_to_settings">Ga naar instellingen</string>
   <string name="open_file">Open bestand</string>
 </resources>

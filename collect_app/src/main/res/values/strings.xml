@@ -269,10 +269,6 @@
     <string name="go_drive">My Drive</string>
     <string name="go_shared">Shared with Me</string>
     <string name="modified_on_date_at_time">\'Modified on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="sms_submission_preferences">SMS submission settings</string>
-    <string name="submission_transport">Submission transport (advanced)</string>
-    <string name="submission_transport_types_title">Send submissions via</string>
-    <string name="google_preferences">Google Sheets settings</string>
     <string name="google_sheets_url_hint">Forms must set a submission URL. If they don\'t, this URL will be used.</string>
     <string name="drive_get_file">Getting %1$s and media files.</string>
     <string name="no_google_account">No Google Account Selected!</string>
@@ -661,8 +657,6 @@
     <string name="instance_upload_cancelled">Instance upload canceled</string>
     <string name="hide_old_form_versions_setting_title">Hide old form versions</string>
     <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
-    <string name="sms_pref_dialog_title">Destination phone number</string>
-    <string name="sms_pref_title">Destination phone number</string>
     <string name="sms_invalid_phone_number">Invalid phone number!</string>
 
     <!-- Sms submission -->
@@ -681,9 +675,6 @@
     <string name="sms_submission_queued">Queued for submission.</string>
     <string name="sms_submissions_notif_title">SMS submissions</string>
     <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>
-    <string name="transport_type_internet">Wifi/Cellular (recommended)</string>
-    <string name="transport_type_sms">SMS</string>
-    <string name="transport_type_both">Select on send</string>
     <string name="rank_items">Rank items</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
     <string name="missing_google_account_dialog_title">Google account not set</string>

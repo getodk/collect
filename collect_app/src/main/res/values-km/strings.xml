@@ -260,8 +260,7 @@
   <string name="go_drive">ថាសរបស់ខ្ញុំ</string>
   <string name="go_shared">ចែក​រំលែក​ជាមួយ​ខ្ញុំ</string>
   <string name="modified_on_date_at_time">\'កែប្រែនៅថ្ងៃ\' EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
-    <string name="google_preferences">ការកំណត់សន្លឹក Google</string>
-  <string name="google_sheets_url_hint">ទម្រង់​ត្រូវតែ​កំណត់ URLក្នុងការបញ្ជូន​។ ប្រសិន​មិន​បាន​កំណត់, URL នេះ​នឹង​ត្រូវ​បាន​ប្រើប្រាស់។</string>
+    <string name="google_sheets_url_hint">ទម្រង់​ត្រូវតែ​កំណត់ URLក្នុងការបញ្ជូន​។ ប្រសិន​មិន​បាន​កំណត់, URL នេះ​នឹង​ត្រូវ​បាន​ប្រើប្រាស់។</string>
   <string name="drive_get_file">កំពុង​ទទួល​ %1$s និង ឯកសារមេឌៀ</string>
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
@@ -564,8 +563,6 @@
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
   <string name="sms_invalid_phone_number">លេខទូរស័ព្ទមិន​ត្រឹម​ត្រូវ!</string>
   <!--Sms submission-->
-  <string name="transport_type_sms">សារ</string>
-  <string name="transport_type_both">ជ្រើសរើសនៅពេលផ្ញើ</string>
   <string name="rank_items">ចំណាត់ថ្នាក់ធាតុ</string>
   <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
   <string name="notification_channel_name">ការជូនដំណឹង​ជាទូទៅ</string>

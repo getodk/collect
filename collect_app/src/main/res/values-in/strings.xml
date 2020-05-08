@@ -257,11 +257,7 @@
   <string name="go_drive">Drive saya</string>
   <string name="go_shared">Berbagi dengan saya</string>
   <string name="modified_on_date_at_time">\'dirubah pada tanggal\' EEE, MMM dd, yyyy \'di jam\' HH:mm</string>
-    <string name="sms_submission_preferences">Pengaturan pengiriman SMS</string>
-  <string name="submission_transport">Pengiriman (Mahir)</string>
-  <string name="submission_transport_types_title">Pengiriman melalui</string>
-    <string name="google_preferences">Pengaturan Google Sheets</string>
-  <string name="google_sheets_url_hint">Tautan pengajuan harus ditetapkan pada formulir. Jika tidak, tautan ini yang akan digunakan.</string>
+    <string name="google_sheets_url_hint">Tautan pengajuan harus ditetapkan pada formulir. Jika tidak, tautan ini yang akan digunakan.</string>
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
@@ -574,9 +570,7 @@
   <string name="instance_upload_cancelled">permintaan unggah dibatalkan</string>
   <string name="hide_old_form_versions_setting_title">sembunyikan versi formulir lawas</string>
   <string name="hide_old_form_versions_setting_summary">Hanya versi tebaru yg akan muncul dalam pilihan Formulir Baru</string>
-  <string name="sms_pref_dialog_title">nomor telepon tujuan</string>
-  <string name="sms_pref_title">nomor telepon tujuan</string>
-  <string name="sms_invalid_phone_number">Nomor telepon tidak valid!</string>
+    <string name="sms_invalid_phone_number">Nomor telepon tidak valid!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Gagal pada\' EEE, MMM dd, yyyy \'di\' HH:mm \'dikarenakan tidak ada penerimaan\'</string>
   <string name="sms_no_number">\'Gagal pada\' EEE, MMM dd, yyyy \'di\' HH:mm \'dikarenakan tidak ada nomor telepon\'</string>
@@ -592,10 +586,7 @@
   <string name="sms_submission_queued">Dalam antrian pengiriman</string>
   <string name="sms_submissions_notif_title">Pengiriman SMS</string>
   <string name="sms_submissions_notif_description">Beberapa formulir saat ini sedang dikirim.</string>
-  <string name="transport_type_internet">Wifi/sulular (direkomendasikan)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Memilih saat mengirim</string>
-  <string name="rank_items">Urutkan</string>
+    <string name="rank_items">Urutkan</string>
   <string name="loading_form_failed">Kesalahan terjadi saat membuka formulir. Coba lagi.</string>
   <string name="missing_google_account_dialog_title">Akun Google belum diatur</string>
   <string name="missing_google_account_dialog_desc">Untuk dapat mengirim formulir melalui Google Sheet anda harus mengatur akun Google di pengaturan Server.</string>
