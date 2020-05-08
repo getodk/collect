@@ -802,17 +802,14 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         String mediaDirName = FileUtils.constructMediaPath(item.getName());
 
         try {
-            String folderId;
+            List<com.google.api.services.drive.model.File> mediaFileList;
             try {
-                folderId = driveHelper.getIDOfFolderWithName(mediaDirName, item.getParentId(), false);
+                mediaFileList = getMediaFiles(item);
             } catch (MultipleFoldersFoundException exception) {
                 return false;
             }
 
-            if (folderId != null) {
-                List<com.google.api.services.drive.model.File> mediaFileList;
-                mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
-
+            if (mediaFileList != null) {
                 for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                     File localMediaFile = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
                     if (!localMediaFile.exists()) {
@@ -830,6 +827,17 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             Timber.e(e);
         }
         return false;
+    }
+
+    private List<com.google.api.services.drive.model.File> getMediaFiles(DriveListItem item) throws MultipleFoldersFoundException, IOException {
+        String mediaDirName = FileUtils.constructMediaPath(item.getName());
+        String folderId = driveHelper.getIDOfFolderWithName(mediaDirName, item.getParentId(), false);
+        if (folderId != null) {
+            List<com.google.api.services.drive.model.File> mediaFileList;
+            mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
+            return mediaFileList;
+        }
+        return null;
     }
 
     private class GetFileTask extends
@@ -857,18 +865,15 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
                     String mediaDirName = FileUtils.constructMediaPath(fileItem.getName());
 
-                    String folderId;
+                    List<com.google.api.services.drive.model.File> mediaFileList;
                     try {
-                        folderId = driveHelper.getIDOfFolderWithName(mediaDirName, fileItem.getParentId(), false);
+                        mediaFileList = getMediaFiles(fileItem);
                     } catch (MultipleFoldersFoundException exception) {
                         results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
                         return results;
                     }
 
-                    if (folderId != null) {
-                        List<com.google.api.services.drive.model.File> mediaFileList;
-                        mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
-
+                    if (mediaFileList != null) {
                         FileUtils.createFolder(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName);
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
