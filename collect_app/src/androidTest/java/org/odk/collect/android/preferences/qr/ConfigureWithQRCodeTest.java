@@ -59,6 +59,9 @@ public class ConfigureWithQRCodeTest {
     private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
 
     @Rule
+    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+
+    @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -72,7 +75,7 @@ public class ConfigureWithQRCodeTest {
                     return new StubQRCodeGenerator();
                 }
             }))
-            .around(new IntentsTestRule<>(MainMenuActivity.class));
+            .around(rule);
 
     @Before
     public void stubAllExternalIntents() {
