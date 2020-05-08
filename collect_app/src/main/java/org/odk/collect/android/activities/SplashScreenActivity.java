@@ -29,9 +29,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.Style;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -86,7 +83,6 @@ public class SplashScreenActivity extends Activity {
                 }
 
                 init();
-                initMapBox();
             }
 
             @Override
@@ -228,16 +224,5 @@ public class SplashScreenActivity extends Activity {
             }
         };
         t.start();
-    }
-
-    private void initMapBox() {
-        // This "one weird trick" lets us initialize MapBox at app start when the internet is
-        // most likely to be available. This is annoyingly needed for offline tiles to work.
-        try {
-            MapView mapView = getLayoutInflater().inflate(R.layout.mapbox_init, null).findViewById(R.id.mapView);
-            mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
-        } catch (Exception | Error ignored) {
-            // This will crash on devices where the arch for MapBox is not included
-        }
     }
 }
