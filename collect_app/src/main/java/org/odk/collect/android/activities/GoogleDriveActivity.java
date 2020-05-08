@@ -552,6 +552,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 break;
 
             case R.id.back_button:
+                folderIdStack.pop();
                 backButton.setEnabled(false);
                 rootButton.setEnabled(false);
                 downloadButton.setEnabled(false);
@@ -561,7 +562,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     if (folderIdStack.empty()) {
                         parentId = ROOT_KEY;
                     } else {
-                        parentId = folderIdStack.pop();
+                        parentId = folderIdStack.peek();
                     }
                     listFiles(parentId);
                     currentPath.pop();
