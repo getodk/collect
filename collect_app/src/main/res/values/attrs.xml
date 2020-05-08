@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="Collect">
-        <attr name="primaryTextColor" format="color" />
-        <attr name="secondaryTextColor" format="color" />
         <attr name="iconColor" format="color" />
         <attr name="dividerColor" format="color" />
-        <attr name="rankItemColor" format="color" />
         <attr name="dividerCompat" format="reference" />
-        <attr name="spinnerItemBackgroundColor" format="color" />
     </declare-styleable>
 </resources>

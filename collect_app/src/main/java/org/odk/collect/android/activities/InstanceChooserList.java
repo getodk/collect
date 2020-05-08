@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -254,7 +254,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         alertDialog.show();
     }
 }

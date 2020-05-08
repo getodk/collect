@@ -19,7 +19,7 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -398,7 +398,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), quitListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertShowing = true;
         alertMsg = message;

@@ -29,7 +29,6 @@ public class ThemeUtilsTests {
 
     public ThemeUtilsTests() {
         attrs = new int[]{
-                R.attr.primaryTextColor,
                 R.attr.iconColor,
                 android.R.attr.alertDialogTheme,
                 android.R.attr.searchViewStyle,
