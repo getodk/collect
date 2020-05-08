@@ -30,7 +30,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back_button"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/go_back" />
@@ -38,7 +37,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/download_button"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:enabled="false"
@@ -47,7 +45,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/root_button"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/go_shared" />

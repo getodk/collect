@@ -58,7 +58,6 @@ the License.
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggle_button"
                 style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_extra_small"
                 android:layout_marginRight="@dimen/margin_extra_small"
                 android:text="@string/select_all" />
@@ -66,7 +65,6 @@ the License.
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/refresh_button"
                 style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_extra_small"
                 android:layout_marginRight="@dimen/margin_extra_small"
                 android:text="@string/refresh" />
@@ -74,7 +72,6 @@ the License.
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_button"
                 style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_extra_small"
                 android:layout_marginRight="@dimen/margin_extra_small"
                 android:text="@string/download" />

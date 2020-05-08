@@ -36,7 +36,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/jumpBeginningButton"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/jump_to_beginning" />
@@ -44,7 +43,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/jumpEndButton"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/jump_to_end" />
@@ -52,7 +50,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/exitButton"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/exit"

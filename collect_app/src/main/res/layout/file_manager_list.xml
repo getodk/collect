@@ -45,7 +45,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/toggle_button"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/select_all" />
@@ -53,7 +52,6 @@ the License.
         <com.google.android.material.button.MaterialButton
             android:id="@+id/delete_button"
             style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_extra_small"
             android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/delete_file" />
