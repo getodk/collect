@@ -58,7 +58,6 @@ public class ConfigureWithQRCodeTest {
     // drawable resource that will act as "qr code" in this test
     private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
 
-    @Rule
     public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
     @Rule
