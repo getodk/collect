@@ -543,6 +543,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
             // get the formId and version for this instance...
+
             formInfo = ContentResolverHelper.getFormDetails(uri);   // Smap increase scope of FormInfo
             Collect.getInstance().setFormInfo(formInfo);            // smap
 
@@ -686,7 +687,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mFormId = formInfo.getFormId();                                             // smap
 
         DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
-        // show dialog before we execute...
         //formLoaderTask.execute(formPath);		// smap replaced with background thread
         formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);      // smap add formId
     }
