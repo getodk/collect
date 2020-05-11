@@ -20,6 +20,6 @@
         android:key="custom_server_paths"
         android:persistent="false"
         android:summary="@string/legacy_custom_server_paths_summary"
-        android:title="@string/legacy_custom_server_paths" />
+        android:title="@string/custom_server_paths" />
 
 </PreferenceScreen>

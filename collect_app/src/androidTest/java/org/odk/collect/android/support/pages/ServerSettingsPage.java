@@ -36,7 +36,7 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
     }
 
     public CustomServerPathsPage clickCustomServerPaths() {
-        onView(withText(getTranslatedString(R.string.legacy_custom_server_paths))).perform(click());
+        onView(withText(getTranslatedString(R.string.custom_server_paths))).perform(click());
         return new CustomServerPathsPage(rule).assertOnPage();
     }
 }
