@@ -15,24 +15,16 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
-import android.content.ContentUris;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.chip.Chip;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
@@ -40,6 +32,7 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel.ClickActio
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.fragments.dialogs.InstanceSummaryDialogFragment;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
@@ -51,8 +44,6 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.text.SimpleDateFormat;
@@ -72,7 +63,6 @@ public class FormMapActivity extends BaseGeoMapActivity {
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     private FormMapViewModel viewModel;
-    private BottomSheetBehavior bottomSheet;
 
     @Inject
     MapProvider mapProvider;
@@ -122,8 +112,6 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
-        bottomSheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
-        bottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
@@ -261,17 +249,6 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    private Intent getEditFormInstanceIntentFor(int featureId) {
-        Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instancesByFeatureId.get(featureId).getDatabaseId());
-        return new Intent(Intent.ACTION_EDIT, uri);
-    }
-
-    private Intent getViewOnlyFormInstanceIntentFor(int featureId) {
-        Intent intent = getEditFormInstanceIntentFor(featureId);
-        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-        return intent;
-    }
-
     protected void restoreFromInstanceState(Bundle state) {
         MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
         double mapZoom = state.getDouble(MAP_ZOOM_KEY);
@@ -316,49 +293,17 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     private void showSummary(int featureId, boolean canEdit) {
         FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
-        if (mappableFormInstance == null) {
-            return;
+        if (mappableFormInstance != null) {
+            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
+
+            String instanceName = mappableFormInstance.getInstanceName();
+            String instanceStatus = mappableFormInstance.getStatus();
+            String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, instanceStatus, mappableFormInstance.getLastStatusChangeDate());
+            long instanceId = mappableFormInstance.getDatabaseId();
+
+            InstanceSummaryDialogFragment
+                    .newInstance(canEdit, instanceName, instanceStatus, instanceLastStatusChangeDate, instanceId)
+                    .show(getSupportFragmentManager(), InstanceSummaryDialogFragment.TAG);
         }
-        map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
-
-        String instanceName = mappableFormInstance.getInstanceName();
-        String instanceStatus = mappableFormInstance.getStatus();
-        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, instanceStatus, mappableFormInstance.getLastStatusChangeDate());
-
-        ((TextView) findViewById(R.id.submission_name)).setText(instanceName);
-        ((TextView) findViewById(R.id.status_text)).setText(instanceLastStatusChangeDate);
-
-        Chip openFormChip = findViewById(R.id.openFormChip);
-        openFormChip.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
-        openFormChip.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
-        openFormChip.setOnClickListener(v -> {
-            if (canEdit) {
-                startActivity(getEditFormInstanceIntentFor(featureId));
-            } else {
-                startActivity(getViewOnlyFormInstanceIntentFor(featureId));
-            }
-        });
-
-        Drawable statusIcon = null;
-        switch (instanceStatus) {
-            case InstanceProviderAPI.STATUS_INCOMPLETE:
-                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_saved);
-                break;
-            case InstanceProviderAPI.STATUS_COMPLETE:
-                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_finalized);
-                break;
-            case InstanceProviderAPI.STATUS_SUBMITTED:
-                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_submited);
-                break;
-            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                statusIcon = ContextCompat.getDrawable(this, R.drawable.form_state_submission_failed);
-                break;
-        }
-
-        ImageView statusImage = findViewById(R.id.status_icon);
-        statusImage.setImageDrawable(statusIcon);
-        statusImage.setBackground(null);
-
-        bottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }

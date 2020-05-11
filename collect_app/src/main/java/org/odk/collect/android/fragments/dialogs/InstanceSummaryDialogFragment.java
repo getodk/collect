@@ -19,12 +19,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
-import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,10 +29,16 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     public static final String TAG = "InstanceSummaryDialogFragment";
 
     private static final String CAN_EDIT ="canEdit";
-    private static final String MAPPABLE_FROM_INSTANCE ="mappableFormInstance";
+    private static final String INSTANCE_NAME ="instanceName";
+    private static final String INSTANCE_STATUS ="instanceStatus";
+    private static final String INSTANCE_LAST_STATUS_CHANGE_DATE ="instanceLastStatusChangeDate";
+    private static final String INSTANCE_ID ="instanceId";
 
     private boolean canEdit;
-    private FormMapViewModel.MappableFormInstance mappableFormInstance;
+    private String instanceName;
+    private String instanceStatus;
+    private String instanceLastStatusChangeDate;
+    private long instanceId;
 
     @BindView(R.id.submission_name)
     TextView submissionName;
@@ -50,11 +52,17 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     @BindView(R.id.openFormChip)
     Chip openFormChip;
 
-    public static InstanceSummaryDialogFragment newInstance(boolean canEdit, FormMapViewModel.MappableFormInstance mappableFormInstance) {
+    public static InstanceSummaryDialogFragment newInstance(boolean canEdit, String instanceName,
+                                                            String instanceStatus,
+                                                            String instanceLastStatusChangeDate,
+                                                            long instanceId) {
         InstanceSummaryDialogFragment dialog = new InstanceSummaryDialogFragment();
         Bundle args = new Bundle();
         args.putBoolean(CAN_EDIT, canEdit);
-        args.putSerializable(MAPPABLE_FROM_INSTANCE, mappableFormInstance);
+        args.putString(INSTANCE_NAME, instanceName);
+        args.putString(INSTANCE_STATUS, instanceStatus);
+        args.putString(INSTANCE_LAST_STATUS_CHANGE_DATE, instanceLastStatusChangeDate);
+        args.putLong(INSTANCE_ID, instanceId);
         dialog.setArguments(args);
         return dialog;
     }
@@ -70,24 +78,43 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(CAN_EDIT, canEdit);
-        outState.putSerializable(MAPPABLE_FROM_INSTANCE, mappableFormInstance);
+        outState.putString(INSTANCE_NAME, instanceName);
+        outState.putString(INSTANCE_STATUS, instanceStatus);
+        outState.putString(INSTANCE_LAST_STATUS_CHANGE_DATE, instanceLastStatusChangeDate);
+        outState.putLong(INSTANCE_ID, instanceId);
         super.onSaveInstanceState(outState);
     }
 
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        readProperties(savedInstanceState);
+        setUpElements();
+    }
+
+    private void readProperties(Bundle savedInstanceState) {
         canEdit = savedInstanceState == null
                 ? getArguments().getBoolean(CAN_EDIT)
                 : savedInstanceState.getBoolean(CAN_EDIT);
 
-        mappableFormInstance = (FormMapViewModel.MappableFormInstance) (savedInstanceState == null
-                        ? getArguments().getSerializable(MAPPABLE_FROM_INSTANCE)
-                        : savedInstanceState.getSerializable(MAPPABLE_FROM_INSTANCE));
+        instanceName = savedInstanceState == null
+                ? getArguments().getString(INSTANCE_NAME)
+                : savedInstanceState.getString(INSTANCE_NAME);
 
-        String instanceName = mappableFormInstance.getInstanceName();
-        String instanceStatus = mappableFormInstance.getStatus();
-        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(getActivity(), instanceStatus, mappableFormInstance.getLastStatusChangeDate());
+        instanceStatus = savedInstanceState == null
+                ? getArguments().getString(INSTANCE_STATUS)
+                : savedInstanceState.getString(INSTANCE_STATUS);
 
+        instanceLastStatusChangeDate = savedInstanceState == null
+                ? getArguments().getString(INSTANCE_LAST_STATUS_CHANGE_DATE)
+                : savedInstanceState.getString(INSTANCE_LAST_STATUS_CHANGE_DATE);
+
+        instanceId = savedInstanceState == null
+                ? getArguments().getLong(INSTANCE_ID)
+                : savedInstanceState.getLong(INSTANCE_ID);
+    }
+
+    private void setUpElements() {
         submissionName.setText(instanceName);
         statusText.setText(instanceLastStatusChangeDate);
         statusIcon.setImageDrawable(getStatusIcon(instanceStatus));
@@ -96,12 +123,9 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
         openFormChip.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
         openFormChip.setChipIcon(ContextCompat.getDrawable(getActivity(), canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormChip.setOnClickListener(v -> {
-            if (canEdit) {
-                startActivity(getEditFormInstanceIntentFor());
-            } else {
-                startActivity(getViewOnlyFormInstanceIntentFor());
-            }
-            dismiss();
+            startActivity(canEdit
+                    ? getEditFormInstanceIntentFor()
+                    : getViewOnlyFormInstanceIntentFor());
         });
     }
 
@@ -126,7 +150,7 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     }
 
     private Intent getEditFormInstanceIntentFor() {
-        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, mappableFormInstance.getDatabaseId());
+        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
     }
 }

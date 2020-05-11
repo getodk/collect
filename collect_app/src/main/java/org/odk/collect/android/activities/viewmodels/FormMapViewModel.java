@@ -10,6 +10,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -132,7 +133,7 @@ public class FormMapViewModel extends ViewModel {
         DELETED_TOAST, NOT_VIEWABLE_TOAST, OPEN_READ_ONLY, OPEN_EDIT, NONE
     }
 
-    public class MappableFormInstance {
+    public class MappableFormInstance implements Serializable {
         private final long databaseId;
         private final Double latitude;
         private final Double longitude;
