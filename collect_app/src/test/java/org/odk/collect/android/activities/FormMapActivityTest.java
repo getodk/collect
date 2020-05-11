@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
+import org.odk.collect.android.fragments.dialogs.InstanceSummaryDialogFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
@@ -194,6 +195,7 @@ public class FormMapActivityTest {
             int featureId = map.getFeatureIdFor(toTap);
 
             activity.onFeatureClicked(featureId);
+            clickOnOpenFormChip();
             Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
 
             assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
@@ -214,6 +216,7 @@ public class FormMapActivityTest {
             int featureId = map.getFeatureIdFor(toTap);
 
             activity.onFeatureClicked(featureId);
+            clickOnOpenFormChip();
             Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
 
             assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
@@ -227,6 +230,7 @@ public class FormMapActivityTest {
         int featureId = map.getFeatureIdFor(sent);
 
         activity.onFeatureClicked(featureId);
+        clickOnOpenFormChip();
         Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
 
         assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
@@ -253,6 +257,11 @@ public class FormMapActivityTest {
 
         activity.onFeatureClicked(featureId);
         assertThat(ShadowToast.getTextOfLatestToast(), containsString("Deleted on"));
+    }
+
+    private void clickOnOpenFormChip() {
+        InstanceSummaryDialogFragment instanceSummaryDialogFragment = (InstanceSummaryDialogFragment) activity.getSupportFragmentManager().findFragmentByTag(InstanceSummaryDialogFragment.TAG);
+        instanceSummaryDialogFragment.getView().findViewById(R.id.openFormChip).performClick();
     }
 
     private static class TestFactory implements ViewModelProvider.Factory {
