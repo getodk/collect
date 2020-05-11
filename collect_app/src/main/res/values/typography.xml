@@ -26,7 +26,7 @@
 
     <style name="TextAppearance.Collect.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textAllCaps">false</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.04</item>
     </style>
 
     <style name="TextAppearance.Collect.Caption" parent="TextAppearance.MaterialComponents.Caption">

@@ -6,81 +6,53 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.version.VersionInformation;
 
 public class MainMenuViewModel extends ViewModel {
 
-    private final VersionDescriptionProvider versionDescriptionProvider;
+    private final VersionInformation version;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    MainMenuViewModel(VersionDescriptionProvider versionDescriptionProvider) {
-        this(versionDescriptionProvider, AdminSharedPreferences.getInstance());
+    MainMenuViewModel(VersionInformation versionInformation) {
+        this(versionInformation, AdminSharedPreferences.getInstance());
     }
 
-    private MainMenuViewModel(VersionDescriptionProvider versionDescriptionProvider, AdminSharedPreferences adminSharedPreferences) {
-        this.versionDescriptionProvider = versionDescriptionProvider;
+    private MainMenuViewModel(VersionInformation versionInformation, AdminSharedPreferences adminSharedPreferences) {
+        this.version = versionInformation;
         this.adminSharedPreferences = adminSharedPreferences;
     }
 
     public String getVersion() {
-        if (hasBetaTag()) {
-            return getVersionDescriptionComponents()[0] + " Beta " + versionDescriptionProvider.getVersionDescription().split("beta")[1].substring(1, 2);
+        if (version.getBetaNumber() != null) {
+            return version.getSemanticVersion() + " Beta " + version.getBetaNumber();
         } else {
-            return getVersionDescriptionComponents()[0];
+            return version.getSemanticVersion();
         }
     }
 
     @Nullable
     public String getVersionCommitDescription() {
-        if (isRelease() || isBetaRelease()) {
-            return null;
-        } else {
-            String commitDescription = "";
-            String[] components = getVersionDescriptionComponents();
+        String commitDescription = "";
 
-            if (hasBetaTag() && getVersionDescriptionComponents().length > 3) {
-                commitDescription = components[2] + "-" + components[3];
-            } else if (!hasBetaTag() && getVersionDescriptionComponents().length > 2) {
-                commitDescription = components[1] + "-" + components[2];
-            }
-
-            if (isDirty()) {
-                if (commitDescription.isEmpty()) {
-                    commitDescription = "dirty";
-                } else {
-                    commitDescription = commitDescription + "-dirty";
-                }
-            }
-
-            return commitDescription;
+        if (version.getCommitCount() != null) {
+            commitDescription = appendToCommitDescription(commitDescription, version.getCommitCount().toString());
         }
-    }
 
-    private boolean isDirty() {
-        return versionDescriptionProvider.getVersionDescription().contains("dirty");
-    }
+        if (version.getCommitSHA() != null) {
+            commitDescription = appendToCommitDescription(commitDescription, version.getCommitSHA());
+        }
 
-    private boolean hasBetaTag() {
-        return versionDescriptionProvider.getVersionDescription().contains("beta");
-    }
+        if (version.isDirty()) {
+            commitDescription = appendToCommitDescription(commitDescription, "dirty");
+        }
 
-    private boolean isRelease() {
-        return getVersionDescriptionComponents().length == 1;
-    }
-
-    private boolean isBetaRelease() {
-        return hasBetaTag() && getVersionDescriptionComponents().length == 2;
-    }
-
-    @NotNull
-    private String[] getVersionDescriptionComponents() {
-        return versionDescriptionProvider.getVersionDescription().split("-");
-    }
-
-    public interface VersionDescriptionProvider {
-        String getVersionDescription();
+        if (!commitDescription.isEmpty()) {
+            return commitDescription;
+        } else {
+            return null;
+        }
     }
 
     public boolean shouldEditSavedFormButtonBeVisible() {
@@ -103,12 +75,28 @@ public class MainMenuViewModel extends ViewModel {
         return (boolean) adminSharedPreferences.get(AdminKeys.KEY_DELETE_SAVED);
     }
 
+    @NotNull
+    private String appendToCommitDescription(String commitDescription, String part) {
+        if (commitDescription.isEmpty()) {
+            commitDescription = part;
+        } else {
+            commitDescription = commitDescription + "-" + part;
+        }
+        return commitDescription;
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
+
+        private final VersionInformation versionInformation;
+
+        public Factory(VersionInformation versionInformation) {
+            this.versionInformation = versionInformation;
+        }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(() -> BuildConfig.VERSION_NAME, AdminSharedPreferences.getInstance());
+            return (T) new MainMenuViewModel(versionInformation, AdminSharedPreferences.getInstance());
         }
     }
 }

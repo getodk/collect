@@ -22,7 +22,7 @@
 
     <item
         android:id="@+id/menu_save"
-        android:icon="@drawable/ic_save"
+        android:icon="@drawable/ic_save_menu"
         android:title="@string/save_all_answers"
         app:showAsAction="always" />
 

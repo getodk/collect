@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,12 +29,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
@@ -68,6 +72,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.version.VersionInformation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -142,6 +147,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Inject
     AdminPasswordProvider adminPasswordProvider;
 
+    @Inject
+    VersionInformation versionInformation;
+
     private MainMenuViewModel viewModel;
 
     @Override
@@ -150,9 +158,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         Collect.getInstance().getComponent().inject(this);
         setContentView(R.layout.main_menu);
         ButterKnife.bind(this);
-        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory()).get(MainMenuViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory(versionInformation)).get(MainMenuViewModel.class);
 
         initToolbar();
+        initMapBox();
         DaggerUtils.getComponent(this).inject(this);
 
         disableSmsIfNeeded();
@@ -389,6 +398,19 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         return super.onOptionsItemSelected(item);
     }
 
+    private void initMapBox() {
+        // This "one weird trick" lets us initialize MapBox at app start when the internet is
+        // most likely to be available. This is annoyingly needed for offline tiles to work.
+        try {
+            MapView mapView = new MapView(this);
+            FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
+            mapboxContainer.addView(mapView);
+            mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
+        } catch (Exception | Error ignored) {
+            // This will crash on devices where the arch for MapBox is not included
+        }
+    }
+
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(String.format("%s %s", getString(R.string.app_name), viewModel.getVersion()));
@@ -454,7 +476,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         alertDialog.show();
     }
 

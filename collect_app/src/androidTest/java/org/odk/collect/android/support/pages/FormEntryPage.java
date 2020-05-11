@@ -42,11 +42,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEndPage clickJumpEndButton() {
-        onView(withId(R.id.jumpEndButton)).perform(click());
-        return new FormEndPage(formName, rule).assertOnPage();
-    }
-
     public FormEntryPage swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
         return this;
@@ -66,7 +61,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public ErrorDialog swipeToNextQuestionWithError() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
-        return new ErrorDialog(rule);
+        return new ErrorDialog(rule).assertOnPage();
     }
 
     public FormEntryPage clickOptionsIcon() {
@@ -95,9 +90,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickGoToArrow() {
+    public FormHierarchyPage clickGoToArrow() {
         onView(withId(R.id.menu_goto)).perform(click());
-        return this;
+        return new FormHierarchyPage(formName, rule).assertOnPage();
     }
 
     public FormEntryPage clickWidgetButton() {
@@ -119,17 +114,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withText(questionText)).perform(longClick());
         onView(withText(R.string.delete_repeat)).perform(click());
         onView(withText(R.string.discard_group)).perform(click());
-        return this;
-    }
-
-    public FormEntryPage deleteGroup() {
-        onView(withId(R.id.menu_delete_child)).perform(click());
-        onView(withText(R.string.delete_repeat)).perform(click());
-        return this;
-    }
-
-    public FormEntryPage clickGoUpIcon() {
-        onView(withId(R.id.menu_go_up)).perform(click());
         return this;
     }
 
@@ -211,7 +195,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public AddNewRepeatDialog clickPlus(String repeatName) {
         onView(withId(R.id.menu_add_repeat)).perform(click());
-        return new AddNewRepeatDialog(repeatName, rule);
+        return new AddNewRepeatDialog(repeatName, rule).assertOnPage();
     }
 
     public FormEntryPage longPressOnView(int id, int index) {
@@ -232,6 +216,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
-        return new AddNewRepeatDialog(repeatName, rule);
+        return new AddNewRepeatDialog(repeatName, rule).assertOnPage();
     }
 }
