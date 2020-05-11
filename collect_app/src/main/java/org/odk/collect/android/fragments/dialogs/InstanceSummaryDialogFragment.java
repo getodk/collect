@@ -28,11 +28,11 @@ import butterknife.ButterKnife;
 public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     public static final String TAG = "InstanceSummaryDialogFragment";
 
-    private static final String CAN_EDIT ="canEdit";
-    private static final String INSTANCE_NAME ="instanceName";
-    private static final String INSTANCE_STATUS ="instanceStatus";
-    private static final String INSTANCE_LAST_STATUS_CHANGE_DATE ="instanceLastStatusChangeDate";
-    private static final String INSTANCE_ID ="instanceId";
+    private static final String CAN_EDIT = "canEdit";
+    private static final String INSTANCE_NAME = "instanceName";
+    private static final String INSTANCE_STATUS = "instanceStatus";
+    private static final String INSTANCE_LAST_STATUS_CHANGE_DATE = "instanceLastStatusChangeDate";
+    private static final String INSTANCE_ID = "instanceId";
 
     private boolean canEdit;
     private String instanceName;
