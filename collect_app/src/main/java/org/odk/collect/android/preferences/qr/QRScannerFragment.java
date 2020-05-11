@@ -64,7 +64,7 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         new PermissionUtils().requestCameraPermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
-                barcodeScannerView.decodeSingle(new BarcodeCallback() {
+                barcodeScannerView.decodeContinuous(new BarcodeCallback() {
                     @Override
                     public void barcodeResult(BarcodeResult result) {
                         beepManager.playBeepSoundAndVibrate();

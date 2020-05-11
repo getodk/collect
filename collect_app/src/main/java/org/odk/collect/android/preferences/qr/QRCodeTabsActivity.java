@@ -1,6 +1,9 @@
 package org.odk.collect.android.preferences.qr;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +13,17 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.zip.DataFormatException;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -30,6 +38,9 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 
 import javax.inject.Inject;
 
@@ -137,5 +148,41 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == SELECT_PHOTO) {
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    boolean qrCodeFound = false;
+                    final Uri imageUri = data.getData();
+                    if (imageUri != null) {
+                        final InputStream imageStream = getContentResolver()
+                                .openInputStream(imageUri);
+
+                        final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                        if (bitmap != null) {
+                            String response = QRCodeUtils.decodeFromBitmap(bitmap);
+                            if (response != null) {
+                                qrCodeFound = true;
+                                SettingsUtils.applySettings(this, response);
+                            }
+                        }
+                    }
+                    if (!qrCodeFound) {
+                        ToastUtils.showLongToast(R.string.qr_code_not_found);
+                    }
+                } catch (FormatException | NotFoundException | ChecksumException e) {
+                    Timber.i(e);
+                    ToastUtils.showLongToast(R.string.qr_code_not_found);
+                } catch (DataFormatException | IOException | OutOfMemoryError | IllegalArgumentException e) {
+                    Timber.e(e);
+                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
+                }
+            } else {
+                Timber.i("Choosing QR code from sdcard cancelled");
+            }
+        }
+    }
 }
