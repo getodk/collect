@@ -4,7 +4,7 @@ Collect forms are defined using [XForms](https://opendatakit.github.io/xforms-sp
 
 ## Implementing widgets
 
-The `TriggerWiget` will be used here as an example of how to implement a widget. The `TriggerWidget` represents the `acknowledge` question type (its docs are [here](https://docs.opendatakit.org/form-question-types/#trigger-acknowledge-widget)).
+The `TriggerWiget` will be used here as an example of how to implement a widget. The `TriggerWidget` represents the `acknowledge` question type (its docs are [here](https://docs.getodk.org/form-question-types/#trigger-acknowledge-widget)).
 
 ```java
 public class TriggerWidget extends QuestionWidget {

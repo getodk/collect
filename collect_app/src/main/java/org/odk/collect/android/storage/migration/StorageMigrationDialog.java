@@ -135,12 +135,12 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private void showMoreDetails() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://forum.opendatakit.org/t/25268"));
+        intent.setData(Uri.parse("https://forum.getodk.org/t/25268"));
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException | SecurityException e) {
             intent = new Intent(getContext(), WebViewActivity.class);
-            intent.putExtra(CustomTabHelper.OPEN_URL, "https://forum.opendatakit.org/t/25268");
+            intent.putExtra(CustomTabHelper.OPEN_URL, "https://forum.getodk.org/t/25268");
             startActivity(intent);
         }
     }
