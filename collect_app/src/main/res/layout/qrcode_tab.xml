@@ -11,13 +11,10 @@
             android:orientation="vertical">
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
-                style="@style/Widget.MaterialComponents.TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabGravity="fill"
                 app:tabMaxWidth="0dp"
-                app:tabSelectedTextColor="@color/blue_500"
-                app:tabIndicatorColor="@color/blue_500"
                 app:tabIndicatorHeight="4dp"
                 app:tabMode="fixed"
                 android:layout_gravity="top" />
