@@ -321,7 +321,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
         map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
 
-        String instanceName = mappableFormInstance.getInstanceNme();
+        String instanceName = mappableFormInstance.getInstanceName();
         String instanceStatus = mappableFormInstance.getStatus();
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, instanceStatus, mappableFormInstance.getLastStatusChangeDate());
 

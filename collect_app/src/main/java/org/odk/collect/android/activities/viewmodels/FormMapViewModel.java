@@ -164,7 +164,7 @@ public class FormMapViewModel extends ViewModel {
             return longitude;
         }
 
-        public String getInstanceNme() {
+        public String getInstanceName() {
             return instanceName;
         }
 
