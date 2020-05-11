@@ -19,7 +19,8 @@
             android:id="@+id/submission_name"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="?primaryTextColor" />
 
         <View
             android:layout_width="match_parent"
@@ -54,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
         android:textColor="@android:color/white"
-        app:chipBackgroundColor="?colorAccent"
+        app:chipBackgroundColor="?colorSecondary"
         app:iconStartPadding="@dimen/margin_small"
         app:chipEndPadding="@dimen/margin_small"/>
 
