@@ -14,12 +14,14 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
+import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
 
@@ -30,13 +32,15 @@ public class ApplicationInitializer {
     private final Application context;
     private final CollectJobCreator collectJobCreator;
     private final SharedPreferences metaSharedPreferences;
+    private final UserAgentProvider userAgentProvider;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, SharedPreferences metaSharedPreferences) {
+    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, SharedPreferences metaSharedPreferences, UserAgentProvider userAgentProvider) {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
         this.metaSharedPreferences = metaSharedPreferences;
+        this.userAgentProvider = userAgentProvider;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
@@ -53,6 +57,10 @@ public class ApplicationInitializer {
         JodaTimeAndroid.init(context);
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
+        new com.google.android.gms.maps.MapView(context).onCreate(null);
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
+        MapboxUtils.initMapbox();
     }
 
     public void initializeLocale() {

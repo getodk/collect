@@ -10,8 +10,4 @@ package org.odk.collect.android.application;
 
 public class TestCollect extends Collect {
 
-    @Override
-    protected void setupOSMDroid() {
-        // no op for Robolectric
-    }
 }

@@ -24,6 +24,7 @@ import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.utilities.UserAgentProvider;
 import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class SplashScreenActivityTest {
             }
 
             @Override
-            public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, MetaSharedPreferencesProvider metaSharedPreferencesProvider) {
+            public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, MetaSharedPreferencesProvider metaSharedPreferencesProvider, UserAgentProvider userAgentProvider) {
                 return applicationInitializer;
             }
         });

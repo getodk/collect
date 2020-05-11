@@ -296,7 +296,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, MetaSharedPreferencesProvider metaSharedPreferencesProvider) {
-        return new ApplicationInitializer(application, collectJobCreator, metaSharedPreferencesProvider.getMetaSharedPreferences());
+    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, MetaSharedPreferencesProvider metaSharedPreferencesProvider, UserAgentProvider userAgentProvider) {
+        return new ApplicationInitializer(application, collectJobCreator, metaSharedPreferencesProvider.getMetaSharedPreferences(), userAgentProvider);
     }
 }
