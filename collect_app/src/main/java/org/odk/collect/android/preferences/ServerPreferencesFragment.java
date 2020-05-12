@@ -109,7 +109,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     private void initProtocolPrefs() {
         ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
-
         protocolPref.setSummary(protocolPref.getEntry());
         protocolPref.setOnPreferenceChangeListener((preference, newValue) -> {
             if (preference.getKey().equals(KEY_PROTOCOL)) {
@@ -128,12 +127,17 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             return true;
         });
 
-        CharSequence value = protocolPref.getValue();
-        if (value == null || value.equals(getString(R.string.protocol_odk_default))) {
-            setDefaultAggregatePaths();
-            addAggregatePreferences();
-        } else if (value.equals(getString(R.string.protocol_google_sheets))) {
-            addGooglePreferences();
+        String value = protocolPref.getValue();
+        ProtocolPreferenceMapper protocolPreferenceMapper = new ProtocolPreferenceMapper(getActivity());
+
+        switch (protocolPreferenceMapper.getProtocol(value)) {
+            case ODK:
+                setDefaultAggregatePaths();
+                addAggregatePreferences();
+                break;
+            case GOOGLE:
+                addGooglePreferences();
+                break;
         }
     }
 
