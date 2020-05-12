@@ -1,6 +1,6 @@
 # Question Widgets
 
-Collect forms are defined using [XForms](https://opendatakit.github.io/xforms-spec/) which in the most simple sense are just a list of questions (which can be of various [types](https://xlsform.org/en/#question-types)). To render the form and let the enumerator fill it out Collect needs to be able to deal with each of these different question types. To do this Collect has a series of different `QuestionWidget` implementations - usually one for each type of question. The exact mapping between question types and widgets happens in `WidgetFactory`.
+Collect forms are defined using [XForms](https://getodk.github.io/xforms-spec/) which in the most simple sense are just a list of questions (which can be of various [types](https://xlsform.org/en/#question-types)). To render the form and let the enumerator fill it out Collect needs to be able to deal with each of these different question types. To do this Collect has a series of different `QuestionWidget` implementations - usually one for each type of question. The exact mapping between question types and widgets happens in `WidgetFactory`.
 
 ## Implementing widgets
 
