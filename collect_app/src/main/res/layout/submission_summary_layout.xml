@@ -15,10 +15,10 @@
 
         <TextView
             android:id="@+id/submission_name"
-            style="@style/TextAppearance.AppCompat.Headline"
+            style="@style/TextAppearance.Collect.Headline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?primaryTextColor" />
+            android:textColor="?colorOnSurface" />
 
         <View
             android:layout_width="match_parent"
@@ -39,9 +39,10 @@
 
         <TextView
             android:id="@+id/status_text"
+            style="@style/TextAppearance.Collect.Body2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?primaryTextColor"
+            android:textColor="?colorOnSurface"
             android:layout_marginStart="@dimen/margin_standard"
             android:layout_gravity="center_vertical"/>
 
@@ -60,10 +61,11 @@
 
     <TextView
         android:id="@+id/info"
+        style="@style/TextAppearance.Collect.Body2"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?primaryTextColor"
+        android:textColor="?colorOnSurface"
         android:layout_marginTop="@dimen/margin_small"
         android:layout_gravity="center_vertical"/>
 
