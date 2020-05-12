@@ -42,19 +42,19 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     private FormMapViewModel viewModel;
 
     @BindView(R.id.submission_name)
-    TextView submissionName;
+    public TextView submissionName;
 
     @BindView(R.id.status_icon)
-    ImageView statusIcon;
+    public ImageView statusIcon;
 
     @BindView(R.id.status_text)
-    TextView statusText;
+    public TextView statusText;
 
     @BindView(R.id.info)
-    TextView infoText;
+    public TextView infoText;
 
     @BindView(R.id.openFormChip)
-    Chip openFormChip;
+    public Chip openFormChip;
 
     @Override
     public void onAttach(@NonNull Context context) {

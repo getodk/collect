@@ -2,6 +2,7 @@ package org.odk.collect.android.activities;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -28,7 +29,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.shadows.ShadowToast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -239,29 +239,34 @@ public class FormMapActivityTest {
 
     // Geometry is removed from the database on instance encryption but just in case there is an
     // encrypted instance with geometry available, show an encrypted toast.
-    @Test public void tappingOnEncryptedInstances_showsUneditableToast() {
+    @Test public void tappingOnEncryptedInstances_showsSummaryWithAppropriateMessage() {
         MapPoint submissionFailedCantEditWhenFinalized = new MapPoint(10.4, 125.6);
 
         int featureId = map.getFeatureIdFor(submissionFailedCantEditWhenFinalized);
 
         activity.onFeatureClicked(featureId);
-        assertThat(ShadowToast.getTextOfLatestToast(), is("This form cannot be edited once it has been marked as finalized. It may be encrypted."));
+        assertThat(getInstanceSummaryDialogFragment().openFormChip.getVisibility(), is(View.GONE));
+        assertThat(getInstanceSummaryDialogFragment().infoText.getText().toString(), is("This form cannot be edited once it has been marked as finalized. It may be encrypted."));
     }
 
     // Geometry is removed from the database on instance deletion but just in case there is a
     // deleted instance with geometry available, show a deleted toast.
-    @Test public void tappingOnDeletedInstances_showsDeletedToast() {
+    @Test public void tappingOnDeletedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint deleted = new MapPoint(10.0, 125.6);
 
         int featureId = map.getFeatureIdFor(deleted);
 
         activity.onFeatureClicked(featureId);
-        assertThat(ShadowToast.getTextOfLatestToast(), containsString("Deleted on"));
+        assertThat(getInstanceSummaryDialogFragment().openFormChip.getVisibility(), is(View.GONE));
+        assertThat(getInstanceSummaryDialogFragment().infoText.getText().toString(), containsString("Deleted on"));
     }
 
     private void clickOnOpenFormChip() {
-        InstanceSummaryDialogFragment instanceSummaryDialogFragment = (InstanceSummaryDialogFragment) activity.getSupportFragmentManager().findFragmentByTag(InstanceSummaryDialogFragment.class.getName());
-        instanceSummaryDialogFragment.getView().findViewById(R.id.openFormChip).performClick();
+        getInstanceSummaryDialogFragment().openFormChip.performClick();
+    }
+
+    private InstanceSummaryDialogFragment getInstanceSummaryDialogFragment() {
+        return (InstanceSummaryDialogFragment) activity.getSupportFragmentManager().findFragmentByTag(InstanceSummaryDialogFragment.class.getName());
     }
 
     private static class TestFactory implements ViewModelProvider.Factory {
