@@ -170,6 +170,7 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
             startActivity(canEdit
                     ? getEditFormInstanceIntentFor()
                     : getViewOnlyFormInstanceIntentFor());
+            dismiss();
         });
     }
 
