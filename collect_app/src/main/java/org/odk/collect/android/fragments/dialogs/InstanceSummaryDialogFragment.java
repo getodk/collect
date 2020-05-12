@@ -36,8 +36,7 @@ import butterknife.ButterKnife;
 
 public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     public static final String TAG = "InstanceSummaryDialogFragment";
-
-    private static final String FEATURE_ID = "featureId";
+    public static final String FEATURE_ID = "featureId";
 
     private int featureId;
     private FormMapViewModel.MappableFormInstance formInstance;
@@ -57,14 +56,6 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
 
     @BindView(R.id.openFormChip)
     Chip openFormChip;
-
-    public static InstanceSummaryDialogFragment newInstance(int featureId) {
-        InstanceSummaryDialogFragment dialog = new InstanceSummaryDialogFragment();
-        Bundle args = new Bundle();
-        args.putInt(FEATURE_ID, featureId);
-        dialog.setArguments(args);
-        return dialog;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {

@@ -48,6 +48,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
+
 /** Show a map with points representing saved instances of the selected form. */
 public class FormMapActivity extends BaseGeoMapActivity {
     public static final String MAP_CENTER_KEY = "map_center";
@@ -260,9 +262,9 @@ public class FormMapActivity extends BaseGeoMapActivity {
         if (mappableFormInstance != null) {
             map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
 
-            InstanceSummaryDialogFragment
-                    .newInstance(featureId)
-                    .show(getSupportFragmentManager(), InstanceSummaryDialogFragment.TAG);
+            Bundle args = new Bundle();
+            args.putInt(InstanceSummaryDialogFragment.FEATURE_ID, featureId);
+            showIfNotShowing(InstanceSummaryDialogFragment.class, args, getSupportFragmentManager());
         }
     }
 }
