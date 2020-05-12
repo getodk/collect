@@ -3,7 +3,6 @@ package org.odk.collect.android.fragments.dialogs;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +26,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.IconUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -109,7 +109,7 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
 
         submissionName.setText(mappableFormInstance.getInstanceName());
         statusText.setText(instanceLastStatusChangeDate);
-        statusIcon.setImageDrawable(getStatusIcon(mappableFormInstance.getStatus()));
+        statusIcon.setImageDrawable(IconUtils.getSubmissionSummaryStatusIcon(requireContext(), mappableFormInstance.getStatus()));
         statusIcon.setBackground(null);
 
         switch (getAction()) {
@@ -146,20 +146,6 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
                     : getViewOnlyFormInstanceIntentFor());
             dismiss();
         });
-    }
-
-    private Drawable getStatusIcon(String instanceStatus) {
-        switch (instanceStatus) {
-            case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_saved);
-            case InstanceProviderAPI.STATUS_COMPLETE:
-                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_finalized);
-            case InstanceProviderAPI.STATUS_SUBMITTED:
-                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_submited);
-            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_submission_failed);
-        }
-        return null;
     }
 
     private Intent getViewOnlyFormInstanceIntentFor() {
