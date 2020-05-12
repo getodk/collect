@@ -55,7 +55,7 @@ public final class SharedPreferencesUtils {
         JSONObject adminPrefs = new JSONObject();
         JSONObject generalPrefs = new JSONObject();
 
-        //checking for admin password
+        // checking for admin password
         if (keys.contains(KEY_ADMIN_PW)) {
             String password = (String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW);
             if (!password.equals("")) {
@@ -68,7 +68,7 @@ public final class SharedPreferencesUtils {
         if (keys.contains(KEY_PASSWORD)) {
             String password = (String) GeneralSharedPreferences.getInstance().get(KEY_PASSWORD);
             if (!password.equals("")) {
-                adminPrefs.put(KEY_ADMIN_PW, password);
+                adminPrefs.put(KEY_PASSWORD, password);
             }
             keys.remove(KEY_PASSWORD);
         }
