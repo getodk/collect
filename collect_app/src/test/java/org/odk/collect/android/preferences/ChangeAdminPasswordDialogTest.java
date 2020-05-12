@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences;
 
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.text.InputType;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,6 +16,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowDialog;
 
 import static android.view.View.VISIBLE;
@@ -22,20 +25,29 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class ChangeAdminPasswordDialogTest {
 
-    private ChangeAdminPasswordDialog dialogFragment;
+    private ActivityController<FragmentActivity> activity;
     private FragmentManager fragmentManager;
-    private FragmentActivity activity;
+    private ChangeAdminPasswordDialog dialogFragment;
+    private ChangeAdminPasswordDialog.ChangePasswordDialogCallback callback;
 
     @Before
     public void setup() {
-        activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
-        fragmentManager = activity.getSupportFragmentManager();
+        activity = RobolectricHelpers.buildThemedActivity(FragmentActivity.class);
+        activity.setup();
+
+        fragmentManager = activity.get().getSupportFragmentManager();
         dialogFragment = new ChangeAdminPasswordDialog();
+
+        callback = mock(ChangeAdminPasswordDialog.ChangePasswordDialogCallback.class);
+        dialogFragment.callback = callback;
     }
 
     @Test
@@ -51,23 +63,21 @@ public class ChangeAdminPasswordDialogTest {
 
         assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(VISIBLE));
         assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getText(),
-                equalTo(activity.getString(R.string.ok)));
+                equalTo(activity.get().getString(R.string.ok)));
         assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getVisibility(), equalTo(VISIBLE));
         assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getText(),
-                equalTo(activity.getString(R.string.cancel)));
+                equalTo(activity.get().getString(R.string.cancel)));
     }
 
     @Test
     public void clickingOkAfterSettingPassword_callsOnPasswordChanged() {
-        TestChangeAdminPasswordDialog fragment = new TestChangeAdminPasswordDialog();
-
-        fragment.show(fragmentManager, "TAG");
+        dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         EditText passwordEditText = dialog.findViewById(R.id.pwd_field);
         passwordEditText.setText("blah");
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
 
-        assertThat(fragment.password, equals("blah"));
-        assertThat(fragment.onPasswordChangedCalled, equalTo(true));
+        verify(callback, times(1)).onPasswordChanged("blah");
     }
 
     @Test
@@ -77,10 +87,15 @@ public class ChangeAdminPasswordDialogTest {
         EditText passwordEditText = dialog.findViewById(R.id.pwd_field);
         passwordEditText.setText("blah");
 
-        ChangeAdminPasswordDialog restoredFragment = new ChangeAdminPasswordDialog();
-        restoredFragment.show(fragmentManager, "TAG");
-        AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
+        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_PORTRAIT));
+        RuntimeEnvironment.setQualifiers("+land");
+        activity.configurationChange();
+        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_LANDSCAPE));
 
+        ChangeAdminPasswordDialog restoredFragment = (ChangeAdminPasswordDialog)
+                activity.get().getSupportFragmentManager().findFragmentByTag("TAG");
+
+        AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
         assertThat(((EditText) restoredDialog.findViewById(R.id.pwd_field)).getText().toString(), equalTo("blah"));
     }
 
@@ -89,13 +104,18 @@ public class ChangeAdminPasswordDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         CheckBox passwordCheckBox = dialog.findViewById(R.id.checkBox2);
-        Boolean value = !passwordCheckBox.isChecked();
-        passwordCheckBox.setChecked(value);
+        passwordCheckBox.setChecked(true);
 
-        ChangeAdminPasswordDialog restoredFragment = new ChangeAdminPasswordDialog();
-        restoredFragment.show(fragmentManager, "TAG");
+        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_PORTRAIT));
+        RuntimeEnvironment.setQualifiers("+land");
+        activity.configurationChange();
+        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_LANDSCAPE));
+
+        ChangeAdminPasswordDialog restoredFragment = (ChangeAdminPasswordDialog)
+                activity.get().getSupportFragmentManager().findFragmentByTag("TAG");
+
         AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
-        assertThat(((CheckBox) restoredDialog.findViewById(R.id.checkBox2)).isChecked(), equalTo(value));
+        assertThat(((CheckBox) restoredDialog.findViewById(R.id.checkBox2)).isChecked(), equalTo(true));
     }
 
     @Test
@@ -129,7 +149,7 @@ public class ChangeAdminPasswordDialogTest {
         CheckBox passwordCheckBox = dialog.findViewById(R.id.checkBox2);
 
         passwordCheckBox.setChecked(true);
-        assertThat(passwordEditText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT));
+        assertThat(passwordEditText.getInputType(), equalTo(InputType.TYPE_TEXT_VARIATION_PASSWORD));
     }
 
     @Test
@@ -141,18 +161,6 @@ public class ChangeAdminPasswordDialogTest {
         CheckBox passwordCheckBox = dialog.findViewById(R.id.checkBox2);
 
         passwordCheckBox.setChecked(false);
-        assertThat(passwordEditText.getInputType(),equalTo(InputType.TYPE_TEXT_VARIATION_PASSWORD));
-    }
-
-    private static class TestChangeAdminPasswordDialog extends ChangeAdminPasswordDialog implements ChangeAdminPasswordDialog.ChangePasswordDialogCallback {
-
-        private String password;
-        private Boolean onPasswordChangedCalled = false;
-
-        @Override
-        public void onPasswordChanged(String password) {
-            this.password = password;
-            onPasswordChangedCalled = true;
-        }
+        assertThat(passwordEditText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD));
     }
 }
