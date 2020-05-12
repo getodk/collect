@@ -12,7 +12,9 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -32,11 +34,24 @@ public class FormMapViewModel extends ViewModel {
      */
     private List<MappableFormInstance> mappableFormInstances;
 
+    /**
+     * Quick lookup of instance objects from map feature IDs.
+     */
+    private final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
+
     private final InstancesRepository instancesRepository;
 
     public FormMapViewModel(Form form, InstancesRepository instancesRepository) {
         this.instancesRepository = instancesRepository;
         this.form = form;
+    }
+
+    public MappableFormInstance getInstanceByFeatureId(int featureId) {
+        return instancesByFeatureId.get(featureId);
+    }
+
+    public void addInstanceByFeatureId(int featureId, MappableFormInstance instance) {
+        instancesByFeatureId.put(featureId, instance);
     }
 
     public String getFormTitle() {

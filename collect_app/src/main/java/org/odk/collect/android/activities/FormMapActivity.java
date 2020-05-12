@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
-import org.odk.collect.android.activities.viewmodels.FormMapViewModel.ClickAction;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
@@ -40,13 +39,10 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.MapsPreferences;
-import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -64,12 +60,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private MapFragment map;
 
     /**
-     * Quick lookup of instance objects from map feature IDs.
-     */
-    private final Map<Integer, FormMapViewModel.MappableFormInstance> instancesByFeatureId = new HashMap<>();
-
-    /**
-     * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
+     * Points to be mapped. Note: kept separately from {@link FormMapViewModel#instancesByFeatureId} so we can
      * quickly zoom to bounding box.
      */
     private final List<MapPoint> points = new ArrayList<>();
@@ -200,7 +191,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             int drawableId = getDrawableIdForStatus(instance.getStatus());
             map.setMarkerIcon(featureId, drawableId);
 
-            instancesByFeatureId.put(featureId, instance);
+            viewModel.addInstanceByFeatureId(featureId, instance);
             points.add(point);
         }
     }
@@ -219,9 +210,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a toast or switching activities to view or edit a form.
      */
     public void onFeatureClicked(int featureId) {
-        MappableFormInstance instance = instancesByFeatureId.get(featureId);
-        ClickAction clickAction = instance == null ? FormMapViewModel.ClickAction.NONE : instance.getClickAction();
-        showSummary(featureId, clickAction);
+        showSummary(featureId);
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -266,18 +255,13 @@ public class FormMapActivity extends BaseGeoMapActivity {
         return R.drawable.ic_map_point;
     }
 
-    private void showSummary(int featureId, ClickAction clickAction) {
-        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
+    private void showSummary(int featureId) {
+        FormMapViewModel.MappableFormInstance mappableFormInstance = viewModel.getInstanceByFeatureId(featureId);
         if (mappableFormInstance != null) {
             map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
 
-            String instanceName = mappableFormInstance.getInstanceName();
-            String instanceStatus = mappableFormInstance.getStatus();
-            String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, instanceStatus, mappableFormInstance.getLastStatusChangeDate());
-            long instanceId = mappableFormInstance.getDatabaseId();
-
             InstanceSummaryDialogFragment
-                    .newInstance(instanceName, instanceStatus, instanceLastStatusChangeDate, instanceId, clickAction)
+                    .newInstance(featureId)
                     .show(getSupportFragmentManager(), InstanceSummaryDialogFragment.TAG);
         }
     }

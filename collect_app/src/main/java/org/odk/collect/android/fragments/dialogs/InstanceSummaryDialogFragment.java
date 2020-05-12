@@ -24,6 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -36,17 +37,10 @@ import butterknife.ButterKnife;
 public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     public static final String TAG = "InstanceSummaryDialogFragment";
 
-    private static final String INSTANCE_NAME = "instanceName";
-    private static final String INSTANCE_STATUS = "instanceStatus";
-    private static final String INSTANCE_LAST_STATUS_CHANGE_DATE = "instanceLastStatusChangeDate";
-    private static final String INSTANCE_ID = "instanceId";
-    private static final String CLICK_ACTION = "clickAction";
+    private static final String FEATURE_ID = "featureId";
 
-    private String instanceName;
-    private String instanceStatus;
-    private String instanceLastStatusChangeDate;
+    private int featureId;
     private long instanceId;
-    private FormMapViewModel.ClickAction clickAction;
 
     private FormMapViewModel viewModel;
 
@@ -65,16 +59,10 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     @BindView(R.id.openFormChip)
     Chip openFormChip;
 
-    public static InstanceSummaryDialogFragment newInstance(String instanceName, String instanceStatus,
-                                                            String instanceLastStatusChangeDate,
-                                                            long instanceId, FormMapViewModel.ClickAction clickAction) {
+    public static InstanceSummaryDialogFragment newInstance(int featureId) {
         InstanceSummaryDialogFragment dialog = new InstanceSummaryDialogFragment();
         Bundle args = new Bundle();
-        args.putString(INSTANCE_NAME, instanceName);
-        args.putString(INSTANCE_STATUS, instanceStatus);
-        args.putString(INSTANCE_LAST_STATUS_CHANGE_DATE, instanceLastStatusChangeDate);
-        args.putLong(INSTANCE_ID, instanceId);
-        args.putSerializable(CLICK_ACTION, clickAction);
+        args.putInt(FEATURE_ID, featureId);
         dialog.setArguments(args);
         return dialog;
     }
@@ -95,15 +83,12 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(INSTANCE_NAME, instanceName);
-        outState.putString(INSTANCE_STATUS, instanceStatus);
-        outState.putString(INSTANCE_LAST_STATUS_CHANGE_DATE, instanceLastStatusChangeDate);
-        outState.putLong(INSTANCE_ID, instanceId);
-        outState.putSerializable(CLICK_ACTION, clickAction);
+        outState.putInt(FEATURE_ID, featureId);
         super.onSaveInstanceState(outState);
     }
 
-    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         readProperties(savedInstanceState);
@@ -111,34 +96,23 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void readProperties(Bundle savedInstanceState) {
-        instanceName = savedInstanceState == null
-                ? getArguments().getString(INSTANCE_NAME)
-                : savedInstanceState.getString(INSTANCE_NAME);
-
-        instanceStatus = savedInstanceState == null
-                ? getArguments().getString(INSTANCE_STATUS)
-                : savedInstanceState.getString(INSTANCE_STATUS);
-
-        instanceLastStatusChangeDate = savedInstanceState == null
-                ? getArguments().getString(INSTANCE_LAST_STATUS_CHANGE_DATE)
-                : savedInstanceState.getString(INSTANCE_LAST_STATUS_CHANGE_DATE);
-
-        instanceId = savedInstanceState == null
-                ? getArguments().getLong(INSTANCE_ID)
-                : savedInstanceState.getLong(INSTANCE_ID);
-
-        clickAction = (FormMapViewModel.ClickAction) (savedInstanceState == null
-                        ? getArguments().getSerializable(CLICK_ACTION)
-                        : savedInstanceState.getSerializable(CLICK_ACTION));
+        featureId = savedInstanceState == null
+                ? getArguments().getInt(FEATURE_ID)
+                : savedInstanceState.getInt(FEATURE_ID);
     }
 
     private void setUpElements() {
-        submissionName.setText(instanceName);
+        FormMapViewModel.MappableFormInstance mappableFormInstance = viewModel.getInstanceByFeatureId(featureId);
+
+        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(requireActivity(), mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
+        instanceId = mappableFormInstance.getDatabaseId();
+
+        submissionName.setText(mappableFormInstance.getInstanceName());
         statusText.setText(instanceLastStatusChangeDate);
-        statusIcon.setImageDrawable(getStatusIcon(instanceStatus));
+        statusIcon.setImageDrawable(getStatusIcon(mappableFormInstance.getStatus()));
         statusIcon.setBackground(null);
 
-        switch (clickAction) {
+        switch (getAction()) {
             case DELETED_TOAST:
                 infoText.setVisibility(View.VISIBLE);
                 String deletedTime = getString(R.string.deleted_on_date_at_time);
@@ -197,5 +171,10 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     private Intent getEditFormInstanceIntentFor() {
         Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
+    }
+
+    private FormMapViewModel.ClickAction getAction() {
+        FormMapViewModel.MappableFormInstance instance = viewModel.getInstanceByFeatureId(featureId);
+        return instance == null ? FormMapViewModel.ClickAction.NONE : instance.getClickAction();
     }
 }
