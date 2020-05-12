@@ -251,7 +251,7 @@ public class AllWidgetsFormTest {
     }
 
     public void testUrlWidget() {
-        Uri uri = Uri.parse("http://opendatakit.org/");
+        Uri uri = Uri.parse("http://getodk.org/");
 
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
                 .respondWith(okResult);

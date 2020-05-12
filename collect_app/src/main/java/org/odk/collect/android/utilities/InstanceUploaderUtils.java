@@ -124,7 +124,7 @@ public class InstanceUploaderUtils {
     // If a spreadsheet is created using Excel (or a similar tool) and uploaded to GD it contains:
     // drive.google.com/file/d/ instead of docs.google.com/spreadsheets/d/
     // Such a file can't be used. We can write data only to documents generated via Google Sheets
-    // https://forum.opendatakit.org/t/error-400-bad-request-failed-precondition-on-collect-to-google-sheets/19801/5?u=grzesiek2010
+    // https://forum.getodk.org/t/error-400-bad-request-failed-precondition-on-collect-to-google-sheets/19801/5?u=grzesiek2010
     public static boolean doesUrlRefersToGoogleSheetsFile(String url) {
         return !url.contains("drive.google.com/file/d/");
     }

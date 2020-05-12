@@ -44,7 +44,7 @@ public class StorageMigrationDialogPage extends Page<StorageMigrationDialogPage>
     }
 
     public StorageMigrationDialogPage assertForumPostOpen() {
-        intended(hasData(Uri.parse("https://forum.opendatakit.org/t/25268")));
+        intended(hasData(Uri.parse("https://forum.getodk.org/t/25268")));
         return this;
     }
 

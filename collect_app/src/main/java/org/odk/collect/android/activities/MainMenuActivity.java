@@ -629,7 +629,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     .setMessage(R.string.sms_feature_disabled_dialog_message)
                     .setPositiveButton(R.string.read_details, (dialog, which) -> {
                         Intent intent = new Intent(this, WebViewActivity.class);
-                        intent.putExtra("url", "https://forum.opendatakit.org/t/17973");
+                        intent.putExtra("url", "https://forum.getodk.org/t/17973");
                         startActivity(intent);
                     })
                     .setNegativeButton(R.string.ok, (dialog, which) -> dialog.dismiss());
