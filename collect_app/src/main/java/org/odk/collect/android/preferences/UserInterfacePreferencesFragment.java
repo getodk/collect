@@ -14,22 +14,32 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.version.VersionInformation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeMap;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -42,24 +52,37 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class UserInterfacePreferences extends BasePreferenceFragment {
+public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
 
     protected static final int IMAGE_CHOOSER = 0;
 
-    public static UserInterfacePreferences newInstance(boolean adminMode) {
+    @Inject
+    VersionInformation versionInformation;
+
+    public static UserInterfacePreferencesFragment newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
 
-        UserInterfacePreferences userInterfacePreferences = new UserInterfacePreferences();
-        userInterfacePreferences.setArguments(bundle);
+        UserInterfacePreferencesFragment userInterfacePreferencesFragment = new UserInterfacePreferencesFragment();
+        userInterfacePreferencesFragment.setArguments(bundle);
 
-        return userInterfacePreferences;
+        return userInterfacePreferencesFragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.user_interface_preferences);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.user_interface_preferences, rootKey);
+
+        FragmentActivity activity = getActivity();
+        if (activity instanceof CollectAbstractActivity) {
+            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
+        }
 
         initThemePrefs();
         initNavigationPrefs();
@@ -69,14 +92,18 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     private void initThemePrefs() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_APP_THEME);
+        final ListPreference pref = findPreference(KEY_APP_THEME);
 
         if (pref != null) {
+            if (versionInformation.isRelease()) {
+                hideExperimentalThemes(pref);
+            }
+
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                if (!pref.getEntry().equals(entry)) {
+                if (pref.getEntry() == null || !pref.getEntry().equals(entry)) {
                     preference.setSummary(entry);
                     startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 }
@@ -85,8 +112,16 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         }
     }
 
+    private void hideExperimentalThemes(ListPreference pref) {
+        CharSequence[] entries = pref.getEntries();
+        pref.setEntries(Arrays.copyOfRange(entries, 0, entries.length - 1));
+
+        CharSequence[] entryValues = pref.getEntryValues();
+        pref.setEntryValues(Arrays.copyOfRange(entryValues, 0, entryValues.length - 1));
+    }
+
     private void initNavigationPrefs() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_NAVIGATION);
+        final ListPreference pref = findPreference(KEY_NAVIGATION);
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
@@ -100,7 +135,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     private void initFontSizePref() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_FONT_SIZE);
+        final ListPreference pref = findPreference(KEY_FONT_SIZE);
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
@@ -114,7 +149,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     private void initLanguagePrefs() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_APP_LANGUAGE);
+        final ListPreference pref = findPreference(KEY_APP_LANGUAGE);
 
         if (pref != null) {
             final LocaleHelper localeHelper = new LocaleHelper();
@@ -139,8 +174,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
 
-                SharedPreferences.Editor edit = PreferenceManager
-                        .getDefaultSharedPreferences(getActivity()).edit();
+                SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
                 edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                 edit.apply();
 

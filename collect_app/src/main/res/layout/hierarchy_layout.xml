@@ -16,7 +16,7 @@ the License.
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/app_bar_layout"/>
+    <include layout="@layout/app_bar_layout" />
 
     <TextView
         android:id="@+id/pathtext"
@@ -33,45 +33,36 @@ the License.
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/jumpBeginningButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:text="@string/jump_to_beginning"
-            android:textAllCaps="false"
-            android:textSize="16sp" />
+            style="@style/Widget.Collect.Button.BottomOption"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
+            android:text="@string/jump_to_beginning" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/jumpEndButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:text="@string/jump_to_end"
-            android:textAllCaps="false"
-            android:textSize="16sp" />
+            style="@style/Widget.Collect.Button.BottomOption"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
+            android:text="@string/jump_to_end" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/exitButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="12dp"
+            style="@style/Widget.Collect.Button.BottomOption"
+            android:layout_marginLeft="@dimen/margin_extra_small"
+            android:layout_marginRight="@dimen/margin_extra_small"
             android:text="@string/exit"
-            android:textAllCaps="false"
-            android:textSize="16sp"
             android:visibility="gone" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/buttonholder"
-        android:layout_below="@id/pathtext" />
+        android:layout_below="@id/pathtext"
+        android:scrollbars="vertical" />
 
     <TextView
         android:id="@android:id/empty"

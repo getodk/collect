@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/client">
 
     <ListPreference
@@ -8,30 +8,40 @@
         android:entries="@array/theme_entries"
         android:entryValues="@array/theme_entry_values"
         android:key="appTheme"
-        android:title="@string/app_theme" />
+        android:title="@string/app_theme"
+        app:iconSpaceReserved="false" />
+
     <ListPreference
         android:dialogTitle="@string/language"
         android:key="app_language"
-        android:title="@string/language" />
+        android:title="@string/language"
+        app:iconSpaceReserved="false" />
+
     <ListPreference
         android:dialogTitle="@string/change_font_size"
         android:entries="@array/font_size_entries"
         android:entryValues="@array/font_size_entry_values"
         android:key="font_size"
-        android:title="@string/font_size" />
+        android:title="@string/font_size"
+        app:iconSpaceReserved="false" />
+
     <ListPreference
         android:dialogTitle="@string/navigation"
         android:entries="@array/navigation_entries"
         android:entryValues="@array/navigation_entry_values"
         android:key="navigation"
-        android:title="@string/navigation" />
+        android:title="@string/navigation"
+        app:iconSpaceReserved="false" />
+
     <CheckBoxPreference
         android:key="showSplash"
         android:summary="@string/show_splash_summary"
-        android:title="@string/show_splash_title" />
+        android:title="@string/show_splash_title"
+        app:iconSpaceReserved="false" />
+
     <Preference
         android:dependency="showSplash"
         android:key="splashPath"
-        android:layout="?android:attr/preferenceLayoutChild"
-        android:title="@string/splash_path" />
+        android:title="@string/splash_path"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

@@ -69,7 +69,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/playBtn"
-            android:textColor="?primaryTextColor"
+            android:textColor="?colorOnSurface"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:text="00:00" />
@@ -80,7 +80,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/playBtn"
-            android:textColor="?primaryTextColor"
+            android:textColor="?colorOnSurface"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:text="00:00" />

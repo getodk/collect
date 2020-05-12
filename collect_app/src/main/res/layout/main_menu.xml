@@ -30,6 +30,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <FrameLayout
+                android:id="@+id/mapbox_container"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="invisible">
+            </FrameLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +53,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/enter_data"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -54,7 +61,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/review_data"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -62,7 +69,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/send_data"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -70,7 +77,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/view_sent_forms"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -78,7 +85,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/get_forms"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -86,7 +93,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/manage_forms"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"

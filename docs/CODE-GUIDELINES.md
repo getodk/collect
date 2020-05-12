@@ -44,14 +44,8 @@ Follow these naming conventions in Android XML files:
   ```
 
 ## UI components style guidelines
-Ensure that the added UI components are compatible with both light and dark themes.
-Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.color_name).
 
-UI Component | Java | Xml _(layouts, drawables, vectors)_:
---- | --- | ---
-text color | themeUtils.getPrimaryTextColor() | ?primaryTextColor
-accent color | themeUtils.getAccentColor() | ?colorAccent
-icon color | themeUtils.getIconColor() | ?iconColor
+Ensure that the added UI components are compatible with both light and dark themes by using theme attributes for coloring the UI components instead of directly using color values (eg. #000000 or R.color.color_name). In XML these should come from the Material Theme attributes documented [here](https://material.io/develop/android/theming/color/). If you need to set colors in Java code there is a `ThemeUtils` helper class that will let you fetch these attributes.
 
 ## Custom view guidelines
 

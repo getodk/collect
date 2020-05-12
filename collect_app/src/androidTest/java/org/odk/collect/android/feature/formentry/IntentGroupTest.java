@@ -47,7 +47,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
- * Tests that intent groups work as documented at https://docs.opendatakit.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields
+ * Tests that intent groups work as documented at https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields
  */
 public class IntentGroupTest {
     private static final String INTENT_GROUP_FORM = "intent-group.xml";

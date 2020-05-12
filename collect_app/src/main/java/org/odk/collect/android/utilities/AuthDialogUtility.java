@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.utilities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
