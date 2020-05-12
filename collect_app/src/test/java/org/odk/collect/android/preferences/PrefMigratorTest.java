@@ -342,4 +342,11 @@ public class PrefMigratorTest {
         PrefMigrator.migrateSharedPrefs();
         assertPrefs("maps", false);
     }
+
+    @Test
+    public void migratesServerType() {
+        initPrefs("protocol", "other_protocol");
+        PrefMigrator.migrateSharedPrefs();
+        assertPrefs("protocol", "odk_default");
+    }
 }

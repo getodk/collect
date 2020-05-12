@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateValue;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_STAMEN;
@@ -71,6 +72,8 @@ public class PrefMigrator {
                 .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "positron")
             .withValues("osmdroid", "openmap_carto_darkmatter")
                 .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "dark_matter"),
+
+            translateValue("other_protocol").toValue("odk_default").forKey("protocol")
     };
 
     static final Migration[] ADMIN_MIGRATIONS = {
