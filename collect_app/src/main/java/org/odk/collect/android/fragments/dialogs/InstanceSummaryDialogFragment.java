@@ -165,7 +165,7 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     private void setUpChip(boolean canEdit) {
         openFormChip.setVisibility(View.VISIBLE);
         openFormChip.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
-        openFormChip.setChipIcon(ContextCompat.getDrawable(getActivity(), canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
+        openFormChip.setChipIcon(ContextCompat.getDrawable(requireActivity(), canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormChip.setOnClickListener(v -> {
             startActivity(canEdit
                     ? getEditFormInstanceIntentFor()
@@ -177,13 +177,13 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     private Drawable getStatusIcon(String instanceStatus) {
         switch (instanceStatus) {
             case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return ContextCompat.getDrawable(getActivity(), R.drawable.form_state_saved);
+                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_saved);
             case InstanceProviderAPI.STATUS_COMPLETE:
-                return ContextCompat.getDrawable(getActivity(), R.drawable.form_state_finalized);
+                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_finalized);
             case InstanceProviderAPI.STATUS_SUBMITTED:
-                return ContextCompat.getDrawable(getActivity(), R.drawable.form_state_submited);
+                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_submited);
             case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return ContextCompat.getDrawable(getActivity(), R.drawable.form_state_submission_failed);
+                return ContextCompat.getDrawable(requireActivity(), R.drawable.form_state_submission_failed);
         }
         return null;
     }
