@@ -4,9 +4,7 @@ import androidx.fragment.app.DialogFragment;
 
 public class ChangeAdminPasswordDialog extends DialogFragment {
 
-
-    public interface ChangeAdminPasswordDialogCallback {
-        void onPassWordChanged(String pw);
-        void onEmptyPasswordSubmitted();
+    public interface ChangePasswordDialogCallback {
+        void onPasswordChanged(String password);
     }
 }
