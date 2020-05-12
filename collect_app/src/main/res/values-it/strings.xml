@@ -162,7 +162,6 @@
   <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
   <string name="edit_prompt">Modifica Prompt</string>
   <string name="selected_google_account_text">Account Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Molto Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Media</string>

@@ -159,7 +159,6 @@
   <string name="save_as_error">Nama tidak boleh kosong!</string>
   <string name="edit_prompt">Ubah risalah</string>
   <string name="selected_google_account_text">Akun Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Sangat besar</string>
   <string name="font_size_large">Besar</string>
   <string name="font_size_medium">Sedang</string>

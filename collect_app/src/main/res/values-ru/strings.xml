@@ -159,7 +159,6 @@
   <string name="save_as_error">Название не может быть пустым!</string>
   <string name="edit_prompt">Изменить вопрос</string>
   <string name="selected_google_account_text">Учётная запись Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Очень большой</string>
   <string name="font_size_large">Большой</string>
   <string name="font_size_medium">Средний</string>

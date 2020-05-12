@@ -162,7 +162,6 @@
   <string name="save_as_error">Le nom ne peut pas être vide !</string>
   <string name="edit_prompt">Ligne de modification</string>
   <string name="selected_google_account_text">Compte Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Très grand</string>
   <string name="font_size_large">Grand</string>
   <string name="font_size_medium">Normal</string>

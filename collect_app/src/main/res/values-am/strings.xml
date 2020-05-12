@@ -118,7 +118,6 @@
   <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
   <string name="selected_google_account_text">የ Google መለያ</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">በጣም ትልቅ</string>
   <string name="font_size_large">ትልቅ</string>
   <string name="font_size_medium">መካከለኛ</string>

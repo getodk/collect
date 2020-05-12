@@ -161,7 +161,6 @@
   <string name="save_as_error">Sparat namn får inte vara tomt!</string>
   <string name="edit_prompt">Inmatningstext</string>
   <string name="selected_google_account_text">Google-konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Extra stor</string>
   <string name="font_size_large">Stor</string>
   <string name="font_size_medium">Mellan</string>

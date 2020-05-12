@@ -162,7 +162,6 @@
   <string name="save_as_error">Gespeicherter Name darf nicht leer sein!</string>
   <string name="edit_prompt">Eingabe ändern</string>
   <string name="selected_google_account_text">Google-Konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Sehr gross</string>
   <string name="font_size_large">Groß</string>
   <string name="font_size_medium">Mittel</string>

@@ -163,7 +163,6 @@
   <string name="save_as_error">¡El nombre no puede estar en blanco!</string>
   <string name="edit_prompt">Editar entrada</string>
   <string name="selected_google_account_text">Cuenta de Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Extra Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Medio</string>

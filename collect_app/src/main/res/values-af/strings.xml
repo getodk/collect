@@ -136,7 +136,6 @@
   <string name="save_as_error">Gestoorde naam mag nie leeg wees nie!</string>
   <string name="edit_prompt">Wysig Vraag</string>
   <string name="selected_google_account_text">Google rekening</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
   <string name="font_size_extra_large">Extra Large</string>
   <string name="font_size_large">Large</string>
   <string name="font_size_medium">Medium</string>

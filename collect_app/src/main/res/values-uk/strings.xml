@@ -159,7 +159,6 @@
   <string name="save_as_error">Ім’я не може бути порожнім!</string>
   <string name="edit_prompt">Редагувати запит</string>
   <string name="selected_google_account_text">Обліковий запис Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Дуже великий</string>
   <string name="font_size_large">Великий</string>
   <string name="font_size_medium">Середній</string>

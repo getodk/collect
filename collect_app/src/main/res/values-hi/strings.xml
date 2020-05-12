@@ -148,7 +148,6 @@
   <string name="save_as_error">संरक्षित नाम रिक्त नहीं होना चाहिए!</string>
   <string name="edit_prompt">Prompt को संशोधित करें</string>
   <string name="selected_google_account_text">गूगल अकाउंट</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">ज्यादा बड़ा</string>
   <string name="font_size_large">बड़ा</string>
   <string name="font_size_medium">मझला</string>

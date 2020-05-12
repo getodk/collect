@@ -162,7 +162,6 @@
   <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
   <string name="edit_prompt">Vastauksen muokkaus</string>
   <string name="selected_google_account_text">Google-tili</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Erittäin suuri</string>
   <string name="font_size_large">Suuri</string>
   <string name="font_size_medium">Keskikokoinen</string>

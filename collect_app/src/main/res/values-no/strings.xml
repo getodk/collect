@@ -135,7 +135,6 @@
   <string name="save_as_error">Navnet kan ikke være blank!</string>
   <string name="edit_prompt">Rediger prompt</string>
   <string name="selected_google_account_text">Google-konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Ekstra stor</string>
   <string name="font_size_large">Stor</string>
   <string name="font_size_medium">Medium</string>

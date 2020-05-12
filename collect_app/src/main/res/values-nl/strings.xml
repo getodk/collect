@@ -156,7 +156,6 @@
   <string name="save_as_error">Formuliernaam mag niet leeg zijn!</string>
   <string name="edit_prompt">Edit Prompt</string>
   <string name="selected_google_account_text">Google Account</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Extra groot</string>
   <string name="font_size_large">Groot</string>
   <string name="font_size_medium">Nomaal</string>

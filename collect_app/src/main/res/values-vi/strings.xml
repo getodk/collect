@@ -132,7 +132,6 @@
   <string name="save_as_error">Tên được lưu không để trống!</string>
   <string name="edit_prompt">Sửa thông tin</string>
   <string name="selected_google_account_text">Tài khoản Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Cực lớn</string>
   <string name="font_size_large">Lớn</string>
   <string name="font_size_medium">Vừa</string>

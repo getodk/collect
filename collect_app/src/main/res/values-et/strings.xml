@@ -139,7 +139,6 @@
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
   <string name="edit_prompt">Muuda küsimust</string>
   <string name="selected_google_account_text">Google konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Väga suur</string>
   <string name="font_size_large">Suur</string>
   <string name="font_size_medium">Keskmine</string>

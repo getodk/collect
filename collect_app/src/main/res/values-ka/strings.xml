@@ -159,7 +159,6 @@
   <string name="save_as_error">სახელი არ უნდა იყოს ცარიელი!</string>
   <string name="edit_prompt">გამოპასუხების რედაქტირება</string>
   <string name="selected_google_account_text">Google ექაუნთი</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">ძალიან დიდი</string>
   <string name="font_size_large">დიდი</string>
   <string name="font_size_medium">საშუალო</string>

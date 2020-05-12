@@ -161,7 +161,6 @@
   <string name="save_as_error">ឈ្មោះរក្សាទុកមិនអាចទទេ!</string>
   <string name="edit_prompt">កែប្រែ Prompt</string>
   <string name="selected_google_account_text">គណនី Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">ធំបំផុត</string>
   <string name="font_size_large">ធំ</string>
   <string name="font_size_medium">មធ្បម</string>

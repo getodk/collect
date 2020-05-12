@@ -133,7 +133,6 @@
   <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
   <string name="edit_prompt">ແກ້ໄຂຈຸດທີ່ເລືອກ</string>
   <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
   <string name="font_size_large">ຂະໜາດໃຫຍ່</string>
   <string name="font_size_medium">ຂະໜາດປານກາງ</string>

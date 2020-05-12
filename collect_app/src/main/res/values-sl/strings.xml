@@ -154,7 +154,6 @@
   <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
   <string name="edit_prompt">Uredi</string>
   <string name="selected_google_account_text">Goggle račun</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Extra veliko</string>
   <string name="font_size_large">Veliko</string>
   <string name="font_size_medium">Srednje</string>

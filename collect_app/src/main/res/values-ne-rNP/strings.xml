@@ -156,7 +156,6 @@
   <string name="save_as_error">संचित गर्दा नाम खाली छोड्न मिल्दैन !</string>
   <string name="edit_prompt">सम्पादन गर्न प्रेरित गर्नुहोस् </string>
   <string name="selected_google_account_text">गुगल एकाउण्ट</string>
-  <string name="server_platform_odk_aggregate">ODK एग्रिगेट</string>
     <string name="font_size_extra_large">अझ ठूलो </string>
   <string name="font_size_large">ठूलो </string>
   <string name="font_size_medium">मध्यम </string>

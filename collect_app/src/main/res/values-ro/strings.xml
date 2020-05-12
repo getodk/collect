@@ -135,7 +135,6 @@
   <string name="save_as_error">Numele salvat nu trebuie să fie gol!</string>
   <string name="edit_prompt">Editare câmp</string>
   <string name="selected_google_account_text">Cont Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">Extra mare</string>
   <string name="font_size_large">Mare</string>
   <string name="font_size_medium">Medie</string>

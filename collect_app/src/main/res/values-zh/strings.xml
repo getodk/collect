@@ -143,7 +143,6 @@
   <string name="save_as_error">保存的名字不能为空!</string>
   <string name="edit_prompt">修改提示</string>
   <string name="selected_google_account_text">Google账号</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">极大</string>
   <string name="font_size_large">大</string>
   <string name="font_size_medium">中</string>

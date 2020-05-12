@@ -162,7 +162,6 @@
   <string name="save_as_error">اسم الحفظ لا يمكن أن يكون فارغ!</string>
   <string name="edit_prompt">تعديل التوجيه</string>
   <string name="selected_google_account_text">حساب جوجل</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">كبير جدا</string>
   <string name="font_size_large">كبير</string>
   <string name="font_size_medium">متوسط</string>

@@ -23,7 +23,7 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/protocol_google_sheets</item>
     </string-array>
     <string-array name="protocol_entries">
-        <item>@string/server_platform_odk_aggregate</item>
+        <item>@string/server_platform_odk</item>
         <item>@string/server_platform_google_sheets</item>
     </string-array>
 

@@ -162,7 +162,6 @@
   <string name="save_as_error">保存する名前は空にできません!</string>
   <string name="edit_prompt">プロンプトを編集</string>
   <string name="selected_google_account_text">Google アカウント</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
     <string name="font_size_extra_large">特大</string>
   <string name="font_size_large">大</string>
   <string name="font_size_medium">中</string>
