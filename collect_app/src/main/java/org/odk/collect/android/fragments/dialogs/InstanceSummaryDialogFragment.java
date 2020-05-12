@@ -35,11 +35,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
-    public static final String TAG = "InstanceSummaryDialogFragment";
-    public static final String FEATURE_ID = "featureId";
+    public static final String INSTANCE_ID = "instanceId";
 
-    private int featureId;
-    private FormMapViewModel.MappableFormInstance formInstance;
+    private long instanceId;
+
     private FormMapViewModel viewModel;
 
     @BindView(R.id.submission_name)
@@ -73,34 +72,35 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(FEATURE_ID, featureId);
+        outState.putLong(INSTANCE_ID, instanceId);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        featureId = savedInstanceState == null
-                ? getArguments().getInt(FEATURE_ID)
-                : savedInstanceState.getInt(FEATURE_ID);
+        instanceId = savedInstanceState == null
+                ? getArguments().getLong(INSTANCE_ID)
+                : savedInstanceState.getLong(INSTANCE_ID);
 
-        formInstance = viewModel.getInstanceByFeatureId(featureId);
         setUpDialog();
     }
 
     private void setUpDialog() {
+        FormMapViewModel.MappableFormInstance formInstance = viewModel.getInstanceById(instanceId);
+
         submissionName.setText(formInstance.getInstanceName());
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(requireActivity(), formInstance.getStatus(), formInstance.getLastStatusChangeDate());
         statusText.setText(instanceLastStatusChangeDate);
         statusIcon.setImageDrawable(IconUtils.getSubmissionSummaryStatusIcon(requireContext(), formInstance.getStatus()));
         statusIcon.setBackground(null);
 
-        switch (getAction()) {
+        switch (formInstance.getClickAction()) {
             case DELETED_TOAST:
                 infoText.setVisibility(View.VISIBLE);
                 String deletedTime = getString(R.string.deleted_on_date_at_time);
                 String disabledMessage = new SimpleDateFormat(deletedTime,
-                        Locale.getDefault()).format(viewModel.getDeletedDateOf(formInstance.getDatabaseId()));
+                        Locale.getDefault()).format(viewModel.getDeletedDateOf(instanceId));
                 infoText.setText(disabledMessage);
                 break;
             case NOT_VIEWABLE_TOAST:
@@ -138,12 +138,7 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     }
 
     private Intent getEditFormInstanceIntentFor() {
-        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, formInstance.getDatabaseId());
+        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
-    }
-
-    private FormMapViewModel.ClickAction getAction() {
-        FormMapViewModel.MappableFormInstance instance = viewModel.getInstanceByFeatureId(featureId);
-        return instance == null ? FormMapViewModel.ClickAction.NONE : instance.getClickAction();
     }
 }

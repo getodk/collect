@@ -260,7 +260,7 @@ public class FormMapActivityTest {
     }
 
     private void clickOnOpenFormChip() {
-        InstanceSummaryDialogFragment instanceSummaryDialogFragment = (InstanceSummaryDialogFragment) activity.getSupportFragmentManager().findFragmentByTag(InstanceSummaryDialogFragment.TAG);
+        InstanceSummaryDialogFragment instanceSummaryDialogFragment = (InstanceSummaryDialogFragment) activity.getSupportFragmentManager().findFragmentByTag(InstanceSummaryDialogFragment.class.getName());
         instanceSummaryDialogFragment.getView().findViewById(R.id.openFormChip).performClick();
     }
 

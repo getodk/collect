@@ -42,7 +42,9 @@ import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -62,7 +64,12 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private MapFragment map;
 
     /**
-     * Points to be mapped. Note: kept separately from {@link FormMapViewModel#instancesByFeatureId} so we can
+     * Quick lookup of instance objects from map feature IDs.
+     */
+    private final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
+
+    /**
+     * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
      * quickly zoom to bounding box.
      */
     private final List<MapPoint> points = new ArrayList<>();
@@ -193,7 +200,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             int drawableId = getDrawableIdForStatus(instance.getStatus());
             map.setMarkerIcon(featureId, drawableId);
 
-            viewModel.addInstanceByFeatureId(featureId, instance);
+            instancesByFeatureId.put(featureId, instance);
             points.add(point);
         }
     }
@@ -258,12 +265,12 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private void showSummary(int featureId) {
-        FormMapViewModel.MappableFormInstance mappableFormInstance = viewModel.getInstanceByFeatureId(featureId);
+        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
         if (mappableFormInstance != null) {
             map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
 
             Bundle args = new Bundle();
-            args.putInt(InstanceSummaryDialogFragment.FEATURE_ID, featureId);
+            args.putLong(InstanceSummaryDialogFragment.INSTANCE_ID, mappableFormInstance.getDatabaseId());
             showIfNotShowing(InstanceSummaryDialogFragment.class, args, getSupportFragmentManager());
         }
     }
