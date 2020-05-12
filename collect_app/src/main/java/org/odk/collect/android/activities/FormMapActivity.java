@@ -39,12 +39,9 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -226,27 +223,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     public void onFeatureClicked(int featureId) {
         MappableFormInstance instance = instancesByFeatureId.get(featureId);
         ClickAction clickAction = instance == null ? FormMapViewModel.ClickAction.NONE : instance.getClickAction();
-
-        boolean canEditSaved = (Boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_EDIT_SAVED);
-
-        switch (clickAction) {
-            case DELETED_TOAST:
-                String deletedTime = getString(R.string.deleted_on_date_at_time);
-                String disabledMessage = new SimpleDateFormat(deletedTime,
-                        Locale.getDefault()).format(viewModel.getDeletedDateOf(instance.getDatabaseId()));
-
-                ToastUtils.showLongToast(disabledMessage);
-                break;
-            case NOT_VIEWABLE_TOAST:
-                ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
-                break;
-            case OPEN_READ_ONLY:
-                showSummary(featureId, false);
-                break;
-            case OPEN_EDIT:
-                showSummary(featureId, canEditSaved);
-                break;
-        }
+        showSummary(featureId, clickAction);
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -291,7 +268,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         return R.drawable.ic_map_point;
     }
 
-    private void showSummary(int featureId, boolean canEdit) {
+    private void showSummary(int featureId, ClickAction clickAction) {
         FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
         if (mappableFormInstance != null) {
             map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
@@ -302,7 +279,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             long instanceId = mappableFormInstance.getDatabaseId();
 
             InstanceSummaryDialogFragment
-                    .newInstance(canEdit, instanceName, instanceStatus, instanceLastStatusChangeDate, instanceId)
+                    .newInstance(instanceName, instanceStatus, instanceLastStatusChangeDate, instanceId, clickAction)
                     .show(getSupportFragmentManager(), InstanceSummaryDialogFragment.TAG);
         }
     }

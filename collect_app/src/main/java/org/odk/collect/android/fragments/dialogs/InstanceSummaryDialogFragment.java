@@ -1,6 +1,7 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -14,13 +15,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,17 +36,19 @@ import butterknife.ButterKnife;
 public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     public static final String TAG = "InstanceSummaryDialogFragment";
 
-    private static final String CAN_EDIT = "canEdit";
     private static final String INSTANCE_NAME = "instanceName";
     private static final String INSTANCE_STATUS = "instanceStatus";
     private static final String INSTANCE_LAST_STATUS_CHANGE_DATE = "instanceLastStatusChangeDate";
     private static final String INSTANCE_ID = "instanceId";
+    private static final String CLICK_ACTION = "clickAction";
 
-    private boolean canEdit;
     private String instanceName;
     private String instanceStatus;
     private String instanceLastStatusChangeDate;
     private long instanceId;
+    private FormMapViewModel.ClickAction clickAction;
+
+    private FormMapViewModel viewModel;
 
     @BindView(R.id.submission_name)
     TextView submissionName;
@@ -49,22 +59,30 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     @BindView(R.id.status_text)
     TextView statusText;
 
+    @BindView(R.id.info)
+    TextView infoText;
+
     @BindView(R.id.openFormChip)
     Chip openFormChip;
 
-    public static InstanceSummaryDialogFragment newInstance(boolean canEdit, String instanceName,
-                                                            String instanceStatus,
+    public static InstanceSummaryDialogFragment newInstance(String instanceName, String instanceStatus,
                                                             String instanceLastStatusChangeDate,
-                                                            long instanceId) {
+                                                            long instanceId, FormMapViewModel.ClickAction clickAction) {
         InstanceSummaryDialogFragment dialog = new InstanceSummaryDialogFragment();
         Bundle args = new Bundle();
-        args.putBoolean(CAN_EDIT, canEdit);
         args.putString(INSTANCE_NAME, instanceName);
         args.putString(INSTANCE_STATUS, instanceStatus);
         args.putString(INSTANCE_LAST_STATUS_CHANGE_DATE, instanceLastStatusChangeDate);
         args.putLong(INSTANCE_ID, instanceId);
+        args.putSerializable(CLICK_ACTION, clickAction);
         dialog.setArguments(args);
         return dialog;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = ViewModelProviders.of(requireActivity()).get(FormMapViewModel.class);
     }
 
     @Nullable
@@ -77,11 +95,11 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(CAN_EDIT, canEdit);
         outState.putString(INSTANCE_NAME, instanceName);
         outState.putString(INSTANCE_STATUS, instanceStatus);
         outState.putString(INSTANCE_LAST_STATUS_CHANGE_DATE, instanceLastStatusChangeDate);
         outState.putLong(INSTANCE_ID, instanceId);
+        outState.putSerializable(CLICK_ACTION, clickAction);
         super.onSaveInstanceState(outState);
     }
 
@@ -93,10 +111,6 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void readProperties(Bundle savedInstanceState) {
-        canEdit = savedInstanceState == null
-                ? getArguments().getBoolean(CAN_EDIT)
-                : savedInstanceState.getBoolean(CAN_EDIT);
-
         instanceName = savedInstanceState == null
                 ? getArguments().getString(INSTANCE_NAME)
                 : savedInstanceState.getString(INSTANCE_NAME);
@@ -112,6 +126,10 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
         instanceId = savedInstanceState == null
                 ? getArguments().getLong(INSTANCE_ID)
                 : savedInstanceState.getLong(INSTANCE_ID);
+
+        clickAction = (FormMapViewModel.ClickAction) (savedInstanceState == null
+                        ? getArguments().getSerializable(CLICK_ACTION)
+                        : savedInstanceState.getSerializable(CLICK_ACTION));
     }
 
     private void setUpElements() {
@@ -120,6 +138,32 @@ public class InstanceSummaryDialogFragment extends BottomSheetDialogFragment {
         statusIcon.setImageDrawable(getStatusIcon(instanceStatus));
         statusIcon.setBackground(null);
 
+        switch (clickAction) {
+            case DELETED_TOAST:
+                infoText.setVisibility(View.VISIBLE);
+                String deletedTime = getString(R.string.deleted_on_date_at_time);
+                String disabledMessage = new SimpleDateFormat(deletedTime,
+                        Locale.getDefault()).format(viewModel.getDeletedDateOf(instanceId));
+                infoText.setText(disabledMessage);
+                break;
+            case NOT_VIEWABLE_TOAST:
+                infoText.setVisibility(View.VISIBLE);
+                infoText.setText(R.string.cannot_edit_completed_form);
+                break;
+            case OPEN_READ_ONLY:
+                openFormChip.setVisibility(View.VISIBLE);
+                setUpChip(false);
+                break;
+            case OPEN_EDIT:
+                openFormChip.setVisibility(View.VISIBLE);
+                boolean canEditSaved = (Boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_EDIT_SAVED);
+                setUpChip(canEditSaved);
+                break;
+        }
+    }
+
+    private void setUpChip(boolean canEdit) {
+        openFormChip.setVisibility(View.VISIBLE);
         openFormChip.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
         openFormChip.setChipIcon(ContextCompat.getDrawable(getActivity(), canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormChip.setOnClickListener(v -> {

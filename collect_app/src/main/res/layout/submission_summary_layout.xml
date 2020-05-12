@@ -49,6 +49,7 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/openFormChip"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
@@ -56,5 +57,14 @@
         app:chipBackgroundColor="?colorSecondary"
         app:iconStartPadding="@dimen/margin_small"
         app:chipEndPadding="@dimen/margin_small"/>
+
+    <TextView
+        android:id="@+id/info"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?primaryTextColor"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>
