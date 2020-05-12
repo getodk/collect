@@ -51,6 +51,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,6 +65,9 @@ import timber.log.Timber;
 
 import static java.lang.StrictMath.abs;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
+import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
+import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
+import static org.odk.collect.android.utilities.FileUtils.write;
 
 public class Utilities {
 
@@ -821,7 +825,7 @@ public class Utilities {
     /*
      * Copy instance files to a new location
      */
-    public static void copyInstanceFiles(String fromInstancePath, String toInstancePath) {
+    public static void copyInstanceFiles(String fromInstancePath, String toInstancePath, String formPath) {
         String fromFolderPath = fromInstancePath.substring(0, fromInstancePath.lastIndexOf('/'));   // InstancePaths are for the XML files
         String toFolderPath = toInstancePath.substring(0, toInstancePath.lastIndexOf('/'));   // InstancePaths are for the XML files
 
@@ -847,6 +851,13 @@ public class Utilities {
                 }
             }
         }
+
+        final File formXml = new File(formPath);
+        final File mediaFolder = FileUtils.getFormMediaDir(formXml);
+        String lastSavedPath = FileUtils.getLastSavedPath(mediaFolder);
+        // Create stub for last saved
+        File tmpLastSaved = new File(lastSavedPath, LAST_SAVED_FILENAME);
+        write(tmpLastSaved, STUB_XML.getBytes(Charset.forName("UTF-8")));
     }
 
     /*

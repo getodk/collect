@@ -962,7 +962,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         Utilities.duplicateTask(originalPath, newPath, entry);
 
         // 3. Copy the instance files
-        Utilities.copyInstanceFiles(originalPath, newPath);
+        Utilities.copyInstanceFiles(originalPath, newPath, formPath);
         return newPath;
     }
 
