@@ -72,6 +72,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -113,6 +114,7 @@ public class SmapTaskMapFragment extends Fragment
 
     BitmapDescriptor complete = null;
     BitmapDescriptor accepted = null;
+    BitmapDescriptor late = null;
     BitmapDescriptor repeat = null;
     BitmapDescriptor rejected = null;
     BitmapDescriptor newtask = null;
@@ -258,6 +260,7 @@ public class SmapTaskMapFragment extends Fragment
 
             complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
             accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
+            late = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_late));
             repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
             rejected = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_rejected));
             newtask = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_new));
@@ -428,7 +431,7 @@ public class SmapTaskMapFragment extends Fragment
                                 .title(t.name)
                                 .snippet(taskTime + "\n" + addressText);
 
-                        markerOptions.icon(getIcon(t.taskStatus, t.repeat, t.locationTrigger != null));
+                        markerOptions.icon(getIcon(t.taskStatus, t.repeat, t.locationTrigger != null, t.taskFinish));
                         Marker m = mMap.addMarker(markerOptions);
                         markers.add(m);
                         markerMap.put(m, index);
@@ -509,7 +512,7 @@ public class SmapTaskMapFragment extends Fragment
     /*
      * Get the icon to represent the passed in task status
      */
-    private BitmapDescriptor getIcon(String status, boolean isRepeat, boolean hasTrigger) {
+    private BitmapDescriptor getIcon(String status, boolean isRepeat, boolean hasTrigger, long taskFinish) {
 
         if(status.equals(Utilities.STATUS_T_REJECTED) || status.equals(Utilities.STATUS_T_CANCELLED)) {
             return rejected;
@@ -520,6 +523,8 @@ public class SmapTaskMapFragment extends Fragment
                 return triggered_repeat;
             } else if(isRepeat) {
                 return repeat;
+            } else if(taskFinish != 0 && taskFinish < (new Date()).getTime()) {
+                return late;
             } else {
                 return accepted;
             }
