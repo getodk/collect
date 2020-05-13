@@ -215,6 +215,7 @@ public class Collect extends Application {
                     .penaltyLog()
                     .build());
         }
+    }
 
     private void initMapProviders() {
         new com.google.android.gms.maps.MapView(this).onCreate(null);
