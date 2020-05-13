@@ -219,7 +219,14 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
-        showSummary(featureId);
+        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
+        if (mappableFormInstance != null) {
+            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
+
+            Bundle args = new Bundle();
+            args.putLong(InstanceSummaryDialogFragment.INSTANCE_ID, mappableFormInstance.getDatabaseId());
+            showIfNotShowing(InstanceSummaryDialogFragment.class, args, getSupportFragmentManager());
+        }
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -262,16 +269,5 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 return R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;
-    }
-
-    private void showSummary(int featureId) {
-        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
-        if (mappableFormInstance != null) {
-            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
-
-            Bundle args = new Bundle();
-            args.putLong(InstanceSummaryDialogFragment.INSTANCE_ID, mappableFormInstance.getDatabaseId());
-            showIfNotShowing(InstanceSummaryDialogFragment.class, args, getSupportFragmentManager());
-        }
     }
 }
