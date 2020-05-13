@@ -237,7 +237,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     public void onFeatureClicked(int featureId) {
         FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
         if (mappableFormInstance != null) {
-            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), false);
+            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
             setUpSummarySheet(mappableFormInstance);
             summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
