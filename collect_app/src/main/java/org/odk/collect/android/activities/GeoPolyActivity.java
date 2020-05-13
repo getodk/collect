@@ -14,28 +14,27 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-public class GeoPolyActivity extends BaseGeoMapActivity {
+public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -83,7 +82,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     private TextView locationStatus;
     private TextView collectionStatus;
 
-    private AlertDialog settingsDialog;
     private View settingsView;
 
     private static final int[] INTERVAL_OPTIONS = {
@@ -99,11 +97,9 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     private boolean inputActive; // whether we are ready for the user to add points
     private boolean recordingEnabled; // whether points are taken from GPS readings (if not, placed by tapping)
     private boolean recordingAutomatic; // whether GPS readings are taken at regular intervals (if not, only when user-directed)
-    private RadioGroup radioGroup;
-    private View autoOptions;
-    private Spinner autoInterval;
+
     private int intervalIndex = DEFAULT_INTERVAL_INDEX;
-    private Spinner accuracyThreshold;
+
     private int accuracyThresholdIndex = DEFAULT_ACCURACY_THRESHOLD_INDEX;
 
     // restored from savedInstanceState
@@ -173,38 +169,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         locationStatus = findViewById(R.id.location_status);
         collectionStatus = findViewById(R.id.collection_status);
         settingsView = getLayoutInflater().inflate(R.layout.geopoly_dialog, null);
-        radioGroup = settingsView.findViewById(R.id.radio_group);
-        radioGroup.setOnCheckedChangeListener(this::updateRecordingMode);
-        autoOptions = settingsView.findViewById(R.id.auto_options);
-        autoInterval = settingsView.findViewById(R.id.auto_interval);
-        autoInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                intervalIndex = position;
-            }
-
-            @Override public void onNothingSelected(AdapterView<?> parent) { }
-        });
-
-        String[] options = new String[INTERVAL_OPTIONS.length];
-        for (int i = 0; i < INTERVAL_OPTIONS.length; i++) {
-            options[i] = formatInterval(INTERVAL_OPTIONS[i]);
-        }
-        populateSpinner(autoInterval, options);
-
-        accuracyThreshold = settingsView.findViewById(R.id.accuracy_threshold);
-        accuracyThreshold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                accuracyThresholdIndex = position;
-            }
-
-            @Override public void onNothingSelected(AdapterView<?> parent) { }
-        });
-
-        options = new String[ACCURACY_THRESHOLD_OPTIONS.length];
-        for (int i = 0; i < ACCURACY_THRESHOLD_OPTIONS.length; i++) {
-            options[i] = formatAccuracyThreshold(ACCURACY_THRESHOLD_OPTIONS[i]);
-        }
-        populateSpinner(accuracyThreshold, options);
 
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
@@ -239,7 +203,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
             if (map.getPolyPoints(featureId).isEmpty()) {
-                settingsDialog.show();
+                DialogUtils.showIfNotShowing(SettingsDialogFragment.class, getSupportFragmentManager());
             } else {
                 startInput();
             }
@@ -247,8 +211,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
 
         recordButton = findViewById(R.id.record_button);
         recordButton.setOnClickListener(v -> recordPoint());
-
-        buildDialogs();
 
         findViewById(R.id.layers).setOnClickListener(v -> {
             MapsPreferences.showReferenceLayerDialog(this);
@@ -324,29 +286,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         }
     }
 
-    /** Populates a Spinner with the option labels in the given array. */
-    private void populateSpinner(Spinner spinner, String[] options) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-            this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-    }
-
-    /** Formats a time interval as a whole number of seconds or minutes. */
-    private String formatInterval(int seconds) {
-        int minutes = seconds / 60;
-        return minutes > 0 ?
-            getResources().getQuantityString(R.plurals.number_of_minutes, minutes, minutes) :
-            getResources().getQuantityString(R.plurals.number_of_seconds, seconds, seconds);
-    }
-
-    /** Formats an entry in the accuracy threshold dropdown. */
-    private String formatAccuracyThreshold(int meters) {
-        return meters > 0 ?
-            getResources().getQuantityString(R.plurals.number_of_meters, meters, meters) :
-            getString(R.string.none);
-    }
-
     /**
      * Parses a form result string, as previously formatted by formatPoints,
      * into a list of vertices.
@@ -406,23 +345,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         return result.toString().trim();
     }
 
-    private void buildDialogs() {
-        settingsDialog = new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.input_method))
-            .setView(settingsView)
-            .setPositiveButton(getString(R.string.start), (dialog, id) -> {
-                startInput();
-                dialog.cancel();
-                settingsDialog.dismiss();
-            })
-            .setNegativeButton(R.string.cancel, (dialog, id) -> {
-                dialog.cancel();
-                settingsDialog.dismiss();
-            })
-            .create();
-    }
-
-    private void startInput() {
+    @Override
+    public void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
             startScheduler(INTERVAL_OPTIONS[intervalIndex]);
@@ -430,10 +354,39 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         updateUi();
     }
 
+    @Override
     public void updateRecordingMode(RadioGroup group, int id) {
         recordingEnabled = id != R.id.placement_mode;
         recordingAutomatic = id == R.id.automatic_mode;
-        updateUi();
+    }
+
+    @Override
+    public int getCheckedId() {
+        if (recordingEnabled) {
+            return recordingAutomatic ? R.id.automatic_mode : R.id.manual_mode;
+        } else {
+            return R.id.placement_mode;
+        }
+    }
+
+    @Override
+    public int getIntervalIndex() {
+        return intervalIndex;
+    }
+
+    @Override
+    public int getAccuracyThresholdIndex() {
+        return accuracyThresholdIndex;
+    }
+
+    @Override
+    public void setIntervalIndex(int intervalIndex) {
+        this.intervalIndex = intervalIndex;
+    }
+
+    @Override
+    public void setAccuracyThresholdIndex(int accuracyThresholdIndex) {
+        this.accuracyThresholdIndex = accuracyThresholdIndex;
     }
 
     public void startScheduler(int intervalSeconds) {
@@ -515,14 +468,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
         settingsView.findViewById(R.id.automatic_mode).setEnabled(location != null);
 
         // Settings dialog
-        if (recordingEnabled) {
-            radioGroup.check(recordingAutomatic ? R.id.automatic_mode : R.id.manual_mode);
-        } else {
-            radioGroup.check(R.id.placement_mode);
-        }
-        autoOptions.setVisibility(recordingEnabled && recordingAutomatic ? View.VISIBLE : View.GONE);
-        autoInterval.setSelection(intervalIndex);
-        accuracyThreshold.setSelection(accuracyThresholdIndex);
 
         // GPS status
         boolean usingThreshold = isAccuracyThresholdActive();
