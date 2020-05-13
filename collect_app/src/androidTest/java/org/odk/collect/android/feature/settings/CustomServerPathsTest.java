@@ -44,7 +44,7 @@ public class CustomServerPathsTest {
             .around(new CopyFormRule("one-question.xml"))
             .around(rule);
 
-    @Test
+    @Test // Issue number NODK-235 TestCase1
     public void changingFormListPathInSettings_changesFormListDownloadPath() {
         server.setFormListPath("/customPath");
         server.addForm("Custom path form");
@@ -69,7 +69,7 @@ public class CustomServerPathsTest {
                 .assertText("Custom path form");
     }
 
-    @Test
+    @Test // Issue number NODK-235 TestCase2
     public void changingSubmissionPathInSettings_changesSubmissionUploadPath() {
         server.setFormSubmissionPath("/customPath");
 
