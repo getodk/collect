@@ -27,7 +27,7 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
         return this;
     }
 
-    public ServerSettingsPage clickAggregateUsername() {
+    public ServerSettingsPage clickServerUsername() {
         onView(withText(getTranslatedString(R.string.username))).perform(click());
         return this;
     }

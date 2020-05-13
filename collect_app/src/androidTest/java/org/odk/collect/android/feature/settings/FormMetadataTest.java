@@ -20,6 +20,7 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
@@ -73,6 +74,35 @@ public class FormMetadataTest {
                 .assertText("Chino", "chino@whitepony.com", "664615");
     }
 
+    @Test // Issue number NODK-238 TestCase4 TestCase5
+    public void settingServerUsername_usedAsFallbackForMetadataUsername() {
+        new MainMenuPage(rule)
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickServerSettings()
+                .clickServerUsername()
+                .inputText("Chino")
+                .clickOKOnDialog()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+                .startBlankForm("Metadata")
+                .assertText("Chino")
+                .pressBack(new SaveOrIgnoreDialog<>("Metadata", new MainMenuPage(rule), rule))
+                .clickIgnoreChanges()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickUserAndDeviceIdentity()
+                .clickFormMetadata()
+                .clickUsername()
+                .inputText("Stephen")
+                .clickOKOnDialog()
+                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+                .startBlankForm("Metadata")
+                .assertText("Stephen");
+    }
+
     @Test
     public void deviceIdentifiersAreDisplayedInSettings() {
         new MainMenuPage(rule)
@@ -100,7 +130,7 @@ public class FormMetadataTest {
         return new SharedPreferencesInstallIDProvider(sharedPreferences, KEY_INSTALL_ID).getInstallID();
     }
 
-    class FakeDeviceDetailsProvider implements DeviceDetailsProvider {
+    private static class FakeDeviceDetailsProvider implements DeviceDetailsProvider {
 
         @Override
         public String getDeviceId() {

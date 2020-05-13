@@ -1,7 +1,10 @@
 package org.odk.collect.android.support;
 
+import android.content.res.AssetManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
@@ -14,6 +17,8 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,17 +36,35 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private String formListPath = "/formList";
     private String submissionPath = "/submission";
 
-    private final List<String> forms = new ArrayList<>();
+    private final List<FormManifestEntry> forms = new ArrayList<>();
 
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
         if (uri.getPath().equals(formListPath)) {
             String response = getFormListResponse();
-            return new HttpGetResult(new ByteArrayInputStream(response.getBytes()), new HashMap<>(), "", 200);
+
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("x-openrosa-version", "1.0");
+            return new HttpGetResult(new ByteArrayInputStream(response.getBytes()), headers, "", 200);
+        } else if (uri.getPath().equals("/form")) {
+            InputStream response = getFormResponse(uri);
+
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("x-openrosa-version", "1.0");
+            return new HttpGetResult(response, headers, "", 200);
         } else {
             return new HttpGetResult(null, new HashMap<>(), "", 404);
         }
+    }
+
+    @NotNull
+    private InputStream getFormResponse(@NonNull URI uri) throws IOException {
+        String formID = uri.getQuery().split("=")[1];
+        String xmlPath = forms.get(Integer.parseInt(formID)).getFormXML();
+
+        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
+        return assetManager.open("forms/" + xmlPath);
     }
 
     @NonNull
@@ -75,8 +98,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         submissionPath = path;
     }
 
-    public void addForm(String formLabel) {
-        forms.add(formLabel);
+    public void addForm(String formLabel, String formXML) {
+        forms.add(new FormManifestEntry(formLabel, formXML));
     }
 
     public String getURL() {
@@ -84,19 +107,47 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     }
 
     @NotNull
+    @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
     private String getFormListResponse() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<forms>\n");
+        stringBuilder
+                .append("<?xml version='1.0' encoding='UTF-8' ?>\n")
+                .append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">\n");
 
-        for (String form : forms) {
+        for (int i = 0; i < forms.size(); i++) {
+            FormManifestEntry form = forms.get(i);
+
             stringBuilder
-                    .append("<form url=\"https://server.example.com/formXml?formId=customPathForm\">")
-                    .append(form)
-                    .append("</form>\n");
+                    .append("<xform>\n")
+                    .append("<formID>" + i + "</formID>\n")
+                    .append("<name>" + form.getFormLabel() + "</name>\n")
+                    .append("<version>1</version>\n")
+                    .append("<hash>md5:c28fc778a9291672badee04ac880a05d</hash>\n")
+                    .append("<downloadUrl>" + getURL() + "/form?formId=" + i + "</downloadUrl>\n")
+                    .append("</xform>\n");
         }
 
-        stringBuilder.append("</forms>");
+        stringBuilder.append("</xforms>");
         return stringBuilder.toString();
+    }
+
+    private static class FormManifestEntry {
+
+        private final String formLabel;
+        private final String formXML;
+
+        FormManifestEntry(String formLabel, String formXML) {
+            this.formLabel = formLabel;
+            this.formXML = formXML;
+        }
+
+        public String getFormLabel() {
+            return formLabel;
+        }
+
+        public String getFormXML() {
+            return formXML;
+        }
     }
 
     private static class MapHeaders implements CaseInsensitiveHeaders {
