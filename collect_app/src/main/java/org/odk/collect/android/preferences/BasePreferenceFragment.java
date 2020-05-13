@@ -70,6 +70,17 @@ public class BasePreferenceFragment extends PreferenceFragment {
             }
         }
 
+        // smap High res video
+        Preference hrv = getPreferenceScreen().findPreference(GeneralKeys.KEY_HIGH_RESOLUTION);
+        if(hrv != null) {
+            boolean override_hrv = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO);
+            if (override_hrv) {
+                hrv.setEnabled(false);
+            } else {
+                hrv.setEnabled(true);
+            }
+        }
+
         // smap image size
         Preference image_size = getPreferenceScreen().findPreference(GeneralKeys.KEY_IMAGE_SIZE);
         if(image_size != null) {

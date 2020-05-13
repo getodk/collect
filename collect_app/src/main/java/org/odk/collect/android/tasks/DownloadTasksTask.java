@@ -423,6 +423,22 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     }
 
                     /*
+                     * Override the high resolution video
+                     */
+                    if(tr.settings.ft_high_res_video != null) {
+                        if(tr.settings.ft_high_res_video.equals("off")) {
+                            editor.putBoolean(GeneralKeys.KEY_HIGH_RESOLUTION, false);
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, true);
+                        } else if(tr.settings.ft_high_res_video.equals("on")) {
+                            editor.putBoolean(GeneralKeys.KEY_HIGH_RESOLUTION, true);
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, true);
+                        } else {
+                            // Leave the local settings as they are and enable for local editing
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, false);
+                        }
+                    }
+
+                    /*
                      * Set the password policy
                      */
                     editor.putString(GeneralKeys.KEY_SMAP_PASSWORD_POLICY, String.valueOf(tr.settings.ft_pw_policy));

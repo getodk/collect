@@ -109,6 +109,7 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_OVERRIDE_SYNC = "smap_override_sync";  // Override the local settings for synchronisation
     public static final String KEY_SMAP_OVERRIDE_LOCATION = "smap_override_location";  // Override the local settings for user trail
     public static final String KEY_SMAP_OVERRIDE_DELETE = "smap_override_del";  // Override the local settings for delete after send
+    public static final String KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO = "smap_override_high_res_video";  // Override the local settings for video resolution
     public static final String KEY_SMAP_OVERRIDE_IMAGE_SIZE = "smap_override_image_size";  // Override the local settings for the image size
     public static final String KEY_SMAP_OVERRIDE_NAVIGATION = "smap_override_navigation";  // Override the local settings for the screen navigation
     public static final String KEY_SMAP_REGISTRATION_ID = "registration_id";  // Android notifications id
@@ -130,7 +131,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_DELETE_AFTER_SEND,          false);
         hashMap.put(KEY_COMPLETED_DEFAULT,          true);
         hashMap.put(KEY_CONSTRAINT_BEHAVIOR,        CONSTRAINT_BEHAVIOR_ON_SWIPE);
-        hashMap.put(KEY_HIGH_RESOLUTION,            true);
+        hashMap.put(KEY_HIGH_RESOLUTION,            false);
         hashMap.put(KEY_IMAGE_SIZE,                 "original_image_size");
         hashMap.put(KEY_INSTANCE_SYNC,              true);
         hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
@@ -173,6 +174,7 @@ public final class GeneralKeys {
 
         hashMap.put(KEY_SMAP_OVERRIDE_SYNC, false);
         hashMap.put(KEY_SMAP_OVERRIDE_DELETE, false);
+        hashMap.put(KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, false);
         hashMap.put(KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
         hashMap.put(KEY_SMAP_OVERRIDE_NAVIGATION, false);
         hashMap.put(KEY_SMAP_OVERRIDE_LOCATION, false);
