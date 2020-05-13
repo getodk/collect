@@ -29,6 +29,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.annotation.LooperMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +46,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormMapViewModelTest.testInstances;
 import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormMapActivityTest {
@@ -184,6 +186,7 @@ public class FormMapActivityTest {
         }
     }
 
+    @LooperMode(PAUSED)
     @Test public void tappingOnEditableInstances_launchesEditActivity() {
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);
@@ -203,6 +206,7 @@ public class FormMapActivityTest {
         }
     }
 
+    @LooperMode(PAUSED)
     @Test public void tappingOnEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
         AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, false);
 
@@ -224,6 +228,7 @@ public class FormMapActivityTest {
         }
     }
 
+    @LooperMode(PAUSED)
     @Test public void tappingOnUneditableInstances_launchesViewActivity() {
         MapPoint sent = new MapPoint(10.3, 125.7);
 
@@ -239,6 +244,7 @@ public class FormMapActivityTest {
 
     // Geometry is removed from the database on instance encryption but just in case there is an
     // encrypted instance with geometry available, show an encrypted toast.
+    @LooperMode(PAUSED)
     @Test public void tappingOnEncryptedInstances_showsSummaryWithAppropriateMessage() {
         MapPoint submissionFailedCantEditWhenFinalized = new MapPoint(10.4, 125.6);
 
@@ -251,6 +257,7 @@ public class FormMapActivityTest {
 
     // Geometry is removed from the database on instance deletion but just in case there is a
     // deleted instance with geometry available, show a deleted toast.
+    @LooperMode(PAUSED)
     @Test public void tappingOnDeletedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint deleted = new MapPoint(10.0, 125.6);
 
