@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 
 import org.junit.Before;
@@ -317,6 +318,7 @@ public class FormMapActivityTest {
 
     private void clickOnOpenFormChip() {
         activity.findViewById(R.id.openFormChip).performClick();
+        assertThat(activity.summarySheet.getState(), is(BottomSheetBehavior.STATE_HIDDEN));
     }
 
     private void assertSubmissionSummaryContent(FormMapViewModel.MappableFormInstance mappableFormInstance) {

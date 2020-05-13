@@ -323,6 +323,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         openFormButton.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
         openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormButton.setOnClickListener(v -> {
+            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
             startActivity(canEdit
                     ? getEditFormInstanceIntentFor(instanceId)
                     : getViewOnlyFormInstanceIntentFor(instanceId));
