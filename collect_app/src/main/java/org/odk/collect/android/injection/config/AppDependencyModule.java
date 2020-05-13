@@ -32,6 +32,8 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.qr.ObservableQRCodeGenerator;
+import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.migration.StorageEraser;
@@ -266,6 +268,11 @@ public class AppDependencyModule {
     @Provides
     public NetworkStateProvider providesConnectivityProvider() {
         return new ConnectivityProvider();
+    }
+
+    @Provides
+    public QRCodeGenerator providesQRCodeGenerator() {
+        return new ObservableQRCodeGenerator();
     }
 
     @Provides

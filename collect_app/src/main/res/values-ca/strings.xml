@@ -330,11 +330,8 @@
   <string name="select_time">Selecciona hora</string>
   <string name="no_date_selected">Data no seleccionada</string>
   <string name="no_time_selected">Hora no seleccionada</string>
-  <string name="scan_qrcode">Escaneja codi des d\'un altre dispositiu</string>
   <string name="successfully_imported_settings">Configuració importada correctament</string>
   <string name="share">Comparteix</string>
-  <string name="select_qrcode">Selecciona codi des de tarja SD</string>
-  <string name="qrcode_scanner_prompt">Situa codi QR dins el rectangle</string>
   <string name="server_password">Clau d\'accés servidor</string>
   <string name="include_password_dialog">Claus d\'accés incloses al codi</string>
   <string name="generate">Genera</string>

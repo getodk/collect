@@ -111,4 +111,11 @@ public class AnalyticsEvents {
      * Track scoped storage migration attempts. The action should be the result of the attempt.
      */
     public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
+
+    /**
+     * Track presses of QRCode Configuration options which can be used to remove
+     * the admin or server password from the generated QR Code.
+     * The action should be the password removed/added.
+     */
+    public static final String CONFIGURE_QR_CODE = "ConfigureQRCode";
 }

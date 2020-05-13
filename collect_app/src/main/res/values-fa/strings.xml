@@ -257,9 +257,7 @@
   <string name="select_time">انتخاب زمان</string>
   <string name="no_date_selected">هیچ تاریخی انتخاب نشده است</string>
   <string name="no_time_selected">هیچ زمانی انتخاب نشده است</string>
-  <string name="scan_qrcode">کود سکن دستگاه دیگر</string>
   <string name="share">اشتراک گذاری</string>
-  <string name="select_qrcode">انتخاب کد از مموری کارت</string>
   <string name="turn_on_flashlight">روشن نمودن چراغ </string>
   <string name="turn_off_flashlight">خاموش نمودن چراغ</string>
   <string name="autosend_selector_title">ارسال خودکار</string>
