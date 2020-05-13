@@ -29,14 +29,19 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class SettingsDialogFragmentTest {
 
+    private int sampleId = R.id.automatic_mode;
+
     private ActivityController<FragmentActivity> activity;
     private FragmentManager fragmentManager;
     private SettingsDialogFragment dialogFragment;
+
+    private SettingsDialogFragment.SettingsDialogCallback callback;
 
     @Before
     public void setup() {
@@ -46,7 +51,8 @@ public class SettingsDialogFragmentTest {
         fragmentManager = activity.get().getSupportFragmentManager();
         dialogFragment = new SettingsDialogFragment();
 
-        dialogFragment.callback = mock(SettingsDialogFragment.SettingsDialogCallback.class);
+        callback = mock(SettingsDialogFragment.SettingsDialogCallback.class);
+        dialogFragment.callback = callback;
     }
 
     @Test
@@ -91,7 +97,7 @@ public class SettingsDialogFragmentTest {
     }
 
     @Test
-    public void clickingStart_shouldCallStartInputMethod() {
+    public void clickingStart_callsStartInputMethod() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
@@ -100,7 +106,17 @@ public class SettingsDialogFragmentTest {
     }
 
     @Test
-    public void selectingAutomaticMode_shouldDisplayIntervalAndAccuracyOptions() {
+    public void checkingRadioButton_callsUpdateRecordingMode() {
+        dialogFragment.show(fragmentManager, "TAG");
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
+        radioGroup.check(sampleId);
+
+        verify(dialogFragment.callback, times(2)).updateRecordingMode(radioGroup, sampleId);
+    }
+
+    @Test
+    public void selectingAutomaticMode_displaysIntervalAndAccuracyOptions() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
 
@@ -108,7 +124,7 @@ public class SettingsDialogFragmentTest {
         View autoOptions = dialog.findViewById(R.id.auto_options);
         assertThat(autoOptions.getVisibility(), equalTo(GONE));
 
-        radioGroup.check(R.id.automatic_mode);
+        radioGroup.check(sampleId);
         fragmentManager.executePendingTransactions();
         assertThat(autoOptions.getVisibility(), equalTo(VISIBLE));
     }
@@ -121,7 +137,7 @@ public class SettingsDialogFragmentTest {
         Spinner autoInterval = dialog.findViewById(R.id.auto_interval);
         Spinner accuracyThreshold = dialog.findViewById(R.id.accuracy_threshold);
 
-        radioGroup.check(R.id.automatic_mode);
+        radioGroup.check(sampleId);
         autoInterval.setSelection(2);
         accuracyThreshold.setSelection(2);
 
@@ -133,7 +149,35 @@ public class SettingsDialogFragmentTest {
         SettingsDialogFragment restoredFragment = (SettingsDialogFragment) activity.get().getSupportFragmentManager().findFragmentByTag("TAG");
         AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
 
-        assertThat(((RadioGroup) restoredDialog.findViewById(R.id.radio_group)).getCheckedRadioButtonId(), equalTo(R.id.automatic_mode));
+        assertThat(((RadioGroup) restoredDialog.findViewById(R.id.radio_group)).getCheckedRadioButtonId(), equalTo(sampleId));
+        assertThat(((Spinner) restoredDialog.findViewById(R.id.auto_interval)).getSelectedItemPosition(), equalTo(2));
+        assertThat(((Spinner) restoredDialog.findViewById(R.id.accuracy_threshold)).getSelectedItemPosition(), equalTo(2));
+    }
+
+    @Test
+    public void retainsIntervalAndSpinnerValueOnDialogRecreation() {
+        when(dialogFragment.callback.getCheckedId()).thenReturn(sampleId);
+        when(dialogFragment.callback.getIntervalIndex()).thenReturn(2);
+        when(dialogFragment.callback.getAccuracyThresholdIndex()).thenReturn(2);
+
+        dialogFragment.show(fragmentManager, "TAG");
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
+        Spinner autoInterval = dialog.findViewById(R.id.auto_interval);
+        Spinner accuracyThreshold = dialog.findViewById(R.id.accuracy_threshold);
+
+        radioGroup.check(sampleId);
+        autoInterval.setSelection(2);
+        accuracyThreshold.setSelection(2);
+
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+
+        SettingsDialogFragment restoredFragment = new SettingsDialogFragment();
+        restoredFragment.callback = callback;
+        restoredFragment.show(fragmentManager, "TAG");
+        AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
+
+        assertThat(((RadioGroup) restoredDialog.findViewById(R.id.radio_group)).getCheckedRadioButtonId(), equalTo(sampleId));
         assertThat(((Spinner) restoredDialog.findViewById(R.id.auto_interval)).getSelectedItemPosition(), equalTo(2));
         assertThat(((Spinner) restoredDialog.findViewById(R.id.accuracy_threshold)).getSelectedItemPosition(), equalTo(2));
     }
