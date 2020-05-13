@@ -8,16 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
-import com.google.zxing.WriterException;
-
 import androidx.core.content.FileProvider;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
-import dagger.Provides;
-import io.reactivex.Observable;
+
+import com.google.zxing.WriterException;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,8 +25,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.utilities.FileUtils;
@@ -38,6 +33,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import dagger.Provides;
+import io.reactivex.Observable;
+
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.BundleMatchers.hasEntry;
@@ -49,7 +48,6 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-
 import static org.junit.Assert.assertTrue;
 
 
@@ -65,7 +63,8 @@ public class ConfigureWithQRCodeTest {
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CAMERA
             ))
             .around(new ResetStateRule(new AppDependencyModule() {
                 @Override
@@ -78,9 +77,8 @@ public class ConfigureWithQRCodeTest {
 
     @Before
     public void stubAllExternalIntents() {
-        // By default Espresso Intents does not stub any Intents. Stubbing needs to be setup before
-        // every test run. In this case all external Intents will be blocked.
-        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+        // Pretend that the share/import actions are cancelled so we don't deal with actual import here
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null));
     }
 
     @Test
@@ -101,7 +99,7 @@ public class ConfigureWithQRCodeTest {
                 .clickConfigureQR()
                 .clickViewQRFragment()
                 .assertImageViewShowsImage(R.id.ivQRcode, BitmapFactory.decodeResource(
-                        ApplicationProvider.getApplicationContext().getResources(),
+                        getApplicationContext().getResources(),
                         CHECKER_BACKGROUND_DRAWABLE_ID
                 ));
     }
@@ -122,7 +120,7 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void onMainMenu_clickConfigureQRCode_andClickingOnShareQRCode_startsExternalShareIntent() {
         String path = new StubQRCodeGenerator().getQrCodeFilepath();
-        Uri expected = FileProvider.getUriForFile(ApplicationProvider.getApplicationContext(),
+        Uri expected = FileProvider.getUriForFile(getApplicationContext(),
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File(path));
 
@@ -132,6 +130,10 @@ public class ConfigureWithQRCodeTest {
                 .clickConfigureQR()
                 .clickOnId(R.id.menu_item_share);
 
+        // Check that we've actually generated a QR code to share
+        File qrcodeFile = new File(path);
+        assertTrue(qrcodeFile.exists());
+
         // should be two Intents, 1. to QRCodeTabsActivity 2. Share QR Code Intent
         assertThat(Intents.getIntents().size(), equalTo(2));
         Intent receivedIntent = Intents.getIntents().get(1);
@@ -139,7 +141,7 @@ public class ConfigureWithQRCodeTest {
 
         // test title
         assertThat(receivedIntent, hasExtras(hasEntry(Intent.EXTRA_TITLE,
-                ApplicationProvider.getApplicationContext().getString(R.string.share_qrcode))));
+                getApplicationContext().getString(R.string.share_qrcode))));
 
         // test SEND intent
         assertThat(receivedIntent, hasExtraWithKey(Intent.EXTRA_INTENT));
@@ -148,15 +150,12 @@ public class ConfigureWithQRCodeTest {
         assertThat(sendIntent, hasAction(Intent.ACTION_SEND));
         assertThat(sendIntent, hasType("image/*"));
         assertThat(sendIntent, hasExtras(hasEntry(Intent.EXTRA_STREAM, expected)));
-
-        // test that file stream is valid by checking that file exists
-        File qrcodeFile = new File(path);
-        assertTrue(qrcodeFile.exists());
     }
 
     // StubQRCodeGenerator is a class that is injected during this test
     // to verify that the QRCode is generated and shown to user correctly
     private static class StubQRCodeGenerator implements QRCodeGenerator {
+
         @Override
         public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
             // don't use this in this test, so okay to return null
@@ -168,19 +167,19 @@ public class ConfigureWithQRCodeTest {
             return Observable.create(emitter -> {
                 Bitmap bitmap =
                         BitmapFactory.decodeResource(
-                                ApplicationProvider.getApplicationContext().getResources(),
+                                getApplicationContext().getResources(),
                                 CHECKER_BACKGROUND_DRAWABLE_ID);
                 emitter.onNext(bitmap);
+                FileUtils.saveBitmapToFile(bitmap, getQrCodeFilepath());
 
                 // save bitmap to test that shareQRCode generates bitmap if file not there
-                FileUtils.saveBitmapToFile(bitmap, getQrCodeFilepath());
                 emitter.onComplete();
             });
         }
 
         @Override
         public String getQrCodeFilepath() {
-            return new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS) + File.separator + "test-collect-settings.png";
+            return getApplicationContext().getExternalFilesDir(null) + File.separator + "test-collect-settings.png";
         }
 
         @Override
