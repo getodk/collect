@@ -80,7 +80,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     /**
      * Quick lookup of instance objects from map feature IDs.
      */
-    private final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
+    final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
 
     /**
      * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
