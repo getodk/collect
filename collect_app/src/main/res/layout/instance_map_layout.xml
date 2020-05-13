@@ -1,84 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/form_title"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:padding="4dp"
-        android:background="#BF000000"
-        android:textColor="#FFFFFF" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/geometry_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="start"
-        android:padding="4dp"
-        android:background="#BF000000"
-        android:textColor="#FFFFFF" />
-
-    <FrameLayout
-        android:id="@+id/map_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/form_title"
-        android:layout_above="@id/geometry_status" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/new_instance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@id/geometry_status"
-        app:srcCompat="@drawable/ic_note_add"
-        android:padding="15dp" />
-
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/form_title"
-        android:layout_above="@+id/new_instance">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/form_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="start"
+            android:padding="4dp"
+            android:background="#BF000000"
+            android:textColor="#FFFFFF" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/zoom_to_location"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_my_location"
-                android:padding="15dp" />
+        <TextView
+            android:id="@+id/geometry_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="start"
+            android:padding="4dp"
+            android:background="#BF000000"
+            android:textColor="#FFFFFF" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/zoom_to_bounds"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_crop_frame"
-                android:padding="15dp" />
+        <FrameLayout
+            android:id="@+id/map_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/form_title"
+            android:layout_above="@id/geometry_status" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/layer_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_layers"
-                android:padding="15dp" />
-        </LinearLayout>
-    </ScrollView>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/new_instance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/geometry_status"
+            app:srcCompat="@drawable/ic_note_add"
+            android:padding="15dp" />
 
-</RelativeLayout>
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/form_title"
+            android:layout_above="@+id/new_instance">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/zoom_to_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_my_location"
+                    android:padding="15dp" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/zoom_to_bounds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_crop_frame"
+                    android:padding="15dp" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/layer_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_layers"
+                    android:padding="15dp" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/submission_summary"
+        layout="@layout/submission_summary_layout" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

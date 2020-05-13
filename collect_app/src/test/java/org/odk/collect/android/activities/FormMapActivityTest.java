@@ -3,6 +3,7 @@ package org.odk.collect.android.activities;
 import android.app.Fragment;
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -15,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
-import org.odk.collect.android.fragments.dialogs.InstanceSummaryDialogFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
@@ -34,13 +34,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormMapViewModelTest.testInstances;
@@ -245,8 +245,8 @@ public class FormMapActivityTest {
         int featureId = map.getFeatureIdFor(submissionFailedCantEditWhenFinalized);
 
         activity.onFeatureClicked(featureId);
-        assertThat(getInstanceSummaryDialogFragment().openFormChip.getVisibility(), is(View.GONE));
-        assertThat(getInstanceSummaryDialogFragment().infoText.getText().toString(), is("This form cannot be edited once it has been marked as finalized. It may be encrypted."));
+        assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.GONE));
+        assertThat(((TextView) activity.findViewById(R.id.info)).getText().toString(), is("This form cannot be edited once it has been marked as finalized. It may be encrypted."));
     }
 
     // Geometry is removed from the database on instance deletion but just in case there is a
@@ -257,16 +257,12 @@ public class FormMapActivityTest {
         int featureId = map.getFeatureIdFor(deleted);
 
         activity.onFeatureClicked(featureId);
-        assertThat(getInstanceSummaryDialogFragment().openFormChip.getVisibility(), is(View.GONE));
-        assertThat(getInstanceSummaryDialogFragment().infoText.getText().toString(), containsString("Deleted on"));
+        assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.GONE));
+        assertThat(((TextView) activity.findViewById(R.id.info)).getText().toString(), containsString("Deleted on"));
     }
 
     private void clickOnOpenFormChip() {
-        getInstanceSummaryDialogFragment().openFormChip.performClick();
-    }
-
-    private InstanceSummaryDialogFragment getInstanceSummaryDialogFragment() {
-        return (InstanceSummaryDialogFragment) activity.getSupportFragmentManager().findFragmentByTag(InstanceSummaryDialogFragment.class.getName());
+        activity.findViewById(R.id.openFormChip).performClick();
     }
 
     private static class TestFactory implements ViewModelProvider.Factory {

@@ -102,15 +102,6 @@ public class FormMapViewModel extends ViewModel {
         return mappableFormInstances;
     }
 
-    public MappableFormInstance getInstanceById(long instanceId) {
-        for (MappableFormInstance mappableFormInstance : mappableFormInstances) {
-            if (mappableFormInstance.databaseId == instanceId) {
-                return mappableFormInstance;
-            }
-        }
-        return null;
-    }
-
     private ClickAction getClickActionForInstance(Instance instance) {
         if (instance != null) {
             if (instance.getDeletedDate() != null) {
