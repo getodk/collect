@@ -119,7 +119,7 @@ public class ConfigureWithQRCodeTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickServerSettings()
-                .clickOnPassword()
+                .clickServerPassword()
                 .inputText("blah")
                 .clickOKOnDialog()
                 .pressBack(new GeneralSettingsPage(rule))

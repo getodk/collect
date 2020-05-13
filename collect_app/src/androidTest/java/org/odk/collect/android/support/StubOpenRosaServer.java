@@ -31,47 +31,40 @@ import static java.util.Arrays.asList;
 
 public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
-    private static final String URL = "https://server.example.com";
+    private static final String HOST = "server.example.com";
 
     private String formListPath = "/formList";
     private String submissionPath = "/submission";
 
     private final List<FormManifestEntry> forms = new ArrayList<>();
+    private String username;
+    private String password;
 
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        if (uri.getPath().equals(formListPath)) {
-            String response = getFormListResponse();
-
-            HashMap<String, String> headers = new HashMap<>();
-            headers.put("x-openrosa-version", "1.0");
-            return new HttpGetResult(new ByteArrayInputStream(response.getBytes()), headers, "", 200);
+        if (!uri.getHost().equals(HOST)) {
+            return new HttpGetResult(null, new HashMap<>(), "Trying to connect to incorrect server: " + uri.getHost(), 410);
+        } else if (credentialsIncorrect(credentials)) {
+            return new HttpGetResult(null, new HashMap<>(), "", 401);
+        } else if (uri.getPath().equals(formListPath)) {
+            return new HttpGetResult(getFormListResponse(), getStandardHeaders(), "", 200);
         } else if (uri.getPath().equals("/form")) {
-            InputStream response = getFormResponse(uri);
-
-            HashMap<String, String> headers = new HashMap<>();
-            headers.put("x-openrosa-version", "1.0");
-            return new HttpGetResult(response, headers, "", 200);
+            return new HttpGetResult(getFormResponse(uri), getStandardHeaders(), "", 200);
         } else {
             return new HttpGetResult(null, new HashMap<>(), "", 404);
         }
     }
 
-    @NotNull
-    private InputStream getFormResponse(@NonNull URI uri) throws IOException {
-        String formID = uri.getQuery().split("=")[1];
-        String xmlPath = forms.get(Integer.parseInt(formID)).getFormXML();
-
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        return assetManager.open("forms/" + xmlPath);
-    }
-
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        if (uri.getPath().equals(submissionPath)) {
-            HashMap<String, String> headers = new HashMap<>();
+        if (!uri.getHost().equals(HOST)) {
+            return new HttpHeadResult(410, new CaseInsensitiveEmptyHeaders());
+        } else if (credentialsIncorrect(credentials)) {
+            return new HttpHeadResult(401, new CaseInsensitiveEmptyHeaders());
+        } else if (uri.getPath().equals(submissionPath)) {
+            HashMap<String, String> headers = getStandardHeaders();
             headers.put("x-openrosa-accept-content-length", "10485760");
 
             return new HttpHeadResult(204, new MapHeaders(headers));
@@ -83,7 +76,11 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws Exception {
-        if (uri.getPath().equals(submissionPath)) {
+        if (!uri.getHost().equals(HOST)) {
+            return new HttpPostResult("Trying to connect to incorrect server: " + uri.getHost(), 410, "");
+        } else if (credentialsIncorrect(credentials)) {
+            return new HttpPostResult("", 401, "");
+        } else if (uri.getPath().equals(submissionPath)) {
             return new HttpPostResult("", 201, "");
         } else {
             return new HttpPostResult("", 404, "");
@@ -98,17 +95,41 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         submissionPath = path;
     }
 
+    public void setCredentials(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public void addForm(String formLabel, String formXML) {
         forms.add(new FormManifestEntry(formLabel, formXML));
     }
 
     public String getURL() {
-        return URL;
+        return "https://" + HOST;
+    }
+
+    private boolean credentialsIncorrect(HttpCredentialsInterface credentials) {
+        if (username == null && password == null) {
+            return false;
+        } else {
+            if (credentials == null) {
+                return true;
+            } else {
+                return !credentials.getUsername().equals(username) || !credentials.getPassword().equals(password);
+            }
+        }
+    }
+
+    @NotNull
+    private HashMap<String, String> getStandardHeaders() {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-openrosa-version", "1.0");
+        return headers;
     }
 
     @NotNull
     @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
-    private String getFormListResponse() {
+    private InputStream getFormListResponse() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
                 .append("<?xml version='1.0' encoding='UTF-8' ?>\n")
@@ -128,7 +149,16 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         }
 
         stringBuilder.append("</xforms>");
-        return stringBuilder.toString();
+        return new ByteArrayInputStream(stringBuilder.toString().getBytes());
+    }
+
+    @NotNull
+    private InputStream getFormResponse(@NonNull URI uri) throws IOException {
+        String formID = uri.getQuery().split("=")[1];
+        String xmlPath = forms.get(Integer.parseInt(formID)).getFormXML();
+
+        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
+        return assetManager.open("forms/" + xmlPath);
     }
 
     private static class FormManifestEntry {

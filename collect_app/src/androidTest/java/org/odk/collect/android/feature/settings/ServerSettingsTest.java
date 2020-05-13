@@ -43,6 +43,7 @@ public class ServerSettingsTest {
 
     @Test
     public void settingODKServer_usesServerForFetchingAndSubmittingForms() {
+        server.setCredentials("Joe", "netsky");
         server.addForm("One Question", "one-question.xml");
 
         rule.mainMenu()
@@ -52,6 +53,15 @@ public class ServerSettingsTest {
                 .clickOnURL()
                 .inputText(server.getURL())
                 .clickOKOnDialog()
+                .assertText(server.getURL())
+                .clickServerUsername()
+                .inputText("Joe")
+                .clickOKOnDialog()
+                .assertText("Joe")
+                .clickServerPassword()
+                .inputText("netsky")
+                .clickOKOnDialog()
+                .assertText("********")
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
 
