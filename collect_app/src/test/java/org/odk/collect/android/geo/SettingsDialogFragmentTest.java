@@ -35,7 +35,7 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class SettingsDialogFragmentTest {
 
-    private int sampleId = R.id.automatic_mode;
+    private final int sampleId = R.id.automatic_mode;
 
     private ActivityController<FragmentActivity> activity;
     private FragmentManager fragmentManager;
