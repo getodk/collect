@@ -16,6 +16,7 @@ import androidx.test.rule.GrantPermissionRule;
 
 import com.google.zxing.WriterException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,9 +28,9 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -53,8 +54,8 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ConfigureWithQRCodeTest {
-    // drawable resource that will act as "qr code" in this test
-    private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
+
+    private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
 
     public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
@@ -70,7 +71,7 @@ public class ConfigureWithQRCodeTest {
                 @Override
                 @Provides
                 public QRCodeGenerator providesQRCodeGenerator() {
-                    return new StubQRCodeGenerator();
+                    return stubQRCodeGenerator;
                 }
             }))
             .around(rule);
@@ -79,6 +80,12 @@ public class ConfigureWithQRCodeTest {
     public void stubAllExternalIntents() {
         // Pretend that the share/import actions are cancelled so we don't deal with actual import here
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null));
+    }
+
+    @After
+    public void teardown() {
+        // Clean up files created by stub generator
+        stubQRCodeGenerator.teardown();
     }
 
     @Test
@@ -100,7 +107,7 @@ public class ConfigureWithQRCodeTest {
                 .clickViewQRFragment()
                 .assertImageViewShowsImage(R.id.ivQRcode, BitmapFactory.decodeResource(
                         getApplicationContext().getResources(),
-                        CHECKER_BACKGROUND_DRAWABLE_ID
+                        stubQRCodeGenerator.getDrawableID()
                 ));
     }
 
@@ -112,7 +119,7 @@ public class ConfigureWithQRCodeTest {
                 .clickConfigureQR()
                 .clickOnMenu()
                 .clickOnString(R.string.import_qrcode_sd);
-        
+
         intended(hasAction(Intent.ACTION_PICK));
         intended(hasType("image/*"));
     }
@@ -156,11 +163,7 @@ public class ConfigureWithQRCodeTest {
     // to verify that the QRCode is generated and shown to user correctly
     private static class StubQRCodeGenerator implements QRCodeGenerator {
 
-        @Override
-        public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
-            // don't use this in this test, so okay to return null
-            return null;
-        }
+        private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
 
         @Override
         public Observable<Bitmap> generateQRCode(Collection<String> selectedPasswordKeys) {
@@ -169,10 +172,8 @@ public class ConfigureWithQRCodeTest {
                         BitmapFactory.decodeResource(
                                 getApplicationContext().getResources(),
                                 CHECKER_BACKGROUND_DRAWABLE_ID);
+                saveBitmap(bitmap);
                 emitter.onNext(bitmap);
-                FileUtils.saveBitmapToFile(bitmap, getQrCodeFilepath());
-
-                // save bitmap to test that shareQRCode generates bitmap if file not there
                 emitter.onComplete();
             });
         }
@@ -180,6 +181,31 @@ public class ConfigureWithQRCodeTest {
         @Override
         public String getQrCodeFilepath() {
             return getApplicationContext().getExternalFilesDir(null) + File.separator + "test-collect-settings.png";
+        }
+
+        public int getDrawableID() {
+            return CHECKER_BACKGROUND_DRAWABLE_ID;
+        }
+
+        public void teardown() {
+            File file = new File(getQrCodeFilepath());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+
+        private void saveBitmap(Bitmap bitmap) {
+            try (FileOutputStream out = new FileOutputStream(getQrCodeFilepath())) {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
+            // don't use this in this test, so okay to return null
+            return null;
         }
 
         @Override
