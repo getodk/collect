@@ -38,7 +38,7 @@ public class ScannerWithFlashlightActivity extends CollectAbstractActivity {
 
         FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
         QRScannerFragment qrScannerFragment = QRScannerFragment.newInstance(QRScannerFragment.Action.BARCODE_WIDGET);
-        fragTransaction.add(R.id.qrCodeFragmentContainer, qrScannerFragment , "qrCodeFragment");
+        fragTransaction.add(R.id.qrCodeFragmentContainer, qrScannerFragment, QRScannerFragment.class.getName());
         fragTransaction.commit();
     }
 }

@@ -54,10 +54,10 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
 
     private static final String ACTION = "action";
 
-    public enum Action {BARCODE_WIDGET, APPLY_SETTINGS};
+    public enum Action { BARCODE_WIDGET, APPLY_SETTINGS };
 
     private CaptureManager capture;
-    DecoratedBarcodeView barcodeScannerView;
+    private DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
     private BeepManager beepManager;
     private Action action;
@@ -76,33 +76,20 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
                         ? getArguments().getSerializable(ACTION)
                         : savedInstanceState.getSerializable(ACTION));
 
-        View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
         beepManager = new BeepManager(getActivity());
-        barcodeScannerView = rootView.findViewById(R.id.barcode_view);
-        switchFlashlightButton = rootView.findViewById(R.id.switch_flashlight);
 
+        View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
+        barcodeScannerView = rootView.findViewById(R.id.barcode_view);
         barcodeScannerView.setTorchListener(this);
 
-        Intent intent = new IntentIntegrator(getActivity())
-                .setDesiredBarcodeFormats(getSupportedCodeFormats())
-                .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
-                .createScanIntent();
-        intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-
         capture = new CaptureManager(getActivity(), barcodeScannerView);
-        capture.initializeFromIntent(intent, savedInstanceState);
+        capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
 
         if (frontCameraUsed()) {
             switchToFrontCamera();
         }
 
-        switchFlashlightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchFlashlight(v);
-            }
-        });
         new PermissionUtils().requestCameraPermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
@@ -141,6 +128,8 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
             }
         });
 
+        switchFlashlightButton = rootView.findViewById(R.id.switch_flashlight);
+        switchFlashlightButton.setOnClickListener(v -> switchFlashlight());
         // if the device does not have flashlight in its camera, then remove the switch flashlight button...
         if (!hasFlash() || frontCameraUsed()) {
             switchFlashlightButton.setVisibility(View.GONE);
@@ -159,6 +148,15 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         CameraSettings cameraSettings = new CameraSettings();
         cameraSettings.setRequestedCameraId(CameraUtils.getFrontCameraId());
         barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
+    }
+
+    private Intent getIntent() {
+        Intent intent = new IntentIntegrator(getActivity())
+                .setDesiredBarcodeFormats(getSupportedCodeFormats())
+                .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
+                .createScanIntent();
+        intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
+        return intent;
     }
 
     @Override
@@ -188,11 +186,6 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         super.onDestroy();
     }
 
-    /**
-     * Check if the device's camera has a Flashlight.
-     *
-     * @return true if there is Flashlight, otherwise false.
-     */
     private boolean hasFlash() {
         return getActivity().getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
@@ -203,7 +196,7 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         return bundle != null && bundle.getBoolean(WidgetAppearanceUtils.FRONT);
     }
 
-    public void switchFlashlight(View view) {
+    private void switchFlashlight() {
         if (getString(R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
             barcodeScannerView.setTorchOn();
         } else {
