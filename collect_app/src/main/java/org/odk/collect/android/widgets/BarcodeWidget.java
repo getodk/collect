@@ -128,10 +128,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
                 waitForData();
 
                 IntentIntegrator intent = new IntentIntegrator((Activity) getContext())
-                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                        .setOrientationLocked(false)
-                        .setPrompt(getContext().getString(R.string.barcode_scanner_prompt));
+                        .setCaptureActivity(ScannerWithFlashlightActivity.class);
 
                 setCameraIdIfNeeded(intent);
                 intent.initiateScan();
