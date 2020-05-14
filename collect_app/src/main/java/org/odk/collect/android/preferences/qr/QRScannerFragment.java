@@ -26,6 +26,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
@@ -35,6 +36,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,6 +48,7 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
 
     public enum Action {BARCODE_WIDGET, APPLY_SETTINGS};
 
+    private CaptureManager capture;
     DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
     private BeepManager beepManager;
@@ -71,6 +74,10 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         switchFlashlightButton = rootView.findViewById(R.id.switch_flashlight);
 
         barcodeScannerView.setTorchListener(this);
+
+        capture = new CaptureManager(getActivity(), barcodeScannerView);
+        capture.initializeFromIntent(getActivity().getIntent(), savedInstanceState);
+        capture.decode();
 
         switchFlashlightButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +117,8 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
             }
         });
 
-        if (!hasFlash()) {
+        // if the device does not have flashlight in its camera, then remove the switch flashlight button...
+        if (!hasFlash() || frontCameraUsed()) {
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
@@ -120,6 +128,7 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(ACTION, action);
+        capture.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
 
@@ -127,12 +136,20 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
     public void onPause() {
         super.onPause();
         barcodeScannerView.pauseAndWait();
+        capture.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         barcodeScannerView.resume();
+        capture.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        capture.onDestroy();
+        super.onDestroy();
     }
 
     /**
@@ -143,6 +160,11 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
     private boolean hasFlash() {
         return getActivity().getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    private boolean frontCameraUsed() {
+        Bundle bundle = getActivity().getIntent().getExtras();
+        return bundle != null && bundle.getBoolean(WidgetAppearanceUtils.FRONT);
     }
 
     public void switchFlashlight(View view) {
