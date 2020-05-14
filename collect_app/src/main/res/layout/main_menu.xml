@@ -8,12 +8,13 @@
   the specific language governing permissions and limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/app_bar_layout"/>
+    <include layout="@layout/app_bar_layout" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,10 +26,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/storage_migration_banner"
+            <org.odk.collect.material.MaterialBanner
+                android:id="@+id/storageMigrationBanner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                custom:text="blah"
+                custom:secondaryActionColor="true" />
 
             <FrameLayout
                 android:id="@+id/mapbox_container"

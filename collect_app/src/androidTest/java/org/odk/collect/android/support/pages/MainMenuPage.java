@@ -113,12 +113,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public StorageMigrationDialogPage clickLearnMoreButton() {
-        onView(withId(R.id.storageMigrationBannerLearnMoreButton)).perform(click());
+        onView(withText(getTranslatedString(R.string.scoped_storage_learn_more))).perform(click());
         return new StorageMigrationDialogPage(rule).assertOnPage();
     }
 
     public MainMenuPage clickDismissButton() {
-        onView(withId(R.id.storageMigrationBannerDismissButton)).perform(click());
+        onView(withText(getTranslatedString(R.string.scoped_storage_dismiss))).perform(click());
         return this;
     }
 

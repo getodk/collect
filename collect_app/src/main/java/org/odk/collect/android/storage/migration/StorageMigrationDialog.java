@@ -13,17 +13,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 import javax.inject.Inject;
 
@@ -119,6 +122,12 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     @Override
     protected void onBackPressed() {
+    }
+
+    @Nullable
+    @Override
+    protected Toolbar getToolbar() {
+        return getView().findViewById(R.id.toolbar);
     }
 
     private void setUpToolbar() {
