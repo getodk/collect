@@ -144,7 +144,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         String appearance = getFormEntryPrompt().getAppearanceHint();
         if (appearance != null && appearance.equalsIgnoreCase(WidgetAppearanceUtils.FRONT)) {
             if (CameraUtils.isFrontCameraAvailable()) {
-                intent.setCameraId(CameraUtils.getFrontCameraId());
                 intent.addExtra(WidgetAppearanceUtils.FRONT, true);
             } else {
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);

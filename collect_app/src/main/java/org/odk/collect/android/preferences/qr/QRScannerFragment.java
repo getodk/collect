@@ -32,9 +32,11 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
+import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -90,6 +92,10 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         capture = new CaptureManager(getActivity(), barcodeScannerView);
         capture.initializeFromIntent(intent, savedInstanceState);
         capture.decode();
+
+        if (frontCameraUsed()) {
+            switchToFrontCamera();
+        }
 
         switchFlashlightButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +153,12 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         return action.equals(Action.APPLY_SETTINGS)
                 ? Collections.singletonList(IntentIntegrator.QR_CODE)
                 : IntentIntegrator.ALL_CODE_TYPES;
+    }
+
+    private void switchToFrontCamera() {
+        CameraSettings cameraSettings = new CameraSettings();
+        cameraSettings.setRequestedCameraId(CameraUtils.getFrontCameraId());
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
     }
 
     @Override
