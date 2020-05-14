@@ -18,6 +18,7 @@ import com.google.zxing.WriterException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -114,6 +115,7 @@ public class ConfigureWithQRCodeTest {
     }
 
     @Test
+    @Ignore("Should be replaced at Robolectric level")
     public void onMainMenu_clickConfigureQRCode_andClickingOnImportQRCode_startsExternalImagePickerIntent() {
         new MainMenuPage(rule)
                 .assertOnPage()
@@ -127,6 +129,7 @@ public class ConfigureWithQRCodeTest {
     }
 
     @Test
+    @Ignore("Should be replaced at Robolectric level")
     public void onMainMenu_clickConfigureQRCode_andClickingOnShareQRCode_startsExternalShareIntent() {
         String path = new StubQRCodeGenerator().getQrCodeFilepath();
         Uri expected = FileProvider.getUriForFile(getApplicationContext(),

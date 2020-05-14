@@ -219,7 +219,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
-        return new AddNewRepeatDialog(repeatName, rule).assertOnPage();
+        tryAgainOnFail(() -> {
+            onView(withId(R.id.questionholder)).perform(swipeLeft());
+            new AddNewRepeatDialog(repeatName, rule).assertOnPage();
+        });
+
+        return new AddNewRepeatDialog(repeatName, rule);
     }
 }
