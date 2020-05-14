@@ -27,6 +27,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.io.File;
@@ -74,6 +75,7 @@ public class ConfigureWithQRCodeTest {
                     return stubQRCodeGenerator;
                 }
             }))
+            .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
 
     @Before
@@ -172,7 +174,6 @@ public class ConfigureWithQRCodeTest {
                         BitmapFactory.decodeResource(
                                 getApplicationContext().getResources(),
                                 CHECKER_BACKGROUND_DRAWABLE_ID);
-                saveBitmap(bitmap);
                 emitter.onNext(bitmap);
                 emitter.onComplete();
             });
@@ -183,8 +184,16 @@ public class ConfigureWithQRCodeTest {
             return getApplicationContext().getExternalFilesDir(null) + File.separator + "test-collect-settings.png";
         }
 
-        public int getDrawableID() {
+        int getDrawableID() {
             return CHECKER_BACKGROUND_DRAWABLE_ID;
+        }
+
+        public void setup() {
+            Bitmap bitmap =
+                    BitmapFactory.decodeResource(
+                            getApplicationContext().getResources(),
+                            CHECKER_BACKGROUND_DRAWABLE_ID);
+            saveBitmap(bitmap);
         }
 
         public void teardown() {
