@@ -42,12 +42,29 @@ import java.util.zip.DataFormatException;
 
 public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
 
+    private static final String ACTION = "action";
+
+    public enum Action {BARCODE_WIDGET, APPLY_SETTINGS};
+
     DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
     private BeepManager beepManager;
+    private Action action;
+
+    public static QRScannerFragment newInstance(Action action) {
+        QRScannerFragment fragment = new QRScannerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ACTION, action);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        action = (Action) (savedInstanceState == null
+                        ? getArguments().getSerializable(ACTION)
+                        : savedInstanceState.getSerializable(ACTION));
+
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
         beepManager = new BeepManager(getActivity());
         barcodeScannerView = rootView.findViewById(R.id.barcode_view);
@@ -69,7 +86,11 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
                     public void barcodeResult(BarcodeResult result) {
                         beepManager.playBeepSoundAndVibrate();
                         try {
-                            SettingsUtils.applySettings(getActivity(), CompressionUtils.decompress(result.getText()));
+                            switch (action) {
+                                case APPLY_SETTINGS:
+                                    SettingsUtils.applySettings(getActivity(), CompressionUtils.decompress(result.getText()));
+                                    break;
+                            }
                         } catch (IOException | DataFormatException | IllegalArgumentException e) {
                             Timber.e(e);
                             ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
@@ -94,6 +115,12 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(ACTION, action);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
