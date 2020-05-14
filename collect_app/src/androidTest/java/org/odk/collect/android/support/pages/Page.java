@@ -301,13 +301,14 @@ abstract class Page<T extends Page<T>> {
 
     public void waitForText(String text) {
         int counter = 0;
+        NoMatchingViewException failure = null;
 
         while (counter < 20) {
             try {
                 assertText(text);
-                break;
-            } catch (NoMatchingViewException ignored) {
-                // ignored
+                return;
+            } catch (NoMatchingViewException exception) {
+                failure = exception;
             }
 
             try {
@@ -317,6 +318,10 @@ abstract class Page<T extends Page<T>> {
             }
 
             counter++;
+        }
+
+        if (failure != null) {
+            throw failure;
         }
     }
 }
