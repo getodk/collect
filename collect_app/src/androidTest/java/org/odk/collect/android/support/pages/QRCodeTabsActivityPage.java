@@ -49,8 +49,11 @@ public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage> {
     }
 
     public QRCodeTabsActivityPage clickOnMenu() {
-        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-        onView(withText(R.string.import_qrcode_sd)).check(matches(isDisplayed()));
+        tryAgainOnFail(() -> {
+            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+            onView(withText(getTranslatedString(R.string.import_qrcode_sd))).check(matches(isDisplayed()));
+        });
+
         return this;
     }
 

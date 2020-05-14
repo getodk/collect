@@ -40,9 +40,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
-import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
@@ -288,6 +288,15 @@ abstract class Page<T extends Page<T>> {
     public T checkIfWebViewActivityIsDisplayed() {
         onView(withClassName(endsWith("WebView"))).check(matches(isDisplayed()));
         return (T) this;
+    }
+
+    void tryAgainOnFail(Runnable action) {
+        try {
+            action.run();
+        } catch (NoMatchingViewException e) {
+            assertOnPage();
+            action.run();
+        }
     }
 
     void waitForText(String text) {
