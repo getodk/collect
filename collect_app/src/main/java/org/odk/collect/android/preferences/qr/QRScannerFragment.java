@@ -83,6 +83,7 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
 
         Intent intent = new IntentIntegrator(getActivity())
                 .setDesiredBarcodeFormats(getSupportedCodeFormats())
+                .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
                 .createScanIntent();
         intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
 
