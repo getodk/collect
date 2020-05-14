@@ -428,10 +428,6 @@
   <string name="share">ចែករំលែក</string>
   <string name="turn_on_flashlight">បើក​ភ្លើងពិល</string>
   <string name="turn_off_flashlight">បិទភ្លើងពិល</string>
-  <string name="qrcode_with_both_passwords">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​អ្នក​គ្រប់គ្រង​ និង​ម៉ាស៊ីនមេ​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
-  <string name="qrcode_without_passwords">លេខ​កូដ​ QR នេះ​ពុំ​មាន​ពាក្យ​សម្ងាត់​អ្នក​គ្រប់គ្រង និង​ម៉ាស៊ីនមេ​របស់​អ្នក​។ \n (ប៉ះ​ដើម្បី​ដាក់​ពាក្យ​សម្ងាត់​)</string>
-  <string name="qrcode_with_admin_password">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​អ្នក​គ្រប់គ្រង​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
-  <string name="qrcode_with_server_password">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​​ម៉ាស៊ីនមេ​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
   <string name="barcode_scanner_prompt">សូមដាក់បារកូដនៅក្នុងប្រអប់ចតុកោណកែង</string>
   <string name="server_password">ពាក្យសម្ងាត់​ម៉ាស៊ីន​មេ</string>
   <string name="include_password_dialog">ពាក្យ​សម្ងាត់​មានភ្ជាប់នៅក្នុង​កូដ</string>

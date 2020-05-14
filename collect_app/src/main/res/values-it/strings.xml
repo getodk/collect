@@ -471,10 +471,6 @@
   <string name="share">Condividi</string>
   <string name="turn_on_flashlight">Accendere il flash</string>
   <string name="turn_off_flashlight">Spegnere il flash</string>
-  <string name="qrcode_with_both_passwords">Questo codice QR include le tue password amministratore e server. Perpiacere trattalo con attenzione. \n(Tocca per rimuovere le passwords)</string>
-  <string name="qrcode_without_passwords">Questo codice QR code non include le tue password amministratore e server. \n(Tocca per aggiungere le passwords)</string>
-  <string name="qrcode_with_admin_password">Questo codice QR code include la tua password amministratore. Perpiacere trattalo con attenzione. \n(Tocca per rimuovere la password)</string>
-  <string name="qrcode_with_server_password">Questo codice QR code include la tua password server. Perpiacere trattalo con attenzione. \n(Tocca per rimuovere la password)</string>
   <string name="barcode_scanner_prompt">Inserire il codice a barre dentro il rettangolo</string>
   <string name="server_password">Password del Server</string>
   <string name="include_password_dialog">Password inclusa nel Codice</string>

@@ -459,10 +459,6 @@
   <string name="share">Podijeli</string>
   <string name="turn_on_flashlight">Upali lampu</string>
   <string name="turn_off_flashlight">Ugasi lampu</string>
-  <string name="qrcode_with_both_passwords">Ovaj QR kod sadrži administratorske i serverske lozinke. Molim da ga tretirate povjerljivo. \n(Klikni kako bi uklonio-la lozinke)</string>
-  <string name="qrcode_without_passwords">Ovaj QR kod ne sadrži administratorske i serverske lozinke. \n(Klikni kako bi dodao-la lozinke)</string>
-  <string name="qrcode_with_admin_password">Ovaj QR kod sadrži administratorske i serverske lozinke. Molim da ga tretirate povjerljivo. \n(Klikni kako bi uklonio-la lozinke)</string>
-  <string name="qrcode_with_server_password">Ovaj QR kod sadrži serverske lozinke. \n(Klikni kako bi uklonio-la lozinku)</string>
   <string name="barcode_scanner_prompt">Postavi barkod unutar kocke</string>
   <string name="server_password">Server lozinka</string>
   <string name="include_password_dialog">Lozinka je dio Koda</string>

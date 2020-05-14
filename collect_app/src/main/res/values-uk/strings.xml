@@ -462,10 +462,6 @@
   <string name="share">Поділитись</string>
   <string name="turn_on_flashlight">Увімкнути ліхтарик</string>
   <string name="turn_off_flashlight">Вимкнути ліхтарик</string>
-  <string name="qrcode_with_both_passwords">Цей QR код містить Ваші паролі адміністратора та сервера. Будь ласка, оберігайте його. \n(Натисніть для видалення паролів)</string>
-  <string name="qrcode_without_passwords">Цей QR код не містить Ваших паролів адміністратора чи сервера. \n(Натисніть щоб додати паролі)</string>
-  <string name="qrcode_with_admin_password">Цей QR код містить Ваш пароль адміністратора. Будь ласка, оберігайте його. \n(Натисніть для видалення паролю)</string>
-  <string name="qrcode_with_server_password">Цей QR код містить Ваш пароль сервера. \n(Натисніть для видалення паролю)</string>
   <string name="barcode_scanner_prompt">Розмістіть штрихкод в прямокутнику</string>
   <string name="server_password">Пароль Сервера</string>
   <string name="include_password_dialog">Паролі Включені в Код</string>
