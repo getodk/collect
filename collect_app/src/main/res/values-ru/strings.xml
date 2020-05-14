@@ -426,10 +426,6 @@
   <string name="share">Поделиться</string>
   <string name="turn_on_flashlight">Включить подсветку</string>
   <string name="turn_off_flashlight">Выключить подсветку</string>
-  <string name="qrcode_with_both_passwords">Этот QR-код содержит ваши пароли администратора и сервера. Пожалуйста, будьте осторожнее с ним.\n(Нажмите, чтобы удалить пароли)</string>
-  <string name="qrcode_without_passwords">Этот QR-код не содержит ваши пароли администратора и сервера.\n(Нажмите, чтобы добавить пароли)</string>
-  <string name="qrcode_with_admin_password">Этот QR-код содержит ваш пароль администратора. Пожалуйста, будьте осторожнее с ним.\n(Нажмите, чтобы удалить пароль)</string>
-  <string name="qrcode_with_server_password">Этот QR-код содержит ваш пароль сервера. Пожалуйста, будьте осторожнее с ним.\n(Нажмите, чтобы удалить пароль)</string>
   <string name="barcode_scanner_prompt">Вместите штрихкод внутрь прямоугольника</string>
   <string name="server_password">Пароль сервера</string>
   <string name="include_password_dialog">Пароли включены в код</string>

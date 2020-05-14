@@ -447,10 +447,6 @@ Dela ODK Collect med dem.</string>
   <string name="share">Dela</string>
   <string name="turn_on_flashlight">Slå på ficklampa</string>
   <string name="turn_off_flashlight">Stäng av ficklampa</string>
-  <string name="qrcode_with_both_passwords">QR-koden innehåller dina administratörs- och serverlösenord. Använd den med försiktighet. \n(Knacka för att ta bort lösenorden)</string>
-  <string name="qrcode_without_passwords">QR-koden innehåller inte dina administratörs- och serverlösenord. \n(Knacka för att lägga till lösenorden)</string>
-  <string name="qrcode_with_admin_password">QR-koden innehåller ditt administratörslösenord. Använd den med försiktighet. \n(Knacka för att ta bort lösenordet)</string>
-  <string name="qrcode_with_server_password">QR-koden innehåller ditt serverlösenord. \n(Knacka för att ta bort lösenordet)</string>
   <string name="barcode_scanner_prompt">Placera streckkoden innanför rektangeln</string>
   <string name="server_password">Serverlösenord</string>
   <string name="include_password_dialog">Koden innehåller lösenorden</string>

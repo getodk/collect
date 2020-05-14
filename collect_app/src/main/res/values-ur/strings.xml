@@ -422,10 +422,6 @@
   <string name="share">شیئر </string>
   <string name="turn_on_flashlight">فلیش لائٹ چالو کریں</string>
   <string name="turn_off_flashlight">فلیش لائٹ بند کریں</string>
-  <string name="qrcode_with_both_passwords">اس کیو آر کوڈ میں ایڈمن اور سرور کے پاس ورڈ شامل ہیں. براہ مہربانی اسے احتیاط سے استعمال کریں. \ این  (پاس ورڈ کو ہٹانےکے لیےٹیپ کریں)</string>
-  <string name="qrcode_without_passwords">اس کیو آر کوڈ میں ایڈمن اور سرور کے پاس ورڈ شامل نہیں ہیں. \ این (پاس ورڈ ایڈ کرنےکے لیے ٹیپ کریں)</string>
-  <string name="qrcode_with_admin_password">اس کیو آر کوڈ میں ایڈمن اور سرور کے پاس ورڈ شامل ہیں. براہ مہربانی اسے احتیاط سے استعمال کریں. \ این (پاس ورڈ کو ہٹانےکے لیےٹیپ کریں )</string>
-  <string name="qrcode_with_server_password">اس کیو آر کوڈ میںاپکے سرور کا پاس ورڈ شامل ہے.  \ این (پاس ورڈ کو ہٹانےکے لیے ٹیپ کریں)</string>
   <string name="barcode_scanner_prompt">بارکوڈ کو مستطیل کے اندر رکھیں</string>
   <string name="server_password">سرور پاس ورڈ</string>
   <string name="include_password_dialog">کوڈ میں شامل پاس ورڈ</string>

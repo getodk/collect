@@ -483,10 +483,6 @@
   <string name="share">Udostępnij</string>
   <string name="turn_on_flashlight">Włącz latarkę</string>
   <string name="turn_off_flashlight">Wyłącz latarkę</string>
-  <string name="qrcode_with_both_passwords">Ten kod QR zawiera twoje hasło administratora i hasło do serwera. Używaj go rozważnie. \n(Dotknij, by usunąć hasło)</string>
-  <string name="qrcode_without_passwords">Ten kod QR nie zawiera hasła administratora ani hasła do serwera. \n(Dotknij, by dodać hasło)</string>
-  <string name="qrcode_with_admin_password">Ten kod QR zawiera twoje hasło administratora. Używaj go rozważnie. \n(Dotknij, by usunąć hasło)</string>
-  <string name="qrcode_with_server_password">Ten kod QR zawiera hasło do serwera. \n(Dotknij, by usunąć hasło)</string>
   <string name="barcode_scanner_prompt">Umieść kod kreskowy wewnątrz prostokąta</string>
   <string name="server_password">Hasło Serwera</string>
   <string name="include_password_dialog">Hasło Zawarte w Kodzie</string>

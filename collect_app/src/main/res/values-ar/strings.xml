@@ -489,10 +489,6 @@
   <string name="share">مشاركة</string>
   <string name="turn_on_flashlight">تشغيل الإضاءة الخلفية</string>
   <string name="turn_off_flashlight">إيقاف الإضاءة الخلفية</string>
-  <string name="qrcode_with_both_passwords">كود QR هذا يتضمن كلمتي المرور المدير والمخدم الخاص بك. رجاء تعامل معه بحرص.\n(إنقر ليتم حذف كلمات المرور)</string>
-  <string name="qrcode_without_passwords">كود QR هذا لا يتضمن أي من كلمتي مرور المدير أو المخدم الخاصتين بك.\n(إنقر ليتم إضافة كلمات المرور)</string>
-  <string name="qrcode_with_admin_password">كود QR هذا يتضمن كلمة المدير الخاصة بك. الرجاء التعامل معه بحرض.\n(إنقر لحذف كلمة المرور)</string>
-  <string name="qrcode_with_server_password">كود QR هذا يتضمن كلمة مرور الخادم الخاصة بك.\n(إنقر لحذف كلمة المرور)</string>
   <string name="barcode_scanner_prompt">ضع الباركود داخل المستطيل</string>
   <string name="server_password">كلمة مرور الخادم</string>
   <string name="include_password_dialog">تضمين كلمات المرور في الكود</string>
