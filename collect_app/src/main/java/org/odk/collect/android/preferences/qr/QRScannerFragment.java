@@ -12,6 +12,8 @@
  */
 
 package org.odk.collect.android.preferences.qr;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -96,6 +98,12 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
                             switch (action) {
                                 case APPLY_SETTINGS:
                                     SettingsUtils.applySettings(getActivity(), CompressionUtils.decompress(result.getText()));
+                                    break;
+                                case BARCODE_WIDGET:
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra("SCAN_RESULT", result.getText());
+                                    getActivity().setResult(Activity.RESULT_OK, returnIntent);
+                                    getActivity().finish();
                                     break;
                             }
                         } catch (IOException | DataFormatException | IllegalArgumentException e) {
