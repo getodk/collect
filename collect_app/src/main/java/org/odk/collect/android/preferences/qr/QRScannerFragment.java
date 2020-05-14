@@ -26,6 +26,8 @@ import timber.log.Timber;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
@@ -41,6 +43,8 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
@@ -77,8 +81,13 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
 
         barcodeScannerView.setTorchListener(this);
 
+        Intent intent = new IntentIntegrator(getActivity())
+                .setDesiredBarcodeFormats(getSupportedCodeFormats())
+                .createScanIntent();
+        intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
+
         capture = new CaptureManager(getActivity(), barcodeScannerView);
-        capture.initializeFromIntent(getActivity().getIntent(), savedInstanceState);
+        capture.initializeFromIntent(intent, savedInstanceState);
         capture.decode();
 
         switchFlashlightButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +140,12 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
         }
 
         return rootView;
+    }
+
+    private Collection<String> getSupportedCodeFormats() {
+        return action.equals(Action.APPLY_SETTINGS)
+                ? Collections.singletonList(IntentIntegrator.QR_CODE)
+                : IntentIntegrator.ALL_CODE_TYPES;
     }
 
     @Override
