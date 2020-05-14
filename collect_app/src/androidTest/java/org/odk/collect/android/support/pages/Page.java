@@ -299,8 +299,10 @@ abstract class Page<T extends Page<T>> {
         }
     }
 
-    void waitForText(String text) {
-        while (true) {
+    public void waitForText(String text) {
+        int counter = 0;
+
+        while (counter < 20) {
             try {
                 assertText(text);
                 break;
@@ -313,6 +315,8 @@ abstract class Page<T extends Page<T>> {
             } catch (InterruptedException ignored) {
                 // ignored
             }
+
+            counter++;
         }
     }
 }

@@ -49,7 +49,7 @@ public class DeletingRepeatGroupsTest {
         new FormEntryPage("repeatGroups", activityTestRule)
                 .swipeToNextQuestion()
                 .deleteGroup("text1")
-                .assertText("3");
+                .waitForText("3");
     }
 
     @Test
