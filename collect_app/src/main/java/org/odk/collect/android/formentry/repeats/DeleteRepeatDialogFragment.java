@@ -1,7 +1,46 @@
 package org.odk.collect.android.formentry.repeats;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import org.odk.collect.android.R;
+
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
+
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+
+        alertDialog.setTitle(getActivity().getString(R.string.delete_repeat_ask));
+        DialogInterface.OnClickListener quitListener = (dialog, i) -> {
+            switch (i) {
+                case BUTTON_POSITIVE: // yes
+
+                    break;
+
+                case BUTTON_NEGATIVE: // no
+
+                    break;
+            }
+            alertDialog.cancel();
+            dismiss();
+        };
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(BUTTON_POSITIVE, getActivity().getString(R.string.discard_group), quitListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, getActivity().getString(R.string.delete_repeat_no), quitListener);
+
+        return alertDialog;
+    }
 }

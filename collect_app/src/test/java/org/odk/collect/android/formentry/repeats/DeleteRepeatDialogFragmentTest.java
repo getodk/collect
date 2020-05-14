@@ -37,9 +37,11 @@ public class DeleteRepeatDialogFragmentTest {
     }
 
     @Test
-    public void dialogIsCancellable() {
+    public void dialogIsNotCancellable() {
         dialogFragment.show(fragmentManager, "TAG");
-        assertThat(shadowOf(dialogFragment.getDialog()).isCancelable(), equalTo(true));
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        activity.get().finish();
+        assertThat(dialog.isShowing(), equalTo(true));
     }
 
     @Test
