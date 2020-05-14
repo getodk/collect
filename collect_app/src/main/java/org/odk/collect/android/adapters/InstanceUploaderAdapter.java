@@ -94,15 +94,15 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         switch (status) {
             case STATUS_SUBMISSION_FAILED:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submission_failed);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submission_failed_circle);
                 break;
 
             case STATUS_SUBMITTED:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submitted);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submitted_circle);
                 break;
 
             default:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_finalized);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_finalized_circle);
         }
 
         if (isSmsSubmission) {
@@ -150,7 +150,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     private void setSmsSubmissionStateIcons(int smsStatus, ViewHolder viewHolder) {
         switch (smsStatus) {
             case Activity.RESULT_OK:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submitted);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submitted_circle);
                 break;
 
             case RESULT_QUEUED:
@@ -161,7 +161,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                 break;
 
             default:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submission_failed);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submission_failed_circle);
                 break;
         }
     }
