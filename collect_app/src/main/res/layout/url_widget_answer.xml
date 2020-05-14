@@ -19,7 +19,6 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/url_answer_text"
-        style="@style/Widget.Collect.TextView.Empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

@@ -17,21 +17,23 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
-
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -42,31 +44,42 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
 public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     private Uri uri;
-    final Button openUrlButton;
-    final TextView stringAnswer;
+    private Button openUrlButton;
+    private TextView stringAnswer;
     private final CustomTabHelper customTabHelper;
 
     public UrlWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        customTabHelper = new CustomTabHelper();
+    }
 
-        openUrlButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), context.getString(R.string.open_url), getAnswerFontSize(), this);
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.url_widget_answer, null);
 
-        stringAnswer = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
+        openUrlButton = answerView.findViewById(R.id.url_button);
+        stringAnswer = answerView.findViewById(R.id.url_answer_text);
 
-        String s = questionDetails.getPrompt().getAnswerText();
+        if (prompt.isReadOnly()) {
+            openUrlButton.setVisibility(GONE);
+        } else {
+            openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            openUrlButton.setOnClickListener(v -> {
+                if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
+                    onButtonClick(openUrlButton.getId());
+                }
+            });
+        }
+
+        stringAnswer.setTextColor(new ThemeUtils(context).getColorOnSurface());
+        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        String s = prompt.getAnswerText();
         if (s != null) {
             stringAnswer.setText(s);
             uri = Uri.parse(stringAnswer.getText().toString());
         }
 
-        // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(openUrlButton);
-        answerLayout.addView(stringAnswer);
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
-
-        customTabHelper = new CustomTabHelper();
+        return answerView;
     }
 
     private boolean isUrlEmpty(TextView stringAnswer) {
