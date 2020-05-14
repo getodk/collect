@@ -6,18 +6,19 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.rule.ActivityTestRule;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.matcher.BoundedMatcher;
-import androidx.test.rule.ActivityTestRule;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -49,6 +50,7 @@ public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage> {
 
     public QRCodeTabsActivityPage clickOnMenu() {
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+        onView(withText(R.string.import_qrcode_sd)).check(matches(isDisplayed()));
         return this;
     }
 
