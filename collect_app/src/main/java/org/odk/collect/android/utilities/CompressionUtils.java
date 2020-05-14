@@ -84,6 +84,7 @@ public class CompressionUtils {
             outputStream.write(buffer, 0, count);
         }
         outputStream.close();
+        inflater.end();
         byte[] result = outputStream.toByteArray();
 
         // Decode the bytes into a String
