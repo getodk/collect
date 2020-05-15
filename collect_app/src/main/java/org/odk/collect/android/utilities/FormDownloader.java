@@ -484,7 +484,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = openRosaAPIClient.getFile(downloadUrl, null, true);    // smap add credentials
+                    is = openRosaAPIClient.getFile(downloadUrl, null, credentials);    // smap add credentials
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
