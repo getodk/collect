@@ -78,7 +78,7 @@ public class ProgressDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        dialogView = getLayoutInflater().inflate(R.layout.progress_dialog, null, false);
+        dialogView = requireActivity().getLayoutInflater().inflate(R.layout.progress_dialog, null, false);
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
                 .create();
