@@ -12,7 +12,6 @@
  */
 
 package org.odk.collect.android.fragments;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -34,10 +33,9 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import org.odk.collect.android.listeners.PermissionListener;
@@ -46,36 +44,17 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-public class CodeScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
-
-    private static final String ACTION = "action";
-
-    public enum Action { BARCODE_WIDGET, APPLY_SETTINGS };
-
+public abstract class BaseCodeScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
     private BeepManager beepManager;
-    private Action action;
-
-    public static CodeScannerFragment newInstance(Action action) {
-        CodeScannerFragment fragment = new CodeScannerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ACTION, action);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        action = (Action) (savedInstanceState == null
-                        ? getArguments().getSerializable(ACTION)
-                        : savedInstanceState.getSerializable(ACTION));
-
         beepManager = new BeepManager(getActivity());
 
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
@@ -98,17 +77,7 @@ public class CodeScannerFragment extends Fragment implements DecoratedBarcodeVie
                     public void barcodeResult(BarcodeResult result) {
                         beepManager.playBeepSoundAndVibrate();
                         try {
-                            switch (action) {
-                                case APPLY_SETTINGS:
-                                    SettingsUtils.applySettings(getActivity(), CompressionUtils.decompress(result.getText()));
-                                    break;
-                                case BARCODE_WIDGET:
-                                    Intent returnIntent = new Intent();
-                                    returnIntent.putExtra("SCAN_RESULT", result.getText());
-                                    getActivity().setResult(Activity.RESULT_OK, returnIntent);
-                                    getActivity().finish();
-                                    break;
-                            }
+                            handleScanningResult(result);
                         } catch (IOException | DataFormatException | IllegalArgumentException e) {
                             Timber.e(e);
                             ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
@@ -138,12 +107,6 @@ public class CodeScannerFragment extends Fragment implements DecoratedBarcodeVie
         return rootView;
     }
 
-    private Collection<String> getSupportedCodeFormats() {
-        return action.equals(Action.APPLY_SETTINGS)
-                ? Collections.singletonList(IntentIntegrator.QR_CODE)
-                : IntentIntegrator.ALL_CODE_TYPES;
-    }
-
     private void switchToFrontCamera() {
         CameraSettings cameraSettings = new CameraSettings();
         cameraSettings.setRequestedCameraId(CameraUtils.getFrontCameraId());
@@ -160,8 +123,7 @@ public class CodeScannerFragment extends Fragment implements DecoratedBarcodeVie
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ACTION, action);
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         capture.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
@@ -213,4 +175,8 @@ public class CodeScannerFragment extends Fragment implements DecoratedBarcodeVie
     public void onTorchOff() {
         switchFlashlightButton.setText(R.string.turn_on_flashlight);
     }
+
+    protected abstract Collection<String> getSupportedCodeFormats();
+
+    protected abstract void handleScanningResult(BarcodeResult result) throws IOException, DataFormatException;
 }
