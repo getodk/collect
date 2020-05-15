@@ -199,8 +199,6 @@ configurations.all {
 }
 
 dependencies {
-    def fragment_version = "1.2.4"
-
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -209,7 +207,7 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.preference:preference:1.1.0'
-    implementation "androidx.fragment:fragment:$fragment_version"
+    implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
 
     implementation "com.google.android.gms:play-services-auth:17.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
@@ -314,7 +312,7 @@ dependencies {
 
     testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation 'androidx.test.ext:junit:1.1.1'
-    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+    debugImplementation "androidx.fragment:fragment-testing:${rootProject.fragmentVersion}"
     testImplementation "org.robolectric:shadows-multidex:4.3.1"
     testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
     testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
