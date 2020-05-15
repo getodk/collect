@@ -81,6 +81,17 @@ public class BasePreferenceFragment extends PreferenceFragment {
             }
         }
 
+        // smap guidance
+        Preference guide = getPreferenceScreen().findPreference(GeneralKeys.KEY_GUIDANCE_HINT);
+        if(guide != null) {
+            boolean override_guide = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE);
+            if (override_guide) {
+                guide.setEnabled(false);
+            } else {
+                guide.setEnabled(true);
+            }
+        }
+
         // smap image size
         Preference image_size = getPreferenceScreen().findPreference(GeneralKeys.KEY_IMAGE_SIZE);
         if(image_size != null) {

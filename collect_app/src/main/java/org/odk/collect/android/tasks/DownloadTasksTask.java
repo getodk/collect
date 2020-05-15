@@ -48,6 +48,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -420,6 +421,25 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     } else {
                         // Leave the local settings as they are and enable for local editing
                         editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
+                    }
+
+                    /*
+                     * Override the guidance setting
+                     */
+                    if(tr.settings.ft_guidance != null) {
+                        if(tr.settings.ft_guidance.equals("no")) {
+                            editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.No.toString());
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
+                        } else if(tr.settings.ft_guidance.equals("yes always")) {
+                            editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
+                        } else if(tr.settings.ft_guidance.equals("yes collapsed")) {
+                            editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
+                        } else {
+                            // Leave the local settings as they are and enable for local editing
+                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, false);
+                        }
                     }
 
                     /*

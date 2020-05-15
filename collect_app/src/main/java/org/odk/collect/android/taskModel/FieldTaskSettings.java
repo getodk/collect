@@ -29,6 +29,7 @@ public class FieldTaskSettings {
     public boolean ft_exit_track_menu;
     public boolean ft_review_final;
     public String ft_high_res_video;
+    public String ft_guidance;
     public String ft_send;
     public boolean ft_send_wifi;
     public boolean ft_send_wifi_cell;
