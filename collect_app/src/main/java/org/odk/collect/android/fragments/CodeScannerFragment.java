@@ -11,7 +11,7 @@
  * the License.
  */
 
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;

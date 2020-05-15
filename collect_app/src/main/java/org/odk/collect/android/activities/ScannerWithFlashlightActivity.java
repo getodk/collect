@@ -21,7 +21,7 @@ import android.view.WindowManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.qr.CodeScannerFragment;
+import org.odk.collect.android.fragments.CodeScannerFragment;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
