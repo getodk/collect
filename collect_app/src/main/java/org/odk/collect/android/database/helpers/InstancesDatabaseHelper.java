@@ -142,8 +142,9 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createInstancesTableV5(db, INSTANCES_TABLE_NAME);
-        upgradeToVersion6(db, INSTANCES_TABLE_NAME);
+
+        createInstancesTableV16(db, INSTANCES_TABLE_NAME);  // smap
+        //upgradeToVersion6(db, INSTANCES_TABLE_NAME);      // smap commented
     }
 
     /**
@@ -158,6 +159,11 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         try {
             Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
+            // smap
+            if(oldVersion < 16) {
+                upgradeToVersion16(db);
+            }
+            /*
             switch (oldVersion) {
                 case 1:
                     upgradeToVersion2(db);
@@ -172,11 +178,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                     break;
                 default:
                     // Timber.i("Unknown version %d", oldVersion); // smap commented
-                    // smap start
-                    if(oldVersion < 16) {
-                        upgradeToVersion16(db);
-                    }
             }
+             */
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;

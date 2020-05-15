@@ -21,7 +21,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.database.DatabaseContext;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.SQLiteUtils;
@@ -39,7 +38,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DES
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
-//import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
@@ -68,19 +67,17 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String[] COLUMN_NAMES_V8 = {_ID, DISPLAY_NAME, DESCRIPTION,
         JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
         SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-        //LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH}; // smap
-        LAST_DETECTED_FORM_VERSION_HASH};
+        LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH};
 
     private static final String[] COLUMN_NAMES_V15 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            //LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH}; // smap
-            LAST_DETECTED_FORM_VERSION_HASH,
-            PROJECT,
-            TASKS_ONLY,
-            SOURCE};
+            LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH,
+            PROJECT,    // smap
+            TASKS_ONLY, // smap
+            SOURCE};    // smap
 
-    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V8;
+    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V15;  // smap
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -98,7 +95,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV8(db);
+        createFormsTableV15(db);    // smap
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -107,6 +104,11 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         try {
             Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
+            if(oldVersion < 15) {   // smap - start from 15
+                upgradeToVersion15(db);
+            }
+
+            /* smap
             switch (oldVersion) {
                 case 1:
                     upgradeToVersion2(db);
@@ -123,12 +125,10 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                     upgradeToVersion8(db);
                     break;
                 default:
-                    // Timber.i("Unknown version %d", oldVersion); // smap commented
-                    // smap start
-                    if(oldVersion < 15) {
-                        upgradeToVersion15(db);
-                    }
+                    Timber.i("Unknown version %d", oldVersion);
+
             }
+             */
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;
@@ -287,7 +287,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion8(SQLiteDatabase db) {
-        //SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");   // smap
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");   // smap
     }
 
     // smap
@@ -356,8 +356,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text);");   // smap
-                //+ GEOMETRY_XPATH + " text);");  // smap
+                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
+                + GEOMETRY_XPATH + " text);");
     }
 
     // smap
@@ -379,7 +379,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
                 + LAST_DETECTED_FORM_VERSION_HASH + " text,"
-                //+ GEOMETRY_XPATH + " text,"  // smap
+                + GEOMETRY_XPATH + " text,"
                 + PROJECT + " text,"
                 + TASKS_ONLY + " text,"
                 + SOURCE + " text,"
