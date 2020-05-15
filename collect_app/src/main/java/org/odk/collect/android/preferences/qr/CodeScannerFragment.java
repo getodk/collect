@@ -50,7 +50,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
+public class CodeScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
 
     private static final String ACTION = "action";
 
@@ -62,8 +62,8 @@ public class QRScannerFragment extends Fragment implements DecoratedBarcodeView.
     private BeepManager beepManager;
     private Action action;
 
-    public static QRScannerFragment newInstance(Action action) {
-        QRScannerFragment fragment = new QRScannerFragment();
+    public static CodeScannerFragment newInstance(Action action) {
+        CodeScannerFragment fragment = new CodeScannerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ACTION, action);
         fragment.setArguments(bundle);
