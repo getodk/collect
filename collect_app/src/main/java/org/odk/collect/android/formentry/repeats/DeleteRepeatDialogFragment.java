@@ -10,20 +10,30 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.javarosawrapper.FormController;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
+    protected FormController formController = Collect.getInstance().getFormController();;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+        String name = formController.getLastRepeatedGroupName();
+        int repeatcount = formController.getLastRepeatedGroupRepeatCount();
+        if (repeatcount != -1) {
+            name += " (" + (repeatcount + 1) + ")";
+        }
 
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setTitle(getActivity().getString(R.string.delete_repeat_ask));
+        alertDialog.setMessage(getActivity().getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
             switch (i) {
                 case BUTTON_POSITIVE: // yes
