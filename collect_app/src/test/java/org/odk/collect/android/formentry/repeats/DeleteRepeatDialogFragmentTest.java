@@ -24,6 +24,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -40,7 +42,9 @@ public class DeleteRepeatDialogFragmentTest {
         activity.setup();
         fragmentManager = activity.get().getSupportFragmentManager();
         dialogFragment = new DeleteRepeatDialogFragment();
+
         dialogFragment.formController = mock(FormController.class);
+        dialogFragment.callback = mock(DeleteRepeatDialogFragment.DeleteRepeatDialogCallback.class);
     }
 
     @Test
@@ -75,7 +79,6 @@ public class DeleteRepeatDialogFragmentTest {
 
         DeleteRepeatDialogFragment restoredFragment = (DeleteRepeatDialogFragment) activity.get().getSupportFragmentManager().findFragmentByTag("TAG");
         AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
-
         assertThat(((TextView) restoredDialog.findViewById(android.R.id.message)).getText().toString(), equalTo(message));
     }
 
@@ -99,5 +102,21 @@ public class DeleteRepeatDialogFragmentTest {
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
         assertFalse(dialog.isShowing());
         assertTrue(shadowOf(dialog).hasBeenDismissed());
+    }
+
+    @Test
+    public void clickingRemoveGroup_callsDeleteGroup() {
+        dialogFragment.show(fragmentManager, "TAG");
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+        verify(dialogFragment.callback, times(1)).deleteGroup();
+    }
+
+    @Test
+    public void clickingCancel_callsOnCancelled() {
+        dialogFragment.show(fragmentManager, "TAG");
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+        verify(dialogFragment.callback, times(1)).onCancelled();
     }
 }

@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry.repeats;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -18,7 +19,17 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
-    protected FormController formController = Collect.getInstance().getFormController();;
+    protected FormController formController = Collect.getInstance().getFormController();
+    protected DeleteRepeatDialogCallback callback;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof DeleteRepeatDialogCallback) {
+            callback = (DeleteRepeatDialogCallback) context;
+        }
+    }
 
     @NonNull
     @Override
@@ -37,11 +48,11 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
             switch (i) {
                 case BUTTON_POSITIVE: // yes
-
+                    callback.deleteGroup();
                     break;
 
                 case BUTTON_NEGATIVE: // no
-
+                    callback.onCancelled();
                     break;
             }
             alertDialog.cancel();
@@ -52,5 +63,10 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
         alertDialog.setButton(BUTTON_NEGATIVE, getActivity().getString(R.string.delete_repeat_no), quitListener);
 
         return alertDialog;
+    }
+
+    public interface DeleteRepeatDialogCallback {
+        void deleteGroup();
+        void onCancelled();
     }
 }
