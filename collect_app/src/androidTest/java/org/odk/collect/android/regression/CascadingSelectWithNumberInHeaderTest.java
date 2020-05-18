@@ -9,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -17,7 +18,9 @@ import java.util.Collections;
 
 // Issue number NODK-207
 @RunWith(AndroidJUnit4.class)
-public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
+public class CascadingSelectWithNumberInHeaderTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -26,7 +29,8 @@ public class CascadingSelectWithNumberInHeaderTest extends BaseRegressionTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("numberInCSV.xml", Collections.singletonList("itemSets.csv")));
+            .around(new CopyFormRule("numberInCSV.xml", Collections.singletonList("itemSets.csv")))
+            .around(rule);
 
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {

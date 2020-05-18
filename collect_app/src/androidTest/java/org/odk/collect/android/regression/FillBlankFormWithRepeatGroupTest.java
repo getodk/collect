@@ -9,15 +9,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 
 //Issue NODK-247
 @RunWith(AndroidJUnit4.class)
-public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
+public class FillBlankFormWithRepeatGroupTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -41,7 +44,8 @@ public class FillBlankFormWithRepeatGroupTest extends BaseRegressionTest {
             .around(new CopyFormRule("basic.xml"))
             .around(new CopyFormRule("repeat_group_form.xml"))
             .around(new CopyFormRule("repeat_group_new.xml"))
-            .around(new CopyFormRule("RepeatTitles_1648.xml"));
+            .around(new CopyFormRule("RepeatTitles_1648.xml"))
+            .around(rule);
 
     @Test
     public void whenNoRepeatGroupAdded_ShouldNotDoubleLastQuestion() {

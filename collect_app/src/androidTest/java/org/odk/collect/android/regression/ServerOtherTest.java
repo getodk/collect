@@ -9,19 +9,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.MainMenuPage;
 
 // Issue number NODK-235
 @RunWith(AndroidJUnit4.class)
-public class ServerOtherTest extends BaseRegressionTest {
+public class ServerOtherTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_PHONE_STATE)
             )
-            .around(new ResetStateRule());
+            .around(new ResetStateRule())
+            .around(rule);
 
     @Test
     public void formListPath_ShouldBeUpdated() {
