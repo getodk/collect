@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.FeatureTestRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AdminSettingsPage;
 
@@ -17,7 +17,7 @@ import org.odk.collect.android.support.pages.AdminSettingsPage;
 @RunWith(AndroidJUnit4.class)
 public class AdminSettingsTest {
 
-    public FeatureTestRule rule = new FeatureTestRule();
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain

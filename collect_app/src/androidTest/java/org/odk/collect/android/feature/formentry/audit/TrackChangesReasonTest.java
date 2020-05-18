@@ -12,7 +12,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.FeatureTestRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage;
@@ -26,7 +26,7 @@ public class TrackChangesReasonTest {
     private static final String TRACK_CHANGES_REASON_ON_EDIT_FORM = "track-changes-reason-on-edit.xml";
     private static final String NO_TRACK_CHANGES_REASON_FORM = "no-track-changes-reason.xml";
 
-    public FeatureTestRule rule = new FeatureTestRule();
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
