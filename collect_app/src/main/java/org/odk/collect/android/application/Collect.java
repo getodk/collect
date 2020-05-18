@@ -40,7 +40,6 @@ import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -70,9 +69,6 @@ public class Collect extends Application {
     private FormController formController;
     private ExternalDataManager externalDataManager;
     private AppDependencyComponent applicationComponent;
-
-    @Inject
-    UserAgentProvider userAgentProvider;
 
     @Inject
     ApplicationInitializer applicationInitializer;
