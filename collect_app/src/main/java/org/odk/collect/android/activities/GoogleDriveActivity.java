@@ -112,6 +112,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     GoogleAccountsManager accountsManager;
 
     @Inject
+    StoragePathProvider storagePathProvider;
+
+    @Inject
     NetworkStateProvider connectivityProvider;
 
     private void initToolbar() {
@@ -779,21 +782,20 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     private void checkFormUpdates() {
         for (DriveListItem item: driveList) {
-            if (item.getType() == DriveListItem.FILE) {
-                if (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item)) {
+            if (item.getType() == DriveListItem.FILE && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
                     item.setNewerVersion(true);
-                }
             }
         }
     }
 
     private boolean isNewerFormVersionAvailable(DriveListItem item) {
         FormsDao formsDao = new FormsDao();
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
-        if (cursor != null && cursor.moveToFirst()) {
-            Long lastModifiedLocal = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
-            Long lastModifiedServer = item.getDate().getValue();
-            return lastModifiedServer > lastModifiedLocal;
+        try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
+            if (cursor != null && cursor.moveToFirst()) {
+                Long lastModifiedLocal = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
+                Long lastModifiedServer = item.getDate().getValue();
+                return lastModifiedServer > lastModifiedLocal;
+            }
         }
         return false;
     }
@@ -811,7 +813,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
             if (mediaFileList != null) {
                 for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
-                    File localMediaFile = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
+                    File localMediaFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
                     if (!localMediaFile.exists()) {
                         return true;
                     } else {
@@ -824,7 +826,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 }
             }
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.w(e);
         }
         return false;
     }
