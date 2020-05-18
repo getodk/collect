@@ -57,10 +57,7 @@ public class ApplicationInitializer {
         JodaTimeAndroid.init(context);
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-
-        new com.google.android.gms.maps.MapView(context).onCreate(null);
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
-        MapboxUtils.initMapbox();
+        initializeMapFrameworks();
     }
 
     public void initializeLocale() {
@@ -99,6 +96,12 @@ public class ApplicationInitializer {
                 .migrate();
 
         AutoSendPreferenceMigrator.migrate();
+    }
+
+    private void initializeMapFrameworks() {
+        new com.google.android.gms.maps.MapView(context).onCreate(null);
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
+        MapboxUtils.initMapbox();
     }
 
     private static class CrashReportingTree extends Timber.Tree {
