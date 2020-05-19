@@ -14,31 +14,16 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-
-import com.google.zxing.client.android.Intents;
-import com.journeyapps.barcodescanner.CaptureManager;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class ScannerWithFlashlightActivity extends CollectAbstractActivity implements
-        DecoratedBarcodeView.TorchListener {
-
-    private CaptureManager capture;
-    private DecoratedBarcodeView barcodeScannerView;
-    private Button switchFlashlightButton;
+public class ScannerWithFlashlightActivity extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,88 +32,5 @@ public class ScannerWithFlashlightActivity extends CollectAbstractActivity imple
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_custom_scanner);
-
-        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
-        barcodeScannerView.setTorchListener(this);
-
-        switchFlashlightButton = findViewById(R.id.switch_flashlight);
-
-        // if the device does not have flashlight in its camera,
-        // then remove the switch flashlight button...
-        if (!hasFlash() || frontCameraUsed()) {
-            switchFlashlightButton.setVisibility(View.GONE);
-        }
-
-        capture = new CaptureManager(this, barcodeScannerView);
-        capture.initializeFromIntent(getIntent(), savedInstanceState);
-        capture.decode();
-    }
-
-    public Intent getIntent() {
-        Intent intent = super.getIntent();
-        intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-        return intent;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        capture.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        capture.onPause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        capture.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        capture.onSaveInstanceState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * Check if the device's camera has a Flashlight.
-     *
-     * @return true if there is Flashlight, otherwise false.
-     */
-    private boolean hasFlash() {
-        return getApplicationContext().getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-    }
-
-    private boolean frontCameraUsed() {
-        Bundle bundle = getIntent().getExtras();
-        return bundle != null && bundle.getBoolean(WidgetAppearanceUtils.FRONT);
-    }
-
-    public void switchFlashlight(View view) {
-        if (getString(R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
-            barcodeScannerView.setTorchOn();
-        } else {
-            barcodeScannerView.setTorchOff();
-        }
-    }
-
-    @Override
-    public void onTorchOn() {
-        switchFlashlightButton.setText(R.string.turn_off_flashlight);
-    }
-
-    @Override
-    public void onTorchOff() {
-        switchFlashlightButton.setText(R.string.turn_on_flashlight);
     }
 }
