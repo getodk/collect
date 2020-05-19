@@ -105,6 +105,8 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_ODK_INSTANCENAME = "odk_instancename";  // Allow user to change instance name
     public static final String KEY_SMAP_PREVENT_DISABLE_TRACK = "disable_prevent_track";  // Prevent the user from disabling tracking
     public static final String KEY_SMAP_ODK_ADMIN_MENU = "odk_admin_menu";  // Show ODK admin menu
+    public static final String KEY_SMAP_ADMIN_SERVER_MENU = "admin_server_menu";  // Show server menu in general settings
+    public static final String KEY_SMAP_ADMIN_META_MENU = "admin_meta_menu";  // Show meta menu in general settings
     public static final String KEY_SMAP_EXIT_TRACK_MENU = "smap_exit_track_menu";  // Show ODK admin menu
     public static final String KEY_SMAP_OVERRIDE_SYNC = "smap_override_sync";  // Override the local settings for synchronisation
     public static final String KEY_SMAP_OVERRIDE_LOCATION = "smap_override_location";  // Override the local settings for user trail
@@ -171,6 +173,8 @@ public final class GeneralKeys {
         hashMap.put(KEY_SMAP_ODK_INSTANCENAME, false);
         hashMap.put(KEY_SMAP_PREVENT_DISABLE_TRACK, false);
         hashMap.put(KEY_SMAP_ODK_ADMIN_MENU, false);
+        hashMap.put(KEY_SMAP_ADMIN_SERVER_MENU, true);
+        hashMap.put(KEY_SMAP_ADMIN_META_MENU, true);
         hashMap.put(KEY_SMAP_EXIT_TRACK_MENU, false);
 
         hashMap.put(KEY_SMAP_OVERRIDE_SYNC, false);

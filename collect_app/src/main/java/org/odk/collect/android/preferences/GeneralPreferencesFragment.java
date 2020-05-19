@@ -18,6 +18,7 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
@@ -91,8 +92,12 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     }
 
     private void setPreferencesVisibility() {
+
+        GeneralSharedPreferences generalPreferences = GeneralSharedPreferences.getInstance();   // smap get the general preferences
+
         PreferenceScreen preferenceScreen = getPreferenceScreen();
-        if (!hasAtleastOneSettingEnabled(AdminKeys.serverKeys)) {
+        if (!hasAtleastOneSettingEnabled(AdminKeys.serverKeys)
+                || !generalPreferences.getBoolean(GeneralKeys.KEY_SMAP_ADMIN_SERVER_MENU, true)) {     // smap
             preferenceScreen.removePreference(findPreference("protocol"));
         }
 
@@ -109,7 +114,8 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
             preferenceScreen.removePreference(findPreference("form_management"));
         }
 
-        if (!hasAtleastOneSettingEnabled(AdminKeys.identityKeys)) {
+        if (!hasAtleastOneSettingEnabled(AdminKeys.identityKeys)
+                || !generalPreferences.getBoolean(GeneralKeys.KEY_SMAP_ADMIN_META_MENU, true)) {     // smap
             preferenceScreen.removePreference(findPreference("user_and_device_identity"));
         }
     }
