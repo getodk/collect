@@ -19,7 +19,6 @@ import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGr
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
-
     private final Analytics analytics;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
@@ -59,6 +58,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
 
         jumpBackIndex = formController.getFormIndex();
+        jumpToNewRepeat();
+    }
+
+    public void jumpToNewRepeat() {
         formController.jumpToNewRepeatPrompt();
     }
 
