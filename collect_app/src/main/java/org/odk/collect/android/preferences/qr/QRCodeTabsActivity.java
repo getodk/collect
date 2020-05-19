@@ -9,12 +9,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
+
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -28,34 +38,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
-
-import javax.inject.Inject;
-
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.qr.QRCodeMenuDelegate.SELECT_PHOTO;
 
 public class QRCodeTabsActivity extends CollectAbstractActivity {
-    private static final int SELECT_PHOTO = 111;
+
     private static String[] fragmentTitleList;
+
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Intent shareIntent;
 
     @Inject
     QRCodeGenerator qrCodeGenerator;
+
+    @Inject
+    ActivityAvailability activityAvailability;
+
+    private QRCodeMenuDelegate menuDelegate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +96,8 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(fragmentTitleList[position])).attach();
         updateShareIntent();
+
+        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability);
     }
 
     private void initToolbar() {
@@ -123,36 +133,30 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.settings_menu, menu);
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public void onDestroy() {
-        compositeDisposable.dispose();
-        super.onDestroy();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (menuDelegate.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.menu_item_share:
                 if (shareIntent != null) {
                     this.startShareQRCodeIntent();
                 }
                 return true;
-            case R.id.menu_item_scan_sd_card:
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                if (photoPickerIntent.resolveActivity(this.getPackageManager()) != null) {
-                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-                } else {
-                    ToastUtils.showShortToast(getString(R.string.activity_not_found, getString(R.string.choose_image)));
-                    Timber.w(getString(R.string.activity_not_found, getString(R.string.choose_image)));
-                }
-                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     @Override

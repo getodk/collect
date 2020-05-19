@@ -272,7 +272,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public QRCodeGenerator providesQRCodeGenerator() {
+    public QRCodeGenerator providesQRCodeGenerator(Context context) {
         return new ObservableQRCodeGenerator();
     }
 

@@ -15,6 +15,7 @@
 package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 
 import com.google.zxing.BarcodeFormat;
@@ -31,7 +32,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 
 import java.io.IOException;
-
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;

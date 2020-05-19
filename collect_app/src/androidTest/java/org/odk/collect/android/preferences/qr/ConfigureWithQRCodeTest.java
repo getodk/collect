@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences.qr;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,7 +41,6 @@ import dagger.Provides;
 import io.reactivex.Observable;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
@@ -71,7 +71,7 @@ public class ConfigureWithQRCodeTest {
             .around(new ResetStateRule(new AppDependencyModule() {
                 @Override
                 @Provides
-                public QRCodeGenerator providesQRCodeGenerator() {
+                public QRCodeGenerator providesQRCodeGenerator(Context context) {
                     return stubQRCodeGenerator;
                 }
             }))
@@ -111,20 +111,6 @@ public class ConfigureWithQRCodeTest {
                         getApplicationContext().getResources(),
                         stubQRCodeGenerator.getDrawableID()
                 ));
-    }
-
-    @Test
-    @Ignore("Should be replaced at Robolectric level")
-    public void onMainMenu_clickConfigureQRCode_andClickingOnImportQRCode_startsExternalImagePickerIntent() {
-        new MainMenuPage(rule)
-                .assertOnPage()
-                .clickOnMenu()
-                .clickConfigureQR()
-                .clickOnMenu()
-                .clickOnString(R.string.import_qrcode_sd);
-
-        intended(hasAction(Intent.ACTION_PICK));
-        intended(hasType("image/*"));
     }
 
     @Test
