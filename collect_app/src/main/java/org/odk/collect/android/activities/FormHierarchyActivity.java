@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,8 +22,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,7 @@ import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
@@ -54,8 +56,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_FORM_CONTROLLER_EVENT;
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 
 public class FormHierarchyActivity extends CollectAbstractActivity {
 
@@ -115,6 +117,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     @Inject
     Analytics analytics;
 
+    private FormEntryViewModel formEntryViewModel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +142,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             analytics.logEvent(NULL_FORM_CONTROLLER_EVENT, "FormHierarchyActivity", null);
             return;
         }
+
+        formEntryViewModel = new ViewModelProvider(this, new FormEntryViewModel.Factory(analytics)).get(FormEntryViewModel.class);
+        formEntryViewModel.formLoaded(Collect.getInstance().getFormController());
 
         startIndex = formController.getFormIndex();
 
@@ -272,8 +279,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             case R.id.menu_add_repeat:
                 Collect.getInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
-                Collect.getInstance().getFormController().jumpToNewRepeatPrompt();
-                setResult(RESULT_ADD_REPEAT);
+                formEntryViewModel.jumpToNewRepeat();
+                formEntryViewModel.addRepeat(false);
+
                 finish();
                 return true;
 
