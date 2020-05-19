@@ -54,6 +54,15 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage swipeToNextRepeat(String repeatLabel, int repeatNumber) {
+        tryAgainOnFail(() -> {
+            onView(withId(R.id.questionholder)).perform(swipeLeft());
+            onView(withText(repeatLabel + " > " + repeatNumber));
+        });
+
+        return this;
+    }
+
     public FormEndPage swipeToEndScreen() {
         tryAgainOnFail(() -> {
             onView(withId(R.id.questionholder)).perform(swipeLeft());

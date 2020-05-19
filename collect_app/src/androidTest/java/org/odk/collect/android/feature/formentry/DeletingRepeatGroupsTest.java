@@ -47,17 +47,17 @@ public class DeletingRepeatGroupsTest {
     @Test
     public void requestingDeletionOfMiddleRepeat_deletesMiddleRepeat() {
         new FormEntryPage("repeatGroups", activityTestRule)
-                .swipeToNextQuestion()
+                .swipeToNextRepeat("repeat", 2)
                 .deleteGroup("text1")
-                .waitForText("3");
+                .assertText("3");
     }
 
     @Test
     public void requestingDeletionOfLastRepeat_deletesLastRepeat() {
         new FormEntryPage("repeatGroups", activityTestRule)
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToNextRepeat("repeat", 2)
+                .swipeToNextRepeat("repeat", 3)
+                .swipeToNextRepeat("repeat", 4)
                 .deleteGroup("text1")
                 .assertText("number1");
     }
