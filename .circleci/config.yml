@@ -209,7 +209,8 @@ jobs:
           name: Move Firebase coverage report
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
-              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Pixel2-27-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+            mkdir -p collect_app/build/outputs/code-coverage/connected
+            find firebase -iname 'coverage.ec' | cpio -pdm collect_app/build/outputs/code-coverage/connected
             fi
       - run:
           name: Generate JaCoCo report
@@ -243,11 +244,11 @@ workflows:
           filters:
             branches:
               only: master
-#      - report_coverage:
-#          requires:
-#            - test_unit
-#            - test_instrumented
-#          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
-#          filters:
-#            branches:
-#              only: master
+      - report_coverage:
+          requires:
+            - test_unit
+            - test_instrumented
+          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+          filters:
+            branches:
+              only: master
