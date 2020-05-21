@@ -46,6 +46,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.material.MaterialBanner;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
@@ -141,6 +142,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     VersionInformation versionInformation;
+
+    @Inject
+    NetworkStateProvider connectivityProvider;
 
     private MainMenuViewModel viewModel;
 
@@ -391,15 +395,17 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void initMapBox() {
-        // This "one weird trick" lets us initialize MapBox at app start when the internet is
-        // most likely to be available. This is annoyingly needed for offline tiles to work.
-        try {
-            MapView mapView = new MapView(this);
-            FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
-            mapboxContainer.addView(mapView);
-            mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
-        } catch (Exception | Error ignored) {
-            // This will crash on devices where the arch for MapBox is not included
+        if (connectivityProvider.isDeviceOnline()) {
+            // This "one weird trick" lets us initialize MapBox at app start when the internet is
+            // most likely to be available. This is annoyingly needed for offline tiles to work.
+            try {
+                MapView mapView = new MapView(this);
+                FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
+                mapboxContainer.addView(mapView);
+                mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
+            } catch (Exception | Error ignored) {
+                // This will crash on devices where the arch for MapBox is not included
+            }
         }
     }
 
