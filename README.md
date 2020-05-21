@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build status](https://circleci.com/gh/getodk/collect.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/getodk/collect)
 [![codecov.io](https://codecov.io/github/getodk/collect/branch/master/graph/badge.svg)](https://codecov.io/github/getodk/collect)
-[![Slack status](http://slack.getodk.org/badge.svg)](http://slack.getodk.org)
+[![Slack](https://img.shields.io/badge/chat-on%20slack-brightgreen)](https://slack.getodk.org)
 
 ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part the ODK Project, a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the ODK project and its history [here](https://getodk.org/) and read about example ODK deployments [here](https://forum.getodk.org/c/showcase).
 
@@ -27,8 +27,7 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 * ODK website: [https://getodk.org](https://getodk.org)
 * ODK Collect usage documentation: [https://docs.getodk.org/collect-intro/](https://docs.getodk.org/collect-intro/)
 * ODK forum: [https://forum.getodk.org](https://forum.getodk.org)
-* ODK developer Slack chat: [http://slack.getodk.org](http://slack.getodk.org) 
-* ODK developer Slack archive: [https://getodk.slackarchive.io](https://getodk.slackarchive.io) 
+* ODK developer Slack chat: [https://slack.getodk.org](https://slack.getodk.org)
 
 ## Release cycle
 Releases can be requested by any community member and generally happen every 2 months.
