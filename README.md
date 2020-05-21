@@ -119,7 +119,7 @@ JavaRosa is the form engine that powers Collect. If you want to debug or change 
 1. In Android Studio, select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the project
 1. In Collect's `build.gradle` file, find the JavaRosa section:
     ```gradle
-    implementation("org.opendatakit:opendatakit-javarosa:x.y.z") {
+    implementation("org.getodk:javarosa:x.y.z") {
         ...
     }
     ```
@@ -135,13 +135,13 @@ JavaRosa is the form engine that powers Collect. If you want to debug or change 
 1. In JavaRosa, change the version in `build.gradle` and build the jar
 	```gradle
 	jar {
-	    baseName = 'opendatakit-javarosa'
+	    baseName = 'javarosa'
 	    version = 'x.y.z-SNAPSHOT'
 	```
 
 1. In Collect, add the path to the jar to the dependencies in `build.gradle`
 	```gradle
-	compile files('/path/to/javarosa/build/libs/opendatakit-javarosa-x.y.z-SNAPSHOT.jar')
+	compile files('/path/to/javarosa/build/libs/javarosa-x.y.z-SNAPSHOT.jar')
 	```
 
 ## Contributing code
