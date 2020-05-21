@@ -542,7 +542,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             Map<String, Object> entries = (Map<String, Object>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
-            PreferenceSaver.saveGeneralPrefs(GeneralSharedPreferences.getInstance(), entries);
+            PreferenceSaver.saveGeneralPrefs(generalSharedPreferences, entries);
 
             // second object is admin options
             Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
@@ -624,8 +624,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void disableSmsIfNeeded() {
-        if (Transport.Internet != Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE))) {
-            GeneralSharedPreferences.getInstance().save(KEY_SUBMISSION_TRANSPORT_TYPE, getString(R.string.transport_type_value_internet));
+        if (Transport.Internet != Transport.fromPreference(generalSharedPreferences.get(KEY_SUBMISSION_TRANSPORT_TYPE))) {
+            generalSharedPreferences.save(KEY_SUBMISSION_TRANSPORT_TYPE, getString(R.string.transport_type_value_internet));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder
