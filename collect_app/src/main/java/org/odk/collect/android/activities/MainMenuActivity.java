@@ -89,6 +89,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_INITIALIZED;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
@@ -145,6 +146,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     NetworkStateProvider connectivityProvider;
+
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
 
     private MainMenuViewModel viewModel;
 
@@ -395,14 +399,16 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void initMapBox() {
-        if (connectivityProvider.isDeviceOnline()) {
+        if (!generalSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED, false) && connectivityProvider.isDeviceOnline()) {
             // This "one weird trick" lets us initialize MapBox at app start when the internet is
             // most likely to be available. This is annoyingly needed for offline tiles to work.
             try {
                 MapView mapView = new MapView(this);
                 FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
                 mapboxContainer.addView(mapView);
-                mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
+                mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+                    generalSharedPreferences.save(KEY_MAPBOX_INITIALIZED, true);
+                }));
             } catch (Exception | Error ignored) {
                 // This will crash on devices where the arch for MapBox is not included
             }
