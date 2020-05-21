@@ -173,6 +173,15 @@ public class FormMapActivity extends BaseGeoMapActivity {
         state.putInt(MAP_SELECTED_SUBMISSION_ID, selectedSubmissionId);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     public void initMap(MapFragment newMapFragment) {
         map = newMapFragment;
