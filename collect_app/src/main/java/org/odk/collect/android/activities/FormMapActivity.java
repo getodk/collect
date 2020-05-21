@@ -68,6 +68,7 @@ import timber.log.Timber;
 public class FormMapActivity extends BaseGeoMapActivity {
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
+    public static final String MAP_SELECTED_SUBMISSION_ID = "map_selected_submission_id";
 
     private FormMapViewModel viewModel;
 
@@ -92,6 +93,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * True if the map viewport has been initialized, false otherwise.
      */
     private boolean viewportInitialized;
+
+    private int selectedSubmissionId = -1;
 
     @VisibleForTesting public ViewModelProvider.Factory viewModelFactory;
 
@@ -123,6 +126,19 @@ public class FormMapActivity extends BaseGeoMapActivity {
         setContentView(R.layout.instance_map_layout);
         summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
         summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        summarySheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    selectedSubmissionId = -1;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
 
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
@@ -154,6 +170,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
+        state.putInt(MAP_SELECTED_SUBMISSION_ID, selectedSubmissionId);
     }
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
@@ -183,6 +200,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         map.setFeatureClickListener(this::onFeatureClicked);
         updateInstanceGeometry();
+
+        if (selectedSubmissionId != -1) {
+            onFeatureClicked(selectedSubmissionId);
+        }
     }
 
     private void updateInstanceGeometry() {
@@ -235,6 +256,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
+        selectedSubmissionId = featureId;
         FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
         if (mappableFormInstance != null) {
             map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
@@ -250,6 +272,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             map.zoomToPoint(mapCenter, mapZoom, false);
             viewportInitialized = true; // avoid recentering as soon as location is received
         }
+        selectedSubmissionId = state.getInt(MAP_SELECTED_SUBMISSION_ID);
     }
 
     /**
