@@ -27,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -102,7 +103,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     private static final String FORM_VERSION_KEY = "formversion";
 
     private AlertDialog alertDialog;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private ProgressDialog cancelDialog;
     private Button downloadButton;
 
@@ -683,7 +684,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     private void createProgressDialog() {
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new AlertDialog.Builder(this).create();
         DialogInterface.OnClickListener loadingButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -713,12 +714,17 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                         viewModel.setProgressDialogShowing(false);
                     }
                 };
+
         progressDialog.setTitle(getString(R.string.downloading_data));
-        progressDialog.setMessage(viewModel.getProgressDialogMsg());
+
+        View dialogView = this.getLayoutInflater().inflate(R.layout.progress_dialog, null, false);
+        TextView textView = dialogView.findViewById(R.id.message);
+        textView.setText(viewModel.getProgressDialogMsg());
+
+        progressDialog.setView(dialogView);
         progressDialog.setIcon(android.R.drawable.ic_dialog_info);
-        progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
-        progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), loadingButtonListener);
         viewModel.setProgressDialogShowing(true);
         DialogUtils.showDialog(progressDialog, this);
     }
