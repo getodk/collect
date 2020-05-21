@@ -209,7 +209,8 @@ jobs:
           name: Move Firebase coverage report
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
-              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Pixel2-27-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+            mkdir -p collect_app/build/outputs/code-coverage/connected
+            find firebase -iname 'coverage.ec' -exec cp --parents \{\} collect_app/build/outputs/code-coverage/connected \;
             fi
       - run:
           name: Generate JaCoCo report
