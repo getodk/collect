@@ -73,7 +73,7 @@ public abstract class OpenRosaHeadRequestTest {
     }
 
     // Ensure we can look up lower-case headers using mixed-case header names.
-    // https://github.com/opendatakit/collect/issues/3068
+    // https://github.com/getodk/collect/issues/3068
     @Test
     public void when204Response_returnsLowerCaseHeaders() throws Exception {
         String headerLowerCase = "header-case-test";

@@ -12,7 +12,7 @@ import java.io.IOException;
 import static org.odk.collect.android.feature.externalintents.ExportedActivitiesUtils.testDirectories;
 
 @Suppress
-// Frequent failures: https://github.com/opendatakit/collect/issues/796
+// Frequent failures: https://github.com/getodk/collect/issues/796
 public class FormChooserListTest {
 
     @Rule

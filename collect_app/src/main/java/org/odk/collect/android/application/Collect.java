@@ -49,7 +49,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 /**
- * The Open Data Kit Collect application.
+ * The ODK Collect application.
  *
  * @author carlhartung
  */

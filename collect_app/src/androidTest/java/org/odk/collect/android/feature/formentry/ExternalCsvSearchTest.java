@@ -44,7 +44,7 @@ public class ExternalCsvSearchTest {
     }
 
     @Test
-    // Regression: https://github.com/opendatakit/collect/issues/3132
+    // Regression: https://github.com/getodk/collect/issues/3132
     public void search_withFilter_showsMatchingChoices() {
         new FormEntryPage("external-csv-search", rule).assertOnPage()
                 .swipeToNextQuestion("Produce search")
@@ -56,7 +56,6 @@ public class ExternalCsvSearchTest {
                 .assertText("Cherimoya")
                 .assertText("Carrot")
                 .checkIfTextDoesNotExist("Blueberry")
-
                 .swipeToPreviousQuestion()
                 .inputText("B")
                 .swipeToNextQuestion("Produce")
