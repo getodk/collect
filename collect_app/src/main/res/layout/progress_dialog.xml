@@ -18,11 +18,11 @@
 
     <TextView
         android:layout_marginStart="@dimen/margin_standard"
-        android:textAppearance="@style/TextAppearance.Collect.Body1"
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/progress_bar"
+        android:layout_centerVertical="true"
         tools:text="Loading..." />
 
 </RelativeLayout>
