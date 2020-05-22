@@ -130,6 +130,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    updateSubmissionMarker(selectedSubmissionId, instancesByFeatureId.get(selectedSubmissionId).getStatus(), false);
                     selectedSubmissionId = -1;
                 }
             }
@@ -243,12 +244,16 @@ public class FormMapActivity extends BaseGeoMapActivity {
             MapPoint point = new MapPoint(instance.getLatitude(), instance.getLongitude());
             int featureId = map.addMarker(point, false);
 
-            int drawableId = getDrawableIdForStatus(instance.getStatus());
-            map.setMarkerIcon(featureId, drawableId);
+            updateSubmissionMarker(featureId, instance.getStatus(), false);
 
             instancesByFeatureId.put(featureId, instance);
             points.add(point);
         }
+    }
+
+    private void updateSubmissionMarker(int featureId, String status, boolean big) {
+        int drawableId = getDrawableIdForStatus(status, big);
+        map.setMarkerIcon(featureId, drawableId);
     }
 
     /**
@@ -265,9 +270,13 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
+        if (selectedSubmissionId != -1) {
+            updateSubmissionMarker(selectedSubmissionId, instancesByFeatureId.get(selectedSubmissionId).getStatus(), false);
+        }
         selectedSubmissionId = featureId;
         FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
         if (mappableFormInstance != null) {
+            updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
             map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
             setUpSummarySheet(mappableFormInstance);
             summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -303,16 +312,16 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    private static int getDrawableIdForStatus(String status) {
+    private static int getDrawableIdForStatus(String status, boolean big) {
         switch (status) {
             case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return R.drawable.ic_room_blue_24dp;
+                return big ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
             case InstanceProviderAPI.STATUS_COMPLETE:
-                return R.drawable.ic_room_deep_purple_24dp;
+                return big ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
             case InstanceProviderAPI.STATUS_SUBMITTED:
-                return R.drawable.ic_room_green_24dp;
+                return big ? R.drawable.ic_room_green_48dp : R.drawable.ic_room_green_24dp;
             case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return R.drawable.ic_room_red_24dp;
+                return big ? R.drawable.ic_room_red_48dp : R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;
     }
