@@ -19,6 +19,7 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -211,9 +212,11 @@ public class FormMapActivity extends BaseGeoMapActivity {
         map.setFeatureClickListener(this::onFeatureClicked);
         updateInstanceGeometry();
 
-        if (selectedSubmissionId != -1) {
-            onFeatureClicked(selectedSubmissionId);
-        }
+        new Handler().postDelayed(() -> {
+            if (selectedSubmissionId != -1) {
+                onFeatureClicked(selectedSubmissionId);
+            }
+        }, 500);
     }
 
     private void updateInstanceGeometry() {
