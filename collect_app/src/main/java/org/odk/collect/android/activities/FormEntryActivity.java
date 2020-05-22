@@ -1200,19 +1200,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case FormEntryController.EVENT_REPEAT:
                 // should only be a group here if the event_group is a field-list
                 try {
-                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), System.currentTimeMillis());
-
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
 
-                    TreeElement treeElement = formController.getFormDef().getInstance().
-                            resolveReference(prompts[0].getIndex().getReference());
-                    if(treeElement == null) {
+                    TreeElement treeElement = formController.getFormDef().getInstance()
+                            .resolveReference(prompts[0].getIndex().getReference());
+                    if (treeElement == null) {
                         formController.getAuditEventLogger().flush();
                         formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
                         return createViewForFormBeginning(formController);
                     }
+
+                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), System.currentTimeMillis());
 
                     odkView = createODKView(advancingPage, prompts, groups);
                     odkView.setWidgetValueChangedListener(this);
@@ -1660,18 +1660,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     .getQuestionPrompts();
             for (FormEntryPrompt p : prompts) {
 
-                TreeElement treeElement = formController.getFormDef().getInstance().
-                        resolveReference(p.getIndex().getReference());
-                if (treeElement == null) {
-                    break;
-                }
-                List<TreeElement> attrs = p.getBindAttributes();
-                for (int i = 0; i < attrs.size(); i++) {
-                    if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
+                TreeElement treeElement = formController.getFormDef().getInstance()
+                        .resolveReference(p.getIndex().getReference());
+                if (treeElement != null) {
+                    List<TreeElement> attrs = p.getBindAttributes();
+                    for (int i = 0; i < attrs.size(); i++) {
+                        if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
+                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
-                        saveForm(false, false, null, false);
-                        autoSaved = true;
+                            saveForm(false, false, null, false);
+                            autoSaved = true;
+                        }
                     }
                 }
             }
