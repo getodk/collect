@@ -364,7 +364,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         findViewById(R.id.info).setVisibility(View.GONE);
         Chip openFormButton = findViewById(R.id.openFormChip);
         openFormButton.setVisibility(View.VISIBLE);
-        openFormButton.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
+        openFormButton.setText(canEdit ? R.string.review_data : R.string.view_data);
         openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormButton.setOnClickListener(v -> {
             summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);

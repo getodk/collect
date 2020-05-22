@@ -115,6 +115,7 @@
     <string name="replace_barcode">Replace Barcode</string>
     <string name="required_answer_error">Sorry, this response is required!</string>
     <string name="review_data">Edit Saved Form</string>
+    <string name="view_data">View Saved Form</string>
     <string name="review_data_button">Edit Saved Form (%s)‎‎‎‎</string>
     <string name="save_all_answers">Save Form</string>
     <string name="save_enter_data_description">You are at the end of %s.</string>
