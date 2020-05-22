@@ -1206,6 +1206,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             .getGroupsForCurrentIndex();
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
 
+                    TreeElement treeElement = formController.getFormDef().getInstance().
+                            resolveReference(prompts[0].getIndex().getReference());
+                    if(treeElement == null) {
+                        formController.getAuditEventLogger().flush();
+                        formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                        return createViewForFormBeginning(formController);
+                    }
+
                     odkView = createODKView(advancingPage, prompts, groups);
                     odkView.setWidgetValueChangedListener(this);
                     Timber.i("Created view for group %s %s",
@@ -1651,6 +1659,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             FormEntryPrompt[] prompts = getFormController()
                     .getQuestionPrompts();
             for (FormEntryPrompt p : prompts) {
+
+                TreeElement treeElement = formController.getFormDef().getInstance().
+                        resolveReference(p.getIndex().getReference());
+                if (treeElement == null) {
+                    break;
+                }
                 List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
