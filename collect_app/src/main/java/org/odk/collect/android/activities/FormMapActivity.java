@@ -215,6 +215,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }, 500);
     }
 
+    @SuppressWarnings("PMD.UnusedFormalParameter")
     private void onClick(MapPoint mapPoint) {
         if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
