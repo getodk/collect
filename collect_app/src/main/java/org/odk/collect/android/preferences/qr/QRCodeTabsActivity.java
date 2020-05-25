@@ -18,50 +18,39 @@ import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.zip.DataFormatException;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.qr.QRCodeMenuDelegate.SELECT_PHOTO;
 
 public class QRCodeTabsActivity extends CollectAbstractActivity {
 
     private static String[] fragmentTitleList;
 
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private Intent shareIntent;
-
     @Inject
     QRCodeGenerator qrCodeGenerator;
 
     @Inject
     ActivityAvailability activityAvailability;
+
+    @Inject
+    FileProvider fileProvider;
 
     private QRCodeMenuDelegate menuDelegate;
 
@@ -95,40 +84,14 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(fragmentTitleList[position])).attach();
-        updateShareIntent();
 
-        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability);
+        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider);
     }
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.configure_via_qr_code));
         setSupportActionBar(toolbar);
-    }
-
-    private void updateShareIntent() {
-        // Initialize the intent to share QR Code
-        shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        Uri uri = ContentUriProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(qrCodeGenerator.getQrCodeFilepath()));
-        FileUtils.grantFileReadPermissions(shareIntent, uri, this);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-    }
-
-    private void startShareQRCodeIntent() {
-        if (new File(qrCodeGenerator.getQrCodeFilepath()).exists()) {
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
-        } else {
-            Collection<String> keys = new ArrayList<>();
-            keys.add(KEY_ADMIN_PW);
-            keys.add(KEY_PASSWORD);
-            Disposable disposable = qrCodeGenerator.generateQRCode(keys)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(bitmap -> startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode))), Timber::e);
-            compositeDisposable.add(disposable);
-        }
     }
 
     @Override
@@ -141,22 +104,9 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (menuDelegate.onOptionsItemSelected(item)) {
             return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-
-        switch (item.getItemId()) {
-            case R.id.menu_item_share:
-                if (shareIntent != null) {
-                    this.startShareQRCodeIntent();
-                }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDestroy() {
-        compositeDisposable.dispose();
-        super.onDestroy();
     }
 
     @Override

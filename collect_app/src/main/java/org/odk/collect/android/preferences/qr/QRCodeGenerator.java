@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import com.google.zxing.WriterException;
 
+import org.odk.collect.utilities.Consumer;
+
 import java.io.IOException;
 import java.util.Collection;
 
@@ -11,11 +13,14 @@ import io.reactivex.Observable;
 
 
 public interface QRCodeGenerator {
-    Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException;
+
+    void generateQRCode(Consumer<String> callback);
 
     Observable<Bitmap> generateQRCode(Collection<String> selectedPasswordKeys);
 
-    String getQrCodeFilepath();
+    Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException;
+
+    String getQRCodeFilepath();
 
     String getMd5CachePath();
 }

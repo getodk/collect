@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -19,10 +20,14 @@ public class QRCodeMenuDelegate implements MenuDelegate {
 
     private final Activity activity;
     private final ActivityAvailability activityAvailability;
+    private final QRCodeGenerator qrCodeGenerator;
+    private final FileProvider fileProvider;
 
-    QRCodeMenuDelegate(Activity activity, ActivityAvailability activityAvailability) {
+    QRCodeMenuDelegate(Activity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator, FileProvider fileProvider) {
         this.activity = activity;
         this.activityAvailability = activityAvailability;
+        this.qrCodeGenerator = qrCodeGenerator;
+        this.fileProvider = fileProvider;
     }
 
     @Override
@@ -42,6 +47,20 @@ public class QRCodeMenuDelegate implements MenuDelegate {
                     ToastUtils.showShortToast(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
                     Timber.w(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
                 }
+
+                return true;
+
+            case R.id.menu_item_share:
+                qrCodeGenerator.generateQRCode(path -> {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("image/*");
+
+                    intent.putExtra(Intent.EXTRA_STREAM, fileProvider.getURIForFile(path));
+
+                    activity.startActivity(intent);
+                });
+
                 return true;
         }
 

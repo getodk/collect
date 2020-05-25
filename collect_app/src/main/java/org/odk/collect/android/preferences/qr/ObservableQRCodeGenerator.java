@@ -18,45 +18,46 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
+import org.odk.collect.utilities.Consumer;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
 public class ObservableQRCodeGenerator implements QRCodeGenerator {
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
 
     @Override
-    public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
-        final long time = System.currentTimeMillis();
-        String compressedData = CompressionUtils.compress(data);
+    public void generateQRCode(Consumer<String> callback) {
+        String filePath = getQRCodeFilepath();
 
-        // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
-        if (compressedData.length() > 4000) {
-            throw new IOException(Collect.getInstance().getString(R.string.encoding_max_limit));
+        if (new File(filePath).exists()) {
+            callback.accept(filePath);
+        } else {
+            Collection<String> keys = new ArrayList<>();
+            keys.add(KEY_ADMIN_PW);
+            keys.add(KEY_PASSWORD);
+            generateQRCode(keys)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(bitmap -> {
+                        callback.accept(filePath);
+                    }, Timber::e);
         }
-
-        Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
-        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(compressedData, BarcodeFormat.QR_CODE, sideLength, sideLength, hints);
-
-        Bitmap bmp = Bitmap.createBitmap(sideLength, sideLength, Bitmap.Config.RGB_565);
-        for (int x = 0; x < sideLength; x++) {
-            for (int y = 0; y < sideLength; y++) {
-                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-            }
-        }
-        Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
-        return bmp;
     }
 
     @Override
@@ -91,7 +92,7 @@ public class ObservableQRCodeGenerator implements QRCodeGenerator {
                     Timber.i("Loading QRCode from the disk...");
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    bitmap = FileUtils.getBitmap(getQrCodeFilepath(), options);
+                    bitmap = FileUtils.getBitmap(getQRCodeFilepath(), options);
                     shouldWriteToDisk = false;
                 }
             }
@@ -109,8 +110,8 @@ public class ObservableQRCodeGenerator implements QRCodeGenerator {
 
                 // Save the QRCode to disk
                 if (shouldWriteToDisk) {
-                    Timber.i("Saving QR Code to disk... : " + getQrCodeFilepath());
-                    FileUtils.saveBitmapToFile(bitmap, getQrCodeFilepath());
+                    Timber.i("Saving QR Code to disk... : " + getQRCodeFilepath());
+                    FileUtils.saveBitmapToFile(bitmap, getQRCodeFilepath());
 
                     FileUtils.write(mdCacheFile, messageDigest);
                     Timber.i("Updated %s file contents", SETTINGS_MD5_FILE);
@@ -123,7 +124,32 @@ public class ObservableQRCodeGenerator implements QRCodeGenerator {
     }
 
     @Override
-    public String getQrCodeFilepath() {
+    public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
+        final long time = System.currentTimeMillis();
+        String compressedData = CompressionUtils.compress(data);
+
+        // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
+        if (compressedData.length() > 4000) {
+            throw new IOException(Collect.getInstance().getString(R.string.encoding_max_limit));
+        }
+
+        Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(compressedData, BarcodeFormat.QR_CODE, sideLength, sideLength, hints);
+
+        Bitmap bmp = Bitmap.createBitmap(sideLength, sideLength, Bitmap.Config.RGB_565);
+        for (int x = 0; x < sideLength; x++) {
+            for (int y = 0; y < sideLength; y++) {
+                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+            }
+        }
+        Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
+        return bmp;
+    }
+
+    @Override
+    public String getQRCodeFilepath() {
         return new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS) + File.separator + "collect-settings.png";
     }
 

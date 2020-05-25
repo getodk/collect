@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 public class QRCodeUtilsTest {
 
     private final QRCodeGenerator qrCodeGenerator = new ObservableQRCodeGenerator();
-    private final File savedQrCodeImage = new File(qrCodeGenerator.getQrCodeFilepath());
+    private final File savedQrCodeImage = new File(qrCodeGenerator.getQRCodeFilepath());
     private final File md5File = new File(qrCodeGenerator.getMd5CachePath());
 
     @Before
@@ -81,7 +81,7 @@ public class QRCodeUtilsTest {
 
         // stubbing cache and bitmap files
         new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS)).mkdirs();
-        FileUtils.saveBitmapToFile(qrCodeGenerator.generateQRBitMap(expectedData, 100), qrCodeGenerator.getQrCodeFilepath());
+        FileUtils.saveBitmapToFile(qrCodeGenerator.generateQRBitMap(expectedData, 100), qrCodeGenerator.getQRCodeFilepath());
         FileUtils.write(md5File, getDigest(expectedData.getBytes()));
 
         // verify that QRCode and md5 cache files exist

@@ -31,6 +31,7 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.utilities.ContentUriProvider;
+import org.odk.collect.utilities.Consumer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -116,7 +117,7 @@ public class ConfigureWithQRCodeTest {
     @Test
     @Ignore("Should be replaced at Robolectric level")
     public void onMainMenu_clickConfigureQRCode_andClickingOnShareQRCode_startsExternalShareIntent() {
-        String path = new StubQRCodeGenerator().getQrCodeFilepath();
+        String path = new StubQRCodeGenerator().getQRCodeFilepath();
         Uri expected = ContentUriProvider.getUriForFile(getApplicationContext(),
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File(path));
@@ -156,6 +157,11 @@ public class ConfigureWithQRCodeTest {
         private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
 
         @Override
+        public void generateQRCode(Consumer<String> callback) {
+
+        }
+
+        @Override
         public Observable<Bitmap> generateQRCode(Collection<String> selectedPasswordKeys) {
             return Observable.create(emitter -> {
                 Bitmap bitmap =
@@ -168,7 +174,7 @@ public class ConfigureWithQRCodeTest {
         }
 
         @Override
-        public String getQrCodeFilepath() {
+        public String getQRCodeFilepath() {
             return getApplicationContext().getExternalFilesDir(null) + File.separator + "test-collect-settings.png";
         }
 
@@ -185,14 +191,14 @@ public class ConfigureWithQRCodeTest {
         }
 
         public void teardown() {
-            File file = new File(getQrCodeFilepath());
+            File file = new File(getQRCodeFilepath());
             if (file.exists()) {
                 file.delete();
             }
         }
 
         private void saveBitmap(Bitmap bitmap) {
-            try (FileOutputStream out = new FileOutputStream(getQrCodeFilepath())) {
+            try (FileOutputStream out = new FileOutputStream(getQRCodeFilepath())) {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             } catch (Exception e) {
                 throw new RuntimeException(e);
