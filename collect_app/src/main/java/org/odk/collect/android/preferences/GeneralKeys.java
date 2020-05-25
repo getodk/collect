@@ -65,10 +65,6 @@ public final class GeneralKeys {
 
     static final String KEY_FORM_METADATA                   = "form_metadata";
 
-    // other keys
-    public static final String KEY_MAPBOX_INITIALIZED       = "mapbox_initialized";
-    public static final String KEY_GOOGLE_BUG_154855417_FIXED = "google_bug_154855417_fixed";
-
     public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 
     // values
@@ -143,7 +139,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
         return hashMap;
     }
-    
+
     public static final HashMap<String, Object> DEFAULTS = getHashMap();
 
     private GeneralKeys() {

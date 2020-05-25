@@ -51,8 +51,8 @@ import timber.log.Timber;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
 
