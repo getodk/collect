@@ -154,11 +154,6 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    @Override public void onResume() {
-        super.onResume();
-        updateInstanceGeometry();
-    }
-
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (map == null) {
@@ -280,17 +275,16 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
-        if (selectedSubmissionId != -1) {
+        if (selectedSubmissionId != -1 && selectedSubmissionId != featureId) {
             updateSubmissionMarker(selectedSubmissionId, instancesByFeatureId.get(selectedSubmissionId).getStatus(), false);
         }
-        selectedSubmissionId = featureId;
         FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
         if (mappableFormInstance != null) {
-            updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
             map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
+            updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
             setUpSummarySheet(mappableFormInstance);
-            summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
+        selectedSubmissionId = featureId;
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -365,6 +359,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
                 break;
         }
+
+        summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     private void setUpOpenFormButton(boolean canEdit, long instanceId) {
