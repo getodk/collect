@@ -14,8 +14,6 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.google.zxing.WriterException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -35,7 +33,6 @@ import org.odk.collect.utilities.Consumer;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Collection;
 
 import dagger.Provides;
@@ -158,7 +155,7 @@ public class ConfigureWithQRCodeTest {
 
         @Override
         public void generateQRCode(Consumer<String> callback) {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -173,7 +170,6 @@ public class ConfigureWithQRCodeTest {
             });
         }
 
-        @Override
         public String getQRCodeFilepath() {
             return getApplicationContext().getExternalFilesDir(null) + File.separator + "test-collect-settings.png";
         }
@@ -203,18 +199,6 @@ public class ConfigureWithQRCodeTest {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }
-
-        @Override
-        public Bitmap generateQRBitMap(String data) throws IOException, WriterException {
-            // don't use this in this test, so okay to return null
-            return null;
-        }
-
-        @Override
-        public String getMd5CachePath() {
-            // don't use this in this test, so okay to return null
-            return null;
         }
     }
 }
