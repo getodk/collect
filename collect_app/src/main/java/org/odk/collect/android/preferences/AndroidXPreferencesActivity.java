@@ -20,9 +20,9 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 
 public class AndroidXPreferencesActivity extends CollectAbstractActivity {
 
-    private static final String KEY_EXTRA_FRAGMENT = "key_extra_fragment";
-    private static final int EXTRA_FRAGMENT_FORM_METADATA = 1;
-    private static final int EXTRA_FRAGMENT_USER_INTERFACE = 2;
+    public static final String KEY_EXTRA_FRAGMENT = "key_extra_fragment";
+    public static final int EXTRA_FRAGMENT_FORM_METADATA = 1;
+    public static final int EXTRA_FRAGMENT_USER_INTERFACE = 2;
 
     public static <T extends PreferenceFragmentCompat> void start(Activity activity, Class<T> fragmentClass) {
         Intent intent = new Intent(activity, AndroidXPreferencesActivity.class);
@@ -41,26 +41,28 @@ public class AndroidXPreferencesActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences_layout);
 
-        int fragmentToShow = getIntent().getExtras().getInt(KEY_EXTRA_FRAGMENT);
-        Fragment fragment;
+        if (savedInstanceState == null) {
+            int fragmentToShow = getIntent().getExtras().getInt(KEY_EXTRA_FRAGMENT);
+            Fragment fragment;
 
-        switch (fragmentToShow) {
-            case EXTRA_FRAGMENT_FORM_METADATA:
-                fragment = new FormMetadataFragment();
-                break;
+            switch (fragmentToShow) {
+                case EXTRA_FRAGMENT_FORM_METADATA:
+                    fragment = new FormMetadataFragment();
+                    break;
 
-            case EXTRA_FRAGMENT_USER_INTERFACE:
-                fragment = new UserInterfacePreferencesFragment();
-                break;
-            default:
-                fragment = null;
-        }
+                case EXTRA_FRAGMENT_USER_INTERFACE:
+                    fragment = new UserInterfacePreferencesFragment();
+                    break;
+                default:
+                    fragment = null;
+            }
 
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.preferences_fragment_container, fragment)
-                    .commit();
+            if (fragment != null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.preferences_fragment_container, fragment)
+                        .commit();
+            }
         }
     }
 }
