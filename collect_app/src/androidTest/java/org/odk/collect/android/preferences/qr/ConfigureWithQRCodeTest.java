@@ -206,7 +206,7 @@ public class ConfigureWithQRCodeTest {
         }
 
         @Override
-        public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
+        public Bitmap generateQRBitMap(String data) throws IOException, WriterException {
             // don't use this in this test, so okay to return null
             return null;
         }

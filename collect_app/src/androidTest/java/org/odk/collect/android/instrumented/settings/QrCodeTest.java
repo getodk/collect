@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
-import org.odk.collect.android.preferences.qr.ObservableQRCodeGenerator;
+import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.utilities.QRCodeUtils;
 
@@ -54,7 +54,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 public class QrCodeTest {
 
     private final GeneralSharedPreferences preferences = GeneralSharedPreferences.getInstance();
-    private final QRCodeGenerator qrCodeGenerator = new ObservableQRCodeGenerator();
+    private final QRCodeGenerator qrCodeGenerator = new CachingQRCodeGenerator();
 
     @Test
     public void importSettingsFromQrCode() throws JSONException, IOException, WriterException, DataFormatException, ChecksumException, NotFoundException, FormatException {

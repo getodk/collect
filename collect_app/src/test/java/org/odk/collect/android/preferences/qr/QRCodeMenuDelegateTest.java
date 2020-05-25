@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-import com.google.zxing.WriterException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +18,6 @@ import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import io.reactivex.Observable;
@@ -100,21 +97,6 @@ public class QRCodeMenuDelegateTest {
 
         @Override
         public Observable<Bitmap> generateQRCode(Collection<String> selectedPasswordKeys) {
-            return null;
-        }
-
-        @Override
-        public Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
-            return null;
-        }
-
-        @Override
-        public String getQRCodeFilepath() {
-            return null;
-        }
-
-        @Override
-        public String getMd5CachePath() {
             return null;
         }
 
