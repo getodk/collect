@@ -300,6 +300,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             }
         }
         features.clear();
+        nextFeatureId = 1;
     }
 
     @Override public void setClickListener(@Nullable PointListener listener) {

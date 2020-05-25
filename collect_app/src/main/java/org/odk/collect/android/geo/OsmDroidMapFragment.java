@@ -330,6 +330,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getOverlays().add(myLocationOverlay);
         map.invalidate();
         features.clear();
+        nextFeatureId = 1;
     }
 
     @Override public void setClickListener(@Nullable PointListener listener) {

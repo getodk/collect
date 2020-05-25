@@ -412,6 +412,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             }
         }
         features.clear();
+        nextFeatureId = 1;
     }
 
     @Override public void setClickListener(@Nullable PointListener listener) {

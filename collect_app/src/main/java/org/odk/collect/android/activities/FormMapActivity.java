@@ -243,6 +243,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private void updateMapFeatures() {
         points.clear();
         map.clearFeatures();
+        instancesByFeatureId.clear();
 
         List<MappableFormInstance> instances = viewModel.getMappableFormInstances();
         for (MappableFormInstance instance : instances) {
