@@ -130,15 +130,14 @@ public class FormMapActivity extends BaseGeoMapActivity {
         summarySheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    updateSubmissionMarker(selectedSubmissionId, instancesByFeatureId.get(selectedSubmissionId).getStatus(), false);
-                    selectedSubmissionId = -1;
-                }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
+                if (slideOffset == -1 && selectedSubmissionId != -1) {
+                    updateSubmissionMarker(selectedSubmissionId, instancesByFeatureId.get(selectedSubmissionId).getStatus(), false);
+                    selectedSubmissionId = -1;
+                }
             }
         });
 
@@ -173,7 +172,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     @Override
     public void onBackPressed() {
         if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+            hideSummary();
         } else {
             super.onBackPressed();
         }
@@ -218,7 +217,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     @SuppressWarnings("PMD.UnusedFormalParameter")
     private void onClick(MapPoint mapPoint) {
         if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+            hideSummary();
         }
     }
 
@@ -372,7 +371,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         openFormButton.setText(canEdit ? R.string.review_data : R.string.view_data);
         openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormButton.setOnClickListener(v -> {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+            hideSummary();
             startActivity(canEdit
                     ? getEditFormInstanceIntentFor(instanceId)
                     : getViewOnlyFormInstanceIntentFor(instanceId));
@@ -395,5 +394,11 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private Intent getEditFormInstanceIntentFor(long instanceId) {
         Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
+    }
+
+    private void hideSummary() {
+        updateSubmissionMarker(selectedSubmissionId, instancesByFeatureId.get(selectedSubmissionId).getStatus(), false);
+        selectedSubmissionId = -1;
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 }
