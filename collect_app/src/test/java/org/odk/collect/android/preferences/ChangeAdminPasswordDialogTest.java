@@ -20,7 +20,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowDialog;
 
-import static android.view.View.VISIBLE;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -54,19 +53,6 @@ public class ChangeAdminPasswordDialogTest {
     public void dialogIsCancellable() {
         dialogFragment.show(fragmentManager, "TAG");
         assertThat(shadowOf(dialogFragment.getDialog()).isCancelable(), equalTo(true));
-    }
-
-    @Test
-    public void shouldShowCorrectButtons() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-
-        assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(VISIBLE));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getText(),
-                equalTo(activity.get().getString(R.string.ok)));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getVisibility(), equalTo(VISIBLE));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getText(),
-                equalTo(activity.get().getString(R.string.cancel)));
     }
 
     @Test
