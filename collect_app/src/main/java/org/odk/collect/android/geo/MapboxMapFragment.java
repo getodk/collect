@@ -756,6 +756,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
         public void setIcon(int drawableId) {
             symbol.setIconImage(addIconImage(drawableId));
+            symbolManager.update(symbol);
         }
 
         public MapPoint getPoint() {
