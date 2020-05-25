@@ -2,10 +2,15 @@ package org.odk.collect.android.activities;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.chip.Chip;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -22,18 +27,18 @@ import org.odk.collect.android.instances.TestInstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.shadows.ShadowToast;
+import org.robolectric.annotation.LooperMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
@@ -44,6 +49,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormMapViewModelTest.testInstances;
 import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormMapActivityTest {
@@ -152,6 +158,22 @@ public class FormMapActivityTest {
         assertThat(fragments, hasItem(isA(MapsPreferences.class)));
     }
 
+    @LooperMode(PAUSED)
+    @Test public void tappingOnInstance_centersToThatInstanceAndKeepsTheSameZoom() {
+        MapPoint sent = new MapPoint(10.3, 125.7);
+        map.zoomToPoint(new MapPoint(7, 8), 7, false);
+
+        assertThat(map.getLatestZoomPoint().lat, is(7.0));
+        assertThat(map.getLatestZoomPoint().lon, is(8.0));
+        assertThat(map.getZoom(), is(7.0));
+
+        activity.onFeatureClicked(map.getFeatureIdFor(sent));
+
+        assertThat(map.getLatestZoomPoint().lat, is(10.3));
+        assertThat(map.getLatestZoomPoint().lon, is(125.7));
+        assertThat(map.getZoom(), is(7.0));
+    }
+
     @Test public void tappingOnNewInstanceButton_opensNewInstance() {
         activity.findViewById(R.id.new_instance).performClick();
 
@@ -183,7 +205,8 @@ public class FormMapActivityTest {
         }
     }
 
-    @Test public void tappingOnEditableInstances_launchesEditActivity() {
+    @LooperMode(PAUSED)
+    @Test public void openingEditableInstances_launchesEditActivity() {
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);
         MapPoint failedToSend = new MapPoint(10.3, 125.6);
@@ -194,6 +217,7 @@ public class FormMapActivityTest {
             int featureId = map.getFeatureIdFor(toTap);
 
             activity.onFeatureClicked(featureId);
+            clickOnOpenFormChip();
             Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
 
             assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
@@ -201,7 +225,8 @@ public class FormMapActivityTest {
         }
     }
 
-    @Test public void tappingOnEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
+    @LooperMode(PAUSED)
+    @Test public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
         AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, false);
 
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
@@ -214,6 +239,7 @@ public class FormMapActivityTest {
             int featureId = map.getFeatureIdFor(toTap);
 
             activity.onFeatureClicked(featureId);
+            clickOnOpenFormChip();
             Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
 
             assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
@@ -221,38 +247,106 @@ public class FormMapActivityTest {
         }
     }
 
-    @Test public void tappingOnUneditableInstances_launchesViewActivity() {
+    @LooperMode(PAUSED)
+    @Test public void openingUneditableInstances_launchesViewActivity() {
         MapPoint sent = new MapPoint(10.3, 125.7);
 
         int featureId = map.getFeatureIdFor(sent);
 
         activity.onFeatureClicked(featureId);
+        clickOnOpenFormChip();
         Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
 
         assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
         assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(ApplicationConstants.FormModes.VIEW_SENT));
     }
 
+    @LooperMode(PAUSED)
+    @Test public void tappingOnEditableInstance_showsSubmissionSummaryWithAppropriateMessage() {
+        MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
+        MapPoint unfinalized = new MapPoint(10.1, 126.6);
+        MapPoint failedToSend = new MapPoint(10.3, 125.6);
+
+        MapPoint[] testPoints = {editableAndFinalized, unfinalized, failedToSend};
+
+        for (MapPoint toTap : testPoints) {
+            int featureId = map.getFeatureIdFor(toTap);
+
+            FormMapViewModel.MappableFormInstance mappableFormInstance = activity.instancesByFeatureId.get(featureId);
+            activity.onFeatureClicked(featureId);
+
+            assertSubmissionSummaryContent(mappableFormInstance);
+        }
+    }
+
+    @LooperMode(PAUSED)
+    @Test public void tappingOnUneditableInstances_showsSubmissionSummaryWithAppropriateMessage() {
+        MapPoint sent = new MapPoint(10.3, 125.7);
+
+        int featureId = map.getFeatureIdFor(sent);
+        FormMapViewModel.MappableFormInstance mappableFormInstance = activity.instancesByFeatureId.get(featureId);
+        activity.onFeatureClicked(featureId);
+
+        assertSubmissionSummaryContent(mappableFormInstance);
+    }
+
     // Geometry is removed from the database on instance encryption but just in case there is an
     // encrypted instance with geometry available, show an encrypted toast.
-    @Test public void tappingOnEncryptedInstances_showsUneditableToast() {
+    @LooperMode(PAUSED)
+    @Test public void tappingOnEncryptedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint submissionFailedCantEditWhenFinalized = new MapPoint(10.4, 125.6);
 
         int featureId = map.getFeatureIdFor(submissionFailedCantEditWhenFinalized);
-
+        FormMapViewModel.MappableFormInstance mappableFormInstance = activity.instancesByFeatureId.get(featureId);
         activity.onFeatureClicked(featureId);
-        assertThat(ShadowToast.getTextOfLatestToast(), is("This form cannot be edited once it has been marked as finalized. It may be encrypted."));
+
+        assertSubmissionSummaryContent(mappableFormInstance);
     }
 
     // Geometry is removed from the database on instance deletion but just in case there is a
     // deleted instance with geometry available, show a deleted toast.
-    @Test public void tappingOnDeletedInstances_showsDeletedToast() {
+    @LooperMode(PAUSED)
+    @Test public void tappingOnDeletedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint deleted = new MapPoint(10.0, 125.6);
 
         int featureId = map.getFeatureIdFor(deleted);
-
+        FormMapViewModel.MappableFormInstance mappableFormInstance = activity.instancesByFeatureId.get(featureId);
         activity.onFeatureClicked(featureId);
-        assertThat(ShadowToast.getTextOfLatestToast(), containsString("Deleted on"));
+
+        assertSubmissionSummaryContent(mappableFormInstance);
+    }
+
+    private void clickOnOpenFormChip() {
+        activity.findViewById(R.id.openFormChip).performClick();
+        assertThat(activity.summarySheet.getState(), is(BottomSheetBehavior.STATE_HIDDEN));
+    }
+
+    private void assertSubmissionSummaryContent(FormMapViewModel.MappableFormInstance mappableFormInstance) {
+        assertThat(((TextView) activity.findViewById(R.id.submission_name)).getText().toString(), is(mappableFormInstance.getInstanceName()));
+        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(activity, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
+        assertThat(((TextView) activity.findViewById(R.id.status_text)).getText().toString(), is(instanceLastStatusChangeDate));
+
+        switch (mappableFormInstance.getClickAction()) {
+            case DELETED_TOAST:
+                assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.VISIBLE));
+                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.GONE));
+                break;
+            case NOT_VIEWABLE_TOAST:
+                assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.VISIBLE));
+                assertThat(((TextView) activity.findViewById(R.id.info)).getText().toString(), is(activity.getString(R.string.cannot_edit_completed_form)));
+                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.GONE));
+                break;
+            case OPEN_READ_ONLY:
+                assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));
+                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.VISIBLE));
+                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.view_sent_forms)));
+                break;
+            case OPEN_EDIT:
+                assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));
+                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.VISIBLE));
+                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.review_data)));
+                break;
+        }
     }
 
     private static class TestFactory implements ViewModelProvider.Factory {

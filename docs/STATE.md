@@ -8,7 +8,7 @@ and update this document as the code evolves.
 
 * App originally built in Java for Android 1.0/T-Mobile G1
 * Written at Google by graduate student interns and then University of Washington
-* Designed as a survey application backed by [JavaRosa](https://github.com/opendatakit/javarosa/) (which deals with XForm forms) communicating with [OpenRosa](https://docs.opendatakit.org/openrosa/) servers
+* Designed as a survey application backed by [JavaRosa](https://github.com/getodk/javarosa/) (which deals with XForm forms) communicating with [OpenRosa](https://docs.getodk.org/openrosa/) servers
 * Many different contributors/styles/eras over 10 year lifetime
 * App wasn't built with a TDD workflow or with automated testing
 * Lots of work in the last two years to add more tests and clean up code using coverage measurement and static checks
@@ -37,13 +37,13 @@ and update this document as the code evolves.
 
 ## Where we're going
 
-* Trying to adopt Material Design's language to make design decisions and conversations easier in the absence of designers and to make the UI more consistent for enumerators ([“Typography rework” discussion](https://forum.opendatakit.org/t/reworking-collects-typography/20634))
+* Trying to adopt Material Design's language to make design decisions and conversations easier in the absence of designers and to make the UI more consistent for enumerators ([“Typography rework” discussion](https://forum.getodk.org/t/reworking-collects-typography/20634))
 * Moving non UI testing away from Espresso to cut down on long test startup times
 * Slowly moving responsibilities out of FormEntryActivity
-* Talk of moving to Kotlin but not real plans as of yet ([“Using Kotlin for ODK Android apps” discussion](https://forum.opendatakit.org/t/using-kotlin-for-odk-android-apps/18367))
+* Talk of moving to Kotlin but not real plans as of yet ([“Using Kotlin for ODK Android apps” discussion](https://forum.getodk.org/t/using-kotlin-for-odk-android-apps/18367))
 * General effort to increase test coverage and quality while working on anything and pushing more for tests in PR review
 * Trying to remove technical debt flagged with `@Deprecated`
 * Favoring domain objects (instance, form) with related logic where possible to more explicitly link data and logic
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code
-* Refactoring towards an OpenRosa abstraction (`OpenRosaAPIClient`) closer to its [documented API](https://docs.opendatakit.org/openrosa/) and takes care of all interactions with Aggregate, Central etc (currently some high level work interacts with `OpenRosaHttpInterface` directly)
+* Refactoring towards an OpenRosa abstraction (`OpenRosaAPIClient`) closer to its [documented API](https://docs.getodk.org/openrosa/) and takes care of all interactions with Aggregate, Central etc (currently some high level work interacts with `OpenRosaHttpInterface` directly)
 * `QuestionWiget` implementations are moving from defining their "answer" view programmatically to [implementing `onCreateAnswerView`](WIDGETS.md)

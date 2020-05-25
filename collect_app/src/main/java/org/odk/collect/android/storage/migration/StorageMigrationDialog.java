@@ -13,17 +13,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 import javax.inject.Inject;
 
@@ -121,6 +124,12 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
     protected void onBackPressed() {
     }
 
+    @Nullable
+    @Override
+    protected Toolbar getToolbar() {
+        return getView().findViewById(R.id.toolbar);
+    }
+
     private void setUpToolbar() {
         getToolbar().setTitle(R.string.storage_migration_dialog_title);
         getToolbar().setNavigationIcon(null);
@@ -135,12 +144,12 @@ public class StorageMigrationDialog extends MaterialFullScreenDialogFragment {
 
     private void showMoreDetails() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://forum.opendatakit.org/t/25268"));
+        intent.setData(Uri.parse("https://forum.getodk.org/t/25268"));
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException | SecurityException e) {
             intent = new Intent(getContext(), WebViewActivity.class);
-            intent.putExtra(CustomTabHelper.OPEN_URL, "https://forum.opendatakit.org/t/25268");
+            intent.putExtra(CustomTabHelper.OPEN_URL, "https://forum.getodk.org/t/25268");
             startActivity(intent);
         }
     }

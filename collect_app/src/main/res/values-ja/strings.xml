@@ -471,18 +471,11 @@
   <string name="no_time_selected">時刻が選択されていません</string>
   <string name="configure_via_qr_code">QR コードから設定</string>
   <string name="qr_code">QR コード設定</string>
-  <string name="scan_qrcode">他のデバイスからコードをスキャン</string>
   <string name="successfully_imported_settings">設定を正常にインポートしました</string>
   <string name="encoding_max_limit">最大文字数制限に達しました: すべての設定の QR コードを生成することができません</string>
   <string name="share">共有</string>
-  <string name="select_qrcode">SD カードからコードを選択</string>
   <string name="turn_on_flashlight">フラッシュライトをオンにする</string>
   <string name="turn_off_flashlight">フラッシュライトをオフにする</string>
-  <string name="qrcode_with_both_passwords">この QR コードには、管理者パスワードとサーバーパスワードが含まれています。 慎重に扱ってください。 \n(タップするとパスワードを削除します)</string>
-  <string name="qrcode_without_passwords">この QR コードには、管理者パスワードまたはサーバーパスワードは含まれていません。 \n(タップするとパスワードを追加します)</string>
-  <string name="qrcode_with_admin_password">この QR コードには管理者パスワードが含まれています。 慎重に扱ってください。 \n(タップするとパスワードを削除します)</string>
-  <string name="qrcode_with_server_password">この QR コードにはサーバーのパスワードが含まれています。 \n(タップするとパスワードを削除します)</string>
-  <string name="qrcode_scanner_prompt">四角の中に QR コードを入れてください</string>
   <string name="barcode_scanner_prompt">四角の中にバーコードを入れてください</string>
   <string name="server_password">サーバーパスワード</string>
   <string name="include_password_dialog">パスワードがコードに含まれます</string>
@@ -633,6 +626,7 @@
   <string name="app_theme">テーマ</string>
   <string name="theme_light">ライトテーマ</string>
   <string name="theme_dark">ダークテーマ</string>
+  <string name="theme_magenta">マゼンタテーマ (試験的)</string>
   <string name="cannot_create_directory">ディレクトリーを作成できません: %s</string>
   <string name="not_a_directory">%s は存在しますが、ディレクトリーではありません</string>
   <string name="location_metadata">利用可能なサテライト: %1$d/24\n\n経過した時間: %2$s</string>

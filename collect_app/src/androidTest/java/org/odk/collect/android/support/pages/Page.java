@@ -40,9 +40,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
-import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
@@ -290,13 +290,25 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    void waitForText(String text) {
-        while (true) {
+    void tryAgainOnFail(Runnable action) {
+        try {
+            action.run();
+        } catch (NoMatchingViewException e) {
+            assertOnPage();
+            action.run();
+        }
+    }
+
+    public void waitForText(String text) {
+        int counter = 0;
+        NoMatchingViewException failure = null;
+
+        while (counter < 20) {
             try {
                 assertText(text);
-                break;
-            } catch (NoMatchingViewException ignored) {
-                // ignored
+                return;
+            } catch (NoMatchingViewException exception) {
+                failure = exception;
             }
 
             try {
@@ -304,6 +316,12 @@ abstract class Page<T extends Page<T>> {
             } catch (InterruptedException ignored) {
                 // ignored
             }
+
+            counter++;
+        }
+
+        if (failure != null) {
+            throw failure;
         }
     }
 }

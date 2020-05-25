@@ -23,9 +23,9 @@ import android.preference.Preference;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -82,7 +82,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     break;
 
                 case KEY_IMPORT_SETTINGS:
-                    fragment = new ShowQRCodeFragment();
+                    Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
+                    startActivity(pref);
                     break;
                 case "save_legacy_settings":
                     File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
@@ -93,7 +94,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                             return false;
                         }
                     }
-
                     File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
                     boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
                     if (success) {

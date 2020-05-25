@@ -15,7 +15,7 @@
 package org.odk.collect.android.geo;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;

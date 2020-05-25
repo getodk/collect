@@ -22,8 +22,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
@@ -55,8 +55,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEndPage swipeToEndScreen() {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
-        return new FormEndPage(formName, rule).assertOnPage();
+        tryAgainOnFail(() -> {
+            onView(withId(R.id.questionholder)).perform(swipeLeft());
+            new FormEndPage(formName, rule).assertOnPage();
+        });
+
+        return new FormEndPage(formName, rule);
     }
 
     public ErrorDialog swipeToNextQuestionWithError() {
@@ -215,7 +219,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
-        return new AddNewRepeatDialog(repeatName, rule).assertOnPage();
+        tryAgainOnFail(() -> {
+            onView(withId(R.id.questionholder)).perform(swipeLeft());
+            new AddNewRepeatDialog(repeatName, rule).assertOnPage();
+        });
+
+        return new AddNewRepeatDialog(repeatName, rule);
     }
 }

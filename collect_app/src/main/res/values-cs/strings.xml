@@ -478,19 +478,13 @@
   <string name="select_time">Vybrat čas</string>
   <string name="no_date_selected">Nevybrán žádný datum</string>
   <string name="no_time_selected">Nevybrán žádný čas</string>
+  <string name="configure_via_qr_code">Konfigurovat pomocí QR kódu</string>
   <string name="qr_code">QR kódová konfigurace</string>
-  <string name="scan_qrcode">Sejmout kód z jiného zařízení</string>
   <string name="successfully_imported_settings">Nastavení úspěšně importováno</string>
   <string name="encoding_max_limit">Maximální limit počtu znaků: QR kód nelze generovat pro všechna nastavení</string>
   <string name="share">Sdílet</string>
-  <string name="select_qrcode">Vybrat kód z karty SD</string>
   <string name="turn_on_flashlight">Zapnout svítilnu</string>
   <string name="turn_off_flashlight">Vypnout svítilnu</string>
-  <string name="qrcode_with_both_passwords">Tento kód QR obsahuje vaše administrátorské a serverové hesla. Prosím, zacházejte s ním opatrně. \n (Klepnutím odeberete hesla)</string>
-  <string name="qrcode_without_passwords">Tento QR kód neobsahuje vaše administrátorské nebo serverové hesla. \n (Klepnutím přidáte hesla)</string>
-  <string name="qrcode_with_admin_password">Tento kód QR obsahuje vaše heslo administrátora. Prosím, zacházejte s ním opatrně. \n (Klepnutím odeberete heslo)</string>
-  <string name="qrcode_with_server_password">Tento kód QR obsahuje vaše heslo k serveru. \n (Klepnutím odeberete hesla)</string>
-  <string name="qrcode_scanner_prompt">Vložte QR kód do obdélníku</string>
   <string name="barcode_scanner_prompt">Vložte čárový kód do obdélníku</string>
   <string name="server_password">Heslo serveru</string>
   <string name="include_password_dialog">Hesla zahrnuta v kódu</string>
@@ -708,4 +702,22 @@
   <string name="reason_for_changes_description">Musíte vysvětlit důvod změn tohoto formuláře</string>
   <string name="scoped_storage_banner_text">Do srpna 2020 musíte migrovat formuláře Collect do soukromého úložiště, abyste splnili požadavky systému Android.</string>
   <string name="scoped_storage_learn_more">Další informace a migrace</string>
+  <string name="storage_migration_completed">Migrace úložiště byla dokončena!</string>
+  <string name="scoped_storage_dismiss">Zavrhnout</string>
+  <string name="storage_migration_dialog_message1">Požadavky na Android se změnily a soubory používané společností Collect musí být migrovány do srpna 2020.</string>
+  <string name="storage_migration_dialog_message2">Máte %d neodeslané příspěvky. Před migrací se doporučuje odeslat všechna data.</string>
+  <string name="storage_migration_dialog_message3">Používáte-li integraci externí aplikace, jako je OpenMapKit, zatím prosím nemigrujte.</string>
+  <string name="storage_migration_more_details">Více informací</string>
+  <string name="try_again">Zkusit znovu</string>
+  <string name="migrate">Migrovat</string>
+  <string name="error">Chyba:</string>
+  <string name="storage_migration_not_enough_space">Na interním úložišti nemáte dostatek místa pro migraci dat. Uvolněte místo a zkuste to znovu.</string>
+  <string name="storage_migration_form_uploader_is_running">Je spuštěn nástroj pro nahrávání na pozadí. Prosím zkuste to znovu.</string>
+  <string name="storage_migration_form_downloader_is_running">Je spuštěno stahování formulářů na pozadí. Prosím zkuste to znovu.</string>
+  <string name="storage_migration_failed">Migrace dat se nezdařila. Prosím zkuste to znovu.</string>
+  <string name="storage_migration_dialog_title">Migrace úložiště</string>
+  <string name="storage_migration_progress_msg">Probíhá migrace. 
+Může to trvat několik sekund …</string>
+  <string name="install_id">Install ID - nahradí ID zařízení v srpnu 2020</string>
+  <string name="preference_not_available">Není dostupný</string>
 </resources>

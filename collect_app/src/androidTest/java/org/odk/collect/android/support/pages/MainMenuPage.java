@@ -61,6 +61,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new AdminSettingsPage(rule).assertOnPage();
     }
 
+    public QRCodeTabsActivityPage clickConfigureQR() {
+        clickOnString(R.string.configure_via_qr_code);
+        return new QRCodeTabsActivityPage(rule).assertOnPage();
+    }
+
     public FillBlankFormPage clickFillBlankForm() {
         onView(withId(R.id.enter_data)).perform(click());
         return new FillBlankFormPage(rule).assertOnPage();
@@ -108,12 +113,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public StorageMigrationDialogPage clickLearnMoreButton() {
-        onView(withId(R.id.storageMigrationBannerLearnMoreButton)).perform(click());
+        onView(withText(getTranslatedString(R.string.scoped_storage_learn_more))).perform(click());
         return new StorageMigrationDialogPage(rule).assertOnPage();
     }
 
     public MainMenuPage clickDismissButton() {
-        onView(withId(R.id.storageMigrationBannerDismissButton)).perform(click());
+        onView(withText(getTranslatedString(R.string.scoped_storage_dismiss))).perform(click());
         return this;
     }
 

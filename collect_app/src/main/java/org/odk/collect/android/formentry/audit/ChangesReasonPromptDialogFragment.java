@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
-import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
+import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
@@ -75,6 +75,11 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     @Override
     protected void onBackPressed() {
         dismiss();
+    }
+
+    @Override
+    protected Toolbar getToolbar() {
+        return getView().findViewById(R.id.toolbar);
     }
 
     @Override

@@ -10,10 +10,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.material.MaterialFullScreenDialogFragment;
+import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFragment {
 
@@ -80,6 +81,11 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
     protected void onBackPressed() {
         dismiss();
         viewModel.promptDismissed();
+    }
+
+    @Override
+    protected Toolbar getToolbar() {
+        return getView().findViewById(R.id.toolbar);
     }
 
     @Override

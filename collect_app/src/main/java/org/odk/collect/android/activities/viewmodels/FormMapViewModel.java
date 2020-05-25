@@ -11,6 +11,7 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import timber.log.Timber;
@@ -86,6 +87,8 @@ public class FormMapViewModel extends ViewModel {
                             mappableFormInstances.add(new MappableFormInstance(
                                     instance.getDatabaseId(),
                                     lat, lon,
+                                    instance.getDisplayName(),
+                                    instance.getLastStatusChangeDate(),
                                     instance.getStatus(),
                                     getClickActionForInstance(instance)
                             ));
@@ -133,13 +136,18 @@ public class FormMapViewModel extends ViewModel {
         private final long databaseId;
         private final Double latitude;
         private final Double longitude;
+        private final String instanceName;
+        private final Long lastStatusChangeDate;
         private final String status;
         private final ClickAction clickAction;
 
-        MappableFormInstance(long databaseId, Double latitude, Double longitude, String status, ClickAction clickAction) {
+        MappableFormInstance(long databaseId, Double latitude, Double longitude, String instanceName,
+                             Long lastStatusChangeDate, String status, ClickAction clickAction) {
             this.databaseId = databaseId;
             this.latitude = latitude;
             this.longitude = longitude;
+            this.instanceName = instanceName;
+            this.lastStatusChangeDate = lastStatusChangeDate;
             this.status = status;
             this.clickAction = clickAction;
         }
@@ -154,6 +162,14 @@ public class FormMapViewModel extends ViewModel {
 
         public Double getLongitude() {
             return longitude;
+        }
+
+        public String getInstanceName() {
+            return instanceName;
+        }
+
+        public Date getLastStatusChangeDate() {
+            return new Date(lastStatusChangeDate);
         }
 
         public String getStatus() {

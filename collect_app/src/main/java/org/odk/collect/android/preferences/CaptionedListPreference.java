@@ -1,6 +1,5 @@
 package org.odk.collect.android.preferences;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
@@ -13,14 +12,14 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.odk.collect.android.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /** A ListPreference where each item has a caption and the entire dialog also has a caption. */
 public class CaptionedListPreference extends ListPreference {
@@ -65,7 +64,8 @@ public class CaptionedListPreference extends ListPreference {
         this.dialogCaption = dialogCaption;
     }
 
-    @Override protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
+    @Override
+    protected void onPrepareDialogBuilder(android.app.AlertDialog.Builder builder) {
         // Selecting an item will close the dialog, so we don't need the "OK" button.
         builder.setPositiveButton(null, null);
     }

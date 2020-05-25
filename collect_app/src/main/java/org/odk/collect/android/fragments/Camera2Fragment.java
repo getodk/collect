@@ -397,7 +397,6 @@ public class Camera2Fragment extends Fragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         textureView = view.findViewById(R.id.texture);
-        textureView.setOnClickListener(this);
     }
 
     @Override
@@ -644,6 +643,8 @@ public class Camera2Fragment extends Fragment
                                 previewRequest = previewRequestBuilder.build();
                                 captureSession.setRepeatingRequest(previewRequest,
                                         captureCallback, backgroundHandler);
+
+                                getActivity().runOnUiThread(() -> textureView.setOnClickListener(Camera2Fragment.this));
                             } catch (CameraAccessException e) {
                                 Timber.e(e);
                             }
