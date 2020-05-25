@@ -210,6 +210,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
 
         map.setFeatureClickListener(this::onFeatureClicked);
+        map.setClickListener(this::onClick);
         updateInstanceGeometry();
 
         new Handler().postDelayed(() -> {
@@ -217,6 +218,12 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 onFeatureClicked(selectedSubmissionId);
             }
         }, 500);
+    }
+
+    private void onClick(MapPoint mapPoint) {
+        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
     }
 
     private void updateInstanceGeometry() {
