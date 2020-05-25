@@ -101,7 +101,8 @@ class PrefMigrator {
                 removeKey("firstRun"),
                 removeKey("lastVersion"),
                 moveKey("scoped_storage_used").toPreferences(metaSharedPreferences),
-                removeKey("metadata_migrated")
+                removeKey("metadata_migrated"),
+                moveKey("mapbox_initialized").toPreferences(metaSharedPreferences)
         };
     }
 

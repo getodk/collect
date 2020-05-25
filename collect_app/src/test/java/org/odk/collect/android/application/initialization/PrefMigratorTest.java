@@ -136,14 +136,16 @@ public class PrefMigratorTest {
                 "firstRun", true,
                 "lastVersion", 1L,
                 "scoped_storage_used", true,
-                "metadata_migrated", true
+                "metadata_migrated", true,
+                "mapbox_initialized", true
         );
 
         new PrefMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
 
         assertPrefsEmpty(generalPrefs);
         assertPrefs(metaPrefs,
-                "scoped_storage_used", true
+                "scoped_storage_used", true,
+                "mapbox_initialized", true
         );
     }
 
