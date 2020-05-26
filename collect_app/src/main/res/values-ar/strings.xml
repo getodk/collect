@@ -482,8 +482,7 @@
   <string name="include_password_dialog">تضمين كلمات المرور في الكود</string>
   <string name="generate">توليد</string>
   <string name="invalid_qrcode">كود QR لا يتضمن إعدادات صحيحة</string>
-  <string name="share_qrcode">مشاركة كود QR</string>
-  <string name="take_picture_instruction">انقر على الشاشة لإلتقاط صورة</string>
+    <string name="take_picture_instruction">انقر على الشاشة لإلتقاط صورة</string>
   <string name="error_front_camera_unavailable">الكاميرا الأمامية غير متوفرة على هذا الجهاز</string>
   <string name="camera_error">خطأ في الكاميرا</string>
   <string name="invalid_range_widget">هذة الميزة غير موجودة</string>

@@ -337,8 +337,7 @@
   <string name="include_password_dialog">पासवर्डहरु कोड मै छन्</string>
   <string name="generate">निकाल्नुस्</string>
   <string name="invalid_qrcode">QR कोडमा सही सेटिङ्स छैन</string>
-  <string name="share_qrcode">QR कोड शेयर</string>
-  <string name="take_picture_instruction">फोटो लिन स्क्रीन ट्याप गर्नुहोस्</string>
+    <string name="take_picture_instruction">फोटो लिन स्क्रीन ट्याप गर्नुहोस्</string>
   <string name="error_front_camera_unavailable">यस यन्त्रमा फ्रन्ट क्यामेरा छैन</string>
   <string name="camera_error">यस यन्त्रले Camera2 API सपोर्ट गर्देन ।</string>
   <string name="user_settings">प्रयोगकर्ता सेटिङ्स</string>

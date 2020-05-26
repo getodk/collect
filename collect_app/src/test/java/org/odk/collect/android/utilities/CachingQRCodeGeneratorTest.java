@@ -2,6 +2,8 @@ package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
 
+import androidx.core.util.Pair;
+
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
@@ -100,9 +102,14 @@ public class CachingQRCodeGeneratorTest {
     }
 
     public void generateQrCode(GenerationResults generationResults) {
-        // subscribe to the QRCode generator in the same thread
-        qrCodeGenerator.generateQRCode(new ArrayList<>())
-                .subscribe(generationResults.generatedBitmap::set, generationResults.errorThrown::set, () -> generationResults.isFinished.set(true));
+        try {
+            Pair<Bitmap, String> qrCode = qrCodeGenerator.getQRCode(new ArrayList<>());
+            generationResults.generatedBitmap.set(qrCode.first);
+        } catch (Throwable e) {
+            generationResults.errorThrown.set(e);
+        } finally {
+            generationResults.isFinished.set(true);
+        }
 
         generationResults.assertGeneratedOk();
     }

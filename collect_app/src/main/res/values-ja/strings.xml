@@ -476,8 +476,7 @@
   <string name="include_password_dialog">パスワードがコードに含まれます</string>
   <string name="generate">生成</string>
   <string name="invalid_qrcode">QR コードに有効な設定が含まれていません</string>
-  <string name="share_qrcode">QR コードを共有</string>
-  <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
+    <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
   <string name="error_front_camera_unavailable">このデバイスは前面カメラが利用できません</string>
   <string name="camera_error">このデバイスは Camera2 API をサポートしていません。</string>
   <string name="invalid_range_widget">このウィジェットに無効なパラメータがあります!</string>

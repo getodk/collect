@@ -17,14 +17,10 @@
 package org.odk.collect.android.instrumented.settings;
 
 import android.graphics.Bitmap;
+
+import androidx.core.util.Pair;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.WriterException;
-
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -34,12 +30,8 @@ import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.utilities.QRCodeUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.zip.DataFormatException;
-
-import timber.log.Timber;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -57,7 +49,7 @@ public class QrCodeTest {
     private final QRCodeGenerator qrCodeGenerator = new CachingQRCodeGenerator();
 
     @Test
-    public void importSettingsFromQrCode() throws JSONException, IOException, WriterException, DataFormatException, ChecksumException, NotFoundException, FormatException {
+    public void importSettingsFromQrCode() throws Exception {
         // reset preferences
         preferences.loadDefaultPreferences();
 
@@ -76,8 +68,8 @@ public class QrCodeTest {
 
         // generate QrCode
         final AtomicReference<Bitmap> generatedBitmap = new AtomicReference<>();
-        qrCodeGenerator.generateQRCode(new ArrayList<>())
-                .subscribe(generatedBitmap::set, Timber::e);
+        Pair<Bitmap, String> qrCode = qrCodeGenerator.getQRCode(new ArrayList<>());
+        generatedBitmap.set(qrCode.first);
 
         assertNotNull(generatedBitmap.get());
 

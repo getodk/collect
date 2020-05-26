@@ -415,8 +415,7 @@
   <string name="include_password_dialog">کوڈ میں شامل پاس ورڈ</string>
   <string name="generate">جنریٹ </string>
   <string name="invalid_qrcode">کیو آر کوڈ درست سیٹنگنز پر مشتمل نہیں ہے</string>
-  <string name="share_qrcode">شئیر کیو آر کوڈ </string>
-  <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
+    <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
   <string name="error_front_camera_unavailable">اس ڈیوائس پر فرنٹ کمیرہ دستیاب نہیں ہے</string>
   <string name="camera_error">یہ ڈیوائس اے پی آئ کمیرہ 2 سپورٹ نہیں کرتا </string>
   <string name="invalid_range_widget">اس ویجیٹ میں غلط پیرامیٹرز ہیں!</string>

@@ -479,8 +479,7 @@
   <string name="include_password_dialog">Mots de passe inclus dans le Code</string>
   <string name="generate">Générer</string>
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
-  <string name="share_qrcode">Partager le QR code</string>
-  <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
+    <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
   <string name="error_front_camera_unavailable">Caméra frontale non disponible sur cet appareil</string>
   <string name="camera_error">Cet appareil ne prend pas en charge l\'API Camera2.</string>
   <string name="invalid_range_widget">Les paramètres de ce widget sont invalides!</string>

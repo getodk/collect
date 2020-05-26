@@ -405,8 +405,7 @@ Escolher Imagem</string>
   <string name="include_password_dialog">Senha Adicionada no Código</string>
   <string name="generate">Gerar</string>
   <string name="invalid_qrcode">QR code não contém configurações válidas</string>
-  <string name="share_qrcode">Compartilhar QR code</string>
-  <string name="take_picture_instruction">Selecione na tela para tirar uma fotografia</string>
+    <string name="take_picture_instruction">Selecione na tela para tirar uma fotografia</string>
   <string name="error_front_camera_unavailable">A câmera da frente não está disponível neste dispositivo</string>
   <string name="camera_error">Este dispositivo não suporta a API da Câmera2</string>
   <string name="invalid_range_widget">Esta ferramenta possui parâmetros inválidos!</string>

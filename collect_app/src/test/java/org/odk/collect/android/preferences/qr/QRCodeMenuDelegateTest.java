@@ -2,8 +2,9 @@ package org.odk.collect.android.preferences.qr;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
+
+import androidx.core.util.Pair;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,16 +12,14 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
-import org.odk.collect.utilities.Consumer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
+import java.util.ArrayList;
 import java.util.Collection;
-
-import io.reactivex.Observable;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -29,13 +28,15 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class QRCodeMenuDelegateTest {
 
     private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
-    private final FakeQRCodeGenerator qrCodeGenerator = new FakeQRCodeGenerator();
+    private final QRCodeGenerator qrCodeGenerator = mock(QRCodeGenerator.class);
     private final FileProvider fileProvider = mock(FileProvider.class);
 
     private Activity activity;
@@ -70,38 +71,25 @@ public class QRCodeMenuDelegateTest {
     }
 
     @Test
-    public void clickingOnShare_startsShareIntentWhenQRCodeGenerated() {
+    public void clickingOnShare_startsShareIntentWhenQRCodeGenerated() throws Exception {
+        Robolectric.getBackgroundThreadScheduler().pause();
+
+        Collection<String> keys = new ArrayList<>();
+        keys.add(KEY_ADMIN_PW);
+        keys.add(KEY_PASSWORD);
+        when(qrCodeGenerator.getQRCode(keys)).thenReturn(new Pair<>(null, "qr.png"));
         when(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"));
 
         QRCodeMenuDelegate menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator, fileProvider);
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_share));
         assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
 
-        qrCodeGenerator.generate("qr.png");
+        Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable();
 
         Intent intent = shadowOf(activity).getNextStartedActivity();
         assertThat(intent, notNullValue());
         assertThat(intent.getAction(), is(Intent.ACTION_SEND));
         assertThat(intent.getType(), is("image/*"));
         assertThat(intent.getExtras().getParcelable(Intent.EXTRA_STREAM), is(Uri.parse("uri")));
-    }
-
-    private static class FakeQRCodeGenerator implements QRCodeGenerator {
-
-        private Consumer<String> callback;
-
-        @Override
-        public void generateQRCode(Consumer<String> callback) {
-            this.callback = callback;
-        }
-
-        @Override
-        public Observable<Bitmap> generateQRCode(Collection<String> selectedPasswordKeys) {
-            return null;
-        }
-
-        public void generate(String path) {
-            callback.accept(path);
-        }
     }
 }

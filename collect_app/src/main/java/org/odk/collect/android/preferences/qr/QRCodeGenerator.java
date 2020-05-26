@@ -2,16 +2,18 @@ package org.odk.collect.android.preferences.qr;
 
 import android.graphics.Bitmap;
 
-import org.odk.collect.utilities.Consumer;
+import androidx.core.util.Pair;
 
+import com.google.zxing.WriterException;
+
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
-
-import io.reactivex.Observable;
 
 
 public interface QRCodeGenerator {
 
-    void generateQRCode(Consumer<String> callback);
-
-    Observable<Bitmap> generateQRCode(Collection<String> selectedPasswordKeys);
+    Pair<Bitmap, String> getQRCode(Collection<String> selectedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException;
 }

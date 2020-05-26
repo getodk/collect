@@ -419,8 +419,7 @@
   <string name="include_password_dialog">Пароли включены в код</string>
   <string name="generate">Сгенерировать</string>
   <string name="invalid_qrcode">В QR-коде не содержатся правильные настройки</string>
-  <string name="share_qrcode">Поделиться QR-кодом</string>
-  <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
+    <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
   <string name="error_front_camera_unavailable">Передняя камера недоступна на данном устройстве</string>
   <string name="camera_error">Это устройство не поддерживает API Camera2.</string>
   <string name="invalid_range_widget">У этого виджета неправильные параметры!</string>

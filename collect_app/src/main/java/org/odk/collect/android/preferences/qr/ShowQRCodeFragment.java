@@ -14,6 +14,8 @@ package org.odk.collect.android.preferences.qr;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
@@ -43,11 +46,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -103,15 +102,27 @@ public class ShowQRCodeFragment extends Fragment {
         ivQRCode.setVisibility(GONE);
         setPasswordWarning();
 
-        Disposable disposable = qrCodeGenerator.generateQRCode(getSelectedPasswordKeys())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bitmap -> {
-                    progressBar.setVisibility(GONE);
-                    ivQRCode.setVisibility(VISIBLE);
-                    ivQRCode.setImageBitmap(bitmap);
-                }, Timber::e);
-        compositeDisposable.add(disposable);
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(Void... voids) {
+                try {
+                    Pair<Bitmap, String> qrCode = qrCodeGenerator.getQRCode(getSelectedPasswordKeys());
+                    return qrCode.first;
+                } catch (Exception ignored) {
+                    // Ignored
+                }
+                
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                progressBar.setVisibility(GONE);
+                ivQRCode.setVisibility(VISIBLE);
+                ivQRCode.setImageBitmap(bitmap);
+            }
+        }.execute();
     }
 
     @Override

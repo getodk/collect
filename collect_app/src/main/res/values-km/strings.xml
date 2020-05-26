@@ -424,8 +424,7 @@
   <string name="include_password_dialog">ពាក្យ​សម្ងាត់​មានភ្ជាប់នៅក្នុង​កូដ</string>
   <string name="generate">បង្កើត</string>
   <string name="invalid_qrcode">លេខកូដ QR មិនមានការកំណត់ត្រឹមត្រូវ</string>
-  <string name="share_qrcode">ចែក​រំលែក​ QR Code</string>
-  <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
+    <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
   <string name="error_front_camera_unavailable">កាមេរ៉ាខាងមុខមិនមាននៅលើឧបករណ៍នេះទេ</string>
   <string name="camera_error">ឧបករណ៍នេះមិនមានការគាំទ្រ​ក្នុង​ការ​ប្រើ​ប្រាស់ API របស់ Camera2</string>
   <string name="invalid_range_widget">ធាតុក្រាហ្វិកនេះមានប៉ារ៉ាម៉ែត្រមិនត្រឹមត្រូវ!</string>

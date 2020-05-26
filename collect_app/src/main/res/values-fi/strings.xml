@@ -479,8 +479,7 @@
   <string name="include_password_dialog">Koodiin sisältyvät salasanat</string>
   <string name="generate">Luo</string>
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
-  <string name="share_qrcode">Jaa QR-koodi</string>
-  <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
+    <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
   <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>
   <string name="invalid_range_widget">Tällä widgetillä on väärät asetukset!</string>

@@ -2,6 +2,7 @@ package org.odk.collect.android.preferences.qr;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,7 +13,13 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
 public class QRCodeMenuDelegate implements MenuDelegate {
 
@@ -51,15 +58,31 @@ public class QRCodeMenuDelegate implements MenuDelegate {
                 return true;
 
             case R.id.menu_item_share:
-                qrCodeGenerator.generateQRCode(path -> {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("image/*");
+                new AsyncTask<Void, Void, String>() {
 
-                    intent.putExtra(Intent.EXTRA_STREAM, fileProvider.getURIForFile(path));
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        try {
+                            Collection<String> keys = new ArrayList<>();
+                            keys.add(KEY_ADMIN_PW);
+                            keys.add(KEY_PASSWORD);
+                            return qrCodeGenerator.getQRCode(keys).second;
+                        } catch (Exception ignored) {
+                            // Ignored
+                        }
 
-                    activity.startActivity(intent);
-                });
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String filePath) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_SEND);
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_STREAM, fileProvider.getURIForFile(filePath));
+                        activity.startActivity(intent);
+                    }
+                }.execute();
 
                 return true;
         }
