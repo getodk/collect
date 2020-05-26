@@ -18,7 +18,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.TestCase.assertTrue;
@@ -34,7 +33,6 @@ import static org.robolectric.Shadows.shadowOf;
 public class ChangeAdminPasswordDialogTest {
 
     private TestActivityScenario<DialogFragmentTestActivity> activityScenario;
-    private ActivityController<FragmentActivity> activity;
     private FragmentManager fragmentManager;
     private ChangeAdminPasswordDialog dialogFragment;
     private ChangeAdminPasswordDialog.ChangePasswordDialogCallback callback;
@@ -42,10 +40,9 @@ public class ChangeAdminPasswordDialogTest {
     @Before
     public void setup() {
         activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity.class);
-        activity = RobolectricHelpers.buildThemedActivity(FragmentActivity.class);
-        activity.setup();
+        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
 
-        fragmentManager = activity.get().getSupportFragmentManager();
+        fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new ChangeAdminPasswordDialog();
 
         callback = mock(ChangeAdminPasswordDialog.ChangePasswordDialogCallback.class);
