@@ -26,7 +26,6 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminPreferencesActivity.ADMIN_PREFERENCES;
 import static org.robolectric.Shadows.shadowOf;
@@ -37,7 +36,6 @@ public class ChangeAdminPasswordDialogTest {
     private TestActivityScenario<DialogFragmentTestActivity> activityScenario;
     private FragmentManager fragmentManager;
     private ChangeAdminPasswordDialog dialogFragment;
-    private ChangeAdminPasswordDialog.ChangePasswordDialogCallback callback;
     private SharedPreferences sharedPreferences;
 
     @Before
@@ -48,9 +46,6 @@ public class ChangeAdminPasswordDialogTest {
 
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new ChangeAdminPasswordDialog();
-
-        callback = mock(ChangeAdminPasswordDialog.ChangePasswordDialogCallback.class);
-        dialogFragment.callback = callback;
     }
 
     @Test
@@ -67,7 +62,7 @@ public class ChangeAdminPasswordDialogTest {
         passwordEditText.setText("blah");
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
 
-        assertThat(sharedPreferences.getString(KEY_ADMIN_PW , ""), equalTo("blah"));
+        assertThat(sharedPreferences.getString(KEY_ADMIN_PW, ""), equalTo("blah"));
     }
 
     @Test
