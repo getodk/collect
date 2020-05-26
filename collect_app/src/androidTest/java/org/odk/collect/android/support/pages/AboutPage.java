@@ -18,7 +18,7 @@ public class AboutPage extends Page<AboutPage> {
 
     @Override
     public AboutPage assertOnPage() {
-        checkIsStringDisplayed(R.string.about_preferences);
+        assertText(R.string.about_preferences);
         return this;
     }
 

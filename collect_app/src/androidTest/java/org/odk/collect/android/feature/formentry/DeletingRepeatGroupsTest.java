@@ -152,7 +152,7 @@ public class DeletingRepeatGroupsTest {
                 .clickOnText("repeatGroupFieldList > 4")
                 .clickOnQuestion("number1")
                 .deleteGroup("number1")
-                .checkIsStringDisplayed(R.string.quit_entry);
+                .assertText(R.string.quit_entry);
     }
 
     @Test

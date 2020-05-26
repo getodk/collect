@@ -16,7 +16,7 @@ public class UserAndDeviceIdentitySettingsPage extends Page<UserAndDeviceIdentit
 
     @Override
     public UserAndDeviceIdentitySettingsPage assertOnPage() {
-        checkIsStringDisplayed(R.string.user_and_device_identity_title);
+        assertText(R.string.user_and_device_identity_title);
         return this;
     }
 

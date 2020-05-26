@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.google.zxing.WriterException;
@@ -18,10 +17,11 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
+import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.io.File;
@@ -39,7 +39,7 @@ public class ConfigureWithQRCodeTest {
 
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
 
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -66,30 +66,65 @@ public class ConfigureWithQRCodeTest {
     }
 
     @Test
-    public void onMainMenu_clickConfigureQRCode_andClickingOnScan_opensScanner() {
-        new MainMenuPage(rule)
-                .assertOnPage()
+    public void clickConfigureQRCode_opensScanner() {
+        rule.mainMenu()
                 .clickOnMenu()
                 .clickConfigureQR()
-                .clickScanFragment()
                 .checkIsIdDisplayed(R.id.zxing_barcode_surface);
     }
 
     @Test
-    public void onMainMenu_clickConfigureQRCode_andClickingOnView_showsQRCode() {
-        new MainMenuPage(rule)
-                .assertOnPage()
+    public void clickConfigureQRCode_andClickingOnView_showsQRCode() {
+        rule.mainMenu()
                 .clickOnMenu()
                 .clickConfigureQR()
-                .clickViewQRFragment()
+                .clickView()
                 .assertImageViewShowsImage(R.id.ivQRcode, BitmapFactory.decodeResource(
                         getApplicationContext().getResources(),
                         stubQRCodeGenerator.getDrawableID()
                 ));
     }
 
-    // StubQRCodeGenerator is a class that is injected during this test
-    // to verify that the QRCode is generated and shown to user correctly
+    @Test
+    public void whenThereIsAnAdminPassword_canRemoveFromQRCode() {
+        rule.mainMenu()
+                .clickOnMenu()
+                .clickAdminSettings()
+                .clickOnString(R.string.admin_password)
+                .inputText("blah")
+                .clickOKOnDialog()
+                .pressBack(new MainMenuPage(rule))
+
+                .clickOnMenu()
+                .clickConfigureQRWithAdminPassword("blah")
+                .clickView()
+                .clickOnString(R.string.qrcode_with_admin_password)
+                .clickOnString(R.string.admin_password)
+                .clickOnString(R.string.generate)
+                .assertText(R.string.qrcode_without_passwords);
+    }
+
+    @Test
+    public void whenThereIsAServerPassword_canRemoveFromQRCode() {
+        rule.mainMenu()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickServerSettings()
+                .clickOnPassword()
+                .inputText("blah")
+                .clickOKOnDialog()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
+                .clickOnMenu()
+                .clickConfigureQR()
+                .clickView()
+                .clickOnString(R.string.qrcode_with_server_password)
+                .clickOnString(R.string.server_password)
+                .clickOnString(R.string.generate)
+                .assertText(R.string.qrcode_without_passwords);
+    }
+
     private static class StubQRCodeGenerator implements QRCodeGenerator {
 
         private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
@@ -100,10 +135,9 @@ public class ConfigureWithQRCodeTest {
         }
 
         public void setup() {
-            Bitmap bitmap =
-                    BitmapFactory.decodeResource(
-                            getApplicationContext().getResources(),
-                            CHECKER_BACKGROUND_DRAWABLE_ID);
+            Bitmap bitmap = BitmapFactory.decodeResource(
+                    getApplicationContext().getResources(),
+                    getDrawableID());
             saveBitmap(bitmap);
         }
 

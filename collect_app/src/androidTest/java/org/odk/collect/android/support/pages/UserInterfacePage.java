@@ -17,7 +17,7 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
 
     @Override
     public UserInterfacePage assertOnPage() {
-        checkIsStringDisplayed(R.string.client);
+        assertText(R.string.client);
         return this;
     }
 
