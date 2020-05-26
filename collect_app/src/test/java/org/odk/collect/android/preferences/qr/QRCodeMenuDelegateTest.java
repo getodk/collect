@@ -1,8 +1,9 @@
 package org.odk.collect.android.preferences.qr;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +17,6 @@ import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -26,8 +24,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -37,11 +33,14 @@ public class QRCodeMenuDelegateTest {
     private final QRCodeGenerator qrCodeGenerator = mock(QRCodeGenerator.class);
     private final FileProvider fileProvider = mock(FileProvider.class);
 
-    private Activity activity;
+    private FragmentActivity activity;
+    private QRCodeMenuDelegate menuDelegate;
 
     @Before
     public void setup() {
-        activity = Robolectric.buildActivity(Activity.class).get();
+        Robolectric.getBackgroundThreadScheduler().pause();
+        activity = Robolectric.setupActivity(FragmentActivity.class);
+        menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator, fileProvider);
     }
 
     @Test
@@ -61,7 +60,6 @@ public class QRCodeMenuDelegateTest {
     public void clickingOnImportQRCode_whenPickerActivityNotAvailable_showsToast() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
 
-        QRCodeMenuDelegate menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator, fileProvider);
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_scan_sd_card));
 
         assertThat(shadowOf(activity).getNextStartedActivityForResult(), is(nullValue()));
@@ -69,20 +67,22 @@ public class QRCodeMenuDelegateTest {
     }
 
     @Test
-    public void clickingOnShare_startsShareIntentWhenQRCodeGenerated() throws Exception {
-        Robolectric.getBackgroundThreadScheduler().pause();
-
-        Collection<String> keys = new ArrayList<>();
-        keys.add(KEY_ADMIN_PW);
-        keys.add(KEY_PASSWORD);
-        when(qrCodeGenerator.generateQRCode(keys)).thenReturn("qr.png");
+    public void clickingOnShare_beforeQRCodeIsGenerated_doesNothing() throws Exception {
+        when(qrCodeGenerator.generateQRCode(any())).thenReturn("qr.png");
         when(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"));
 
-        QRCodeMenuDelegate menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator, fileProvider);
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_share));
-        assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
 
+        assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
+    }
+
+    @Test
+    public void clickingOnShare_whenQRCodeIsGenerated_startsShareIntent() throws Exception {
+        when(qrCodeGenerator.generateQRCode(any())).thenReturn("qr.png");
+        when(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"));
         Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable();
+
+        menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_share));
 
         Intent intent = shadowOf(activity).getNextStartedActivity();
         assertThat(intent, notNullValue());

@@ -14,9 +14,6 @@ package org.odk.collect.android.preferences.qr;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +33,6 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.FileUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +43,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.disposables.CompositeDisposable;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -56,7 +51,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
 public class ShowQRCodeFragment extends Fragment {
 
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final boolean[] checkedItems = {true, true};
     private final boolean[] passwordsSet = {true, true};
 
@@ -80,6 +74,8 @@ public class ShowQRCodeFragment extends Fragment {
     @Inject
     public QRCodeGenerator qrCodeGenerator;
 
+    private QRCodeViewModel qrCodeViewModel;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -88,7 +84,19 @@ public class ShowQRCodeFragment extends Fragment {
         setHasOptionsMenu(true);
         passwordsSet[0] = !((String) adminSharedPreferences.get(KEY_ADMIN_PW)).isEmpty();
         passwordsSet[1] = !((String) generalSharedPreferences.get(KEY_PASSWORD)).isEmpty();
-        generateCode();
+
+        qrCodeViewModel.getBitmap().observe(this.getViewLifecycleOwner(), bitmap -> {
+            if (bitmap != null) {
+                progressBar.setVisibility(GONE);
+                ivQRCode.setVisibility(VISIBLE);
+                ivQRCode.setImageBitmap(bitmap);
+            } else {
+                progressBar.setVisibility(VISIBLE);
+                ivQRCode.setVisibility(GONE);
+                setPasswordWarning();
+            }
+        });
+
         return view;
     }
 
@@ -96,42 +104,7 @@ public class ShowQRCodeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-    }
-
-    private void generateCode() {
-        progressBar.setVisibility(VISIBLE);
-        ivQRCode.setVisibility(GONE);
-        setPasswordWarning();
-
-        new AsyncTask<Void, Void, Bitmap>() {
-
-            @Override
-            protected Bitmap doInBackground(Void... voids) {
-                try {
-                    String filePath = qrCodeGenerator.generateQRCode(getSelectedPasswordKeys());
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    return FileUtils.getBitmap(filePath, options);
-                } catch (Exception ignored) {
-                    // Ignored
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                progressBar.setVisibility(GONE);
-                ivQRCode.setVisibility(VISIBLE);
-                ivQRCode.setImageBitmap(bitmap);
-            }
-        }.execute();
-    }
-
-    @Override
-    public void onDestroy() {
-        compositeDisposable.dispose();
-        super.onDestroy();
+        qrCodeViewModel = new QRCodeViewModel(qrCodeGenerator);
     }
 
     private void setPasswordWarning() {
@@ -143,6 +116,7 @@ public class ShowQRCodeFragment extends Fragment {
 
         boolean showingAdminPassword = passwordsSet[0] && checkedItems[0];
         boolean showingServerPassword = passwordsSet[1] && checkedItems[1];
+
         CharSequence status;
         if (showingAdminPassword && showingServerPassword) {
             status = getText(R.string.qrcode_with_both_passwords);
@@ -172,7 +146,7 @@ public class ShowQRCodeFragment extends Fragment {
                     })
                     .setCancelable(false)
                     .setPositiveButton(R.string.generate, (dialog, which) -> {
-                        generateCode();
+                        qrCodeViewModel.setIncludedKeys(getSelectedPasswordKeys());
                         dialog.dismiss();
                     })
                     .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())

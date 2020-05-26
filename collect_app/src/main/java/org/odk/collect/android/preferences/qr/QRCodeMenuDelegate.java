@@ -1,11 +1,11 @@
 package org.odk.collect.android.preferences.qr;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -13,28 +13,29 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import timber.log.Timber;
-
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
 public class QRCodeMenuDelegate implements MenuDelegate {
 
     static final int SELECT_PHOTO = 111;
 
-    private final Activity activity;
+    private final FragmentActivity activity;
     private final ActivityAvailability activityAvailability;
-    private final QRCodeGenerator qrCodeGenerator;
     private final FileProvider fileProvider;
 
-    QRCodeMenuDelegate(Activity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator, FileProvider fileProvider) {
+    private String qrFilePath;
+
+    QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator, FileProvider fileProvider) {
         this.activity = activity;
         this.activityAvailability = activityAvailability;
-        this.qrCodeGenerator = qrCodeGenerator;
         this.fileProvider = fileProvider;
+
+        QRCodeViewModel qrCodeViewModel = new QRCodeViewModel(qrCodeGenerator);
+        qrCodeViewModel.getFilePath().observe(activity, filePath -> {
+            if (filePath != null) {
+                this.qrFilePath = filePath;
+            }
+        });
     }
 
     @Override
@@ -58,31 +59,13 @@ public class QRCodeMenuDelegate implements MenuDelegate {
                 return true;
 
             case R.id.menu_item_share:
-                new AsyncTask<Void, Void, String>() {
-
-                    @Override
-                    protected String doInBackground(Void... voids) {
-                        try {
-                            Collection<String> keys = new ArrayList<>();
-                            keys.add(KEY_ADMIN_PW);
-                            keys.add(KEY_PASSWORD);
-                            return qrCodeGenerator.generateQRCode(keys);
-                        } catch (Exception ignored) {
-                            // Ignored
-                        }
-
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(String filePath) {
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_SEND);
-                        intent.setType("image/*");
-                        intent.putExtra(Intent.EXTRA_STREAM, fileProvider.getURIForFile(filePath));
-                        activity.startActivity(intent);
-                    }
-                }.execute();
+                if (qrFilePath != null) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_STREAM, fileProvider.getURIForFile(qrFilePath));
+                    activity.startActivity(intent);
+                }
 
                 return true;
         }
