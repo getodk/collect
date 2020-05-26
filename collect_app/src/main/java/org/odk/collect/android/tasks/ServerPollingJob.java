@@ -18,11 +18,8 @@ package org.odk.collect.android.tasks;
 
 import android.app.PendingIntent;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
@@ -30,11 +27,12 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.FormListDownloader;
@@ -48,7 +46,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.activities.FormDownloadList.DISPLAY_ONLY_UPDATED_FORMS;
+import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
@@ -73,6 +71,9 @@ public class ServerPollingJob extends Job {
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
     public ServerPollingJob() {
         Collect.getInstance().getComponent().inject(this);
     }
@@ -80,7 +81,7 @@ public class ServerPollingJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
-        if (!isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
+        if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
             return Result.FAILURE;
         }
 
@@ -156,7 +157,7 @@ public class ServerPollingJob extends Job {
     }
 
     private void informAboutNewAvailableForms() {
-        Intent intent = new Intent(getContext(), FormDownloadList.class);
+        Intent intent = new Intent(getContext(), FormDownloadListActivity.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -170,7 +171,7 @@ public class ServerPollingJob extends Job {
     private void informAboutNewDownloadedForms(String title, HashMap<FormDetails, String> result) {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
-        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadList.getDownloadResultMessage(result));
+        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationUtils.showNotification(contentIntent,
@@ -183,13 +184,6 @@ public class ServerPollingJob extends Job {
         ContentValues values = new ContentValues();
         values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
         new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
-    }
-
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) Collect.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 
     private String getContentText(HashMap<FormDetails, String> result) {

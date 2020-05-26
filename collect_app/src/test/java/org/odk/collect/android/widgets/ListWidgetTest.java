@@ -28,7 +28,7 @@ public class ListWidgetTest extends GeneralSelectOneWidgetTest<ListWidget> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        for (RadioButton radioButton : getWidget().buttons) {
+        for (RadioButton radioButton : getSpyWidget().buttons) {
             assertThat(radioButton.getVisibility(), is(View.VISIBLE));
             assertThat(radioButton.isEnabled(), is(Boolean.FALSE));
         }

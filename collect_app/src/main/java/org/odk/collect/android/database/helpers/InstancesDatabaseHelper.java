@@ -79,7 +79,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
 
-    static final int DATABASE_VERSION = 16;     // smap
+    public static final int DATABASE_VERSION = 16;     // smap
 
     private static final String[] COLUMN_NAMES_V5 = {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
@@ -128,7 +128,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             T_HIDE              // smap
     };
 
-    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V16;  // smap
+    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V16;  // smap
 
     private static boolean isDatabaseBeingMigrated;
 

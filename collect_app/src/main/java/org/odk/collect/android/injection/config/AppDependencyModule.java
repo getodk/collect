@@ -9,6 +9,7 @@ import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.backgroundwork.CollectBackgroundWorkManager;
@@ -21,6 +22,8 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
+import org.odk.collect.android.network.ConnectivityProvider;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -29,6 +32,9 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.qr.ObservableQRCodeGenerator;
+import org.odk.collect.android.preferences.qr.QRCodeGenerator;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.migration.StorageEraser;
@@ -43,6 +49,7 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.utilities.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -140,9 +147,9 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public Analytics providesAnalytics(Application application) {
+    public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
-        return new FirebaseAnalytics(firebaseAnalyticsInstance);
+        return new FirebaseAnalytics(firebaseAnalyticsInstance, generalSharedPreferences);
     }
 
     @Provides
@@ -169,6 +176,12 @@ public class AppDependencyModule {
     @Singleton
     public StorageMigrationRepository providesStorageMigrationRepository() {
         return new StorageMigrationRepository();
+    }
+
+    @Provides
+    @Singleton
+    public StorageInitializer providesStorageInitializer() {
+        return new StorageInitializer();
     }
 
     @Provides
@@ -257,5 +270,20 @@ public class AppDependencyModule {
     @Provides
     public BackgroundWorkManager providesBackgroundWorkManager() {
         return new CollectBackgroundWorkManager();
+    }
+
+    @Provides
+    public NetworkStateProvider providesConnectivityProvider() {
+        return new ConnectivityProvider();
+    }
+
+    @Provides
+    public QRCodeGenerator providesQRCodeGenerator() {
+        return new ObservableQRCodeGenerator();
+    }
+
+    @Provides
+    public VersionInformation providesVersionInformation() {
+        return new VersionInformation(() -> BuildConfig.VERSION_NAME);
     }
 }

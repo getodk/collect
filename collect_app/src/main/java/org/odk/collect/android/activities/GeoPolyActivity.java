@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

@@ -8,25 +8,13 @@
   the specific language governing permissions and limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
 
-        <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/toolbar"
-            style="@style/Widget.Collect.Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:navigationIcon="@mipmap/ic_launcher"
-            tools:title="ODK Collect" />
-
-    </com.google.android.material.appbar.AppBarLayout>
+    <include layout="@layout/app_bar_layout" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -38,10 +26,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/storage_migration_banner"
+            <org.odk.collect.material.MaterialBanner
+                android:id="@+id/storageMigrationBanner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                custom:text="blah"
+                custom:secondaryActionColor="true" />
+
+            <FrameLayout
+                android:id="@+id/mapbox_container"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="invisible">
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +58,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/enter_data"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -67,7 +66,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/review_data"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -75,7 +74,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/send_data"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -83,7 +82,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/view_sent_forms"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -91,7 +90,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/get_forms"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -99,7 +98,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/manage_forms"
-                        style="@style/Widget.Collect.Button.MainMenu"
+                        style="@style/Widget.Collect.Button.FullWidth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"

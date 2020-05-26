@@ -1,8 +1,16 @@
 package org.odk.collect.android.analytics;
 
 public class AnalyticsEvents {
+
     private AnalyticsEvents() {
+
     }
+
+    /**
+     * Used to measure how popular different methods of adding repeats are. The "action" should
+     * describe the way the repeat was added. The label should be the form hash identifier.
+     */
+    public static final String ADD_REPEAT = "AddRepeat";
 
     /**
      * Track changes to the server URL setting. The action should be the scheme followed by a space
@@ -103,4 +111,30 @@ public class AnalyticsEvents {
      * Track scoped storage migration attempts. The action should be the result of the attempt.
      */
     public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
+
+    /**
+     * Track presses of QRCode Configuration options which can be used to remove
+     * the admin or server password from the generated QR Code.
+     * The action should be the password removed/added.
+     */
+    public static final String CONFIGURE_QR_CODE = "ConfigureQRCode";
+
+    /**
+     * Track downloads initiated when there are no downloaded forms on the device. The action should
+     * be in the format: {number of downloaded forms}/{total forms}-{form server hash}
+     *
+     * Questions to answer to help shape new on-boarding and multi-tenancy experience:
+     *      - Does it look like some projects instruct data collectors to download all forms on
+     *      first launch and others to download a subset?
+     *      - If it looks like there's a clear process split, which of the two processes is most
+     *      common? Is project scale or number of forms hosted on server relevant to the process?
+     *      - Are subsequent manual downloads common? Are all forms downloaded or a subset?
+     */
+    public static final String FIRST_FORM_DOWNLOAD = "FirstFormDownload";
+
+    /**
+     * Download a subset of available forms. The action should be in the format:
+     * {number of downloaded forms}/{total forms}-{form server hash}
+     */
+    public static final String SUBSEQUENT_FORM_DOWNLOAD = "SubsequentFormDownload";
 }

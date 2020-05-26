@@ -12,6 +12,7 @@
      the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -19,7 +20,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttons">
+        android:layout_above="@+id/status">
 
         <ProgressBar
             android:id="@+id/circularProgressBar"
@@ -36,43 +37,24 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/status"
-        android:layout_margin="5dp"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnScan"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/scan_qrcode" />
-
-        <Button
-            android:id="@+id/btnSelect"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/select_qrcode" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/darker_gray"
+        android:background="?colorError"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:src="@android:drawable/ic_dialog_alert"
-            android:tint="#ffff00" />
+            android:tint="?colorOnError"
+            />
 
         <TextView
             android:id="@+id/tvPasswordWarning"
@@ -81,6 +63,10 @@
             android:layout_weight="1"
             android:padding="5dp"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:text="@string/qrcode_with_both_passwords"
+            android:textColor="?colorOnError"
+            />
+
     </LinearLayout>
 </RelativeLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Collect.Button.Custom" parent="Widget.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Widget.Collect.Button.BottomOption" parent="Widget.Collect.Button.Custom">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Widget.Collect.Button.FullWidth" parent="Widget.Collect.Button.Custom">
+        <item name="android:paddingTop">@dimen/margin_standard</item>
+        <item name="android:paddingBottom">@dimen/margin_standard</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="Widget.Collect.ImageButton.Custom.Light" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/light_theme_tint_list</item>
+    </style>
+
+    <style name="Widget.Collect.ImageButton.Custom.Dark" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/dark_theme_tint_list</item>
+    </style>
+
+</resources>

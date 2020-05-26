@@ -46,7 +46,7 @@ import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookup;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookupImagelabels;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerSearch;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ZipUtils;
@@ -86,7 +86,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private ExternalDataManager externalDataManager;
     private FormDef formDef;
 
-    protected static class FECWrapper {
+    public static class FECWrapper {
         FormController controller;
         boolean usedSavepoint;
 
@@ -95,7 +95,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             this.usedSavepoint = usedSavepoint;
         }
 
-        protected FormController getController() {
+        public FormController getController() {
             return controller;
         }
 

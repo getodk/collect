@@ -305,7 +305,6 @@
   <string name="no_date_selected">Geen datum geselecteerd</string>
   <string name="no_time_selected">Geen tijd geselecteerd</string>
   <string name="share">Deel</string>
-  <string name="qrcode_with_server_password">Deze QR-code bevat jouw serverwachtwoord. \n(Klik om de wachtwoorden te verwijderen)</string>
   <string name="user_settings">Gebruikersinstellingen</string>
   <string name="main_menu_settings">Hoofdmenu instellingen</string>
   <string name="autosend_selector_title">Automatisch versturen</string>

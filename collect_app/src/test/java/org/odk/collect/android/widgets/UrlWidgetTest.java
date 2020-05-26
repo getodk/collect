@@ -41,6 +41,6 @@ public class UrlWidgetTest extends QuestionWidgetTest<UrlWidget, StringData> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().openUrlButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().openUrlButton.getVisibility(), is(View.GONE));
     }
 }

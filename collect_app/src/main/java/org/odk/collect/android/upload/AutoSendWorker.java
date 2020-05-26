@@ -30,12 +30,14 @@ import androidx.work.WorkerParameters;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -70,6 +72,12 @@ public class AutoSendWorker extends Worker {
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
+    @Inject
+    Analytics analytics;
+
     public AutoSendWorker(@NonNull Context c, @NonNull WorkerParameters parameters) {
         super(c, parameters);
     }
@@ -96,10 +104,7 @@ public class AutoSendWorker extends Worker {
             return Result.failure();
         }
 
-        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-
+        NetworkInfo currentNetworkInfo = connectivityProvider.getNetworkInfo();
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
                 || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
             if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo)) {
@@ -172,7 +177,7 @@ public class AutoSendWorker extends Worker {
                 String action = protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
-                Collect.getInstance().logRemoteAnalytics(SUBMISSION, action, label);
+                analytics.logEvent(SUBMISSION, action, label);
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;

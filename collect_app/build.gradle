@@ -89,6 +89,7 @@ android {
     }
 
     buildTypes {
+
         // Release build for all forks
         release {
             buildConfigField("String", "SENDER_ID", "\"" + secrets['SENDER_ID'] + "\"")    // smap
@@ -97,6 +98,8 @@ android {
             buildConfigField("String", "AMAZON_COGNITO_IDENTITY_POOL_ID", "\"" + secrets['AMAZON_COGNITO_IDENTITY_POOL_ID'] + "\"")   // smap
             buildConfigField("String", "AMAZON_DYNAMODB_REGION", "\"" + secrets['AMAZON_DYNAMODB_REGION'] + "\"")  // smap
 
+            resValue("bool", "CRASHLYTICS_ENABLED", "false")
+            resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             if (secrets.getProperty('RELEASE_STORE_FILE')) {
                 signingConfig signingConfigs.release
             }
@@ -105,7 +108,10 @@ android {
             resValue("bool", "CRASHLYTICS_ENABLED", "true")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+
+            matchingFallbacks = ['release'] // So other modules use release build type for this
         }
+
         debug {
             buildConfigField("String", "SENDER_ID", "\"" + secrets['SENDER_ID'] + "\"")    // smap
             buildConfigField("String", "AWS_MOBILEHUB_USER_AGENT", "\"" + secrets['AWS_MOBILEHUB_USER_AGENT'] + "\"")
@@ -119,7 +125,7 @@ android {
 
 
             debuggable(true)
-            testCoverageEnabled(true)
+            testCoverageEnabled((findProperty("enableJacoco") ?: "false").toBoolean())
             resValue("bool", "CRASHLYTICS_ENABLED", "false")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
@@ -200,39 +206,32 @@ configurations.all {
 }
 
 dependencies {
-    // To make ODK Collect is installable on all devices even though the Mapbox
-    // native library is missing for some ABIs, we include an .aar dependency
-    // named "nbi-stubs", which causes there to be at least one .so library
-    // present for every ABI (armeabi, armeabi-v7a, arm64-v8a, x86, x86_64).
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01' // Shouldn't be upgraded until https://issuetracker.google.com/issues/141869006 is fixed
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation('androidx.preference:preference:1.1.0') {
-        exclude group: 'androidx.appcompat', module: 'appcompat' // Again because of https://issuetracker.google.com/issues/141869006
-    }
+    implementation 'androidx.preference:preference:1.1.0'
+    implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
 
     implementation "com.google.android.gms:play-services-auth:17.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
     implementation "com.google.android.gms:play-services-location:17.0.0"
     implementation "com.google.android.gms:play-services-gcm:17.0.0"    // smap google cloud messaging
 
-    implementation 'com.google.firebase:firebase-perf:19.0.4'
-    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.google.firebase:firebase-perf:19.0.5'
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
     implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.0.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v7:0.6.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
 
-    implementation("com.google.guava:guava:28.1-android")
+    implementation("com.google.guava:guava:28.2-android")
 
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
-    implementation 'com.burgstaller:okhttp-digest:1.18' //newer versions require minSdkVersion >= 21
+    implementation 'com.burgstaller:okhttp-digest:2.2'
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
@@ -245,17 +244,17 @@ dependencies {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
-    implementation "com.karumi:dexter:6.0.1"
-    implementation "org.osmdroid:osmdroid-android:5.6.4"
-    implementation("com.google.api-client:google-api-client-android:1.30.5") { //updating would require minSdkVersion >=19
+    implementation "com.karumi:dexter:6.0.2"
+    implementation "org.osmdroid:osmdroid-android:6.1.6"
+    implementation("com.google.api-client:google-api-client-android:1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-drive:v3-rev20191108-1.30.3") {
+    implementation("com.google.apis:google-api-services-drive:v3-rev20200306-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20191213-1.30.3") {
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20200312-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
@@ -279,7 +278,8 @@ dependencies {
     //odkCollectReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"  smap
 
     // Android Architecture Components:
-    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // smap aws
     implementation 'com.amazonaws:aws-android-sdk-core:2.16.+'
@@ -304,7 +304,7 @@ dependencies {
 
     // RxJava 2:
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
-    implementation "io.reactivex.rxjava2:rxjava:2.2.16"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.19"
 
     // Better "Subjects" for Rx:
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
@@ -318,6 +318,9 @@ dependencies {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
 
+    implementation project(':nbi-stubs')
+    implementation project(':material')
+
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:10.2.1"
@@ -327,28 +330,28 @@ dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
     // Used to generate documentation screenshots.
-    androidTestImplementation "tools.fastlane:screengrab:1.1.0" //updating would require minSdkVersion >=18
+    androidTestImplementation "tools.fastlane:screengrab:2.0.0"
 
     // Testing-only dependencies
-    testImplementation "junit:junit:4.13-beta-3"
-    testImplementation "org.mockito:mockito-core:3.2.4"
+    testImplementation "junit:junit:4.13"
+    testImplementation "org.mockito:mockito-core:3.3.3"
 
     testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation 'androidx.test.ext:junit:1.1.1'
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.1'
+    debugImplementation "androidx.fragment:fragment-testing:${rootProject.fragmentVersion}"
     testImplementation "org.robolectric:shadows-multidex:4.3.1"
     testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
     testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
 
     // power mock (for mocking final methods which is not handled by mockito)
-    testImplementation "org.powermock:powermock-module-junit4:2.0.4"
-    testImplementation "org.powermock:powermock-api-mockito2:2.0.4"
+    testImplementation "org.powermock:powermock-module-junit4:2.0.5"
+    testImplementation "org.powermock:powermock-api-mockito2:2.0.5"
 
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
     testImplementation "org.json:json:20190722"
 
-    androidTestImplementation "org.mockito:mockito-android:3.2.4"
+    androidTestImplementation "org.mockito:mockito-android:3.3.3"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'

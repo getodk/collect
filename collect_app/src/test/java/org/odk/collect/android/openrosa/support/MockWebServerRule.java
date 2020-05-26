@@ -42,13 +42,13 @@ public class MockWebServerRule implements TestRule {
         mockWebServers.add(httpsMockWebServer);
 
         httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
-        httpsMockWebServer.start(8443);
+        httpsMockWebServer.start();
         return httpsMockWebServer;
     }
 
     public void teardown() throws IOException {
         for (MockWebServer mockWebServer : mockWebServers) {
-            mockWebServer.shutdown();
+            mockWebServer.close();
         }
     }
 }

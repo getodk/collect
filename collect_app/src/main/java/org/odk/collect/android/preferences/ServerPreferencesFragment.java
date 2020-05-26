@@ -18,7 +18,7 @@ package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
 import android.preference.EditTextPreference;
 import android.preference.Preference;

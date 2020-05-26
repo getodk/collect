@@ -112,7 +112,9 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         radioButton.setOnClickListener(this);
         radioButton.setOnCheckedChangeListener(this);
 
-        if (filteredItems.get(index).getValue().equals(selectedValue)) {
+        String value = filteredItems.get(index).getValue();
+
+        if (value != null && value.equals(selectedValue)) {
             radioButton.setChecked(true);
         }
 

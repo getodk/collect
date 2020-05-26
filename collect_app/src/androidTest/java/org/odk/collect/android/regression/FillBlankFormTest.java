@@ -140,18 +140,18 @@ public class FillBlankFormTest extends BaseRegressionTest {
         new MainMenuPage(rule)
                 .startBlankForm("1560_DateData")
                 .checkIsTranslationDisplayed("Jan 01, 1900", "01 ene. 1900")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
 
                 .startBlankForm("1560_IntegerData")
                 .assertText("5")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .assertText("5")
                 .clickSaveAndExit()
 
                 .startBlankForm("1560_IntegerData_instanceID")
                 .assertText("5")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -254,7 +254,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .clickOnText("No")
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
@@ -273,7 +273,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnText("Gala")
                 .clickOnText("Granny Smith")
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
 
     }
@@ -349,7 +349,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .assertText("Oranges")
                 .clickOnText("Mango")
                 .clickOnText("Oranges")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
@@ -366,8 +366,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToNextQuestion();
             secondQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToNextQuestion();
-            formEntryPage.clickSaveAndExit();
+            formEntryPage.swipeToEndScreen().clickSaveAndExit();
         }
 
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
@@ -385,8 +384,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
             formEntryPage.inputText("3");
             formEntryPage.swipeToNextQuestion();
             firstQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToNextQuestion();
-            formEntryPage.clickSaveAndExit();
+            formEntryPage.swipeToEndScreen().clickSaveAndExit();
         }
 
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
@@ -401,7 +399,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         new MainMenuPage(rule)
                 .startBlankFormWithError("g6Error")
                 .clickOK(new FormEntryPage("g6Error", rule))
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
@@ -411,18 +409,19 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOK(new FormEntryPage("g6Error2", rule))
                 .swipeToNextQuestion()
                 .inputText("ble")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage(rule)
-                .startBlankForm("emptyGroupFieldList")
+                .clickFillBlankForm()
+                .clickOnEmptyForm("emptyGroupFieldList")
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage(rule).startBlankForm("emptyGroupFieldList2")
                 .inputText("nana")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
@@ -432,7 +431,8 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         //TestCase27
         new MainMenuPage(rule)
-                .startBlankForm("metadata2")
+                .clickFillBlankForm()
+                .clickOnEmptyForm("metadata2")
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
@@ -466,7 +466,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnString(R.string.select_one)
                 .clickOnText("Jaggu")
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -560,7 +560,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.")
                 .clickOKOnDialog()
                 .swipeToNextQuestion()
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -601,7 +601,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
-                .clickOnDoNotAddGroup()
+                .clickOnDoNotAddGroupEndingForm()
                 .clickSaveAndExit();
     }
 
@@ -616,7 +616,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .assertText("more cheese")
                 .swipeToNextQuestion()
                 .assertText("5")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -652,7 +652,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .startBlankForm("search_and_select")
                 .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre.csv is missing.")
                 .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre2.csv is missing.")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit()
 
                 .startBlankForm("cascading select test")
@@ -661,16 +661,17 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
                 .swipeToNextQuestion()
                 .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
-                .swipeToNextQuestion(4)
+                .swipeToNextQuestion(3)
+                .swipeToEndScreen()
                 .clickSaveAndExit()
 
                 .startBlankForm("fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnElementInHierarchy(14)
-                .clickOnText("Source15")
+                .clickOnQuestion("Source15")
                 .assertText("File: /storage/emulated/0/odk/forms/fieldlist-updates_nocsv-media/fruits.csv is missing.")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExit();
     }
 
@@ -772,7 +773,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
                 .clickOnDoNotAdd(new FormEntryPage("Repeat Group", rule))
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .checkIsFormEndScreenVisible()
                 .clickGoToArrow()
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }

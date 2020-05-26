@@ -51,7 +51,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -59,8 +58,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
@@ -96,42 +93,43 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;    // smap
+import org.odk.collect.android.formentry.FormEntryMenuDelegate;
+import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormIndexAnimationHandler;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialog;
-import org.odk.collect.android.formentry.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
-import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
+import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.SmapRemoteListener;    // smap
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.location.client.GoogleLocationClient;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.taskModel.FormRestartDetails;    // smap
@@ -153,6 +151,7 @@ import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -186,10 +185,15 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
 //import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;  // smap commented
 //import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;    // smap commented
+import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
+import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
+import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.DialogUtils.getDialog;
+import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.ToastUtils.showLongToast;
@@ -211,7 +215,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         SmapRemoteListener,    // smap add SmapRemoteListener
-        AudioControllerView.SwipableParent {
+        AudioControllerView.SwipableParent,
+        FormIndexAnimationHandler.Listener {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -307,6 +312,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     MediaLoadingFragment mediaLoadingFragment;
+    private FormEntryMenuDelegate menuDelegate;
+    private FormIndexAnimationHandler formIndexAnimationHandler;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -327,6 +334,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     //@Inject    // smap commented
     //Analytics analytics;    // smap commented
 
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     /**
@@ -339,6 +349,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private BackgroundLocationViewModel backgroundLocationViewModel;
     private IdentityPromptViewModel identityPromptViewModel;
     private FormSaveViewModel formSaveViewModel;
+    private FormEntryViewModel formEntryViewModel;
 
     /**
      * Called when the activity is first created.
@@ -349,11 +360,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         Collect.getInstance().setFormEntryActivity(this);   // smap
         Collect.getInstance().initRemoteServiceCaches();   // smap
-        setupViewModels();
-
-        setContentView(R.layout.form_entry);
-
         Collect.getInstance().getComponent().inject(this);
+        setupViewModels();
+        setContentView(R.layout.form_entry);
 
         compositeDisposable
                 .add(eventBus
@@ -373,6 +382,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         initToolbar();
 
+        formIndexAnimationHandler = new FormIndexAnimationHandler(this);
+        menuDelegate = new FormEntryMenuDelegate(
+                this,
+                () -> getCurrentViewIfODKView().getAnswers(),
+                formIndexAnimationHandler
+        );
+
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
             beenSwiped = true;
@@ -385,7 +401,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             showPreviousView();
         });
 
-        questionFontSize = Collect.getQuestionFontsize();
+        questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
 
         if (savedInstanceState == null) {
             mediaLoadingFragment = new MediaLoadingFragment();
@@ -427,27 +443,46 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void setupViewModels() {
-        backgroundLocationViewModel = ViewModelProviders.of(this, new FormEntryViewModelFactory()).get(BackgroundLocationViewModel.class);
+        backgroundLocationViewModel = ViewModelProviders
+                .of(this, new BackgroundLocationViewModel.Factory())
+                .get(BackgroundLocationViewModel.class);
 
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
-                IdentifyUserPromptDialogFragment dialog = IdentifyUserPromptDialogFragment.create(getFormController().getFormTitle());
-                DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
+                showIfNotShowing(IdentifyUserPromptDialogFragment.class, getSupportFragmentManager());
             }
         });
+
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
                 finish();
             }
         });
 
-        FormSaveViewModel.Factory changesReasonViewModelFactory = new FormSaveViewModel.Factory();
+        formEntryViewModel = ViewModelProviders
+                .of(this, new FormEntryViewModel.Factory(analytics))
+                .get(FormEntryViewModel.class);
+
+        formEntryViewModel.getError().observe(this, error -> {
+            if (error != null) {
+                createErrorDialog(error, DO_NOT_EXIT);
+                formEntryViewModel.errorDisplayed();
+            }
+        });
+
         formSaveViewModel = ViewModelProviders
-                .of(this, changesReasonViewModelFactory)
+                .of(this, new FormSaveViewModel.Factory(analytics))
                 .get(FormSaveViewModel.class);
 
-        formSaveViewModel.getSavedResult().observe(this, this::handleSaveResult);
+        formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
+    }
+
+    private void formControllerAvailable(FormController formController) {
+        menuDelegate.formLoaded(formController);
+        identityPromptViewModel.formLoaded(formController);
+        formEntryViewModel.formLoaded(formController);
+        formSaveViewModel.formLoaded(formController);
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -508,13 +543,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (!newForm) {
                 if (getFormController() != null) {
                     FormController formController = getFormController();
-                    identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                    formSaveViewModel.setFormController(formController);
+                    formControllerAvailable(formController);
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
-                    DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
+                    showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath, mFormId);      // Smap add mForm Id
                 }
                 return;
@@ -522,7 +556,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
-            supportInvalidateOptionsMenu();
             Intent intent = getIntent();
             if (intent != null) {
                 loadFromIntent(intent);
@@ -686,7 +719,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
         mFormId = formInfo.getFormId();                                             // smap
 
-        DialogUtils.showIfNotShowing(FormLoadingDialogFragment.newInstance(), getSupportFragmentManager());
+        showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         //formLoaderTask.execute(formPath);		// smap replaced with background thread
         formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);      // smap add formId
     }
@@ -727,6 +760,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormController getFormController() {
         return Collect.getInstance().getFormController();
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -812,7 +846,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // request was canceled...
                 Timber.i("QR code scanning cancelled");
             } else {
-                String sb = intent.getStringExtra("SCAN_RESULT");
+                String sb = intent.getStringExtra(BARCODE_RESULT_KEY);
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(sb);
                 }
@@ -921,7 +955,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-                mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
+                mediaLoadingFragment.beginMediaLoadingTask(intent.getData(), connectivityProvider);
                 break;
             case RequestCodes.AUDIO_CAPTURE:
                 /*
@@ -973,15 +1007,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
             case RequestCodes.GEOSHAPE_CAPTURE:
+            case RequestCodes.GEOTRACE_CAPTURE:
                 String gshr = intent.getStringExtra(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
                     getCurrentViewIfODKView().setBinaryData(gshr);
-                }
-                break;
-            case RequestCodes.GEOTRACE_CAPTURE:
-                String traceExtra = intent.getStringExtra(ANSWER_KEY);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(traceExtra);
                 }
                 break;
             case RequestCodes.NFC_CAPTURE:       // smap
@@ -1029,81 +1058,52 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * out of sync due to dialogs and restarts caused by screen orientation
      * changes, so they're resynchronized here.
      */
+    @Override
     public void refreshCurrentView() {
         int event = getFormController().getEvent();
 
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
+
+        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.form_menu, menu);
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-
-        boolean useability;
-
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID);
-
-        menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
-
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_JUMP_TO);
-
-        menu.findItem(R.id.menu_goto).setVisible(useability)
-                .setEnabled(useability);
-
-        FormController formController = getFormController();
-
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_CHANGE_LANGUAGE)
-                && (formController != null)
-                && formController.getLanguages() != null
-                && formController.getLanguages().length > 1;
-
-        menu.findItem(R.id.menu_languages).setVisible(useability)
-                .setEnabled(useability);
-
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_ACCESS_SETTINGS);
-
-        menu.findItem(R.id.menu_preferences).setVisible(useability)
-                .setEnabled(useability);
+        menuDelegate.onPrepareOptionsMenu(menu);
 
         if (getFormController() != null && getFormController().currentFormCollectsBackgroundLocation()
                 && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-            MenuItem backgroundLocation = menu.findItem(R.id.track_location);
-            backgroundLocation.setVisible(true);
-            backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
-
-            // start smap
-            boolean disablePrevent = PreferenceManager        // smap
-                    .getDefaultSharedPreferences(this)
-                    .getBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, false);
-            if(disablePrevent) {
-                backgroundLocation.setEnabled(false);
-            }
-            // end smap
-
-            //analytics.logEvent(LAUNCH_FORM_WITH_BG_LOCATION, getFormController().getCurrentFormIdentifierHash());    // smap commented
+            //analytics.logEvent(LAUNCH_FORM_WITH_BG_LOCATION, getFormController().getCurrentFormIdentifierHash());
         }
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (menuDelegate.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        // These actions should move into the `FormEntryMenuDelegate`
         FormController formController = getFormController();
         switch (item.getItemId()) {
             case R.id.menu_languages:
                 createLanguageDialog();
                 return true;
+
             case R.id.menu_save:
                 // don't exit
                 saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
                 return true;
+
             case R.id.menu_goto:
                 state = null;
                 if (formController != null && formController.currentPromptIsQuestion()) {
@@ -1118,10 +1118,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
-            case R.id.menu_preferences:
-                Intent pref = new Intent(this, PreferencesActivity.class);
-                startActivity(pref);
-                return true;
             case R.id.menu_comment:              // smap
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
@@ -1132,12 +1128,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return true;
             case R.id.menu_clear_remote_cache:              // smap
                 Collect.getInstance().clearRemoteServiceCaches();
-            case R.id.track_location:
-                GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
-
-                backgroundLocationViewModel.backgroundLocationPreferenceToggled();
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -1148,7 +1141,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+    private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -1180,6 +1173,28 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
         return true;
+    }
+
+    // The method saves questions one by one in order to support calculations in field-list groups
+    private void saveAnswersForCurrentScreen(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
+        FormController formController = getFormController();
+        ODKView currentView = getCurrentViewIfODKView();
+        if (formController == null || currentView == null) {
+            return;
+        }
+
+        int index = 0;
+        for (Map.Entry<FormIndex, IAnswerData> answer : currentView.getAnswers().entrySet()) {
+            // Questions with calculates will have their answers updated as the questions they depend on are saved
+            if (!isQuestionRecalculated(mutableQuestionsBeforeSave[index], immutableQuestionsBeforeSave.get(index))) {
+                try {
+                    formController.saveOneScreenAnswer(answer.getKey(), answer.getValue(), false);
+                } catch (JavaRosaException e) {
+                    Timber.w(e);
+                }
+            }
+            index++;
+        }
     }
 
     /**
@@ -1308,7 +1323,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 return odkView;
 
-            case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+            case EVENT_PROMPT_NEW_REPEAT:
                 createRepeatDialog();
                 return new EmptyView(this);
 
@@ -1523,27 +1538,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             FormController formController = getFormController();
             swipeDirection = "forward";         // smap
 
-            // get constraint behavior preference value with appropriate default
-            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                    .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-            if (formController != null && formController.currentPromptIsQuestion()) {
-                // if constraint behavior says we should validate on swipe, do so
-                if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                    if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-                        // A constraint was violated so a dialog should be showing.
-                        beenSwiped = false;
-                        return;
-                    }
-
-                    // otherwise, just save without validating (constraints will be validated on
-                    // finalize)
-                } else {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
+            if (saveBeforeNextView(formController)) {
+                return;
             }
-
-            View next;
 
             int originalEvent = formController.getEvent();
             int event = formController.stepToNextScreenEvent();
@@ -1555,34 +1552,64 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            formController.getAuditEventLogger().flush();    // Close events waiting for an end time
-
-            switch (event) {
-                case FormEntryController.EVENT_QUESTION:
-                case FormEntryController.EVENT_GROUP:
-                    // create a savepoint
-                    nonblockingCreateSavePointData();
-                    next = createView(event, true);
-                    showView(next, AnimationType.RIGHT);
-                    break;
-                case FormEntryController.EVENT_END_OF_FORM:
-                case FormEntryController.EVENT_REPEAT:
-                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                    next = createView(event, true);
-                    showView(next, AnimationType.RIGHT);
-                    break;
-                case FormEntryController.EVENT_REPEAT_JUNCTURE:
-                    Timber.i("Repeat juncture: %s", formController.getFormIndex().getReference());
-                    // skip repeat junctures until we implement them
-                    break;
-                default:
-                    Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
-                    break;
-            }
+            animateToNextView();
         } catch (JavaRosaException e) {
             Timber.d(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
+    }
+
+    @Override
+    public void animateToNextView() {
+        int event = getFormController().getEvent();
+
+        switch (event) {
+            case FormEntryController.EVENT_QUESTION:
+            case FormEntryController.EVENT_GROUP:
+                // create a savepoint
+                nonblockingCreateSavePointData();
+                showView(createView(event, true), AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_END_OF_FORM:
+            case FormEntryController.EVENT_REPEAT:
+            case EVENT_PROMPT_NEW_REPEAT:
+                showView(createView(event, true), AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_REPEAT_JUNCTURE:
+                Timber.i("Repeat juncture: %s", getFormController().getFormIndex().getReference());
+                // skip repeat junctures until we implement them
+                break;
+            default:
+                Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+                break;
+        }
+
+        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
+    }
+
+    private boolean saveBeforeNextView(FormController formController) {
+        if (formController.currentPromptIsQuestion()) {
+            // get constraint behavior preference value with appropriate default
+            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                    .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+
+            // if constraint behavior says we should validate on swipe, do so
+            if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+                    // A constraint was violated so a dialog should be showing.
+                    beenSwiped = false;
+                    return true;
+                }
+
+                // otherwise, just save without validating (constraints will be validated on
+                // finalize)
+            } else {
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
+        }
+
+        formController.getAuditEventLogger().flush();    // Close events waiting for an end time
+        return false;
     }
 
     /**
@@ -1593,15 +1620,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void showPreviousView() {
         if (allowMovingBackwards) {
             state = null;
-            try {
-                FormController formController = getFormController();
-                swipeDirection = "back";            // smap
-                if (formController != null) {
-                    // The answer is saved on a back swipe, but question constraints are ignored.
-                    if (formController.currentPromptIsQuestion()) {
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    }
+            FormController formController = getFormController();
+            swipeDirection = "back";            // smap
+            if (formController != null) {
+                // The answer is saved on a back swipe, but question constraints are ignored.
+                if (formController.currentPromptIsQuestion()) {
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                }
 
+                try {
                     if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
                         int event = formController.stepToPreviousScreenEvent();
 
@@ -1610,7 +1637,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             event = formController.stepToNextScreenEvent();
                             beenSwiped = false;
 
-                            if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                            if (event != EVENT_PROMPT_NEW_REPEAT) {
                                 // Returning here prevents the same view sliding when user is on the first screen
                                 return;
                             }
@@ -1621,22 +1648,30 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             // create savepoint
                             nonblockingCreateSavePointData();
                         }
+
                         formController.getAuditEventLogger().flush();    // Close events
-                        View next = createView(event, false);
-                        showView(next, AnimationType.LEFT);
-                    } else {
-                        beenSwiped = false;
+                        animateToPreviousView();
                     }
-                } else {
-                    Timber.w("FormController has a null value");
+                } catch (JavaRosaException e) {
+                    Timber.d(e);
+                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
-            } catch (JavaRosaException e) {
-                Timber.d(e);
-                createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+            } else {
+                Timber.w("FormController has a null value");
             }
+
         } else {
             beenSwiped = false;
         }
+    }
+
+    @Override
+    public void animateToPreviousView() {
+        int event = getFormController().getEvent();
+        View next = createView(event, false);
+        showView(next, AnimationType.LEFT);
+
+        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
     /**
@@ -1645,6 +1680,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * the progress bar.
      */
     public void showView(View next, AnimationType from) {
+        menuDelegate.invalidateOptionsMenu();
+
         // disable notifications...
         if (inAnimation != null) {
             inAnimation.setAnimationListener(null);
@@ -1722,7 +1759,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        // Collect.getInstance().logRemoteAnalytics("WidgetAttribute", "saveIncomplete", Collect.getCurrentFormIdentifierHash());  // smap comment out
+                        // analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
                         saveForm(false, false, null, false, true);        // smap add "save message" as true
                         autoSaved = true;
@@ -1784,39 +1821,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         beenSwiped = false;
         shownAlertDialogIsGroupRepeat = true;
 
-        AddRepeatDialog.show(this, getFormController(), new AddRepeatDialog.Listener() {
+        AddRepeatDialog.show(this, getFormController().getLastGroupText(), new AddRepeatDialog.Listener() {
             @Override
             public void onAddRepeatClicked() {
                 shownAlertDialogIsGroupRepeat = false;
-
-                FormController formController = getFormController();
-
-                try {
-                    formController.newRepeat();
-                } catch (Exception e) {
-                    FormEntryActivity.this.createErrorDialog(
-                            e.getMessage(), DO_NOT_EXIT);
-                    return;
-                }
-                if (!formController.indexIsInFieldList()) {
-                    // we are at a REPEAT event that does not have a
-                    // field-list appearance
-                    // step to the next visible field...
-                    // which could be the start of a new repeat group...
-                    showNextView();
-                } else {
-                    // we are at a REPEAT event that has a field-list
-                    // appearance
-                    // just display this REPEAT event's group.
-                    refreshCurrentView();
-                }
+                formEntryViewModel.addRepeat(true);
+                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
             }
 
             @Override
             public void onCancelClicked() {
                 shownAlertDialogIsGroupRepeat = false;
 
-                //
                 // Make sure the error dialog will not disappear.
                 //
                 // When showNextView() popups an error dialog (because of a
@@ -1828,7 +1844,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // clicked,
                 // so instead of closing the first dialog, it closes the second.
                 new Thread() {
-
                     @Override
                     public void run() {
                         FormEntryActivity.this.runOnUiThread(() -> {
@@ -1838,7 +1853,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 //This is rare
                                 Timber.e(e);
                             }
-                            showNextView();
+
+                            formEntryViewModel.cancelRepeatPrompt();
+                            formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
                         });
                     }
                 }.start();
@@ -1928,28 +1945,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (result == null) {
             return;
         }
-        mTaskId = result.getTaskId();                // smap
         switch (result.getState()) {
             case CHANGE_REASON_REQUIRED:
-                String surveyNotes = getFormController().getSurveyNotes();   // Smap
-                ChangesReasonPromptDialogFragment dialog = ChangesReasonPromptDialogFragment
-                        .create(getFormController().getFormTitle(),
-                                mTaskId, formPath, surveyNotes, mCanUpdate, false);    // smap
-                DialogUtils.showIfNotShowing(dialog, getSupportFragmentManager());
+                showIfNotShowing(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
                 break;
 
             case SAVING:
                 autoSaved = true;
-
-                SaveFormProgressDialogFragment progressDialog = DialogUtils.showIfNotShowing(
-                        new SaveFormProgressDialogFragment(),
-                        getSupportFragmentManager()
-                );
-
-                if (result.getMessage() != null) {
-                    progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
-                }
-
+                showIfNotShowing(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 break;
 
             case SAVED:
@@ -2195,8 +2198,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void adjustFontSize() {
-        if (questionFontSize != Collect.getQuestionFontsize()) {
-            questionFontSize = Collect.getQuestionFontsize();
+        if (questionFontSize != QuestionFontSizeUtils.getQuestionFontSize()) {
+            questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
             refreshCurrentView();
         }
     }
@@ -2467,7 +2470,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.destroy();
 
                 Collect.getInstance().setFormController(formController);
-                supportInvalidateOptionsMenu();
                 backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
@@ -2512,8 +2514,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (formController.getInstanceFile() == null) {
                     createInstanceDirectory(formController);
-                    identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                    formSaveViewModel.setFormController(formController);
+                    formControllerAvailable(formController);
 
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
@@ -2529,8 +2530,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         // we've just loaded a saved form, so start in the hierarchy view
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                            identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                            formSaveViewModel.setFormController(formController);
+                            formControllerAvailable(formController);
 
                             identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                                 if (!requiresIdentity) {
@@ -2562,8 +2562,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        identityPromptViewModel.setAuditEventLogger(formController.getAuditEventLogger());
-                        formSaveViewModel.setFormController(formController);
+                        formControllerAvailable(formController);
 
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
@@ -2649,10 +2648,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public void onProgressStep(String stepMessage) {
-        DialogUtils.showIfNotShowing(
-                new FormLoadingDialogFragment(),
-                getSupportFragmentManager()
-        ).setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+        showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
+
+        FormLoadingDialogFragment dialog = getDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
+        if (dialog != null) {
+            dialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+        }
     }
 
     public void next() {
@@ -2943,7 +2944,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Displays UI representing the given background location message, if there is one.
      */
-    private void displayUIFor(@Nullable BackgroundLocationManager.BackgroundLocationMessage backgroundLocationMessage) {
+    private void displayUIFor(@Nullable BackgroundLocationManager.BackgroundLocationMessage
+                                      backgroundLocationMessage) {
         if (backgroundLocationMessage == null) {
             return;
         }
@@ -3016,10 +3018,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
         }
 
-        // Re-evaluate the form with the newly-changed value and store questions in a map by FormIndex
-        // to later quickly match questions that are still relevant with the corresponding question
-        // before saving.
-        saveAnswersForCurrentScreen(false);
+        saveAnswersForCurrentScreen(questionsBeforeSave, immutableQuestionsBeforeSave);
+
         FormEntryPrompt[] questionsAfterSave = Collect.getInstance().getFormController().getQuestionPrompts();
 
         Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
@@ -3070,21 +3070,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    /**
-     * Build {@link BackgroundLocationViewModel} and its dependencies.
-     */
-    private class FormEntryViewModelFactory implements ViewModelProvider.Factory {
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if (modelClass.equals(BackgroundLocationViewModel.class)) {
-                GoogleLocationClient googleLocationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
-
-                BackgroundLocationManager locationManager =
-                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());
-                return (T) new BackgroundLocationViewModel(locationManager);
-            }
-            return null;
-        }
+    // If an answer has changed after saving one of previous answers that means it has been recalculated automatically
+    private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
+        return !(mutableQuestionBeforeSave.getAnswerText() == null && immutableQuestionBeforeSave.getAnswerText() == null
+                || mutableQuestionBeforeSave.getAnswerText().equals(immutableQuestionBeforeSave.getAnswerText()));
     }
 }
 

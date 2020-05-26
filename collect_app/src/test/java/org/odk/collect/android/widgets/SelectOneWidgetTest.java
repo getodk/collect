@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Application;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -26,6 +27,7 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -36,6 +38,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -47,7 +50,7 @@ import static org.odk.collect.android.support.RobolectricHelpers.populateRecycle
  * @author James Knight
  */
 
-public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSelectOneWidget> {
+public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWidget> {
 
     @NonNull
     @Override
@@ -84,7 +87,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
                 ))
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
         verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", REFERENCES.get(0).second)));
         verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", REFERENCES.get(1).second)));
     }
@@ -103,8 +106,54 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
                 ))
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
         verify(analytics).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
+    }
+
+    @Test
+    public void whenAChoiceValueIsNull_selecting_doesNotSetAnswer() {
+        SelectChoice selectChoice = new SelectChoice(); // The two arg constructor protects against null values
+        selectChoice.setTextID("1");
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(asList(selectChoice))
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
+
+        clickChoice(widget, 0);
+        assertThat(widget.getAnswer(), nullValue());
+    }
+
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        // No appearance
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .withReadOnly(true)
+                .build();
+
+        populateRecyclerView(getWidget());
+
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
+
+        resetWidget();
+
+        // No-buttons appearance
+        formEntryPrompt = new MockFormEntryPromptBuilder(formEntryPrompt)
+                .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
+                .build();
+
+        populateRecyclerView(getWidget());
+
+        FrameLayout view = (FrameLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
+        assertThat(view.isEnabled(), is(Boolean.FALSE));
     }
 
     private void overrideDependencyModule() throws Exception {
@@ -122,40 +171,18 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSele
             }
 
             @Override
-            public Analytics providesAnalytics(Application application) {
+            public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
                 return analytics;
             }
         });
     }
 
-    @Test
-    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
-        // No appearance
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withIndex("i am index")
-                .withSelectChoices(asList(
-                        new SelectChoice("1", "1"),
-                        new SelectChoice("2", "2")
-                ))
-                .withReadOnly(true)
-                .build();
+    private static void clickChoice(SelectOneWidget widget, int index) {
+        ((AudioVideoImageTextLabel) getChoiceView(widget, index).getChildAt(0)).getLabelTextView().performClick();
+    }
 
-        populateRecyclerView(getActualWidget());
-
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
-        assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
-
-        resetWidget();
-
-        // No-buttons appearance
-        formEntryPrompt = new MockFormEntryPromptBuilder(formEntryPrompt)
-                .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
-                .build();
-
-        populateRecyclerView(getActualWidget());
-
-        FrameLayout view = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
-        assertThat(view.isEnabled(), is(Boolean.FALSE));
+    private static ViewGroup getChoiceView(SelectOneWidget widget, int index) {
+        return (ViewGroup) widget.getChoicesList().getChildAt(index);
     }
 
     private static final List<Pair<String, String>> REFERENCES = asList(

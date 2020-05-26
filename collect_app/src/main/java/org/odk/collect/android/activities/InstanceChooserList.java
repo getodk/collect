@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -41,6 +40,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 
 import timber.log.Timber;
@@ -124,7 +124,7 @@ public class InstanceChooserList extends InstanceListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (Collect.allowClick(getClass().getName())) {
+        if (MultiClickGuard.allowClick(getClass().getName())) {
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
                 Uri instanceUri =
@@ -254,7 +254,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         alertDialog.show();
     }
 }

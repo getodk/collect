@@ -25,6 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.FormManagerList;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class FileManagerTabs extends CollectAbstractActivity {
 
         // Give the SlidingTabLayout the ViewPager
         SlidingTabLayout slidingTabLayout = findViewById(R.id.tabs);
+        slidingTabLayout.setCustomTabColorizer(position -> new ThemeUtils(this).getColorSecondary());
         // Attach the view pager to the tab strip
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setFontColor(android.R.color.white);

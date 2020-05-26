@@ -41,14 +41,14 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
 
     @Test
     public void digitsAboveLimitOfNineShouldBeTruncatedFromRight() {
-        getActualWidget().answerText.setText("123456789123");
-        assertEquals("123456789", getActualWidget().getAnswerText());
+        getWidget().answerText.setText("123456789123");
+        assertEquals("123456789", getWidget().getAnswerText());
     }
 
     @Test
     public void separatorsShouldBeAddedWhenEnabled() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
-        getActualWidget().answerText.setText("123456789");
-        assertEquals("123,456,789", getActualWidget().answerText.getText().toString());
+        getWidget().answerText.setText("123456789");
+        assertEquals("123,456,789", getWidget().answerText.getText().toString());
     }
 }

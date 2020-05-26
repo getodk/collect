@@ -45,7 +45,7 @@ public abstract class GeneralSelectMultiWidgetTest<W extends MultiChoiceWidget>
 
     @Test
     public void getAnswerShouldReflectWhichSelectionsWereMade() {
-        W widget = getWidget();
+        W widget = getSpyWidget();
         assertNull(widget.getAnswer());
 
         List<SelectChoice> selectChoices = getSelectChoices();

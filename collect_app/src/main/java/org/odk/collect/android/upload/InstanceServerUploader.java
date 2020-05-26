@@ -210,9 +210,11 @@ public class InstanceServerUploader extends InstanceUploader {
                 } else {
                     if (messageParser.isValid()) {
                         exception = new UploadException(FAIL + messageParser.getMessageResponse());
+                    } else if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                        Timber.w(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                        exception = new UploadException("Failed to upload. Please make sure the form is configured to accept submissions on the server");
                     } else {
-                        exception = new UploadException(FAIL + postResult.getReasonPhrase()
-                                + " (" + responseCode + ") at " + urlString);
+                        exception = new UploadException(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                     }
 
                 }
@@ -267,7 +269,7 @@ public class InstanceServerUploader extends InstanceUploader {
      *
      * If the upload was triggered by an external app and specified an override URL, use that one.
      * Otherwise, use the submission URL configured in the form
-     * (https://opendatakit.github.io/xforms-spec/#submission-attributes). Finally, default to the
+     * (https://getodk.github.io/xforms-spec/#submission-attributes). Finally, default to the
      * URL configured at the app level.
      */
     @Override

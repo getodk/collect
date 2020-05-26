@@ -2,12 +2,18 @@ package org.odk.collect.android.analytics;
 
 import android.os.Bundle;
 
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+
 public class FirebaseAnalytics implements Analytics {
 
     //private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;  // smap
+    private final GeneralSharedPreferences generalSharedPreferences;
 
-    public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics) {
-        //this.firebaseAnalytics = firebaseAnalytics;   // smap
+    public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, GeneralSharedPreferences generalSharedPreferences) {
+        // this.firebaseAnalytics = firebaseAnalytics;  // smap commented
+        // this.generalSharedPreferences = generalSharedPreferences;  // smap commented
+        // setupRemoteAnalytics();  // smap commented
     }
 
     @Override
@@ -23,5 +29,14 @@ public class FirebaseAnalytics implements Analytics {
         //bundle.putString("action", action);
         //bundle.putString("label", label);
         //firebaseAnalytics.logEvent(category, bundle);
+    }
+
+    private void setupRemoteAnalytics() {
+        boolean isAnalyticsEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
+        setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+    }
+
+    public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
+        firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
     }
 }

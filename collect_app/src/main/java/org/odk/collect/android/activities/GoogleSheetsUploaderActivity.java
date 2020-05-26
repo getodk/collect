@@ -20,14 +20,11 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,10 +34,12 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
@@ -73,6 +72,12 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     GoogleAccountsManager accountsManager;
+
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
+    @Inject
+    Analytics analytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +125,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void runTask() {
-        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
+        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager, analytics);
 
         // ensure we have a google account selected
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -143,7 +148,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private void getResultsFromApi() {
         if (!accountsManager.isAccountSelected()) {
             selectAccount();
-        } else if (!isDeviceOnline()) {
+        } else if (!connectivityProvider.isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();
@@ -198,18 +203,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 getResultsFromApi();
             }
         }
-    }
-
-    /**
-     * Checks whether the device currently has a network connection.
-     *
-     * @return true if the device has a network connection, false otherwise.
-     */
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 
     @Override
@@ -308,7 +301,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), quitListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
         alertShowing = true;
         alertMsg = message;
         alertDialog.show();

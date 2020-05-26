@@ -23,6 +23,7 @@ import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
@@ -78,10 +79,10 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
                 return context -> audioHelper;
             }
 
-            //@Override
-            //public Analytics providesAnalytics(Application application) {
-                //return analytics;
-            //}
+            @Override
+            public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
+                return analytics;
+            }
         });
     }
 
@@ -100,7 +101,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
                 ))
                 .build();
 
-        GridMultiWidget widget = getActualWidget();
+        GridMultiWidget widget = getWidget();
 
         widget.onItemClick(0);
         verify(audioHelper).play(new Clip("i am index 0", REFERENCES.get(0).second));
@@ -124,7 +125,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
                 ))
                 .build();
 
-        getActualWidget();
+        getWidget();
 
         verify(analytics).logEvent("Prompt", "AudioChoiceGrid", "formAnalyticsID");
     }
@@ -143,7 +144,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
                 ))
                 .build();
 
-        GridMultiWidget widget = getActualWidget();
+        GridMultiWidget widget = getWidget();
         widget.onItemClick(0);
 
         verify(audioHelper, never()).play(any());
@@ -151,7 +152,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
 
     @Test
     public void getAnswerShouldReflectWhichSelectionsWereMade() {
-        GridMultiWidget widget = getWidget();
+        GridMultiWidget widget = getSpyWidget();
         assertNull(widget.getAnswer());
 
         List<SelectChoice> selectChoices = getSelectChoices();
@@ -207,7 +208,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        for (View view : getWidget().itemViews) {
+        for (View view : getSpyWidget().itemViews) {
             assertThat(view.getVisibility(), is(View.VISIBLE));
             assertThat(view.isEnabled(), is(Boolean.FALSE));
         }

@@ -41,7 +41,7 @@ public abstract class GeneralSelectOneWidgetTest<W extends MultiChoiceWidget>
 
     @Test
     public void getAnswerShouldReflectTheCurrentlySelectedChoice() {
-        W widget = getWidget();
+        W widget = getSpyWidget();
         assertNull(widget.getAnswer());
 
         List<SelectChoice> selectChoices = getSelectChoices();

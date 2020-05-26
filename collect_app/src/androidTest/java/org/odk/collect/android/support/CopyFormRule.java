@@ -3,7 +3,6 @@ package org.odk.collect.android.support;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import org.odk.collect.android.test.FormLoadingUtils;
 
 import java.util.List;
 

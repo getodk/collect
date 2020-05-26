@@ -11,6 +11,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_item_scan_sd_card"
+        android:title="@string/import_qrcode_sd"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/menu_item_share"
         android:title="@string/share"
         android:icon="@drawable/ic_menu_share"

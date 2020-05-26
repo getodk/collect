@@ -42,9 +42,9 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
                 .withReadOnly(true)
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
 
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0)).getChildAt(0);
         assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
 
         resetWidget();
@@ -54,9 +54,9 @@ public class SelectOneAutocompleteWidgetTest extends GeneralSelectOneWidgetTest<
                 .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
                 .build();
 
-        populateRecyclerView(getActualWidget());
+        populateRecyclerView(getWidget());
 
-        FrameLayout view = (FrameLayout) ((RecyclerView) getWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0);
+        FrameLayout view = (FrameLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(1)).getLayoutManager().getChildAt(0);
         assertThat(view.isEnabled(), is(Boolean.FALSE));
     }
 }

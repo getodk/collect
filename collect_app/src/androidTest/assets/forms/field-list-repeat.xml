@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Field-List Repeat</h:title>
+        <model>
+            <instance>
+                <data id="field_list_repeat">
+                    <person>
+                        <age/>
+                        <name/>
+                    </person>
+                </data>
+            </instance>
+            <bind nodeset="/data/person/age" type="int"/>
+            <bind nodeset="/data/person/name" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/person">
+            <label>Person</label>
+            <repeat nodeset="/data/person" appearance="field-list">
+                <input ref="/data/person/age">
+                    <label>What is their age?</label>
+                </input>
+                <input ref="/data/person/name">
+                    <label>What is their name?</label>
+                </input>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>

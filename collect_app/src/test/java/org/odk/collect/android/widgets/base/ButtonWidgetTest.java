@@ -29,11 +29,11 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
 
     protected void stubAllRuntimePermissionsGranted(boolean isGranted) {
         permissionUtils.setPermissionGranted(isGranted);
-        ((QuestionWidget) getActualWidget()).setPermissionUtils(permissionUtils);
+        ((QuestionWidget) getWidget()).setPermissionUtils(permissionUtils);
     }
 
     protected Intent getIntentLaunchedByClick(int buttonId) {
-        ((QuestionWidget) getWidget()).findViewById(buttonId).performClick();
+        ((QuestionWidget) getSpyWidget()).findViewById(buttonId).performClick();
         return shadowOf(activity).getNextStartedActivity();
     }
 

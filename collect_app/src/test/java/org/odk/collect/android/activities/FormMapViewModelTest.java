@@ -173,6 +173,8 @@ public class FormMapViewModelTest {
 
     static Instance[] testInstances = {
             new Instance.Builder().databaseId(0L)
+                    .displayName("Form1")
+                    .lastStatusChangeDate(1487782554846L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
                     .deletedDate(1487782554846L)
@@ -181,6 +183,8 @@ public class FormMapViewModelTest {
                     .status(InstanceProviderAPI.STATUS_SUBMITTED).build(),
 
             new Instance.Builder().databaseId(1L)
+                    .displayName("Form2")
+                    .lastStatusChangeDate(1488782558743L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
                     .geometryType("Point")
@@ -189,6 +193,8 @@ public class FormMapViewModelTest {
                     .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
 
             new Instance.Builder().databaseId(2L)
+                    .displayName("Form3")
+                    .lastStatusChangeDate(1484582553254L)
                     .jrFormId("formId1")
                     .jrVersion("2019103102")
                     .geometryType("Point")
@@ -196,11 +202,15 @@ public class FormMapViewModelTest {
                     .status(InstanceProviderAPI.STATUS_INCOMPLETE).build(),
 
             new Instance.Builder().databaseId(3L)
+                    .displayName("Form4")
+                    .lastStatusChangeDate(1488582557456L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
                     .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
 
             new Instance.Builder().databaseId(4L)
+                    .displayName("Form5")
+                    .lastStatusChangeDate(1483582557438L)
                     .jrFormId("formId1")
                     .jrVersion("2019103106")
                     .geometryType("Point")
@@ -209,6 +219,8 @@ public class FormMapViewModelTest {
                     .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build(),
 
             new Instance.Builder().databaseId(5L)
+                    .displayName("Form6")
+                    .lastStatusChangeDate(1482282559618L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
                     .geometryType("Point")
@@ -217,6 +229,8 @@ public class FormMapViewModelTest {
                     .status(InstanceProviderAPI.STATUS_SUBMITTED).build(),
 
             new Instance.Builder().databaseId(6L)
+                    .displayName("Form7")
+                    .lastStatusChangeDate(1484782559836L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
                     .geometryType("Point")
@@ -225,6 +239,8 @@ public class FormMapViewModelTest {
                     .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build(),
 
             new Instance.Builder().databaseId(7L)
+                    .displayName("Form8")
+                    .lastStatusChangeDate(1487982552254L)
                     .jrFormId("formId2")
                     .jrVersion("2019103101")
                     .geometryType("Point")
@@ -232,6 +248,8 @@ public class FormMapViewModelTest {
                     .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
 
             new Instance.Builder().databaseId(8L)
+                    .displayName("Form9")
+                    .lastStatusChangeDate(1484682557369L)
                     .jrFormId("formId2")
                     .jrVersion("2019103101")
                     .geometryType("Crazy stuff")

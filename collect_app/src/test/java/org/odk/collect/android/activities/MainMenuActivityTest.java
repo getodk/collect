@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
@@ -42,13 +43,13 @@ public class MainMenuActivityTest {
     }
 
     @Test
-    public void pressingConfigureQRCode_launchesScanQRCodeActivity() {
+    public void pressingConfigureQRCode_launchesQRCodeTabsActivity() {
         ActivityScenario<MainMenuActivity> firstActivity = ActivityScenario.launch(MainMenuActivity.class);
         firstActivity.onActivity(activity -> {
             MenuItem item = new RoboMenuItem(R.id.menu_configure_qr_code);
             activity.onOptionsItemSelected(item);
 
-            Intent expectedIntent = new Intent(activity, ScanQRCodeActivity.class);
+            Intent expectedIntent = new Intent(activity, QRCodeTabsActivity.class);
             Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
             assertThat(expectedIntent.getComponent(), equalTo(actual.getComponent()));
         });

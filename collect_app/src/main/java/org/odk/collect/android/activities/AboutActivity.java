@@ -36,6 +36,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
@@ -47,8 +48,8 @@ public class AboutActivity extends CollectAbstractActivity implements
 
     private static final String LICENSES_HTML_PATH = "file:///android_asset/open_source_licenses.html";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
-    private static final String ODK_WEBSITE = "https://opendatakit.org";
-    private static final String ODK_FORUM = "https://forum.opendatakit.org";
+    private static final String ODK_WEBSITE = "https://getodk.org";
+    private static final String ODK_FORUM = "https://forum.getodk.org";
 
     private CustomTabHelper websiteTabHelper;
     private CustomTabHelper forumTabHelper;
@@ -101,7 +102,7 @@ public class AboutActivity extends CollectAbstractActivity implements
 
     @Override
     public void onClick(int position) {
-        if (Collect.allowClick(getClass().getName())) {
+        if (MultiClickGuard.allowClick(getClass().getName())) {
             switch (position) {
                 case 0:
                     websiteTabHelper.openUri(this, websiteUri);

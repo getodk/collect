@@ -7,14 +7,6 @@
         android:key="odk_preferences"
         android:summary="@string/admin_access_settings"
         android:title="@string/general_preferences">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="org.odk.collect.android.preferences.PreferencesActivity"
-            android:targetPackage="org.smap.smapTask.android">
-            <extra
-                android:name="adminMode"
-                android:value="true" />
-        </intent>
     </Preference>
 
     <Preference

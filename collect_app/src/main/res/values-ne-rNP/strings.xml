@@ -340,16 +340,9 @@
   <string name="select_time">समय छान्नुहोस्</string>
   <string name="no_date_selected">मिति छानिएको छैन</string>
   <string name="no_time_selected">समय छानिएको छैन</string>
-  <string name="scan_qrcode">अन्य यन्त्रबाट स्क्यान गर्नुहोस्</string>
   <string name="share">शेयर</string>
-  <string name="select_qrcode">SD कार्डबाट कोड छान्नुहोस्</string>
   <string name="turn_on_flashlight">flashlight अन गर्नुहोस्</string>
   <string name="turn_off_flashlight">flashlight बन्द गर्नुहोस् </string>
-  <string name="qrcode_with_both_passwords">यस QR कोडमा तपाईंको एडमिन र सर्भर पासवर्ड छ । कृपया ध्यान पुर्‍याउनु होला । \n ( पासवर्ड हटाउन ट्याप गर्नुहोस् )</string>
-  <string name="qrcode_without_passwords">यस QR कोडमा तपाईंको एडमिन र सर्भर पासवर्ड छैन । \n ( पासवर्ड लगाउनको लागि ट्याप गर्नुहोस् )</string>
-  <string name="qrcode_with_admin_password">यस QR कोडमा तपाईंको एडमिन पासवर्ड छ । कृपया ध्यान पुर्‍याउनु होला । \n ( पासवर्ड हटाउन ट्याप गर्नुहोस् )</string>
-  <string name="qrcode_with_server_password">यस QR कोडमा तपाईंको सर्भर पासवर्ड छ ।\n ( पासवर्ड हटाउन ट्याप गर्नुहोस् )</string>
-  <string name="qrcode_scanner_prompt">QR कोडलाई समकोण (चार पाटे बाक्सा) भित्र राख्नुहोस्</string>
   <string name="barcode_scanner_prompt">बार कोडलाई समकोण (चार पाटे बाक्सा) भित्र राख्नुहोस्</string>
   <string name="server_password">सर्भर पासवर्ड</string>
   <string name="include_password_dialog">पासवर्डहरु कोड मै छन्</string>

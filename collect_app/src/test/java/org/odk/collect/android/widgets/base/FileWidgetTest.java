@@ -39,7 +39,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
 
         super.settingANewAnswerShouldRemoveTheOldAnswer();
 
-        W widget = getWidget();
+        W widget = getSpyWidget();
         verify(widget).deleteFile();
     }
 
@@ -47,7 +47,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
     public void callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
         super.callingClearShouldRemoveTheExistingAnswer();
 
-        W widget = getWidget();
+        W widget = getSpyWidget();
         verify(widget).deleteFile();
     }
 

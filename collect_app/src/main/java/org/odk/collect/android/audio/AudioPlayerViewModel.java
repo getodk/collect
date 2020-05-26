@@ -171,7 +171,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
         return error;
     }
 
-    public void dismissError() {
+    public void errorDisplayed() {
         error.setValue(null);
     }
 

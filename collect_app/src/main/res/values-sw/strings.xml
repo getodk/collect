@@ -356,6 +356,7 @@
   <string name="discard">Sitisha</string>
   <string name="geoshape_view_change_location">Onesha au badilisha umbo la Kijografia</string>
   <string name="geotrace_view_change_location">Onesha au badili Mfuatilio wa Kijografia</string>
+  <string name="geometry_status">Fomu zilizohifadhiwa:%d%d zimeoneshwa kwenye ramani</string>
   <string name="bearing">Uelekeo: \"Bearing\"%.3f</string>
   <string name="direction">Uelekeo: \"Direction\"%s</string>
   <string name="select_odk_shortcut">Chagua njia fupi ya ODK </string>
@@ -372,6 +373,7 @@
   <string name="install_openmapkit">Tafadhali sakinisha OpenMapKit!</string>
   <string name="go_back">Rudi  nyuma</string>
   <string name="download_selected">Pakua zilizochaguliwa</string>
+  <string name="record_geopoint">Rekodi pointi</string>
   <string name="gps_result">Latitude: %1$s \nLongitude: %2$s \nUrefumwambao:%3$s m\nUsahihi: %4$s m</string>
   <string name="parser_exception">Isipokuwa ya XPathparser: \"%s\"</string>
   <string name="selected_answer">Iliyochaguliwa: %s</string>
@@ -452,18 +454,11 @@
   <string name="select_time">Chagua muda</string>
   <string name="no_date_selected">Hakuna tarehe iliyochaguliwa</string>
   <string name="no_time_selected">Hakuna muda uliochaguliwa</string>
-  <string name="scan_qrcode">Chuja msimbo kutoka kifaa kingine</string>
   <string name="successfully_imported_settings">Mipangilio imeingizwa kwa mafanikio</string>
   <string name="encoding_max_limit">Kiwango cha herufi kimefikia ukomo: Misimbo ya QR haziwezi kutengenezwa kwa mipangilio yote</string>
   <string name="share">Shirikisha</string>
-  <string name="select_qrcode">Chagua kanuni kutoka kadi ya SD</string>
   <string name="turn_on_flashlight">Washa mwanga</string>
   <string name="turn_off_flashlight">Zima mwanga</string>
-  <string name="qrcode_with_both_passwords">Kanuni za QR unajumuisha kiongozi na muhifadi kanuni. Tafadhali tunza kwa uangalifu. \n(Bofya kuondoa neno la siri/nywila) </string>
-  <string name="qrcode_without_passwords">Kanuni hizi za QR hazijajumuishi  kiongozi au mhifadhi misimbo. \n(Bofya kuongeza Nyilwa)</string>
-  <string name="qrcode_with_admin_password">Kanuni hizi  za QR zinajumuishi  neno la siri/nywila za  kiongozi. Tafadhali tumia kwa umakini/uangalifu. \n(Bofya kuondoa kanuni)</string>
-  <string name="qrcode_with_server_password">Kanuni hizi za QR zinajumuishi nywila/neno la siri la kiongozi. \n(Bofya kuondoa kanuni)</string>
-  <string name="qrcode_scanner_prompt">Panga kanuni za  QR ndani ya mstatili</string>
   <string name="barcode_scanner_prompt">Panga msimbo pau ndani ya mstatili</string>
   <string name="server_password">Nenosiri la seva</string>
   <string name="include_password_dialog">Nenosiri limejumuishwa ndani ya kanuni</string>
@@ -632,6 +627,10 @@
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
   <string name="sms_invalid_phone_number_description">Weka namba ya simu itakayotumiwa ujumbe au badilisha aina yako ya usafirishaji</string>
   <string name="read_details">Soma maelezo</string>
+  <string name="storage_migration_not_enough_space">Huna nafasi kwenye kifaa chako cha ndani kuhamisha data, Tafadhali ongeza nafasi kiasi na ujaribu tena.</string>
+  <string name="storage_migration_form_uploader_is_running">Fomu ya upakuaji inatumika. Tafadhali jaribu tena</string>
+  <string name="storage_migration_form_downloader_is_running">Fomu inatumika kwenye upakuaji. Tafadhali jaribu tena.</string>
+  <string name="storage_migration_failed">Hamisho la data limesitishwa, Tafadhali jaribu tena</string>
   <string name="storage_migration_dialog_title">Uhamiaji wa uhifadhi</string>
   <string name="storage_migration_progress_msg">Uhamiaji unaendelea. \ Hii inaweza kuchukua sekunde chache…</string>
   <string name="install_id">Ingiza Kitambulisho - itachukua nafasi ya Kitambulisho cha Kifaa mnamo Agosti 2020</string>

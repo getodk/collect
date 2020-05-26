@@ -14,14 +14,12 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +46,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
@@ -135,6 +134,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Inject
     PermissionUtils permissionUtils;
 
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,11 +181,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                    Context.CONNECTIVITY_SERVICE);
-            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-            if (ni == null || !ni.isConnected()) {
+            if (!connectivityProvider.isDeviceOnline()) {
                 ToastUtils.showShortToast(R.string.no_connection);
                 return;
             }

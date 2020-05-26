@@ -15,7 +15,7 @@
 package org.odk.collect.android.geo;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -52,6 +52,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -170,8 +171,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void applyConfig(Bundle config) {
         mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        String path = new StoragePathProvider().getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
-        referenceLayerFile = path != null ? new File(path) : null;
+        referenceLayerFile = GeoUtils.getReferenceLayerFile(config, new StoragePathProvider());
         if (map != null) {
             map.setMapType(mapType);
             loadReferenceOverlay();

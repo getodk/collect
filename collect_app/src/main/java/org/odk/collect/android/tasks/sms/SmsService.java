@@ -12,7 +12,6 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -48,7 +47,6 @@ import static android.app.Activity.RESULT_OK;
 import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_MESSAGE_ID;
@@ -331,10 +329,10 @@ public class SmsService {
 
             boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
             String formId = null;
-            String formVersion = null;
+            //String formVersion = null;
             while (cursor.moveToNext()) {
                 formId = cursor.getString(cursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                formVersion = cursor.getString(cursor.getColumnIndex(InstanceColumns.JR_VERSION));
+                //formVersion = cursor.getString(cursor.getColumnIndex(InstanceColumns.JR_VERSION));
                 if (InstanceServerUploader.formShouldBeAutoDeleted(formId, isFormAutoDeleteOptionEnabled)) {
 
                     List<String> instancesToDelete = new ArrayList<>();
@@ -346,7 +344,7 @@ public class SmsService {
                 }
             }
 
-            Collect.getInstance().logRemoteAnalytics(SUBMISSION, "SMS", Collect.getFormIdentifierHash(formId, formVersion));
+            //Collect.getInstance().logRemoteAnalytics(SUBMISSION, "SMS", Collect.getFormIdentifierHash(formId, formVersion));
         }
     }
 

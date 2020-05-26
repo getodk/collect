@@ -16,23 +16,38 @@
 
 package org.odk.collect.android.activities.viewmodels;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.utilities.FileUtils;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
-public class FormDownloadListViewModel extends ViewModel {
-    private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<>();
+import static org.odk.collect.android.analytics.AnalyticsEvents.FIRST_FORM_DOWNLOAD;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBSEQUENT_FORM_DOWNLOAD;
 
+public class FormDownloadListViewModel extends ViewModel {
+    private final Analytics analytics;
+
+    private HashMap<String, FormDetails> formDetailsByFormId = new HashMap<>();
+
+    /**
+     * List of forms from the formList response. The map acts like a DisplayableForm object with
+     * values for each component that shows up in the form list UI. See
+     * FormDownloadListActivity.formListDownloadingComplete for keys.
+     */
     private final ArrayList<HashMap<String, String>> formList = new ArrayList<>();
 
-    private final LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
+    private final LinkedHashSet<String> selectedFormIds = new LinkedHashSet<>();
 
     private String alertTitle;
     private String progressDialogMsg;
@@ -52,16 +67,20 @@ public class FormDownloadListViewModel extends ViewModel {
     private String password;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
 
-    public HashMap<String, FormDetails> getFormNamesAndURLs() {
-        return formNamesAndURLs;
+    FormDownloadListViewModel(Analytics analytics) {
+        this.analytics = analytics;
     }
 
-    public void setFormNamesAndURLs(HashMap<String, FormDetails> formNamesAndURLs) {
-        this.formNamesAndURLs = formNamesAndURLs;
+    public HashMap<String, FormDetails> getFormDetailsByFormId() {
+        return formDetailsByFormId;
     }
 
-    public void clearFormNamesAndURLs() {
-        formNamesAndURLs.clear();
+    public void setFormDetailsByFormId(HashMap<String, FormDetails> formDetailsByFormId) {
+        this.formDetailsByFormId = formDetailsByFormId;
+    }
+
+    public void clearFormDetailsByFormId() {
+        formDetailsByFormId.clear();
     }
 
     public String getAlertTitle() {
@@ -120,20 +139,20 @@ public class FormDownloadListViewModel extends ViewModel {
         formList.add(index, item);
     }
 
-    public LinkedHashSet<String> getSelectedForms() {
-        return selectedForms;
+    public LinkedHashSet<String> getSelectedFormIds() {
+        return selectedFormIds;
     }
 
-    public void addSelectedForm(String form) {
-        selectedForms.add(form);
+    public void addSelectedFormId(String selectedFormId) {
+        selectedFormIds.add(selectedFormId);
     }
 
-    public void removeSelectedForm(String form) {
-        selectedForms.remove(form);
+    public void removeSelectedFormId(String selectedFormId) {
+        selectedFormIds.remove(selectedFormId);
     }
 
-    public void clearSelectedForms() {
-        selectedForms.clear();
+    public void clearSelectedFormIds() {
+        selectedFormIds.clear();
     }
 
     public boolean isDownloadOnlyMode() {
@@ -206,5 +225,38 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setLoadingCanceled(boolean loadingCanceled) {
         this.loadingCanceled = loadingCanceled;
+    }
+
+    public void logDownloadAnalyticsEvent(int downloadedFormCount, String serverUrl) {
+        String analyticsEvent = getDownloadAnalyticsEvent(downloadedFormCount);
+        String analyticsDesc = getDownloadAnalyticsDescription(serverUrl);
+        analytics.logEvent(analyticsEvent, analyticsDesc);
+    }
+
+    private String getDownloadAnalyticsEvent(int downloadedFormCount) {
+        return downloadedFormCount == 0 ? FIRST_FORM_DOWNLOAD : SUBSEQUENT_FORM_DOWNLOAD;
+    }
+
+    private String getDownloadAnalyticsDescription(String serverUrl) {
+        // If a URL was set by intent, use that
+        serverUrl = getUrl() != null ? getUrl() : serverUrl;
+
+        String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(serverUrl.getBytes()));
+        return getSelectedFormIds().size() + "/" + getFormList().size() + "-" + serverHash;
+    }
+
+    public static class Factory implements ViewModelProvider.Factory {
+        private final Analytics analytics;
+
+        public Factory(Analytics analytics) {
+            this.analytics = analytics;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new FormDownloadListViewModel(analytics);
+        }
     }
 }

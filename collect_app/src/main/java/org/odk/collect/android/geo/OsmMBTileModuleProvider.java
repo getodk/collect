@@ -22,8 +22,6 @@ import android.graphics.drawable.Drawable;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.IRegisterReceiver;
-import org.osmdroid.tileprovider.MapTile;
-import org.osmdroid.tileprovider.MapTileRequestState;
 import org.osmdroid.tileprovider.modules.MapTileFileStorageProviderBase;
 import org.osmdroid.tileprovider.modules.MapTileModuleProviderBase;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
@@ -60,7 +58,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
     }
 
     @Override
-    protected Runnable getTileLoader() {
+    public MapTileModuleProviderBase.TileLoader getTileLoader() {
         return new TileLoader();
     }
 
@@ -93,18 +91,11 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
     private class TileLoader extends MapTileModuleProviderBase.TileLoader {
 
         @Override
-        public Drawable loadTile(final MapTileRequestState state) {
-
-            // if there's no sdcard then don't do anything
-            if (!isSdCardAvailable()) {
-                return null;
-            }
-
-            MapTile mapTile = state.getMapTile();
+        public Drawable loadTile(long mapTileIndex) {
             InputStream inputStream = null;
 
             try {
-                inputStream = tileSource.getInputStream(mapTile);
+                inputStream = tileSource.getInputStream(mapTileIndex);
 
                 if (inputStream != null) {
 

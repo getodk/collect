@@ -25,8 +25,8 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().launchIntentButton.getVisibility(), is(View.GONE));
-        assertThat(getWidget().answerText.getVisibility(), is(View.VISIBLE));
-        assertThat(getWidget().answerText.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().launchIntentButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().answerText.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().answerText.isEnabled(), is(Boolean.FALSE));
     }
 }

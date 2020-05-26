@@ -30,6 +30,7 @@ the specific language governing permissions and limitations under the License. -
     <string name="every_24_hours_value" translatable="false">every_24_hours</string>
     <string name="app_theme_light" translatable="false">light_theme</string>
     <string name="app_theme_dark" translatable="false">dark_theme</string>
+    <string name="app_theme_magenta" translatable="false">magenta_theme</string>
 
     <!-- For consistency, we don't translate these brand/organization names. -->
     <string name="basemap_source_google" translatable="false">Google</string>

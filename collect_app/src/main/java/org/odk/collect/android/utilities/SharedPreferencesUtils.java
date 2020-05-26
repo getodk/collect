@@ -42,7 +42,7 @@ public final class SharedPreferencesUtils {
 
     }
 
-    static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
+    public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
         Collection<String> keys = new ArrayList<>(passwordKeys);
         keys.addAll(DEFAULTS.keySet());
         JSONObject sharedPrefJson = getModifiedPrefs(keys);
@@ -55,13 +55,22 @@ public final class SharedPreferencesUtils {
         JSONObject adminPrefs = new JSONObject();
         JSONObject generalPrefs = new JSONObject();
 
-        //checking for admin password
+        // checking for admin password
         if (keys.contains(KEY_ADMIN_PW)) {
             String password = (String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW);
             if (!password.equals("")) {
                 adminPrefs.put(KEY_ADMIN_PW, password);
             }
             keys.remove(KEY_ADMIN_PW);
+        }
+
+        // checking for server password
+        if (keys.contains(KEY_PASSWORD)) {
+            String password = (String) GeneralSharedPreferences.getInstance().get(KEY_PASSWORD);
+            if (!password.equals("")) {
+                adminPrefs.put(KEY_PASSWORD, password);
+            }
+            keys.remove(KEY_PASSWORD);
         }
 
         for (String key : keys) {

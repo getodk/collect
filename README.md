@@ -46,5 +46,5 @@ Acknowledgements
 ----------------
 
 This project includes:
-* the odkCollect Library of (http://opendatakit.org/) from the University of Washington
+* the odkCollect Library of (http://opendatakit.org/)
 * the Android SDK from [MapBox] (https://www.mapbox.com/)

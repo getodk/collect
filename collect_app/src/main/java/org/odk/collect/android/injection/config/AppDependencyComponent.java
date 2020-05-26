@@ -4,8 +4,9 @@ import android.app.Application;
 import android.telephony.SmsManager;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
@@ -14,27 +15,35 @@ import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SmapMain;    // smap
+import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
-import org.odk.collect.android.fragments.ShowQRCodeFragment;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
+import org.odk.collect.android.preferences.qr.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.receivers.NetworkReceiver;               // smap
 import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
 import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;          // smap
+import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -120,7 +129,7 @@ public interface AppDependencyComponent {
 
     void inject(AuthDialogUtility authDialogUtility);
 
-    void inject(FormDownloadList formDownloadList);
+    void inject(FormDownloadListActivity formDownloadListActivity);
 
     void inject(SmapMain smapMain);                                             // smap
 
@@ -164,13 +173,31 @@ public interface AppDependencyComponent {
 
     void inject(MainMenuActivity mainMenuActivity);
 
+    void inject(QRCodeTabsActivity qrCodeTabsActivity);
+
     void inject(ShowQRCodeFragment showQRCodeFragment);
+
+    void inject(StorageInitializer storageInitializer);
 
     void inject(StorageMigrationService storageMigrationService);
 
     void inject(AutoSendWorker autoSendWorker);
 
     void inject(StorageMigrationDialog storageMigrationDialog);
+
+    void inject(AdminPasswordDialogFragment adminPasswordDialogFragment);
+
+    void inject(SplashScreenActivity splashScreenActivity);
+
+    void inject(FormHierarchyActivity formHierarchyActivity);
+
+    void inject(FormManagementPreferences formManagementPreferences);
+
+    void inject(IdentityPreferences identityPreferences);
+
+    void inject(UserInterfacePreferencesFragment userInterfacePreferencesFragment);
+
+    void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
 
     SmsManager smsManager();
 

@@ -44,7 +44,7 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
 
     @Test
     public void getAnswerShouldReflectActualValueSetViaSeekBar() {
-        W widget = getWidget();
+        W widget = getSpyWidget();
         assertNull(widget.getAnswer());
 
         int progress = Math.abs(random.nextInt()) % widget.getElementCount();
@@ -73,14 +73,14 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         // Picker appearance
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getWidget().pickerButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().pickerButton.getVisibility(), is(View.GONE));
 
         resetWidget();
 
         // No appearance
         when(rangeQuestion.getAppearanceAttr()).thenReturn(null);
 
-        assertThat(getWidget().seekBar.getVisibility(), is(View.VISIBLE));
-        assertThat(getWidget().seekBar.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().seekBar.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().seekBar.isEnabled(), is(Boolean.FALSE));
     }
 }
