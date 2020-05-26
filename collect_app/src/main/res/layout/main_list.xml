@@ -44,7 +44,7 @@ the License.
 		android:paddingRight="20dp"
 		android:gravity="center"
 		android:background="@android:color/white"
-		android:textColor="?primaryTextColor" />
+		android:textColor="?colorPrimary" />
    
   </LinearLayout>
   <ImageView

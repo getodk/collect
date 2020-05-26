@@ -7,13 +7,14 @@
         android:layout_height="wrap_content"
         android:elevation="4dp">
 
+        <!-- smap change navigation icon -->
         <com.google.android.material.appbar.MaterialToolbar
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
             style="@style/Widget.Collect.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/notes" />
+            app:navigationIcon="@mipmap/ic_launcher" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

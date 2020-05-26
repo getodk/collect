@@ -98,8 +98,6 @@ android {
             buildConfigField("String", "AMAZON_COGNITO_IDENTITY_POOL_ID", "\"" + secrets['AMAZON_COGNITO_IDENTITY_POOL_ID'] + "\"")   // smap
             buildConfigField("String", "AMAZON_DYNAMODB_REGION", "\"" + secrets['AMAZON_DYNAMODB_REGION'] + "\"")  // smap
 
-            resValue("bool", "CRASHLYTICS_ENABLED", "false")
-            resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             if (secrets.getProperty('RELEASE_STORE_FILE')) {
                 signingConfig signingConfigs.release
             }
@@ -268,14 +266,7 @@ dependencies {
     implementation "net.danlew:android.joda:2.10.3"
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
-    //debugImplementation "com.squareup.leakcanary:leakcanary-android:${rootProject.leakyCanaryVersion}"
-    // smap use noop version for debug as well
-    debugImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
-    // No-Op version of LeakCanary for release builds: no notifications, no analysis, nothing
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
-    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"
-    //odkCollectReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${rootProject.leakyCanaryVersion}"  smap
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     // Android Architecture Components:
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"

@@ -36,11 +36,11 @@
     </style>
 
     <style name="ListItemPrimaryTextStyle" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">?primaryTextColor</item>
+        <item name="android:textColor">?colorPrimary</item>
     </style>
 
     <style name="ListItemSecondaryTextStyle" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">?secondaryTextColor</item>
+        <item name="android:textColor">?colorSecondary</item>
     </style>
 
 
