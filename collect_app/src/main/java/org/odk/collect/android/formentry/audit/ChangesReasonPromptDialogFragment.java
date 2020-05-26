@@ -56,12 +56,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         });
 
         toolbar.setOnMenuItemClickListener(item -> {
-            if (viewModel.saveReason(
-                    getArguments().getLong(ARG_SMAP_TASK_ID),            // smap
-                    getArguments().getString(ARG_SMAP_FORM_PATH),        // smap
-                    getArguments().getString(ARG_SMAP_SURVEY_NOTES),     // smap
-                    getArguments().getBoolean(ARG_SMAP_CAN_UPDATE),      // smap
-                    getArguments().getBoolean(ARG_SMAP_SAVE_MESSAGE))) {  // smap
+            if (viewModel.saveReason()) {
                 dismiss();
             }
 

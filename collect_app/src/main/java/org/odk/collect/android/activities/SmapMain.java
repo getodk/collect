@@ -90,6 +90,7 @@ import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ManageForm;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -385,7 +386,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
 
     public void processHistory() {
-        if (Collect.allowClick(getClass().getName())) {
+        if (MultiClickGuard.allowClick(getClass().getName())) {
             Intent i = new Intent(getApplicationContext(), HistoryActivity.class);
             i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                     ApplicationConstants.FormModes.VIEW_SENT);

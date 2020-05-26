@@ -19,8 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fragments.dialogs.AdminPasswordDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;

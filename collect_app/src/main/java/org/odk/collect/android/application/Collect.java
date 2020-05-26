@@ -47,7 +47,6 @@ import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.loaders.GeofenceEntry;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -62,7 +61,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.utilities.UserAgentProvider;
 

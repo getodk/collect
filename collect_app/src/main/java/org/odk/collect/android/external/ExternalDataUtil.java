@@ -36,7 +36,6 @@ import org.odk.collect.android.exception.InvalidSyntaxException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerSearch;
 import org.odk.collect.android.logic.FormInfo;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;

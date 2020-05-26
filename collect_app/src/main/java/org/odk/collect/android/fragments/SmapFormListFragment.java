@@ -36,7 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.FormChooserListActivity;
-import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
@@ -53,6 +53,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -241,7 +242,7 @@ public class SmapFormListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long rowId) {
-        if (Collect.allowClick(getClass().getName())) {
+        if (MultiClickGuard.allowClick(getClass().getName())) {
             super.onListItemClick(l, v, position, rowId);
 
             TaskEntry entry = (TaskEntry) getListAdapter().getItem(position);
@@ -481,7 +482,7 @@ public class SmapFormListFragment extends ListFragment {
     }
 
     private void processEnterData() {
-        if (Collect.allowClick(getClass().getName())) {
+        if (MultiClickGuard.allowClick(getClass().getName())) {
             Intent i = new Intent(getContext(),
                     FormChooserListActivity.class);
             startActivity(i);
@@ -491,7 +492,7 @@ public class SmapFormListFragment extends ListFragment {
     // Get new forms
     private void processGetForms() {
 
-        Intent i = new Intent(getContext(), FormDownloadList.class);
+        Intent i = new Intent(getContext(), FormDownloadListActivity.class);
         startActivity(i);
     }
 

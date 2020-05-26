@@ -461,7 +461,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel = ViewModelProviders
-                .of(this, new FormEntryViewModel.Factory(analytics))
+                .of(this, new FormEntryViewModel.Factory(null))     // smap null out analytics
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getError().observe(this, error -> {
@@ -472,7 +472,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formSaveViewModel = ViewModelProviders
-                .of(this, new FormSaveViewModel.Factory(analytics))
+                .of(this, new FormSaveViewModel.Factory(null))      // smap null out analytics
                 .get(FormSaveViewModel.class);
 
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
