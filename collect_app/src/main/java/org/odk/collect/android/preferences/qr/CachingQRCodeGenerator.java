@@ -1,9 +1,6 @@
 package org.odk.collect.android.preferences.qr;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import androidx.core.util.Pair;
 
 import com.google.zxing.WriterException;
 
@@ -28,7 +25,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
 
     @Override
-    public Pair<Bitmap, String> getQRCode(Collection<String> selectedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
+    public String generateQRCode(Collection<String> selectedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
         String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(selectedPasswordKeys);
 
         MessageDigest md = MessageDigest.getInstance("MD5");
@@ -36,7 +33,6 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
         byte[] messageDigest = md.digest();
 
         boolean shouldWriteToDisk = true;
-        Bitmap bitmap = null;
 
         // check if settings directory exists, if not then create one
         File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
@@ -56,33 +52,25 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
              */
             if (Arrays.equals(messageDigest, cachedMessageDigest)) {
                 Timber.i("Loading QRCode from the disk...");
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                bitmap = FileUtils.getBitmap(getQRCodeFilepath(), options);
                 shouldWriteToDisk = false;
             }
         }
 
         // If the file is not found in the disk or md5Hash not matched
-        if (bitmap == null) {
+        if (shouldWriteToDisk) {
             Timber.i("Generating QRCode...");
             final long time = System.currentTimeMillis();
             Bitmap bmp = QRCodeUtils.encode(preferencesString);
             Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
-            bitmap = bmp;
-            shouldWriteToDisk = true;
-        }
 
-        // Save the QRCode to disk
-        if (shouldWriteToDisk) {
             Timber.i("Saving QR Code to disk... : " + getQRCodeFilepath());
-            FileUtils.saveBitmapToFile(bitmap, getQRCodeFilepath());
+            FileUtils.saveBitmapToFile(bmp, getQRCodeFilepath());
 
             FileUtils.write(mdCacheFile, messageDigest);
             Timber.i("Updated %s file contents", SETTINGS_MD5_FILE);
         }
 
-        return new Pair<>(bitmap, getQRCodeFilepath());
+        return getQRCodeFilepath();
     }
 
     private String getQRCodeFilepath() {

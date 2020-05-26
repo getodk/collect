@@ -15,6 +15,7 @@ package org.odk.collect.android.preferences.qr;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
@@ -36,6 +36,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,12 +108,14 @@ public class ShowQRCodeFragment extends Fragment {
             @Override
             protected Bitmap doInBackground(Void... voids) {
                 try {
-                    Pair<Bitmap, String> qrCode = qrCodeGenerator.getQRCode(getSelectedPasswordKeys());
-                    return qrCode.first;
+                    String filePath = qrCodeGenerator.generateQRCode(getSelectedPasswordKeys());
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    return FileUtils.getBitmap(filePath, options);
                 } catch (Exception ignored) {
                     // Ignored
                 }
-                
+
                 return null;
             }
 

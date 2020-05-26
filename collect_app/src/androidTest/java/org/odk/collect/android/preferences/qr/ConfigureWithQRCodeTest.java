@@ -1,22 +1,18 @@
 package org.odk.collect.android.preferences.qr;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import androidx.core.util.Pair;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.google.zxing.WriterException;
 
 import org.json.JSONException;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -37,16 +33,13 @@ import java.util.Collection;
 import dagger.Provides;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class ConfigureWithQRCodeTest {
 
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
 
-    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -65,12 +58,6 @@ public class ConfigureWithQRCodeTest {
             }))
             .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
-
-    @Before
-    public void stubAllExternalIntents() {
-        // Pretend that the share/import actions are cancelled so we don't deal with actual import here
-        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null));
-    }
 
     @After
     public void teardown() {
@@ -108,20 +95,8 @@ public class ConfigureWithQRCodeTest {
         private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
 
         @Override
-        public Pair<Bitmap, String> getQRCode(Collection<String> selectedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
-            Bitmap bitmap =
-                    BitmapFactory.decodeResource(
-                            getApplicationContext().getResources(),
-                            CHECKER_BACKGROUND_DRAWABLE_ID);
-            return new Pair<>(bitmap, getQRCodeFilepath());
-        }
-
-        public String getQRCodeFilepath() {
-            return getApplicationContext().getExternalFilesDir(null) + File.separator + "test-collect-settings.png";
-        }
-
-        int getDrawableID() {
-            return CHECKER_BACKGROUND_DRAWABLE_ID;
+        public String generateQRCode(Collection<String> selectedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
+            return getQRCodeFilePath();
         }
 
         public void setup() {
@@ -133,14 +108,22 @@ public class ConfigureWithQRCodeTest {
         }
 
         public void teardown() {
-            File file = new File(getQRCodeFilepath());
+            File file = new File(getQRCodeFilePath());
             if (file.exists()) {
                 file.delete();
             }
         }
 
+        String getQRCodeFilePath() {
+            return getApplicationContext().getExternalFilesDir(null) + File.separator + "test-collect-settings.png";
+        }
+
+        int getDrawableID() {
+            return CHECKER_BACKGROUND_DRAWABLE_ID;
+        }
+
         private void saveBitmap(Bitmap bitmap) {
-            try (FileOutputStream out = new FileOutputStream(getQRCodeFilepath())) {
+            try (FileOutputStream out = new FileOutputStream(getQRCodeFilePath())) {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             } catch (Exception e) {
                 throw new RuntimeException(e);

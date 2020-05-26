@@ -66,7 +66,7 @@ public class QRCodeMenuDelegate implements MenuDelegate {
                             Collection<String> keys = new ArrayList<>();
                             keys.add(KEY_ADMIN_PW);
                             keys.add(KEY_PASSWORD);
-                            return qrCodeGenerator.getQRCode(keys).second;
+                            return qrCodeGenerator.generateQRCode(keys);
                         } catch (Exception ignored) {
                             // Ignored
                         }

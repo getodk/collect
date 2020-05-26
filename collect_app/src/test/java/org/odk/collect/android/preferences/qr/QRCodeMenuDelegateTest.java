@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
-import androidx.core.util.Pair;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,7 +75,7 @@ public class QRCodeMenuDelegateTest {
         Collection<String> keys = new ArrayList<>();
         keys.add(KEY_ADMIN_PW);
         keys.add(KEY_PASSWORD);
-        when(qrCodeGenerator.getQRCode(keys)).thenReturn(new Pair<>(null, "qr.png"));
+        when(qrCodeGenerator.generateQRCode(keys)).thenReturn("qr.png");
         when(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"));
 
         QRCodeMenuDelegate menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator, fileProvider);
