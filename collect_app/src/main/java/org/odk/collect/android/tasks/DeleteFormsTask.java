@@ -70,15 +70,6 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
-        synchronized (this) {
-            if (dl != null) {
-                dl.progressUpdate(values[0], values[1]);
-            }
-        }
-    }
-
-    @Override
     protected void onPostExecute(Integer result) {
         cr = null;
         if (dl != null) {

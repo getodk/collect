@@ -156,11 +156,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         alertDialog.show();
     }
 
-    @Override
-    public void progressUpdate(int progress, int total) {
-        String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message), progress, total);
-        dialogFragment.setMessage(message);
-    }
     /**
      * Deletes the selected files.First from the database then from the file
      * system

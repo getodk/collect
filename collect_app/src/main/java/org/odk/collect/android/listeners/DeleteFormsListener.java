@@ -22,6 +22,4 @@ package org.odk.collect.android.listeners;
  */
 public interface DeleteFormsListener {
     void deleteComplete(int deletedForms);
-
-    void progressUpdate(int progress, int total);
 }
