@@ -1,8 +1,8 @@
 package org.odk.collect.android.preferences;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -16,19 +16,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ToastUtils;
+
+import static android.content.Context.MODE_PRIVATE;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.AdminPreferencesActivity.ADMIN_PREFERENCES;
 
 public class ChangeAdminPasswordDialog extends DialogFragment {
-
-    public ChangePasswordDialogCallback callback;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof ChangePasswordDialogCallback) {
-            callback = (ChangePasswordDialogCallback) context;
-        }
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -58,8 +52,16 @@ public class ChangeAdminPasswordDialog extends DialogFragment {
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                callback.onPasswordChanged(passwordEditText.getText().toString());
-                dialog.cancel();
+                String password = passwordEditText.getText().toString();
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                editor.putString(KEY_ADMIN_PW, password);
+
+                if (password.equals("")) {
+                    ToastUtils.showShortToast(R.string.admin_password_disabled);
+                } else {
+                    ToastUtils.showShortToast(R.string.admin_password_changed);
+                }
+                editor.apply();
                 dismiss();
             }
         });
@@ -74,9 +76,5 @@ public class ChangeAdminPasswordDialog extends DialogFragment {
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         return alertDialog;
-    }
-
-    public interface ChangePasswordDialogCallback {
-        void onPasswordChanged(String password);
     }
 }

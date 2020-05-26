@@ -25,7 +25,6 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +34,6 @@ import java.io.ObjectOutputStream;
 import timber.log.Timber;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
@@ -45,7 +43,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
  *         option)
  */
 public class AdminPreferencesActivity extends CollectAbstractActivity implements MovingBackwardsDialog.MovingBackwardsDialogListener,
-        ResetSettingsResultDialog.ResetSettingsResultDialogListener, ChangeAdminPasswordDialog.ChangePasswordDialogCallback {
+        ResetSettingsResultDialog.ResetSettingsResultDialogListener {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
@@ -103,18 +101,5 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
     @Override
     public void onDialogClosed() {
         startActivityAndCloseAllOthers(this, MainMenuActivity.class);
-    }
-
-    @Override
-    public void onPasswordChanged(String password) {
-        SharedPreferences.Editor editor = this.getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-        editor.putString(KEY_ADMIN_PW, password);
-
-        if (password.equals("")) {
-            ToastUtils.showShortToast(R.string.admin_password_disabled);
-        } else {
-            ToastUtils.showShortToast(R.string.admin_password_changed);
-        }
-        editor.apply();
     }
 }
