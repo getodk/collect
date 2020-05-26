@@ -48,7 +48,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         DeleteFormsListener, View.OnClickListener {
     private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     BackgroundTasks backgroundTasks; // handled across orientation changes
-    private ProgressDialogFragment dialogFragment = new ProgressDialogFragment();
+    private final ProgressDialogFragment dialogFragment = new ProgressDialogFragment();
     private AlertDialog alertDialog;
 
     public static FormManagerList newInstance() {
