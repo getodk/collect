@@ -1,6 +1,8 @@
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.CheckBox;
@@ -25,8 +27,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.AdminPreferencesActivity.ADMIN_PREFERENCES;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -36,11 +38,13 @@ public class ChangeAdminPasswordDialogTest {
     private FragmentManager fragmentManager;
     private ChangeAdminPasswordDialog dialogFragment;
     private ChangeAdminPasswordDialog.ChangePasswordDialogCallback callback;
+    private SharedPreferences sharedPreferences;
 
     @Before
     public void setup() {
         activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity.class);
         FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
+        sharedPreferences = activity.getSharedPreferences(ADMIN_PREFERENCES, Context.MODE_PRIVATE);
 
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new ChangeAdminPasswordDialog();
@@ -56,14 +60,14 @@ public class ChangeAdminPasswordDialogTest {
     }
 
     @Test
-    public void clickingOkAfterSettingPassword_callsOnPasswordChanged() {
+    public void clickingOkAfterSettingPassword_setsPasswordInSharedPreferences() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         EditText passwordEditText = dialog.findViewById(R.id.pwd_field);
         passwordEditText.setText("blah");
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
 
-        verify(callback, times(1)).onPasswordChanged("blah");
+        assertThat(sharedPreferences.getString(KEY_ADMIN_PW , ""), equalTo("blah"));
     }
 
     @Test
