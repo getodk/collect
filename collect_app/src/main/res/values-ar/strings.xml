@@ -134,8 +134,7 @@
   <string name="change_splash_path">تغيير الصورة</string>
   <string name="keep_changes">حفظ التعديلات</string>
   <string name="change_formlist_url">مسار الارسال (مظاف الى الرابط)</string>
-  <string name="change_protocol">البرنامج</string>
-  <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
+    <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
   <string name="formlist_url">مسار قائمة الاستمارات</string>
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>

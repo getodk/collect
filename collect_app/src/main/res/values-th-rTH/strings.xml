@@ -112,8 +112,7 @@
   <string name="change_splash_path">เปลี่ยนภาพใหม่</string>
   <string name="keep_changes">บันทึกการเปลี่ยนแปลง</string>
   <string name="change_formlist_url">Form list path (appended to URL)</string>
-  <string name="change_protocol">Platform</string>
-  <string name="change_submission_url">Submission path (appended to URL)</string>
+    <string name="change_submission_url">Submission path (appended to URL)</string>
   <string name="formlist_url">Form list path</string>
   <string name="submission_url">Submission path</string>
   <string name="font_size">ขนาดตัวอักษร</string>

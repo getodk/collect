@@ -134,8 +134,7 @@
   <string name="change_splash_path">画像を変更</string>
   <string name="keep_changes">変更を保存する</string>
   <string name="change_formlist_url">フォーム一覧のパス (URLに追加されます)</string>
-  <string name="change_protocol">プラットフォーム</string>
-  <string name="change_submission_url">提出パス (URLに追加されます)</string>
+    <string name="change_submission_url">提出パス (URLに追加されます)</string>
   <string name="formlist_url">フォーム一覧のパス</string>
   <string name="submission_url">送信パス</string>
   <string name="font_size">文字フォントサイズ</string>

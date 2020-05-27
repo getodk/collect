@@ -86,8 +86,7 @@
   <string name="change_splash_path">Görüntüyü Değiştir</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
-  <string name="change_protocol">Platform</string>
-  <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
+    <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
   <string name="formlist_url">Form listesi yolu</string>
   <string name="submission_url">Gönderim yolu</string>
   <string name="font_size">Text font büyüklüğü</string>

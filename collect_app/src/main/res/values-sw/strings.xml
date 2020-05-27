@@ -134,8 +134,7 @@
   <string name="change_splash_path">Badili picha</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="change_formlist_url">Orodhesha njia ya Fomu (iliyotumwa kwenye URL)</string>
-  <string name="change_protocol">Uwanja</string>
-  <string name="change_submission_url">Njia ya kuwasilisha (iliyotumwa kwenye URL)</string>
+    <string name="change_submission_url">Njia ya kuwasilisha (iliyotumwa kwenye URL)</string>
   <string name="formlist_url">Njia ya orodha ya fomu</string>
   <string name="submission_url">Njia ya kuwasilisha </string>
   <string name="font_size">Ukubwa wa maandishi</string>

@@ -134,8 +134,7 @@
   <string name="change_splash_path">Cambiare immagine</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
-  <string name="change_protocol">Piattaforma server</string>
-  <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
+    <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
   <string name="formlist_url">Percorso Elenco Moduli</string>
   <string name="submission_url">Luogo di consegna</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>

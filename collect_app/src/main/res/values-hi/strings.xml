@@ -122,8 +122,7 @@
   <string name="change_splash_path">इमेज बदले</string>
   <string name="keep_changes">बदलाव संरक्षित करें</string>
   <string name="change_formlist_url">फॉर्म सूची पथ (URL पर जोड़ा गया)</string>
-  <string name="change_protocol">प्लेटफोर्म</string>
-  <string name="change_submission_url">सबमिशन पथ (URL पर जोड़ा गया)</string>
+    <string name="change_submission_url">सबमिशन पथ (URL पर जोड़ा गया)</string>
   <string name="formlist_url">फॉर्म सूची पथ</string>
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">अक्षर फॉन्ट आकार</string>

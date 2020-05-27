@@ -110,8 +110,7 @@
   <string name="change_splash_path">Verander Prentjie</string>
   <string name="keep_changes">Stoor Veranderinge</string>
   <string name="change_formlist_url">Vorm lys path (word bygevoeg tot URL)</string>
-  <string name="change_protocol">Platvorm</string>
-  <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
+    <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
   <string name="formlist_url">Vorm lys path</string>
   <string name="submission_url">Indiening path</string>
   <string name="font_size">Teks font grootte</string>

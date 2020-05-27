@@ -131,8 +131,7 @@
   <string name="change_splash_path">Изменить изображение</string>
   <string name="keep_changes">Сохранить ответы</string>
   <string name="change_formlist_url">Папка с бланками (добавляется к URL)</string>
-  <string name="change_protocol">Платформа</string>
-  <string name="change_submission_url">Папка выгрузки опросов (добавляется к URL)</string>
+    <string name="change_submission_url">Папка выгрузки опросов (добавляется к URL)</string>
   <string name="formlist_url">Папка с бланками</string>
   <string name="submission_url">Папка выгрузки</string>
   <string name="font_size">Размер шрифта</string>

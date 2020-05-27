@@ -103,8 +103,7 @@
   <string name="change_splash_path">Pakeisti paveikslėlį</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-  <string name="change_protocol">Protokolas</string>
-  <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
+    <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
   <string name="formlist_url">Formų sąrašo kelias</string>
   <string name="submission_url">Pateikimo kelias</string>
   <string name="font_size">Teksto šrifto dydis</string>

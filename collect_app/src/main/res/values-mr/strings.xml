@@ -117,8 +117,7 @@
   <string name="change_splash_path">प्रतिमा बदला</string>
   <string name="keep_changes">बदल जतन करा</string>
   <string name="change_formlist_url">फॉर्म यादी पथ ( यु र एल  वर जोडलेले )</string>
-  <string name="change_protocol">प्लॅटफॉर्म</string>
-  <string name="change_submission_url">सबमिशन पथ (यु र एल वर जोडला आहे)</string>
+    <string name="change_submission_url">सबमिशन पथ (यु र एल वर जोडला आहे)</string>
   <string name="formlist_url">फॉर्म यादी पथ</string>
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">मजकूर फॉन्ट आकार</string>

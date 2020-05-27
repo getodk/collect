@@ -134,8 +134,7 @@
   <string name="change_splash_path">Modifier l\'image</string>
   <string name="keep_changes">Sauvegarder les Modifications</string>
   <string name="change_formlist_url">Chemin de la liste de formulaires (ajouté à l\'URL du serveur)</string>
-  <string name="change_protocol">Protocole</string>
-  <string name="change_submission_url">Chemin de soumission (ajouté à l\'URL du serveur)</string>
+    <string name="change_submission_url">Chemin de soumission (ajouté à l\'URL du serveur)</string>
   <string name="formlist_url">Chemin de la liste de formulaires</string>
   <string name="submission_url">Chemin de soumission</string>
   <string name="font_size">Taille de la Police</string>

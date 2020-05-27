@@ -110,8 +110,7 @@
   <string name="change_splash_path">ছবি পরিবর্তন করুন</string>
   <string name="keep_changes">পরিবর্তন সংরক্ষণকরুন</string>
   <string name="change_formlist_url">ফর্ম তালিকা URL পরিবর্তন</string>
-  <string name="change_protocol">প্লাটফর্ম</string>
-  <string name="change_submission_url"> সাবমিশান URL পরিবর্তন</string>
+    <string name="change_submission_url"> সাবমিশান URL পরিবর্তন</string>
   <string name="formlist_url">ফর্ম তালিকা URL</string>
   <string name="submission_url"> সাবমিশান URL</string>
   <string name="font_size">ফন্ট আকার</string>

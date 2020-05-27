@@ -108,8 +108,7 @@
   <string name="change_splash_path">ປ່ຽນຮູບພາບ</string>
   <string name="keep_changes">ບັນທຶກການປ່ຽນແປງ</string>
   <string name="change_formlist_url">​ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ (ເພີ່ມເຕີມໃສ່ URL)</string>
-  <string name="change_protocol">ແພຼັດຟອມ (Platform)</string>
-  <string name="change_submission_url">​ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ (ເພີ່ມເຕີມໃສ່ URL)</string>
+    <string name="change_submission_url">​ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ (ເພີ່ມເຕີມໃສ່ URL)</string>
   <string name="formlist_url">ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ</string>
   <string name="submission_url">ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ </string>
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>

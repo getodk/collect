@@ -122,8 +122,7 @@
   <string name="change_splash_path">Trocar Imagem</string>
   <string name="keep_changes">Salvar Alterações</string>
   <string name="change_formlist_url">Listagem do caminho do formulário (adicionado do URL do Servidor)</string>
-  <string name="change_protocol">Protocolo</string>
-  <string name="change_submission_url">Caminho para submeter (adicionado do URL do Servidor)</string>
+    <string name="change_submission_url">Caminho para submeter (adicionado do URL do Servidor)</string>
   <string name="formlist_url">Lista de Caminho do Formulário</string>
   <string name="submission_url">Caminho para submeter</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>

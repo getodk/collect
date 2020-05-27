@@ -133,8 +133,7 @@
   <string name="change_splash_path">ផ្លាស់ប្តូររូបថត</string>
   <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
   <string name="change_formlist_url">ផ្លូវរបស់បញ្ជីសំណុំ​បែប​បទ​(បានបន្ថែមលើ URL)</string>
-  <string name="change_protocol">Platform</string>
-  <string name="change_submission_url">ផ្លូវដាក់ចូល (បន្ថែមលើ URL)</string>
+    <string name="change_submission_url">ផ្លូវដាក់ចូល (បន្ថែមលើ URL)</string>
   <string name="formlist_url">ទីតាំងបញ្ជីសំណុំ​បែប​បទ</string>
   <string name="submission_url">ផ្លូវដាក់ចូល</string>
   <string name="font_size">ទំហំពុម្ភអក្សរ</string>

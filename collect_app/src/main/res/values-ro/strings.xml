@@ -110,8 +110,7 @@
   <string name="change_splash_path">Schimbați imaginea</string>
   <string name="keep_changes">Salvați modificările</string>
   <string name="change_formlist_url">Calea către lista formularelor (adăugată adresei URL a serverului)</string>
-  <string name="change_protocol">Platformă server</string>
-  <string name="change_submission_url">Calea transmiterii (adăugată adresei URL a serverului)</string>
+    <string name="change_submission_url">Calea transmiterii (adăugată adresei URL a serverului)</string>
   <string name="formlist_url">Calea către lista formularelor</string>
   <string name="submission_url">Calea către transmitere</string>
   <string name="font_size">Mărimea fontului textului</string>

@@ -115,8 +115,7 @@
   <string name="change_splash_path">ပံုေျပာင္းရန္</string>
   <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
   <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
-  <string name="change_protocol">ဆာဗာ ပလက္္ေဖာင္း</string>
-  <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
+    <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
   <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
   <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
   <string name="font_size">စာလံုးအရြယ္အစား</string>

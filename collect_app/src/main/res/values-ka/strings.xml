@@ -134,8 +134,7 @@
   <string name="change_splash_path">სურათის შეცვლა</string>
   <string name="keep_changes">ცვლილებების შენახვა</string>
   <string name="change_formlist_url">ბმული ფორმების ჩამონათვალზე (დაემატოს სერვერის ბმულს)</string>
-  <string name="change_protocol">სერვერის პლატფორმა</string>
-  <string name="change_submission_url">ბმული დადასტურებულ ფორმებზე (დაემატოს სერვერის ბმულს)</string>
+    <string name="change_submission_url">ბმული დადასტურებულ ფორმებზე (დაემატოს სერვერის ბმულს)</string>
   <string name="formlist_url">ბმული ფორმების ჩამონათვალზე</string>
   <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
   <string name="font_size">ტექსტის ზომა</string>

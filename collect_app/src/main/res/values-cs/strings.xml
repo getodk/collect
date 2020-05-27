@@ -134,8 +134,7 @@
   <string name="change_splash_path">Změnit obrázek</string>
   <string name="keep_changes">Uložit změny</string>
   <string name="change_formlist_url">Cesta k seznamu dotazníků (přidat k URL)</string>
-  <string name="change_protocol">Platforma</string>
-  <string name="change_submission_url">Cesta pro odeslání (přidat k URL)</string>
+    <string name="change_submission_url">Cesta pro odeslání (přidat k URL)</string>
   <string name="formlist_url">Cesta k seznamu dotazníků</string>
   <string name="submission_url">Cesta pro odeslání</string>
   <string name="font_size">Velikost písma</string>

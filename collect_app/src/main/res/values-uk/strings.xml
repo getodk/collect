@@ -131,8 +131,7 @@
   <string name="change_splash_path">Змінити зображення</string>
   <string name="keep_changes">Зберегти зміни</string>
   <string name="change_formlist_url">Шлях до списку анкет (додається до URL)</string>
-  <string name="change_protocol">Платформа</string>
-  <string name="change_submission_url">Шлях надсилання (додається до URL)</string>
+    <string name="change_submission_url">Шлях надсилання (додається до URL)</string>
   <string name="formlist_url">Шлях до списку анкет</string>
   <string name="submission_url">Шлях надсилання</string>
   <string name="font_size">Розмір шрифту</string>

@@ -131,8 +131,7 @@
   <string name="change_splash_path">ఫోటో ని మార్చండి</string>
   <string name="keep_changes">మార్పులను సేవ్ చెయ్యి</string>
   <string name="change_formlist_url">ఫారం జాబితా లింకు (URL కు జోడించబడింది)</string>
-  <string name="change_protocol">వేదిక</string>
-  <string name="change_submission_url">సబ్మిషన్ లింక్  (URL కు జోడించబడింది)</string>
+    <string name="change_submission_url">సబ్మిషన్ లింక్  (URL కు జోడించబడింది)</string>
   <string name="formlist_url">ఫారం జాబితా లింక్ </string>
   <string name="submission_url">సబ్మిషన్ లింక్ </string>
   <string name="font_size">అక్షరాల సైజు </string>

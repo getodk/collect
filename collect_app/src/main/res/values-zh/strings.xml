@@ -118,8 +118,7 @@
   <string name="change_splash_path">修改图片</string>
   <string name="keep_changes">保存修改</string>
   <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
-  <string name="change_protocol">服务器平台</string>
-  <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
+    <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
   <string name="formlist_url">表格列表路径</string>
   <string name="submission_url">提交路径</string>
   <string name="font_size">字体大小</string>

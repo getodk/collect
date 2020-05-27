@@ -131,8 +131,7 @@
   <string name="change_splash_path">Promijeni sliku</string>
   <string name="keep_changes">Sačuvaj izmjene</string>
   <string name="change_formlist_url">Web putanja liste formulara (dodata URL adresi)</string>
-  <string name="change_protocol">Platforma</string>
-  <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
+    <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
   <string name="formlist_url">Web putanja liste formulara</string>
   <string name="submission_url">Web putanja za slanje formulara</string>
   <string name="font_size">Veličina teksta</string>

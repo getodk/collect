@@ -134,8 +134,7 @@
   <string name="change_splash_path">Vaihda kuva</string>
   <string name="keep_changes">Tallenna muutokset</string>
   <string name="change_formlist_url">Lomakkeiden listan polku (lisätään URL:ään)</string>
-  <string name="change_protocol">Alusta (platform)</string>
-  <string name="change_submission_url">Lähetettävien lomakkeiden polku (lisätään URL:ään)</string>
+    <string name="change_submission_url">Lähetettävien lomakkeiden polku (lisätään URL:ään)</string>
   <string name="formlist_url">Lomakelistauksen polku</string>
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>

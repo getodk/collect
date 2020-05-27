@@ -126,8 +126,7 @@
   <string name="change_splash_path">Zamenjaj sliko</string>
   <string name="keep_changes">Shrani spremembe</string>
   <string name="change_formlist_url">Pot seznama obrazcev (dodana URL)</string>
-  <string name="change_protocol">Platforma</string>
-  <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
+    <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
   <string name="formlist_url">Pot seznama obrazcev</string>
   <string name="submission_url">Pot prispevkov</string>
   <string name="font_size">Velikost črk</string>

@@ -110,8 +110,7 @@
   <string name="change_splash_path">Endre bilde</string>
   <string name="keep_changes">Lagre endringer</string>
   <string name="change_formlist_url">Sti</string>
-  <string name="change_protocol">Server platform</string>
-  <string name="change_submission_url">Sti</string>
+    <string name="change_submission_url">Sti</string>
   <string name="formlist_url">Skjema oversikt</string>
   <string name="submission_url">Bane for innsending</string>
   <string name="font_size">Fontstørrelse</string>

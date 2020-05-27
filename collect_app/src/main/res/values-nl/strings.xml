@@ -129,8 +129,7 @@
   <string name="change_splash_path">Wijzig afbeelding</string>
   <string name="keep_changes">Wijzigingen opslaan</string>
   <string name="change_formlist_url">Form List Path (toegevoegd aan Server URL)</string>
-  <string name="change_protocol">Server Platform</string>
-  <string name="change_submission_url">Submission Path (toegevoegd aan Server URL)</string>
+    <string name="change_submission_url">Submission Path (toegevoegd aan Server URL)</string>
   <string name="formlist_url">Form List Path</string>
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Tekstgrootte</string>

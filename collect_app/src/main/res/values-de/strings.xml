@@ -134,8 +134,7 @@
   <string name="change_splash_path">Bild ändern</string>
   <string name="keep_changes">Änderungen speichern</string>
   <string name="change_formlist_url">Formularlisten-Pfad (der Server-URL angehängt)</string>
-  <string name="change_protocol">Server-Plattform</string>
-  <string name="change_submission_url">Submissionspfad (der Server-URL angehängt)</string>
+    <string name="change_submission_url">Submissionspfad (der Server-URL angehängt)</string>
   <string name="formlist_url">Formularlisten-Pfad</string>
   <string name="submission_url">Submissionspfad</string>
   <string name="font_size">Schriftgröße</string>

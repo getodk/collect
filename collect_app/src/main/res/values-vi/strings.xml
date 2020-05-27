@@ -107,8 +107,7 @@
   <string name="change_splash_path">Đổi ảnh</string>
   <string name="keep_changes">Lưu thay đổi</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
-  <string name="change_protocol">Nền tảng máy chủ</string>
-  <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
+    <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="formlist_url">Danh sách đường dẫn biểu mẫu</string>
   <string name="submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="font_size">Kích thước chữ</string>

@@ -128,8 +128,7 @@
   <string name="change_splash_path">تصویر بدل دیں</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="change_formlist_url">فارم لسٹ پاتھ (اپینڈڈ یو آر ایل)</string>
-  <string name="change_protocol">پلیٹ فارم</string>
-  <string name="change_submission_url">سبمشن پاتھ(اپینڈڈ یو آر ایل)</string>
+    <string name="change_submission_url">سبمشن پاتھ(اپینڈڈ یو آر ایل)</string>
   <string name="formlist_url">فارم لسٹ کا پاتھ</string>
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>

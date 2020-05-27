@@ -133,8 +133,7 @@
   <string name="change_splash_path">Byt bild</string>
   <string name="keep_changes">Spara ändringar</string>
   <string name="change_formlist_url">Sökväg till formulärlista (tillagd till URL)</string>
-  <string name="change_protocol">Plattform</string>
-  <string name="change_submission_url">Sökväg till skickade formulär (tillagd till URL)</string>
+    <string name="change_submission_url">Sökväg till skickade formulär (tillagd till URL)</string>
   <string name="formlist_url">Sökväg till formulär</string>
   <string name="submission_url">Sökväg till skickade formulär</string>
   <string name="font_size">Textstorlek</string>

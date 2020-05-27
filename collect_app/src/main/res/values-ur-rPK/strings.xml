@@ -108,8 +108,7 @@
   <string name="change_splash_path">عکس بدل دیں</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="change_formlist_url">فارم لیسٹ کا راستہ (ملحقہ ہو آر ایل)</string>
-  <string name="change_protocol">پلیٹ فارم</string>
-  <string name="change_submission_url">حوالگی کا راستہ </string>
+    <string name="change_submission_url">حوالگی کا راستہ </string>
   <string name="formlist_url">فارم فہرست کا پاتھ</string>
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ہجوں کے فانٹ کا ناپ</string>

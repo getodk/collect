@@ -134,8 +134,7 @@
   <string name="change_splash_path">Cambiar la imagen</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="change_formlist_url">Ubicación de la Lista del Formulario (se añade a la URL del Servidor)</string>
-  <string name="change_protocol">Protocolo</string>
-  <string name="change_submission_url">Ubicación a donde enviar (se añade a la URL del Servidor)</string>
+    <string name="change_submission_url">Ubicación a donde enviar (se añade a la URL del Servidor)</string>
   <string name="formlist_url">La ubicación de la lista de formularios</string>
   <string name="submission_url">Ubicación de Envio</string>
   <string name="font_size">Tamaño del Texto</string>

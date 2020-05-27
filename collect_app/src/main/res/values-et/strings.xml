@@ -114,8 +114,7 @@
   <string name="change_splash_path">Muuda pilti</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>
-  <string name="change_protocol">Platvorm</string>
-  <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
+    <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
   <string name="formlist_url">Vormi nimekirja asukoht</string>
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>

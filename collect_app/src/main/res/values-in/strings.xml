@@ -131,8 +131,7 @@
   <string name="change_splash_path">Ubah gambar</string>
   <string name="keep_changes">Simpan perubahan</string>
   <string name="change_formlist_url">Tautan formulir (appended to Server URL)</string>
-  <string name="change_protocol">Platform</string>
-  <string name="change_submission_url">Tautan pengumpulan (appended to Server URL)</string>
+    <string name="change_submission_url">Tautan pengumpulan (appended to Server URL)</string>
   <string name="formlist_url">Tautan daftar formulir</string>
   <string name="submission_url">Tautan pengumpulan</string>
   <string name="font_size">Ukuran teks font</string>
