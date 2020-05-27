@@ -73,6 +73,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
             @Override
             public void denied() {
+                finish();
             }
         });
     }
