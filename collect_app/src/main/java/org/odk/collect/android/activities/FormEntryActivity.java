@@ -101,6 +101,7 @@ import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
+import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
@@ -152,6 +153,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
+import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -315,6 +317,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     NetworkStateProvider connectivityProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -616,7 +621,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formPath.lastIndexOf('.'))
                         + "_";
                 final String fileSuffix = ".xml.save";
-                File cacheDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE));
+                File cacheDir = new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE));
                 File[] files = cacheDir.listFiles(pathname -> {
                     String name = pathname.getName();
                     return name.startsWith(filePrefix)
@@ -634,7 +639,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     candidate.getName().length()
                                             - fileSuffix.length());
                     File instanceDir = new File(
-                            new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator
+                            storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + File.separator
                                     + instanceDirName);
                     File instanceFile = new File(instanceDir,
                             instanceDirName + ".xml");
@@ -831,7 +836,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                StoragePathProvider storagePathProvider = new StoragePathProvider();
                 ImageConverter.execute(storagePathProvider.getTmpFilePath(), getWidgetWaitingForBinaryData(), this);
                 File fi = new File(storagePathProvider.getTmpFilePath());
 
@@ -2045,7 +2049,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                         languages[whichButton]);
                                 String selection = FormsColumns.FORM_FILE_PATH
                                         + "=?";
-                                String[] selectArgs = {new StoragePathProvider().getFormDbPath(formPath)};
+                                String[] selectArgs = {storagePathProvider.getFormDbPath(formPath)};
                                 int updated = new FormsDao().updateForm(values, selection, selectArgs);
                                 Timber.i("Updated language to: %s in %d rows",
                                         languages[whichButton],
@@ -2481,14 +2485,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void createInstanceDirectory(FormController formController) {
-        String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
-                Locale.ENGLISH).format(Calendar.getInstance().getTime());
-        String file = formPath.substring(formPath.lastIndexOf('/') + 1,
-                formPath.lastIndexOf('.'));
-        String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + file + "_"
-                + time;
-        if (FileUtils.createFolder(path)) {
-            File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
+        FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
+                storagePathProvider,
+                System::currentTimeMillis
+        );
+        
+        File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
+        if (instanceFile != null) {
             formController.setInstanceFile(instanceFile);
         }
     }
