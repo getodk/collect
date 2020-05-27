@@ -8,19 +8,20 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
 
 // Issue number NODK-209
 @RunWith(AndroidJUnit4.class)
-public class DrawWidgetTest extends BaseRegressionTest {
+public class DrawWidgetTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -30,10 +31,8 @@ public class DrawWidgetTest extends BaseRegressionTest {
                     Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("All_widgets.xml"));
-
-    @Rule
-    public TestRule screenshotFailRule = new ScreenshotOnFailureTestRule();
+            .around(new CopyFormRule("All_widgets.xml"))
+            .around(rule);
 
     @Test
     public void saveIgnoreDialog_ShouldUseBothOptions() {

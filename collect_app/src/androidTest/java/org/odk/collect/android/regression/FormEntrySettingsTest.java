@@ -8,18 +8,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AdminSettingsPage;
 import org.odk.collect.android.support.pages.ExitFormDialog;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 
 //Issue NODK-243
-public class FormEntrySettingsTest extends BaseRegressionTest {
-    @Rule
-    public RuleChain ruleChain = RuleChain
-            .outerRule(new ResetStateRule());
+public class FormEntrySettingsTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -29,7 +29,8 @@ public class FormEntrySettingsTest extends BaseRegressionTest {
                     Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("All_widgets.xml"));
+            .around(new CopyFormRule("All_widgets.xml"))
+            .around(rule);
 
     @SuppressWarnings("PMD.AvoidCallingFinalize")
     @Test

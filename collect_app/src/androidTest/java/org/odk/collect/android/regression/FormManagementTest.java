@@ -10,15 +10,18 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 
 //Issue NODK-237
 @RunWith(AndroidJUnit4.class)
-public class FormManagementTest extends BaseRegressionTest {
+public class FormManagementTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -29,7 +32,8 @@ public class FormManagementTest extends BaseRegressionTest {
             )
             .around(new ResetStateRule())
             .around(new CopyFormRule("OnePageFormValid2.xml"))
-            .around(new CopyFormRule("hints_textq.xml"));
+            .around(new CopyFormRule("hints_textq.xml"))
+            .around(rule);
 
     @SuppressWarnings("PMD.AvoidCallingFinalize")
     @Test

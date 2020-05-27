@@ -5,9 +5,9 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
-public class FeatureTestRule extends ActivityTestRule<MainMenuActivity> {
+public class CollectTestRule extends ActivityTestRule<MainMenuActivity> {
 
-    public FeatureTestRule() {
+    public CollectTestRule() {
         super(MainMenuActivity.class);
     }
 
