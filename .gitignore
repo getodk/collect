@@ -11,6 +11,7 @@ fieldTask/fieldTask-release/
 # emacs backup files
 *.*~
 
+fieldTask4.iml
 *.iml
 *.swp
 collect_app/collect_app.iml
