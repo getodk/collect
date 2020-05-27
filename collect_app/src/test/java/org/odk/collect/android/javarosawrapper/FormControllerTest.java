@@ -14,6 +14,9 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 public class FormControllerTest {
 
@@ -72,6 +75,18 @@ public class FormControllerTest {
 
         assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_PROMPT_NEW_REPEAT));
         assertThat(formController.getFormIndex().toString(), equalTo("0_0, 1_1, "));
+    }
+
+    @Test
+    public void whenInstanceFileAndAuditConfigNull_getAuditEventLogger_isNotNull() throws Exception {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(ONE_QUESTION_NESTED_REPEAT.getBytes());
+        final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
+        final FormEntryController formEntryController = new FormEntryController(fem);
+        FormController formController = new FormController(Files.createTempDir(), formEntryController, null);
+        assertThat(formController.getSubmissionMetadata().auditConfig, is(nullValue()));
+        assertThat(formController.getInstanceFile(), is(nullValue()));
+
+        assertThat(formController.getAuditEventLogger(), notNullValue());
     }
 
     @NotNull

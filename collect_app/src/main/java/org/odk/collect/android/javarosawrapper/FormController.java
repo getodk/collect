@@ -195,21 +195,17 @@ public class FormController {
     }
 
     public AuditEventLogger getAuditEventLogger() {
-        if (auditEventLogger == null && instanceFile != null) {
+        if (auditEventLogger == null) {
             AuditConfig auditConfig = getSubmissionMetadata().auditConfig;
 
             if (auditConfig != null) {
-                setAuditEventLogger(new AuditEventLogger(auditConfig, new AsyncTaskAuditEventWriter(new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME), auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled(), auditConfig.isTrackChangesReasonEnabled()), this));
+                auditEventLogger = new AuditEventLogger(auditConfig, new AsyncTaskAuditEventWriter(new File(instanceFile.getParentFile().getPath() + File.separator + AUDIT_FILE_NAME), auditConfig.isLocationEnabled(), auditConfig.isTrackingChangesEnabled(), auditConfig.isIdentifyUserEnabled(), auditConfig.isTrackChangesReasonEnabled()), this);
             } else {
-                setAuditEventLogger(new AuditEventLogger(null, null, this));
+                auditEventLogger = new AuditEventLogger(null, null, this);
             }
         }
 
         return auditEventLogger;
-    }
-
-    private void setAuditEventLogger(AuditEventLogger logger) {
-        auditEventLogger = logger;
     }
 
     /**
