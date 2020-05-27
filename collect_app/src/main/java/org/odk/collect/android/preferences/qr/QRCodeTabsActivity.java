@@ -33,7 +33,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -82,18 +81,13 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         fragmentTitleList = new String[]{getString(R.string.scan_qr_code_fragment_title),
                 getString(R.string.view_qr_code_fragment_title)};
 
-        ViewPager2 viewPager = (ViewPager2) this.findViewById(R.id.viewPager);
-        TabLayout tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         QRCodeTabsAdapter adapter = new QRCodeTabsAdapter(this);
         viewPager.setAdapter(adapter);
 
-        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                tab.setText(fragmentTitleList[position]);
-            }
-        }).attach();
-        this.updateShareIntent();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(fragmentTitleList[position])).attach();
+        updateShareIntent();
     }
 
     private void initToolbar() {
@@ -123,9 +117,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
             Disposable disposable = qrCodeGenerator.generateQRCode(keys)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(bitmap -> {
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
-                    }, Timber::e);
+                    .subscribe(bitmap -> startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode))), Timber::e);
             compositeDisposable.add(disposable);
         }
     }
