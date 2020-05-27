@@ -62,19 +62,6 @@ public class SettingsDialogFragmentTest {
     }
 
     @Test
-    public void shouldShowCorrectButtons() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-
-        assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(VISIBLE));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getText(),
-                equalTo(activity.get().getString(R.string.start)));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getVisibility(), equalTo(VISIBLE));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getText(),
-                equalTo(activity.get().getString(R.string.cancel)));
-    }
-
-    @Test
     public void clickingStart_shouldDismissTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
