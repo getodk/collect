@@ -52,7 +52,8 @@ public class FormInstanceFileCreatorTest {
 
     @Test
     public void whenCreatingDirFails_returnsNull() throws Exception {
-        when(pathProvider.getDirPath(StorageSubdirectory.INSTANCES)).thenReturn("/not-real");
+        File tempFile = File.createTempFile("not-a", "dir"); // Create a file where it needs a dir
+        when(pathProvider.getDirPath(StorageSubdirectory.INSTANCES)).thenReturn(tempFile.getAbsolutePath());
         when(clock.getCurrentTime()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
