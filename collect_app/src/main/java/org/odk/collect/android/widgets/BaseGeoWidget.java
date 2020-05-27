@@ -27,19 +27,19 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
 
     public BaseGeoWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        readOnly = getFormEntryPrompt().isReadOnly();
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.base_geo_widget_layout, null);
 
-        answerDisplay = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
         answerDisplay = answerView.findViewById(R.id.geo_answer_text);
         answerDisplay.setTextColor(new ThemeUtils(context).getColorOnSurface());
         answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        startGeoButton = answerView.findViewById(R.id.start_geo_button);
-        if (readOnly) {
+        startGeoButton = answerView.findViewById(R.id.simple_button);
+        if (prompt.isReadOnly()) {
             startGeoButton.setVisibility(GONE);
         } else {
             startGeoButton.setText(getDefaultButtonLabel());
