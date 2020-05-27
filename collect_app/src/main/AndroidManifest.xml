@@ -97,9 +97,6 @@ the specific language governing permissions and limitations under the License.
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activities.ScanQRCodeActivity"
-            android:screenOrientation="portrait"
-            />
         <activity
             android:name=".activities.FormEntryActivity"
             android:windowSoftInputMode="adjustResize" />
@@ -130,6 +127,7 @@ the specific language governing permissions and limitations under the License.
             android:configChanges="orientation|screenSize" />
         <activity android:name=".activities.InstanceUploaderActivity" />
         <activity android:name=".activities.AboutActivity" />
+        <activity android:name=".preferences.qr.QRCodeTabsActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
         <activity android:name=".preferences.AndroidXPreferencesActivity" />

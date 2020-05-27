@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -39,8 +40,8 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
-import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
@@ -185,6 +186,7 @@ public class Collect extends Application {
         }
 
         setupOSMDroid();
+        setupStrictMode();
         initMapProviders();
 
         // Force inclusion of scoped storage strings so they can be translated
@@ -194,6 +196,25 @@ public class Collect extends Application {
 
     protected void setupOSMDroid() {
         org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
+    }
+
+    /**
+     * Enable StrictMode and log violations to the system log.
+     * This catches disk and network access on the main thread, as well as leaked SQLite
+     * cursors and unclosed resources.
+     */
+    private void setupStrictMode() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .permitDiskReads()  // shared preferences are being read on main thread
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+        }
     }
 
     private void initMapProviders() {

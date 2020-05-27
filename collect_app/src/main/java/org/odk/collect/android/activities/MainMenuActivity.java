@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,10 +29,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -47,6 +46,8 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.material.MaterialBanner;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
@@ -58,6 +59,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -67,8 +69,8 @@ import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -87,6 +89,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_INITIALIZED;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
@@ -121,16 +124,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     public Analytics analytics;
 
     @BindView(R.id.storageMigrationBanner)
-    LinearLayout storageMigrationBanner;
-
-    @BindView(R.id.storageMigrationBannerText)
-    TextView storageMigrationBannerText;
-
-    @BindView(R.id.storageMigrationBannerDismissButton)
-    Button storageMigrationBannerDismissButton;
-
-    @BindView(R.id.storageMigrationBannerLearnMoreButton)
-    Button storageMigrationBannerLearnMoreButton;
+    MaterialBanner storageMigrationBanner;
 
     @BindView(R.id.version_sha)
     TextView versionSHAView;
@@ -149,6 +143,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     VersionInformation versionInformation;
+
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
 
     private MainMenuViewModel viewModel;
 
@@ -376,7 +376,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     args.putSerializable(AdminPasswordDialogFragment.ARG_ACTION, Action.SCAN_QR_CODE);
                     showIfNotShowing(AdminPasswordDialogFragment.class, args, getSupportFragmentManager());
                 } else {
-                    startActivity(new Intent(this, ScanQRCodeActivity.class));
+                    startActivity(new Intent(this, QRCodeTabsActivity.class));
                 }
                 return true;
             case R.id.menu_about:
@@ -399,15 +399,19 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void initMapBox() {
-        // This "one weird trick" lets us initialize MapBox at app start when the internet is
-        // most likely to be available. This is annoyingly needed for offline tiles to work.
-        try {
-            MapView mapView = new MapView(this);
-            FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
-            mapboxContainer.addView(mapView);
-            mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> { }));
-        } catch (Exception | Error ignored) {
-            // This will crash on devices where the arch for MapBox is not included
+        if (!generalSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED, false) && connectivityProvider.isDeviceOnline()) {
+            // This "one weird trick" lets us initialize MapBox at app start when the internet is
+            // most likely to be available. This is annoyingly needed for offline tiles to work.
+            try {
+                MapView mapView = new MapView(this);
+                FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
+                mapboxContainer.addView(mapView);
+                mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+                    generalSharedPreferences.save(KEY_MAPBOX_INITIALIZED, true);
+                }));
+            } catch (Exception | Error ignored) {
+                // This will crash on devices where the arch for MapBox is not included
+            }
         }
     }
 
@@ -538,7 +542,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             Map<String, Object> entries = (Map<String, Object>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
-            PreferenceSaver.saveGeneralPrefs(GeneralSharedPreferences.getInstance(), entries);
+            PreferenceSaver.saveGeneralPrefs(generalSharedPreferences, entries);
 
             // second object is admin options
             Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
@@ -574,7 +578,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
                 break;
             case SCAN_QR_CODE:
-                startActivity(new Intent(this, ScanQRCodeActivity.class));
+                startActivity(new Intent(this, QRCodeTabsActivity.class));
                 break;
         }
     }
@@ -620,8 +624,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void disableSmsIfNeeded() {
-        if (Transport.Internet != Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE))) {
-            GeneralSharedPreferences.getInstance().save(KEY_SUBMISSION_TRANSPORT_TYPE, getString(R.string.transport_type_value_internet));
+        if (Transport.Internet != Transport.fromPreference(generalSharedPreferences.get(KEY_SUBMISSION_TRANSPORT_TYPE))) {
+            generalSharedPreferences.save(KEY_SUBMISSION_TRANSPORT_TYPE, getString(R.string.transport_type_value_internet));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder
@@ -638,16 +642,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     .create()
                     .show();
         }
-    }
-
-    public void onStorageMigrationBannerDismiss(View view) {
-        storageMigrationBanner.setVisibility(View.GONE);
-        storageMigrationRepository.clearResult();
-    }
-
-    public void onStorageMigrationBannerLearnMoreClick(View view) {
-        showStorageMigrationDialog();
-        getContentResolver().unregisterContentObserver(contentObserver);
     }
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
@@ -680,15 +674,21 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void displayStorageMigrationBanner() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
-        storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
-        storageMigrationBannerDismissButton.setVisibility(View.GONE);
+        storageMigrationBanner.setText(getString(R.string.scoped_storage_banner_text));
+        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_learn_more));
+        storageMigrationBanner.setAction(() -> {
+            showStorageMigrationDialog();
+            getContentResolver().unregisterContentObserver(contentObserver);
+        });
     }
 
     private void displayBannerWithSuccessStorageMigrationResult() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBannerText.setText(R.string.storage_migration_completed);
-        storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
-        storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
+        storageMigrationBanner.setText(getString(R.string.storage_migration_completed));
+        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_dismiss));
+        storageMigrationBanner.setAction(() -> {
+            storageMigrationBanner.setVisibility(View.GONE);
+            storageMigrationRepository.clearResult();
+        });
     }
 }

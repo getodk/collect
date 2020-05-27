@@ -62,6 +62,7 @@ task checkInstrumented(type: GradleBuild) {
 }
 
 ext {
+    fragmentVersion = '1.2.4'
     daggerVersion = '2.27'
     okhttp3Version = '4.4.1'
 }

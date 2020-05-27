@@ -19,18 +19,23 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.chip.Chip;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
-import org.odk.collect.android.activities.viewmodels.FormMapViewModel.ClickAction;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
@@ -43,10 +48,10 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.IconUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,10 +75,12 @@ public class FormMapActivity extends BaseGeoMapActivity {
     MapProvider mapProvider;
     private MapFragment map;
 
+    public BottomSheetBehavior summarySheet;
+
     /**
      * Quick lookup of instance objects from map feature IDs.
      */
-    private final Map<Integer, FormMapViewModel.MappableFormInstance> instancesByFeatureId = new HashMap<>();
+    final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
 
     /**
      * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
@@ -114,6 +121,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
+        summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
@@ -223,47 +232,15 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     /**
-     * Reacts to a tap on a feature by showing a toast or switching activities to view or edit a form.
+     * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
-        MappableFormInstance instance = instancesByFeatureId.get(featureId);
-        ClickAction clickAction = instance == null ? FormMapViewModel.ClickAction.NONE : instance.getClickAction();
-
-        boolean canEditSaved = (Boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_EDIT_SAVED);
-
-        switch (clickAction) {
-            case DELETED_TOAST:
-                String deletedTime = getString(R.string.deleted_on_date_at_time);
-                String disabledMessage = new SimpleDateFormat(deletedTime,
-                        Locale.getDefault()).format(viewModel.getDeletedDateOf(instance.getDatabaseId()));
-
-                ToastUtils.showLongToast(disabledMessage);
-                break;
-            case NOT_VIEWABLE_TOAST:
-                ToastUtils.showLongToast(R.string.cannot_edit_completed_form);
-                break;
-            case OPEN_READ_ONLY:
-                startActivity(getViewOnlyFormInstanceIntentFor(featureId));
-                break;
-            case OPEN_EDIT:
-                if (canEditSaved) {
-                    startActivity(getEditFormInstanceIntentFor(featureId));
-                } else {
-                    startActivity(getViewOnlyFormInstanceIntentFor(featureId));
-                }
-                break;
+        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
+        if (mappableFormInstance != null) {
+            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
+            setUpSummarySheet(mappableFormInstance);
+            summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
-    }
-
-    private Intent getEditFormInstanceIntentFor(int featureId) {
-        Uri uri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, instancesByFeatureId.get(featureId).getDatabaseId());
-        return new Intent(Intent.ACTION_EDIT, uri);
-    }
-
-    private Intent getViewOnlyFormInstanceIntentFor(int featureId) {
-        Intent intent = getEditFormInstanceIntentFor(featureId);
-        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-        return intent;
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -306,5 +283,68 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 return R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;
+    }
+
+    private void setUpSummarySheet(MappableFormInstance mappableFormInstance) {
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        ((TextView) findViewById(R.id.submission_name)).setText(mappableFormInstance.getInstanceName());
+        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
+        ((TextView) findViewById(R.id.status_text)).setText(instanceLastStatusChangeDate);
+
+        ImageView statusImage = findViewById(R.id.status_icon);
+        statusImage.setImageDrawable(IconUtils.getSubmissionSummaryStatusIcon(this, mappableFormInstance.getStatus()));
+        statusImage.setBackground(null);
+
+        switch (mappableFormInstance.getClickAction()) {
+            case DELETED_TOAST:
+                String deletedTime = getString(R.string.deleted_on_date_at_time);
+                String disabledMessage = new SimpleDateFormat(deletedTime,
+                        Locale.getDefault()).format(viewModel.getDeletedDateOf(mappableFormInstance.getDatabaseId()));
+                setUpInfoText(disabledMessage);
+                break;
+            case NOT_VIEWABLE_TOAST:
+                setUpInfoText(getString(R.string.cannot_edit_completed_form));
+                break;
+            case OPEN_READ_ONLY:
+                setUpOpenFormButton(false, mappableFormInstance.getDatabaseId());
+                break;
+            case OPEN_EDIT:
+                boolean canEditSaved = (Boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_EDIT_SAVED);
+                setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
+                break;
+        }
+    }
+
+    private void setUpOpenFormButton(boolean canEdit, long instanceId) {
+        findViewById(R.id.info).setVisibility(View.GONE);
+        Chip openFormButton = findViewById(R.id.openFormChip);
+        openFormButton.setVisibility(View.VISIBLE);
+        openFormButton.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
+        openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
+        openFormButton.setOnClickListener(v -> {
+            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+            startActivity(canEdit
+                    ? getEditFormInstanceIntentFor(instanceId)
+                    : getViewOnlyFormInstanceIntentFor(instanceId));
+        });
+    }
+
+    private void setUpInfoText(String message) {
+        findViewById(R.id.openFormChip).setVisibility(View.GONE);
+        TextView infoText = findViewById(R.id.info);
+        infoText.setVisibility(View.VISIBLE);
+        infoText.setText(message);
+    }
+
+    private Intent getViewOnlyFormInstanceIntentFor(long instanceId) {
+        Intent intent = getEditFormInstanceIntentFor(instanceId);
+        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+        return intent;
+    }
+
+    private Intent getEditFormInstanceIntentFor(long instanceId) {
+        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
+        return new Intent(Intent.ACTION_EDIT, uri);
     }
 }

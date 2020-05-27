@@ -8,6 +8,6 @@
         android:id="@+id/image"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:srcCompat="@drawable/form_state_blank" />
+        app:srcCompat="@drawable/form_state_blank_circle" />
 
 </merge>
