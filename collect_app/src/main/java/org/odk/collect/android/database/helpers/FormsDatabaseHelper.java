@@ -290,13 +290,18 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");   // smap
     }
 
-    // smap
+    // smap sarting point for upgrades
     private void upgradeToVersion15(SQLiteDatabase db) {
-        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
-        createFormsTableV15(db);
-        SQLiteUtils.copyRows(db, temporaryTable, COLUMN_NAMES_V15, FORMS_TABLE_NAME);
-        SQLiteUtils.dropTable(db, temporaryTable);
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");     // Version 5
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");   // Version 7
+
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
+
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, PROJECT, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, TASKS_ONLY, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, SOURCE, "text");
+
     }
 
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
