@@ -153,19 +153,15 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
-import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -2394,7 +2390,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (formController.getInstanceFile() == null) {
-                    createInstanceDirectory(formController);
+                    FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
+                            storagePathProvider,
+                            System::currentTimeMillis
+                    );
+
+                    File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
+                    if (instanceFile != null) {
+                        formController.setInstanceFile(instanceFile);
+                    } else {
+                        showFormLoadErrorAndExit(getString(R.string.form_instance_file_creation_error));
+                    }
+
                     formControllerAvailable(formController);
 
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
@@ -2484,23 +2491,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private void createInstanceDirectory(FormController formController) {
-        FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
-                storagePathProvider,
-                System::currentTimeMillis
-        );
-        
-        File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
-        if (instanceFile != null) {
-            formController.setInstanceFile(instanceFile);
-        }
-    }
-
     /**
      * called by the FormLoaderTask if something goes wrong.
      */
     @Override
     public void loadingError(String errorMsg) {
+        showFormLoadErrorAndExit(errorMsg);
+    }
+
+    private void showFormLoadErrorAndExit(String errorMsg) {
         DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {

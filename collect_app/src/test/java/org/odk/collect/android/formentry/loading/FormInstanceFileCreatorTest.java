@@ -2,7 +2,6 @@ package org.odk.collect.android.formentry.loading;
 
 import com.google.common.io.Files;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -13,7 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
