@@ -13,8 +13,10 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -63,6 +65,19 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         setContentView(R.layout.qrcode_tab);
         initToolbar();
 
+        new PermissionUtils().requestCameraPermission(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                setupViewPager();
+            }
+
+            @Override
+            public void denied() {
+            }
+        });
+    }
+
+    private void setupViewPager() {
         fragmentTitleList = new String[]{getString(R.string.scan_qr_code_fragment_title),
                 getString(R.string.view_qr_code_fragment_title)};
 

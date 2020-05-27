@@ -38,8 +38,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.IOException;
@@ -69,30 +67,20 @@ public abstract class BaseCodeScannerFragment extends Fragment implements Decora
             switchToFrontCamera();
         }
 
-        new PermissionUtils().requestCameraPermission(getActivity(), new PermissionListener() {
+        barcodeScannerView.decodeContinuous(new BarcodeCallback() {
             @Override
-            public void granted() {
-                barcodeScannerView.decodeContinuous(new BarcodeCallback() {
-                    @Override
-                    public void barcodeResult(BarcodeResult result) {
-                        beepManager.playBeepSoundAndVibrate();
-                        try {
-                            handleScanningResult(result);
-                        } catch (IOException | DataFormatException | IllegalArgumentException e) {
-                            Timber.e(e);
-                            ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
-                        }
-                    }
-
-                    @Override
-                    public void possibleResultPoints(List<ResultPoint> resultPoints) {
-
-                    }
-                });
+            public void barcodeResult(BarcodeResult result) {
+                beepManager.playBeepSoundAndVibrate();
+                try {
+                    handleScanningResult(result);
+                } catch (IOException | DataFormatException | IllegalArgumentException e) {
+                    Timber.e(e);
+                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
+                }
             }
 
             @Override
-            public void denied() {
+            public void possibleResultPoints(List<ResultPoint> resultPoints) {
 
             }
         });
