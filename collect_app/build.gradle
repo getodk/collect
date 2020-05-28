@@ -202,6 +202,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation "androidx.work:work-runtime:2.3.4"
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
@@ -283,15 +284,6 @@ dependencies {
     // Better "Subjects" for Rx:
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
-    // WorkManager for specifying deferrable, asynchronous tasks
-    implementation("android.arch.work:work-runtime:1.0.1") {
-        exclude group: 'com.google.guava', module: 'listenablefuture'
-    }
-    // Optional JobDispatcher support so devices with Play Services do better than AlarmManager
-    implementation("android.arch.work:work-firebase:1.0.0-alpha11") {
-        exclude group: 'com.google.guava', module: 'listenablefuture'
-    }
-
     implementation project(':nbi-stubs')
     implementation project(':material')
 
@@ -321,8 +313,6 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4:2.0.5"
     testImplementation "org.powermock:powermock-api-mockito2:2.0.5"
 
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-
     testImplementation "org.json:json:20190722"
 
     androidTestImplementation "org.mockito:mockito-android:3.3.3"
@@ -336,7 +326,7 @@ dependencies {
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 
-    androidTestImplementation "android.arch.work:work-testing:1.0.1"
+    androidTestImplementation "androidx.work:work-testing:2.3.4"
 }
 
 // Must be at bottom to prevent dependency collisions
