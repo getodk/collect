@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class FormInstanceFileCreator {
 
     private final StoragePathProvider storagePathProvider;
@@ -31,6 +33,7 @@ public class FormInstanceFileCreator {
         if (FileUtils.createFolder(instanceDir)) {
             return new File(instanceDir + File.separator + formFileName + "_" + timestamp + ".xml");
         } else {
+            Timber.e("Error creating form instance file");
             return null;
         }
     }
