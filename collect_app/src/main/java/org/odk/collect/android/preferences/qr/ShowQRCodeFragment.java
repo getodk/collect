@@ -26,6 +26,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
@@ -33,6 +34,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,12 +69,18 @@ public class ShowQRCodeFragment extends Fragment {
 
     @Inject
     public Analytics analytics;
+
     @Inject
     public AdminSharedPreferences adminSharedPreferences;
+
     @Inject
     public GeneralSharedPreferences generalSharedPreferences;
+
     @Inject
     public QRCodeGenerator qrCodeGenerator;
+
+    @Inject
+    public PreferencesProvider preferencesProvider;
 
     private QRCodeViewModel qrCodeViewModel;
 
@@ -93,8 +101,12 @@ public class ShowQRCodeFragment extends Fragment {
             } else {
                 progressBar.setVisibility(VISIBLE);
                 ivQRCode.setVisibility(GONE);
-                setPasswordWarning();
             }
+        });
+
+        qrCodeViewModel.getWarning().observe(this.getViewLifecycleOwner(), warning -> {
+            tvPasswordWarning.setText(warning);
+            passwordStatus.setVisibility(VISIBLE);
         });
 
         return view;
@@ -104,31 +116,10 @@ public class ShowQRCodeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-        qrCodeViewModel = new QRCodeViewModel(qrCodeGenerator);
-    }
-
-    private void setPasswordWarning() {
-        if (!passwordsSet[0] && !passwordsSet[1]) {
-            // should not display password warning is passwords are not set
-            passwordStatus.setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        boolean showingAdminPassword = passwordsSet[0] && checkedItems[0];
-        boolean showingServerPassword = passwordsSet[1] && checkedItems[1];
-
-        CharSequence status;
-        if (showingAdminPassword && showingServerPassword) {
-            status = getText(R.string.qrcode_with_both_passwords);
-        } else if (showingAdminPassword) {
-            status = getText(R.string.qrcode_with_admin_password);
-        } else if (showingServerPassword) {
-            status = getText(R.string.qrcode_with_server_password);
-        } else {
-            status = getText(R.string.qrcode_without_passwords);
-        }
-        tvPasswordWarning.setText(status);
-        passwordStatus.setVisibility(VISIBLE);
+        qrCodeViewModel = new ViewModelProvider(
+                requireActivity(),
+                new QRCodeViewModel.Factory(qrCodeGenerator, preferencesProvider)
+        ).get(QRCodeViewModel.class);
     }
 
     @OnClick(R.id.tvPasswordWarning)

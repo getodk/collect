@@ -33,7 +33,7 @@ import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
-import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
@@ -180,5 +180,5 @@ public interface AppDependencyComponent {
 
     AdminSharedPreferences adminSharedPreferences();
 
-    MetaSharedPreferencesProvider metaSharedPreferencesProvider();
+    PreferencesProvider preferencesProvider();
 }

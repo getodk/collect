@@ -22,6 +22,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
@@ -51,6 +52,9 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
     @Inject
     FileProvider fileProvider;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
 
     private QRCodeMenuDelegate menuDelegate;
 
@@ -85,7 +89,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(fragmentTitleList[position])).attach();
 
-        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider);
+        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider);
     }
 
     private void initToolbar() {

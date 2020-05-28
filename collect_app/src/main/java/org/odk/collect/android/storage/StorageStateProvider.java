@@ -17,7 +17,7 @@ public class StorageStateProvider {
     private final SharedPreferences metaSharedPreferences;
 
     public StorageStateProvider() {
-        metaSharedPreferences = Collect.getInstance().getComponent().metaSharedPreferencesProvider().getMetaSharedPreferences();
+        metaSharedPreferences = Collect.getInstance().getComponent().preferencesProvider().getMetaSharedPreferences();
     }
 
     public boolean isScopedStorageUsed() {

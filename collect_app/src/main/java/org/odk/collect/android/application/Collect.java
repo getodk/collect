@@ -33,7 +33,7 @@ import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -69,7 +69,7 @@ public class Collect extends Application {
     ApplicationInitializer applicationInitializer;
 
     @Inject
-    MetaSharedPreferencesProvider metaSharedPreferencesProvider;
+    PreferencesProvider preferencesProvider;
 
     public static Collect getInstance() {
         return singleton;
@@ -230,7 +230,7 @@ public class Collect extends Application {
     // https://issuetracker.google.com/issues/154855417
     private void fixGoogleBug154855417() {
         try {
-            SharedPreferences metaSharedPreferences = metaSharedPreferencesProvider.getMetaSharedPreferences();
+            SharedPreferences metaSharedPreferences = preferencesProvider.getMetaSharedPreferences();
 
             boolean hasFixedGoogleBug154855417 = metaSharedPreferences.getBoolean(KEY_GOOGLE_BUG_154855417_FIXED, false);
 

@@ -30,7 +30,7 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -183,16 +183,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    MetaSharedPreferencesProvider providesMetaSharedPreferencesProvider(Context context) {
-        return new MetaSharedPreferencesProvider(context);
+    PreferencesProvider providesPreferencesProvider(Context context) {
+        return new PreferencesProvider(context);
     }
 
     @Provides
-    InstallIDProvider providesInstallIDProvider(MetaSharedPreferencesProvider metaSharedPreferencesProvider) {
-        return new SharedPreferencesInstallIDProvider(
-                metaSharedPreferencesProvider.getMetaSharedPreferences(),
-                KEY_INSTALL_ID
-        );
+    InstallIDProvider providesInstallIDProvider(PreferencesProvider preferencesProvider) {
+        return new SharedPreferencesInstallIDProvider(preferencesProvider.getMetaSharedPreferences(), KEY_INSTALL_ID);
     }
 
     @Provides
@@ -292,7 +289,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, MetaSharedPreferencesProvider metaSharedPreferencesProvider, UserAgentProvider userAgentProvider) {
-        return new ApplicationInitializer(application, collectJobCreator, metaSharedPreferencesProvider.getMetaSharedPreferences(), userAgentProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, PreferencesProvider preferencesProvider, UserAgentProvider userAgentProvider) {
+        return new ApplicationInitializer(application, collectJobCreator, preferencesProvider.getMetaSharedPreferences(), userAgentProvider);
     }
 }

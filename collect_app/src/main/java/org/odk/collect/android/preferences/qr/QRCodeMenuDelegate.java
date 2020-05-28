@@ -6,8 +6,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
@@ -25,12 +27,15 @@ public class QRCodeMenuDelegate implements MenuDelegate {
 
     private String qrFilePath;
 
-    QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator, FileProvider fileProvider) {
+    QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator, FileProvider fileProvider, PreferencesProvider preferencesProvider) {
         this.activity = activity;
         this.activityAvailability = activityAvailability;
         this.fileProvider = fileProvider;
 
-        QRCodeViewModel qrCodeViewModel = new QRCodeViewModel(qrCodeGenerator);
+        QRCodeViewModel qrCodeViewModel = new ViewModelProvider(
+                activity,
+                new QRCodeViewModel.Factory(qrCodeGenerator, preferencesProvider)
+        ).get(QRCodeViewModel.class);
         qrCodeViewModel.getFilePath().observe(activity, filePath -> {
             if (filePath != null) {
                 this.qrFilePath = filePath;
