@@ -7,18 +7,22 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AdminSettingsPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.ResetStateRule;
 
 //Issue NODK-241
 @RunWith(AndroidJUnit4.class)
-public class UserSettingsTest extends BaseRegressionTest {
+public class UserSettingsTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain ruleChain = RuleChain
-            .outerRule(new ResetStateRule());
+            .outerRule(new ResetStateRule())
+            .around(rule);
 
     @Test
     public void typeOption_ShouldNotBeVisible() {
