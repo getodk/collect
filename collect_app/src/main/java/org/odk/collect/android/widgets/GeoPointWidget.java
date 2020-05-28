@@ -21,6 +21,7 @@ import android.content.Intent;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
@@ -55,20 +56,20 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        determineMapProperties();
+        determineMapProperties(questionDetails.getPrompt());
     }
 
-    private void determineMapProperties() {
+    private void determineMapProperties(FormEntryPrompt prompt) {
         // Determine the accuracy threshold to use.
-        String acc = getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
-        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
+//        String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+//        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
         // Determine whether to use the map and whether the point should be draggable.
         if (MapProvider.getConfigurator().isAvailable(getContext())) {
-            if (hasAppearance(getFormEntryPrompt(), PLACEMENT_MAP)) {
+            if (hasAppearance(prompt, PLACEMENT_MAP)) {
                 draggable = true;
                 useMap = true;
-            } else if (hasAppearance(getFormEntryPrompt(), MAPS)) {
+            } else if (hasAppearance(prompt, MAPS)) {
                 draggable = false;
                 useMap = true;
             }
