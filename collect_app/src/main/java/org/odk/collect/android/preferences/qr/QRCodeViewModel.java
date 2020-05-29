@@ -19,7 +19,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
@@ -37,10 +36,11 @@ class QRCodeViewModel extends ViewModel {
         this.qrCodeGenerator = qrCodeGenerator;
         this.generalSharedPreferences = generalSharedPreferences;
         this.adminSharedPreferences = adminSharedPreferences;
+
+        generateQRCode();
     }
 
     public LiveData<String> getFilePath() {
-        generateQRCode();
         return qrCodeFilePath;
     }
 
@@ -63,7 +63,7 @@ class QRCodeViewModel extends ViewModel {
             @Override
             protected Pair<String, Bitmap> doInBackground(Void... voids) {
                 try {
-                    String filePath = qrCodeGenerator.generateQRCode(emptyList());
+                    String filePath = qrCodeGenerator.generateQRCode(includedKeys);
 
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -85,12 +85,18 @@ class QRCodeViewModel extends ViewModel {
                 boolean serverPasswordSet = !generalSharedPreferences.getString(KEY_PASSWORD, "").isEmpty();
                 boolean adminPasswordSet = adminSharedPreferences.contains(KEY_ADMIN_PW);
 
-                if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD)) {
-                    warning.setValue(R.string.qrcode_with_server_password);
-                } else if (adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {
-                    warning.setValue(R.string.qrcode_with_admin_password);
+                if (serverPasswordSet || adminPasswordSet) {
+                    if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD) && adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {
+                        warning.setValue(R.string.qrcode_with_both_passwords);
+                    } else if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD)) {
+                        warning.setValue(R.string.qrcode_with_server_password);
+                    } else if (adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {
+                        warning.setValue(R.string.qrcode_with_admin_password);
+                    } else {
+                        warning.setValue(R.string.qrcode_without_passwords);
+                    }
                 } else {
-                    warning.setValue(R.string.qrcode_without_passwords);
+                    warning.setValue(null);
                 }
             }
         }.execute();

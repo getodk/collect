@@ -32,8 +32,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 
 import java.util.ArrayList;
@@ -71,12 +69,6 @@ public class ShowQRCodeFragment extends Fragment {
     public Analytics analytics;
 
     @Inject
-    public AdminSharedPreferences adminSharedPreferences;
-
-    @Inject
-    public GeneralSharedPreferences generalSharedPreferences;
-
-    @Inject
     public QRCodeGenerator qrCodeGenerator;
 
     @Inject
@@ -90,8 +82,8 @@ public class ShowQRCodeFragment extends Fragment {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        passwordsSet[0] = !((String) adminSharedPreferences.get(KEY_ADMIN_PW)).isEmpty();
-        passwordsSet[1] = !((String) generalSharedPreferences.get(KEY_PASSWORD)).isEmpty();
+        passwordsSet[0] = !preferencesProvider.getAdminSharedPreferences().getString(KEY_ADMIN_PW, "").isEmpty();
+        passwordsSet[1] = !preferencesProvider.getGeneralSharedPreferences().getString(KEY_PASSWORD, "").isEmpty();
 
         qrCodeViewModel.getBitmap().observe(this.getViewLifecycleOwner(), bitmap -> {
             if (bitmap != null) {
@@ -105,8 +97,10 @@ public class ShowQRCodeFragment extends Fragment {
         });
 
         qrCodeViewModel.getWarning().observe(this.getViewLifecycleOwner(), warning -> {
-            tvPasswordWarning.setText(warning);
-            passwordStatus.setVisibility(VISIBLE);
+            if (warning != null) {
+                tvPasswordWarning.setText(warning);
+                passwordStatus.setVisibility(VISIBLE);
+            }
         });
 
         return view;
