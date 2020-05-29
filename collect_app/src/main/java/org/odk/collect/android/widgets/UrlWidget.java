@@ -48,9 +48,9 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
     private TextView stringAnswer;
     private final CustomTabHelper customTabHelper;
 
-    public UrlWidget(Context context, QuestionDetails questionDetails) {
+    public UrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper) {
         super(context, questionDetails);
-        customTabHelper = new CustomTabHelper();
+        this.customTabHelper = customTabHelper;
     }
 
     @Override
