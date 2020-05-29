@@ -32,7 +32,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 /**
@@ -71,7 +70,6 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
             });
         }
 
-        stringAnswer.setTextColor(new ThemeUtils(context).getColorOnSurface());
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         String s = prompt.getAnswerText();
         if (s != null) {
