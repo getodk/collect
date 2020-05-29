@@ -20,7 +20,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
@@ -66,13 +65,13 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void whenPromptHasAnswer_setsCorrectAnswer() {
+    public void whenPromptHasAnswer_displaysAnswer() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertThat(((TextView) widget.findViewById(R.id.url_answer_text)).getText().toString(), equalTo("blah"));
     }
 
     @Test
-    public void whenPromptAnswerDoesNotHaveAnswer_setsNullValue() {
+    public void whenPromptAnswerDoesNotHaveAnswer_displayEmptyString() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         assertThat(((TextView) widget.findViewById(R.id.url_answer_text)).getText().toString(), equalTo(""));
     }
@@ -89,15 +88,15 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void clickingButtonWhenUrlIsNotEmpty_callsCorrectMethods() {
+    public void clickingButton_callsCorrectMethods() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         Button urlButton = widget.findViewById(R.id.url_button);
         TextView textView = widget.findViewById(R.id.url_answer_text);
         urlButton.performClick();
 
         assertThat(textView.getText().toString(), equalTo("blah"));
-        verify(customTabHelper, times(1)).bindCustomTabsService(widget.getContext(), null);
-        verify(customTabHelper, times(1)).openUri(widget.getContext(), Uri.parse("blah"));
+        verify(customTabHelper).bindCustomTabsService(widget.getContext(), null);
+        verify(customTabHelper).openUri(widget.getContext(), Uri.parse("blah"));
     }
 
     private UrlWidget createWidget(FormEntryPrompt prompt) {
