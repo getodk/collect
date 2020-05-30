@@ -1933,15 +1933,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        String surveyNotes = getFormController().getSurveyNotes();   // Smap
-        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit,
-                mTaskId, formPath, surveyNotes, mCanUpdate, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
+        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit);
 
 
         return true;
     }
 
-    private void handleSaveResult(FormSaveViewModel.SaveResult result) {        // smap added taskId and showSaveMsg
+    private void handleSaveResult(FormSaveViewModel.SaveResult result) {
         if (result == null) {
             return;
         }
@@ -2447,7 +2445,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         final FormController formController = task.getFormController();
         if (formController != null) {
             formController.setSurveyNotes(mSurveyNotes);        // smap
-            formController.setCanUpdate(mCanUpdate);        // smap
+            formController.setCanUpdate(mCanUpdate);            // smap
+            formController.setTaskId(mTaskId);                  // smap
             if (readPhoneStatePermissionRequestNeeded) {
                 new PermissionUtils().requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
