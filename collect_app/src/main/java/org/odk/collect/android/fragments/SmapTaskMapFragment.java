@@ -258,13 +258,13 @@ public class SmapTaskMapFragment extends Fragment
 
             mMap.setMyLocationEnabled(true);
 
-            complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized));
-            accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved));
+            complete = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_finalized_circle));
+            accepted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_saved_circle));
             late = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_late));
             repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_repeat));
             rejected = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_rejected));
             newtask = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_new));
-            submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted));
+            submitted = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_submitted_circle));
             triggered = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
             triggered_repeat = getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.form_state_triggered));
 

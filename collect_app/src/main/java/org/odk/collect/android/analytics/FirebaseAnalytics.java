@@ -8,7 +8,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 public class FirebaseAnalytics implements Analytics {
 
     //private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;  // smap
-    private final GeneralSharedPreferences generalSharedPreferences;
+    //private final GeneralSharedPreferences generalSharedPreferences;  // smap
 
     public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, GeneralSharedPreferences generalSharedPreferences) {
         // this.firebaseAnalytics = firebaseAnalytics;  // smap commented
@@ -32,11 +32,11 @@ public class FirebaseAnalytics implements Analytics {
     }
 
     private void setupRemoteAnalytics() {
-        boolean isAnalyticsEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
-        setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+        //boolean isAnalyticsEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_ANALYTICS, true);   // smap
+        //setAnalyticsCollectionEnabled(isAnalyticsEnabled);    // smap
     }
 
     public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
-        firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+        //firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);  // smap
     }
 }

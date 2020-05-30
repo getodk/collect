@@ -72,7 +72,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 
     	ImageView icon = (ImageView) view.findViewById(R.id.icon);
     	if(item.type.equals("form")) {
-            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank);
+            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank_circle);
             icon.setImageDrawable(d);
     	} else if (item.taskStatus != null) {
     		if(item.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
@@ -99,7 +99,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_rejected);
                 icon.setImageDrawable(d);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {
-                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_submitted);
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_submitted_circle);
                 icon.setImageDrawable(d);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_NEW)) {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_new);
