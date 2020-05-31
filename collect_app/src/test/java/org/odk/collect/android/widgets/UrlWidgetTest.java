@@ -15,6 +15,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.robolectric.RobolectricTestRunner;
 
+import static android.view.KeyEvent.ACTION_UP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -76,7 +77,6 @@ public class UrlWidgetTest {
         assertThat(((TextView) widget.findViewById(R.id.url_answer_text)).getText().toString(), equalTo(""));
     }
 
-
     @Test
     public void clickingButtonWhenUrlIsEmpty_doesNotCallOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
@@ -91,13 +91,31 @@ public class UrlWidgetTest {
     public void clickingButton_callsCorrectMethods() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         Button urlButton = widget.findViewById(R.id.url_button);
-        TextView textView = widget.findViewById(R.id.url_answer_text);
         urlButton.performClick();
 
-        assertThat(textView.getText().toString(), equalTo("blah"));
         verify(customTabHelper).bindCustomTabsService(widget.getContext(), null);
         verify(customTabHelper).openUri(widget.getContext(), Uri.parse("blah"));
     }
+
+    @Test
+    public void onLongPressButton_doesNotCallOpenUri() {
+        UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        Button urlButton = widget.findViewById(R.id.url_button);
+        urlButton.performLongClick();
+
+        verify(customTabHelper, never()).bindCustomTabsService(widget.getContext(), null);
+        verify(customTabHelper, never()).openUri(widget.getContext(), Uri.parse("blah"));
+    }
+
+    @Test
+    public void textViewShouldIgnoreLongPress() {
+        UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        TextView textView = widget.findViewById(R.id.url_answer_text);
+
+        textView.onEditorAction(ACTION_UP);
+        assertThat(textView.hasFocus(), equalTo(false));
+    }
+
 
     private UrlWidget createWidget(FormEntryPrompt prompt) {
         return new UrlWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), customTabHelper);
