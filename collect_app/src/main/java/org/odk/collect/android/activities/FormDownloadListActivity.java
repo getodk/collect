@@ -27,11 +27,12 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
@@ -40,6 +41,8 @@ import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
@@ -89,7 +92,8 @@ import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormDownloadListActivity extends FormListActivity implements FormListDownloaderListener,
-        DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
+        DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener,
+        AdapterView.OnItemClickListener, RefreshFormListDialogFragment.RefreshFormListDialogFragmentListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
@@ -103,10 +107,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     private static final String FORM_VERSION_KEY = "formversion";
 
     private AlertDialog alertDialog;
-    private AlertDialog progressDialog;
     private ProgressDialog cancelDialog;
     private Button downloadButton;
 
+    private RefreshFormListDialogFragment refreshFormListDialogFragment;
     private DownloadFormListTask downloadFormListTask;
     private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
@@ -254,26 +258,18 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
             downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
-                try {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                    viewModel.setProgressDialogShowing(false);
-                } catch (IllegalArgumentException e) {
-                    Timber.i("Attempting to close a dialog that was not previously opened");
+                Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                if (dialogFragment != null) {
+                    ((DialogFragment) dialogFragment).dismiss();
                 }
                 downloadFormsTask = null;
             }
         } else if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
             downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                try {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                    viewModel.setProgressDialogShowing(false);
-                } catch (IllegalArgumentException e) {
-                    Timber.i("Attempting to close a dialog that was not previously opened");
+                Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                if (dialogFragment != null) {
+                    ((DialogFragment) dialogFragment).dismiss();
                 }
                 downloadFormsTask = null;
             }
@@ -322,11 +318,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             }
         } else {
             viewModel.clearFormDetailsByFormId();
-            if (progressDialog != null) {
-                // This is needed because onPrepareDialog() is broken in 1.6.
-                progressDialog.setMessage(viewModel.getProgressDialogMsg());
-            }
-            createProgressDialog();
+            refreshFormListDialogFragment = new RefreshFormListDialogFragment();
+            refreshFormListDialogFragment.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
             if (downloadFormListTask != null
                     && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -441,7 +434,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         int totalCount = filesToDownload.size();
         if (totalCount > 0) {
             // show dialog box
-            createProgressDialog();
+            refreshFormListDialogFragment = new RefreshFormListDialogFragment();
+            refreshFormListDialogFragment.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
             downloadFormsTask = new DownloadFormsTask();
             downloadFormsTask.setDownloaderListener(this);
@@ -490,9 +484,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
         if (viewModel.isAlertShowing()) {
             createAlertDialog(viewModel.getAlertTitle(), viewModel.getAlertDialogMsg(), viewModel.shouldExit());
-        }
-        if (viewModel.isProgressDialogShowing() && (progressDialog == null || !progressDialog.isShowing())) {
-            createProgressDialog();
         }
         if (viewModel.isCancelDialogShowing()) {
             createCancelDialog();
@@ -543,8 +534,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      * <form_id, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
-        progressDialog.dismiss();
-        viewModel.setProgressDialogShowing(false);
+        Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+        if (dialogFragment != null) {
+            ((DialogFragment) dialogFragment).dismiss();
+        }
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
 
@@ -683,52 +676,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         DialogUtils.showDialog(alertDialog, this);
     }
 
-    private void createProgressDialog() {
-        progressDialog = new AlertDialog.Builder(this).create();
-        DialogInterface.OnClickListener loadingButtonListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // we use the same progress dialog for both
-                        // so whatever isn't null is running
-                        dialog.dismiss();
-                        if (downloadFormListTask != null) {
-                            downloadFormListTask.setDownloaderListener(null);
-                            downloadFormListTask.cancel(true);
-                            downloadFormListTask = null;
-
-                            // Only explicitly exit if DownloadFormListTask is running since
-                            // DownloadFormTask has a callback when cancelled and has code to handle
-                            // cancellation when in download mode only
-                            if (viewModel.isDownloadOnlyMode()) {
-                                setReturnResult(false, "User cancelled the operation", viewModel.getFormResults());
-                                finish();
-                            }
-                        }
-
-                        if (downloadFormsTask != null) {
-                            createCancelDialog();
-                            downloadFormsTask.cancel(true);
-                        }
-                        viewModel.setLoadingCanceled(true);
-                        viewModel.setProgressDialogShowing(false);
-                    }
-                };
-
-        progressDialog.setTitle(getString(R.string.downloading_data));
-
-        View dialogView = this.getLayoutInflater().inflate(R.layout.progress_dialog, null, false);
-        TextView textView = dialogView.findViewById(R.id.message);
-        textView.setText(viewModel.getProgressDialogMsg());
-
-        progressDialog.setView(dialogView);
-        progressDialog.setIcon(android.R.drawable.ic_dialog_info);
-        progressDialog.setCancelable(false);
-        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), loadingButtonListener);
-        viewModel.setProgressDialogShowing(true);
-        DialogUtils.showDialog(progressDialog, this);
-    }
-
     private void createAuthDialog() {
         viewModel.setAlertShowing(false);
 
@@ -754,7 +701,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
         viewModel.setProgressDialogMsg(getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total)));
-        progressDialog.setMessage(viewModel.getProgressDialogMsg());
+//        progressDialog.setMessage(viewModel.getProgressDialogMsg());
     }
 
     @Override
@@ -765,10 +712,9 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         cleanUpWebCredentials();
 
-        if (progressDialog.isShowing()) {
-            // should always be true here
-            progressDialog.dismiss();
-            viewModel.setProgressDialogShowing(false);
+        Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+        if (dialogFragment != null) {
+            ((DialogFragment) dialogFragment).dismiss();
         }
 
         createAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
@@ -865,5 +811,28 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 webCredentialsUtils.clearCredentials(viewModel.getUrl());
             }
         }
+    }
+
+    @Override
+    public void onCancelFormLoading() {
+        if (downloadFormListTask != null) {
+            downloadFormListTask.setDownloaderListener(null);
+            downloadFormListTask.cancel(true);
+            downloadFormListTask = null;
+
+            // Only explicitly exit if DownloadFormListTask is running since
+            // DownloadFormTask has a callback when cancelled and has code to handle
+            // cancellation when in download mode only
+            if (viewModel.isDownloadOnlyMode()) {
+                setReturnResult(false, "User cancelled the operation", viewModel.getFormResults());
+                finish();
+            }
+        }
+
+        if (downloadFormsTask != null) {
+            createCancelDialog();
+            downloadFormsTask.cancel(true);
+        }
+        viewModel.setLoadingCanceled(true);
     }
 }
