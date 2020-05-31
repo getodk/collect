@@ -101,7 +101,6 @@ public class ProgressDialogFragment extends DialogFragment {
         }
 
         if (getArguments() != null && getArguments().getString(MESSAGE) != null) {
-            ((TextView) dialogView.findViewById(R.id.message)).setTextAppearance(getActivity(), R.style.TextAppearance_Collect_Body1);
             ((TextView) dialogView.findViewById(R.id.message)).setText(getArguments().getString(MESSAGE));
         }
 
