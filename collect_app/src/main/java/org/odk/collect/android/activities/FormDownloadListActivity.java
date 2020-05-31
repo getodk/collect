@@ -700,8 +700,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
-        viewModel.setProgressDialogMsg(getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total)));
-//        progressDialog.setMessage(viewModel.getProgressDialogMsg());
+        refreshFormListDialogFragment = (RefreshFormListDialogFragment) getSupportFragmentManager()
+                .findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+        refreshFormListDialogFragment.setMessage(getString(R.string.fetching_file, currentFile,
+                String.valueOf(progress), String.valueOf(total)));
     }
 
     @Override
