@@ -286,4 +286,9 @@ public class AppDependencyModule {
     public VersionInformation providesVersionInformation() {
         return new VersionInformation(() -> BuildConfig.VERSION_NAME);
     }
+
+    @Provides
+    MetaSharedPreferencesProvider providesMetaSharedPreferencesProvider(Context context) {
+        return new MetaSharedPreferencesProvider(context);
+    }
 }
