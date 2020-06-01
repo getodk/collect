@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.os.Handler;
 
+import org.odk.collect.utilities.Cancellable;
 import org.odk.collect.utilities.Scheduler;
 
 /**
@@ -10,14 +11,9 @@ import org.odk.collect.utilities.Scheduler;
  */
 public class HandlerScheduler implements Scheduler {
 
-    private final Handler handler;
-
-    public HandlerScheduler() {
-        handler = new Handler();
-    }
-
     @Override
-    public void schedule(Runnable task, long period) {
+    public Cancellable schedule(Runnable task, long period) {
+        Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -25,10 +21,10 @@ public class HandlerScheduler implements Scheduler {
                 handler.postDelayed(this, period);
             }
         });
-    }
 
-    @Override
-    public void cancel() {
-        handler.removeCallbacksAndMessages(null);
+        return () -> {
+            handler.removeCallbacksAndMessages(null);
+            return true;
+        };
     }
 }

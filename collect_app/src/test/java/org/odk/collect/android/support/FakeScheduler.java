@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import org.odk.collect.utilities.Cancellable;
 import org.odk.collect.utilities.Scheduler;
 
 public class FakeScheduler implements Scheduler {
@@ -8,13 +9,12 @@ public class FakeScheduler implements Scheduler {
     private Boolean cancelled = false;
 
     @Override
-    public void schedule(Runnable task, long period) {
+    public Cancellable schedule(Runnable task, long period) {
         this.task = task;
-    }
-
-    @Override
-    public void cancel() {
-        cancelled = true;
+        return () -> {
+            cancelled = true;
+            return true;
+        };
     }
 
     public void runTask() {

@@ -7,15 +7,11 @@ package org.odk.collect.utilities;
 public interface Scheduler {
 
     /**
-     * Schedule a task to run and then repeat
+     * * Schedule a task to run and then repeat
      *
      * @param task   the task to be run
      * @param period the period between each run of the task
+     * @return object that allows task to be cancelled
      */
-    void schedule(Runnable task, long period);
-
-    /**
-     * Cancel any tasks currently repeating
-     */
-    void cancel();
+    Cancellable schedule(Runnable task, long period);
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.R;
+import org.odk.collect.utilities.Cancellable;
 import org.odk.collect.utilities.Scheduler;
 
 import java.io.File;
@@ -29,7 +30,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     private final MutableLiveData<Exception> error = new MutableLiveData<>();
     private final Map<String, MutableLiveData<Integer>> positions = new HashMap<>();
 
-    private Boolean scheduledDurationUpdates = false;
+    private Cancellable postitionUpdatesCancellable;
 
     AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
@@ -176,8 +177,8 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     private void schedulePositionUpdates() {
-        if (!scheduledDurationUpdates) {
-            scheduler.schedule(() -> {
+        if (postitionUpdatesCancellable == null) {
+            postitionUpdatesCancellable = scheduler.schedule(() -> {
                 CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
 
                 if (currentlyPlaying != null) {
@@ -185,13 +186,13 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
                     position.postValue(getMediaPlayer().getCurrentPosition());
                 }
             }, 500);
-            scheduledDurationUpdates = true;
         }
     }
 
     private void cancelPositionUpdates() {
-        scheduler.cancel();
-        scheduledDurationUpdates = false;
+        if (postitionUpdatesCancellable != null) {
+            postitionUpdatesCancellable.cancel();
+        }
     }
 
     private void releaseMediaPlayer() {

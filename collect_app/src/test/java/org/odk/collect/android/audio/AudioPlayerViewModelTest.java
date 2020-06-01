@@ -219,7 +219,9 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void background_cancelsScheduler() {
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.background();
+
         assertThat(fakeScheduler.isCancelled(), equalTo(true));
     }
 
@@ -340,7 +342,9 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void onCleared_cancelsScheduler() {
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.onCleared();
+
         assertThat(fakeScheduler.isCancelled(), equalTo(true));
     }
 
