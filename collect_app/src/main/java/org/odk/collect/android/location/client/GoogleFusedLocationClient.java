@@ -109,7 +109,6 @@ public class GoogleFusedLocationClient
 
         if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
-
         } else {
             onConnectionSuspended(0);
         }

@@ -150,6 +150,12 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     @Override
     protected void onStop() {
         locationClient.stop();
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager != null) {
+            locationManager.removeGpsStatusListener(this);
+        }
+
         super.onStop();
     }
 
@@ -168,7 +174,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         outState.putLong(START_TIME, startTime);
     }
 
-    // LocationClientListener:
+    //region LocationClientListener:
 
     @SuppressLint("MissingPermission") // Checking Permissions handled in constructor
     @Override
@@ -195,12 +201,9 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     @Override
     public void onClientStop() {
-        locationClient.stopLocationUpdates();
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager != null) {
-            locationManager.removeGpsStatusListener(this);
-        }
     }
+
+    //endregion
 
     /**
      * Sets up the look and actions for the progress dialog while the GPS is searching.
