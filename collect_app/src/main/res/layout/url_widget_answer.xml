@@ -14,7 +14,6 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_extra_small"
-        android:layout_marginBottom="@dimen/margin_extra_small"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -25,6 +24,7 @@
         android:paddingStart="@dimen/margin_standard"
         android:paddingEnd="@dimen/margin_standard"
         android:textColor="?colorOnSurface"
+        android:layout_marginTop="@dimen/margin_extra_small"
         />
 
 </LinearLayout>
