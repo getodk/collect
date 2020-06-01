@@ -1,7 +1,9 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Context;
 import android.net.Uri;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,7 +17,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.robolectric.RobolectricTestRunner;
 
-import static android.view.KeyEvent.ACTION_UP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -34,10 +35,17 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class UrlWidgetTest {
 
     private CustomTabHelper customTabHelper;
+    private OnLongClickListener listener;
 
     @Before
     public void setUp() {
         customTabHelper = mock(CustomTabHelper.class);
+        listener = new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        };
     }
 
     @Test
@@ -98,26 +106,23 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void onLongPressButton_doesNotCallOpenUri() {
+    public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         Button urlButton = widget.findViewById(R.id.url_button);
         urlButton.performLongClick();
 
-        verify(customTabHelper, never()).bindCustomTabsService(widget.getContext(), null);
-        verify(customTabHelper, never()).openUri(widget.getContext(), Uri.parse("blah"));
+        assertThat(listener.onLongClick(urlButton), equalTo(true));
     }
 
-    @Test
-    public void textViewShouldIgnoreLongPress() {
-        UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        TextView textView = widget.findViewById(R.id.url_answer_text);
-
-        textView.onEditorAction(ACTION_UP);
-        assertThat(textView.hasFocus(), equalTo(false));
+    private TestUrlWidget createWidget(FormEntryPrompt prompt) {
+        return new TestUrlWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), customTabHelper, listener);
     }
 
+    private static class TestUrlWidget extends UrlWidget {
 
-    private UrlWidget createWidget(FormEntryPrompt prompt) {
-        return new UrlWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), customTabHelper);
+        public TestUrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper, OnLongClickListener listener) {
+            super(context, questionDetails, customTabHelper);
+            this.setOnLongClickListener(listener);
+        }
     }
 }
