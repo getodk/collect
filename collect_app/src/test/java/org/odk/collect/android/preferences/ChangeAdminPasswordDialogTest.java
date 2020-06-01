@@ -33,14 +33,12 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class ChangeAdminPasswordDialogTest {
 
-    private TestActivityScenario<DialogFragmentTestActivity> activityScenario;
     private FragmentManager fragmentManager;
     private ChangeAdminPasswordDialog dialogFragment;
     private SharedPreferences sharedPreferences;
 
     @Before
     public void setup() {
-        activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity.class);
         FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
         sharedPreferences = activity.getSharedPreferences(ADMIN_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -67,6 +65,7 @@ public class ChangeAdminPasswordDialogTest {
 
     @Test
     public void whenScreenIsRotated_passwordAndCheckboxValueIsRetained() {
+        TestActivityScenario<DialogFragmentTestActivity> activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity.class);
         activityScenario.onActivity(activity -> {
             dialogFragment.show(activity.getSupportFragmentManager(), "TAG");
             AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
