@@ -743,5 +743,4 @@
 
     <string name="install_id">Install ID - will replace Device ID in August 2020</string>
     <string name="preference_not_available">Not available</string>
-    <string name="form_instance_file_creation_error">Form instance file could not be created!</string>
 </resources>

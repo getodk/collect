@@ -2399,7 +2399,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (instanceFile != null) {
                         formController.setInstanceFile(instanceFile);
                     } else {
-                        showFormLoadErrorAndExit(getString(R.string.form_instance_file_creation_error));
+                        showFormLoadErrorAndExit(getString(R.string.loading_form_failed));
                     }
 
                     formControllerAvailable(formController);
