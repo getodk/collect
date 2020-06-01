@@ -1,7 +1,6 @@
 package org.odk.collect.android.formentry.repeats;
 
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -64,22 +63,6 @@ public class DeleteRepeatDialogFragmentTest {
         String message = ((TextView) dialog.findViewById(android.R.id.message)).getText().toString();
 
         assertThat(message, equalTo(RuntimeEnvironment.application.getString(R.string.delete_repeat_confirm, "blah (1)")));
-    }
-
-    @Test
-    public void shouldRetainMessageOnScreenRotation() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        String message = ((TextView) dialog.findViewById(android.R.id.message)).getText().toString();
-
-        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_PORTRAIT));
-        RuntimeEnvironment.setQualifiers("+land");
-        activity.configurationChange();
-        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_LANDSCAPE));
-
-        DeleteRepeatDialogFragment restoredFragment = (DeleteRepeatDialogFragment) activity.get().getSupportFragmentManager().findFragmentByTag("TAG");
-        AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
-        assertThat(((TextView) restoredDialog.findViewById(android.R.id.message)).getText().toString(), equalTo(message));
     }
 
     @Test
