@@ -1,7 +1,6 @@
 package org.odk.collect.android.geo;
 
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -16,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowDialog;
 
@@ -37,15 +35,13 @@ public class SettingsDialogFragmentTest {
 
     private final int sampleId = R.id.automatic_mode;
 
-    private ActivityController<FragmentActivity> activity;
     private FragmentManager fragmentManager;
     private SettingsDialogFragment dialogFragment;
-
     private SettingsDialogFragment.SettingsDialogCallback callback;
 
     @Before
     public void setup() {
-        activity = RobolectricHelpers.buildThemedActivity(FragmentActivity.class);
+        ActivityController<FragmentActivity> activity = RobolectricHelpers.buildThemedActivity(FragmentActivity.class);
         activity.setup();
 
         fragmentManager = activity.get().getSupportFragmentManager();
@@ -114,31 +110,6 @@ public class SettingsDialogFragmentTest {
         radioGroup.check(sampleId);
         fragmentManager.executePendingTransactions();
         assertThat(autoOptions.getVisibility(), equalTo(VISIBLE));
-    }
-
-    @Test
-    public void retainsIntervalAndSpinnerValueOnScreenOrientation() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
-        Spinner autoInterval = dialog.findViewById(R.id.auto_interval);
-        Spinner accuracyThreshold = dialog.findViewById(R.id.accuracy_threshold);
-
-        radioGroup.check(sampleId);
-        autoInterval.setSelection(2);
-        accuracyThreshold.setSelection(2);
-
-        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_PORTRAIT));
-        RuntimeEnvironment.setQualifiers("+land");
-        activity.configurationChange();
-        assertThat(activity.get().getResources().getConfiguration().orientation, equalTo(Configuration.ORIENTATION_LANDSCAPE));
-
-        SettingsDialogFragment restoredFragment = (SettingsDialogFragment) activity.get().getSupportFragmentManager().findFragmentByTag("TAG");
-        AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
-
-        assertThat(((RadioGroup) restoredDialog.findViewById(R.id.radio_group)).getCheckedRadioButtonId(), equalTo(sampleId));
-        assertThat(((Spinner) restoredDialog.findViewById(R.id.auto_interval)).getSelectedItemPosition(), equalTo(2));
-        assertThat(((Spinner) restoredDialog.findViewById(R.id.accuracy_threshold)).getSelectedItemPosition(), equalTo(2));
     }
 
     @Test
