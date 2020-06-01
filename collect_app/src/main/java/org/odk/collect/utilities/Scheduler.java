@@ -1,10 +1,17 @@
 package org.odk.collect.utilities;
 
 /**
- * An object that schedules tasks to run in the background repeatedly with a fixed interval
- * between runs.
+ * Runs tasks in the foreground and background
  */
 public interface Scheduler {
+
+    /**
+     * * Schedule a task to run in the background (off the UI thread)
+     *
+     * @param task     the task to be run
+     * @param callback run on the UI thread once the task is complete
+     */
+    <T> void scheduleInBackground(Supplier<T> task, Consumer<T> callback);
 
     /**
      * * Schedule a task to run and then repeat

@@ -3,7 +3,6 @@ package org.odk.collect.android.preferences.qr;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -15,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.utilities.Scheduler;
 
 import java.util.Collection;
 
@@ -27,15 +27,17 @@ class QRCodeViewModel extends ViewModel {
     private final QRCodeGenerator qrCodeGenerator;
     private final SharedPreferences generalSharedPreferences;
     private final SharedPreferences adminSharedPreferences;
+    private final Scheduler scheduler;
     private final MutableLiveData<String> qrCodeFilePath = new MutableLiveData<>(null);
     private final MutableLiveData<Bitmap> qrCodeBitmap = new MutableLiveData<>(null);
     private final MutableLiveData<Integer> warning = new MutableLiveData<>();
     private Collection<String> includedKeys = asList(KEY_ADMIN_PW, KEY_PASSWORD);
 
-    QRCodeViewModel(QRCodeGenerator qrCodeGenerator, SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) {
+    QRCodeViewModel(QRCodeGenerator qrCodeGenerator, SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences, Scheduler scheduler) {
         this.qrCodeGenerator = qrCodeGenerator;
         this.generalSharedPreferences = generalSharedPreferences;
         this.adminSharedPreferences = adminSharedPreferences;
+        this.scheduler = scheduler;
 
         generateQRCode();
     }
@@ -58,58 +60,56 @@ class QRCodeViewModel extends ViewModel {
     }
 
     private void generateQRCode() {
-        new AsyncTask<Void, Void, Pair<String, Bitmap>>() {
+        scheduler.scheduleInBackground(
+                () -> {
+                    try {
+                        String filePath = qrCodeGenerator.generateQRCode(includedKeys);
 
-            @Override
-            protected Pair<String, Bitmap> doInBackground(Void... voids) {
-                try {
-                    String filePath = qrCodeGenerator.generateQRCode(includedKeys);
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                        Bitmap bitmap = FileUtils.getBitmap(filePath, options);
 
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    Bitmap bitmap = FileUtils.getBitmap(filePath, options);
-
-                    return new Pair<>(filePath, bitmap);
-                } catch (Exception ignored) {
-                    // Ignored
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Pair<String, Bitmap> qrCode) {
-                qrCodeFilePath.setValue(qrCode.first);
-                qrCodeBitmap.setValue(qrCode.second);
-
-                boolean serverPasswordSet = !generalSharedPreferences.getString(KEY_PASSWORD, "").isEmpty();
-                boolean adminPasswordSet = adminSharedPreferences.contains(KEY_ADMIN_PW);
-
-                if (serverPasswordSet || adminPasswordSet) {
-                    if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD) && adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {
-                        warning.setValue(R.string.qrcode_with_both_passwords);
-                    } else if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD)) {
-                        warning.setValue(R.string.qrcode_with_server_password);
-                    } else if (adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {
-                        warning.setValue(R.string.qrcode_with_admin_password);
-                    } else {
-                        warning.setValue(R.string.qrcode_without_passwords);
+                        return new Pair<>(filePath, bitmap);
+                    } catch (Exception ignored) {
+                        // Ignored
                     }
-                } else {
-                    warning.setValue(null);
+
+                    return null;
+                },
+                qrCode -> {
+                    qrCodeFilePath.setValue(qrCode.first);
+                    qrCodeBitmap.setValue(qrCode.second);
+
+                    boolean serverPasswordSet = !generalSharedPreferences.getString(KEY_PASSWORD, "").isEmpty();
+                    boolean adminPasswordSet = adminSharedPreferences.contains(KEY_ADMIN_PW);
+
+                    if (serverPasswordSet || adminPasswordSet) {
+                        if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD) && adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {
+                            warning.setValue(R.string.qrcode_with_both_passwords);
+                        } else if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD)) {
+                            warning.setValue(R.string.qrcode_with_server_password);
+                        } else if (adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {
+                            warning.setValue(R.string.qrcode_with_admin_password);
+                        } else {
+                            warning.setValue(R.string.qrcode_without_passwords);
+                        }
+                    } else {
+                        warning.setValue(null);
+                    }
                 }
-            }
-        }.execute();
+        );
     }
 
     public static class Factory implements ViewModelProvider.Factory {
 
         private final QRCodeGenerator qrCodeGenerator;
         private final PreferencesProvider preferencesProvider;
+        private final Scheduler scheduler;
 
-        Factory(QRCodeGenerator qrCodeGenerator, PreferencesProvider preferencesProvider) {
+        Factory(QRCodeGenerator qrCodeGenerator, PreferencesProvider preferencesProvider, Scheduler scheduler) {
             this.qrCodeGenerator = qrCodeGenerator;
             this.preferencesProvider = preferencesProvider;
+            this.scheduler = scheduler;
         }
 
         @NonNull
@@ -118,7 +118,8 @@ class QRCodeViewModel extends ViewModel {
             return (T) new QRCodeViewModel(
                     qrCodeGenerator,
                     preferencesProvider.getGeneralSharedPreferences(),
-                    preferencesProvider.getAdminSharedPreferences()
+                    preferencesProvider.getAdminSharedPreferences(),
+                    scheduler
             );
         }
     }

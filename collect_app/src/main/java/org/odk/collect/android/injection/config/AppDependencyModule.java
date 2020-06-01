@@ -45,10 +45,12 @@ import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.utilities.HandlerAndAsyncTaskScheduler;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.utilities.BackgroundWorkManager;
+import org.odk.collect.utilities.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
@@ -288,7 +290,12 @@ public class AppDependencyModule {
     }
 
     @Provides
+    public Scheduler providesScheduler() {
+        return new HandlerAndAsyncTaskScheduler();
+    }
+
     @Singleton
+    @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, PreferencesProvider preferencesProvider, UserAgentProvider userAgentProvider) {
         return new ApplicationInitializer(application, collectJobCreator, preferencesProvider.getMetaSharedPreferences(), userAgentProvider);
     }

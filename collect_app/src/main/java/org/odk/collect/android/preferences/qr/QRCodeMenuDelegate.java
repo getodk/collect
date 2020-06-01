@@ -14,6 +14,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.utilities.Scheduler;
 
 import timber.log.Timber;
 
@@ -27,14 +28,14 @@ public class QRCodeMenuDelegate implements MenuDelegate {
 
     private String qrFilePath;
 
-    QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator, FileProvider fileProvider, PreferencesProvider preferencesProvider) {
+    QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator, FileProvider fileProvider, PreferencesProvider preferencesProvider, Scheduler scheduler) {
         this.activity = activity;
         this.activityAvailability = activityAvailability;
         this.fileProvider = fileProvider;
 
         QRCodeViewModel qrCodeViewModel = new ViewModelProvider(
                 activity,
-                new QRCodeViewModel.Factory(qrCodeGenerator, preferencesProvider)
+                new QRCodeViewModel.Factory(qrCodeGenerator, preferencesProvider, scheduler)
         ).get(QRCodeViewModel.class);
         qrCodeViewModel.getFilePath().observe(activity, filePath -> {
             if (filePath != null) {
