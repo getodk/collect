@@ -121,7 +121,6 @@ public class SettingsDialogFragmentTest {
         assertThat(((Spinner) dialog.findViewById(R.id.accuracy_threshold)).getSelectedItemPosition(), equalTo(2));
     }
 
-
     @Test
     public void onDismissingDialog_callsCorrectMethods() {
         dialogFragment.show(fragmentManager, "TAG");

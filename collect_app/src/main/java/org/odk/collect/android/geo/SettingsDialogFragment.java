@@ -28,8 +28,6 @@ public class SettingsDialogFragment extends DialogFragment {
 
     private View autoOptions;
     private RadioGroup radioGroup;
-    private Spinner autoInterval;
-    private Spinner accuracyThreshold;
     protected SettingsDialogCallback callback;
 
     private int checkedRadioButtonId = -1;
@@ -65,7 +63,7 @@ public class SettingsDialogFragment extends DialogFragment {
         });
 
         autoOptions = settingsView.findViewById(R.id.auto_options);
-        autoInterval = settingsView.findViewById(R.id.auto_interval);
+        Spinner autoInterval = settingsView.findViewById(R.id.auto_interval);
         autoInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -84,7 +82,7 @@ public class SettingsDialogFragment extends DialogFragment {
         }
         populateSpinner(autoInterval, options);
 
-        accuracyThreshold = settingsView.findViewById(R.id.accuracy_threshold);
+        Spinner accuracyThreshold = settingsView.findViewById(R.id.accuracy_threshold);
         accuracyThreshold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 accuracyThresholdIndex = position;
