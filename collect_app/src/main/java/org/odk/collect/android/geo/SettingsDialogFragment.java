@@ -30,8 +30,11 @@ public class SettingsDialogFragment extends DialogFragment {
     private RadioGroup radioGroup;
     private Spinner autoInterval;
     private Spinner accuracyThreshold;
-
     protected SettingsDialogCallback callback;
+
+    private int checkedRadioButtonId = -1;
+    private int intervalIndex = -1;
+    private int accuracyThresholdIndex = -1;
 
     @Override
     public void onAttach(Context context) {
@@ -52,19 +55,27 @@ public class SettingsDialogFragment extends DialogFragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                callback.updateRecordingMode(group, checkedId);
-                updateSettingsDialog();
+                checkedRadioButtonId = checkedId;
+                if (checkedId == R.id.automatic_mode) {
+                    autoOptions.setVisibility(View.VISIBLE);
+                } else {
+                    autoOptions.setVisibility(View.GONE);
+                }
             }
         });
 
         autoOptions = settingsView.findViewById(R.id.auto_options);
         autoInterval = settingsView.findViewById(R.id.auto_interval);
         autoInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                callback.setIntervalIndex(position);
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                intervalIndex = position;
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) { }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
 
         String[] options = new String[INTERVAL_OPTIONS.length];
@@ -76,7 +87,7 @@ public class SettingsDialogFragment extends DialogFragment {
         accuracyThreshold = settingsView.findViewById(R.id.accuracy_threshold);
         accuracyThreshold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                callback.setAccuracyThresholdIndex(position);
+                accuracyThresholdIndex = position;
             }
 
             @Override public void onNothingSelected(AdapterView<?> parent) { }
@@ -88,8 +99,15 @@ public class SettingsDialogFragment extends DialogFragment {
         }
         populateSpinner(accuracyThreshold, options);
 
-        radioGroup.check(callback.getCheckedId());
-        updateSettingsDialog();
+        if (checkedRadioButtonId == -1) {
+            checkedRadioButtonId = callback.getCheckedId();
+            intervalIndex = callback.getIntervalIndex();
+            accuracyThresholdIndex = callback.getAccuracyThresholdIndex();
+
+            radioGroup.check(checkedRadioButtonId);
+            autoInterval.setSelection(intervalIndex);
+            accuracyThreshold.setSelection(accuracyThresholdIndex);
+        }
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.input_method))
@@ -104,12 +122,6 @@ public class SettingsDialogFragment extends DialogFragment {
                     dismiss();
                 })
                 .create();
-    }
-
-    private void updateSettingsDialog() {
-        autoOptions.setVisibility(radioGroup.getCheckedRadioButtonId() == R.id.automatic_mode ? View.VISIBLE : View.GONE);
-        autoInterval.setSelection(callback.getIntervalIndex());
-        accuracyThreshold.setSelection(callback.getAccuracyThresholdIndex());
     }
 
     /** Formats a time interval as a whole number of seconds or minutes. */
@@ -133,6 +145,14 @@ public class SettingsDialogFragment extends DialogFragment {
         return meters > 0 ?
                 getResources().getQuantityString(R.plurals.number_of_meters, meters, meters) :
                 getString(R.string.none);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        callback.updateRecordingMode(radioGroup, radioGroup.getCheckedRadioButtonId());
+        callback.setIntervalIndex(intervalIndex);
+        callback.setAccuracyThresholdIndex(accuracyThresholdIndex);
     }
 
     public interface SettingsDialogCallback {
