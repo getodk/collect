@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -23,6 +22,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
@@ -40,12 +40,7 @@ public class UrlWidgetTest {
     @Before
     public void setUp() {
         customTabHelper = mock(CustomTabHelper.class);
-        listener = new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return true;
-            }
-        };
+        listener = mock(OnLongClickListener.class);
     }
 
     @Test
@@ -109,20 +104,14 @@ public class UrlWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         Button urlButton = widget.findViewById(R.id.url_button);
-        urlButton.performLongClick();
 
+        when(listener.onLongClick(urlButton)).thenReturn(true);
+        widget.setOnLongClickListener(listener);
+        urlButton.performLongClick();
         assertThat(listener.onLongClick(urlButton), equalTo(true));
     }
 
-    private TestUrlWidget createWidget(FormEntryPrompt prompt) {
-        return new TestUrlWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), customTabHelper, listener);
-    }
-
-    private static class TestUrlWidget extends UrlWidget {
-
-        public TestUrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper, OnLongClickListener listener) {
-            super(context, questionDetails, customTabHelper);
-            this.setOnLongClickListener(listener);
-        }
+    private UrlWidget createWidget(FormEntryPrompt prompt) {
+        return new UrlWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), customTabHelper);
     }
 }
