@@ -6,6 +6,8 @@ import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.browser.customtabs.CustomTabsServiceConnection;
+
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -35,11 +37,13 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class UrlWidgetTest {
 
     private CustomTabHelper customTabHelper;
+    private CustomTabsServiceConnection serviceConnection;
     private OnLongClickListener listener;
 
     @Before
     public void setUp() {
         customTabHelper = mock(CustomTabHelper.class);
+        serviceConnection = mock(CustomTabsServiceConnection.class);
         listener = mock(OnLongClickListener.class);
     }
 
@@ -104,11 +108,28 @@ public class UrlWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         Button urlButton = widget.findViewById(R.id.url_button);
-
-        when(listener.onLongClick(urlButton)).thenReturn(true);
-        widget.setOnLongClickListener(listener);
         urlButton.performLongClick();
-        assertThat(listener.onLongClick(urlButton), equalTo(true));
+
+        verify(listener, never()).onLongClick(urlButton);
+    }
+
+    @Test
+    public void detachingFromWindow_disconnectsService_whenServiceConnectionIsNotNull() {
+        when(customTabHelper.getServiceConnection()).thenReturn(serviceConnection);
+        UrlWidget widget = createWidget(promptWithAnswer(null));
+        widget.onDetachedFromWindow();
+
+        verify(serviceConnection).onServiceDisconnected(null);
+    }
+
+
+    @Test
+    public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIstNull() {
+        when(customTabHelper.getServiceConnection()).thenReturn(null);
+        UrlWidget widget = createWidget(promptWithAnswer(null));
+        widget.onDetachedFromWindow();
+
+        verify(serviceConnection, never()).onServiceDisconnected(null);
     }
 
     private UrlWidget createWidget(FormEntryPrompt prompt) {
