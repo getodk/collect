@@ -72,6 +72,7 @@ public final class GeneralKeys {
     public static final String KEY_FIRST_RUN                = "firstRun";
     public static final String KEY_SCOPED_STORAGE_USED      = "scoped_storage_used";
     public static final String KEY_MAPBOX_INITIALIZED       = "mapbox_initialized";
+    public static final String KEY_GOOGLE_BUG_154855417_FIXED = "google_bug_154855417_fixed";
 
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
