@@ -140,6 +140,10 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onPause() {
         super.onPause();
 
+        if (timer != null) {
+            timer.cancel();
+        }
+
         // We're not using managed dialogs, so we have to dismiss the dialog to prevent it from
         // leaking memory.
         if (locationDialog != null && locationDialog.isShowing()) {
@@ -158,14 +162,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         locationClient.setListener(null);
 
         super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (timer != null) {
-            timer.cancel();
-        }
-        super.onDestroy();
     }
 
     @Override
