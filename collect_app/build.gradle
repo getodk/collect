@@ -202,28 +202,29 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation "androidx.work:work-runtime:2.3.4"
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.1.0'
+    implementation 'androidx.exifinterface:exifinterface:1.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
     implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
 
-    implementation "com.google.android.gms:play-services-auth:17.0.0"
+    implementation "com.google.android.gms:play-services-auth:18.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
     implementation "com.google.android.gms:play-services-location:17.0.0"
 
-    implementation 'com.google.firebase:firebase-perf:19.0.5'
+    implementation 'com.google.firebase:firebase-perf:19.0.7'
     implementation 'com.google.firebase:firebase-analytics:17.4.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.0.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
 
-    implementation("com.google.guava:guava:28.2-android")
+    implementation("com.google.guava:guava:29.0-android")
 
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
-    implementation 'com.burgstaller:okhttp-digest:2.2'
+    implementation 'com.burgstaller:okhttp-digest:2.3'
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
@@ -236,17 +237,17 @@ dependencies {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
-    implementation "com.karumi:dexter:6.0.2"
+    implementation "com.karumi:dexter:6.1.2"
     implementation "org.osmdroid:osmdroid-android:6.1.6"
     implementation("com.google.api-client:google-api-client-android:1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-drive:v3-rev20200306-1.30.9") {
+    implementation("com.google.apis:google-api-services-drive:v3-rev20200413-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20200312-1.30.9") {
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20200508-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
@@ -257,10 +258,10 @@ dependencies {
 
     implementation "com.google.zxing:core:3.3.0" //updating to 3.4.0 requires minSdkVersion >=24 https://github.com/zxing/zxing/releases/tag/zxing-3.4.0
     implementation "com.journeyapps:zxing-android-embedded:3.6.0" //updating would require minSdkVersion >=24
-    implementation "net.danlew:android.joda:2.10.3"
+    implementation "net.danlew:android.joda:2.10.6"
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
     // Android Architecture Components:
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -282,15 +283,6 @@ dependencies {
 
     // Better "Subjects" for Rx:
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
-
-    // WorkManager for specifying deferrable, asynchronous tasks
-    implementation("android.arch.work:work-runtime:1.0.1") {
-        exclude group: 'com.google.guava', module: 'listenablefuture'
-    }
-    // Optional JobDispatcher support so devices with Play Services do better than AlarmManager
-    implementation("android.arch.work:work-firebase:1.0.0-alpha11") {
-        exclude group: 'com.google.guava', module: 'listenablefuture'
-    }
 
     implementation project(':nbi-stubs')
     implementation project(':material')
@@ -318,16 +310,15 @@ dependencies {
     testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
 
     // power mock (for mocking final methods which is not handled by mockito)
-    testImplementation "org.powermock:powermock-module-junit4:2.0.5"
-    testImplementation "org.powermock:powermock-api-mockito2:2.0.5"
-
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "org.powermock:powermock-module-junit4:2.0.7"
+    testImplementation "org.powermock:powermock-api-mockito2:2.0.7"
 
     testImplementation "org.json:json:20190722"
 
     androidTestImplementation "org.mockito:mockito-android:3.3.3"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0") {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -336,7 +327,7 @@ dependencies {
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 
-    androidTestImplementation "android.arch.work:work-testing:1.0.1"
+    androidTestImplementation "androidx.work:work-testing:2.3.4"
 }
 
 // Must be at bottom to prevent dependency collisions

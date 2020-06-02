@@ -15,7 +15,7 @@ public class QRCodeTabsAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new QRScannerFragment();
+                return new QRCodeScannerFragment();
             case 1:
                 return new ShowQRCodeFragment();
             default:

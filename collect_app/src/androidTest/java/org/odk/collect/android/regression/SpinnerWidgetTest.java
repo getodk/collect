@@ -1,6 +1,7 @@
 package org.odk.collect.android.regression;
 
 import android.Manifest;
+
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -9,15 +10,18 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 
 
 // Issue number NODK-219
 @RunWith(AndroidJUnit4.class)
-public class SpinnerWidgetTest extends BaseRegressionTest {
+public class SpinnerWidgetTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -27,7 +31,8 @@ public class SpinnerWidgetTest extends BaseRegressionTest {
                     Manifest.permission.READ_PHONE_STATE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule("selectOneMinimal.xml"));
+            .around(new CopyFormRule("selectOneMinimal.xml"))
+            .around(rule);
 
     @Test
     public void spinnerList_ShouldDisplay() {

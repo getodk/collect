@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.pages.AboutPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
@@ -21,14 +22,17 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
 
 //Issue NODK-234
 @RunWith(AndroidJUnit4.class)
-public class AboutPageTest extends BaseRegressionTest {
+public class AboutPageTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
+    public RuleChain ruleChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE));
+                    Manifest.permission.READ_PHONE_STATE))
+            .around(rule);
 
     @Test
     public void when_rotateScreenOnAboutPage_should_notCrash() {

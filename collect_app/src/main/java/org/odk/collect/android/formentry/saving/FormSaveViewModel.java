@@ -14,16 +14,23 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.utilities.Clock;
 
+import java.io.File;
+
+import timber.log.Timber;
 import java.util.HashMap;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
@@ -94,6 +101,33 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         } else {
             this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
         }
+    }
+
+    // Cleanup when user exits a form without saving
+    public void removeTempInstance() {
+        if (formController != null && formController.getInstanceFile() != null) {
+            SaveFormToDisk.removeSavepointFiles(formController.getInstanceFile().getName());
+
+            // if it's not already saved, erase everything
+            if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
+                // delete media first
+                String instanceFolder = formController.getInstanceFile().getParent();
+                Timber.i("Attempting to delete: %s", instanceFolder);
+                File file = formController.getInstanceFile().getParentFile();
+                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
+                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
+                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
+
+                Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
+                        images, audio, video);
+                FileUtils.purgeMediaPath(instanceFolder);
+            }
+        }
+    }
+
+    @Nullable
+    public String getAbsoluteInstancePath() {
+        return formController != null ? formController.getAbsoluteInstancePath() : null;
     }
 
     public boolean isSaving() {
@@ -209,7 +243,14 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public String getFormName() {
+        if (formController == null) {
+            return null;
+        }
         return formController.getFormTitle();
+    }
+
+    public AuditEventLogger getAuditEventLogger() {
+        return formController.getAuditEventLogger();
     }
 
     public static class SaveResult {

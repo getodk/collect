@@ -890,7 +890,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         class SymbolClickListener implements OnSymbolClickListener {
             @Override public void onAnnotationClick(Symbol clickedSymbol) {
                 for (Symbol symbol : symbols) {
-                    if (clickedSymbol.getId() == symbol.getId()) {
+                    if (clickedSymbol.getId() == symbol.getId() && featureClickListener != null) {
                         featureClickListener.onFeature(featureId);
                         break;
                     }
@@ -900,7 +900,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
         class LineClickListener implements OnLineClickListener {
             @Override public void onAnnotationClick(Line clickedLine) {
-                if (clickedLine.getId() == line.getId()) {
+                if (clickedLine.getId() == line.getId() && featureClickListener != null) {
                     featureClickListener.onFeature(featureId);
                 }
             }

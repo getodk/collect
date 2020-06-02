@@ -14,21 +14,13 @@
 
 package org.odk.collect.android.preferences;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
@@ -36,15 +28,14 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 
-import static android.content.Context.MODE_PRIVATE;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
@@ -86,58 +77,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     break;
 
                 case KEY_CHANGE_ADMIN_PASSWORD:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                    LayoutInflater factory = LayoutInflater.from(getActivity());
-                    final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
-                    final EditText passwordEditText = dialogView.findViewById(R.id.pwd_field);
-                    final CheckBox passwordCheckBox = dialogView.findViewById(R.id.checkBox2);
-                    passwordEditText.requestFocus();
-                    passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            if (!passwordCheckBox.isChecked()) {
-                                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            } else {
-                                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            }
-                        }
-                    });
-                    builder.setTitle(R.string.change_admin_password);
-                    builder.setView(dialogView);
-                    builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String pw = passwordEditText.getText().toString();
-                            if (!pw.equals("")) {
-                                SharedPreferences.Editor editor = getActivity()
-                                        .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                                editor.putString(KEY_ADMIN_PW, pw);
-                                ToastUtils.showShortToast(R.string.admin_password_changed);
-                                editor.apply();
-                                dialog.dismiss();
-                            } else {
-                                SharedPreferences.Editor editor = getActivity()
-                                        .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                                editor.putString(KEY_ADMIN_PW, "");
-                                editor.apply();
-                                ToastUtils.showShortToast(R.string.admin_password_disabled);
-                                dialog.dismiss();
-                            }
-                        }
-                    });
-                    builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    builder.setCancelable(false);
-                    AlertDialog dialog = builder.create();
-                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                    dialog.show();
-
+                    DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class,
+                            ((AppCompatActivity) getActivity()).getSupportFragmentManager());
                     break;
 
                 case KEY_IMPORT_SETTINGS:

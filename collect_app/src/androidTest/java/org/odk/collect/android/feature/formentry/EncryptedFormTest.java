@@ -26,13 +26,13 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.FeatureTestRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 
 public class EncryptedFormTest {
 
     @Rule
-    public FeatureTestRule rule = new FeatureTestRule();
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
