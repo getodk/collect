@@ -107,7 +107,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     private ProgressDialog cancelDialog;
     private Button downloadButton;
 
-    private RefreshFormListDialogFragment refreshFormListDialogFragment;
     private DownloadFormListTask downloadFormListTask;
     private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
@@ -309,8 +308,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             }
         } else {
             viewModel.clearFormDetailsByFormId();
-            refreshFormListDialogFragment = new RefreshFormListDialogFragment();
-            refreshFormListDialogFragment.show(getSupportFragmentManager(), RefreshFormListDialogFragment.class.getName());
+            DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
             if (downloadFormListTask != null
                     && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -425,8 +423,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         int totalCount = filesToDownload.size();
         if (totalCount > 0) {
             // show dialog box
-            refreshFormListDialogFragment = new RefreshFormListDialogFragment();
-            refreshFormListDialogFragment.show(getSupportFragmentManager(), RefreshFormListDialogFragment.class.getName());
+            DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
             downloadFormsTask = new DownloadFormsTask();
             downloadFormsTask.setDownloaderListener(this);
@@ -688,9 +685,9 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
-        refreshFormListDialogFragment = (RefreshFormListDialogFragment) getSupportFragmentManager()
+        RefreshFormListDialogFragment fragment = (RefreshFormListDialogFragment) getSupportFragmentManager()
                 .findFragmentByTag(RefreshFormListDialogFragment.class.getName());
-        refreshFormListDialogFragment.setMessage(getString(R.string.fetching_file, currentFile,
+        fragment.setMessage(getString(R.string.fetching_file, currentFile,
                 String.valueOf(progress), String.valueOf(total)));
     }
 
