@@ -149,12 +149,13 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     @Override
     protected void onStop() {
-        locationClient.stop();
-
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager != null) {
             locationManager.removeGpsStatusListener(this);
         }
+
+        locationClient.stop();
+        locationClient.setListener(null);
 
         super.onStop();
     }

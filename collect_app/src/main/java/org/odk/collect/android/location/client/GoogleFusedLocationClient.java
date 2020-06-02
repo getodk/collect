@@ -130,8 +130,8 @@ public class GoogleFusedLocationClient
             return;
         }
 
+        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, locationListener);
         locationListener = null;
-        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, this);
     }
 
     @Override
