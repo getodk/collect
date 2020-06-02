@@ -108,9 +108,9 @@ public class UrlWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         Button urlButton = widget.findViewById(R.id.url_button);
+        widget.setOnLongClickListener(listener);
         urlButton.performLongClick();
-
-        verify(listener, never()).onLongClick(urlButton);
+        verify(listener).onLongClick(urlButton);
     }
 
     @Test
@@ -118,17 +118,14 @@ public class UrlWidgetTest {
         when(customTabHelper.getServiceConnection()).thenReturn(serviceConnection);
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
-
         verify(serviceConnection).onServiceDisconnected(null);
     }
-
 
     @Test
     public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIstNull() {
         when(customTabHelper.getServiceConnection()).thenReturn(null);
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
-
         verify(serviceConnection, never()).onServiceDisconnected(null);
     }
 

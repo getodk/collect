@@ -100,6 +100,7 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
+        openUrlButton.setOnLongClickListener(l);
     }
 
     @Override
