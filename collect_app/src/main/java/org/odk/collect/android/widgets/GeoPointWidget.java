@@ -97,11 +97,7 @@ public class GeoPointWidget extends BaseGeoWidget {
         if (stringAnswer == null || stringAnswer.isEmpty()) {
             return null;
         } else {
-            try {
-                return new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
-            } catch (Exception numberFormatException) {
-                return null;
-            }
+            return new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
         }
     }
 
@@ -114,18 +110,10 @@ public class GeoPointWidget extends BaseGeoWidget {
     @Override
     public void setBinaryData(Object answer) {
         stringAnswer = (String) answer;
+        answerDisplay.setText(getAnswerToDisplay(stringAnswer));
 
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            String[] parts = stringAnswer.split(" ");
-            answerDisplay.setText(getContext().getString(
-                R.string.gps_result,
-                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
-                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
-                    GeoWidgetUtils.truncateDouble(parts[2]),
-                    GeoWidgetUtils.truncateDouble(parts[3])
-            ));
-        } else {
-            answerDisplay.setText("");
+        if (answerDisplay.getText().toString().equals("")) {
+            stringAnswer = null;
         }
 
         updateButtonLabelsAndVisibility(true);
@@ -134,18 +122,21 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     @Override
     public String getAnswerToDisplay(String answer) {
-        if (!answer.isEmpty()) {
-            String[] parts = answer.split(" ");
-            return getContext().getString(
-                    R.string.gps_result,
-                    GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
-                    GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
-                    GeoWidgetUtils.truncateDouble(parts[2]),
-                    GeoWidgetUtils.truncateDouble(parts[3])
-            );
-        } else {
+        try {
+            if (answer != null && !answer.isEmpty()) {
+                String[] parts = answer.split(" ");
+                return getContext().getString(
+                        R.string.gps_result,
+                        GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[0]), "lat"),
+                        GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(getContext(), Double.parseDouble(parts[1]), "lon"),
+                        GeoWidgetUtils.truncateDouble(parts[2]),
+                        GeoWidgetUtils.truncateDouble(parts[3])
+                );
+            }
+        } catch (NumberFormatException e) {
             return "";
         }
+        return "";
     }
 
     @Override

@@ -18,8 +18,6 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.GeoWidget;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
-
 public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
     public Button startGeoButton;
     public TextView answerDisplay;
@@ -53,6 +51,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
         }
         String answerText = prompt.getAnswerText();
         boolean dataAvailable = false;
+
         if (answerText != null && !answerText.isEmpty()) {
             dataAvailable = true;
             setBinaryData(answerText);
