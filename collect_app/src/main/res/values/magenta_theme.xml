@@ -60,8 +60,14 @@
 
         <!-- Used as divider in many places. Not sure why. -->
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView.Magenta.Theme</item>
 
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
     </style>
+
+    <style name="Widget.Collect.SearchView.Magenta.Theme" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+    </style>
+
 </resources>
