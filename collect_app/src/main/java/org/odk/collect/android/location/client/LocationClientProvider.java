@@ -20,7 +20,7 @@ public class LocationClientProvider {
         return testClient != null
             ? testClient
             : playServicesChecker.isGooglePlayServicesAvailable(context)
-                ? new GoogleFusedLocationClient(context)
+                ? new GoogleFusedLocationClient(context.getApplicationContext()) // avoid context leak
                 : new AndroidLocationClient(context);
     }
 
