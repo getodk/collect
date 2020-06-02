@@ -27,9 +27,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 
-import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -255,10 +255,11 @@ public class Collect extends Application {
                 return;
             }
 
-            Crashlytics.log(priority, tag, message);
+            FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+            crashlytics.log((priority == Log.ERROR ? "E/" : "W/") + tag + ": " + message);
 
             if (t != null && priority == Log.ERROR) {
-                Crashlytics.logException(t);
+                crashlytics.recordException(t);
             }
         }
     }
