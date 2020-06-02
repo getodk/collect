@@ -88,8 +88,6 @@ public class ProgressDialogFragment extends DialogFragment {
 
         setupView(dialog);
 
-        dialog.setCancelable(getArguments().getBoolean(CANCELABLE));
-
         return dialog;
     }
 
