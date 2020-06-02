@@ -24,7 +24,7 @@ import java.util.List;
 public class CustomTabHelper {
     public static final String OPEN_URL = "url";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
-    public CustomTabsClient customTabsClient;
+    private CustomTabsClient customTabsClient;
     private CustomTabsSession customTabsSession;
 
     /*
