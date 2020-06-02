@@ -4,9 +4,10 @@ import android.os.AsyncTask;
 import android.os.Handler;
 
 import org.odk.collect.utilities.Cancellable;
-import org.odk.collect.utilities.Consumer;
 import org.odk.collect.utilities.Scheduler;
-import org.odk.collect.utilities.Supplier;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * An implementation of {@link Scheduler} that uses {@link Handler} and {@link AsyncTask} to schedule work on the

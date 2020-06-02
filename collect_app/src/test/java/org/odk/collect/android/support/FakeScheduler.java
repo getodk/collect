@@ -1,9 +1,10 @@
 package org.odk.collect.android.support;
 
 import org.odk.collect.utilities.Cancellable;
-import org.odk.collect.utilities.Consumer;
 import org.odk.collect.utilities.Scheduler;
-import org.odk.collect.utilities.Supplier;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class FakeScheduler implements Scheduler {
 

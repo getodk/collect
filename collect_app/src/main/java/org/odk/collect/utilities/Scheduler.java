@@ -1,5 +1,8 @@
 package org.odk.collect.utilities;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 /**
  * Runs tasks in the foreground and background
  */
