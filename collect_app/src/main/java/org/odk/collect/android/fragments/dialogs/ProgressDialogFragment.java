@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.R;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -20,9 +22,10 @@ import static android.content.DialogInterface.BUTTON_NEGATIVE;
 public class ProgressDialogFragment extends DialogFragment {
 
     public static final String COLLECT_PROGRESS_DIALOG_TAG = "collectProgressDialogTag";
+    public static final String TITLE = "title";
+    public static final String MESSAGE = "message";
+    public static final String CANCELABLE = "true";
 
-    private static final String TITLE = "title";
-    private static final String MESSAGE = "message";
     private View dialogView;
 
     /**
@@ -84,6 +87,9 @@ public class ProgressDialogFragment extends DialogFragment {
                 .create();
 
         setupView(dialog);
+
+        dialog.setCancelable(getArguments().getBoolean(CANCELABLE));
+
         return dialog;
     }
 
@@ -102,6 +108,10 @@ public class ProgressDialogFragment extends DialogFragment {
 
         if (getArguments() != null && getArguments().getString(MESSAGE) != null) {
             ((TextView) dialogView.findViewById(R.id.message)).setText(getArguments().getString(MESSAGE));
+        }
+
+        if (getArguments() != null && Objects.equals(getArguments().getString(CANCELABLE), "false")) {
+            dialog.setCancelable(false);
         }
 
         if (getCancelButtonText() != null) {
