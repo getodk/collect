@@ -31,8 +31,6 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
@@ -42,7 +40,6 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
@@ -258,19 +255,13 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
             downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
-                Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-                if (dialogFragment != null) {
-                    ((DialogFragment) dialogFragment).dismiss();
-                }
+                DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
                 downloadFormsTask = null;
             }
         } else if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
             downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-                if (dialogFragment != null) {
-                    ((DialogFragment) dialogFragment).dismiss();
-                }
+                DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
                 downloadFormsTask = null;
             }
         } else if (viewModel.getFormDetailsByFormId().isEmpty()
@@ -319,7 +310,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         } else {
             viewModel.clearFormDetailsByFormId();
             refreshFormListDialogFragment = new RefreshFormListDialogFragment();
-            refreshFormListDialogFragment.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+            refreshFormListDialogFragment.show(getSupportFragmentManager(), RefreshFormListDialogFragment.class.getName());
 
             if (downloadFormListTask != null
                     && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -435,7 +426,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         if (totalCount > 0) {
             // show dialog box
             refreshFormListDialogFragment = new RefreshFormListDialogFragment();
-            refreshFormListDialogFragment.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+            refreshFormListDialogFragment.show(getSupportFragmentManager(), RefreshFormListDialogFragment.class.getName());
 
             downloadFormsTask = new DownloadFormsTask();
             downloadFormsTask.setDownloaderListener(this);
@@ -534,10 +525,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      * <form_id, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
     public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
-        Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-        if (dialogFragment != null) {
-            ((DialogFragment) dialogFragment).dismiss();
-        }
+        DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
 
@@ -701,7 +689,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
         refreshFormListDialogFragment = (RefreshFormListDialogFragment) getSupportFragmentManager()
-                .findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                .findFragmentByTag(RefreshFormListDialogFragment.class.getName());
         refreshFormListDialogFragment.setMessage(getString(R.string.fetching_file, currentFile,
                 String.valueOf(progress), String.valueOf(total)));
     }
@@ -714,11 +702,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         cleanUpWebCredentials();
 
-        Fragment dialogFragment = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-        if (dialogFragment != null) {
-            ((DialogFragment) dialogFragment).dismiss();
-        }
-
+        DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
         createAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
 
         // Set result to true for forms which were downloaded
