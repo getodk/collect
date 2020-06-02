@@ -188,7 +188,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         if (locationClient.isLocationAvailable()) {
             logLastLocation();
-
         } else {
             finishOnError();
         }

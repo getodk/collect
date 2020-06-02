@@ -15,6 +15,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -74,30 +76,29 @@ public class GoogleFusedLocationClientTest {
     }
 
     @Test
-    public void stopShouldDisconnectFromGoogleApiIfConnected() {
-
+    public void stopShouldDisconnectFromGoogleApiIfConnected_andAlwaysCallOnClientStopIfListenerSet() {
         TestClientListener testClientListener = new TestClientListener();
         client.setListener(testClientListener);
 
-        // Call through to ApiClient.disconnect(), but don't do anything:
+        // Previously connected, disconnection succeeds
         when(googleApiClient.isConnected()).thenReturn(true);
         client.stop();
-
-        // ApiClient.disconnect() won't call through to stop in this instance:
-        assertFalse(testClientListener.wasStopCalled());
-
-        doAnswer(new OnDisconnectedAnswer()).when(googleApiClient).disconnect();
-
-        client.stop();
-        assertTrue(testClientListener.wasStopCalled());
+        verify(googleApiClient).disconnect();
+        assertThat(testClientListener.getOnClientStopCount(), is(1));
 
         testClientListener.reset();
 
-        // Don't call through to ApiClient.disconnect():
+        // Previously connected, disconnection calls onConnectionSuspended
+        doAnswer(new OnDisconnectedAnswer()).when(googleApiClient).disconnect();
+        client.stop();
+        assertThat(testClientListener.getOnClientStopCount(), is(1));
+
+        testClientListener.reset();
+
+        // Not previously connected
         when(googleApiClient.isConnected()).thenReturn(false);
         client.stop();
-
-        assertTrue(testClientListener.wasStopCalled());
+        assertThat(testClientListener.getOnClientStopCount(), is(1));
     }
 
     @Test

@@ -109,8 +109,10 @@ public class GoogleFusedLocationClient
 
         if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
-        } else {
-            onConnectionSuspended(0);
+        }
+
+        if (getListener() != null) {
+            getListener().onClientStop();
         }
     }
 
@@ -192,9 +194,6 @@ public class GoogleFusedLocationClient
 
     @Override
     public void onConnectionSuspended(int cause) {
-        if (getListener() != null) {
-            getListener().onClientStop();
-        }
     }
 
     // OnConnectionFailedListener:
