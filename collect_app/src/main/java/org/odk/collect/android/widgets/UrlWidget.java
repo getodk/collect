@@ -42,10 +42,11 @@ import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 @SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
-    private Uri uri;
-    private Button openUrlButton;
-    private TextView stringAnswer;
     private final CustomTabHelper customTabHelper;
+    private Uri uri;
+
+    protected Button openUrlButton;
+    protected TextView stringAnswer;
 
     public UrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper) {
         super(context, questionDetails);

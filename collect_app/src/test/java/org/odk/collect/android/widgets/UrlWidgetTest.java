@@ -106,11 +106,22 @@ public class UrlWidgetTest {
 
     @Test
     public void clickingButtonForLong_callsLongClickListener() {
-        UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        UrlWidget widget = createWidget(promptWithAnswer(null));
         Button urlButton = widget.findViewById(R.id.url_button);
         widget.setOnLongClickListener(listener);
         urlButton.performLongClick();
         verify(listener).onLongClick(urlButton);
+    }
+
+    @Test
+    public void cancelLongPress_callsCancelLongPressForButtonAndTextView() {
+        UrlWidget widget = createWidget(promptWithAnswer(null));
+        widget.openUrlButton = mock(Button.class);
+        widget.stringAnswer = mock(TextView.class);
+        widget.cancelLongPress();
+
+        verify(widget.openUrlButton).cancelLongPress();
+        verify(widget.stringAnswer).cancelLongPress();
     }
 
     @Test
