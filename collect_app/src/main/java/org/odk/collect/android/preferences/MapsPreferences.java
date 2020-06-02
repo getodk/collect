@@ -81,6 +81,20 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
     }
 
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (referenceLayerPref != null) {
+            populateReferenceLayerPref();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        referenceLayerPref = null;
+    }
+
     /**
      * Creates the Basemap Source preference widget (but doesn't add it to
      * the screen; onBasemapSourceChanged will do that part).
@@ -157,6 +171,7 @@ public class MapsPreferences extends BasePreferenceFragment {
             referenceLayerPref.setSummary(summary);
         }
     }
+
 
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
