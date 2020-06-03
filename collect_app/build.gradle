@@ -316,9 +316,7 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:2.0.7"
 =======
     testImplementation "org.powermock:powermock-module-junit4:2.0.5"
-    testImplementation "org.powermock:powermock-module-junit4-rule:2.0.5"
     testImplementation "org.powermock:powermock-api-mockito2:2.0.5"
-    testImplementation "org.powermock:powermock-classloading-xstream:2.0.5"
 
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 >>>>>>> 911881237... add unit tests
