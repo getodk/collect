@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.StringData;
@@ -115,12 +114,6 @@ public class GeoPointWidgetTest {
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
-    @Test
-    public void usingReadOnlyOption_showsViewGeoPointButton() {
-        GeoPointWidget widget = createWidget(promptWithReadOnly());
-        assertThat(((Button) widget.findViewById(R.id.geo_answer_text)).getText().toString(), equalTo(R.string.geopoint_view_read_only));
-    }
-
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
     }
@@ -172,88 +165,3 @@ public class GeoPointWidgetTest {
         };
     }
 }
-
-
-
-/*
-
-@Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoPointWidgetTest extends BaseGeoWidgetTest<GeoPointWidget, GeoPointData> {
-
-    @Mock
-    QuestionDef questionDef;
-
-    private double[] initialDoubles;
-    private double[] answerDoubles;
-
-    @Override
-    public GeoPointData getInitialAnswer() {
-        return new GeoPointData(initialDoubles);
-    }
-
-    @NonNull
-    @Override
-    public GeoPointWidget createWidget() {
-        return new GeoPointWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
-    }
-
-    @Override
-    public Object createBinaryData(GeoPointData answerData) {
-        return stringFromDoubles(answerDoubles);
-    }
-
-    @NonNull
-    @Override
-    public GeoPointData getNextAnswer() {
-        return new GeoPointData(answerDoubles);
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
-
-        initialDoubles = getRandomDoubleArray();
-        answerDoubles = getRandomDoubleArray();
-    }
-
-    @Override
-    public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        when(formEntryPrompt.getAnswerText()).thenReturn(stringFromDoubles(initialDoubles));
-        super.getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer();
-    }
-
-    private double[] getRandomDoubleArray() {
-        return new double[]{
-                random.nextDouble(),
-                random.nextDouble(),
-                random.nextDouble(),
-                random.nextDouble()
-        };
-    }
-
-/**
-     * Matches {@link GeoPointData#getDisplayText()}
-     *//*
-
-    private String stringFromDoubles(double[] doubles) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < doubles.length; i++) {
-            b.append(doubles[i]);
-            if (i != doubles.length - 1) {
-                b.append(' ');
-            }
-        }
-
-        return b.toString();
-    }
-
-    @Test
-    public void buttonsShouldLaunchCorrectIntents() {
-        stubAllRuntimePermissionsGranted(true);
-
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
-        assertComponentEquals(activity, GeoPointActivity.class, intent);
-    }
-}
-*/
