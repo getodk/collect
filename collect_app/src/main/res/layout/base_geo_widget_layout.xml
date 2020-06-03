@@ -4,12 +4,12 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/simple_button"
+        android:id="@+id/geo_button"
         style="@style/Widget.Collect.Button.Custom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_small"
-        android:text="@string/open_url"
+        android:text="@string/get_point"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="5dp"
