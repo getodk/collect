@@ -207,6 +207,7 @@ public class FormDownloader {
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
+                ReferenceManager.instance().reset();    // smap ensure reference manager reset after error
                 return message + e.getMessage();
             }
         }
