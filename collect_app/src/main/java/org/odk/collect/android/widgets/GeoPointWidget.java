@@ -49,7 +49,7 @@ public class GeoPointWidget extends BaseGeoWidget {
     public static final String DRAGGABLE_ONLY = "draggable";
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
-    private MapConfigurator mapConfigurator;
+    private final MapConfigurator mapConfigurator;
     private boolean useMap;
     private double accuracyThreshold;
     private boolean draggable = true;
@@ -80,8 +80,12 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
-            startGeoButton.setText(
-                dataAvailable ? R.string.view_change_location : R.string.get_point);
+            if (readOnly) {
+                startGeoButton.setText(R.string.geopoint_view_read_only);
+            } else {
+                startGeoButton.setText(
+                        dataAvailable ? R.string.view_change_location : R.string.get_point);
+            }
         } else {
             if (!readOnly) {
                 startGeoButton.setText(
@@ -114,8 +118,8 @@ public class GeoPointWidget extends BaseGeoWidget {
             stringAnswer = null;
         }
 
+        updateButtonLabelsAndVisibility(stringAnswer != null);
         widgetValueChanged();
-        updateButtonLabelsAndVisibility(true);
     }
 
     @Override
