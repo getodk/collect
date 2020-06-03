@@ -19,13 +19,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -48,23 +49,25 @@ public class GeoPointWidget extends BaseGeoWidget {
     public static final String DRAGGABLE_ONLY = "draggable";
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
+    private MapConfigurator mapConfigurator;
     private boolean useMap;
     private double accuracyThreshold;
     private boolean draggable = true;
     private String stringAnswer;
 
-    public GeoPointWidget(Context context, QuestionDetails questionDetails) {
+    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, MapConfigurator mapConfigurator) {
         super(context, questionDetails);
-        determineMapProperties();
+        this.mapConfigurator = mapConfigurator;
+        determineMapProperties(questionDef);
     }
 
-    private void determineMapProperties() {
+    private void determineMapProperties(QuestionDef questionDef) {
         // Determine the accuracy threshold to use.
-        String acc = getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+        String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
         accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
         // Determine whether to use the map and whether the point should be draggable.
-        if (MapProvider.getConfigurator().isAvailable(getContext())) {
+        if (mapConfigurator.isAvailable(getContext())) {
             if (hasAppearance(getFormEntryPrompt(), PLACEMENT_MAP)) {
                 draggable = true;
                 useMap = true;
@@ -77,12 +80,8 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
-            if (readOnly) {
-                startGeoButton.setText(R.string.geopoint_view_read_only);
-            } else {
-                startGeoButton.setText(
-                    dataAvailable ? R.string.view_change_location : R.string.get_point);
-            }
+            startGeoButton.setText(
+                dataAvailable ? R.string.view_change_location : R.string.get_point);
         } else {
             if (!readOnly) {
                 startGeoButton.setText(
@@ -115,8 +114,8 @@ public class GeoPointWidget extends BaseGeoWidget {
             stringAnswer = null;
         }
 
-        updateButtonLabelsAndVisibility(true);
         widgetValueChanged();
+        updateButtonLabelsAndVisibility(true);
     }
 
     @Override
