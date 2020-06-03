@@ -97,6 +97,16 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
+    public MainMenuPage assertNumberOfEditableForms(int number) {
+        if (number == 0) {
+            onView(withText(getTranslatedString(R.string.review_data))).check(matches(isDisplayed()));
+        } else {
+            onView(withText(getTranslatedString(R.string.review_data, String.valueOf(number)))).check(matches(isDisplayed()));
+        }
+
+        return this;
+    }
+
     public MainMenuPage assertStorageMigrationBannerIsDisplayed() {
         onView(withText(R.string.scoped_storage_banner_text)).check(matches(isDisplayed()));
         onView(withText(R.string.scoped_storage_learn_more)).check(matches(isDisplayed()));

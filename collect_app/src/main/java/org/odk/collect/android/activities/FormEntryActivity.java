@@ -201,7 +201,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent,
-        FormIndexAnimationHandler.Listener {
+        FormIndexAnimationHandler.Listener,
+        QuitFormDialogFragment.Listener {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -1026,7 +1027,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
                 return true;
 
             case R.id.menu_goto:
@@ -1398,7 +1399,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         } else {
                             saveForm(EXIT, instanceComplete
                                     .isChecked(), saveAs.getText()
-                                    .toString());
+                                    .toString(), true);
                         }
                     }
                 });
@@ -1807,12 +1808,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * isntancs as complete. If updatedSaveName is non-null, the instances
      * content provider is updated with the new name
      */
-    // by default, save the current screen
-    private boolean saveForm(boolean exit, boolean complete, String updatedSaveName) {
-        return saveForm(exit, complete, updatedSaveName, true);
-    }
-
-    // but if you want save in the background, can't be current screen
     private boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
                              boolean current) {
         // save current answer
@@ -1914,6 +1909,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private void createQuitDialog() {
         showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
+    }
+
+    @Override
+    public void onSaveChangesClicked() {
+        saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
     }
 
     @Nullable
