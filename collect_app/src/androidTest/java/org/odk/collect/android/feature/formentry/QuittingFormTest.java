@@ -45,4 +45,14 @@ public class QuittingFormTest {
                 .assertText("Reuben") // Previous answers are saved
                 .assertText("10"); // Current screen answers are saved
     }
+
+    @Test
+    public void partiallyFillingForm_andPressingBack_andClickingIgnoreChanges_doesNotSaveForm() {
+        rule.mainMenu()
+                .startBlankForm("Two Question")
+                .answerQuestion("What is your name?", "Reuben")
+                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage(rule), rule))
+                .clickIgnoreChanges()
+                .assertNumberOfEditableForms(0);
+    }
 }
