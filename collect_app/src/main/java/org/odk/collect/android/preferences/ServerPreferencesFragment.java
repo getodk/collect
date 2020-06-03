@@ -133,7 +133,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         switch (protocolPreferenceMapper.getProtocol(value)) {
             case ODK:
-                setDefaultAggregatePaths();
                 addAggregatePreferences();
                 break;
             case GOOGLE:
@@ -410,12 +409,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         passwordPreference.setSummary(password != null && password.length() > 0
                 ? "********"
                 : "");
-    }
-
-    protected void setDefaultAggregatePaths() {
-        GeneralSharedPreferences sharedPreferences = GeneralSharedPreferences.getInstance();
-        sharedPreferences.reset(KEY_FORMLIST_URL);
-        sharedPreferences.reset(KEY_SUBMISSION_URL);
     }
 
     @Override
