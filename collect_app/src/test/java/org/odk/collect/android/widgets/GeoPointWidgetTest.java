@@ -55,12 +55,11 @@ import static org.robolectric.Shadows.shadowOf;
 public class GeoPointWidgetTest {
 
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
+    private final List<double[]> answerDoubles = getRandomDoubleArrayList();
+    private final String answer = stringFromDoubleList(answerDoubles);
 
-    private List<double[]> answerDoubles = getRandomDoubleArrayList();
     private QuestionDef questionDef;
     private MapConfigurator mapConfigurator;
-
-    private String answer = stringFromDoubleList(answerDoubles);
 
     @Before
     public void setup() {
