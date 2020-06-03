@@ -95,11 +95,5 @@ public class SplashScreenActivityTest {
         scenario1.onActivity(activity -> {
             assertThat(activity.findViewById(R.id.splash_default).getVisibility(), is(View.VISIBLE));
         });
-
-        ActivityScenario<SplashScreenActivity> scenario2 = ActivityScenario.launch(SplashScreenActivity.class);
-        assertThat(scenario2.getState(), is(Lifecycle.State.RESUMED));
-        scenario2.onActivity(activity -> {
-            assertThat(activity.findViewById(R.id.splash_default).getVisibility(), is(View.VISIBLE));
-        });
     }
 }
