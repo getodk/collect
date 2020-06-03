@@ -42,6 +42,7 @@ public class QuitFormDialogFragment extends DialogFragment {
     Analytics analytics;
 
     private FormSaveViewModel viewModel;
+    private Listener listener;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -50,6 +51,10 @@ public class QuitFormDialogFragment extends DialogFragment {
 
         viewModel = new ViewModelProvider(requireActivity(), new FormSaveViewModel.Factory(analytics))
                 .get(FormSaveViewModel.class);
+
+        if (context instanceof Listener) {
+            listener = (Listener) context;
+        }
     }
 
     @NonNull
@@ -76,9 +81,9 @@ public class QuitFormDialogFragment extends DialogFragment {
             IconMenuItem item = (IconMenuItem) adapter.getItem(position);
 
             if (item.getTextResId() == R.string.keep_changes) {
-                viewModel.saveForm(getActivity().getIntent().getData(), InstancesDaoHelper.isInstanceComplete(false),
-                        null, true);
-
+                if (listener != null) {
+                    listener.onSaveChangesClicked();
+                }
             } else {
                 ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
                 if (manager != null) {
@@ -116,5 +121,9 @@ public class QuitFormDialogFragment extends DialogFragment {
                 })
                 .setView(listView)
                 .create();
+    }
+
+    public interface Listener {
+        void onSaveChangesClicked();
     }
 }

@@ -235,4 +235,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
         return new AddNewRepeatDialog(repeatName, rule);
     }
+
+    public FormEntryPage answerQuestion(String question, String answer) {
+        assertText(question);
+        inputText(answer);
+        closeSoftKeyboard();
+        return this;
+    }
 }
