@@ -44,6 +44,7 @@ import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -191,8 +192,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         });
 
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
-            AndroidXPreferencesActivity.start(getActivity(), CustomServerPathsFragment.class);
-            return true;
+            if (MultiClickGuard.allowClick(getClass().getName())) {
+                AndroidXPreferencesActivity.start(getActivity(), CustomServerPathsFragment.class);
+                return true;
+            } else {
+                return false;
+            }
         });
     }
 
