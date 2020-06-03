@@ -62,7 +62,7 @@ public class QuitFormDialogFragmentTest {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
 
-        assertThat(dialogTitle.getText().toString(), equalTo(activity.getString(R.string.no_form_loaded)));
+        assertThat(dialogTitle.getText().toString(), equalTo(activity.getString(R.string.quit_application, activity.getString(R.string.no_form_loaded))));
     }
 
 
@@ -74,7 +74,7 @@ public class QuitFormDialogFragmentTest {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
 
-        assertThat(dialogTitle.getText().toString(), equalTo("blah"));
+        assertThat(dialogTitle.getText().toString(), equalTo(activity.getString(R.string.quit_application, "blah")));
     }
 
     @Test

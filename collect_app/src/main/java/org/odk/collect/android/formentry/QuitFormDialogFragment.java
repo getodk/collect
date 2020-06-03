@@ -109,7 +109,7 @@ public class QuitFormDialogFragment extends DialogFragment {
         });
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(title)
+                .setTitle(getString(R.string.quit_application, title))
                 .setNegativeButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
                     dialog.cancel();
                     dismiss();
