@@ -53,7 +53,6 @@ public class FormDownloadListViewModel extends ViewModel {
     private String progressDialogMsg;
     private String alertDialogMsg;
 
-    private boolean progressDialogShowing;
     private boolean alertShowing;
     private boolean cancelDialogShowing;
     private boolean shouldExit;
@@ -201,14 +200,6 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setFormIdsToDownload(String[] formIdsToDownload) {
         this.formIdsToDownload = formIdsToDownload;
-    }
-
-    public boolean isProgressDialogShowing() {
-        return progressDialogShowing;
-    }
-
-    public void setProgressDialogShowing(boolean progressDialogShowing) {
-        this.progressDialogShowing = progressDialogShowing;
     }
 
     public boolean isCancelDialogShowing() {
