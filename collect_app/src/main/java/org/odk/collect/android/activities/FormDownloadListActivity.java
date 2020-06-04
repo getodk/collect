@@ -208,7 +208,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
         downloadButton.setOnClickListener(v -> {
             ArrayList<FormDetails> filesToDownload = getFilesToDownload();
-            viewModel.logDownloadAnalyticsEvent(formsDao.getFormsCursor().getCount(),
+            viewModel.logDownloadAnalyticsEvent(formsDao.getCount(),
                     webCredentialsUtils.getServerUrlFromPreferences());
             startFormsDownload(filesToDownload);
         });

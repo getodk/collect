@@ -21,6 +21,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import androidx.loader.content.CursorLoader;
+
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -28,8 +30,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.loader.content.CursorLoader;
 
 /**
  * This class is used to encapsulate all access to the {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
@@ -230,6 +230,12 @@ public class FormsDao {
 
     public int updateForm(ContentValues values, String where, String[] whereArgs) {
         return Collect.getInstance().getContentResolver().update(FormsColumns.CONTENT_URI, values, where, whereArgs);
+    }
+
+    public int getCount() {
+        try (Cursor c = getFormsCursor()) {
+            return c.getCount();
+        }
     }
 
     /**
