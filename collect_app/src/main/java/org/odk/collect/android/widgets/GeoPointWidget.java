@@ -59,9 +59,9 @@ public class GeoPointWidget extends BaseGeoWidget {
         super(context, questionDetails);
         this.mapConfigurator = mapConfigurator;
 
-        stringAnswer = answerDisplay.getText().toString();
-        updateButtonLabelsAndVisibility(stringAnswer != null || !stringAnswer.isEmpty());
+        stringAnswer = getFormEntryPrompt().getAnswerText();
         determineMapProperties(questionDef);
+        updateButtonLabelsAndVisibility(stringAnswer != null);
     }
 
     private void determineMapProperties(QuestionDef questionDef) {
@@ -90,7 +90,7 @@ public class GeoPointWidget extends BaseGeoWidget {
                         dataAvailable ? R.string.view_change_location : R.string.get_point);
             }
         } else {
-            if (!readOnly) {
+            if (!getFormEntryPrompt().isReadOnly()) {
                 startGeoButton.setText(
                     dataAvailable ? R.string.change_location : R.string.get_point);
             }

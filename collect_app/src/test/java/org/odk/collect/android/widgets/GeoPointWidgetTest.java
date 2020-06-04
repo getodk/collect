@@ -73,13 +73,15 @@ public class GeoPointWidgetTest {
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
-        assertThat(createWidget(promptWithAnswer(null)).getAnswer(), equalTo(null));
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        assertThat(widget.getAnswer(), equalTo(null));
+        assertThat(widget.getAnswerToDisplay(null), equalTo(""));
     }
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveConvertibleString_returnsNull() throws NumberFormatException {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.getAnswer(), equalTo(null));
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(""));
     }
 
     @Test
@@ -139,42 +141,33 @@ public class GeoPointWidgetTest {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearance(PLACEMENT_MAP, true));
 
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(),
-                equalTo(widget.getContext().getString(R.string.geopoint_view_read_only)));
+        assertThat(widget.startGeoButton.getText().toString(), equalTo(widget.getContext().getString(R.string.geopoint_view_read_only)));
     }
 
     @Test
     public void whenWidgetHasAppearanceAndNullAsAnswer_buttonShowsCorrectText() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(PLACEMENT_MAP, null));
-
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(),
-                equalTo(widget.getContext().getString(R.string.get_point)));
+        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(), equalTo(widget.getContext().getString(R.string.get_point)));
     }
 
     @Test
     public void whenWidgetHasAppearanceAndAnswer_buttonShowsCorrectText() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(MAPS, new StringData(answer)));
-
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(),
-                equalTo(widget.getContext().getString(R.string.view_change_location)));
+        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.view_change_location)));
     }
 
     @Test
     public void whenWidgetHasAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(),
-                equalTo(widget.getContext().getString(R.string.change_location)));
+        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(), equalTo(widget.getContext().getString(R.string.change_location)));
     }
 
     @Test
     public void whenWidgetHasNullAsAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
-
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(),
-                equalTo(widget.getContext().getString(R.string.get_point)));
+        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(), equalTo(widget.getContext().getString(R.string.get_point)));
     }
 
     @Test
