@@ -4,8 +4,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.StringData;
@@ -94,7 +92,6 @@ public class GeoPointWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         widget.clearAnswer();
-
         assertThat(widget.getAnswer(), nullValue());
     }
 
@@ -103,31 +100,26 @@ public class GeoPointWidgetTest {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
-
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test
     public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
         GeoPointWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.findViewById(R.id.geo_button).getVisibility(), equalTo(View.GONE));
+        assertThat(widget.startGeoButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
-        TextView textView = widget.findViewById(R.id.geo_answer_text);
-
-        assertThat(textView.getText().toString(), equalTo(""));
+        assertThat(widget.answerDisplay.getText().toString(), equalTo(""));
     }
 
     @Test
     public void whenPromptHasAnswer_textViewDisplaysAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        TextView textView = widget.findViewById(R.id.geo_answer_text);
         String[] parts = answer.split(" ");
-
-        assertThat(textView.getText().toString(), equalTo(widget.getContext().getString(
+        assertThat(widget.answerDisplay.getText().toString(), equalTo(widget.getContext().getString(
                 R.string.gps_result,
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(widget.getContext(), Double.parseDouble(parts[0]), "lat"),
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(widget.getContext(), Double.parseDouble(parts[1]), "lon"),
@@ -140,7 +132,6 @@ public class GeoPointWidgetTest {
     public void whenWidgetHasAppearanceAndIsReadOnly_buttonShowsCorrectText() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearance(PLACEMENT_MAP, true));
-
         assertThat(widget.startGeoButton.getText().toString(), equalTo(widget.getContext().getString(R.string.geopoint_view_read_only)));
     }
 
@@ -148,7 +139,7 @@ public class GeoPointWidgetTest {
     public void whenWidgetHasAppearanceAndNullAsAnswer_buttonShowsCorrectText() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(PLACEMENT_MAP, null));
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(), equalTo(widget.getContext().getString(R.string.get_point)));
+        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.get_point)));
     }
 
     @Test
@@ -161,20 +152,20 @@ public class GeoPointWidgetTest {
     @Test
     public void whenWidgetHasAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(), equalTo(widget.getContext().getString(R.string.change_location)));
+        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.change_location)));
     }
 
     @Test
     public void whenWidgetHasNullAsAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(((Button) widget.findViewById(R.id.geo_button)).getText(), equalTo(widget.getContext().getString(R.string.get_point)));
+        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.get_point)));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_buttonShouldLaunchCorrectIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         stubAllRuntimePermissionsGranted(widget, true);
-        (widget.findViewById(R.id.geo_button)).performClick();
+        widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
@@ -187,7 +178,7 @@ public class GeoPointWidgetTest {
     public void whenPromptHasAnswer_buttonShouldLaunchCorrectIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         stubAllRuntimePermissionsGranted(widget, true);
-        (widget.findViewById(R.id.geo_button)).performClick();
+        widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
@@ -201,7 +192,7 @@ public class GeoPointWidgetTest {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearance(PLACEMENT_MAP, false));
         stubAllRuntimePermissionsGranted(widget, true);
-        (widget.findViewById(R.id.geo_button)).performClick();
+        widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
@@ -215,7 +206,7 @@ public class GeoPointWidgetTest {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearance(MAPS, false));
         stubAllRuntimePermissionsGranted(widget, true);
-        (widget.findViewById(R.id.geo_button)).performClick();
+        widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
