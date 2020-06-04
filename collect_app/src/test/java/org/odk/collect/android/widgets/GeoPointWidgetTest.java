@@ -1,6 +1,8 @@
 package org.odk.collect.android.widgets;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -38,6 +39,7 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_
 import static org.odk.collect.android.widgets.GeoPointWidget.ACCURACY_THRESHOLD;
 import static org.odk.collect.android.widgets.GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
 import static org.odk.collect.android.widgets.GeoPointWidget.DRAGGABLE_ONLY;
+import static org.odk.collect.android.widgets.GeoPointWidget.LOCATION;
 import static org.odk.collect.android.widgets.GeoPointWidget.READ_ONLY;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
@@ -181,17 +183,21 @@ public class GeoPointWidgetTest {
         (widget.findViewById(R.id.geo_button)).performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
-        Intent expectedIntent = new Intent(widgetTestActivity(), GeoPointActivity.class);
+        Bundle bundle = startedIntent.getExtras();
 
-        expectedIntent.putExtra(READ_ONLY, false);
-        expectedIntent.putExtra(DRAGGABLE_ONLY, false);
-        expectedIntent.putExtra(ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
-        assertEquals(startedIntent, expectedIntent);
+        assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointActivity.class)));
+        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false, true);
     }
-
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef, mapConfigurator);
+    }
+
+    private void assertBundleArgumentEquals(Bundle bundle, String location, double accuracyThreshold, boolean readOnly, boolean draggableOnly) {
+        assertThat(bundle.getString(LOCATION), equalTo(location));
+        assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
+        assertThat(bundle.getBoolean(DRAGGABLE_ONLY), equalTo(draggableOnly));
+        assertThat(bundle.getDouble(ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
     }
 
     protected void stubAllRuntimePermissionsGranted(GeoPointWidget widget, boolean isGranted) {
