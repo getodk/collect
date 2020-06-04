@@ -68,7 +68,7 @@ public class BackgroundLocationViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.equals(BackgroundLocationViewModel.class)) {
-                GoogleFusedLocationClient googleLocationClient = new GoogleFusedLocationClient(Collect.getInstance().getApplicationContext());
+                GoogleFusedLocationClient googleLocationClient = new GoogleFusedLocationClient(Collect.getInstance());
 
                 BackgroundLocationManager locationManager =
                         new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());

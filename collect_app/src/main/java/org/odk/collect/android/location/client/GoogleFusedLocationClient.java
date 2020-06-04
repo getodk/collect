@@ -1,6 +1,7 @@
 package org.odk.collect.android.location.client;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -65,11 +66,12 @@ public class GoogleFusedLocationClient
      * <p>
      * This Constructor should be used normally.
      *
-     * @param context The Context where the GoogleFusedLocationClient will be running.
+     * @param application The application. Used as the Context for building the GoogleApiClient because
+     *                    it doesn't release context.
      */
-    public GoogleFusedLocationClient(@NonNull Context context) {
-        this(locationServicesClientForContext(context), LocationServices.FusedLocationApi,
-                (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
+    public GoogleFusedLocationClient(@NonNull Application application) {
+        this(locationServicesClientForContext(application), LocationServices.FusedLocationApi,
+                (LocationManager) application.getSystemService(Context.LOCATION_SERVICE));
     }
 
     /**

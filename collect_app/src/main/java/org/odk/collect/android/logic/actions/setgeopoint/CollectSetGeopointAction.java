@@ -67,7 +67,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     public void requestLocationUpdates() {
         // Do initialization on first location request so the client doesn't need to be serialized
         if (maxAccuracyLocationClient == null) {
-            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleFusedLocationClient(Collect.getInstance().getApplicationContext()), this);
+            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleFusedLocationClient(Collect.getInstance()), this);
         }
 
         // Only start acquiring location if the Collect preference allows it and Google Play

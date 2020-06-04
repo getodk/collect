@@ -15,52 +15,43 @@
 package org.odk.collect.android.location.client;
 
 import android.content.Context;
-import android.util.Log;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class LocationClientProviderTest {
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
+    @Mock
+    private Context context;
 
     @Mock
-    public Context context;
+    private PlayServicesChecker playServicesChecker;
 
     @Mock
-    public PlayServicesChecker playServicesChecker;
+    private GoogleFusedLocationClient googleFusedLocationClient;
 
     @Test
     public void fusedLocationClient_returnedWhenPlayServicesAvailable() {
         when(playServicesChecker.isGooglePlayServicesAvailable(any())).thenReturn(true);
 
-        // Could import Robolectric Shadows Play Services to actually build a GoogleFusedLocationClient
-        // but it wouldn't tell us anything more useful.
-        try {
-            LocationClientProvider.getClient(context, playServicesChecker);
-        } catch (Exception e) {
-            assertThat(Log.getStackTraceString(e), containsString("GoogleFusedLocationClient"));
-        }
+        LocationClient client = LocationClientProvider.getClient(context, playServicesChecker, () -> googleFusedLocationClient);
+        assertThat(client, is(googleFusedLocationClient));
     }
 
     @Test
     public void androidLocationClient_returnedWhenPlayServicesNotAvailable() {
         when(playServicesChecker.isGooglePlayServicesAvailable(any())).thenReturn(false);
 
-        LocationClient client = LocationClientProvider.getClient(context, playServicesChecker);
+        LocationClient client = LocationClientProvider.getClient(context, playServicesChecker, () -> googleFusedLocationClient);
         assertThat(client, instanceOf(AndroidLocationClient.class));
     }
 }
