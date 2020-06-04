@@ -195,10 +195,13 @@ public class FieldListUpdateTest {
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
         onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("")));
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
         onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(String.valueOf(name.length()))));
+        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText(String.valueOf(name.charAt(0)))));
         onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
         onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
+        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("")));
     }
 
     @Test

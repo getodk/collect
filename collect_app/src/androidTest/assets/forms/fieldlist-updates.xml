@@ -87,6 +87,7 @@
           <value_change>
             <source6/>
             <target6/>
+            <target6_1/>
           </value_change>
           <cascading_select>
             <source7/>
@@ -271,6 +272,7 @@
       <bind nodeset="/fieldlist-updates/hint_change/target5" type="string"/>
       <bind nodeset="/fieldlist-updates/value_change/source6" type="string"/>
       <bind calculate="string-length( /fieldlist-updates/value_change/source6 )" nodeset="/fieldlist-updates/value_change/target6" type="int"/>
+      <bind calculate="substr( /fieldlist-updates/value_change/source6, 0, 1 )" nodeset="/fieldlist-updates/value_change/target6_1" type="string"/>
       <bind nodeset="/fieldlist-updates/cascading_select/source7" type="select1"/>
       <bind nodeset="/fieldlist-updates/cascading_select/target7" type="select1"/>
       <bind nodeset="/fieldlist-updates/cascading_select/target7-1" type="select1"/>
@@ -382,6 +384,9 @@
       </input>
       <input ref="/fieldlist-updates/value_change/target6">
         <label>Name length</label>
+      </input>
+      <input ref="/fieldlist-updates/value_change/target6_1">
+        <label>First name letter</label>
       </input>
     </group>
     <group appearance="field-list" ref="/fieldlist-updates/cascading_select">
