@@ -125,8 +125,7 @@
   <string name="change_splash_path">Ndrysho imazhin</string>
   <string name="keep_changes">Ruaj ndryshimet</string>
   <string name="change_formlist_url">Adresa për listën e formularëve (në fund të URL)</string>
-  <string name="change_protocol">Platforma</string>
-  <string name="change_submission_url">Adresa për dërgimin (në fund të URL)</string>
+    <string name="change_submission_url">Adresa për dërgimin (në fund të URL)</string>
   <string name="formlist_url">Adresa për listën e formave</string>
   <string name="submission_url">Adresa për dërgimin</string>
   <string name="font_size">Madhësia tekstit</string>
@@ -148,8 +147,7 @@
   <string name="save_form_as">Emërto formularin</string>
   <string name="save_as_error">Emri i ruajtur nuk mund të jetë bosh!</string>
   <string name="selected_google_account_text">Llogaria në Google</string>
-  <string name="server_platform_other">Tjetër</string>
-  <string name="font_size_extra_large">Shumë e madhe</string>
+    <string name="font_size_extra_large">Shumë e madhe</string>
   <string name="font_size_large">E madhe</string>
   <string name="font_size_medium">Mesatare</string>
   <string name="font_size_small">E vogël</string>
@@ -237,11 +235,7 @@
   <string name="high_resolution_summary">Mundëso regjistrimin video me rezolucion të lartë</string>
   <string name="go_shared">Ndarë me mua</string>
   <string name="modified_on_date_at_time">\'Modifikuar më\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <string name="aggregate_preferences">Parametrat e ODK Aggregate</string>
-  <string name="sms_submission_preferences">Parametrat për të dërguar SMS</string>
-  <string name="other_preferences">Parametrat e tjetër platforme</string>
-  <string name="google_preferences">Parametrat e Google Sheets</string>
-  <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
+    <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
@@ -462,9 +456,7 @@
   <string name="guidance_hint_title">Trego udhëzuesin për pyetjet</string>
   <string name="app_theme">Tema</string>
   <string name="hide_old_form_versions_setting_title">Fshih variantet e vjetra të formularit</string>
-  <string name="sms_pref_dialog_title">Numri i telefonit i destinacionit</string>
-  <string name="sms_pref_title">Numri i telefonit i destinacionit</string>
-  <string name="sms_invalid_phone_number">Numri i telefonit nuk është i vlefshëm!</string>
+    <string name="sms_invalid_phone_number">Numri i telefonit nuk është i vlefshëm!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm \'pasi nuk ka mbulim me valë\'</string>
   <string name="sms_fatal_error">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
@@ -474,9 +466,7 @@
   <string name="sms_submission_queued">Në radhë për t\'u dërguar.</string>
   <string name="sms_submissions_notif_title">Dërguar me SMS</string>
   <string name="sms_submissions_notif_description">Disa formularë janë duke u dërguar.</string>
-  <string name="transport_type_internet">Wifi/Celular (e rekomanduar)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="rank_items">Rendit pohimet</string>
+    <string name="rank_items">Rendit pohimet</string>
   <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
   <string name="go_to_settings">Shko tek parametrat</string>
   <string name="track_location">Gjurmo vendndodhjen</string>

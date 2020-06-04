@@ -134,8 +134,7 @@
   <string name="change_splash_path">画像を変更</string>
   <string name="keep_changes">変更を保存する</string>
   <string name="change_formlist_url">フォーム一覧のパス (URLに追加されます)</string>
-  <string name="change_protocol">プラットフォーム</string>
-  <string name="change_submission_url">提出パス (URLに追加されます)</string>
+    <string name="change_submission_url">提出パス (URLに追加されます)</string>
   <string name="formlist_url">フォーム一覧のパス</string>
   <string name="submission_url">送信パス</string>
   <string name="font_size">文字フォントサイズ</string>
@@ -162,9 +161,7 @@
   <string name="save_as_error">保存する名前は空にできません!</string>
   <string name="edit_prompt">プロンプトを編集</string>
   <string name="selected_google_account_text">Google アカウント</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">その他</string>
-  <string name="font_size_extra_large">特大</string>
+    <string name="font_size_extra_large">特大</string>
   <string name="font_size_large">大</string>
   <string name="font_size_medium">中</string>
   <string name="font_size_small">小</string>
@@ -263,13 +260,7 @@
   <string name="go_drive">マイ ドライブ</string>
   <string name="go_shared">私と共有</string>
   <string name="modified_on_date_at_time">yyyy/MM/dd HH:mm \'に変更しました\'</string>
-  <string name="aggregate_preferences">ODK Aggregate 設定</string>
-  <string name="sms_submission_preferences">SMS 送信設定</string>
-  <string name="submission_transport">送信トランスポート (詳細)</string>
-  <string name="submission_transport_types_title">送信…</string>
-  <string name="other_preferences">その他のプラットフォーム設定</string>
-  <string name="google_preferences">Google スプレッドシート設定</string>
-  <string name="google_sheets_url_hint">フォームは送信 URL を設定する必要があります。 そうしない場合に、この URL が使用されます。</string>
+    <string name="google_sheets_url_hint">フォームは送信 URL を設定する必要があります。 そうしない場合に、この URL が使用されます。</string>
   <string name="drive_get_file">%1$s とメディアファイルを取得中。</string>
   <string name="no_google_account">Google アカウントが選択されていません!</string>
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
@@ -640,9 +631,7 @@
   <string name="instance_upload_cancelled">インスタンスのアップロードがキャンセルされました</string>
   <string name="hide_old_form_versions_setting_title">古いフォームのバージョンを非表示</string>
   <string name="hide_old_form_versions_setting_summary">ブランクフォームに最新バージョンのみが表示されます</string>
-  <string name="sms_pref_dialog_title">相手先電話番号</string>
-  <string name="sms_pref_title">相手先電話番号</string>
-  <string name="sms_invalid_phone_number">電話番号が正しくありません</string>
+    <string name="sms_invalid_phone_number">電話番号が正しくありません</string>
   <!--Sms submission-->
   <string name="sms_no_reception">yyyy/MM/dd E HH:mm \'に受信者がいないため失敗しました\'</string>
   <string name="sms_no_number">yyyy/MM/dd E HH:mm \'に電話番号がないため失敗しました\'</string>
@@ -658,10 +647,7 @@
   <string name="sms_submission_queued">送信キューにいれました。</string>
   <string name="sms_submissions_notif_title">SMS 送信</string>
   <string name="sms_submissions_notif_description">いくつかのフォームを現在送信しています。</string>
-  <string name="transport_type_internet">Wifi/データ通信 (推奨)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">送信時に選択</string>
-  <string name="rank_items">ランキングアイテム</string>
+    <string name="rank_items">ランキングアイテム</string>
   <string name="loading_form_failed">フォームの読み込み時にエラーが発生しました。もう一度やり直してください。</string>
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
   <string name="missing_google_account_dialog_desc">Google スプレッドでフォームを送信するには、サーバー設定で Google アカウントを設定する必要があります。</string>

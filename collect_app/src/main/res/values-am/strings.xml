@@ -118,9 +118,7 @@
   <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
   <string name="selected_google_account_text">የ Google መለያ</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">ሌላ</string>
-  <string name="font_size_extra_large">በጣም ትልቅ</string>
+    <string name="font_size_extra_large">በጣም ትልቅ</string>
   <string name="font_size_large">ትልቅ</string>
   <string name="font_size_medium">መካከለኛ</string>
   <string name="font_size_small">ትንሽ</string>
@@ -185,9 +183,7 @@
   <string name="google_drive">ጉግል Drive</string>
   <string name="go_drive">የእኔ Drive</string>
   <string name="go_shared">ከእኔ ጋር የተጋሩ</string>
-  <string name="aggregate_preferences">ODK Aggregate ቅንጅቶች</string>
-  <string name="other_preferences">ሌሎች ስርዓተ ቅንብሮች</string>
-  <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
+    <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
   <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
   <string name="delete_after_send">ከላክ በኋላ ይሰርዙ</string>

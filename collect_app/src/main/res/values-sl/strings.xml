@@ -126,8 +126,7 @@
   <string name="change_splash_path">Zamenjaj sliko</string>
   <string name="keep_changes">Shrani spremembe</string>
   <string name="change_formlist_url">Pot seznama obrazcev (dodana URL)</string>
-  <string name="change_protocol">Platforma</string>
-  <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
+    <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
   <string name="formlist_url">Pot seznama obrazcev</string>
   <string name="submission_url">Pot prispevkov</string>
   <string name="font_size">Velikost črk</string>
@@ -154,9 +153,7 @@
   <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
   <string name="edit_prompt">Uredi</string>
   <string name="selected_google_account_text">Goggle račun</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Drugo</string>
-  <string name="font_size_extra_large">Extra veliko</string>
+    <string name="font_size_extra_large">Extra veliko</string>
   <string name="font_size_large">Veliko</string>
   <string name="font_size_medium">Srednje</string>
   <string name="font_size_small">Malo</string>
@@ -253,12 +250,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Deljeno z menoj</string>
   <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd,  yyyy \'ob\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate nastavitve</string>
-  <string name="sms_submission_preferences">Nastavitve za predložitev preko SMS sporočil</string>
-  <string name="submission_transport_types_title">Predloži preko</string>
-  <string name="other_preferences">Nastavitve druge platforme</string>
-  <string name="google_preferences">Nastavitve Google Sheets</string>
-  <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>
+    <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>
   <string name="drive_get_file">Pridobivam %1$s in medijske datoteke.</string>
   <string name="no_google_account">Google račun ni izbran!</string>
   <string name="google_set_account">Za svoj strežnik ste izbrali Googlove tabele, pred nadaljevanjem prosim izberite ustrezen Google Račun v splošnih nastavitvah</string>
@@ -361,6 +353,4 @@
   <string name="sms_sent_on_date_at_time">\'Poslano kot SMS sporočilo na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
   <string name="sms_submissions_notif_title">Predložitve preko SMS sporočil</string>
   <string name="sms_submissions_notif_description">Trenutno se oddaja več obrazcev.</string>
-  <string name="transport_type_internet">WiFi / mobilno omrežje (priporočeno)</string>
-  <string name="transport_type_sms">SMS sporočilo</string>
 </resources>

@@ -110,8 +110,7 @@
   <string name="change_splash_path">Verander Prentjie</string>
   <string name="keep_changes">Stoor Veranderinge</string>
   <string name="change_formlist_url">Vorm lys path (word bygevoeg tot URL)</string>
-  <string name="change_protocol">Platvorm</string>
-  <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
+    <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
   <string name="formlist_url">Vorm lys path</string>
   <string name="submission_url">Indiening path</string>
   <string name="font_size">Teks font grootte</string>
@@ -136,8 +135,6 @@
   <string name="save_as_error">Gestoorde naam mag nie leeg wees nie!</string>
   <string name="edit_prompt">Wysig Vraag</string>
   <string name="selected_google_account_text">Google rekening</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Ander</string>
   <string name="font_size_extra_large">Extra Large</string>
   <string name="font_size_large">Large</string>
   <string name="font_size_medium">Medium</string>
@@ -228,8 +225,6 @@
   <string name="go_drive">My Skyf</string>
   <string name="go_shared">Met my gedeel</string>
   <string name="modified_on_date_at_time">\'Verander op\' EEE, MMM dd, yyyy \'om\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate verstellings</string>
-  <string name="other_preferences">Ander platform verstellings</string>
   <string name="drive_get_file">Besig om %1$s en media leêrs te haal.</string>
   <string name="no_google_account">Geen Google rekening geselekteer nie!</string>
   <string name="notification_error">Fout met vertoon van kennisgewing teks</string>

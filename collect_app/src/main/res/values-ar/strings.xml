@@ -134,8 +134,7 @@
   <string name="change_splash_path">تغيير الصورة</string>
   <string name="keep_changes">حفظ التعديلات</string>
   <string name="change_formlist_url">مسار الارسال (مظاف الى الرابط)</string>
-  <string name="change_protocol">البرنامج</string>
-  <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
+    <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
   <string name="formlist_url">مسار قائمة الاستمارات</string>
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
@@ -162,9 +161,7 @@
   <string name="save_as_error">اسم الحفظ لا يمكن أن يكون فارغ!</string>
   <string name="edit_prompt">تعديل التوجيه</string>
   <string name="selected_google_account_text">حساب جوجل</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">أخرى</string>
-  <string name="font_size_extra_large">كبير جدا</string>
+    <string name="font_size_extra_large">كبير جدا</string>
   <string name="font_size_large">كبير</string>
   <string name="font_size_medium">متوسط</string>
   <string name="font_size_small">صغير</string>
@@ -263,12 +260,6 @@
   <string name="go_drive">المحرك الخاص بي</string>
   <string name="go_shared">مشاركة معي</string>
   <string name="modified_on_date_at_time">\'تم التعديل ب \' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
-  <string name="aggregate_preferences">اعدادات  ODK Aggregate</string>
-  <string name="sms_submission_preferences">إعدادات إرسال SMS</string>
-  <string name="submission_transport">نقل الارسال (متقدم)</string>
-  <string name="submission_transport_types_title">إرسال الاستمارات عبر</string>
-  <string name="other_preferences">اعدادات البرنامج الاخرى</string>
-  <string name="google_preferences">اعدادات صفحات الجوجل</string>
   <string name="google_sheets_url_hint">يجب أن تقوم الاستمارات بتعيين رابط للارسال. إذا لم يفعلوا ذلك، فسيتم استخدام عنوان الرابط هذا.</string>
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
@@ -644,8 +635,6 @@
   <string name="instance_upload_cancelled">تم إلغاء تحميل النموذج</string>
   <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
   <string name="hide_old_form_versions_setting_summary">سيظهر الإصدار الأحدث فقط في ملء استمارة فارغة</string>
-  <string name="sms_pref_dialog_title">رقم هاتف الوجهة</string>
-  <string name="sms_pref_title">رقم هاتف الوجهة</string>
   <string name="sms_invalid_phone_number">رقم هاتف غير صحيح!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH \'بسبب عدم التسليم\'</string>
@@ -667,9 +656,6 @@
   <string name="sms_submission_queued">في قائمة الانتظار للإرسال.</string>
   <string name="sms_submissions_notif_title">إرسال عبر SMS</string>
   <string name="sms_submissions_notif_description">يتم إرسال عدة استمارات حاليًا.</string>
-  <string name="transport_type_internet">Wifi / شبكة الاتصال (مستحسن)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">حدد عند الإرسال</string>
   <string name="rank_items">رتب العناصر</string>
   <string name="loading_form_failed">حدث خطأ أثناء تحميل الاستمارة. الرجاء المحاولة مرة أخرى.</string>
   <string name="missing_google_account_dialog_title">حساب Google لم يحدد</string>

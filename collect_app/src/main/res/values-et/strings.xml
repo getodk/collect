@@ -114,8 +114,7 @@
   <string name="change_splash_path">Muuda pilti</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>
-  <string name="change_protocol">Platvorm</string>
-  <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
+    <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
   <string name="formlist_url">Vormi nimekirja asukoht</string>
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>
@@ -139,9 +138,7 @@
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
   <string name="edit_prompt">Muuda küsimust</string>
   <string name="selected_google_account_text">Google konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Mõni teine</string>
-  <string name="font_size_extra_large">Väga suur</string>
+    <string name="font_size_extra_large">Väga suur</string>
   <string name="font_size_large">Suur</string>
   <string name="font_size_medium">Keskmine</string>
   <string name="font_size_small">Väike</string>
@@ -235,9 +232,6 @@
   <string name="go_drive">Minu Drive</string>
   <string name="go_shared">Minuga jagatud</string>
   <string name="modified_on_date_at_time">\'Muudetud\' EEE, MMM dd, yyyy \'kell\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate seaded</string>
-  <string name="other_preferences">Ülejäänud platvormi seaded</string>
-  <string name="google_preferences">Google Sheets seaded</string>
   <string name="drive_get_file">Laen %1$s ja meediafailid.</string>
   <string name="no_google_account">Google kontot ei ole valitud!</string>
   <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>

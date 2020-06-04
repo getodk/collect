@@ -110,8 +110,7 @@
   <string name="change_splash_path">ছবি পরিবর্তন করুন</string>
   <string name="keep_changes">পরিবর্তন সংরক্ষণকরুন</string>
   <string name="change_formlist_url">ফর্ম তালিকা URL পরিবর্তন</string>
-  <string name="change_protocol">প্লাটফর্ম</string>
-  <string name="change_submission_url"> সাবমিশান URL পরিবর্তন</string>
+    <string name="change_submission_url"> সাবমিশান URL পরিবর্তন</string>
   <string name="formlist_url">ফর্ম তালিকা URL</string>
   <string name="submission_url"> সাবমিশান URL</string>
   <string name="font_size">ফন্ট আকার</string>
@@ -126,9 +125,7 @@
   <string name="save_form_as">এই ফর্মের নাম</string>
   <string name="save_as_error">সংরক্ষিত নাম খালি রাখা যাবে না।</string>
   <string name="selected_google_account_text">গুগল একাউন্ট</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">অন্যান</string>
-  <string name="font_size_extra_large">বিশাল বৃহৎ।</string>
+    <string name="font_size_extra_large">বিশাল বৃহৎ।</string>
   <string name="font_size_large">বৃহৎ</string>
   <string name="font_size_medium">মাঝারি</string>
   <string name="font_size_small">ক্ষুদ্র</string>

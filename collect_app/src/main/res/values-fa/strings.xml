@@ -123,9 +123,7 @@
   <string name="save_as_error">نام ذخیره شده نباید خالی باشد!</string>
   <string name="edit_prompt">ویرایش عاجل</string>
   <string name="selected_google_account_text">حساب کاربری گوگل</string>
-  <string name="server_platform_odk_aggregate">مجموعه ODK</string>
-  <string name="server_platform_other">دیگر</string>
-  <string name="font_size_extra_large">بسیار بزرگ</string>
+    <string name="font_size_extra_large">بسیار بزرگ</string>
   <string name="font_size_large">بزرگ</string>
   <string name="font_size_medium">متوسط</string>
   <string name="font_size_small">کوچک</string>
@@ -171,9 +169,6 @@
   <string name="google_drive">گوگل درایو</string>
   <string name="go_drive">درایو من</string>
   <string name="go_shared">با من در اشتراک گذاشته شده است</string>
-  <string name="sms_submission_preferences">تنظیمات ارسال اس ام اس</string>
-  <string name="submission_transport_types_title">فرستادن ارسالی ها از طریق </string>
-  <string name="google_preferences">تنظیمات گوگل شیت</string>
   <string name="odk_auto_note">نتایج ارسال خودکار ODK</string>
   <string name="odk_auto_download_notification_title">نتیاج دانلود خودکار ODK</string>
   <string name="delete_after_send">بعد از ارسال حذف کنید</string>
@@ -306,8 +301,6 @@
   <string name="sms_invalid_phone_number">شماره تماس غیر معتبر!</string>
   <!--Sms submission-->
   <string name="sms_submissions_notif_description">چندین فورم در حال حاضر ارسال شده اند.</string>
-  <string name="transport_type_sms">اس ام اس</string>
-  <string name="transport_type_both">انتخاب ارسال روشن است</string>
   <string name="rank_items">رده بندی اقلام</string>
   <string name="go_to_settings">رفتن به تنظیمات </string>
   <string name="read_details">جزئیات را بخوانید</string>

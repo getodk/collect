@@ -122,8 +122,7 @@
   <string name="change_splash_path">Trocar Imagem</string>
   <string name="keep_changes">Salvar Alterações</string>
   <string name="change_formlist_url">Listagem do caminho do formulário (adicionado do URL do Servidor)</string>
-  <string name="change_protocol">Protocolo</string>
-  <string name="change_submission_url">Caminho para submeter (adicionado do URL do Servidor)</string>
+    <string name="change_submission_url">Caminho para submeter (adicionado do URL do Servidor)</string>
   <string name="formlist_url">Lista de Caminho do Formulário</string>
   <string name="submission_url">Caminho para submeter</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
@@ -150,9 +149,7 @@ Escolher Imagem</string>
   <string name="save_as_error">Nome salvo não pode ser em vazio!</string>
   <string name="edit_prompt">Editar Prompt</string>
   <string name="selected_google_account_text">Conta Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Outro</string>
-  <string name="font_size_extra_large">Extra Grande</string>
+    <string name="font_size_extra_large">Extra Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Média</string>
   <string name="font_size_small">Pequena</string>
@@ -249,13 +246,7 @@ Escolher Imagem</string>
   <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>
   <string name="modified_on_date_at_time">\'Modificado em\' EEE, MMM dd, yyyy \'às\' HH:mm</string>
-  <string name="aggregate_preferences">Configurações do Agregador ODK.</string>
-  <string name="sms_submission_preferences">Parâmetros de envio SMS</string>
-  <string name="submission_transport">Transporte envio (avançado)</string>
-  <string name="submission_transport_types_title">Enviar submissões por</string>
-  <string name="other_preferences">Configurações de outras plataformas.</string>
-  <string name="google_preferences">Configurações Planilhas Google</string>
-  <string name="google_sheets_url_hint">Os formulários devem configurar um envio. Se não foram, esta URL será utilizada.</string>
+    <string name="google_sheets_url_hint">Os formulários devem configurar um envio. Se não foram, esta URL será utilizada.</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
   <string name="google_set_account">Você selecionou o Google Sheets com seu servidor, por favor selecione um conta Google correspondente em Configurações Gerais antes de continuar.</string>

@@ -118,8 +118,7 @@
   <string name="change_splash_path">修改图片</string>
   <string name="keep_changes">保存修改</string>
   <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
-  <string name="change_protocol">服务器平台</string>
-  <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
+    <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
   <string name="formlist_url">表格列表路径</string>
   <string name="submission_url">提交路径</string>
   <string name="font_size">字体大小</string>
@@ -143,9 +142,7 @@
   <string name="save_as_error">保存的名字不能为空!</string>
   <string name="edit_prompt">修改提示</string>
   <string name="selected_google_account_text">Google账号</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">其他</string>
-  <string name="font_size_extra_large">极大</string>
+    <string name="font_size_extra_large">极大</string>
   <string name="font_size_large">大</string>
   <string name="font_size_medium">中</string>
   <string name="font_size_small">小</string>

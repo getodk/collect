@@ -107,8 +107,7 @@
   <string name="change_splash_path">Đổi ảnh</string>
   <string name="keep_changes">Lưu thay đổi</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
-  <string name="change_protocol">Nền tảng máy chủ</string>
-  <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
+    <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="formlist_url">Danh sách đường dẫn biểu mẫu</string>
   <string name="submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="font_size">Kích thước chữ</string>
@@ -132,9 +131,7 @@
   <string name="save_as_error">Tên được lưu không để trống!</string>
   <string name="edit_prompt">Sửa thông tin</string>
   <string name="selected_google_account_text">Tài khoản Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Khác</string>
-  <string name="font_size_extra_large">Cực lớn</string>
+    <string name="font_size_extra_large">Cực lớn</string>
   <string name="font_size_large">Lớn</string>
   <string name="font_size_medium">Vừa</string>
   <string name="font_size_small">Nhỏ</string>

@@ -10,6 +10,7 @@ import org.odk.collect.android.support.ActivityHelpers;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -137,6 +138,16 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public MainMenuPage recreateActivity() {
         getInstrumentation().runOnMainSync(() -> rule.getActivity().recreate());
         return this;
+    }
+
+    public GetBlankFormPage clickGetBlankForm() {
+        onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
+        return new GetBlankFormPage(rule);
+    }
+
+    public SendFinalizedFormPage clickSendFinalizedForm(int formCount) {
+        onView(withText(getTranslatedString(R.string.send_data_button, formCount))).perform(click());
+        return new SendFinalizedFormPage(rule);
     }
 }
 

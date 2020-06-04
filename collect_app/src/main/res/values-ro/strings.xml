@@ -110,8 +110,7 @@
   <string name="change_splash_path">Schimbați imaginea</string>
   <string name="keep_changes">Salvați modificările</string>
   <string name="change_formlist_url">Calea către lista formularelor (adăugată adresei URL a serverului)</string>
-  <string name="change_protocol">Platformă server</string>
-  <string name="change_submission_url">Calea transmiterii (adăugată adresei URL a serverului)</string>
+    <string name="change_submission_url">Calea transmiterii (adăugată adresei URL a serverului)</string>
   <string name="formlist_url">Calea către lista formularelor</string>
   <string name="submission_url">Calea către transmitere</string>
   <string name="font_size">Mărimea fontului textului</string>
@@ -135,9 +134,7 @@
   <string name="save_as_error">Numele salvat nu trebuie să fie gol!</string>
   <string name="edit_prompt">Editare câmp</string>
   <string name="selected_google_account_text">Cont Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Alte</string>
-  <string name="font_size_extra_large">Extra mare</string>
+    <string name="font_size_extra_large">Extra mare</string>
   <string name="font_size_large">Mare</string>
   <string name="font_size_medium">Medie</string>
   <string name="font_size_small">Mică</string>
@@ -230,10 +227,7 @@
   <string name="go_drive">Discul meu</string>
   <string name="go_shared">Partajate cu mine</string>
   <string name="modified_on_date_at_time">\'Modificat în\' EEE, dd MMM yyyy \'la\' HH:mm</string>
-  <string name="aggregate_preferences">Setări ODK Aggregate</string>
-  <string name="other_preferences">Setările altor platforme</string>
-  <string name="google_preferences">Setări Google Sheets</string>
-  <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
+    <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
   <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>

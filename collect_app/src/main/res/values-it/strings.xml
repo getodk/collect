@@ -134,8 +134,7 @@
   <string name="change_splash_path">Cambiare immagine</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
-  <string name="change_protocol">Piattaforma server</string>
-  <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
+    <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
   <string name="formlist_url">Percorso Elenco Moduli</string>
   <string name="submission_url">Luogo di consegna</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
@@ -162,9 +161,7 @@
   <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
   <string name="edit_prompt">Modifica Prompt</string>
   <string name="selected_google_account_text">Account Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Altro</string>
-  <string name="font_size_extra_large">Molto Grande</string>
+    <string name="font_size_extra_large">Molto Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Media</string>
   <string name="font_size_small">Piccolo</string>
@@ -263,13 +260,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>
   <string name="modified_on_date_at_time">\'Modificato il\' EEE, dd MMM yyyy \'alle\' HH:mm</string>
-  <string name="aggregate_preferences">Impostazioni ODK Aggregate</string>
-  <string name="sms_submission_preferences">Parametri sottomissione SMS</string>
-  <string name="submission_transport">Modalità Sottomissione (avanzata)</string>
-  <string name="submission_transport_types_title">Manda sottomissione con</string>
-  <string name="other_preferences">Altre impostazioni piattaforma</string>
-  <string name="google_preferences">Impostazioni di Google Sheets</string>
-  <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>
+    <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
@@ -601,17 +592,13 @@
   <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
   <string name="hide_old_form_versions_setting_title">Nascondi le vecchie versioni dei questionario</string>
   <string name="hide_old_form_versions_setting_summary">Solo l\'ultima versione apparirà in Compila Formulario Vuoto</string>
-  <string name="sms_pref_dialog_title">Numero telefono destinatario</string>
-  <string name="sms_pref_title">Numero telefono destinatario</string>
-  <string name="sms_invalid_phone_number">Numero di telefono non valido!</string>
+    <string name="sms_invalid_phone_number">Numero di telefono non valido!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm \'causa nessuna rete rilevata\'</string>
   <string name="sms_no_number">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm \'causa nessun numero di telefono\'</string>
   <string name="sms_fatal_error">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm</string>
   <string name="sms_submission_queued">In coda per essere inviato</string>
-  <string name="transport_type_internet">Rete Wireless/Cellulare (raccomandato)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="rank_items">Ordina gli elementi</string>
+    <string name="rank_items">Ordina gli elementi</string>
   <string name="missing_google_account_dialog_title">Account Google non specificato</string>
   <string name="notification_channel_name">Impostazioni Generali</string>
   <string name="go_to_settings">Vai a impostazioni</string>

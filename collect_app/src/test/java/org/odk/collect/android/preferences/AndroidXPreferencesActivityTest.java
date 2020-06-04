@@ -12,8 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.LooperMode;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.odk.collect.android.preferences.AndroidXPreferencesActivity.EXTRA_FRAGMENT_FORM_METADATA;
 import static org.odk.collect.android.preferences.AndroidXPreferencesActivity.KEY_EXTRA_FRAGMENT;
 

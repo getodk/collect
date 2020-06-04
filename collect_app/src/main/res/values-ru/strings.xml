@@ -131,8 +131,7 @@
   <string name="change_splash_path">Изменить изображение</string>
   <string name="keep_changes">Сохранить ответы</string>
   <string name="change_formlist_url">Папка с бланками (добавляется к URL)</string>
-  <string name="change_protocol">Платформа</string>
-  <string name="change_submission_url">Папка выгрузки опросов (добавляется к URL)</string>
+    <string name="change_submission_url">Папка выгрузки опросов (добавляется к URL)</string>
   <string name="formlist_url">Папка с бланками</string>
   <string name="submission_url">Папка выгрузки</string>
   <string name="font_size">Размер шрифта</string>
@@ -159,9 +158,7 @@
   <string name="save_as_error">Название не может быть пустым!</string>
   <string name="edit_prompt">Изменить вопрос</string>
   <string name="selected_google_account_text">Учётная запись Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Нестандартная</string>
-  <string name="font_size_extra_large">Очень большой</string>
+    <string name="font_size_extra_large">Очень большой</string>
   <string name="font_size_large">Большой</string>
   <string name="font_size_medium">Средний</string>
   <string name="font_size_small">Маленький</string>
@@ -260,13 +257,7 @@
   <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
-  <string name="aggregate_preferences">ODK AGGREGATE НАСТРОЙКИ</string>
-  <string name="sms_submission_preferences">НАСТРОЙКИ SMS</string>
-  <string name="submission_transport">СПОСОБ ВЫГРУЗКИ</string>
-  <string name="submission_transport_types_title">Выгружать результаты через</string>
-  <string name="other_preferences">НАСТРОЙКИ НЕСТАНДАРТНЫХ ПЛАТФОРМ</string>
-  <string name="google_preferences">НАСТРОЙКИ GOOGLE ТАБЛИЦ</string>
-  <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
+    <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_set_account">Вы выбрали Google таблицы в качестве сервера. Перед тем, как продолжить, пожалуйста, укажите соответствующую учётную запись Google в общих настройках.</string>
@@ -566,9 +557,7 @@
   <string name="instance_upload_cancelled">Загрузка отменена</string>
   <string name="hide_old_form_versions_setting_title">Скрывать прошлые версии бланков</string>
   <string name="hide_old_form_versions_setting_summary">Только новые версии будут показаны в списке заполнения бланков</string>
-  <string name="sms_pref_dialog_title">Выгружать на номер телефона</string>
-  <string name="sms_pref_title">Выгружать на номер телефона</string>
-  <string name="sms_invalid_phone_number">Неправильный формат телефонного номера</string>
+    <string name="sms_invalid_phone_number">Неправильный формат телефонного номера</string>
   <!--Sms submission-->
   <string name="sms_no_number">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm \'— не введён телефон\'</string>
   <string name="sms_fatal_error">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
@@ -578,10 +567,7 @@
   <string name="sms_sent_on_date_at_time">\'Выгруженно через SMS\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <string name="sms_submission_queued">В очереди на выгрузку</string>
   <string name="sms_submissions_notif_title">SMS-выгрузка</string>
-  <string name="transport_type_internet">Интернет (рекомендуется)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Выбрать при выгрузке</string>
-  <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
+    <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
   <string name="sms_invalid_phone_number_description">Введите номер телефона для выгрузки или измените способ доставки.</string>

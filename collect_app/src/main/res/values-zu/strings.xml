@@ -108,8 +108,7 @@
   <string name="change_splash_path">Shintsha umfanekiso</string>
   <string name="keep_changes">Gcina ushintsho</string>
   <string name="change_formlist_url">Uhla lendlela yefomu (appended to URL)</string>
-  <string name="change_protocol">Inkundla</string>
-  <string name="change_submission_url">Indlela yokuhambisa  (appended to URL)</string>
+    <string name="change_submission_url">Indlela yokuhambisa  (appended to URL)</string>
   <string name="formlist_url">Uhla lendlela yefomu</string>
   <string name="submission_url">Indlela yokuthumela</string>
   <string name="font_size">Usayizi wombhalo (Font)</string>
@@ -133,9 +132,7 @@
   <string name="save_as_error">Igama eligciniwe akumele lingabi nalutho</string>
   <string name="edit_prompt">Hlela ngokushesha</string>
   <string name="selected_google_account_text">akhawunti Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Okunye</string>
-  <string name="font_size_extra_large">Okukhulu kakhulu</string>
+    <string name="font_size_extra_large">Okukhulu kakhulu</string>
   <string name="font_size_large">Okukhulu </string>
   <string name="font_size_medium">Okuphakathi</string>
   <string name="font_size_small">Okuncane</string>

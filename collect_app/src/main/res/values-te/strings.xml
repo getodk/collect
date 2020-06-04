@@ -131,8 +131,7 @@
   <string name="change_splash_path">ఫోటో ని మార్చండి</string>
   <string name="keep_changes">మార్పులను సేవ్ చెయ్యి</string>
   <string name="change_formlist_url">ఫారం జాబితా లింకు (URL కు జోడించబడింది)</string>
-  <string name="change_protocol">వేదిక</string>
-  <string name="change_submission_url">సబ్మిషన్ లింక్  (URL కు జోడించబడింది)</string>
+    <string name="change_submission_url">సబ్మిషన్ లింక్  (URL కు జోడించబడింది)</string>
   <string name="formlist_url">ఫారం జాబితా లింక్ </string>
   <string name="submission_url">సబ్మిషన్ లింక్ </string>
   <string name="font_size">అక్షరాల సైజు </string>
@@ -159,9 +158,7 @@
   <string name="save_as_error">సేవ్ చేసిన పేరు ఖాళీగా ఉండకూడదు!</string>
   <string name="edit_prompt">ప్రాంప్ట్ సవరించండి</string>
   <string name="selected_google_account_text">గూగుల్ ఖాతా</string>
-  <string name="server_platform_odk_aggregate">ఓడీకే మొత్తం</string>
-  <string name="server_platform_other">ఇతర</string>
-  <string name="font_size_extra_large">చాలా పెద్దది</string>
+    <string name="font_size_extra_large">చాలా పెద్దది</string>
   <string name="font_size_large">పెద్ద</string>
   <string name="font_size_medium">మధ్యస్థం </string>
   <string name="font_size_small">చిన్న</string>
@@ -260,13 +257,7 @@
   <string name="go_drive">నా డ్రైవ్</string>
   <string name="go_shared">నాతో పంచుకున్నవి </string>
   <string name="modified_on_date_at_time">\'సవరించిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm </string>
-  <string name="aggregate_preferences">ODK మొత్తం సెట్టింగ్‌లు</string>
-  <string name="sms_submission_preferences">SMS సబ్మిషన్ సెట్టింగులు</string>
-  <string name="submission_transport">సబ్మిషన్ రవాణా (అడ్వాన్సుడ్)</string>
-  <string name="submission_transport_types_title">సబ్మిషన్ పంపండి వయా</string>
-  <string name="other_preferences">ఇతర ప్లాట్‌ఫాం సెట్టింగ్‌లు</string>
-  <string name="google_preferences">గూగుల్ షీట్స్ సెట్టింగ్‌లు</string>
-  <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>
+    <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>
   <string name="drive_get_file">గెట్టింగ్ %1$sమరియు మీడియా ఫైల్స్.</string>
   <string name="no_google_account"> గూగుల్ ఖాతా ఎంచుకోబడలేదు</string>
   <string name="google_set_account">మీరు గూగుల్ షీట్లను మీ సర్వర్‌గా ఎంచుకున్నారు, దయచేసి కొనసాగడానికి ముందు సాధారణ సెట్టింగ్‌లలో సంబంధిత గూగుల్ అకౌంట్ ను ఎంచుకోండి</string>
@@ -625,9 +616,7 @@
   <string name="instance_upload_cancelled">instance అప్‌లోడ్ రద్దు చేయబడింది</string>
   <string name="hide_old_form_versions_setting_title">పాత ఫారంలు కనిపించకుండా పెట్టు</string>
   <string name="hide_old_form_versions_setting_summary">ఫారం నింపడాంలో కొత్త వెర్షన్ మాత్రమే కనిపిస్తుంది</string>
-  <string name="sms_pref_dialog_title">గమ్యస్థానం ఫోన్ నంబర్</string>
-  <string name="sms_pref_title">గమ్యస్థానం ఫోన్ నంబర్</string>
-  <string name="sms_invalid_phone_number">ఫోన్ నెంబర్ సరి చూసుకోండి!</string>
+    <string name="sms_invalid_phone_number">ఫోన్ నెంబర్ సరి చూసుకోండి!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'కనెక్షన్ లేని కారణంగా విఫలమైన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
   <string name="sms_no_number">\'ఫొన్ నంబర్ లేని కారణంగా విఫలమైన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
@@ -644,10 +633,7 @@
   <string name="sms_submission_queued">సమర్పణ కోసం క్యూలో ఉంది.</string>
   <string name="sms_submissions_notif_title">SMS సమర్పణలు</string>
   <string name="sms_submissions_notif_description">ప్రస్తుతం అనేక ఫారాలు పంపబడుతున్నాయి.</string>
-  <string name="transport_type_internet">వైఫై లేదా సెల్యులార్ (సూచించబడినది )</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">పంపేందుకు ఎంచుకోండి</string>
-  <string name="rank_items">ర్యాంక్ అంశాలు</string>
+    <string name="rank_items">ర్యాంక్ అంశాలు</string>
   <string name="loading_form_failed">ఫారమ్‌ను లోడ్ చేస్తున్నప్పుడు లోపం సంభవించింది. దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="missing_google_account_dialog_title">గూగుల్ ఖాతా సెట్ చేయబడలేదు</string>
   <string name="missing_google_account_dialog_desc">గూగుల్ షీట్ల ద్వారా ఫారమ్‌లను సమర్పించడానికి మీరు మీ గూగుల్ ఖాతాను సర్వర్ సెట్టింగులలో సెటప్ చేయాలి.</string>

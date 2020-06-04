@@ -115,8 +115,7 @@
   <string name="change_splash_path">ပံုေျပာင္းရန္</string>
   <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
   <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
-  <string name="change_protocol">ဆာဗာ ပလက္္ေဖာင္း</string>
-  <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
+    <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
   <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
   <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
   <string name="font_size">စာလံုးအရြယ္အစား</string>
@@ -140,9 +139,7 @@
   <string name="save_as_error">အမည္ေနရာတြင္ ကြပ္လပ္ထား၍ မရပါ</string>
   <string name="edit_prompt">ခ်က္ျခင္းျပင္ဆင္ရန္</string>
   <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">အျခား</string>
-  <string name="font_size_extra_large">အလြန္ႀကီး</string>
+    <string name="font_size_extra_large">အလြန္ႀကီး</string>
   <string name="font_size_large">အႀကီး</string>
   <string name="font_size_medium">အလယ္အလတ္</string>
   <string name="font_size_small">ေသး</string>

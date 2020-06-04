@@ -1,35 +1,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:key="@string/google_preferences"
-        android:title="@string/google_preferences">
-        <Preference
-            android:key="selected_google_account"
-            android:title="@string/selected_google_account_text" />
-        <EditTextPreference
-            android:dialogTitle="@string/google_sheets_url"
-            android:inputType="textNoSuggestions"
-            android:key="google_sheets_url"
-            android:summary="@string/google_sheets_url_hint"
-            android:title="@string/google_sheets_url" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:key="submission_transport_preference"
-        android:title="@string/submission_transport">
-        <ListPreference
-            android:dialogTitle="@string/submission_transport_types_title"
-            android:entries="@array/transport_type_entries"
-            android:entryValues="@array/transport_type_entry_values"
-            android:key="submission_transport_type"
-            android:title="@string/submission_transport_types_title" />
-    </PreferenceCategory>
-    <org.odk.collect.android.preferences.ExtendedPreferenceCategory
-        android:key="sms_preference"
-        android:title="@string/sms_submission_preferences">
-        <org.odk.collect.android.preferences.ExtendedEditTextPreference
-            android:dialogTitle="@string/sms_pref_dialog_title"
-            android:inputType="phone"
-            android:key="sms_gateway"
-            android:title="@string/sms_pref_title" />
-    </org.odk.collect.android.preferences.ExtendedPreferenceCategory>
+    <Preference
+        android:key="selected_google_account"
+        android:title="@string/selected_google_account_text" />
+
+    <EditTextPreference
+        android:dialogTitle="@string/google_sheets_url"
+        android:inputType="textNoSuggestions"
+        android:key="google_sheets_url"
+        android:summary="@string/google_sheets_url_hint"
+        android:title="@string/google_sheets_url" />
+
 </PreferenceScreen>

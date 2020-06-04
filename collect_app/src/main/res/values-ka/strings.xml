@@ -134,8 +134,7 @@
   <string name="change_splash_path">სურათის შეცვლა</string>
   <string name="keep_changes">ცვლილებების შენახვა</string>
   <string name="change_formlist_url">ბმული ფორმების ჩამონათვალზე (დაემატოს სერვერის ბმულს)</string>
-  <string name="change_protocol">სერვერის პლატფორმა</string>
-  <string name="change_submission_url">ბმული დადასტურებულ ფორმებზე (დაემატოს სერვერის ბმულს)</string>
+    <string name="change_submission_url">ბმული დადასტურებულ ფორმებზე (დაემატოს სერვერის ბმულს)</string>
   <string name="formlist_url">ბმული ფორმების ჩამონათვალზე</string>
   <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
   <string name="font_size">ტექსტის ზომა</string>
@@ -161,9 +160,7 @@
   <string name="save_as_error">სახელი არ უნდა იყოს ცარიელი!</string>
   <string name="edit_prompt">გამოპასუხების რედაქტირება</string>
   <string name="selected_google_account_text">Google ექაუნთი</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">სხვა</string>
-  <string name="font_size_extra_large">ძალიან დიდი</string>
+    <string name="font_size_extra_large">ძალიან დიდი</string>
   <string name="font_size_large">დიდი</string>
   <string name="font_size_medium">საშუალო</string>
   <string name="font_size_small">პატარა</string>
@@ -236,8 +233,7 @@
   <string name="survey_saving_saving_message">მიმდინარეობს SD-ბარათზე შენახვა</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">ჩემი Drive</string>
-  <string name="aggregate_preferences">ODK Aggregate-ის პარამეტრები</string>
-  <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
+    <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>
   <string name="about_preferences">შესახებ</string>

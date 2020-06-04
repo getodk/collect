@@ -108,8 +108,7 @@
   <string name="change_splash_path">عکس بدل دیں</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="change_formlist_url">فارم لیسٹ کا راستہ (ملحقہ ہو آر ایل)</string>
-  <string name="change_protocol">پلیٹ فارم</string>
-  <string name="change_submission_url">حوالگی کا راستہ </string>
+    <string name="change_submission_url">حوالگی کا راستہ </string>
   <string name="formlist_url">فارم فہرست کا پاتھ</string>
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ہجوں کے فانٹ کا ناپ</string>
@@ -129,9 +128,7 @@
   <string name="save_as_error">محفوظ کیا گیا نام خالی نہیں ہونا چاہئے</string>
   <string name="edit_prompt">پرامپٹ کی تدوین کریں</string>
   <string name="selected_google_account_text">گوگل اکاونٹ</string>
-  <string name="server_platform_odk_aggregate">مجموعی  ODK</string>
-  <string name="server_platform_other">دیگر</string>
-  <string name="font_size_extra_large">زیادہ بڑا</string>
+    <string name="font_size_extra_large">زیادہ بڑا</string>
   <string name="font_size_large">بڑا</string>
   <string name="font_size_medium">درمیانہ</string>
   <string name="font_size_small">چھو ٹا</string>

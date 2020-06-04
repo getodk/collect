@@ -86,8 +86,7 @@
   <string name="change_splash_path">Görüntüyü Değiştir</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
-  <string name="change_protocol">Platform</string>
-  <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
+    <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
   <string name="formlist_url">Form listesi yolu</string>
   <string name="submission_url">Gönderim yolu</string>
   <string name="font_size">Text font büyüklüğü</string>
@@ -107,9 +106,7 @@
   <string name="save_form_as">Form ismi </string>
   <string name="save_as_error">İsim alani boş bırakilamaz</string>
   <string name="selected_google_account_text">Google account</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Diğer</string>
-  <string name="font_size_extra_large">Çok Büyük</string>
+    <string name="font_size_extra_large">Çok Büyük</string>
   <string name="font_size_large">Büyük</string>
   <string name="font_size_medium">Orta</string>
   <string name="font_size_small">Küçük</string>

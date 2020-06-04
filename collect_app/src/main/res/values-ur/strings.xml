@@ -128,8 +128,7 @@
   <string name="change_splash_path">تصویر بدل دیں</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="change_formlist_url">فارم لسٹ پاتھ (اپینڈڈ یو آر ایل)</string>
-  <string name="change_protocol">پلیٹ فارم</string>
-  <string name="change_submission_url">سبمشن پاتھ(اپینڈڈ یو آر ایل)</string>
+    <string name="change_submission_url">سبمشن پاتھ(اپینڈڈ یو آر ایل)</string>
   <string name="formlist_url">فارم لسٹ کا پاتھ</string>
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
@@ -156,9 +155,7 @@
   <string name="save_as_error">محفوظ کیا گیا نام خالی نہیں ہونا چاہئے</string>
   <string name="edit_prompt">پرامپٹ کی ترمیم کریں</string>
   <string name="selected_google_account_text">گوگل اکاونٹ</string>
-  <string name="server_platform_odk_aggregate">مجموعی  ODK</string>
-  <string name="server_platform_other">دیگر</string>
-  <string name="font_size_extra_large">زیادہ بڑا</string>
+    <string name="font_size_extra_large">زیادہ بڑا</string>
   <string name="font_size_large">بڑا</string>
   <string name="font_size_medium">درمیانہ</string>
   <string name="font_size_small">چھو ٹا</string>
@@ -255,13 +252,7 @@
   <string name="go_drive">مائی ڈرائیو</string>
   <string name="go_shared">میرے ساتھ شیئر کیا ہوا</string>
   <string name="modified_on_date_at_time"> EEE, MMM dd, yyyy\'کو\' HH:mm \'پر موڈیفائی کیا گیا\'</string>
-  <string name="aggregate_preferences">او ڈی کے اگریگیٹ سیٹینگز</string>
-  <string name="sms_submission_preferences">ایس ایم ایس جمع کرنے کی سیٹینگز</string>
-  <string name="submission_transport">سبمشن ٹرانسپورٹ (ایڈوانسڈ)</string>
-  <string name="submission_transport_types_title">کے ذریعے جمع کرائیں</string>
-  <string name="other_preferences">دوسرے پلیٹ فارم کی سیٹنگز</string>
-  <string name="google_preferences">گوگل شیٹ کی سیٹنگز</string>
-  <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>
+    <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>
   <string name="drive_get_file">%1$sاور میڈیا فائلز کو حاصل کیا جا رہا ہے</string>
   <string name="no_google_account">کوئی گوگل اکاؤنٹ منتخب نہیں ہوا!</string>
   <string name="google_set_account">آپ نے اپنے سرور کے طور پر گوگل شیٹ کو منتخب کیا ہے، براہ کرم شمار کرنے سے قبل عام ترتیب میں اسی گوگل اکاؤنٹ کو منتخب کریں</string>
@@ -566,9 +557,7 @@
   <string name="instance_upload_cancelled">انسٹنس اپ لوڈ منسوخ</string>
   <string name="hide_old_form_versions_setting_title">پرانے فارم ورژن چھپائیں</string>
   <string name="hide_old_form_versions_setting_summary">صرف نئے ورژن  خالی فارم پرکریں میں نظر آئیں گے</string>
-  <string name="sms_pref_dialog_title">ڈیسٹینیشن فون نمبر </string>
-  <string name="sms_pref_title">ڈیسٹینیشن فون نمبر </string>
-  <string name="sms_invalid_phone_number">غلط فون نمبر!</string>
+    <string name="sms_invalid_phone_number">غلط فون نمبر!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">EEE, MMM dd, yyyy \'پر\' HH:mm\' کو ری سیپشن نہ ہونے کی وجہ سے ناکام ہوگئی \'</string>
   <string name="sms_no_number">EEE, MMM dd, yyyy\' پر\' HH:mm \' کو فون نمبر نہ ہونے کی وجہ سے فیل ہو گیا. \'</string>
@@ -585,10 +574,7 @@
   <string name="sms_submission_queued">جمع کرانے کے لئےانتظار میں ہے  </string>
   <string name="sms_submissions_notif_title">ایس ایم ایس سبمیشن</string>
   <string name="sms_submissions_notif_description">اس وقت کئی فارم جمع کیے جا رہے ہیں.</string>
-  <string name="transport_type_internet">وائی فائی / سیلولر (سفارش کردہ)</string>
-  <string name="transport_type_sms">ایس ایم ایس </string>
-  <string name="transport_type_both">بھیجنے پر منتخب کریں</string>
-  <string name="rank_items"> رینک آئٹمز</string>
+    <string name="rank_items"> رینک آئٹمز</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>

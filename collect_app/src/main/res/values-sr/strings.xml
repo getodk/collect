@@ -131,8 +131,7 @@
   <string name="change_splash_path">Promijeni sliku</string>
   <string name="keep_changes">Sačuvaj izmjene</string>
   <string name="change_formlist_url">Web putanja liste formulara (dodata URL adresi)</string>
-  <string name="change_protocol">Platforma</string>
-  <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
+    <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
   <string name="formlist_url">Web putanja liste formulara</string>
   <string name="submission_url">Web putanja za slanje formulara</string>
   <string name="font_size">Veličina teksta</string>
@@ -159,9 +158,7 @@
   <string name="save_as_error">Sačuvano ime ne može biti prazno!</string>
   <string name="edit_prompt">Uredi Prompt</string>
   <string name="selected_google_account_text">Google korisnički nalog</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Ostalo</string>
-  <string name="font_size_extra_large">Veoma veliko</string>
+    <string name="font_size_extra_large">Veoma veliko</string>
   <string name="font_size_large">Veliko</string>
   <string name="font_size_medium">Srednje</string>
   <string name="font_size_small">Malo</string>
@@ -260,13 +257,7 @@
   <string name="go_drive">Moj Drive</string>
   <string name="go_shared">Podijeljeno sa mnom</string>
   <string name="modified_on_date_at_time">\'Modifikovano na\' EEE, MMM dd, yyyy \'u\' HH:mm</string>
-  <string name="aggregate_preferences">Podešavanja ODK Aggregate servera</string>
-  <string name="sms_submission_preferences">Podešavanja SMS otpremanja </string>
-  <string name="submission_transport">Transport otpremanja (napredno)</string>
-  <string name="submission_transport_types_title">Pošalji otpremanja preko</string>
-  <string name="other_preferences">Ostala podešavanja platforme</string>
-  <string name="google_preferences">Podešavanja Google Sheets-a</string>
-  <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
+    <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
   <string name="drive_get_file">Preuzimam %1$s i medija sadržaje.</string>
   <string name="no_google_account">Google nalog nije odabran!</string>
   <string name="google_set_account">Odabrali ste Google Sheets kao svoj server, molim Vas da odaberete ogovarajući Goodle korisnički nalog u opštim podešavanjima prije nego nastavite</string>
@@ -603,9 +594,7 @@
   <string name="instance_upload_cancelled">Otpremanje prekinuto</string>
   <string name="hide_old_form_versions_setting_title">Sakrij stare verzije formulara</string>
   <string name="hide_old_form_versions_setting_summary">Samo nova verzija će se pojaviti u Popuni prazan formular</string>
-  <string name="sms_pref_dialog_title">Broj telefona</string>
-  <string name="sms_pref_title">Broj telefona</string>
-  <string name="sms_invalid_phone_number">Pogrešan broj telefona!</string>
+    <string name="sms_invalid_phone_number">Pogrešan broj telefona!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer mreža nije dostupna\'</string>
   <string name="sms_no_number">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer nemam broj telefona\'</string>
@@ -623,10 +612,7 @@
   <string name="sms_submission_queued">Otpremanja na čekanju</string>
   <string name="sms_submissions_notif_title">Otpremanje SMS-a</string>
   <string name="sms_submissions_notif_description">Nekoliko formulara je trenutno u fazi otpremanja.</string>
-  <string name="transport_type_internet">Wifi/Mobilna mreža (preporučeno)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Odaberi pri otpremanju</string>
-  <string name="rank_items">Rangiraj stavke</string>
+    <string name="rank_items">Rangiraj stavke</string>
   <string name="loading_form_failed">Došlo je do greške prilikom učitavanja formulara. Molim pokušajte ponovo.</string>
   <string name="missing_google_account_dialog_title">Google korisnički nalog nije napravljen</string>
   <string name="missing_google_account_dialog_desc">Da biste otpremili formulara putem Goodle Sheeta morate da postavite Google korisnički nalog u podešavanjima Servera.</string>

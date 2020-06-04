@@ -21,23 +21,10 @@ the specific language governing permissions and limitations under the License. -
     <string-array name="protocol_entry_values">
         <item>@string/protocol_odk_default</item>
         <item>@string/protocol_google_sheets</item>
-        <item>@string/protocol_other</item>
     </string-array>
     <string-array name="protocol_entries">
-        <item>@string/server_platform_odk_aggregate</item>
+        <item>@string/server_platform_odk</item>
         <item>@string/server_platform_google_sheets</item>
-        <item>@string/server_platform_other</item>
-    </string-array>
-    <!-- DO NOT translate transport_type_entry_values - only used internally -->
-    <string-array name="transport_type_entry_values" translatable="false">
-        <item>@string/transport_type_value_internet</item>
-        <item>@string/transport_type_value_sms</item>
-        <item>@string/transport_type_value_both</item>
-    </string-array>
-    <string-array name="transport_type_entries">
-        <item>@string/transport_type_internet</item>
-        <item>@string/transport_type_sms</item>
-        <item>@string/transport_type_both</item>
     </string-array>
 
     <!-- DO NOT alter font_size_entry_values - used internally in preferences activity -->

@@ -105,8 +105,7 @@
   <string name="change_splash_path">Badilisha picha</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="change_formlist_url">Njia ya orodha ya Fomu (imeelekezwa URL)</string>
-  <string name="change_protocol">Jukwaa</string>
-  <string name="change_submission_url">Njia ya Kuwasilisha (imeelekezwa URL)</string>
+    <string name="change_submission_url">Njia ya Kuwasilisha (imeelekezwa URL)</string>
   <string name="formlist_url">Njia ya orodha ya fomu</string>
   <string name="submission_url">Njia ya kuwasilisha</string>
   <string name="font_size">Ukubwa wa fonti za nakala</string>
@@ -130,9 +129,7 @@
   <string name="save_as_error">Jina lilohifadhiwa halifai kuwa tupu</string>
   <string name="edit_prompt">Hariri ilani</string>
   <string name="selected_google_account_text">Akaunti ya Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Nyingine</string>
-  <string name="font_size_extra_large">Kubwa zaidi</string>
+    <string name="font_size_extra_large">Kubwa zaidi</string>
   <string name="font_size_large">Kubwa</string>
   <string name="font_size_medium">Katikati</string>
   <string name="font_size_small">Ndogo</string>

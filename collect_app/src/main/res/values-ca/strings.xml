@@ -115,8 +115,7 @@
   <string name="change_splash_path">Canviar imatge</string>
   <string name="keep_changes">Desar els canvis</string>
   <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
-  <string name="change_protocol">Plataforma de servidor</string>
-  <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
+    <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
   <string name="formlist_url">Carpeta de formularis</string>
   <string name="submission_url">Carpeta de presentacions</string>
   <string name="font_size">Mida del text</string>
@@ -140,9 +139,7 @@
   <string name="save_as_error">El nom no pot deixar-se en blanc</string>
   <string name="edit_prompt">Editar entrada:</string>
   <string name="selected_google_account_text">Compte Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Altres</string>
-  <string name="font_size_extra_large">Extra gran</string>
+    <string name="font_size_extra_large">Extra gran</string>
   <string name="font_size_large">Gran</string>
   <string name="font_size_medium">Mitjana</string>
   <string name="font_size_small">Petita</string>
@@ -236,10 +233,7 @@
   <string name="go_drive">El meu disc</string>
   <string name="go_shared">Comparteix amb mi</string>
   <string name="modified_on_date_at_time">\'Modificat el\' EEE, dd-MMM-yyyy \'a les\' HH:mm</string>
-  <string name="aggregate_preferences">Paràmetres d\'ODK Aggregate</string>
-  <string name="other_preferences">Paràmetres d\'altres plataformes</string>
-  <string name="google_preferences">Configuració Google Sheets</string>
-  <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
+    <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
   <string name="no_google_account">Compte Google no seleccionada!</string>
   <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="notification_error">Error mostrant notificació</string>

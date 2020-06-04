@@ -110,8 +110,7 @@
   <string name="change_splash_path">Endre bilde</string>
   <string name="keep_changes">Lagre endringer</string>
   <string name="change_formlist_url">Sti</string>
-  <string name="change_protocol">Server platform</string>
-  <string name="change_submission_url">Sti</string>
+    <string name="change_submission_url">Sti</string>
   <string name="formlist_url">Skjema oversikt</string>
   <string name="submission_url">Bane for innsending</string>
   <string name="font_size">Fontstørrelse</string>
@@ -135,9 +134,7 @@
   <string name="save_as_error">Navnet kan ikke være blank!</string>
   <string name="edit_prompt">Rediger prompt</string>
   <string name="selected_google_account_text">Google-konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Andre</string>
-  <string name="font_size_extra_large">Ekstra stor</string>
+    <string name="font_size_extra_large">Ekstra stor</string>
   <string name="font_size_large">Stor</string>
   <string name="font_size_medium">Medium</string>
   <string name="font_size_small">Liten</string>
@@ -228,10 +225,7 @@
   <string name="go_drive">Min Drive</string>
   <string name="go_shared">Delt med meg</string>
   <string name="modified_on_date_at_time">\'Endret den\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
-  <string name="aggregate_preferences">Innstillinger for ODK Aggregate</string>
-  <string name="other_preferences">Andre plattforminnstillinger</string>
-  <string name="google_preferences">Innstillinger for Google Sheets</string>
-  <string name="drive_get_file">Henter %1$s og mediafiler.</string>
+    <string name="drive_get_file">Henter %1$s og mediafiler.</string>
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="notification_error">Feil ved visning av kvitteringstekst</string>

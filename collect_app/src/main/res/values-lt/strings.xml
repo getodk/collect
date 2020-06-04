@@ -103,8 +103,7 @@
   <string name="change_splash_path">Pakeisti paveikslėlį</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-  <string name="change_protocol">Protokolas</string>
-  <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
+    <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
   <string name="formlist_url">Formų sąrašo kelias</string>
   <string name="submission_url">Pateikimo kelias</string>
   <string name="font_size">Teksto šrifto dydis</string>
@@ -128,9 +127,7 @@
   <string name="save_as_error">Pavadinimas negali būti tuščias!</string>
   <string name="edit_prompt">Keisti atsakymą</string>
   <string name="selected_google_account_text">Google sąskaita</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Kita</string>
-  <string name="font_size_extra_large">Labai didelis</string>
+    <string name="font_size_extra_large">Labai didelis</string>
   <string name="font_size_large">Didelis</string>
   <string name="font_size_medium">Vidutinis</string>
   <string name="font_size_small">Mažas</string>

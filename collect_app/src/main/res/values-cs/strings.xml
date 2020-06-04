@@ -134,8 +134,7 @@
   <string name="change_splash_path">Změnit obrázek</string>
   <string name="keep_changes">Uložit změny</string>
   <string name="change_formlist_url">Cesta k seznamu dotazníků (přidat k URL)</string>
-  <string name="change_protocol">Platforma</string>
-  <string name="change_submission_url">Cesta pro odeslání (přidat k URL)</string>
+    <string name="change_submission_url">Cesta pro odeslání (přidat k URL)</string>
   <string name="formlist_url">Cesta k seznamu dotazníků</string>
   <string name="submission_url">Cesta pro odeslání</string>
   <string name="font_size">Velikost písma</string>
@@ -162,9 +161,7 @@
   <string name="save_as_error">Uložené jméno nesmí být prázdné!</string>
   <string name="edit_prompt">Editovat otázku</string>
   <string name="selected_google_account_text">Účet Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Jiný</string>
-  <string name="font_size_extra_large">Extra velký</string>
+    <string name="font_size_extra_large">Extra velký</string>
   <string name="font_size_large">Velký</string>
   <string name="font_size_medium">Střední</string>
   <string name="font_size_small">Malý</string>
@@ -263,13 +260,7 @@
   <string name="go_drive">Můj disk</string>
   <string name="go_shared">Sdíleno se mnou</string>
   <string name="modified_on_date_at_time">\'Upraveno v \' EEE, dd MMM, yyyy \'v\' HH:mm</string>
-  <string name="aggregate_preferences">Nastavení ODK Aggregate</string>
-  <string name="sms_submission_preferences">Nastavení odesílání SMS</string>
-  <string name="submission_transport">Odeslání zásilky (pokročilé)</string>
-  <string name="submission_transport_types_title">Odeslání přes</string>
-  <string name="other_preferences">Ostatní nastavení platformy</string>
-  <string name="google_preferences">Nastavení tabulky Google</string>
-  <string name="google_sheets_url_hint">Dotazníky musí obsahovat adresu URL pro podání. Pokud tomu tak není, použije se tato adresa URL.</string>
+    <string name="google_sheets_url_hint">Dotazníky musí obsahovat adresu URL pro podání. Pokud tomu tak není, použije se tato adresa URL.</string>
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="google_set_account">Vybrali jste Tabulky Google jako svůj server, vyberte prosím odpovídající účet Google ve Všeobecných nastaveních a pokračujte</string>
@@ -641,9 +632,7 @@
   <string name="instance_upload_cancelled">Nahrání instance zrušeno</string>
   <string name="hide_old_form_versions_setting_title">Skrýt staré verze formuláře</string>
   <string name="hide_old_form_versions_setting_summary">Pouze nejnovější verze se zobrazí v dotazníku Vyplnit prázdný dotazník</string>
-  <string name="sms_pref_dialog_title">Cílové telefonní číslo</string>
-  <string name="sms_pref_title">Cílové telefonní číslo</string>
-  <string name="sms_invalid_phone_number">Neplatné telefonní číslo!</string>
+    <string name="sms_invalid_phone_number">Neplatné telefonní číslo!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Nepodařilo se\" EEE, MMM dd, rrrr \"v\" HH:mm \"kvůli žádnému příjmu\"</string>
   <string name="sms_no_number">\'Nepodařilo se \"EEE, MMM dd, yyyy\" v \"HH:mm\" kvůli žádnému telefonnímu číslu. \"</string>
@@ -662,15 +651,11 @@
   <string name="sms_submission_queued">Čekající k odeslání.</string>
   <string name="sms_submissions_notif_title">Odesílání SMS</string>
   <string name="sms_submissions_notif_description">Právě se odesílá několik dotazníků</string>
-  <string name="transport_type_internet">Wifi / GSM (doporučeno)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Vybrat možnost odeslání</string>
-  <string name="rank_items">Pořadí položek</string>
+    <string name="rank_items">Pořadí položek</string>
   <string name="loading_form_failed">Během načítání dotazníku došlo k chybě. Prosím zkuste to znovu.</string>
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
   <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
-  <string name="sms_invalid_phone_number_description">Nastavte cílové telefonní číslo pro odesílání SMS nebo změňte typ transportu.</string>
-  <string name="notification_channel_name">Obecná upozornění</string>
+    <string name="notification_channel_name">Obecná upozornění</string>
   <string name="corrupt_imported_preferences_error">Aktuální nastavení je poškozeno. Z nastavení administrátora obnovte nastavení nebo importujte pracovní nastavení.</string>
   <string name="google_play_services_not_available">Tento dotazník chce sledovat vaši polohu, ale služby Google Play nejsou k dispozici.</string>
   <string name="location_providers_disabled_dialog_message">Tento dotazník chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>

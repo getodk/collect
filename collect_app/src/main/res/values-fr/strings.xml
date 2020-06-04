@@ -134,8 +134,7 @@
   <string name="change_splash_path">Modifier l\'image</string>
   <string name="keep_changes">Sauvegarder les Modifications</string>
   <string name="change_formlist_url">Chemin de la liste de formulaires (ajouté à l\'URL du serveur)</string>
-  <string name="change_protocol">Protocole</string>
-  <string name="change_submission_url">Chemin de soumission (ajouté à l\'URL du serveur)</string>
+    <string name="change_submission_url">Chemin de soumission (ajouté à l\'URL du serveur)</string>
   <string name="formlist_url">Chemin de la liste de formulaires</string>
   <string name="submission_url">Chemin de soumission</string>
   <string name="font_size">Taille de la Police</string>
@@ -162,9 +161,7 @@
   <string name="save_as_error">Le nom ne peut pas être vide !</string>
   <string name="edit_prompt">Ligne de modification</string>
   <string name="selected_google_account_text">Compte Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Autre</string>
-  <string name="font_size_extra_large">Très grand</string>
+    <string name="font_size_extra_large">Très grand</string>
   <string name="font_size_large">Grand</string>
   <string name="font_size_medium">Normal</string>
   <string name="font_size_small">Petit</string>
@@ -263,13 +260,7 @@
   <string name="go_drive">Mon Drive</string>
   <string name="go_shared">Partagé avec moi</string>
   <string name="modified_on_date_at_time">\'Modifié\' EEE, MMM dd, yyyy \'à\' HH:mm</string>
-  <string name="aggregate_preferences">Paramètres d\'ODK Aggregate</string>
-  <string name="sms_submission_preferences">Paramètres pour soumissions SMS</string>
-  <string name="submission_transport">Transport de soumissions (avancé)</string>
-  <string name="submission_transport_types_title">Envoyer soumissions par</string>
-  <string name="other_preferences">Autres paramètres de la plate-forme</string>
-  <string name="google_preferences">Paramettres de Google Sheets</string>
-  <string name="google_sheets_url_hint">Les formulaires doivent définir une URL de soumission. Si ce n\'est pas le cas, cette URL sera utilisée.</string>
+    <string name="google_sheets_url_hint">Les formulaires doivent définir une URL de soumission. Si ce n\'est pas le cas, cette URL sera utilisée.</string>
   <string name="drive_get_file">Récupération des %1$s et fichiers médias. </string>
   <string name="no_google_account">Pas de compte Google choisi!</string>
   <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
@@ -643,9 +634,7 @@
   <string name="instance_upload_cancelled">Instance de téléchargement annulée</string>
   <string name="hide_old_form_versions_setting_title">Cacher les anciennes versions de formulaires</string>
   <string name="hide_old_form_versions_setting_summary">Seule la version la plus récente apparaîtra dans Remplir un formulaire</string>
-  <string name="sms_pref_dialog_title">Numéro de téléphone de la destination</string>
-  <string name="sms_pref_title">Numéro de téléphone de la destination</string>
-  <string name="sms_invalid_phone_number">Numéro de téléphone invalide!</string>
+    <string name="sms_invalid_phone_number">Numéro de téléphone invalide!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Échec de\' EEE, MMM dd, yyyy \'à\' HH: mm \'en raison de l\'absence de réception\'</string>
   <string name="sms_no_number">\'Échec de\' EEE, MMM dd, yyyy \'à\' HH: mm \'faute de numéro de téléphone\'</string>
@@ -662,10 +651,7 @@
   <string name="sms_submission_queued">En file d\'attente pour la soumission.</string>
   <string name="sms_submissions_notif_title">Soumissions SMS</string>
   <string name="sms_submissions_notif_description">Plusieurs formulaires sont en train d\'être envoyés.</string>
-  <string name="transport_type_internet">Wifi/cellulaire (recommandé)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Choisir à l\'envoi</string>
-  <string name="rank_items">Choisir l\'ordre des éléments</string>
+    <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="loading_form_failed">Une erreur s\'est produite lors du chargement du formulaire. Veuillez réessayer.</string>
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
   <string name="missing_google_account_dialog_desc">Pour envoyer des formulaires via Google Sheets, vous devez configurer votre compte Google dans les paramètres du serveur.</string>

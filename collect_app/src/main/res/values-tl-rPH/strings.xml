@@ -104,8 +104,7 @@
   <string name="change_splash_path">Palitan ang Imahe</string>
   <string name="keep_changes">Impukin ang mga binago</string>
   <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
-    <string name="change_protocol">Server Platform</string>
-  <string name="change_submission_url">Submission Path (appended to Server URL)</string>
+    <string name="change_submission_url">Submission Path (appended to Server URL)</string>
   <string name="formlist_url">Form List Path</string>
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Laki ng Teklado</string>
@@ -124,8 +123,7 @@
   <string name="save_as_error">Hindi maaaring blangko ang pangalan ng form!</string>
   <string name="edit_prompt">Pamatnugutan ang Udyok</string>
   <string name="selected_google_account_text">Google Account</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="font_size_extra_large">Labis na Malaki</string>
+    <string name="font_size_extra_large">Labis na Malaki</string>
   <string name="font_size_large">Malaki</string>
   <string name="font_size_medium">Katamtaman</string>
   <string name="font_size_small">Maliit</string>

@@ -134,8 +134,7 @@
   <string name="change_splash_path">Ubah gambar</string>
   <string name="keep_changes">Simpan perubahan</string>
   <string name="change_formlist_url">Tautan formulir (appended to Server URL)</string>
-  <string name="change_protocol">Platform</string>
-  <string name="change_submission_url">Tautan pengiriman (dilampirkan ke URL)</string>
+    <string name="change_submission_url">Tautan pengiriman (dilampirkan ke URL)</string>
   <string name="formlist_url">Tautan daftar formulir</string>
   <string name="submission_url">Tautan pengiriman</string>
   <string name="font_size">Ukuran teks font</string>
@@ -162,9 +161,7 @@
   <string name="save_as_error">Nama tidak boleh kosong.</string>
   <string name="edit_prompt">Ubah Risalah</string>
   <string name="selected_google_account_text">Akun Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Lainnya</string>
-  <string name="font_size_extra_large">Sangat Besar</string>
+    <string name="font_size_extra_large">Sangat Besar</string>
   <string name="font_size_large">Besar</string>
   <string name="font_size_medium">Sedang</string>
   <string name="font_size_small">Kecil</string>
@@ -263,12 +260,6 @@
   <string name="go_drive">Drive saya</string>
   <string name="go_shared">Berbagi dengan saya</string>
   <string name="modified_on_date_at_time">\'Diubah pada tanggal\' EEE, dd MMM yyyy\', pukul\' HH:mm</string>
-  <string name="aggregate_preferences">Pengaturan ODK Aggregate</string>
-  <string name="sms_submission_preferences">Pengaturan pengiriman SMS</string>
-  <string name="submission_transport">Pengiriman (Lanjutan)</string>
-  <string name="submission_transport_types_title">Pengiriman melalui</string>
-  <string name="other_preferences">Pengaturan platform lainnya</string>
-  <string name="google_preferences">Pengaturan Google Sheets</string>
   <string name="google_sheets_url_hint">URL pengiriman harus ditetapkan pada formulir. Jika tidak, URL ini yang akan digunakan.</string>
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih.</string>
@@ -640,8 +631,6 @@
   <string name="instance_upload_cancelled">Permintaan unggah dibatalkan</string>
   <string name="hide_old_form_versions_setting_title">Sembunyikan versi formulir lawas</string>
   <string name="hide_old_form_versions_setting_summary">Hanya versi terbaru yang akan muncul dalam pilihan Formulir Kosong.</string>
-  <string name="sms_pref_dialog_title">Nomor telepon tujuan</string>
-  <string name="sms_pref_title">Nomor telepon tujuan</string>
   <string name="sms_invalid_phone_number">Nomor telepon tidak valid.</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Tidak berhasil pada\' EEE, dd MMM yyyy\', pukul\' HH:mm \'dikarenakan tidak ada layanan SMS\'</string>
@@ -658,9 +647,6 @@
   <string name="sms_submission_queued">Dalam antrean pengiriman</string>
   <string name="sms_submissions_notif_title">Pengiriman SMS</string>
   <string name="sms_submissions_notif_description">Beberapa formulir saat ini sedang dikirim.</string>
-  <string name="transport_type_internet">Wifi/Seluler (direkomendasikan)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Pilih saat mengirim</string>
   <string name="rank_items">Peringkat item</string>
   <string name="loading_form_failed">Kesalahan terjadi saat membuka formulir. Mohon coba lagi.</string>
   <string name="missing_google_account_dialog_title">Akun Google belum diatur</string>

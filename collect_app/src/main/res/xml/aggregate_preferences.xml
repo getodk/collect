@@ -1,41 +1,25 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:key="@string/server_preferences"
-        android:title="@string/aggregate_preferences">
-        <EditTextPreference
-            android:dialogTitle="@string/change_server_url"
-            android:inputType="textNoSuggestions"
-            android:key="server_url"
-            android:title="@string/server_url" />
-        <EditTextPreference
-            android:dialogTitle="@string/change_username"
-            android:inputType="textNoSuggestions"
-            android:key="username"
-            android:title="@string/username" />
-        <EditTextPreference
-            android:dialogTitle="@string/change_password"
-            android:inputType="textPassword"
-            android:key="password"
-            android:title="@string/password" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:key="submission_transport_preference"
-        android:title="@string/submission_transport">
-        <ListPreference
-            android:dialogTitle="@string/submission_transport_types_title"
-            android:entries="@array/transport_type_entries"
-            android:entryValues="@array/transport_type_entry_values"
-            android:key="submission_transport_type"
-            android:title="@string/submission_transport_types_title" />
-    </PreferenceCategory>
-    <org.odk.collect.android.preferences.ExtendedPreferenceCategory
-        android:key="sms_preference"
-        android:title="@string/sms_submission_preferences">
-        <org.odk.collect.android.preferences.ExtendedEditTextPreference
-            android:dialogTitle="@string/sms_pref_dialog_title"
-            android:inputType="phone"
-            android:key="sms_gateway"
-            android:title="@string/sms_pref_title" />
-    </org.odk.collect.android.preferences.ExtendedPreferenceCategory>
+    <EditTextPreference
+        android:dialogTitle="@string/change_server_url"
+        android:inputType="textNoSuggestions"
+        android:key="server_url"
+        android:title="@string/server_url" />
+    <EditTextPreference
+        android:dialogTitle="@string/change_username"
+        android:inputType="textNoSuggestions"
+        android:key="username"
+        android:title="@string/username" />
+    <EditTextPreference
+        android:dialogTitle="@string/change_password"
+        android:inputType="textPassword"
+        android:key="password"
+        android:title="@string/password" />
+
+    <Preference
+        android:key="custom_server_paths"
+        android:persistent="false"
+        android:summary="@string/legacy_custom_server_paths_summary"
+        android:title="@string/custom_server_paths" />
+
 </PreferenceScreen>

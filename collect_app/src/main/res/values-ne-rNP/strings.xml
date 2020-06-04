@@ -129,8 +129,7 @@
   <string name="change_splash_path">तस्विर बदल्नुहोस् </string>
   <string name="keep_changes">परिवर्तनहरु संचित गर्नुहोस् </string>
   <string name="change_formlist_url">फारम सूचीको मार्ग (URL मा जोडिसकिएको छ )</string>
-  <string name="change_protocol">मंच </string>
-  <string name="change_submission_url">बुझाईएको वस्तुको मार्ग (URL मा जोडिसकिएको छ )</string>
+    <string name="change_submission_url">बुझाईएको वस्तुको मार्ग (URL मा जोडिसकिएको छ )</string>
   <string name="formlist_url">फारम सूचीको मार्ग </string>
   <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
   <string name="font_size">अक्षरको आकार</string>
@@ -156,9 +155,7 @@
   <string name="save_as_error">संचित गर्दा नाम खाली छोड्न मिल्दैन !</string>
   <string name="edit_prompt">सम्पादन गर्न प्रेरित गर्नुहोस् </string>
   <string name="selected_google_account_text">गुगल एकाउण्ट</string>
-  <string name="server_platform_odk_aggregate">ODK एग्रिगेट</string>
-  <string name="server_platform_other">अन्य</string>
-  <string name="font_size_extra_large">अझ ठूलो </string>
+    <string name="font_size_extra_large">अझ ठूलो </string>
   <string name="font_size_large">ठूलो </string>
   <string name="font_size_medium">मध्यम </string>
   <string name="font_size_small">सानो </string>
@@ -256,12 +253,7 @@
   <string name="go_drive">मेरो ड्राइभ</string>
   <string name="go_shared">म संग साझा गरिएको </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'को\' HH:mm \'मा परिवर्तन गरिएको\'</string>
-  <string name="aggregate_preferences">ODK एग्रीगेट सेटिङ्स</string>
-  <string name="sms_submission_preferences">SMS सेटिङहरू</string>
-  <string name="submission_transport_types_title">फारमहरू कसरी पठाउने?</string>
-  <string name="other_preferences">अन्य प्लेटफर्म सेटिङ्स</string>
-  <string name="google_preferences">गुगल सिट्स सेटिङ्स</string>
-  <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>
+    <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
   <string name="google_set_account">तपाईंले गुगल गुगल सिट्सलाई आफ्नो सर्भरको रूपमा छान्नुभयो , अघि बढ्नु पूर्व कृपया जनरल सेटिङ्समा त्यहि अनुरूपको गुगल खाता छान्नुहोस्</string>
