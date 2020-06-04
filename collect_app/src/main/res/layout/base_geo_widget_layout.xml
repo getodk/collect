@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/geo_button"
+        android:id="@+id/simple_button"
         style="@style/Widget.Collect.Button.Custom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

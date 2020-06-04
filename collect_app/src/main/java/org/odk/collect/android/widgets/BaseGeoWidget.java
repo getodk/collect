@@ -36,7 +36,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
         answerDisplay.setTextColor(new ThemeUtils(context).getColorOnSurface());
         answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        startGeoButton = answerView.findViewById(R.id.geo_button);
+        startGeoButton = answerView.findViewById(R.id.simple_button);
         if (prompt.isReadOnly()) {
             startGeoButton.setVisibility(GONE);
         } else {
@@ -45,7 +45,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
 
             startGeoButton.setOnClickListener(v -> {
                 if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
-                    ((ButtonWidget) this).onButtonClick(R.id.geo_button);
+                    ((ButtonWidget) this).onButtonClick(R.id.simple_button);
                 }
             });
         }
