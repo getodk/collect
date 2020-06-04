@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.inputmethod.EditorInfo;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
@@ -71,8 +72,9 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         setupPrefs();
 
         if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
@@ -88,6 +90,11 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
                 public void denied() {
                 }
             });
+        }
+
+        FragmentActivity activity = getActivity();
+        if (activity instanceof CollectAbstractActivity) {
+            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
         }
     }
 
