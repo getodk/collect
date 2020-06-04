@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
+import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
@@ -177,7 +178,7 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void buttonsShouldLaunchCorrectIntents() {
+    public void whenPromptDoesNotHaveAnswer_buttonShouldLaunchCorrectIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         stubAllRuntimePermissionsGranted(widget, true);
         (widget.findViewById(R.id.geo_button)).performClick();
@@ -189,12 +190,53 @@ public class GeoPointWidgetTest {
         assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false, true);
     }
 
+    @Test
+    public void whenPromptHasAnswer_buttonShouldLaunchCorrectIntent() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        stubAllRuntimePermissionsGranted(widget, true);
+        (widget.findViewById(R.id.geo_button)).performClick();
+
+        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
+        Bundle bundle = startedIntent.getExtras();
+
+        assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointActivity.class)));
+        assertBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer), DEFAULT_LOCATION_ACCURACY, false, true);
+    }
+
+    @Test
+    public void whenPromptHasPlacementMapAppearance_buttonShouldLaunchCorrectIntent() {
+        when(mapConfigurator.isAvailable(any())).thenReturn(true);
+        GeoPointWidget widget = createWidget(promptWithAppearance(PLACEMENT_MAP, false));
+        stubAllRuntimePermissionsGranted(widget, true);
+        (widget.findViewById(R.id.geo_button)).performClick();
+
+        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
+        Bundle bundle = startedIntent.getExtras();
+
+        assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointMapActivity.class)));
+        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false, true);
+    }
+
+    @Test
+    public void whenPromptHasMapsAppearance_buttonShouldLaunchCorrectIntent() {
+        when(mapConfigurator.isAvailable(any())).thenReturn(true);
+        GeoPointWidget widget = createWidget(promptWithAppearance(MAPS, false));
+        stubAllRuntimePermissionsGranted(widget, true);
+        (widget.findViewById(R.id.geo_button)).performClick();
+
+        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
+        Bundle bundle = startedIntent.getExtras();
+
+        assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointMapActivity.class)));
+        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false, false);
+    }
+
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef, mapConfigurator);
     }
 
-    private void assertBundleArgumentEquals(Bundle bundle, String location, double accuracyThreshold, boolean readOnly, boolean draggableOnly) {
-        assertThat(bundle.getString(LOCATION), equalTo(location));
+    private void assertBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, boolean readOnly, boolean draggableOnly) {
+        assertThat(bundle.getDoubleArray(LOCATION), equalTo(location));
         assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
         assertThat(bundle.getBoolean(DRAGGABLE_ONLY), equalTo(draggableOnly));
         assertThat(bundle.getDouble(ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
