@@ -13,7 +13,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.robolectric.RobolectricTestRunner;
@@ -61,8 +60,7 @@ public class UrlWidgetTest {
     @Test
     public void usingReadOnlyOption_makeAllClickableElementsDisabled() {
         UrlWidget widget = createWidget(promptWithReadOnly());
-        Button urlButton = widget.findViewById(R.id.url_button);
-        assertThat(urlButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.openUrlButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
@@ -75,20 +73,19 @@ public class UrlWidgetTest {
     @Test
     public void whenPromptHasAnswer_displaysAnswer() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(((TextView) widget.findViewById(R.id.url_answer_text)).getText().toString(), equalTo("blah"));
+        assertThat(widget.stringAnswer.getText().toString(), equalTo("blah"));
     }
 
     @Test
     public void whenPromptAnswerDoesNotHaveAnswer_displayEmptyString() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(((TextView) widget.findViewById(R.id.url_answer_text)).getText().toString(), equalTo(""));
+        assertThat(widget.stringAnswer.getText().toString(), equalTo(""));
     }
 
     @Test
     public void clickingButtonWhenUrlIsEmpty_doesNotCallOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        Button urlButton = widget.findViewById(R.id.url_button);
-        urlButton.performClick();
+        widget.openUrlButton.performClick();
 
         verify(customTabHelper, never()).bindCustomTabsService(null, null);
         verify(customTabHelper, never()).openUri(null, null);
@@ -97,8 +94,7 @@ public class UrlWidgetTest {
     @Test
     public void clickingButtonWhenUrlIsNotEmpty_callsOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        Button urlButton = widget.findViewById(R.id.url_button);
-        urlButton.performClick();
+        widget.openUrlButton.performClick();
 
         verify(customTabHelper).bindCustomTabsService(widget.getContext(), null);
         verify(customTabHelper).openUri(widget.getContext(), Uri.parse("blah"));
@@ -107,10 +103,9 @@ public class UrlWidgetTest {
     @Test
     public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        Button urlButton = widget.findViewById(R.id.url_button);
         widget.setOnLongClickListener(listener);
-        urlButton.performLongClick();
-        verify(listener).onLongClick(urlButton);
+        widget.openUrlButton.performLongClick();
+        verify(listener).onLongClick(widget.openUrlButton);
     }
 
     @Test
