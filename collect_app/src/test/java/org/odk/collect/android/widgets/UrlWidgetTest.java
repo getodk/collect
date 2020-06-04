@@ -95,7 +95,7 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void clickingButton_callsCorrectMethods() {
+    public void clickingButtonWhenUrlIsNotEmpty_callsOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         Button urlButton = widget.findViewById(R.id.url_button);
         urlButton.performClick();
@@ -133,7 +133,7 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIstNull() {
+    public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIsNull() {
         when(customTabHelper.getServiceConnection()).thenReturn(null);
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
