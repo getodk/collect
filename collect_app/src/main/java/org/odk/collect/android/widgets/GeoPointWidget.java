@@ -58,7 +58,10 @@ public class GeoPointWidget extends BaseGeoWidget {
     public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, MapConfigurator mapConfigurator) {
         super(context, questionDetails);
         this.mapConfigurator = mapConfigurator;
+
+        stringAnswer = answerDisplay.getText().toString();
         determineMapProperties(questionDef);
+        updateButtonLabelsAndVisibility(stringAnswer != null || !stringAnswer.isEmpty());
     }
 
     private void determineMapProperties(QuestionDef questionDef) {
