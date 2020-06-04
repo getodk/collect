@@ -11,7 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
-import org.odk.collect.android.utilities.HandlerAndCoroutineScheduler;
+import org.odk.collect.android.utilities.CoroutineScheduler;
 import org.odk.collect.utilities.Scheduler;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class AudioHelper {
      * @param lifecycleOwner A representative lifecycle for controls - allows for differing activity and control lifecycle
      */
     public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
-        this(activity, lifecycleOwner, new HandlerAndCoroutineScheduler(), MediaPlayer::new);
+        this(activity, lifecycleOwner, new CoroutineScheduler(), MediaPlayer::new);
     }
 
     AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, MediaPlayerFactory mediaPlayerFactory) {

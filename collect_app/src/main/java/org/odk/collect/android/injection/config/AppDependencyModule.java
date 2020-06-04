@@ -45,7 +45,7 @@ import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
-import org.odk.collect.android.utilities.HandlerAndCoroutineScheduler;
+import org.odk.collect.android.utilities.CoroutineScheduler;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
@@ -291,7 +291,7 @@ public class AppDependencyModule {
 
     @Provides
     public Scheduler providesScheduler() {
-        return new HandlerAndCoroutineScheduler();
+        return new CoroutineScheduler();
     }
 
     @Singleton
