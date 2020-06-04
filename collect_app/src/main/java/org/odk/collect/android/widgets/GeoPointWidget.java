@@ -83,7 +83,7 @@ public class GeoPointWidget extends BaseGeoWidget {
 
     public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
-            if (readOnly) {
+            if (getFormEntryPrompt().isReadOnly()) {
                 startGeoButton.setText(R.string.geopoint_view_read_only);
             } else {
                 startGeoButton.setText(
