@@ -4,12 +4,12 @@ class TestClientListener implements LocationClient.LocationClientListener {
 
     private boolean wasStartCalled;
     private boolean wasStartFailureCalled;
-    private int onClientStopCount;
+    private boolean wasStopCalled;
 
     void reset() {
         wasStartCalled = false;
         wasStartFailureCalled = false;
-        onClientStopCount = 0;
+        wasStopCalled = false;
     }
 
     boolean wasStartCalled() {
@@ -21,11 +21,7 @@ class TestClientListener implements LocationClient.LocationClientListener {
     }
 
     boolean wasStopCalled() {
-        return onClientStopCount > 0;
-    }
-
-    int getOnClientStopCount() {
-        return onClientStopCount;
+        return wasStopCalled;
     }
 
     @Override
@@ -40,6 +36,6 @@ class TestClientListener implements LocationClient.LocationClientListener {
 
     @Override
     public void onClientStop() {
-        onClientStopCount++;
+        wasStopCalled = true;
     }
 }

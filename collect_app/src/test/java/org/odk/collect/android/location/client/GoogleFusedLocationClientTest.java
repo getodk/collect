@@ -15,13 +15,12 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,63 +41,55 @@ public class GoogleFusedLocationClientTest {
     @Test
     public void startShouldCallLocationClientOnConnected() {
         doAnswer(new OnConnectedAnswer()).when(googleApiClient).connect();
-        doAnswer(new OnDisconnectedAnswer()).when(googleApiClient).disconnect();
 
-        TestClientListener testClientListener = new TestClientListener();
-        client.setListener(testClientListener);
+        LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
+        client.setListener(listener);
 
         client.start();
-        assertTrue(testClientListener.wasStartCalled());
-        assertFalse(testClientListener.wasStartFailureCalled());
-        assertFalse(testClientListener.wasStopCalled());
+        verify(listener).onClientStart();
+        verify(listener, never()).onClientStartFailure();
+        verify(listener, never()).onClientStop();
 
         client.stop();
-        assertTrue(testClientListener.wasStartCalled());
-        assertFalse(testClientListener.wasStartFailureCalled());
-        assertTrue(testClientListener.wasStopCalled());
 
-        testClientListener.reset();
-
+        reset(listener);
         doAnswer(new OnConnectionFailedAnswer()).when(googleApiClient).connect();
 
         client.start();
-        assertFalse(testClientListener.wasStartCalled());
-        assertTrue(testClientListener.wasStartFailureCalled());
-        assertFalse(testClientListener.wasStopCalled());
-
-        // Necessary for Stop to be called.
-        when(googleApiClient.isConnected()).thenReturn(true);
+        verify(listener, never()).onClientStart();
+        verify(listener).onClientStartFailure();
+        verify(listener, never()).onClientStop();
 
         client.stop();
-        assertFalse(testClientListener.wasStartCalled());
-        assertTrue(testClientListener.wasStartFailureCalled());
-        assertTrue(testClientListener.wasStopCalled());
+        verify(listener, never()).onClientStart();
+        verify(listener).onClientStartFailure();
+        verify(listener).onClientStop();
     }
 
     @Test
     public void stopShouldDisconnectFromGoogleApiIfConnected_andAlwaysCallOnClientStopIfListenerSet() {
-        TestClientListener testClientListener = new TestClientListener();
-        client.setListener(testClientListener);
+        LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
+        client.setListener(listener);
 
         // Previously connected, disconnection succeeds
         when(googleApiClient.isConnected()).thenReturn(true);
         client.stop();
         verify(googleApiClient).disconnect();
-        assertThat(testClientListener.getOnClientStopCount(), is(1));
+        verify(listener).onClientStop();
 
-        testClientListener.reset();
+        reset(listener);
 
         // Previously connected, disconnection calls onConnectionSuspended
         doAnswer(new OnDisconnectedAnswer()).when(googleApiClient).disconnect();
         client.stop();
-        assertThat(testClientListener.getOnClientStopCount(), is(1));
+        verify(listener).onClientStop();
 
-        testClientListener.reset();
+        reset(listener);
 
         // Not previously connected
         when(googleApiClient.isConnected()).thenReturn(false);
         client.stop();
-        assertThat(testClientListener.getOnClientStopCount(), is(1));
+        verify(listener).onClientStop();
     }
 
     @Test
