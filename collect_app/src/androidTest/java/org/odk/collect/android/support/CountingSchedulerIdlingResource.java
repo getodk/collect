@@ -2,28 +2,28 @@ package org.odk.collect.android.support;
 
 import androidx.test.espresso.IdlingResource;
 
-public class CountingTaskExecutorIdlingResource implements IdlingResource {
+public class CountingSchedulerIdlingResource implements IdlingResource {
 
-    private final CallbackCountingTaskExecutorRule rule;
+    private final CountingScheduler countingScheduler;
     private ResourceCallback resourceCallback;
 
-    public CountingTaskExecutorIdlingResource(CallbackCountingTaskExecutorRule rule) {
-        this.rule = rule;
+    public CountingSchedulerIdlingResource(CountingScheduler countingScheduler) {
+        this.countingScheduler = countingScheduler;
     }
 
     @Override
     public String getName() {
-        return CountingTaskExecutorIdlingResource.class.getName();
+        return CountingSchedulerIdlingResource.class.getName();
     }
 
     @Override
     public boolean isIdleNow() {
-        boolean idle = rule.isIdle();
+        boolean idle = countingScheduler.getTaskCount() == 0;
 
         if (idle && resourceCallback != null) {
             resourceCallback.onTransitionToIdle();
         } else {
-            rule.setFinishedCallback(() -> {
+            countingScheduler.setFinishedCallback(() -> {
                 resourceCallback.onTransitionToIdle();
             });
         }

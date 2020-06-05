@@ -19,10 +19,15 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CountingScheduler;
+import org.odk.collect.android.support.CountingSchedulerIdlingResource;
+import org.odk.collect.android.support.IdlingResourceRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.async.Scheduler;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,16 +35,14 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
-import dagger.Provides;
-
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 @RunWith(AndroidJUnit4.class)
 public class ConfigureWithQRCodeTest {
 
+    private final CollectTestRule rule = new CollectTestRule();
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
-
-    public CollectTestRule rule = new CollectTestRule();
+    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineScheduler());
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -50,12 +53,18 @@ public class ConfigureWithQRCodeTest {
                     Manifest.permission.CAMERA
             ))
             .around(new ResetStateRule(new AppDependencyModule() {
+
                 @Override
-                @Provides
                 public QRCodeGenerator providesQRCodeGenerator(Context context) {
                     return stubQRCodeGenerator;
                 }
+
+                @Override
+                public Scheduler providesScheduler() {
+                    return countingScheduler;
+                }
             }))
+            .around(new IdlingResourceRule(new CountingSchedulerIdlingResource(countingScheduler)))
             .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
 
