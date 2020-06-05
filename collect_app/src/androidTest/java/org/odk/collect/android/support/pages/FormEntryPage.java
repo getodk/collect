@@ -42,6 +42,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #swipeToNextQuestion(String)} instead
+     */
+    @Deprecated
     public FormEntryPage swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
         return this;
@@ -53,6 +57,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #swipeToNextQuestion(String)} instead
+     */
+    @Deprecated
     public FormEntryPage swipeToNextQuestion(int repetitions) {
         for (int i = 0; i < repetitions; i++) {
             swipeToNextQuestion();
