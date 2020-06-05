@@ -13,7 +13,7 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
 
     private final String repeatName;
 
-    AddNewRepeatDialog(String repeatName, ActivityTestRule rule) {
+    public AddNewRepeatDialog(String repeatName, ActivityTestRule rule) {
         super(rule);
         this.repeatName = repeatName;
     }

@@ -47,6 +47,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage swipeToNextQuestion(String questionText) {
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        assertText(questionText);
+        return this;
+    }
+
     public FormEntryPage swipeToNextQuestion(int repetitions) {
         for (int i = 0; i < repetitions; i++) {
             swipeToNextQuestion();
@@ -55,9 +61,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage swipeToNextRepeat(String repeatLabel, int repeatNumber) {
+        assertText(repeatLabel + " > " + (repeatNumber - 1));
+
         tryAgainOnFail(() -> {
             onView(withId(R.id.questionholder)).perform(swipeLeft());
-            onView(withText(repeatLabel + " > " + repeatNumber));
+            assertText(repeatLabel + " > " + repeatNumber);
         });
 
         return this;
