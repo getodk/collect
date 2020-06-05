@@ -114,8 +114,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #swipeToPreviousQuestion(String)} instead
+     */
     public FormEntryPage swipeToPreviousQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeRight());
+        return this;
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText) {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+        assertText(questionText);
         return this;
     }
 
