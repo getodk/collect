@@ -33,7 +33,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.utilities.Scheduler;
+import org.odk.collect.async.Scheduler;
 
 import java.util.ArrayList;
 import java.util.Arrays;

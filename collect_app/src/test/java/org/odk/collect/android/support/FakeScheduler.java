@@ -1,7 +1,7 @@
 package org.odk.collect.android.support;
 
-import org.odk.collect.utilities.Cancellable;
-import org.odk.collect.utilities.Scheduler;
+import org.odk.collect.async.Cancellable;
+import org.odk.collect.async.Scheduler;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

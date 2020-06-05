@@ -9,8 +9,8 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.R;
-import org.odk.collect.utilities.Cancellable;
-import org.odk.collect.utilities.Scheduler;
+import org.odk.collect.async.Cancellable;
+import org.odk.collect.async.Scheduler;
 
 import java.io.File;
 import java.io.IOException;

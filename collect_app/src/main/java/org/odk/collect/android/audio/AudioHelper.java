@@ -11,8 +11,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
-import org.odk.collect.android.utilities.CoroutineScheduler;
-import org.odk.collect.utilities.Scheduler;
+import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.async.Scheduler;
 
 import java.util.List;
 

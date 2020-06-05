@@ -1,8 +1,6 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.async
 
 import kotlinx.coroutines.*
-import org.odk.collect.utilities.Cancellable
-import org.odk.collect.utilities.Scheduler
 import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.coroutines.CoroutineContext

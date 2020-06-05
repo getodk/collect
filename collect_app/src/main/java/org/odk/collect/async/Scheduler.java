@@ -1,4 +1,4 @@
-package org.odk.collect.utilities;
+package org.odk.collect.async;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

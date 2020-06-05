@@ -29,7 +29,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.utilities.Scheduler;
+import org.odk.collect.async.Scheduler;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package org.odk.collect.utilities;
+package org.odk.collect.async;
 
 public interface Cancellable {
     boolean cancel();

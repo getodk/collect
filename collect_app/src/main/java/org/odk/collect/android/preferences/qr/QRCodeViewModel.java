@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.utilities.Scheduler;
+import org.odk.collect.async.Scheduler;
 
 import java.util.Collection;
 
