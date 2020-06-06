@@ -5,7 +5,6 @@ import android.Manifest;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -22,7 +21,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-@Ignore("https://github.com/getodk/collect/issues/3903")
 public class DeletingRepeatGroupsTest {
     private static final String TEST_FORM = "repeat_groups.xml";
 
@@ -49,7 +47,7 @@ public class DeletingRepeatGroupsTest {
     @Test
     public void requestingDeletionOfMiddleRepeat_deletesMiddleRepeat() {
         new FormEntryPage("repeatGroups", activityTestRule)
-                .swipeToNextRepeat("repeat", 2)
+                .swipeToNextRepeat("repeatGroup", 2)
                 .deleteGroup("text1")
                 .assertText("3");
     }
@@ -57,9 +55,9 @@ public class DeletingRepeatGroupsTest {
     @Test
     public void requestingDeletionOfLastRepeat_deletesLastRepeat() {
         new FormEntryPage("repeatGroups", activityTestRule)
-                .swipeToNextRepeat("repeat", 2)
-                .swipeToNextRepeat("repeat", 3)
-                .swipeToNextRepeat("repeat", 4)
+                .swipeToNextRepeat("repeatGroup", 2)
+                .swipeToNextRepeat("repeatGroup", 3)
+                .swipeToNextRepeat("repeatGroup", 4)
                 .deleteGroup("text1")
                 .assertText("number1");
     }

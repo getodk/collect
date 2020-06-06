@@ -42,11 +42,25 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #swipeToNextQuestion(String)} instead
+     */
+    @Deprecated
     public FormEntryPage swipeToNextQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
         return this;
     }
 
+    public FormEntryPage swipeToNextQuestion(String questionText) {
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        assertText(questionText);
+        return this;
+    }
+
+    /**
+     * @deprecated use {@link #swipeToNextQuestion(String)} instead
+     */
+    @Deprecated
     public FormEntryPage swipeToNextQuestion(int repetitions) {
         for (int i = 0; i < repetitions; i++) {
             swipeToNextQuestion();
@@ -55,9 +69,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage swipeToNextRepeat(String repeatLabel, int repeatNumber) {
+        assertText(repeatLabel + " > " + (repeatNumber - 1));
+
         tryAgainOnFail(() -> {
             onView(withId(R.id.questionholder)).perform(swipeLeft());
-            onView(withText(repeatLabel + " > " + repeatNumber));
+            assertText(repeatLabel + " > " + repeatNumber);
         });
 
         return this;
@@ -98,8 +114,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #swipeToPreviousQuestion(String)} instead
+     */
     public FormEntryPage swipeToPreviousQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeRight());
+        return this;
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText) {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+        assertText(questionText);
         return this;
     }
 
