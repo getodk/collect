@@ -16,6 +16,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 
+import java.util.concurrent.Callable;
+
 import timber.log.Timber;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -299,20 +301,24 @@ abstract class Page<T extends Page<T>> {
         }
     }
 
-    public void waitForText(String text) {
-        int counter = 0;
-        NoMatchingViewException failure = null;
+    protected void waitForText(String text) {
+        waitFor(() -> assertText(text));
+    }
 
+    protected <T> T waitFor(Callable<T> callable) {
+        int counter = 0;
+        Exception failure = null;
+
+        // Try 20 times/for 5 seconds
         while (counter < 20) {
             try {
-                assertText(text);
-                return;
-            } catch (NoMatchingViewException exception) {
-                failure = exception;
+                return callable.call();
+            } catch (Exception throwable) {
+                failure = throwable;
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(250);
             } catch (InterruptedException ignored) {
                 // ignored
             }
@@ -320,9 +326,7 @@ abstract class Page<T extends Page<T>> {
             counter++;
         }
 
-        if (failure != null) {
-            throw failure;
-        }
+        throw new RuntimeException("waitFor failed", failure);
     }
 }
 
