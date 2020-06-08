@@ -1,6 +1,7 @@
 package org.odk.collect.android.support;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,7 +13,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.ApplicationResetter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,22 +68,23 @@ public class ResetStateRule implements TestRule {
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
             PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
             context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
-            new MetaSharedPreferencesProvider(context).getMetaSharedPreferences().edit().clear().commit();
+            SharedPreferences metaSharedPreferences = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
+            metaSharedPreferences.edit().clear().commit();
 
             // Reset the app in both the old and new storage locations (just nuke dirs)
             List<Integer> resetActions = Arrays.asList(
-                    ResetUtility.ResetAction.RESET_PREFERENCES,
-                    ResetUtility.ResetAction.RESET_INSTANCES,
-                    ResetUtility.ResetAction.RESET_FORMS,
-                    ResetUtility.ResetAction.RESET_LAYERS,
-                    ResetUtility.ResetAction.RESET_CACHE,
-                    ResetUtility.ResetAction.RESET_OSM_DROID
+                    ApplicationResetter.ResetAction.RESET_PREFERENCES,
+                    ApplicationResetter.ResetAction.RESET_INSTANCES,
+                    ApplicationResetter.ResetAction.RESET_FORMS,
+                    ApplicationResetter.ResetAction.RESET_LAYERS,
+                    ApplicationResetter.ResetAction.RESET_CACHE,
+                    ApplicationResetter.ResetAction.RESET_OSM_DROID
             );
 
             new StorageStateProvider().disableUsingScopedStorage();
-            new ResetUtility().reset(context, resetActions);
+            new ApplicationResetter().reset(context, resetActions);
             new StorageStateProvider().enableUsingScopedStorage();
-            new ResetUtility().reset(context, resetActions);
+            new ApplicationResetter().reset(context, resetActions);
 
             // Setup storage location for tests
             if (useScopedStorage) {

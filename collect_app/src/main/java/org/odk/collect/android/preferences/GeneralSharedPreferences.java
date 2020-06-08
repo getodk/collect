@@ -15,6 +15,7 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
@@ -114,10 +115,7 @@ public class GeneralSharedPreferences {
 
     public void clear() {
         for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
-            String key = prefs.getKey();
-            if (!GeneralKeys.KEYS_WE_SHOULD_NOT_RESET.contains(key)) {
-                reset(key);
-            }
+            reset(prefs.getKey());
         }
     }
 
@@ -138,6 +136,10 @@ public class GeneralSharedPreferences {
 
     public static boolean isAutoSendEnabled() {
         return !getInstance().get(GeneralKeys.KEY_AUTOSEND).equals("off");
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 
     public static class ValidationException extends RuntimeException {

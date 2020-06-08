@@ -27,7 +27,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.ApplicationResetter;
 
 import java.io.File;
 import java.io.IOException;
@@ -273,12 +273,12 @@ public class FormsDaoTest {
 
     private void resetAppState() {
         List<Integer> resetActions = Arrays.asList(
-                ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
-                ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,
-                ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
+                ApplicationResetter.ResetAction.RESET_PREFERENCES, ApplicationResetter.ResetAction.RESET_INSTANCES,
+                ApplicationResetter.ResetAction.RESET_FORMS, ApplicationResetter.ResetAction.RESET_LAYERS,
+                ApplicationResetter.ResetAction.RESET_CACHE, ApplicationResetter.ResetAction.RESET_OSM_DROID
         );
 
-        List<Integer> failedResetActions = new ResetUtility().reset(InstrumentationRegistry.getTargetContext(), resetActions);
+        List<Integer> failedResetActions = new ApplicationResetter().reset(InstrumentationRegistry.getTargetContext(), resetActions);
         assertEquals(0, failedResetActions.size());
     }
 }

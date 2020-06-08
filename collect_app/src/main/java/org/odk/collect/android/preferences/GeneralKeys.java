@@ -4,8 +4,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 public final class GeneralKeys {
@@ -66,17 +64,6 @@ public final class GeneralKeys {
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
 
     static final String KEY_FORM_METADATA                   = "form_metadata";
-
-    // other keys
-    public static final String KEY_LAST_VERSION             = "lastVersion";
-    public static final String KEY_FIRST_RUN                = "firstRun";
-    public static final String KEY_SCOPED_STORAGE_USED      = "scoped_storage_used";
-    public static final String KEY_MAPBOX_INITIALIZED       = "mapbox_initialized";
-    public static final String KEY_GOOGLE_BUG_154855417_FIXED = "google_bug_154855417_fixed";
-
-    /** Whether any existing username and email values have been migrated to form metadata */
-    static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
-    public static final String KEY_INSTALL_ID               = "metadata_installid";
 
     public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 
@@ -152,16 +139,6 @@ public final class GeneralKeys {
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
         return hashMap;
     }
-
-    static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
-            KEY_LAST_VERSION,
-            KEY_FIRST_RUN,
-            KEY_METADATA_MIGRATED,
-            KEY_AUTOSEND_WIFI,
-            KEY_AUTOSEND_NETWORK,
-            KEY_SCOPED_STORAGE_USED,
-            KEY_MAPBOX_INITIALIZED
-    );
 
     public static final HashMap<String, Object> DEFAULTS = getHashMap();
 

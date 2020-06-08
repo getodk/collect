@@ -33,4 +33,8 @@ public class SharedPreferenceUtils {
         }
         assertEquals(pairs.length / 2, prefs.getAll().size());
     }
+
+    public static void assertPrefsEmpty(SharedPreferences prefs) {
+        assertEquals(0, prefs.getAll().size());
+    }
 }

@@ -23,7 +23,7 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
+import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataTest {

@@ -40,6 +40,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class MapsPreferences extends BasePreferenceFragment {
+
     private Context context;
     private ListPreference basemapSourcePref;
     private CaptionedListPreference referenceLayerPref;

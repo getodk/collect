@@ -34,14 +34,14 @@ public class NotificationUtils {
     private NotificationUtils() {
     }
 
-    public static void createNotificationChannel(Collect collect) {
+    public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = collect.getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(new NotificationChannel(
                                         CHANNEL_ID,
-                                        collect.getString(R.string.notification_channel_name),
+                                        context.getString(R.string.notification_channel_name),
                                         NotificationManager.IMPORTANCE_DEFAULT)
                 );
             }

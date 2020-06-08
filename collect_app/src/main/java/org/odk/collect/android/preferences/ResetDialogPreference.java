@@ -32,7 +32,7 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
-import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.ApplicationResetter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
-import static org.odk.collect.android.utilities.ResetUtility.ResetAction.RESET_PREFERENCES;
+import static org.odk.collect.android.utilities.ApplicationResetter.ResetAction.RESET_PREFERENCES;
 
 public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener {
     private AppCompatCheckBox preferences;
@@ -94,19 +94,19 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
             resetActions.add(RESET_PREFERENCES);
         }
         if (instances.isChecked()) {
-            resetActions.add(ResetUtility.ResetAction.RESET_INSTANCES);
+            resetActions.add(ApplicationResetter.ResetAction.RESET_INSTANCES);
         }
         if (forms.isChecked()) {
-            resetActions.add(ResetUtility.ResetAction.RESET_FORMS);
+            resetActions.add(ApplicationResetter.ResetAction.RESET_FORMS);
         }
         if (layers.isChecked()) {
-            resetActions.add(ResetUtility.ResetAction.RESET_LAYERS);
+            resetActions.add(ApplicationResetter.ResetAction.RESET_LAYERS);
         }
         if (cache.isChecked()) {
-            resetActions.add(ResetUtility.ResetAction.RESET_CACHE);
+            resetActions.add(ApplicationResetter.ResetAction.RESET_CACHE);
         }
         if (osmDroid.isChecked()) {
-            resetActions.add(ResetUtility.ResetAction.RESET_OSM_DROID);
+            resetActions.add(ApplicationResetter.ResetAction.RESET_OSM_DROID);
         }
 
         if (!resetActions.isEmpty()) {
@@ -118,7 +118,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
 
                 @Override
                 protected List<Integer> doInBackground(Void... voids) {
-                    return new ResetUtility().reset(getContext(), resetActions);
+                    return new ApplicationResetter().reset(getContext(), resetActions);
                 }
 
                 @Override
@@ -154,7 +154,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
                                 getContext().getString(R.string.success)));
                     }
                     break;
-                case ResetUtility.ResetAction.RESET_INSTANCES:
+                case ApplicationResetter.ResetAction.RESET_INSTANCES:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_saved_forms_result),
                                 getContext().getString(R.string.error_occured)));
@@ -163,7 +163,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
                                 getContext().getString(R.string.success)));
                     }
                     break;
-                case ResetUtility.ResetAction.RESET_FORMS:
+                case ApplicationResetter.ResetAction.RESET_FORMS:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_blank_forms_result),
                                 getContext().getString(R.string.error_occured)));
@@ -172,7 +172,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
                                 getContext().getString(R.string.success)));
                     }
                     break;
-                case ResetUtility.ResetAction.RESET_CACHE:
+                case ApplicationResetter.ResetAction.RESET_CACHE:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_cache_result),
                                 getContext().getString(R.string.error_occured)));
@@ -181,7 +181,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
                                 getContext().getString(R.string.success)));
                     }
                     break;
-                case ResetUtility.ResetAction.RESET_LAYERS:
+                case ApplicationResetter.ResetAction.RESET_LAYERS:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_layers_result),
                                 getContext().getString(R.string.error_occured)));
@@ -190,7 +190,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
                                 getContext().getString(R.string.success)));
                     }
                     break;
-                case ResetUtility.ResetAction.RESET_OSM_DROID:
+                case ApplicationResetter.ResetAction.RESET_OSM_DROID:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_osm_tiles_result),
                                 getContext().getString(R.string.error_occured)));
