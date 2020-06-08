@@ -1,20 +1,19 @@
-package org.odk.collect.async;
+package org.odk.collect.async
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Consumer
+import java.util.function.Supplier
 
 /**
  * Runs tasks in the foreground and background
  */
-public interface Scheduler {
-
+interface Scheduler {
     /**
      * * Schedule a task to run in the background (off the UI thread)
      *
      * @param task     the task to be run
      * @param callback run on the UI thread once the task is complete
      */
-    <T> void scheduleInBackground(Supplier<T> task, Consumer<T> callback);
+    fun <T> scheduleInBackground(task: Supplier<T>, callback: Consumer<T>)
 
     /**
      * * Schedule a task to run and then repeat
@@ -23,5 +22,5 @@ public interface Scheduler {
      * @param period the period between each run of the task
      * @return object that allows task to be cancelled
      */
-    Cancellable schedule(Runnable task, long period);
+    fun schedule(task: Runnable, period: Long): Cancellable
 }

@@ -25,9 +25,14 @@ class CoroutineScheduler(private val foreground: CoroutineContext, private val b
             }
         }
 
-        return Cancellable {
-            repeatScope.cancel()
-            true
-        }
+        return ScopeCancellable(repeatScope)
+    }
+}
+
+private class ScopeCancellable(private val scope: CoroutineScope) : Cancellable {
+
+    override fun cancel(): Boolean {
+        scope.cancel()
+        return true
     }
 }
