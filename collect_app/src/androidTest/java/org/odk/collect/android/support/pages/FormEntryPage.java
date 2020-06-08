@@ -53,7 +53,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeToNextQuestion(String questionText) {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
-        assertText(questionText);
+        waitForText(questionText);
         return this;
     }
 
