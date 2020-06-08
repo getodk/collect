@@ -104,6 +104,8 @@ public class ShowQRCodeFragment extends Fragment {
             if (warning != null) {
                 tvPasswordWarning.setText(warning);
                 passwordStatus.setVisibility(VISIBLE);
+            } else {
+                passwordStatus.setVisibility(GONE);
             }
         });
 
