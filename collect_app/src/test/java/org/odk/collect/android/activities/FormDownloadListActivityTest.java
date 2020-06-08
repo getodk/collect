@@ -46,7 +46,8 @@ public class FormDownloadListActivityTest {
         downloadActivity = ActivityScenario.launch(FormDownloadListActivity.class);
     }
 
-    @Test public void tappingDownloadButton_logsAnalytics() {
+    @Test
+    public void tappingDownloadButton_logsAnalytics() {
         Cursor cursor = mock(Cursor.class);
         when(cursor.getCount()).thenReturn(0);
         when(formsDao.getFormsCursor()).thenReturn(cursor);
