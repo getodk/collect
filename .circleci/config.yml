@@ -1,3 +1,6 @@
+# This config and the the Gradle flags/opts are based on: https://circleci.com/docs/2.0/language-android/
+# and https://support.circleci.com/hc/en-us/articles/360021812453
+
 version: 2
 
 references:
