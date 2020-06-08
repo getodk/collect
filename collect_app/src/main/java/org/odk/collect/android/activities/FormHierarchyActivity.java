@@ -36,6 +36,7 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
@@ -736,7 +737,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null) {
             formController.getAuditEventLogger().flush();
-            formController.jumpToIndex(startIndex);
+            navigateToTheLastRelevantIndex(formController);
         }
 
         onBackPressedWithoutLogger();
@@ -744,6 +745,29 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
     protected void onBackPressedWithoutLogger() {
         super.onBackPressed();
+    }
+
+    private void navigateToTheLastRelevantIndex(FormController formController) {
+        FormEntryController fec = new FormEntryController(new FormEntryModel(formController.getFormDef()));
+        formController.jumpToIndex(startIndex);
+
+        // startIndex might no longer exist if it was a part of repeat group that has been removed
+        while (true) {
+            boolean isBeginningOfFormIndex = formController.getFormIndex().isBeginningOfFormIndex();
+            boolean isEndOfFormIndex = formController.getFormIndex().isEndOfFormIndex();
+            boolean isIndexRelevant = isBeginningOfFormIndex
+                    || isEndOfFormIndex
+                    || fec.getModel().isIndexRelevant(formController.getFormIndex());
+            boolean isPromptNewRepeatEvent = formController.getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT;
+
+            boolean shouldNavigateBack = !isIndexRelevant || isPromptNewRepeatEvent;
+
+            if (shouldNavigateBack) {
+                formController.stepToPreviousEvent();
+            } else {
+                break;
+            }
+        }
     }
 
     /**
