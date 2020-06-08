@@ -110,8 +110,6 @@
   <string name="send_data">Skicka avslutat formulär</string>
   <string name="send_data_button">Skicka avslutat formulär (%s)</string>
   <string name="send_selected_data">Skicka valt</string>
-  <string name="send_selected_data_internet">Skicka (internet)</string>
-  <string name="send_selected_data_sms">Skicka (SMS)</string>
   <string name="view_sent_forms">Visa skickat formulär</string>
   <string name="view_sent_forms_button">Visa skickat formulär (%s)</string>
   <string name="server_auth_credentials">Ogiltigt användarnamn eller lösenord för servern: %s</string>
@@ -552,7 +550,6 @@ Dela ODK Collect med dem.</string>
   <string name="location_runtime_permissions_denied_title">Platsbehörigheter</string>
   <string name="camera_runtime_permission_denied_title">Kamerabehörigheter</string>
   <string name="record_audio_runtime_permission_denied_title">Behörigheter för att spela in ljud</string>
-  <string name="send_sms_runtime_permission_denied_title">Behörigheter för att skicka SMS</string>
   <string name="read_phone_state_runtime_permission_denied_title">Behörigheter för att läsa telefonstatus</string>
   <string name="form_update_category">Uppdatera formulär</string>
   <string name="periodic_form_updates_check_title">Periodisk kontroll av uppdaterade formulär</string>
@@ -570,20 +567,10 @@ Dela ODK Collect med dem.</string>
   <string name="cannot_create_directory">Kan inte skapa mappen: %s</string>
   <string name="hide_old_form_versions_setting_title">Göm gamla versioner av formulären</string>
   <string name="hide_old_form_versions_setting_summary">Endast den senaste versionen kommer att synas vid ifyllning av tomma formulär</string>
-  <string name="sms_invalid_phone_number">Ogiltigt telefonnummer!</string>
-  <!--Sms submission-->
-  <string name="sms_no_message">Detta formulär saknar frågor med SMS-taggar.</string>
-  <string name="sms_encrypted_message">Krypterade formulär kan inte skickas in med SMS.</string>
-  <string name="sms_sent_on_date_at_time">Skickat som SMS\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
-  <string name="sms_submission_queued">Köad för uppladdning</string>
-  <string name="sms_submissions_notif_title">Skicka med SMS</string>
-  <string name="sms_submissions_notif_description">Flera formulär håller just nu på att laddas upp</string>
     <string name="loading_form_failed">Ett fel uppstod vid laddning av formuläret. Var vänlig och försök igen.</string>
   <string name="missing_google_account_dialog_title">Google-konto är inte inställt</string>
   <string name="notification_channel_name">Allmäna notifieringar</string>
   <string name="open_file">Öppna fil</string>
-  <string name="sms_feature_disabled_dialog_title">Uppladdning via SMS är ej aktiverat</string>
-  <string name="read_details">Läs detaljerna</string>
   <string name="reading_files">Läser filer</string>
   <string name="qr_code_not_found">Ingen QR-kod kunde hittas i vald bild</string>
   <string name="identity">Identitet</string>

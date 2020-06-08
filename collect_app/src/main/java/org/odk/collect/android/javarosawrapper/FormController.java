@@ -41,7 +41,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.model.xform.CompactSerializingVisitor;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.model.xform.XPathReference;
@@ -1200,7 +1199,7 @@ public class FormController {
     /**
      * Once a submission is marked as complete, it is saved in the
      * submission format, which might be a fragment of the original
-     * form or might be a SMS text string, etc.
+     * form.
      *
      * @return true if the submission is the entire form.  If it is,
      * then the submission can be re-opened for editing
@@ -1349,18 +1348,4 @@ public class FormController {
     public boolean currentFormCollectsBackgroundLocation() {
         return currentFormAuditsLocation() || getFormDef().hasAction(SetGeopointActionHandler.ELEMENT_NAME);
     }
-
-    /**
-     * Constructs the SMS payload for a filled-in form instance. This payload
-     * does not enable a filled-in form to be re-opened and edited.
-     *
-     * @return ByteArrayPayload this can be converted back to a string when necessary.
-     * @throws IOException for some reason any error took place during serialization.
-     */
-    public ByteArrayPayload getFilledInFormSMS() throws IOException {
-        FormInstance dataModel = getInstance();
-        CompactSerializingVisitor serializer = new CompactSerializingVisitor();
-        return (ByteArrayPayload) serializer.createSerializedPayload(dataModel);
-    }
-
 }

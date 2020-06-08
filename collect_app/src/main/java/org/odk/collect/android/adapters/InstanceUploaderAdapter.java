@@ -1,6 +1,5 @@
 package org.odk.collect.android.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -13,50 +12,24 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.events.SmsRxEvent;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.sms.SmsService;
-import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.views.ProgressBar;
 
 import java.util.Date;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMISSION_FAILED;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMITTED;
-import static org.odk.collect.android.tasks.sms.SmsService.RESULT_MESSAGE_READY;
-import static org.odk.collect.android.tasks.sms.SmsService.RESULT_OK_OTHERS_PENDING;
-import static org.odk.collect.android.tasks.sms.SmsService.RESULT_QUEUED;
-import static org.odk.collect.android.tasks.sms.SmsService.RESULT_SENDING;
-import static org.odk.collect.android.tasks.sms.SmsService.getDisplaySubtext;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
-
-    @Inject
-    RxEventBus eventBus;
-    @Inject
-    SmsSubmissionManagerContract submissionManager;
-    @Inject
-    SmsService smsService;
-
-    private final Context context;
     private final CompositeDisposable compositeDisposable;
 
     public InstanceUploaderAdapter(Context context, Cursor cursor) {
         super(context, cursor);
-        this.context = context;
         Collect.getInstance().getComponent().inject(this);
         compositeDisposable = new CompositeDisposable();
     }
@@ -84,14 +57,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceColumns.DISPLAY_NAME)));
         viewHolder.formSubtitle.setText(InstanceProvider.getDisplaySubtext(context, status, new Date(lastStatusChangeDate)));
 
-        long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceColumns._ID));
-
-        SmsSubmission model = submissionManager.getSubmissionModel(String.valueOf(instanceId));
-
-        boolean smsTransportEnabled = ((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE)).equalsIgnoreCase(context.getString(R.string.transport_type_value_sms));
-
-        boolean isSmsSubmission = model != null && smsTransportEnabled;
-
         switch (status) {
             case STATUS_SUBMISSION_FAILED:
                 viewHolder.statusIcon.setImageResource(R.drawable.form_state_submission_failed_circle);
@@ -103,73 +68,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
             default:
                 viewHolder.statusIcon.setImageResource(R.drawable.form_state_finalized_circle);
-        }
-
-        if (isSmsSubmission) {
-            viewHolder.progressBar.setVisibility(View.VISIBLE);
-            viewHolder.progressBar.setProgressPercent((int) model.getCompletion().getPercentage(), false);
-
-            int smsStatus = submissionManager.checkNextMessageResultCode(String.valueOf(instanceId));
-
-            setSmsSubmissionStateIcons(smsStatus, viewHolder);
-
-            SmsRxEvent currentStatus = new SmsRxEvent();
-            currentStatus.setResultCode(smsStatus);
-            currentStatus.setLastUpdated(model.getLastUpdated());
-            currentStatus.setProgress(model.getCompletion());
-
-            setDisplaySubTextView(currentStatus, viewHolder);
-
-            setupCloseButton(viewHolder, smsStatus);
-            viewHolder.closeButton.setOnClickListener(v -> smsService.cancelFormSubmission(String.valueOf(instanceId)));
-        }
-
-        compositeDisposable.add(eventBus.register(SmsRxEvent.class)
-                .filter(event -> event.getInstanceId().equals(String.valueOf(instanceId)))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    viewHolder.progressBar.setProgressPercent((int) event.getProgress().getPercentage(), true);
-                    setSmsSubmissionStateIcons(event.getResultCode(), viewHolder);
-                    setDisplaySubTextView(event, viewHolder);
-                    setupCloseButton(viewHolder, event.getResultCode());
-                }));
-    }
-
-    private void setupCloseButton(ViewHolder viewHolder, int resultCode) {
-
-        if (resultCode == RESULT_QUEUED || resultCode == RESULT_OK_OTHERS_PENDING) {
-            viewHolder.closeButton.setVisibility(View.VISIBLE);
-            viewHolder.checkbox.setVisibility(View.GONE);
-        } else {
-            viewHolder.closeButton.setVisibility(View.GONE);
-            viewHolder.checkbox.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setSmsSubmissionStateIcons(int smsStatus, ViewHolder viewHolder) {
-        switch (smsStatus) {
-            case Activity.RESULT_OK:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submitted_circle);
-                break;
-
-            case RESULT_QUEUED:
-            case RESULT_OK_OTHERS_PENDING:
-            case RESULT_SENDING:
-            case RESULT_MESSAGE_READY:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_sending);
-                break;
-
-            default:
-                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submission_failed_circle);
-                break;
-        }
-    }
-
-    private void setDisplaySubTextView(SmsRxEvent event, ViewHolder viewHolder) {
-        String text = getDisplaySubtext(event.getResultCode(), event.getLastUpdated(), event.getProgress(), context);
-        if (text != null) {
-            viewHolder.formSubtitle.setText(text);
         }
     }
 

@@ -111,8 +111,6 @@
   <string name="send_data">Odeslat dokončený dotazník</string>
   <string name="send_data_button">Odeslat dokončený dotazník (%s)</string>
   <string name="send_selected_data">Odeslat vybrané</string>
-  <string name="send_selected_data_internet">Odeslat (Internet)</string>
-  <string name="send_selected_data_sms">Odeslat (SMS)</string>
   <string name="view_sent_forms">Zobrazit odeslaný dotazník</string>
   <string name="view_sent_forms_button">Zobrazit odeslaný dotazník (%s)</string>
   <string name="server_auth_credentials">Neplatné uživatelské jméno nebo heslo pro server: %s</string>
@@ -608,8 +606,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez tohoto povolení nelze získat přístup k mikrofonu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
   <string name="get_accounts_runtime_permission_denied_title">Získat oprávnění k účtům</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže přistupovat k účtům. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
-  <string name="send_sms_runtime_permission_denied_title">Odeslat povolení SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže odesílat zprávy SMS. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Přečtěte si povolení k telefonu</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect neprovádí volání, ale potřebuje přístup k určitým vlastnostem vašeho zařízení, jako je například telefonní číslo a device ID.</string>
   <string name="form_update_category">Aktualizace formuláře</string>
@@ -632,25 +628,7 @@
   <string name="instance_upload_cancelled">Nahrání instance zrušeno</string>
   <string name="hide_old_form_versions_setting_title">Skrýt staré verze formuláře</string>
   <string name="hide_old_form_versions_setting_summary">Pouze nejnovější verze se zobrazí v dotazníku Vyplnit prázdný dotazník</string>
-    <string name="sms_invalid_phone_number">Neplatné telefonní číslo!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Nepodařilo se\" EEE, MMM dd, rrrr \"v\" HH:mm \"kvůli žádnému příjmu\"</string>
-  <string name="sms_no_number">\'Nepodařilo se \"EEE, MMM dd, yyyy\" v \"HH:mm\" kvůli žádnému telefonnímu číslu. \"</string>
-  <string name="sms_fatal_error">\'Nepodařilo se\" EEE, MMM dd, rrrr \"v\" HH:mm</string>
-  <string name="sms_airplane_mode">\'Nepodařilo se\" EEE, MMM dd, rrrr \"v\" HH:mm \"v důsledku zapnutí režimu Letadlo.\"</string>
-  <string name="sms_no_message">Tento dotazník nemá žádné dotazy se značkami SMS.</string>
-  <string name="sms_encrypted_message">Šifrované dotazníky nelze odeslat jako SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\"Poslední pokus o podání\" EEE, MMM dd, yyyy\"na\" HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Odeslání dotazníku jako jediné zprávy.</item>
-    <item quantity="few">Odeslání dotazníku, odeslání zprávy %1$d z %2$d</item>
-    <item quantity="many">Odeslání dotazníku, odeslání zpráv %1$d z %2$d</item>
-    <item quantity="other">Odeslání dotazníku, odeslání zprávy %1$d z %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\"Odesláno jako SMS na\" EEE, MMM dd, rrrr \"v\" HH: mm</string>
-  <string name="sms_submission_queued">Čekající k odeslání.</string>
-  <string name="sms_submissions_notif_title">Odesílání SMS</string>
-  <string name="sms_submissions_notif_description">Právě se odesílá několik dotazníků</string>
+
     <string name="rank_items">Pořadí položek</string>
   <string name="loading_form_failed">Během načítání dotazníku došlo k chybě. Prosím zkuste to znovu.</string>
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
@@ -664,9 +642,6 @@
   <string name="background_location_disabled">Tento dotazník chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím v nabídce %1$s výše.</string>
   <string name="background_location_enabled">Tento dotazník sleduje vaši polohu. Sledování můžete zakázat v nabídce %1$s výše.</string>
   <string name="open_file">Otevřít soubor</string>
-  <string name="sms_feature_disabled_dialog_title">Odeslání prostřednictvím SMS Zakázáno</string>
-  <string name="sms_feature_disabled_dialog_message">Odeslání příspěvků prostřednictvím SMS bylo zakázáno z důvodu omezení v Obchodě Google Play. \n\nZkontrolujte, zda osoba, která nakonfigurovala toto zařízení, přečetla níže uvedené podrobnosti a přijala opatření.</string>
-  <string name="read_details">Přečtěte si podrobnosti</string>
   <string name="google_sheets_encrypted_message">Šifrované dotazníky nelze odeslat do služby Google Sheets.</string>
   <string name="number_picker_title">Výběr čísla</string>
   <string name="too_complex_form">Tento dotazník je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>

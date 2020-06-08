@@ -108,8 +108,6 @@
   <string name="send_data">Pošalji završene formulare</string>
   <string name="send_data_button">Pošalji završene formulare (%s)</string>
   <string name="send_selected_data">Pošalji označeno</string>
-  <string name="send_selected_data_internet">Pošalji (internet)</string>
-  <string name="send_selected_data_sms">Pošalji (sms)</string>
   <string name="view_sent_forms">Vidi poslate formulare</string>
   <string name="view_sent_forms_button">Vidi poslate formulare (%s)</string>
   <string name="server_auth_credentials">Pogrešno korisničko ime ili lozinka za pristup serveru: %s</string>
@@ -570,8 +568,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit mikrofonu. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
   <string name="get_accounts_runtime_permission_denied_title">Dozvole za dobijanje korisničkih imena.</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit korisničkim nalozima. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
-  <string name="send_sms_runtime_permission_denied_title">Dozvola za slanje SMS poruka.</string>
-  <string name="send_sms_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može slati SMS poruke. Molim pokušajte ponovo kada budete spremni da odobrite dozvole.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Dozvola za čitanje statusa telefona</string>
   <string name="read_phone_state_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može da obavlja pozive ali mu je potreban pristup nekim djelovima uređaja poput broja telefona ili identifikacionog broja uređaja.</string>
   <string name="form_update_category">Ažuriranje formulara</string>
@@ -594,29 +590,10 @@
   <string name="instance_upload_cancelled">Otpremanje prekinuto</string>
   <string name="hide_old_form_versions_setting_title">Sakrij stare verzije formulara</string>
   <string name="hide_old_form_versions_setting_summary">Samo nova verzija će se pojaviti u Popuni prazan formular</string>
-    <string name="sms_invalid_phone_number">Pogrešan broj telefona!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer mreža nije dostupna\'</string>
-  <string name="sms_no_number">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer nemam broj telefona\'</string>
-  <string name="sms_fatal_error">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm </string>
-  <string name="sms_airplane_mode">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer je Airoplan Mode uklljučen\'</string>
-  <string name="sms_no_message">Ovaj formular nema pitanja sa SMS tagovima.</string>
-  <string name="sms_encrypted_message">Enkriptovani formulari ne mogu biti poslati kao SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Poslednji pokušaj otpremanja\' EEE, MMM dd, yyyy \'u\' HH:mm </string>
-  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
-    <item quantity="one">Otpremam formular kao jedinstvenu poruku.</item>
-    <item quantity="few">Otpreman formular, šaljem poruku %1$d od %2$d</item>
-    <item quantity="other">Otpreman formular, šaljem poruku %1$d od %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Poslat SMS\' EEE, MMM dd, yyyy \'u\' HH:mm</string>
-  <string name="sms_submission_queued">Otpremanja na čekanju</string>
-  <string name="sms_submissions_notif_title">Otpremanje SMS-a</string>
-  <string name="sms_submissions_notif_description">Nekoliko formulara je trenutno u fazi otpremanja.</string>
     <string name="rank_items">Rangiraj stavke</string>
   <string name="loading_form_failed">Došlo je do greške prilikom učitavanja formulara. Molim pokušajte ponovo.</string>
   <string name="missing_google_account_dialog_title">Google korisnički nalog nije napravljen</string>
   <string name="missing_google_account_dialog_desc">Da biste otpremili formulara putem Goodle Sheeta morate da postavite Google korisnički nalog u podešavanjima Servera.</string>
-  <string name="sms_invalid_phone_number_description">Postavi telefonski broj za SMS otpremanja ili promijeni tip otpremanja.</string>
   <string name="notification_channel_name">Opšta obavještenja</string>
   <string name="corrupt_imported_preferences_error">Trenutna podešavanja u pokvarena. Iz administratorkih podešavanja resetuj podešavanja ili unesi ona koja rade.</string>
   <string name="google_play_services_not_available">Ovaj formular želi da prati vašu poziciju ali Google Play Services nisu dostupne.</string>
@@ -626,9 +603,6 @@
   <string name="background_location_disabled">Ovaj formular želi da prati vašu lokaciju ali je ona isključena. Molim uključite lokaciju u %1$s meniju iznad.</string>
   <string name="background_location_enabled">Ovaj formular bilježi tvoju lokaciju. Možeš onemogućiti praćenje u %1$s meniju iznad.</string>
   <string name="open_file">Otvori fajl</string>
-  <string name="sms_feature_disabled_dialog_title">Slanje putem SMS je onemogućeno</string>
-  <string name="sms_feature_disabled_dialog_message">Slanje putem SMS-a je onemogućeno zbog restrikcija iz Google prodavnice.\n\nMolim da se uvjerite da je osoba koja je instalirala ovaj uređan pročita detalje i preduzme odgovarajuće korake.  </string>
-  <string name="read_details">Pročitaj detalje</string>
   <string name="google_sheets_encrypted_message">Enkriptovani formulari ne mogu se otpremiti na Google Sheets.</string>
   <string name="number_picker_title">Birač brojeva</string>
   <string name="too_complex_form">Formular je previše kompleksan za vaoj uređaj. Pokušaj da uprostiš izraze ili zatraži pomoć na forumu.</string>

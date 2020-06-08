@@ -88,8 +88,6 @@
   <string name="send_data">ارسال فورم نهایی</string>
   <string name="send_data_button">ارسال فورم نهایی (%s)</string>
   <string name="send_selected_data">ارسال مورد انتخاب شده</string>
-  <string name="send_selected_data_internet">ارسال (داخلی)</string>
-  <string name="send_selected_data_sms">ارسال (اس ام اس)</string>
   <string name="view_sent_forms">مشاهده فورم ارسال شده</string>
   <string name="view_sent_forms_button">مشاهده فورم ارسال شده (%s)</string>
   <string name="server_auth_credentials">پسورد و یا نام کاربری اشتباه برای سرور: %s</string>
@@ -290,7 +288,6 @@
   <string name="camera_runtime_permission_denied_title">مجوز کامره</string>
   <string name="record_audio_runtime_permission_denied_title">ثبت مجوز صوتی</string>
   <string name="get_accounts_runtime_permission_denied_title">دریافت مجوز حساب ها</string>
-  <string name="send_sms_runtime_permission_denied_title">دریافت مجوز اس ام اس</string>
   <string name="form_update_category">آپدیت فورم</string>
   <string name="never">هرگز</string>
   <string name="every_fifteen_minutes">هر پانزده دقیقه بعد</string>
@@ -298,12 +295,8 @@
   <string name="every_six_hours">هر شش ساعت</string>
   <string name="every_24_hours">هر 24 ساعت</string>
   <string name="form_updates_available">آپدیت های فورم موجود است</string>
-  <string name="sms_invalid_phone_number">شماره تماس غیر معتبر!</string>
-  <!--Sms submission-->
-  <string name="sms_submissions_notif_description">چندین فورم در حال حاضر ارسال شده اند.</string>
   <string name="rank_items">رده بندی اقلام</string>
   <string name="go_to_settings">رفتن به تنظیمات </string>
-  <string name="read_details">جزئیات را بخوانید</string>
   <string name="reading_files">خواندن فایل ها</string>
   <string name="copying_media_files_failed">کاپی فایل های رسانه ای ناکام شد</string>
   <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>

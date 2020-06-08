@@ -87,12 +87,6 @@ public final class GeneralKeys {
     public static final String BASEMAP_SOURCE_STAMEN        = "stamen";
     public static final String BASEMAP_SOURCE_CARTO         = "carto";
 
-    // Not currently used
-    public static final String KEY_SMS_GATEWAY              = "sms_gateway";
-    public static final String KEY_SUBMISSION_TRANSPORT_TYPE = "submission_transport_type";
-    public static final String KEY_TRANSPORT_PREFERENCE      = "submission_transport_preference";
-    public static final String KEY_SMS_PREFERENCE            = "sms_preference";
-
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
         // aggregate_preferences.xml
@@ -126,8 +120,6 @@ public final class GeneralKeys {
         hashMap.put(KEY_SUBMISSION_URL,             Collect.getInstance().getString(R.string.default_odk_submission));
         // server_preferences.xml
         hashMap.put(KEY_PROTOCOL,                   Collect.getInstance().getString(R.string.protocol_odk_default));
-        hashMap.put(KEY_SMS_GATEWAY,                "");
-        hashMap.put(KEY_SUBMISSION_TRANSPORT_TYPE,  Collect.getInstance().getString(R.string.transport_type_value_internet));
         // user_interface_preferences.xml
         hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");

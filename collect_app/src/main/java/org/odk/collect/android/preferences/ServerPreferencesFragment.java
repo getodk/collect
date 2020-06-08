@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -64,7 +63,6 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_GATEWAY;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
@@ -75,9 +73,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
-    //protected ExtendedEditTextPreference smsGatewayPreference;
-    protected EditTextPreference submissionUrlPreference;
-    protected EditTextPreference formListUrlPreference;
 
     @Inject
     OpenRosaAPIClient openRosaAPIClient;
@@ -354,17 +349,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         return false;
                     }
                     break;
-
-                case KEY_SMS_GATEWAY:
-                    String phoneNumber = newValue.toString();
-
-                    if (!PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
-                        ToastUtils.showShortToast(getString(R.string.sms_invalid_phone_number));
-                        return false;
-                    }
-
-                    preference.setSummary(phoneNumber);
-                    break;
                 case KEY_FORMLIST_URL:
                 case KEY_SUBMISSION_URL:
                     preference.setSummary(newValue.toString());
@@ -426,36 +410,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         }
     }
 
-    /**
-     * Shows a dialog if SMS submission is enabled but the phone number isn't set.
-     */
-    /*
-    private void runSmsPhoneNumberValidation() {
-        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-
-        if (!transport.equals(Transport.Internet)) {
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-            String gateway = settings.getString(KEY_SMS_GATEWAY, null);
-
-            if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
-
-                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .setTitle(getString(R.string.sms_invalid_phone_number))
-                        .setMessage(R.string.sms_invalid_phone_number_description)
-                        .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
-                        .create();
-
-                showDialog(alertDialog, getActivity());
-            } else {
-                runGoogleAccountValidation();
-            }
-        } else {
-            runGoogleAccountValidation();
-        }
-    }
-    */
     private void runGoogleAccountValidation() {
         String account = (String) GeneralSharedPreferences.getInstance().get(KEY_SELECTED_GOOGLE_ACCOUNT);
         String protocol = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);

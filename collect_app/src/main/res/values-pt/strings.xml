@@ -99,8 +99,6 @@
   <string name="send_data">Enviar Formulário Finalizado</string>
   <string name="send_data_button">Enviar formulário finalizado (%s)</string>
   <string name="send_selected_data">Enviar selecionado</string>
-  <string name="send_selected_data_internet">Enviar (Internet)</string>
-  <string name="send_selected_data_sms">Enviar (SMS)</string>
   <string name="view_sent_forms">Ver Formulário Enviado</string>
   <string name="view_sent_forms_button">Visualizar formulário enviado (%s)</string>
   <string name="server_auth_credentials">Nome de usuário ou senha inválidos para o servidor: %s</string>
@@ -472,5 +470,4 @@ Escolher Imagem</string>
   <string name="theme_dark">Tema escuro</string>
   <string name="hide_old_form_versions_setting_title">Esconder versões antigas de formulários</string>
   <string name="hide_old_form_versions_setting_summary">Somente a versão mais recente aparecerá em Formulário em Branco</string>
-  <!--Sms submission-->
 </resources>

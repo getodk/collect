@@ -65,7 +65,6 @@ import java.io.RandomAccessFile;
 import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.ENCRYPT_SUBMISSION;
-import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 
 /**
  * Background task for loading a form.
@@ -374,10 +373,6 @@ public class SaveFormToDisk {
 
         writeFile(payload, instancePath);
 
-        // Write SMS data
-        final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
-        writeFile(payloadSms, getSmsInstancePath(instancePath));
-
         // Write last-saved instance
         String lastSavedPath = formController.getLastSavedPath();
         writeFile(payload, lastSavedPath);
@@ -390,7 +385,7 @@ public class SaveFormToDisk {
 
         if (markCompleted) {
             // now see if the packaging of the data for the server would make it
-            // non-reopenable (e.g., encryption or send an SMS or other fraction of the form).
+            // non-reopenable (e.g., encryption or other fraction of the form).
             boolean canEditAfterCompleted = formController.isSubmissionEntireForm();
             boolean isEncrypted = false;
 

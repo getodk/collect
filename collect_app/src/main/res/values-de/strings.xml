@@ -111,8 +111,6 @@
   <string name="send_data">Vollständiges Formular hochladen</string>
   <string name="send_data_button">Vollständiges Formular hochladen (%s)</string>
   <string name="send_selected_data">Auswahl hochladen</string>
-  <string name="send_selected_data_internet">Senden (Internet)</string>
-  <string name="send_selected_data_sms">Senden (SMS)</string>
   <string name="view_sent_forms">Gesendete Formulare anzeigen</string>
   <string name="view_sent_forms_button">Gesendetes Formular (%s) anzeigen</string>
   <string name="server_auth_credentials">Ungültiger Benutzername oder Passwort für Server: %s</string>
@@ -609,8 +607,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf das Mikrofon zugreifen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
   <string name="get_accounts_runtime_permission_denied_title">Kontoberechtigungen abfragen</string>
   <string name="get_accounts_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Konten zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
-  <string name="send_sms_runtime_permission_denied_title">SMS-Versand-Berechtigung</string>
-  <string name="send_sms_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect keine SMS versenden. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Berechtigung Telefonstatus abrufen</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect macht keine Telefonanrufe aber benötigt Zugriff auf bestimmte Eigenschaften Ihres Geräts, wie die Telefonnummer und Geräte-ID.</string>
   <string name="form_update_category">Formular-Update</string>
@@ -634,28 +630,10 @@
   <string name="instance_upload_cancelled">Instanz Upload abgebrochen</string>
   <string name="hide_old_form_versions_setting_title">Alte Formular-Versionen verbergen</string>
   <string name="hide_old_form_versions_setting_summary">Nur die neueste Version wird in \"Leeres Formular ausfüllen\" angezeigt</string>
-    <string name="sms_invalid_phone_number">Ungültige Telefonnummer!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm \'wegen fehlendem Empfang.\'</string>
-  <string name="sms_no_number">\'Fehlgeschlagen am\' EEE, dd. MMM yyyy \'um\' HH:mm \'wegen einer fehlenden Telefonnummer.\'</string>
-  <string name="sms_fatal_error">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm \'wegen aktiviertem Flugzeugmodus.\'</string>
-  <string name="sms_no_message">Dieses Formular hat keine Fragen mit SMS-Tags.</string>
-  <string name="sms_encrypted_message">Verschlüsselte Formulare können nicht per SMS eingesendet werden.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Letzter Einsendeversuch am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Formulareinsendung als einzelne Nachricht.</item>
-    <item quantity="other">Formulareinsendung, sende Nachricht %1$d von %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Als SMS versendet am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
-  <string name="sms_submission_queued">Eingereiht zur Einsendung.</string>
-  <string name="sms_submissions_notif_title">SMS-Einsendungen</string>
-  <string name="sms_submissions_notif_description">Mehrere Formulare werden gerade versendet.</string>
     <string name="rank_items">Rangfolge festlegen</string>
   <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
   <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
   <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie Ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
-  <string name="sms_invalid_phone_number_description">Ziel-Telefonnummer für SMS-Versand einstellen oder Übertragungsart ändern.</string>
   <string name="notification_channel_name">Allgemeine Benachrichtigungen</string>
   <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Admin-Einstellungen zurück oder importiere funktionierende.</string>
   <string name="google_play_services_not_available">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Google Play-Dienste sind nicht verfügbar.</string>
@@ -665,9 +643,6 @@
   <string name="background_location_disabled">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Standortaufzeichnung ist deaktiviert. Bitte oben im %1$s Menü aktivieren.</string>
   <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im %1$s Menü deaktivieren.</string>
   <string name="open_file">Datei öffnen</string>
-  <string name="sms_feature_disabled_dialog_title">SMS-Versand deaktiviert</string>
-  <string name="sms_feature_disabled_dialog_message">Der Versand von Einsendungen per SMS wurde wegen Google Play-Store-Bestimmungen deaktiviert.\n\nBitte stellen sicher, dass die Person, die dieses Gerät konfiguriert hat, die untenstehenden Details liest und entsprechend handelt. </string>
-  <string name="read_details">Details lesen</string>
   <string name="google_sheets_encrypted_message">Verschlüsselte Formulare können nicht an Google Sheets gesendet werden.</string>
   <string name="number_picker_title">Zahlenwähler</string>
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>

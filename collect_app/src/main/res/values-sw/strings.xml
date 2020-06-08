@@ -111,8 +111,6 @@
   <string name="send_data">Tuma fomu zilizokamilika</string>
   <string name="send_data_button">Tuma fomu zilizokamilika (%s)</string>
   <string name="send_selected_data">Tuma zilizochaguliwa</string>
-  <string name="send_selected_data_internet">Tuma (Mtandao)</string>
-  <string name="send_selected_data_sms">Tuma (Ujumbe)</string>
   <string name="view_sent_forms">Angalia fomu Iliyotumwa</string>
   <string name="view_sent_forms_button">Angalia fomu Iliyotumwa (%s)</string>
   <string name="server_auth_credentials">Jina la mtumiaji au nenosiri kwenye seva si sahihi:%s </string>
@@ -570,8 +568,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kutumia kinakili sauti. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <string name="get_accounts_runtime_permission_denied_title">Pata ruhusa ya akaunti</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kufungua akaunti. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
-  <string name="send_sms_runtime_permission_denied_title">Tuma ruhusa ya meseji</string>
-  <string name="send_sms_runtime_permission_denied_desc">Bila hizi ruhusa Collect haiwezi kutuma ujumbe wa SMS . Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Soma ruhusa ya simu</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect haipigi simu lakini inahitaji kufikia taarifa fulani kuhusu kifaa chako kama namba ya simu na ya utambulisho wa kifaa.</string>
   <string name="form_update_category">Tolea jipya la fomu</string>
@@ -594,25 +590,10 @@
   <string name="instance_upload_cancelled">Mfano wa kupakia umesitishwa</string>
   <string name="hide_old_form_versions_setting_title">Ficha matoleo ya fomu za zamani</string>
   <string name="hide_old_form_versions_setting_summary">Toleo jipya zaidi pekee itaonekana katika kujaza fomu tupu</string>
-    <string name="sms_invalid_phone_number">Namba ya simu batili!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Imeshidwa\' EEE, MMM dd, yyyy, \'muda\' HH:mm \'kutokana na kutokuwa na mpokeaji\'</string>
-  <string name="sms_no_number">\'Imeshidwa\' EEE, MMM dd, yyyy, \'muda\' HH:mm \'kutokana na kutokuwa na namba ya simu.\'</string>
-  <string name="sms_fatal_error">\'Imeshidwa\' EEE, MMM dd, yyyy, \'muda\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Imeshidwa\' EEE, MMM, dd, yyyy,\' katika\' HH:mm  \'kutokana kuwa katika hali ya ndege \"Airplane Mode\".\'</string>
-  <string name="sms_no_message">Hii fomu haina maswali yenye uambatanisho wa ujumbe.</string>
-  <string name="sms_encrypted_message">Fomu zilizo na usimbazi fiche haziwezi kuwasilishwa kama SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Jaribio la mwisho la kuwasilisha\' EEM, MMM dd, yyy \'at\' HH:mm</string>
-  <string name="sms_sent_on_date_at_time">\'Imetumwa kama ujumbe\' EEE, MMM dd, yyyy \'muda\' HH:mm</string>
-  <string name="sms_submission_queued">Inasubiri kuwasilishwa.</string>
-  <string name="sms_submissions_notif_title">Uwasilishaji wa meseji</string>
-  <string name="sms_submissions_notif_description">Fomu mbalimbali zinawasilishwa kwa sasa.</string>
     <string name="rank_items">Pangilia vitu</string>
   <string name="loading_form_failed">Tatizo limetokea wakati wa kupakua fomu. Tafadhali jaribu tena.</string>
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
-  <string name="sms_invalid_phone_number_description">Weka namba ya simu itakayotumiwa ujumbe au badilisha aina yako ya usafirishaji</string>
-  <string name="read_details">Soma maelezo</string>
   <string name="storage_migration_not_enough_space">Huna nafasi kwenye kifaa chako cha ndani kuhamisha data, Tafadhali ongeza nafasi kiasi na ujaribu tena.</string>
   <string name="storage_migration_form_uploader_is_running">Fomu ya upakuaji inatumika. Tafadhali jaribu tena</string>
   <string name="storage_migration_form_downloader_is_running">Fomu inatumika kwenye upakuaji. Tafadhali jaribu tena.</string>

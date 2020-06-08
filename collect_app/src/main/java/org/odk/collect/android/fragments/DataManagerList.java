@@ -36,13 +36,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
-import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ToastUtils;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -61,8 +55,6 @@ public class DataManagerList extends InstanceListFragment
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
-    @Inject
-    SmsSubmissionManagerContract smsSubmissionManager;
 
     public static DataManagerList newInstance() {
         return new DataManagerList();
@@ -201,22 +193,12 @@ public class DataManagerList extends InstanceListFragment
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            deleteSmsSubmissions(getCheckedIdObjects());
-
             deleteInstancesTask = new DeleteInstancesTask();
             deleteInstancesTask.setContentResolver(getActivity().getContentResolver());
             deleteInstancesTask.setDeleteListener(this);
             deleteInstancesTask.execute(getCheckedIdObjects());
         } else {
             ToastUtils.showLongToast(R.string.file_delete_in_progress);
-        }
-    }
-
-    private void deleteSmsSubmissions(Long[] ids) {
-        List<Long> list = Arrays.asList(ids);
-
-        for (Long id : list) {
-            smsSubmissionManager.forgetSubmission(String.valueOf(id));
         }
     }
 

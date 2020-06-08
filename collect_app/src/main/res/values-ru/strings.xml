@@ -108,8 +108,6 @@
   <string name="send_data">Выгрузить финализированные опросы</string>
   <string name="send_data_button">Выгрузить опросы (%s)</string>
   <string name="send_selected_data">Выгрузить выбранные</string>
-  <string name="send_selected_data_internet">Выгрузить (Интернет)</string>
-  <string name="send_selected_data_sms">Выгрузить (SMS)</string>
   <string name="view_sent_forms">Опросы в архиве</string>
   <string name="view_sent_forms_button">Архив (%s)</string>
   <string name="server_auth_credentials">Неправильное имя пользователя или пароль для сервера: %s</string>
@@ -536,7 +534,6 @@
   <string name="record_audio_runtime_permission_denied_title">Доступ к записи аудио</string>
   <string name="record_audio_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать микрофон. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="get_accounts_runtime_permission_denied_desc">Без данного разрешения Collect не сможет получить доступ к учётным записям. Попробуйте снова когда будете готовы предоставить доступ.</string>
-  <string name="send_sms_runtime_permission_denied_desc">Без данного разрешения приложение не сможет отправлять SMS. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="form_update_category">ОБНОВЛЕНИЕ БЛАНКОВ</string>
   <string name="periodic_form_updates_check_title">Периодичность проверки обновлений</string>
   <string name="never">Никогда</string>
@@ -557,19 +554,7 @@
   <string name="instance_upload_cancelled">Загрузка отменена</string>
   <string name="hide_old_form_versions_setting_title">Скрывать прошлые версии бланков</string>
   <string name="hide_old_form_versions_setting_summary">Только новые версии будут показаны в списке заполнения бланков</string>
-    <string name="sms_invalid_phone_number">Неправильный формат телефонного номера</string>
-  <!--Sms submission-->
-  <string name="sms_no_number">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm \'— не введён телефон\'</string>
-  <string name="sms_fatal_error">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm \'— самолётный режим\'</string>
-  <string name="sms_encrypted_message">Шифрованные ответы нельзя выгрузить через SMS</string>
-  <string name="sms_last_submission_on_date_at_time">\'Последняя попытка выгрузки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_sent_on_date_at_time">\'Выгруженно через SMS\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_submission_queued">В очереди на выгрузку</string>
-  <string name="sms_submissions_notif_title">SMS-выгрузка</string>
     <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
-  <string name="sms_invalid_phone_number_description">Введите номер телефона для выгрузки или измените способ доставки.</string>
-  <string name="sms_feature_disabled_dialog_message">Выгрузка через SMS была отключена из-за ограничений Google Play Store.\n\nПожалуйста, убедитесь, что человек, настроивший это устройство, прочитает подробности ниже и примет меры.</string>
 </resources>

@@ -108,8 +108,6 @@
   <string name="send_data">Надіслати завершену анкету</string>
   <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <string name="send_selected_data">Надіслати обране</string>
-  <string name="send_selected_data_internet">Надіслати (Інтернет)</string>
-  <string name="send_selected_data_sms">Надіслати (Повідомлення)</string>
   <string name="view_sent_forms">Переглянути надіслану анкету</string>
   <string name="view_sent_forms_button">Переглянути надіслану анкету (%s)</string>
   <string name="server_auth_credentials">Неправильні ім\'я користувача або пароль до сервера: %s</string>
@@ -573,8 +571,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до мікрофону. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="get_accounts_runtime_permission_denied_title">Отримати дозволи облікового запису</string>
   <string name="get_accounts_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до облікових записів. Будь ласка, спробуйте знову коли будете готові надати його.</string>
-  <string name="send_sms_runtime_permission_denied_title">Дозвіл надсилати повідомлення</string>
-  <string name="send_sms_runtime_permission_denied_desc">Без цього дозволу Collect не може надсилати повідомлення. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Сатус телефону</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect не робить телефонних дзвінків але потребує доступу до певних властивостей вашого пристрою як то номер телефну та ID пристрою</string>
   <string name="form_update_category">Оновлення анкети</string>
@@ -597,30 +593,10 @@
   <string name="instance_upload_cancelled">Завантаження екземпляру скасовано</string>
   <string name="hide_old_form_versions_setting_title">Приховати старі версії анкет</string>
   <string name="hide_old_form_versions_setting_summary">Тільки найновіша версія буде відображена в Заповнити анкету</string>
-    <string name="sms_invalid_phone_number">Некоректний номер!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через відсутність отримувача\'</string>
-  <string name="sms_no_number">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через не вказаний номер телефону\'</string>
-  <string name="sms_fatal_error">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через ввімкнений Режим Без Зв/\'язку\'</string>
-  <string name="sms_no_message">Ця анкета не має питань з позначками повідомлень.</string>
-  <string name="sms_encrypted_message">Зашифровані анкети не можуть бути відправлені як повідомлення.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Остання спроба відправки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
-    <item quantity="one">Надсилання анкети як повдомлення.</item>
-    <item quantity="few">Надсилання анкети, повдомлення %1$d з %2$d</item>
-    <item quantity="many">Надсилання анкети, повдомлення %1$d з %2$d</item>
-    <item quantity="other">Надсилання анкети, повдомлення %1$d з %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Надіслана як повідомлення\' EEE, MMM dd, yyyy \'о\' HH:mm</string>
-  <string name="sms_submission_queued">Черга на надсилання.</string>
-  <string name="sms_submissions_notif_title">Надсилання повідомлень</string>
-  <string name="sms_submissions_notif_description">Декілька анкет наразі надсилаються.</string>
     <string name="rank_items">Засоби оцінки</string>
   <string name="loading_form_failed">Під час завантаження анкети виникла помилка. Будь ласка спробуйте знову.</string>
   <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
   <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
-  <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
   <string name="notification_channel_name">Загальні сповіщення</string>
   <string name="corrupt_imported_preferences_error">Ці налаштування пошкоджені. Через адміністративні налаштування стиньте налаштування програми або імпортуйте непошкоджені.</string>
   <string name="google_play_services_not_available">Ця анкета хоче відслідковувати ваше розташування але Сервіси Google Play не доступні.</string>
@@ -630,5 +606,4 @@
   <string name="background_location_disabled">Ця анкета хоче відслідковувати ваше розташування але відслідковування вимкнене. Будь ласка, увімкніть його в %1$s меню.</string>
   <string name="background_location_enabled">Ця анкета відслідковує ваше розташування. Ви можете вимкнути відслідковування в %1$s меню.</string>
   <string name="open_file">Відкрити файл</string>
-  <string name="read_details">Прочитайте докладну інформацію</string>
 </resources>

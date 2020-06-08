@@ -106,8 +106,6 @@
   <string name="send_data">Verstuur Afgeronde Formulieren</string>
   <string name="send_data_button">Upload afgerond formulier (%s)</string>
   <string name="send_selected_data">Verstuur selectie</string>
-  <string name="send_selected_data_internet">Verzenden (Internet)</string>
-  <string name="send_selected_data_sms">Verzenden (SMS)</string>
   <string name="view_sent_forms">Bekijk verzonden formulier</string>
   <string name="view_sent_forms_button">Bekijk verzonden formulier (%s)</string>
   <string name="server_auth_credentials">Ongeldige gebruikersnaam of wachtwoord voor server: %s</string>
@@ -326,10 +324,7 @@
   <string name="theme_dark">Donker thema</string>
   <string name="hide_old_form_versions_setting_title">Verberg oude formulier versies. </string>
   <string name="hide_old_form_versions_setting_summary">Alleen de nieuwste versie zal verschijnen in Vul Leeg Formulier In. </string>
-  <string name="sms_invalid_phone_number">Onjuist telefoonnummer! </string>
-  <!--Sms submission-->
-  <string name="sms_no_message">Dit formulier heeft geen vragen met SMS tags. </string>
-    <string name="notification_channel_name">Algemene notificaties</string>
+  <string name="notification_channel_name">Algemene notificaties</string>
   <string name="go_to_settings">Ga naar instellingen</string>
   <string name="open_file">Open bestand</string>
 </resources>

@@ -1,7 +1,6 @@
 package org.odk.collect.android.injection.config;
 
 import android.app.Application;
-import android.telephony.SmsManager;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormDownloadListActivity;
@@ -44,11 +43,6 @@ import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
-import org.odk.collect.android.tasks.sms.SmsSender;
-import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
-import org.odk.collect.android.tasks.sms.SmsService;
-import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormDownloader;
@@ -97,14 +91,6 @@ public interface AppDependencyComponent {
     }
 
     void inject(Collect collect);
-
-    void inject(SmsService smsService);
-
-    void inject(SmsSender smsSender);
-
-    void inject(SmsSentBroadcastReceiver smsSentBroadcastReceiver);
-
-    void inject(SmsNotificationReceiver smsNotificationReceiver);
 
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
@@ -181,10 +167,6 @@ public interface AppDependencyComponent {
     void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
 
     void inject(QuitFormDialogFragment quitFormDialogFragment);
-
-    SmsManager smsManager();
-
-    SmsSubmissionManagerContract smsSubmissionManagerContract();
 
     RxEventBus rxEventBus();
 

@@ -3,7 +3,6 @@ package org.odk.collect.android.injection.config;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
@@ -40,8 +39,6 @@ import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.migration.StorageEraser;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrator;
-import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
-import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
@@ -68,16 +65,6 @@ import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 @Module
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class AppDependencyModule {
-
-    @Provides
-    SmsManager provideSmsManager() {
-        return SmsManager.getDefault();
-    }
-
-    @Provides
-    SmsSubmissionManagerContract provideSmsSubmissionManager(Application application) {
-        return new SmsSubmissionManager(application);
-    }
 
     @Provides
     Context context(Application application) {

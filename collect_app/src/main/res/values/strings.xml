@@ -123,8 +123,6 @@
     <string name="send_data">Send Finalized Form</string>
     <string name="send_data_button">Send Finalized Form (%s)</string>
     <string name="send_selected_data">Send Selected</string>
-    <string name="send_selected_data_internet">Send (Internet)</string>
-    <string name="send_selected_data_sms">Send (SMS)</string>
     <string name="view_sent_forms">View Sent Form</string>
     <string name="view_sent_forms_button">View Sent Form (%s)</string>
     <string name="server_auth_credentials">Invalid username or password for server: %s</string>
@@ -630,8 +628,6 @@
     <string name="record_audio_runtime_permission_denied_desc">Without this permission Collect can\'t access the microphone. Please try again when you are ready to grant it.</string>
     <string name="get_accounts_runtime_permission_denied_title">Get accounts permission</string>
     <string name="get_accounts_runtime_permission_denied_desc">Without this permission Collect can\'t access accounts. Please try again when you are ready to grant it.</string>
-    <string name="send_sms_runtime_permission_denied_title">Send SMS permission</string>
-    <string name="send_sms_runtime_permission_denied_desc">Without this permission Collect can\'t send SMS messages. Please try again when you are ready to grant it.</string>
     <string name="read_phone_state_runtime_permission_denied_title">Read phone state permission</string>
     <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect does not make calls but it needs to access certain properties about your device such as the phone number and device ID.</string>
     <string name="form_update_category">Form update</string>
@@ -655,29 +651,10 @@
     <string name="instance_upload_cancelled">Instance upload canceled</string>
     <string name="hide_old_form_versions_setting_title">Hide old form versions</string>
     <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
-    <string name="sms_invalid_phone_number">Invalid phone number!</string>
-
-    <!-- Sms submission -->
-    <string name="sms_no_reception">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no reception\'</string>
-    <string name="sms_no_number">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no phone number.\'</string>
-    <string name="sms_fatal_error">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="sms_airplane_mode">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to Airplane Mode being on.\'</string>
-    <string name="sms_no_message">This form has no questions with SMS tags.</string>
-    <string name="sms_encrypted_message">Encrypted forms can\'t be submitted as SMS.</string>
-    <string name="sms_last_submission_on_date_at_time">\'Last submission attempt at\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <plurals name="sms_sending">
-        <item quantity="one">Submitting form as a single message.</item>
-        <item quantity="other">Submitting form, sending message %1$d of %2$d</item>
-    </plurals>
-    <string name="sms_sent_on_date_at_time">\'Sent as SMS on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="sms_submission_queued">Queued for submission.</string>
-    <string name="sms_submissions_notif_title">SMS submissions</string>
-    <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>
     <string name="rank_items">Rank items</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
     <string name="missing_google_account_dialog_title">Google account not set</string>
     <string name="missing_google_account_dialog_desc">To submit forms via Google Sheets you have to set up your Google account in the Server settings.</string>
-    <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
     <string name="notification_channel_name">General notifications</string>
     <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
     <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
@@ -687,9 +664,6 @@
     <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the %1$s menu above.</string>
     <string name="background_location_enabled">This form tracks your location. You can disable tracking in the %1$s menu above.</string>
     <string name="open_file">Open file</string>
-    <string name="sms_feature_disabled_dialog_title">Sending via SMS Disabled</string>
-    <string name="sms_feature_disabled_dialog_message">Sending submissions via SMS has been disabled due to Google Play Store restrictions.\n\nPlease make sure the person who configured this device reads the details below and takes action.</string>
-    <string name="read_details">Read details</string>
     <string name="google_sheets_encrypted_message">Encrypted forms can\'t be submitted to Google Sheets.</string>
     <string name="number_picker_title">Number Picker</string>
     <string name="too_complex_form">This form is too complex for this device. Try simplifying expressions or ask for help on the forum.</string>

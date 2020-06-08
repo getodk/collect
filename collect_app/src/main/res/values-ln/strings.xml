@@ -20,7 +20,6 @@
   <string name="do_not_exit">longola</string>
   <string name="no_items_display">Eloko ezate yako lakisa</string>
   <string name="play_video">beta video</string>
-  <string name="send_selected_data_sms">kotinda</string>
   <string name="server_url">Ekangele</string>
   <string name="username">Kombo ya esalelo</string>
   <string name="select_another_image">pona elili mosusu</string>
@@ -41,5 +40,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

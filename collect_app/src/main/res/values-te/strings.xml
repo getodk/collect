@@ -108,8 +108,6 @@
   <string name="send_data">ఫైనల్ అయిన ఫారం పంపండి</string>
   <string name="send_data_button">ఫైనల్ చేసిన ఫారం పంపండి(%s)</string>
   <string name="send_selected_data">ఎంచుకున్నది పంపు</string>
-  <string name="send_selected_data_internet">పంపండి (ఇంటర్నెట్)</string>
-  <string name="send_selected_data_sms">పంపండి (సంక్షిప్త సమాచారం)</string>
   <string name="view_sent_forms">పంపిన ఫారంను చూడండి</string>
   <string name="view_sent_forms_button">పంపిన ఫారం లను చూడండి (%s)</string>
   <string name="server_auth_credentials">సర్వర్ కోసం ఉపయోగించిన యూజర్ పేరు , పాస్ వర్డు సరైనవి కావు:%s</string>
@@ -592,8 +590,6 @@
   <string name="record_audio_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా మైక్రోఫోన్‌ను యాక్సెస్ చేయలేరు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="get_accounts_runtime_permission_denied_title">ఖాతాల అనుమతి పొందండి</string>
   <string name="get_accounts_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా ఖాతాలను యాక్సెస్ చేయదు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
-  <string name="send_sms_runtime_permission_denied_title">SMS అనుమతి పంపండి</string>
-  <string name="send_sms_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా SMS సందేశాలను పంపదు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="read_phone_state_runtime_permission_denied_title">ఫోన్ స్టేట్ అనుమతి చదవండి</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ఎటువంటి కాల్స్ చేయదు. కాని దీనికి మీ పరికరం గురించిన ఫోన్ నంబర్, పరికరం ID వంటి కొంత సమాచారాన్ని సేకరించవలసి ఉంటుంది.</string>
   <string name="form_update_category">ఫారం నవీకరణ</string>
@@ -616,28 +612,10 @@
   <string name="instance_upload_cancelled">instance అప్‌లోడ్ రద్దు చేయబడింది</string>
   <string name="hide_old_form_versions_setting_title">పాత ఫారంలు కనిపించకుండా పెట్టు</string>
   <string name="hide_old_form_versions_setting_summary">ఫారం నింపడాంలో కొత్త వెర్షన్ మాత్రమే కనిపిస్తుంది</string>
-    <string name="sms_invalid_phone_number">ఫోన్ నెంబర్ సరి చూసుకోండి!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'కనెక్షన్ లేని కారణంగా విఫలమైన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
-  <string name="sms_no_number">\'ఫొన్ నంబర్ లేని కారణంగా విఫలమైన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
-  <string name="sms_fatal_error">\'విఫలమైన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
-  <string name="sms_airplane_mode">\'విమానం మోడ్ ఆన్ చేసి ఉంచడం వల్ల విఫలమైన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
-  <string name="sms_no_message">ఈ ఫారమ్‌కు SMS ట్యాగ్‌లతో ప్రశ్నలు లేవు.</string>
-  <string name="sms_encrypted_message">గుప్తీకరించిన ఫారమ్‌లను SMS గా సమర్పించలేము.</string>
-  <string name="sms_last_submission_on_date_at_time">\'సమర్పించటానికి ఆఖరి ప్రయత్నం చేసిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">ఫారమ్‌ను ఒకే సందేశంగా సమర్పించడం.</item>
-    <item quantity="other">ఫారం పంపబడుతుంది, %2$dలో %1$d సందేశం పంపడం జరుగుతుంది.</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'ఎస్ ఎమ్ ఎస్ ద్వారా పంపిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
-  <string name="sms_submission_queued">సమర్పణ కోసం క్యూలో ఉంది.</string>
-  <string name="sms_submissions_notif_title">SMS సమర్పణలు</string>
-  <string name="sms_submissions_notif_description">ప్రస్తుతం అనేక ఫారాలు పంపబడుతున్నాయి.</string>
     <string name="rank_items">ర్యాంక్ అంశాలు</string>
   <string name="loading_form_failed">ఫారమ్‌ను లోడ్ చేస్తున్నప్పుడు లోపం సంభవించింది. దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="missing_google_account_dialog_title">గూగుల్ ఖాతా సెట్ చేయబడలేదు</string>
   <string name="missing_google_account_dialog_desc">గూగుల్ షీట్ల ద్వారా ఫారమ్‌లను సమర్పించడానికి మీరు మీ గూగుల్ ఖాతాను సర్వర్ సెట్టింగులలో సెటప్ చేయాలి.</string>
-  <string name="sms_invalid_phone_number_description">SMS సమర్పణల కోసం గమ్యస్తానం ఫోన్ నంబర్‌ను సెట్ చేయండి లేదా మీ ట్రాన్స్ పోర్ట్ టైపు మార్చండి.</string>
   <string name="notification_channel_name">సాధారణ నోటిఫికేషన్‌లు</string>
   <string name="corrupt_imported_preferences_error">ప్రస్తుత సెట్టింగులు పాడైపోయాయి. అడ్మిన్ సెట్టింగ్‌ల నుండి, సెట్టింగ్‌లను రీసెట్ చేయండి లేదా పని చేసే వాటిని దిగుమతి చేయండి.</string>
   <string name="google_play_services_not_available">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది, కానీ గూగుల్ ప్లే సేవలు అందుబాటులో లేవు.</string>
@@ -647,9 +625,6 @@
   <string name="background_location_disabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని ట్రాకింగ్ నిలిపివేయబడింది. దయచేసి పై మెను %1$sలో ప్రారంభించండి.</string>
   <string name="background_location_enabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేస్తుంది. పై మెను%1$sలో మీరు ట్రాకింగ్‌ను నిలిపివేయవచ్చు.</string>
   <string name="open_file">ఫైలును తెరవండి</string>
-  <string name="sms_feature_disabled_dialog_title">SMS ద్వారా పంపడం నిలిపివేయబడింది</string>
-  <string name="sms_feature_disabled_dialog_message">Sending submissions via SMS has been disabled due to Google Play Store restrictions.\n\nPlease make sure the person who configured this device reads the details below and takes action.</string>
-  <string name="read_details">వివరాలు చదవండి</string>
   <string name="google_sheets_encrypted_message">గుప్తీకరించిన ఫారమ్‌లను గూగుల్ షీట్‌లకు సమర్పించలేము.</string>
   <string name="number_picker_title">నెంబర్ ను ఎంచుకునేది </string>
   <string name="too_complex_form">ఈ పరికరం కోసం ఈ ఫారం చాలా క్లిష్టంగా ఉంటుంది. వ్యక్తీకరణలను సరళీకృతం చేయడానికి ప్రయత్నించండి లేదా ఫోరమ్‌లో సహాయం కోసం అడగండి.</string>
