@@ -40,7 +40,7 @@ public class StorageMigrationDialogPage extends Page<StorageMigrationDialogPage>
 
     public MainMenuPage clickMigrate() {
         onView(withId(R.id.migrateButton)).perform(click());
-        return new MainMenuPage(rule).assertOnPage();
+        return waitFor(() -> new MainMenuPage(rule).assertOnPage());
     }
 
     public StorageMigrationDialogPage assertForumPostOpen() {

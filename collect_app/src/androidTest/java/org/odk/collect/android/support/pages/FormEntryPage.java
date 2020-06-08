@@ -53,7 +53,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeToNextQuestion(String questionText) {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
-        assertText(questionText);
+        waitForText(questionText);
         return this;
     }
 
@@ -69,23 +69,15 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage swipeToNextRepeat(String repeatLabel, int repeatNumber) {
-        assertText(repeatLabel + " > " + (repeatNumber - 1));
-
-        tryAgainOnFail(() -> {
-            onView(withId(R.id.questionholder)).perform(swipeLeft());
-            assertText(repeatLabel + " > " + repeatNumber);
-        });
-
+        waitForText(repeatLabel + " > " + (repeatNumber - 1));
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        waitForText(repeatLabel + " > " + repeatNumber);
         return this;
     }
 
     public FormEndPage swipeToEndScreen() {
-        tryAgainOnFail(() -> {
-            onView(withId(R.id.questionholder)).perform(swipeLeft());
-            new FormEndPage(formName, rule).assertOnPage();
-        });
-
-        return new FormEndPage(formName, rule);
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        return waitFor(() -> new FormEndPage(formName, rule).assertOnPage());
     }
 
     public ErrorDialog swipeToNextQuestionWithError() {
@@ -253,12 +245,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
-        tryAgainOnFail(() -> {
-            onView(withId(R.id.questionholder)).perform(swipeLeft());
-            new AddNewRepeatDialog(repeatName, rule).assertOnPage();
-        });
-
-        return new AddNewRepeatDialog(repeatName, rule);
+        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        return waitFor(() -> new AddNewRepeatDialog(repeatName, rule).assertOnPage());
     }
 
     public FormEntryPage answerQuestion(String question, String answer) {

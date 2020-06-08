@@ -10,27 +10,17 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.FormEntryPage;
 
 import java.util.Collections;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.swipeLeft;
-import static androidx.test.espresso.action.ViewActions.swipeRight;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.endsWith;
-
 public class ExternalCsvSearchTest {
+
     private static final String EXTERNAL_CSV_SEARCH_FORM = "external-csv-search.xml";
 
-    @Rule
-    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
+    public IntentsTestRule<FormEntryActivity> rule = FormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -39,43 +29,42 @@ public class ExternalCsvSearchTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule())
-            .around(new CopyFormRule(EXTERNAL_CSV_SEARCH_FORM, Collections.singletonList("external-csv-search-produce.csv"), true));
+            .around(new CopyFormRule(EXTERNAL_CSV_SEARCH_FORM, Collections.singletonList("external-csv-search-produce.csv"), true))
+            .around(rule);
 
     @Test
-    public void simpleSearchStatement_ShouldDisplayAllCsvChoices() {
-        onView(withText("Multiple produce")).check(matches(isDisplayed()));
-
-        onView(withText("Artichoke")).check(matches(isDisplayed()));
-        onView(withText("Apple")).check(matches(isDisplayed()));
-        onView(withText("Banana")).check(matches(isDisplayed()));
-        onView(withText("Blueberry")).check(matches(isDisplayed()));
-        onView(withText("Cherimoya")).check(matches(isDisplayed()));
-        onView(withText("Carrot")).check(matches(isDisplayed()));
+    public void search_withoutFilter_displaysAllChoices() {
+        new FormEntryPage("external-csv-search", rule).assertOnPage()
+                .assertText("Artichoke")
+                .assertText("Apple")
+                .assertText("Banana")
+                .assertText("Blueberry")
+                .assertText("Cherimoya")
+                .assertText("Carrot");
     }
 
     @Test
     // Regression: https://github.com/opendatakit/collect/issues/3132
-    public void searchStatementWithContainsFilter_ShouldUpdateOnSearchChange() {
-        onView(withText("Multiple produce")).perform(swipeLeft());
+    public void search_withFilter_showsMatchingChoices() {
+        new FormEntryPage("external-csv-search", rule).assertOnPage()
+                .swipeToNextQuestion("Produce search")
+                .inputText("A")
+                .swipeToNextQuestion("Produce")
+                .assertText("Artichoke")
+                .assertText("Apple")
+                .assertText("Banana")
+                .assertText("Cherimoya")
+                .assertText("Carrot")
+                .checkIfTextDoesNotExist("Blueberry")
 
-        onView(withText("Produce search")).check(matches(isDisplayed()));
-        onView(withClassName(endsWith("EditText"))).perform(replaceText("A"));
-        onView(withText("Produce search")).perform(swipeLeft());
-        onView(withText("Artichoke")).check(matches(isDisplayed()));
-        onView(withText("Apple")).check(matches(isDisplayed()));
-        onView(withText("Banana")).check(matches(isDisplayed()));
-        onView(withText("Blueberry")).check(doesNotExist());
-        onView(withText("Cherimoya")).check(matches(isDisplayed()));
-        onView(withText("Carrot")).check(matches(isDisplayed()));
-
-        onView(withText("Produce")).perform(swipeRight());
-        onView(withClassName(endsWith("EditText"))).perform(replaceText("B"));
-        onView(withText("Produce search")).perform(swipeLeft());
-        onView(withText("Artichoke")).check(doesNotExist());
-        onView(withText("Apple")).check(doesNotExist());
-        onView(withText("Banana")).check(matches(isDisplayed()));
-        onView(withText("Blueberry")).check(matches(isDisplayed()));
-        onView(withText("Cherimoya")).check(doesNotExist());
-        onView(withText("Carrot")).check(doesNotExist());
+                .swipeToPreviousQuestion()
+                .inputText("B")
+                .swipeToNextQuestion("Produce")
+                .assertText("Banana")
+                .assertText("Blueberry")
+                .checkIfTextDoesNotExist("Artichoke")
+                .checkIfTextDoesNotExist("Apple")
+                .checkIfTextDoesNotExist("Cherimoya")
+                .checkIfTextDoesNotExist("Carrot");
     }
 }
