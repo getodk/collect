@@ -14,9 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.TestActivityScenario;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.robolectric.annotation.LooperMode;
-import org.robolectric.shadows.ShadowDialog;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
