@@ -32,7 +32,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -40,7 +39,7 @@ import org.odk.collect.android.widgets.interfaces.ButtonWidget;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class UrlWidget extends QuestionWidget implements ButtonWidget {
+public class UrlWidget extends QuestionWidget {
 
     private final CustomTabHelper customTabHelper;
     private Uri uri;
@@ -65,9 +64,7 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         } else {
             openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             openUrlButton.setOnClickListener(v -> {
-                if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
-                    onButtonClick(openUrlButton.getId());
-                }
+                onButtonClick();
             });
         }
 
@@ -118,13 +115,14 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         }
     }
 
-    @Override
-    public void onButtonClick(int buttonId) {
-        if (!isUrlEmpty(stringAnswer)) {
-            customTabHelper.bindCustomTabsService(getContext(), null);
-            customTabHelper.openUri(getContext(), uri);
-        } else {
-            Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
+    public void onButtonClick() {
+        if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
+            if (!isUrlEmpty(stringAnswer)) {
+                customTabHelper.bindCustomTabsService(getContext(), null);
+                customTabHelper.openUri(getContext(), uri);
+            } else {
+                Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
