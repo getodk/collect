@@ -166,7 +166,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
             Bundle args = new Bundle();
             args.putSerializable(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.form_delete_message));
-            args.putSerializable(ProgressDialogFragment.CANCELABLE, "true");
+            args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
             DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
 
             backgroundTasks.deleteFormsTask = new DeleteFormsTask();
