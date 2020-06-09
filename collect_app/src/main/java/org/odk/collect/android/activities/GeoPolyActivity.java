@@ -445,7 +445,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addDraggablePoly(new ArrayList<>(), false);
+        featureId = map.addDraggablePoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE);
         inputActive = false;
         updateUi();
     }
