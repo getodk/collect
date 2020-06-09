@@ -52,8 +52,18 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage swipeToNextQuestion(String questionText) {
+        return swipeToNextQuestion(questionText, false);
+    }
+
+    public FormEntryPage swipeToNextQuestion(String questionText, boolean isRequired) {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
-        waitForText(questionText);
+
+        if (isRequired) {
+            waitForText("* " + questionText);
+        } else {
+            waitForText(questionText);
+        }
+
         return this;
     }
 
