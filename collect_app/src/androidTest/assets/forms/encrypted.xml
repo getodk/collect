@@ -18,7 +18,7 @@
     </h:head>
     <h:body>
         <input ref="/encrypted/question">
-            <label>Question</label>
+            <label>Question 1</label>
         </input>
     </h:body>
 </h:html>

@@ -136,6 +136,7 @@ import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -2514,6 +2515,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                            float velocityY) {
+        FlingRegister.flingDetected();
+
         // only check the swipe if it's enabled in preferences
         String navigation = (String) GeneralSharedPreferences.getInstance()
                 .get(GeneralKeys.KEY_NAVIGATION);

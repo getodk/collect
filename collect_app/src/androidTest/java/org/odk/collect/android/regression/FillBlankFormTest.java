@@ -458,19 +458,19 @@ public class FillBlankFormTest {
 
     @Test
     public void bigForm_ShouldBeFilledSuccessfully() {
-
         //TestCase18
         new MainMenuPage(rule)
                 .startBlankForm("Nigeria Wards")
+                .assertQuestion("State")
                 .clickOnString(R.string.select_one)
                 .clickOnText("Adamawa")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("LGA", true)
                 .clickOnString(R.string.select_one)
                 .clickOnText("Ganye")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("Ward", true)
                 .clickOnString(R.string.select_one)
                 .clickOnText("Jaggu")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("Comments")
                 .swipeToEndScreen()
                 .clickSaveAndExit();
     }

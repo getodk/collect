@@ -5,6 +5,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.utilities.FlingRegister;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -47,13 +48,23 @@ public class FormEntryPage extends Page<FormEntryPage> {
      */
     @Deprecated
     public FormEntryPage swipeToNextQuestion() {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        flingLeft();
         return this;
     }
 
     public FormEntryPage swipeToNextQuestion(String questionText) {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
-        waitForText(questionText);
+        return swipeToNextQuestion(questionText, false);
+    }
+
+    public FormEntryPage swipeToNextQuestion(String questionText, boolean isRequired) {
+        flingLeft();
+
+        if (isRequired) {
+            waitForText("* " + questionText);
+        } else {
+            waitForText(questionText);
+        }
+
         return this;
     }
 
@@ -70,18 +81,18 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeToNextRepeat(String repeatLabel, int repeatNumber) {
         waitForText(repeatLabel + " > " + (repeatNumber - 1));
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        flingLeft();
         waitForText(repeatLabel + " > " + repeatNumber);
         return this;
     }
 
     public FormEndPage swipeToEndScreen() {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        flingLeft();
         return waitFor(() -> new FormEndPage(formName, rule).assertOnPage());
     }
 
     public ErrorDialog swipeToNextQuestionWithError() {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        flingLeft();
         return new ErrorDialog(rule).assertOnPage();
     }
 
@@ -245,7 +256,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        flingLeft();
         return waitFor(() -> new AddNewRepeatDialog(repeatName, rule).assertOnPage());
     }
 
@@ -254,5 +265,25 @@ public class FormEntryPage extends Page<FormEntryPage> {
         inputText(answer);
         closeSoftKeyboard();
         return this;
+    }
+
+    public FormEntryPage assertQuestion(String text) {
+        waitForText(text);
+        return this;
+    }
+
+    private void flingLeft() {
+        tryAgainOnFail(() -> {
+            FlingRegister.attemptingFling();
+            onView(withId(R.id.questionholder)).perform(swipeLeft());
+
+            waitFor(() -> {
+                if (FlingRegister.isFlingDetected()) {
+                    return true;
+                } else {
+                    throw new RuntimeException("Fling never detected!");
+                }
+            });
+        }, 5);
     }
 }

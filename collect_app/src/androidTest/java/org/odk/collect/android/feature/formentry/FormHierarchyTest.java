@@ -106,6 +106,7 @@ public class FormHierarchyTest {
     public void repeatGroupsShouldBeVisibleAsAppropriate() {
         FormHierarchyPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy3")
+                .assertQuestion("Intro")
                 .swipeToNextQuestion("Text")
                 .swipeToNextQuestion("Integer 1_1")
                 .swipeToNextQuestion("Integer 1_2")
