@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.robolectric.annotation.LooperMode;
+import org.robolectric.shadows.ShadowDialog;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -113,16 +114,13 @@ public class ProgressDialogFragmentTest {
 
             Bundle args = new Bundle();
             args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
+
             fragment.setArguments(args);
             fragment.show(activity.getSupportFragmentManager(), "TAG");
+            activity.getSupportFragmentManager().executePendingTransactions();
             shadowOf(getMainLooper()).idle();
 
-            AlertDialog dialog = (AlertDialog) fragment.getDialog();
-
-            activity.finish();
-            shadowOf(getMainLooper()).idle();
-
-            assertThat(dialog.isShowing(), equalTo(true));
+            assertThat(shadowOf(fragment.getDialog()).isCancelable(), equalTo(false));
         });
     }
 

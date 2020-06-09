@@ -108,8 +108,8 @@ public class ProgressDialogFragment extends DialogFragment {
             ((TextView) dialogView.findViewById(R.id.message)).setText(getArguments().getString(MESSAGE));
         }
 
-        if (getArguments() != null && Objects.equals(getArguments().getBoolean(CANCELABLE), false)) {
-            dialog.setCancelable(false);
+        if (getArguments() != null) {
+            dialog.setCancelable(getArguments().getBoolean(CANCELABLE));
         }
 
         if (getCancelButtonText() != null) {
