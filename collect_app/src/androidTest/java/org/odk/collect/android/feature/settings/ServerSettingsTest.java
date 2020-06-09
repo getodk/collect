@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
@@ -31,7 +32,8 @@ public class ServerSettingsTest {
             .outerRule(GrantPermissionRule.grant(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.GET_ACCOUNTS
             ))
             .around(new ResetStateRule(new AppDependencyModule() {
                 @Override
@@ -78,5 +80,23 @@ public class ServerSettingsTest {
                 .clickOnForm("One Question")
                 .clickSendSelected()
                 .assertText("One Question - Success");
+    }
+
+    /**
+     * This test could definitely be extended to cover form download/submit (like the ODK server
+     * type test with the creation of a stub
+     * {@link org.odk.collect.android.utilities.gdrive.DriveHelper} and
+     * {@link org.odk.collect.android.utilities.gdrive.GoogleAccountsManager}
+     */
+    @Test
+    public void selectingGoogleAccount_showsGoogleAccountSettings() {
+        rule.mainMenu()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickServerSettings()
+                .clickOnServerType()
+                .clickOnString(R.string.server_platform_google_sheets)
+                .assertText(R.string.selected_google_account_text)
+                .assertText(R.string.google_sheets_url);
     }
 }
