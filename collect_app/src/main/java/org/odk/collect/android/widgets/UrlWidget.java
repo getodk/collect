@@ -72,9 +72,9 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         }
 
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            stringAnswer.setText(s);
+        String answerText = prompt.getAnswerText();
+        if (answerText != null) {
+            stringAnswer.setText(answerText);
             uri = Uri.parse(stringAnswer.getText().toString());
         }
 
@@ -93,9 +93,9 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = stringAnswer.getText().toString();
-        return !s.isEmpty()
-                ? new StringData(s)
+        String answerText = stringAnswer.getText().toString();
+        return !answerText.isEmpty()
+                ? new StringData(answerText)
                 : null;
     }
 
