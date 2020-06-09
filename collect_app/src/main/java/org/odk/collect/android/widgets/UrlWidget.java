@@ -42,7 +42,6 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 public class UrlWidget extends QuestionWidget {
 
     private final CustomTabHelper customTabHelper;
-    private Uri uri;
 
     protected Button openUrlButton;
     protected TextView stringAnswer;
@@ -70,7 +69,6 @@ public class UrlWidget extends QuestionWidget {
         String answerText = prompt.getAnswerText();
         if (answerText != null) {
             stringAnswer.setText(answerText);
-            uri = Uri.parse(stringAnswer.getText().toString());
         }
 
         return answerView;
@@ -79,6 +77,10 @@ public class UrlWidget extends QuestionWidget {
     private boolean isUrlEmpty(TextView stringAnswer) {
         return stringAnswer == null || stringAnswer.getText() == null
                 || stringAnswer.getText().toString().isEmpty();
+    }
+
+    private Uri getUri() {
+        return Uri.parse(stringAnswer.getText().toString());
     }
 
     @Override
@@ -117,7 +119,7 @@ public class UrlWidget extends QuestionWidget {
         if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
             if (!isUrlEmpty(stringAnswer)) {
                 customTabHelper.bindCustomTabsService(getContext(), null);
-                customTabHelper.openUri(getContext(), uri);
+                customTabHelper.openUri(getContext(), getUri());
             } else {
                 Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
             }
