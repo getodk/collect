@@ -22,7 +22,7 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.app.AlertDialog.Builder;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -72,7 +72,7 @@ public class RankingWidgetDialog extends DialogFragment {
         if (context instanceof RankingListener) {
             listener = (RankingListener) context;
         }
-        viewModel = ViewModelProviders.of(this, new RankingViewModel.Factory(items, formIndex)).get(RankingViewModel.class);
+        viewModel = new ViewModelProvider(this, new RankingViewModel.Factory(items, formIndex)).get(RankingViewModel.class);
         if (viewModel.getItems() == null) {
             dismiss();
         }
