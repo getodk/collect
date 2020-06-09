@@ -255,4 +255,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         closeSoftKeyboard();
         return this;
     }
+
+    public FormEntryPage assertQuestion(String text) {
+        waitForText(text);
+        return this;
+    }
 }
