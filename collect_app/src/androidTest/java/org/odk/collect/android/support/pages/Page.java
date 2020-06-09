@@ -293,12 +293,28 @@ abstract class Page<T extends Page<T>> {
     }
 
     void tryAgainOnFail(Runnable action) {
-        try {
-            action.run();
-        } catch (NoMatchingViewException e) {
-            assertOnPage();
-            action.run();
+        tryAgainOnFail(action, 2);
+    }
+
+    void tryAgainOnFail(Runnable action, int maxTimes) {
+        Exception failure = null;
+
+        for (int i = 0; i < maxTimes; i++) {
+            try {
+                action.run();
+                return;
+            } catch (Exception e) {
+                failure = e;
+
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException ignored) {
+                    // ignored
+                }
+            }
         }
+
+        throw new RuntimeException("tryAgainOnFail failed", failure);
     }
 
     protected void waitForText(String text) {
