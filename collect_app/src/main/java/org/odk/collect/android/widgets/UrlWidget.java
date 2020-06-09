@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -32,6 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.utilities.ToastUtils;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -67,25 +67,14 @@ public class UrlWidget extends QuestionWidget {
 
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         String answerText = prompt.getAnswerText();
-        if (answerText != null) {
-            stringAnswer.setText(answerText);
-        }
+        stringAnswer.setText(answerText);
 
         return answerView;
     }
 
-    private boolean isUrlEmpty(TextView stringAnswer) {
-        return stringAnswer == null || stringAnswer.getText() == null
-                || stringAnswer.getText().toString().isEmpty();
-    }
-
-    private Uri getUri() {
-        return Uri.parse(stringAnswer.getText().toString());
-    }
-
     @Override
     public void clearAnswer() {
-        Toast.makeText(getContext(), "URL is readonly", Toast.LENGTH_SHORT).show();
+        ToastUtils.showShortToast("URL is readonly");
     }
 
     @Override
@@ -108,11 +97,21 @@ public class UrlWidget extends QuestionWidget {
         stringAnswer.cancelLongPress();
     }
 
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (customTabHelper.getServiceConnection() != null) {
             getContext().unbindService(customTabHelper.getServiceConnection());
         }
+    }
+
+    private boolean isUrlEmpty(TextView stringAnswer) {
+        return stringAnswer == null || stringAnswer.getText() == null
+                || stringAnswer.getText().toString().isEmpty();
+    }
+
+    private Uri getUri() {
+        return Uri.parse(stringAnswer.getText().toString());
     }
 
     public void onButtonClick() {
@@ -121,7 +120,7 @@ public class UrlWidget extends QuestionWidget {
                 customTabHelper.bindCustomTabsService(getContext(), null);
                 customTabHelper.openUri(getContext(), getUri());
             } else {
-                Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
+                ToastUtils.showShortToast("No URL set");
             }
         }
     }
