@@ -105,15 +105,6 @@ public class UrlWidget extends QuestionWidget {
         }
     }
 
-    private boolean isUrlEmpty(TextView stringAnswer) {
-        return stringAnswer == null || stringAnswer.getText() == null
-                || stringAnswer.getText().toString().isEmpty();
-    }
-
-    private Uri getUri() {
-        return Uri.parse(stringAnswer.getText().toString());
-    }
-
     public void onButtonClick() {
         if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
             if (!isUrlEmpty(stringAnswer)) {
@@ -123,5 +114,14 @@ public class UrlWidget extends QuestionWidget {
                 ToastUtils.showShortToast("No URL set");
             }
         }
+    }
+
+    private boolean isUrlEmpty(TextView stringAnswer) {
+        return stringAnswer == null || stringAnswer.getText() == null
+                || stringAnswer.getText().toString().isEmpty();
+    }
+
+    private Uri getUri() {
+        return Uri.parse(stringAnswer.getText().toString());
     }
 }
