@@ -73,13 +73,12 @@ public class GeoPointWidgetTest {
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), equalTo(null));
-        assertThat(widget.getAnswerToDisplay(null), equalTo(""));
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveConvertibleString_returnsNull() throws NumberFormatException {
+    public void getAnswer_whenPromptAnswerDoesNotHaveConvertibleString_returnsNull() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.getAnswer().getDisplayText(), equalTo(""));
+        assertThat(widget.getAnswer(), equalTo(null));
     }
 
     @Test
