@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets;
 
+import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -14,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.robolectric.RobolectricTestRunner;
 
@@ -22,6 +25,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
@@ -35,14 +39,15 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 @RunWith(RobolectricTestRunner.class)
 public class UrlWidgetTest {
 
+    private TestScreenContextActivity spyActivity;
     private CustomTabHelper customTabHelper;
-    private CustomTabsServiceConnection serviceConnection;
     private OnLongClickListener listener;
 
     @Before
     public void setUp() {
+        spyActivity = spy(widgetTestActivity());
+
         customTabHelper = mock(CustomTabHelper.class);
-        serviceConnection = mock(CustomTabsServiceConnection.class);
         listener = mock(OnLongClickListener.class);
     }
 
@@ -105,6 +110,7 @@ public class UrlWidgetTest {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
         widget.openUrlButton.performLongClick();
+
         verify(listener).onLongClick(widget.openUrlButton);
     }
 
@@ -120,22 +126,25 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void detachingFromWindow_disconnectsService_whenServiceConnectionIsNotNull() {
-        when(customTabHelper.getServiceConnection()).thenReturn(serviceConnection);
+    public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIsNull() {
+        when(customTabHelper.getServiceConnection()).thenReturn(null);
+
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
-        verify(serviceConnection).onServiceDisconnected(null);
+        verify(spyActivity, never()).unbindService(null);
     }
 
     @Test
-    public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIsNull() {
-        when(customTabHelper.getServiceConnection()).thenReturn(null);
+    public void detachingFromWindow_disconnectsService_whenServiceConnectionIsNotNull() {
+        CustomTabsServiceConnection serviceConnection = mock(CustomTabsServiceConnection.class);
+        when(customTabHelper.getServiceConnection()).thenReturn(serviceConnection);
+
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
-        verify(serviceConnection, never()).onServiceDisconnected(null);
+        verify(spyActivity).unbindService(serviceConnection);
     }
 
     private UrlWidget createWidget(FormEntryPrompt prompt) {
-        return new UrlWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), customTabHelper);
+        return new UrlWidget(spyActivity, new QuestionDetails(prompt, "formAnalyticsID"), customTabHelper);
     }
 }

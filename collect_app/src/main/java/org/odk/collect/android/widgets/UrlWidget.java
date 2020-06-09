@@ -63,9 +63,7 @@ public class UrlWidget extends QuestionWidget {
             openUrlButton.setVisibility(GONE);
         } else {
             openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            openUrlButton.setOnClickListener(v -> {
-                onButtonClick();
-            });
+            openUrlButton.setOnClickListener(v -> onButtonClick());
         }
 
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
