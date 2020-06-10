@@ -10,7 +10,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.Widget;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,7 +23,7 @@ import static org.robolectric.Shadows.shadowOf;
 /**
  * @author James Knight
  */
-public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswerData>
+public abstract class BinaryWidgetTest<W extends Widget, A extends IAnswerData>
         extends QuestionWidgetTest<W, A> {
 
     private final FakePermissionUtils permissionUtils;
@@ -78,7 +79,7 @@ public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswer
         A answer = getNextAnswer();
         Object binaryData = createBinaryData(answer);
 
-        widget.setBinaryData(binaryData);
+        ((BinaryDataReceiver) widget).setBinaryData(binaryData);
 
         IAnswerData answerData = widget.getAnswer();
 
@@ -96,7 +97,7 @@ public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswer
         A newAnswer = getNextAnswer();
         Object binaryData = createBinaryData(newAnswer);
 
-        widget.setBinaryData(binaryData);
+        ((BinaryDataReceiver) widget).setBinaryData(binaryData);
 
         IAnswerData answerData = widget.getAnswer();
 

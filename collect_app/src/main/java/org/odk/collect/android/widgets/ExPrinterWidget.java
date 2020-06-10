@@ -28,7 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -117,7 +117,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExPrinterWidget extends QuestionWidget implements BinaryWidget, ButtonClickListener {
+public class ExPrinterWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
 
     final Button launchIntentButton;
     private final WaitingForDataRegistry waitingForDataRegistry;

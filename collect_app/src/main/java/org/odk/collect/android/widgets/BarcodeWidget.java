@@ -34,7 +34,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -46,7 +46,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BarcodeWidget extends QuestionWidget implements BinaryWidget, ButtonClickListener {
+public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
     final Button getBarcodeButton;
     final TextView stringAnswer;
     private final WaitingForDataRegistry waitingForDataRegistry;
