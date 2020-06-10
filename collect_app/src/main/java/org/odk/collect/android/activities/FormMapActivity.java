@@ -30,7 +30,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
@@ -114,7 +113,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         if (viewModelFactory == null) { // tests set their factories directly
             viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository());
         }
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FormMapViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
 
         Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")",
                 viewModel.getFormTitle(),
@@ -122,21 +121,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
-        summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-        summarySheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                if (slideOffset == -1 && viewModel.getSelectedSubmissionId() != -1) {
-                    updateSubmissionMarker(viewModel.getSelectedSubmissionId(), instancesByFeatureId.get(viewModel.getSelectedSubmissionId()).getStatus(), false);
-                    viewModel.setSelectedSubmissionId(-1);
-                }
-            }
-        });
+        setUpSummarySheet();
 
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
@@ -148,6 +133,24 @@ public class FormMapActivity extends BaseGeoMapActivity {
         } else {
             finish(); // The configured map provider is not available
         }
+    }
+
+    private void setUpSummarySheet() {
+        summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        summarySheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && viewModel.getSelectedSubmissionId() != -1) {
+                    updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
+                    viewModel.setSelectedSubmissionId(-1);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -259,8 +262,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    private void updateSubmissionMarker(int featureId, String status, boolean big) {
-        int drawableId = getDrawableIdForStatus(status, big);
+    private void updateSubmissionMarker(int featureId, String status, boolean enlarged) {
+        int drawableId = getDrawableIdForStatus(status, enlarged);
         map.setMarkerIcon(featureId, drawableId);
     }
 
@@ -279,7 +282,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
      */
     public void onFeatureClicked(int featureId) {
         if (viewModel.getSelectedSubmissionId() != -1 && viewModel.getSelectedSubmissionId() != featureId) {
-            updateSubmissionMarker(viewModel.getSelectedSubmissionId(), instancesByFeatureId.get(viewModel.getSelectedSubmissionId()).getStatus(), false);
+            updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
         }
         FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
         if (mappableFormInstance != null) {
@@ -318,16 +321,16 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    private static int getDrawableIdForStatus(String status, boolean big) {
+    private static int getDrawableIdForStatus(String status, boolean enlarged) {
         switch (status) {
             case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return big ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
+                return enlarged ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
             case InstanceProviderAPI.STATUS_COMPLETE:
-                return big ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
+                return enlarged ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
             case InstanceProviderAPI.STATUS_SUBMITTED:
-                return big ? R.drawable.ic_room_green_48dp : R.drawable.ic_room_green_24dp;
+                return enlarged ? R.drawable.ic_room_green_48dp : R.drawable.ic_room_green_24dp;
             case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return big ? R.drawable.ic_room_red_48dp : R.drawable.ic_room_red_24dp;
+                return enlarged ? R.drawable.ic_room_red_48dp : R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;
     }
@@ -398,8 +401,12 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private void hideSummary() {
-        updateSubmissionMarker(viewModel.getSelectedSubmissionId(), instancesByFeatureId.get(viewModel.getSelectedSubmissionId()).getStatus(), false);
+        updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
         viewModel.setSelectedSubmissionId(-1);
         summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private String getSubmissionStatusFor(int submissionId) {
+        return instancesByFeatureId.get(submissionId).getStatus();
     }
 }
