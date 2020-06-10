@@ -255,7 +255,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             MapPoint point = new MapPoint(instance.getLatitude(), instance.getLongitude());
             int featureId = map.addMarker(point, false);
 
-            updateSubmissionMarker(featureId, instance.getStatus(), false);
+            updateSubmissionMarker(featureId, instance.getStatus(), featureId == viewModel.getSelectedSubmissionId());
 
             instancesByFeatureId.put(featureId, instance);
             points.add(point);
