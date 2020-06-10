@@ -66,8 +66,7 @@ public class UrlWidget extends QuestionWidget {
         }
 
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        String answerText = prompt.getAnswerText();
-        stringAnswer.setText(answerText);
+        stringAnswer.setText(prompt.getAnswerText());
 
         return answerView;
     }
