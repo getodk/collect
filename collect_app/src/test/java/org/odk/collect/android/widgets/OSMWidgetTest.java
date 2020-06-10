@@ -20,6 +20,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import java.io.File;
 
@@ -45,7 +46,7 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     @NonNull
     @Override
     public OSMWidget createWidget() {
-        return new OSMWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new OSMWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
     }
 
     @NonNull

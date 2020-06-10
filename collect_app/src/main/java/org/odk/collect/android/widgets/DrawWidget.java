@@ -25,6 +25,7 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -39,8 +40,8 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
 
     Button drawButton;
 
-    public DrawWidget(Context context, QuestionDetails prompt) {
-        super(context, prompt);
+    public DrawWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+        super(context, prompt, waitingForDataRegistry);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
         addCurrentImageToLayout();

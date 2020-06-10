@@ -15,6 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -31,7 +32,7 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
     @NonNull
     @Override
     public BarcodeWidget createWidget() {
-        return new BarcodeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new BarcodeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
     }
 
     @Override

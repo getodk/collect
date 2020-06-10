@@ -2,6 +2,8 @@ package org.odk.collect.android.widgets;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
+
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,12 +13,11 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
@@ -40,7 +41,7 @@ public class GeoTraceWidgetTest extends BaseGeoWidgetTest<GeoTraceWidget, String
     @NonNull
     @Override
     public GeoTraceWidget createWidget() {
-        return new GeoTraceWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new GeoTraceWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
     }
 
     @Override

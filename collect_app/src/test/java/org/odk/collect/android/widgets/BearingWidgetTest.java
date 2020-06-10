@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -26,7 +27,7 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
     @NonNull
     @Override
     public BearingWidget createWidget() {
-        return new BearingWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new BearingWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
     }
 
     @Override

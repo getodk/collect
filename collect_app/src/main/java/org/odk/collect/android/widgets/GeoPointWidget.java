@@ -203,7 +203,6 @@ public class GeoPointWidget extends QuestionWidget {
             getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
                 @Override
                 public void granted() {
-                    waitForData();
                     startGeoActivity();
                 }
 

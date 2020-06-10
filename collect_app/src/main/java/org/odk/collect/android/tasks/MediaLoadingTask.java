@@ -97,7 +97,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
         ODKView odkView = formEntryActivity.get().getCurrentViewIfODKView();
         if (odkView != null) {
-            odkView.setBinaryData(result);
+            formEntryActivity.get().setBinaryWidgetData(result);
         }
     }
 }

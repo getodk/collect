@@ -8,6 +8,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -32,7 +33,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
     @NonNull
     @Override
     public ExDecimalWidget createWidget() {
-        return new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
     }
 
     @NonNull
@@ -65,11 +66,11 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
         when(answerData.getValue()).thenReturn(eighteenDigitDouble);
 
-        ExDecimalWidget exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        ExDecimalWidget exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
 
         assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
 
-        exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
 
         assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
     }
