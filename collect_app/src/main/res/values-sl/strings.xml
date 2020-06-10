@@ -342,15 +342,4 @@
   <string name="cannot_create_directory">Ne morem narediti mape: %s</string>
   <string name="not_a_directory">%s obstaja, vendar ni mapa</string>
   <string name="hide_old_form_versions_setting_title">Skrij stare različice obrazca</string>
-  <string name="sms_invalid_phone_number">Neveljavna telefonska številka!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Neuspeh na\' EEE,MMM dd, yyyy \'ob\' HH:mm \'ker nimam sprejema\'</string>
-  <string name="sms_fatal_error">\'Neuspeh na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Neuspeh na\' EEE,MMM dd, yyyy \'ob\' HH:mm \'ker je letalski način vključen\'</string>
-  <string name="sms_no_message">Ta obrazec nima nobenega vprašanja s SMS oznako</string>
-  <string name="sms_encrypted_message">Šifriranih obrazcev ni moč predložiti kot SMS sporočilo.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Zadnji poskus predložitve na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
-  <string name="sms_sent_on_date_at_time">\'Poslano kot SMS sporočilo na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
-  <string name="sms_submissions_notif_title">Predložitve preko SMS sporočil</string>
-  <string name="sms_submissions_notif_description">Trenutno se oddaja več obrazcev.</string>
 </resources>

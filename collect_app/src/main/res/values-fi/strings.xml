@@ -111,8 +111,6 @@
   <string name="send_data">Lähetä valmis lomake</string>
   <string name="send_data_button">Lähetä valmis lomake (%s)</string>
   <string name="send_selected_data">Lähetä valitut</string>
-  <string name="send_selected_data_internet">Lähetä (Internet)</string>
-  <string name="send_selected_data_sms">Lähetä (SMS)</string>
   <string name="view_sent_forms">Tarkastele lähetettyä lomaketta</string>
   <string name="view_sent_forms_button">Tarkastele lähetettyä lomaketta (%s)</string>
   <string name="server_auth_credentials">Väärä käyttäjätunnus tai salasana palvelimelle: %s</string>
@@ -609,8 +607,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään mikrofonia. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
   <string name="get_accounts_runtime_permission_denied_title">Hae tilin käyttöluvat</string>
   <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
-  <string name="send_sms_runtime_permission_denied_title">SMS-lähetyslupa</string>
-  <string name="send_sms_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty lähettämään SMS-viestejä. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen käyttölupa</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <string name="form_update_category">Lomakepäivitys</string>
@@ -634,28 +630,10 @@
   <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
   <string name="hide_old_form_versions_setting_title">Piilota vanhat lomakeversiot</string>
   <string name="hide_old_form_versions_setting_summary">Vain uusin versio tulee näkymään \"Täytä tyhjä lomake\" -näkymässä.</string>
-    <string name="sms_invalid_phone_number">Väärä puhelinnumero!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska ei ollut kenttää\'</string>
-  <string name="sms_no_number">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska ei ollut puhelinnumeroa.\'</string>
-  <string name="sms_fatal_error">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska lentokenttämoodi oli päällä.\'</string>
-  <string name="sms_no_message">Tässä kyselyssä ei ole kysymyksiä, joilla olisi SMS-tägiä.</string>
-  <string name="sms_encrypted_message">Salattuja kyselyitä ei pystytä lähettämään SMS:llä.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Viimeisin lähetysyritys\' EEE dd MMM yyyy \'kello\' HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Lähetetään lomaketta yhtenä viestinä.</item>
-    <item quantity="other">Lähetetään lomaketta, lähetetään viestiä %1$d / %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Lähetetty SMS-viestinä\' EEE dd MMM yyyy \'kello\' HH:mm</string>
-  <string name="sms_submission_queued">Lähetysjonossa.</string>
-  <string name="sms_submissions_notif_title">SMS-lähetykset</string>
-  <string name="sms_submissions_notif_description">Useita lomakkeita parhaillaan lähetettävänä.</string>
     <string name="rank_items">Järjestä</string>
   <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
   <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
-  <string name="sms_invalid_phone_number_description">Aseta vastaanottopuhelinnumero SMS-lähetyksille tai vaihda siirtotapaa.</string>
   <string name="notification_channel_name">Yleiset ilmoitukset</string>
   <string name="corrupt_imported_preferences_error">Tämänhetkiset asetukset ovat vialliset. Pääkäyttäjän asetuksissa voit palauttaa oletusasetukset tai touda toimivat.</string>
   <string name="google_play_services_not_available">Tämä lomake haluaa seurata sijaintiasi mutta Google Play Services ei ole käytettävissä.</string>
@@ -665,9 +643,6 @@
   <string name="background_location_disabled">Tämä lomake haluaa seurata sijaintiasi, mutta seuranta on poissa päältä. Ole hyvä ja laita se päälle valikossa %1$s yllä.</string>
   <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
   <string name="open_file">Avaa tiedosto</string>
-  <string name="sms_feature_disabled_dialog_title">SMS-lähetys poissa päältä</string>
-  <string name="sms_feature_disabled_dialog_message">SMS-lähetykset poissa päältä Google Play Kaupan rajoitusten takia.\n\nOle hyvä ja varmista, että tämän laitteen asetukset tehnyt henkilö lukee yksityiskohdat alla ja ryhtyy toimenpiteisiin.</string>
-  <string name="read_details">Lue yksityiskohdat</string>
   <string name="google_sheets_encrypted_message">Salattuja lomakkeita ei voi lähettää Google Sheets -palveluun.</string>
   <string name="number_picker_title">Numerovalitsin</string>
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>

@@ -111,8 +111,6 @@
   <string name="send_data">Invia Modulo Completato</string>
   <string name="send_data_button">Invia Modulo Completato (%s)</string>
   <string name="send_selected_data">Invia selezionato</string>
-  <string name="send_selected_data_internet">Invia (Internet)</string>
-  <string name="send_selected_data_sms">Invia (SMS)</string>
   <string name="view_sent_forms">Visualizza modulo inviato</string>
   <string name="view_sent_forms_button">Visualizza modulo inviato (%s)</string>
   <string name="server_auth_credentials">Nome utente o password del server non validi: %s</string>
@@ -571,8 +569,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può registrare i suoni. Prova di nuovo quando hai autorizzato l\'uso del microfono</string>
   <string name="get_accounts_runtime_permission_denied_title">Autorizzazione uso account</string>
   <string name="get_accounts_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può accedere al tuo account. Prova di nuovo quando hai autorizzato l\'accesso al tuo account</string>
-  <string name="send_sms_runtime_permission_denied_title">Autorizzazione invio SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può inviare SMS. Prova di nuovo quando hai autorizzato l\'invio di SMS</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect non effettua chiamate ma necessita di accedere ad alcune propietà del tuo dispositivo quali ad esempio il numero telefonico e l\'Identificativo del dispositivo.</string>
   <string name="form_update_category">Aggiornamento Modulo</string>
   <string name="periodic_form_updates_check_title">Controllo periodico di aggiornamento questionari</string>
@@ -592,20 +588,12 @@
   <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
   <string name="hide_old_form_versions_setting_title">Nascondi le vecchie versioni dei questionario</string>
   <string name="hide_old_form_versions_setting_summary">Solo l\'ultima versione apparirà in Compila Formulario Vuoto</string>
-    <string name="sms_invalid_phone_number">Numero di telefono non valido!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm \'causa nessuna rete rilevata\'</string>
-  <string name="sms_no_number">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm \'causa nessun numero di telefono\'</string>
-  <string name="sms_fatal_error">\'Fallito il\' EEE, MMM dd, yyyy \'alle\' HH:mm</string>
-  <string name="sms_submission_queued">In coda per essere inviato</string>
     <string name="rank_items">Ordina gli elementi</string>
   <string name="missing_google_account_dialog_title">Account Google non specificato</string>
   <string name="notification_channel_name">Impostazioni Generali</string>
   <string name="go_to_settings">Vai a impostazioni</string>
   <string name="track_location">Registra la posizione</string>
   <string name="open_file">Apri documento</string>
-  <string name="sms_feature_disabled_dialog_title">Invio tramite SMS Disabilitato</string>
-  <string name="read_details">Lettura dettagli</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
   <string name="identity">Identità</string>
   <string name="enter_identity_description">Questo form necessita che tu ti dentifichi</string>

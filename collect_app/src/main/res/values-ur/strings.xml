@@ -105,8 +105,6 @@
   <string name="send_data">حتمی فارم  بھیجیں</string>
   <string name="send_data_button">حتمی فارم  بھیجیں (%s)</string>
   <string name="send_selected_data">منتخب شدہ کو بھیجیں</string>
-  <string name="send_selected_data_internet">بیجھے ( انٹرنیٹ )</string>
-  <string name="send_selected_data_sms">بھیجیں ( ایس ام ایس )</string>
   <string name="view_sent_forms">بھیجا ہوا فارم دیکھیں </string>
   <string name="view_sent_forms_button">بھیجے گئے فارم کو دیکھیں(%s)</string>
   <string name="server_auth_credentials">سرور کے لئے غلط صارف کا نام یا پاس ورڈ:%s</string>
@@ -533,8 +531,6 @@
   <string name="record_audio_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو مائیکروفون تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
   <string name="get_accounts_runtime_permission_denied_title">گیٹ اکاؤنٹس پرمیشن</string>
   <string name="get_accounts_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو اکاؤنٹس تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
-  <string name="send_sms_runtime_permission_denied_title">ایس ایم ایس کی اجازت بھیجیں</string>
-  <string name="send_sms_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ ایس ایم ایس نہیں بھیج سکتا. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
   <string name="read_phone_state_runtime_permission_denied_title">ریڈ فون اسٹیٹ پرمیشن</string>
   <string name="read_phone_state_runtime_permission_denied_desc">او ڈی کے کولیکٹ  کالز نہیں کرتا، لیکن یہ آپ کےڈیوائس  کے بارے میں مخصوص خصوصیات جیسے فون نمبر اور ڈیوائس آئی ڈٰی تک رسائی حاصل کرنے کی ضرورت ہے.</string>
   <string name="form_update_category">فارم اپ ڈیٹ</string>
@@ -557,27 +553,8 @@
   <string name="instance_upload_cancelled">انسٹنس اپ لوڈ منسوخ</string>
   <string name="hide_old_form_versions_setting_title">پرانے فارم ورژن چھپائیں</string>
   <string name="hide_old_form_versions_setting_summary">صرف نئے ورژن  خالی فارم پرکریں میں نظر آئیں گے</string>
-    <string name="sms_invalid_phone_number">غلط فون نمبر!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">EEE, MMM dd, yyyy \'پر\' HH:mm\' کو ری سیپشن نہ ہونے کی وجہ سے ناکام ہوگئی \'</string>
-  <string name="sms_no_number">EEE, MMM dd, yyyy\' پر\' HH:mm \' کو فون نمبر نہ ہونے کی وجہ سے فیل ہو گیا. \'</string>
-  <string name="sms_fatal_error">EEE, MMM dd, yyyy\'پر\' HH:mm \' کو فیل ہوگئی\'</string>
-  <string name="sms_airplane_mode">EEE, MMM dd, yyyy\' پر\' HH:mm \' کو ایئرپلین موڈ پر ہونے کی وجہ سے فیل ہو گئی. \'</string>
-  <string name="sms_no_message">اس فارم میں ایس ایم ایس ٹیگ کے ساتھ کوئی سوال نہیں ہے.</string>
-  <string name="sms_encrypted_message">انکرپٹڈ فارم ایس ایم ایس کے طور پرجمع نہیں کیا جا سکتا.</string>
-  <string name="sms_last_submission_on_date_at_time">EEE, MMM dd, yyyy\' پر\' HH:mm \' کوآخری دفعہ جمع کرانےکی کوشش کی گئی  \'</string>
-  <plurals name="sms_sending">
-    <item quantity="one">فارم کو سنگل میسج کے طور پر جمع کیا جا رہا ہے</item>
-    <item quantity="other">فارم جمع ہو رہا ہے، میسج %1$d آف %2$d بھیجا جا رہا ہے</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">EEE, MMM dd, yyyy\' کو\' HH:mm \'پر ایس ایم ایس کے طور پر بھیجا گیا ہے\'</string>
-  <string name="sms_submission_queued">جمع کرانے کے لئےانتظار میں ہے  </string>
-  <string name="sms_submissions_notif_title">ایس ایم ایس سبمیشن</string>
-  <string name="sms_submissions_notif_description">اس وقت کئی فارم جمع کیے جا رہے ہیں.</string>
     <string name="rank_items"> رینک آئٹمز</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>
-  <string name="sms_invalid_phone_number_description">ایس ایم ایس جمع کرانے کے لۓ ایک ڈیسٹی نیشن فون نمبر مقرر کریں یا اپنے ٹرانسپورٹ کی قسم  تبدیل کریں.</string>
-  <string name="read_details">تفصیلات پڑھیں</string>
 </resources>

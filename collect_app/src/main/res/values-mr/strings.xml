@@ -409,5 +409,4 @@
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

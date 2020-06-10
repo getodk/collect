@@ -103,8 +103,6 @@
   <string name="send_data">Dërgo formularin e përfunduar</string>
   <string name="send_data_button">Dërgo formularin e përfunduar (%s)</string>
   <string name="send_selected_data">Dërgo të përzgjedhurat</string>
-  <string name="send_selected_data_internet">Dërgo (Internet)</string>
-  <string name="send_selected_data_sms">Dërgo (SMS)</string>
   <string name="view_sent_forms">Shih formularin e dërguar</string>
   <string name="view_sent_forms_button">Shih formularin e dërguar (%s)</string>
   <string name="server_auth_credentials">Emri i përdouresit ose fjalëkalimi janë të pavlefshëm për serverin: 1%s</string>
@@ -456,16 +454,6 @@
   <string name="guidance_hint_title">Trego udhëzuesin për pyetjet</string>
   <string name="app_theme">Tema</string>
   <string name="hide_old_form_versions_setting_title">Fshih variantet e vjetra të formularit</string>
-    <string name="sms_invalid_phone_number">Numri i telefonit nuk është i vlefshëm!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm \'pasi nuk ka mbulim me valë\'</string>
-  <string name="sms_fatal_error">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm \'pasi Airplane Mode ishte i aktivizuar\'</string>
-  <string name="sms_encrypted_message">Formularët e enkriptuar nuk mund të nisen me SMS</string>
-  <string name="sms_sent_on_date_at_time">\'Dërguar si SMS më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
-  <string name="sms_submission_queued">Në radhë për t\'u dërguar.</string>
-  <string name="sms_submissions_notif_title">Dërguar me SMS</string>
-  <string name="sms_submissions_notif_description">Disa formularë janë duke u dërguar.</string>
     <string name="rank_items">Rendit pohimet</string>
   <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
   <string name="go_to_settings">Shko tek parametrat</string>

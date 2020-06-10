@@ -111,8 +111,6 @@
   <string name="send_data">確定済のフォームを送信</string>
   <string name="send_data_button">確定済のフォーム (%s) を送信</string>
   <string name="send_selected_data">選択済を送信</string>
-  <string name="send_selected_data_internet">送信 (インターネット)</string>
-  <string name="send_selected_data_sms">送信 (SMS)</string>
   <string name="view_sent_forms">送信済フォームを表示</string>
   <string name="view_sent_forms_button">送信済フォーム (%s) を表示</string>
   <string name="server_auth_credentials">サーバーのユーザー名とパスワードが正しくありません: %s</string>
@@ -606,8 +604,6 @@
   <string name="record_audio_runtime_permission_denied_desc">このアクセス許可がないと、Collect はマイクにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="get_accounts_runtime_permission_denied_title">アカウントのアクセス許可を取得</string>
   <string name="get_accounts_runtime_permission_denied_desc">このアクセス許可がないと、Collect はアカウントにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
-  <string name="send_sms_runtime_permission_denied_title">SMS 送信のアクセス許可</string>
-  <string name="send_sms_runtime_permission_denied_desc">このアクセス許可がないと、Collect は SMS メッセージを送信できません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="read_phone_state_runtime_permission_denied_title">電話の状態読み取りアクセス許可</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect は電話はかけませんが、電話番号やデバイス ID など、デバイスに関する特定のプロパティにアクセスする必要があります。</string>
   <string name="form_update_category">フォームの更新</string>
@@ -631,27 +627,10 @@
   <string name="instance_upload_cancelled">インスタンスのアップロードがキャンセルされました</string>
   <string name="hide_old_form_versions_setting_title">古いフォームのバージョンを非表示</string>
   <string name="hide_old_form_versions_setting_summary">ブランクフォームに最新バージョンのみが表示されます</string>
-    <string name="sms_invalid_phone_number">電話番号が正しくありません</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">yyyy/MM/dd E HH:mm \'に受信者がいないため失敗しました\'</string>
-  <string name="sms_no_number">yyyy/MM/dd E HH:mm \'に電話番号がないため失敗しました\'</string>
-  <string name="sms_fatal_error">yyyy/MM/dd E HH:mm \'に失敗しました\'</string>
-  <string name="sms_airplane_mode">yyyy/MM/dd E HH:mm \'に機内モードがオンのため失敗しました\'</string>
-  <string name="sms_no_message">このフォームは SMS タグの質問がありません。</string>
-  <string name="sms_encrypted_message">暗号化されたフォームは SMS として送信できません。</string>
-  <string name="sms_last_submission_on_date_at_time">\'最終の送信試行\' yyyy/MM/dd E HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="other">フォームを送信します %1$d / %2$d のメッセージを送信しています</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">yyyy/MM/dd E HH:mm \'に SMS として送信しました\'</string>
-  <string name="sms_submission_queued">送信キューにいれました。</string>
-  <string name="sms_submissions_notif_title">SMS 送信</string>
-  <string name="sms_submissions_notif_description">いくつかのフォームを現在送信しています。</string>
     <string name="rank_items">ランキングアイテム</string>
   <string name="loading_form_failed">フォームの読み込み時にエラーが発生しました。もう一度やり直してください。</string>
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
   <string name="missing_google_account_dialog_desc">Google スプレッドでフォームを送信するには、サーバー設定で Google アカウントを設定する必要があります。</string>
-  <string name="sms_invalid_phone_number_description">SMS 送信の宛先電話番号を設定するか、送信の種類を変更してください。</string>
   <string name="notification_channel_name">全般通知</string>
   <string name="corrupt_imported_preferences_error">現在の設定が間違っています。 管理の設定から、設定をリセットするか、有効なものをインポートしてください。</string>
   <string name="google_play_services_not_available">このフォームは位置を追跡しようとしますが、Google Play サービスが利用できません。</string>
@@ -661,9 +640,6 @@
   <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の %1$s メニューで有効にしてください。</string>
   <string name="background_location_enabled">このフォームは位置を追跡します。 上の %1$s メニューで追跡を無効にすることができます。</string>
   <string name="open_file">ファイルを開く</string>
-  <string name="sms_feature_disabled_dialog_title">SMS 経由の送信は無効です</string>
-  <string name="sms_feature_disabled_dialog_message">Google Play ストアの制限により、SMS による送信は無効になっています。\n\nこのデバイスを設定する人が、以下の詳細を読んで対処してください。</string>
-  <string name="read_details">詳細を読む</string>
   <string name="google_sheets_encrypted_message">暗号化されたフォームは Google スプレッドに送信できません。</string>
   <string name="number_picker_title">数値選択</string>
   <string name="too_complex_form">この形式はこの端末には複雑すぎます。 表現を単純化するか、フォーラムで助けを求めてください。</string>

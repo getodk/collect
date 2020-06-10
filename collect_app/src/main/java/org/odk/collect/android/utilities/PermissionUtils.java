@@ -211,21 +211,6 @@ public class PermissionUtils {
         }, Manifest.permission.GET_ACCOUNTS);
     }
 
-    public void requestSendSMSPermission(Activity activity, @NonNull PermissionListener action) {
-        requestPermissions(activity, new PermissionListener() {
-            @Override
-            public void granted() {
-                action.granted();
-            }
-
-            @Override
-            public void denied() {
-                showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
-                        R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
-            }
-        }, Manifest.permission.SEND_SMS);
-    }
-
     public void requestReadPhoneStatePermission(Activity activity, boolean displayPermissionDeniedDialog, @NonNull PermissionListener action) {
         requestPermissions(activity, new PermissionListener() {
             @Override
@@ -243,21 +228,6 @@ public class PermissionUtils {
                 }
             }
         }, Manifest.permission.READ_PHONE_STATE);
-    }
-
-    public void requestSendSMSAndReadPhoneStatePermissions(Activity activity, @NonNull PermissionListener action) {
-        requestPermissions(activity, new PermissionListener() {
-            @Override
-            public void granted() {
-                action.granted();
-            }
-
-            @Override
-            public void denied() {
-                showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
-                        R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
-            }
-        }, Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE);
     }
 
     protected void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {

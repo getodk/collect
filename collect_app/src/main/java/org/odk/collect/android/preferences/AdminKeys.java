@@ -59,7 +59,6 @@ public final class AdminKeys {
 
     static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
     static final String KEY_IMPORT_SETTINGS                     = "import_settings";
-    private static final String KEY_CHANGE_SUBMISSION_TRANSPORT = "change_submission_transport";
     static final String ALLOW_OTHER_WAYS_OF_EDITING_FORM        = "allow_other_ways_of_editing_form";
 
     /**
@@ -70,8 +69,6 @@ public final class AdminKeys {
     static AdminAndGeneralKeys[] adminToGeneral = {
 
             ag(KEY_CHANGE_SERVER,              GeneralKeys.KEY_PROTOCOL),
-            ag(KEY_CHANGE_SUBMISSION_TRANSPORT, GeneralKeys.KEY_TRANSPORT_PREFERENCE),
-            ag(KEY_CHANGE_SUBMISSION_TRANSPORT, GeneralKeys.KEY_SMS_PREFERENCE),
             ag(KEY_CHANGE_FORM_METADATA,       GeneralKeys.KEY_FORM_METADATA),
 
             ag(KEY_PERIODIC_FORM_UPDATES_CHECK, GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),

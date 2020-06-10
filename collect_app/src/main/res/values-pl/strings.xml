@@ -111,8 +111,6 @@
   <string name="send_data">Wyślij Zakończony Formularz</string>
   <string name="send_data_button">Wyślij Zakończony Formularz (%s)</string>
   <string name="send_selected_data">Wyślij Wybrane</string>
-  <string name="send_selected_data_internet">Wyślij (Internet)</string>
-  <string name="send_selected_data_sms">Wyślij (SMS)</string>
   <string name="view_sent_forms">Pokaż Wysłany Formularz</string>
   <string name="view_sent_forms_button">Pokaż Wysłany Formularz (%s)</string>
   <string name="server_auth_credentials">Nieprawidłowa nazwa użytkownika lub hasło do serwera: %s</string>
@@ -605,8 +603,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do mikrofonu. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="get_accounts_runtime_permission_denied_title">Uzyskaj uprawnienia do kont</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do kont. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
-  <string name="send_sms_runtime_permission_denied_title">Uprawnienia do wysyłania wiadomości SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie może wysyłać wiadomości SMS. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Sprawdź uprawnienia dostępu do właściwości telefonu</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect nie wykonuje połączeń, ale wymaga dostępu do niektórych właściwości twojego urządzenia, w tym do numeru telefonu i numeru ID</string>
   <string name="form_update_category">Aktualizacja formularza</string>
@@ -629,30 +625,10 @@
   <string name="instance_upload_cancelled">Przesyłanie zostało anulowane</string>
   <string name="hide_old_form_versions_setting_title">Ukryj stare wersje formularzy</string>
   <string name="hide_old_form_versions_setting_summary">Tylko najnowsza wersja pojawi się w Wypełnij Pusty Formularz</string>
-    <string name="sms_invalid_phone_number">Nieprawidłowy numer telefonu!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu braku zasięgu.\'</string>
-  <string name="sms_no_number">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu braku numeru telefonu.\'</string>
-  <string name="sms_fatal_error">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu aktywnego Trybu Samolotowego.\'</string>
-  <string name="sms_no_message">Ten formularz nie zawiera żadnych pytań z otagowaniem SMS.</string>
-  <string name="sms_encrypted_message">Zaszyfrowane formularze nie mogą być przesłane przez SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Ostatnia próba przesłania miała miejsce\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Przesyłanie formularza jako pojedynczej wiadomości.</item>
-    <item quantity="few">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
-    <item quantity="many">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
-    <item quantity="other">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Wysłano jako SMS\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <string name="sms_submission_queued">W kolejce do przesłania.</string>
-  <string name="sms_submissions_notif_title">Przesyłanie SMSów</string>
-  <string name="sms_submissions_notif_description">Obcenie przesyłanych jest kilka formularzy.</string>
     <string name="rank_items">Uszereguj pozycje</string>
   <string name="loading_form_failed">Wystąpił błąd w trakcie ładowania formularza. Spróbuj ponownie,</string>
   <string name="missing_google_account_dialog_title">Nie wybrano konta Google</string>
   <string name="missing_google_account_dialog_desc">By przesłać formularz poprzez Arkusze Google, zapisz swoje konto Google w ustawieniach serwera.</string>
-  <string name="sms_invalid_phone_number_description">Ustaw docelowy numer telefonu by przesyłać SMSy lub zmień rodzaj transmisji.</string>
   <string name="notification_channel_name">Ogólne powiadomienia</string>
   <string name="corrupt_imported_preferences_error">Bieżące ustawienia nie działają prawidłowo. Zresetuj je lub załaduj poprawne w ustawieniach administratora.</string>
   <string name="google_play_services_not_available">Ten formularz chce śledzić twoją lokalizację, ale usługi Google Play nie są dostępne.</string>
@@ -662,9 +638,6 @@
   <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, jednak funkcja śledzenia jest wyłączona. Włącz ją wybierając %1$s w menu powyżej.</string>
   <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia poprzez %1$s w menu powyżej.</string>
   <string name="open_file">Otwórz plik</string>
-  <string name="sms_feature_disabled_dialog_title">Wysyłanie przez wiadomość SMS Wyłączone.</string>
-  <string name="sms_feature_disabled_dialog_message">Wysyłanie przez SMS zostało wyłączone ze względu na ograniczenia Google Play Store.\n\nUpewnij się, że osoba konfigurująca to urządzenie przeczyta poniższe szczegóły i podejmie stosowne kroki.</string>
-  <string name="read_details">Przeczytaj szczegóły</string>
   <string name="google_sheets_encrypted_message">Zaszyfrowane formularze nie mogą być przesłane do Google Sheets.</string>
   <string name="number_picker_title">Wybór Wartości</string>
   <string name="too_complex_form">Formularz jest zbyt skomplikowany dla tego urządzenia. Spróbuj uprościć wyrażenia, lub poproś o pomoc na forum.</string>

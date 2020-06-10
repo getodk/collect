@@ -111,8 +111,6 @@
   <string name="send_data">إرسال الاستمارة النهائية</string>
   <string name="send_data_button">إرسال الاستمارة المكتملة (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
-  <string name="send_selected_data_internet">إرسال (عبر الإنترنت)</string>
-  <string name="send_selected_data_sms">إرسال (عبر رسائل نصية)</string>
   <string name="view_sent_forms">عرض الاستمارات المرسلة</string>
   <string name="view_sent_forms_button">عرض الاستمارات المرسلة : (%s)</string>
   <string name="server_auth_credentials">اسم المستخدم أو كلمة المرور للمخدم غير صحيحة: %s</string>
@@ -611,8 +609,6 @@
   <string name="record_audio_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الميكروفون. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="get_accounts_runtime_permission_denied_title">الحصول على إذن الحسابات</string>
   <string name="get_accounts_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الحسابات. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
-  <string name="send_sms_runtime_permission_denied_title">إذن لإرسال SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect إرسال رسائل SMS. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="read_phone_state_runtime_permission_denied_title">إذن قراءة حالة الهاتف</string>
   <string name="read_phone_state_runtime_permission_denied_desc">لا يقوم ODK Collect بإجراء مكالمات ولكنه يحتاج إلى الوصول إلى بعض الخصائص المتعلقة بجهازك مثل رقم الهاتف ومعرف الجهاز.</string>
   <string name="form_update_category">تحديث الاستمارة</string>
@@ -635,32 +631,10 @@
   <string name="instance_upload_cancelled">تم إلغاء تحميل النموذج</string>
   <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
   <string name="hide_old_form_versions_setting_summary">سيظهر الإصدار الأحدث فقط في ملء استمارة فارغة</string>
-  <string name="sms_invalid_phone_number">رقم هاتف غير صحيح!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH \'بسبب عدم التسليم\'</string>
-  <string name="sms_no_number">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH \'بسبب عدم وجود رقم الهاتف.\'</string>
-  <string name="sms_fatal_error">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH</string>
-  <string name="sms_airplane_mode">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH \'بسبب وضع الطائرة يجري.\'</string>
-  <string name="sms_no_message">لا تشتمل هذه الاستمارة على أية أسئلة بها علامات SMS.</string>
-  <string name="sms_encrypted_message">لا يمكن إرسال الاستمارات المشفرة باستخدام SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'آخر محاولة إرسال في\' EEE, MMM dd, yyyy HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="zero">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="one">تقديم النموذج كرسالة واحدة.</item>
-    <item quantity="two">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="few">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="many">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="other">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'ارسلت ك SMS ب\' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
-  <string name="sms_submission_queued">في قائمة الانتظار للإرسال.</string>
-  <string name="sms_submissions_notif_title">إرسال عبر SMS</string>
-  <string name="sms_submissions_notif_description">يتم إرسال عدة استمارات حاليًا.</string>
   <string name="rank_items">رتب العناصر</string>
   <string name="loading_form_failed">حدث خطأ أثناء تحميل الاستمارة. الرجاء المحاولة مرة أخرى.</string>
   <string name="missing_google_account_dialog_title">حساب Google لم يحدد</string>
   <string name="missing_google_account_dialog_desc">لإرسال الاستمارات عبر Google Sheets، يجب عليك إعداد حساب Google الخاص بك في إعدادات الخادم.</string>
-  <string name="sms_invalid_phone_number_description">قم بتعيين رقم هاتف وجهة لإرسال SMS أو قم بتغيير نوع النقل الخاص بك.</string>
   <string name="notification_channel_name">الإشعارات العامة</string>
   <string name="corrupt_imported_preferences_error">الإعدادات الحالية تالفة. من إعدادات المسؤول، أعد ضبط الإعدادات أو قم باستيراد الإعدادات العاملة.</string>
   <string name="google_play_services_not_available">تريد هذه الاستمارة تتبع موقعك ولكن خدمات Google Play غير متوفرة.</string>
@@ -670,9 +644,6 @@
   <string name="background_location_disabled">تريد هذه الاستمارة تتبع موقعك ولكن تم تعطيل التتبع. يرجى التمكين في القائمة %1$s أعلاه.</string>
   <string name="background_location_enabled">هذه الاستمارة تقوم بتتبع موقعك. يمكنك تعطيل التتبع في القائمة %1$s أعلاه.</string>
   <string name="open_file">فتح الملف</string>
-  <string name="sms_feature_disabled_dialog_title">إرسال عبر SMS معطل</string>
-  <string name="sms_feature_disabled_dialog_message">تم تعطيل عمليات الإرسال عبر SMS بسبب قيود متجر Google Play.\n\nيرجى التأكد من أن الشخص الذي قام بضبط هذا الجهاز يقرأ التفاصيل أدناه ويتخذ إجراءً.</string>
-  <string name="read_details">قراءة التفاصيل</string>
   <string name="google_sheets_encrypted_message">لا يمكن إرسال الاستمارات المشفرة إلى أوراق Google Sheets.</string>
   <string name="number_picker_title">منتقي الأرقام</string>
   <string name="too_complex_form">هذه الاستمارة معقدة جدًا لهذا الجهاز. حاول تبسيط التعبيرات أو طلب المساعدة في المنتدى.</string>

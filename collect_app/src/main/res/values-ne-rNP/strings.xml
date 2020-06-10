@@ -106,8 +106,6 @@
   <string name="send_data">भरिसकेको फारम पठाउन</string>
   <string name="send_data_button">भरिसकेको फारम पठाउन (%s)</string>
   <string name="send_selected_data">छानिएका पठाउनुहोस् </string>
-  <string name="send_selected_data_internet">पठाउनुहोस् (Internet)</string>
-  <string name="send_selected_data_sms">पठाउनुहोस् (SMS)</string>
   <string name="view_sent_forms">भरिसकेको फारम हेर्न</string>
   <string name="view_sent_forms_button">भरिसकेको फारम हेर्न (%s)</string>
   <string name="server_auth_credentials">सर्भरको प्रयोगकर्ता नाम वा पासवर्ड गलत छ %s</string>
@@ -363,5 +361,4 @@
   <string name="yes">हो</string>
   <string name="no">होइन</string>
   <string name="stop_video_capture_instruction">रेकर्डिङ सुरु भयो। रोक्न फेरि छुनुहोस् ।</string>
-  <!--Sms submission-->
 </resources>

@@ -110,8 +110,6 @@
   <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
   <string name="send_data_button">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់ (%s)</string>
   <string name="send_selected_data">បញ្ជូនការជ្រើសរើស</string>
-  <string name="send_selected_data_internet">ផ្ញើចេញ (អ៊ិនធើណីត)</string>
-  <string name="send_selected_data_sms">ផ្ញើ (សារ)</string>
   <string name="view_sent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ</string>
   <string name="view_sent_forms_button">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ (%s)</string>
   <string name="server_auth_credentials">ឈ្មោះអ្នកប្រើប្រាស់ ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវសម្រាប់ម៉ាស៊ីនមេ៖ %s</string>
@@ -552,8 +550,6 @@
   <string name="not_a_directory">%s មានរួច, ប៉ុន្តែ​ពុំមែន​ជាថត​ឯក​សារ</string>
   <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
-  <string name="sms_invalid_phone_number">លេខទូរស័ព្ទមិន​ត្រឹម​ត្រូវ!</string>
-  <!--Sms submission-->
   <string name="rank_items">ចំណាត់ថ្នាក់ធាតុ</string>
   <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
   <string name="notification_channel_name">ការជូនដំណឹង​ជាទូទៅ</string>

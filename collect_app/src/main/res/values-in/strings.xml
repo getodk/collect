@@ -111,8 +111,6 @@
   <string name="send_data">Kirim Formulir Terfinalisasi</string>
   <string name="send_data_button">Kirim Formulir Terfinalisasi (%s)</string>
   <string name="send_selected_data">Kirim Terpilih</string>
-  <string name="send_selected_data_internet">Kirim (Internet)</string>
-  <string name="send_selected_data_sms">Kirim (SMS)</string>
   <string name="view_sent_forms">Lihat Formulir Terkirim</string>
   <string name="view_sent_forms_button">Lihat Formulir Terkirim (%s)</string>
   <string name="server_auth_credentials">Nama pengguna atau sandi untuk server tidak valid: %s</string>
@@ -606,8 +604,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses mikrofon pada perangkat. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="get_accounts_runtime_permission_denied_title">Izin untuk mengakses akun</string>
   <string name="get_accounts_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses akun. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
-  <string name="send_sms_runtime_permission_denied_title">Izin untuk mengirim SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengirim SMS. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Izin untuk membaca status telepon</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect tidak akan melakukan panggilan telepon, tetapi ODK Collect memerlukan akses ke beberapa informasi mengenai perangkat Anda, seperti nomor telepon dan ID perangkat.</string>
   <string name="form_update_category">Pembaruan formulir</string>
@@ -631,27 +627,10 @@
   <string name="instance_upload_cancelled">Permintaan unggah dibatalkan</string>
   <string name="hide_old_form_versions_setting_title">Sembunyikan versi formulir lawas</string>
   <string name="hide_old_form_versions_setting_summary">Hanya versi terbaru yang akan muncul dalam pilihan Formulir Kosong.</string>
-  <string name="sms_invalid_phone_number">Nomor telepon tidak valid.</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Tidak berhasil pada\' EEE, dd MMM yyyy\', pukul\' HH:mm \'dikarenakan tidak ada layanan SMS\'</string>
-  <string name="sms_no_number">\'Tidak berhasil pada\' EEE, dd MMM yyyy, \'pukul\' HH:mm \'dikarenakan tidak ada nomor telepon\'</string>
-  <string name="sms_fatal_error">\'Tidak berhasil pada\' EEE, dd MMM yyyy, \'pukul\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Tidak berhasil pada\' EEE, dd MMM yyyy, \'pukul\' HH:mm \'dikarenakan mode pesawat aktif.\'</string>
-  <string name="sms_no_message">Formulir ini tidak memiliki pertanyaan dengan Tag SMS.</string>
-  <string name="sms_encrypted_message">Formulir terenkripsi tidak dapat dikirimkan menggunakan SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Upaya pengiriman terakhir pada\' EEE, dd MMM yyyy, \'pukul\' HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="other">Pengiriman formulir, mengirimkan pesan %1$d dari %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Terkirim sebagai SMS pada\' EEE, dd MMM yyyy, \'pukul\' HH:mm</string>
-  <string name="sms_submission_queued">Dalam antrean pengiriman</string>
-  <string name="sms_submissions_notif_title">Pengiriman SMS</string>
-  <string name="sms_submissions_notif_description">Beberapa formulir saat ini sedang dikirim.</string>
   <string name="rank_items">Peringkat item</string>
   <string name="loading_form_failed">Kesalahan terjadi saat membuka formulir. Mohon coba lagi.</string>
   <string name="missing_google_account_dialog_title">Akun Google belum diatur</string>
   <string name="missing_google_account_dialog_desc">Untuk dapat mengirim formulir melalui Google Sheet Anda harus mengatur akun Google Anda di pengaturan Server.</string>
-  <string name="sms_invalid_phone_number_description">Atur nomor telepon tujuan untuk pengiriman melalui SMS atau ubah tipe pengiriman.</string>
   <string name="notification_channel_name">Pemberitahuan umum</string>
   <string name="corrupt_imported_preferences_error">Pengaturan yang sekarang bermasalah. Dari pengaturan admin, set ulang pengaturan atau impor pengaturan.</string>
   <string name="google_play_services_not_available">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi Google Play Service tidak tersedia.</string>
@@ -661,9 +640,6 @@
   <string name="background_location_disabled">Formulir ini hendak melacak lokasi Anda, tetapi pelacakan lokasi tidak aktif. Mohon aktifkan melalui menu %1$s di atas.</string>
   <string name="background_location_enabled">Formulir ini melacak lokasi Anda. Anda dapat menonaktifkan pelacakan melalui menu %1$s di atas.</string>
   <string name="open_file">Buka berkas</string>
-  <string name="sms_feature_disabled_dialog_title">Pengiriman melalui SMS dinonaktifkan.</string>
-  <string name="sms_feature_disabled_dialog_message">Pengiriman melalui SMS telah dinonaktifkan karena pembatasan Google Play Store.\n\nMohon pastikan orang yang mengonfigurasikan perangkat ini membaca rinciannya di bawah dan melakukan tindakan lanjutan.</string>
-  <string name="read_details">Baca rincian</string>
   <string name="google_sheets_encrypted_message">Formulir terenkripsi tidak dapat dikirimkan ke Google Sheets.</string>
   <string name="number_picker_title">Pemilihan nomor</string>
   <string name="too_complex_form">Formulir ini terlalu rumit untuk perangkat ini. Coba sederhanakan ekspresi atau minta bantuan di forum.</string>

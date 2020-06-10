@@ -29,9 +29,6 @@ public class CollectJobCreator implements JobCreator {
     @Override
     public Job create(@NonNull String tag) {
         switch (tag) {
-            case SmsSenderJob.TAG:
-                return new SmsSenderJob();
-
             case ServerPollingJob.TAG:
                 return new ServerPollingJob();
 

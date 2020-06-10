@@ -111,8 +111,6 @@
   <string name="send_data">დასრულებული ფორმების გაგზავნა</string>
   <string name="send_data_button">დასრულებული ფორმების გაგზავნა (%s)</string>
   <string name="send_selected_data">არჩეული ფორმების გაგზავნა</string>
-  <string name="send_selected_data_internet">გაგზავნა (ინტერნეტი)</string>
-  <string name="send_selected_data_sms">გაგზავნა (მოკლე ტექსტური შეტყობინება)</string>
   <string name="view_sent_forms">გაგზავნილი ფორმის ნახვა</string>
   <string name="view_sent_forms_button">გაგზავნილი ფორმების ნახვა (%s)</string>
   <string name="server_auth_credentials">სერვერის არასწორი პაროლი ან მომხმარებლის სახელი: %s</string>
@@ -257,5 +255,4 @@
   <string name="autosend_selector_title">ავტომატურად გაგზავნა</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

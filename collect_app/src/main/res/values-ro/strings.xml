@@ -279,5 +279,4 @@
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">Da</string>
   <string name="no">Nu</string>
-  <!--Sms submission-->
 </resources>

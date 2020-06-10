@@ -111,8 +111,6 @@
   <string name="send_data">Enviar Formulario Finalizado</string>
   <string name="send_data_button">Enviar Formulario Finalizado (%s)</string>
   <string name="send_selected_data">Enviar seleccionado</string>
-  <string name="send_selected_data_internet">Enviar (Internet)</string>
-  <string name="send_selected_data_sms">Enviar (SMS)</string>
   <string name="view_sent_forms">Ver Formularios Enviados</string>
   <string name="view_sent_forms_button">Ver Formularios Enviados (%s)</string>
   <string name="server_auth_credentials">Usuario o contraseña inválidos para el servidor: %s</string>
@@ -611,8 +609,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder al micrófono. Intente de nuevo cuando esté el permiso.</string>
   <string name="get_accounts_runtime_permission_denied_title">Obtener permiso de la cuenta</string>
   <string name="get_accounts_runtime_permission_denied_desc">Sin los permisos no se puede acceder las cuentas. Intente de nuevo cuando haya otorgado los permisos.</string>
-  <string name="send_sms_runtime_permission_denied_title">Enviar permiso SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">Sin los permisos no se puede enviar SMS. Intente de nuevo cuando haya otorgado los permisos.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Lea el permiso del estado del teléfono</string>
   <string name="read_phone_state_runtime_permission_denied_desc">La aplicación  no hace llamadas pero necesita acceso a ciertas propiedades del teléfono como el número telefónico y el IMEI.</string>
   <string name="form_update_category">Actualizar Formulario</string>
@@ -636,28 +632,10 @@
   <string name="instance_upload_cancelled">Cargue de Instancia cancelada</string>
   <string name="hide_old_form_versions_setting_title">Ocultar formularios anteriores </string>
   <string name="hide_old_form_versions_setting_summary">Sólo la versión mas nueva aparecerá en Llenar Nuevo Formulario</string>
-    <string name="sms_invalid_phone_number">¡Número de teléfono inválido!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a no recepción\'</string>
-  <string name="sms_no_number">\'Fallo en\' EEE, MMM dd, yyyy \'at\' HH:mm \': Falta número telefónico\'</string>
-  <string name="sms_fatal_error">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
-  <string name="sms_airplane_mode">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a  que el Modo Avión esta activado\'</string>
-  <string name="sms_no_message">Este formulario no tiene etiquetas SMS</string>
-  <string name="sms_encrypted_message">Formularios encriptados no pueden ser enviados vía SMS</string>
-  <string name="sms_last_submission_on_date_at_time">\'Ultimo intento de envío a\' EEE, MMM dd, yyyy \' \' HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Submitting form as a single message.</item>
-    <item quantity="other">Enviando formulario, enviando mensaje %1$d de %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Enviado como SMS en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
-  <string name="sms_submission_queued">En cola para envío</string>
-  <string name="sms_submissions_notif_title">SMS enviados</string>
-  <string name="sms_submissions_notif_description">Varios formularios están siendo enviados actualmente.</string>
     <string name="rank_items">Ranking de Items</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
   <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>
-  <string name="sms_invalid_phone_number_description">Especifique un número telefónico para el envío de SMS o cambie el tipo de transporte</string>
   <string name="notification_channel_name">Notificaciones generales</string>
   <string name="corrupt_imported_preferences_error">Los ajustes actuales están corruptos. Desde la configuración de administrador, restablecer la configuración o importar.</string>
   <string name="google_play_services_not_available">Este formulario quiere rastrear su ubicación, pero los servicios de Google Play no están disponibles.</string>
@@ -667,9 +645,6 @@
   <string name="background_location_disabled">Este formulario requiere registrar su localización, pero el rastreo esta deshabilitado. Favor habilitar en el menú de arriba %1$s .</string>
   <string name="background_location_enabled">Este formulario registra su localización. Puede deshabilitar el rastreo en el menú de arriba %1$s.</string>
   <string name="open_file">Abrir archivo</string>
-  <string name="sms_feature_disabled_dialog_title">Envíos via SMS Deshabilitado</string>
-  <string name="sms_feature_disabled_dialog_message">Envio de datos via SMS  se ha deshabilitado por restricciones de Google Play Store .\n\nPor favor asegúrese que la persona que configuró el dispositivo lea los detalles abajo y tome la acción que corresponda.</string>
-  <string name="read_details">Leer detalles</string>
   <string name="google_sheets_encrypted_message">Los formularios encriptados no pueden ser enviados a Google Sheets</string>
   <string name="number_picker_title">Selector de números</string>
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>

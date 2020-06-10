@@ -16,7 +16,6 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.StrictMode;
@@ -36,8 +35,6 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
-import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 
@@ -53,8 +50,6 @@ import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
-import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
-import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
 
 /**
  * The Open Data Kit Collect application.
@@ -139,9 +134,6 @@ public class Collect extends Application {
         applicationInitializer.initializeFrameworks();
         applicationInitializer.initializeLocale();
         fixGoogleBug154855417();
-
-        registerReceiver(new SmsSentBroadcastReceiver(), new IntentFilter(SMS_SEND_ACTION));
-        registerReceiver(new SmsNotificationReceiver(), new IntentFilter(SMS_NOTIFICATION_ACTION));
 
         initializeJavaRosa();
         setupStrictMode();
