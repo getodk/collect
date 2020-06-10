@@ -28,7 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
-import org.odk.collect.android.widgets.interfaces.ButtonWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
@@ -39,7 +39,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class UrlWidget extends QuestionWidget implements ButtonWidget {
+public class UrlWidget extends QuestionWidget implements ButtonClickListener {
 
     private Uri uri;
     final Button openUrlButton;

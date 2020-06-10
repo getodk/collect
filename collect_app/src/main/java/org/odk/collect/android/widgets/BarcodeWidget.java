@@ -35,6 +35,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
@@ -44,7 +45,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
+public class BarcodeWidget extends QuestionWidget implements BinaryWidget, ButtonClickListener {
     final Button getBarcodeButton;
     final TextView stringAnswer;
 

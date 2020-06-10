@@ -30,7 +30,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.StringUtils;
-import org.odk.collect.android.widgets.interfaces.ButtonWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -48,7 +48,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class SpinnerMultiWidget extends ItemsWidget implements ButtonWidget, MultiChoiceWidget {
+public class SpinnerMultiWidget extends ItemsWidget implements ButtonClickListener, MultiChoiceWidget {
 
     // The possible select answers
     String[] answerItems;

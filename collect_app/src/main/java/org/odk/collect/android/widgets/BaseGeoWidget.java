@@ -15,7 +15,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.GeoWidget;
 
 public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
@@ -45,7 +44,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
 
             startGeoButton.setOnClickListener(v -> {
                 if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
-                    ((ButtonWidget) this).onButtonClick(R.id.simple_button);
+                    this.onButtonClick(R.id.simple_button);
                 }
             });
         }
