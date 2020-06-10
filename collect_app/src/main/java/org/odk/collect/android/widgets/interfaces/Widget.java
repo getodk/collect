@@ -11,8 +11,6 @@ public interface Widget {
 
     void clearAnswer();
 
-    void waitForData();
-
     void cancelWaitingForData();
 
     boolean isWaitingForData();

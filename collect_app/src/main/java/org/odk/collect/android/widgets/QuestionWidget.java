@@ -438,8 +438,6 @@ public abstract class QuestionWidget
     }
 
     //region Data waiting
-
-    @Override
     public final void waitForData() {
         Collect collect = Collect.getInstance();
         if (collect == null) {
