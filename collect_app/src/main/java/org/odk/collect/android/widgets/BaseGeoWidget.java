@@ -16,14 +16,17 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
+    private final WaitingForDataRegistry waitingForDataRegistry;
     public Button startGeoButton;
     public TextView answerDisplay;
     protected boolean readOnly;
 
-    public BaseGeoWidget(Context context, QuestionDetails questionDetails) {
+    public BaseGeoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
         readOnly = getFormEntryPrompt().isReadOnly();
     }
 
@@ -92,7 +95,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
         getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                waitForData();
+                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
                 startGeoActivity();
             }
 

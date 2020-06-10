@@ -46,6 +46,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
 
@@ -63,22 +64,24 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     private MediaUtil mediaUtil;
 
     private String binaryName;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
     Button chooseFileButton;
     TextView chosenFileNameTextView;
     private LinearLayout answerLayout;
 
-    public ArbitraryFileWidget(Context context, QuestionDetails prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil());
+    public ArbitraryFileWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry);
     }
 
-    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
+    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
 
         binaryName = questionDetails.getPrompt().getAnswerText();
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         setUpLayout(context);
     }
@@ -107,7 +110,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
 
     @Override
     public void onButtonClick(int buttonId) {
-        waitForData();
+        waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         performFileSearch();
     }
 

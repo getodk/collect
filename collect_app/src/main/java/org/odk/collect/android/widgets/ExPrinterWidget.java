@@ -30,6 +30,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
@@ -119,9 +120,11 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 public class ExPrinterWidget extends QuestionWidget implements BinaryWidget, ButtonClickListener {
 
     final Button launchIntentButton;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public ExPrinterWidget(Context context, QuestionDetails prompt) {
+    public ExPrinterWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
@@ -228,10 +231,10 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget, But
         String v = getFormEntryPrompt().getSpecialFormQuestionText("noPrinterErrorString");
         errorString = (v != null) ? v : getContext().getString(R.string.no_printer);
         try {
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             firePrintingActivity(intentName);
         } catch (ActivityNotFoundException e) {
-            cancelWaitingForData();
+            waitingForDataRegistry.cancelWaitingForData();
             Toast.makeText(getContext(),
                     errorString, Toast.LENGTH_SHORT)
                     .show();

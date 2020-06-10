@@ -10,8 +10,4 @@ public interface Widget {
     IAnswerData getAnswer();
 
     void clearAnswer();
-
-    void cancelWaitingForData();
-
-    boolean isWaitingForData();
 }

@@ -36,6 +36,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
@@ -48,9 +49,11 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
 public class BarcodeWidget extends QuestionWidget implements BinaryWidget, ButtonClickListener {
     final Button getBarcodeButton;
     final TextView stringAnswer;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public BarcodeWidget(Context context, QuestionDetails questionDetails) {
+    public BarcodeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         getBarcodeButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.get_barcode), getAnswerFontSize(), this);
 
@@ -126,7 +129,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget, Butto
         getPermissionUtils().requestCameraPermission((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                waitForData();
+                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
 
                 IntentIntegrator intent = new IntentIntegrator((Activity) getContext())
                         .setCaptureActivity(ScannerWithFlashlightActivity.class);

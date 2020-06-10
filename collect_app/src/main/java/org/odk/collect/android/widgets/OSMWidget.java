@@ -27,6 +27,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,10 +58,12 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget, ButtonCli
     private final String instanceId;
     private final int formId;
     private final String formFileName;
+    private final WaitingForDataRegistry waitingForDataRegistry;
     private String osmFileName;
 
-    public OSMWidget(Context context, QuestionDetails questionDetails) {
+    public OSMWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         FormController formController = Collect.getInstance().getFormController();
 
@@ -156,10 +159,10 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget, ButtonCli
             writeOsmRequiredTagsToExtras(launchIntent);
 
             try {
-                waitForData();
+                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
                 ((Activity) getContext()).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
             } catch (ActivityNotFoundException e) {
-                cancelWaitingForData();
+                waitingForDataRegistry.cancelWaitingForData();
                 errorTextView.setVisibility(View.VISIBLE);
             }
 

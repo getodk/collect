@@ -33,6 +33,7 @@ import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
 import java.util.Locale;
@@ -55,8 +56,8 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     private boolean selfie;
 
-    public ImageWidget(Context context, final QuestionDetails prompt) {
-        super(context, prompt);
+    public ImageWidget(Context context, final QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+        super(context, prompt, waitingForDataRegistry);
         imageClickHandler = new ViewImageClickHandler();
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
