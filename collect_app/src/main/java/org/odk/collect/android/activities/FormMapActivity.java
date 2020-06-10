@@ -170,6 +170,12 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateInstanceGeometry();
+    }
+
+    @Override
     public void onBackPressed() {
         if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             hideSummary();
