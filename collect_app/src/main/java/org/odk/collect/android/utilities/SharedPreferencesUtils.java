@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
+import org.odk.collect.android.preferences.PreferenceImporter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -116,7 +116,7 @@ public final class SharedPreferencesUtils {
                 builder.append(line);
             }
 
-            new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(builder.toString(), null);
+            new PreferenceImporter(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(builder.toString(), null);
 
             Collect.getInstance().initializeJavaRosa();
             res = true;

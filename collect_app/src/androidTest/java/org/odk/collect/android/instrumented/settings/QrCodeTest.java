@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
+import org.odk.collect.android.preferences.PreferenceImporter;
 import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.utilities.FileUtils;
@@ -88,7 +88,7 @@ public class QrCodeTest {
         assertNotEquals(resultIfAllSharedPreferencesAreDefault, result);
 
         // update shared preferences using the QrCode
-        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(result, null);
+        new PreferenceImporter(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(result, null);
 
         // assert that values have updated properly
         assertPreferenceHaveDefaultValue(keys, false);

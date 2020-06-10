@@ -8,7 +8,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
+import org.odk.collect.android.preferences.PreferenceImporter;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -22,7 +22,7 @@ public class SettingsUtils {
     }
 
     public static void applySettings(Activity activity, String content) {
-        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
+        new PreferenceImporter(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
             @Override
             public void onSuccess() {
                 Collect.getInstance().initializeJavaRosa();

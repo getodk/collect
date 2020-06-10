@@ -35,6 +35,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
@@ -50,7 +52,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
+import org.odk.collect.android.preferences.PreferenceImporter;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -273,6 +275,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
         File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
+
         // Give JSON file preference
         if (j.exists()) {
             boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
@@ -508,18 +511,19 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             input = new ObjectInputStream(new FileInputStream(src));
 
             // first object is preferences
-            Map<String, Object> entries = (Map<String, Object>) input.readObject();
-
-            AutoSendPreferenceMigrator.migrate(entries);
-            PreferenceSaver.saveGeneralPrefs(generalSharedPreferences, entries);
-
-            // second object is admin options
+            Map<String, Object> generalEntries = (Map<String, Object>) input.readObject();
             Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
-            PreferenceSaver.saveAdminPrefs(AdminSharedPreferences.getInstance(), adminEntries);
+
+            JSONObject settings = new JSONObject()
+                    .put("general", new JSONObject(generalEntries))
+                    .put("admin", new JSONObject(adminEntries));
+
+            AutoSendPreferenceMigrator.migrate(generalEntries);
+            new PreferenceImporter(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(settings.toString(), null);
 
             Collect.getInstance().initializeJavaRosa();
             res = true;
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | JSONException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } finally {
             try {
@@ -530,6 +534,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
             }
         }
+
         return res;
     }
 

@@ -14,7 +14,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SERVER_URL;
 
 @RunWith(RobolectricTestRunner.class)
-public class PreferenceSaverTest {
+public class PreferenceImporterTest {
 
     @Test
     public void fromJSON_whenPreferencesAreValid_savesIncludedGeneralKeys_andResetsMissingGeneralKeys() throws Exception {
@@ -25,7 +25,7 @@ public class PreferenceSaverTest {
         general.put(KEY_PASSWORD, "password");
 
         GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
-        new PreferenceSaver(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), mock(ActionListener.class));
+        new PreferenceImporter(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), mock(ActionListener.class));
 
         verify(generalSharedPreferences).save(KEY_PASSWORD, "password");
         verify(generalSharedPreferences).reset(KEY_SERVER_URL);
@@ -42,7 +42,7 @@ public class PreferenceSaverTest {
         ActionListener listener = mock(ActionListener.class);
 
         GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
-        new PreferenceSaver(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), listener);
+        new PreferenceImporter(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), listener);
 
         verify(listener).onSuccess();
     }
@@ -56,7 +56,7 @@ public class PreferenceSaverTest {
         general.put(KEY_PASSWORD, false);
 
         GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
-        new PreferenceSaver(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), mock(ActionListener.class));
+        new PreferenceImporter(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), mock(ActionListener.class));
 
         verify(generalSharedPreferences, never()).save(any(), any());
         verify(generalSharedPreferences, never()).reset(any());
@@ -72,7 +72,7 @@ public class PreferenceSaverTest {
 
         GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
         ActionListener listener = mock(ActionListener.class);
-        new PreferenceSaver(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), listener);
+        new PreferenceImporter(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(content.toString(), listener);
 
         verify(listener).onFailure(any(GeneralSharedPreferences.ValidationException.class));
     }

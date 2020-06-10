@@ -32,12 +32,12 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.DEFAULTS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SERVER_URL;
 
-public class PreferenceSaver {
+public class PreferenceImporter {
 
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public PreferenceSaver(GeneralSharedPreferences generalSharedPreferences, AdminSharedPreferences adminSharedPreferences) {
+    public PreferenceImporter(GeneralSharedPreferences generalSharedPreferences, AdminSharedPreferences adminSharedPreferences) {
         this.generalSharedPreferences = generalSharedPreferences;
         this.adminSharedPreferences = adminSharedPreferences;
     }
@@ -71,7 +71,7 @@ public class PreferenceSaver {
         }
     }
 
-    public static void saveGeneralPrefs(GeneralSharedPreferences generalSharedPreferences, Map<String, Object> generalPrefs) {
+    private static void saveGeneralPrefs(GeneralSharedPreferences generalSharedPreferences, Map<String, Object> generalPrefs) {
         for (String key : getAllGeneralKeys()) {
             if (generalPrefs.containsKey(key)) {
                 Object value = generalPrefs.get(key);
@@ -85,7 +85,7 @@ public class PreferenceSaver {
         }
     }
 
-    public static void saveAdminPrefs(AdminSharedPreferences adminSharedPreferences, Map<String, Object> adminPrefsJson) {
+    private static void saveAdminPrefs(AdminSharedPreferences adminSharedPreferences, Map<String, Object> adminPrefsJson) {
         for (String key : getAllAdminKeys()) {
             if (adminPrefsJson.containsKey(key)) {
                 Object value = adminPrefsJson.get(key);
