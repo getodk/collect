@@ -33,14 +33,16 @@ public class ApplicationInitializer {
     private final CollectJobCreator collectJobCreator;
     private final SharedPreferences metaSharedPreferences;
     private final UserAgentProvider userAgentProvider;
+    private final MigratorProvider migratorProvider;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, SharedPreferences metaSharedPreferences, UserAgentProvider userAgentProvider) {
+    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, SharedPreferences metaSharedPreferences, UserAgentProvider userAgentProvider, MigratorProvider migratorProvider) {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
         this.metaSharedPreferences = metaSharedPreferences;
         this.userAgentProvider = userAgentProvider;
+        this.migratorProvider = migratorProvider;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
@@ -89,11 +91,9 @@ public class ApplicationInitializer {
     }
 
     private void performMigrations() {
-        new PrefMigrator(
-                generalSharedPreferences.getSharedPreferences(),
-                adminSharedPreferences.getSharedPreferences(),
-                metaSharedPreferences)
-                .migrate();
+        migratorProvider.getGeneralMigrator().migrate(generalSharedPreferences.getSharedPreferences());
+        migratorProvider.getAdminMigrator().migrate(adminSharedPreferences.getSharedPreferences());
+        migratorProvider.getMetaMigrator().migrate(metaSharedPreferences);
 
         AutoSendPreferenceMigrator.migrate();
     }

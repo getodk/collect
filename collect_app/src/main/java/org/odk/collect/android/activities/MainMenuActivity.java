@@ -49,7 +49,6 @@ import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceImporter;
@@ -518,7 +517,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     .put("general", new JSONObject(generalEntries))
                     .put("admin", new JSONObject(adminEntries));
 
-            AutoSendPreferenceMigrator.migrate(generalEntries);
             new PreferenceImporter(generalSharedPreferences, AdminSharedPreferences.getInstance()).fromJSON(settings.toString(), null);
 
             Collect.getInstance().initializeJavaRosa();

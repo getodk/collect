@@ -16,6 +16,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.support.AlwaysDenyStoragePermissionPermissionUtils;
 import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionUtils;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.application.initialization.MigratorProvider;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -53,7 +54,7 @@ public class SplashScreenActivityTest {
             }
 
             @Override
-            public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, PreferencesProvider preferencesProvider, UserAgentProvider userAgentProvider) {
+            public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, PreferencesProvider preferencesProvider, UserAgentProvider userAgentProvider, MigratorProvider migratorProvider) {
                 return applicationInitializer;
             }
         });

@@ -3,7 +3,7 @@ package org.odk.collect.android.application.initialization.migration;
 import android.content.SharedPreferences;
 import java.util.Map;
 
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.put;
+import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 
 public class ValueTranslator implements Migration {
 

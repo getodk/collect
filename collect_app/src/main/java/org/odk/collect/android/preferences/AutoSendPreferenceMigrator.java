@@ -19,7 +19,6 @@ public class AutoSendPreferenceMigrator {
     }
 
     public static void migrate() {
-
         boolean autoSendWifi = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_WIFI, false);
         boolean autoSendNetwork = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_NETWORK, false);
 

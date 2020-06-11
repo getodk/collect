@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.utilities;
+package org.odk.collect.android.preferences.qr;
 
 import android.app.Activity;
 
@@ -16,12 +16,12 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
-public class SettingsUtils {
+public class QRUtils {
 
-    private SettingsUtils() {
+    private QRUtils() {
     }
 
-    public static void applySettings(Activity activity, String content) {
+    public static void importSettingsFromQR(Activity activity, String content) {
         new PreferenceImporter(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
             @Override
             public void onSuccess() {

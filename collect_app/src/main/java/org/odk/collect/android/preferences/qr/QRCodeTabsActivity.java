@@ -22,7 +22,6 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -127,7 +126,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
                             String response = QRCodeUtils.decodeFromBitmap(bitmap);
                             if (response != null) {
                                 qrCodeFound = true;
-                                SettingsUtils.applySettings(this, response);
+                                QRUtils.importSettingsFromQR(this, response);
                             }
                         }
                     }
