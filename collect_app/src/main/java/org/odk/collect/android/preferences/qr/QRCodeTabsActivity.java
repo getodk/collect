@@ -66,8 +66,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-        setContentView(R.layout.qrcode_tab);
-
+        setContentView(R.layout.tabs_layout);
         initToolbar();
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider, scheduler);
 
