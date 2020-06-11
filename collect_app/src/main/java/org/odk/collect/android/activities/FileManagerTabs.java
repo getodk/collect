@@ -15,25 +15,17 @@
 package org.odk.collect.android.activities;
 
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.ViewPagerAdapter;
-import org.odk.collect.android.fragments.DataManagerList;
-import org.odk.collect.android.fragments.FormManagerList;
-import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.views.SlidingTabLayout;
-
-import java.util.ArrayList;
+import org.odk.collect.android.adapters.FileManagerTabsAdapter;
 
 public class FileManagerTabs extends CollectAbstractActivity {
-
-    private final DataManagerList dataManagerList = DataManagerList.newInstance();
-    private final FormManagerList formManagerList = FormManagerList.newInstance();
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -49,24 +41,10 @@ public class FileManagerTabs extends CollectAbstractActivity {
         initToolbar();
 
         String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
-        // Get the ViewPager and set its PagerAdapter so that it can display items
-        ViewPager viewPager = findViewById(R.id.pager);
-
-        ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(dataManagerList);
-        fragments.add(formManagerList);
-
-        viewPager.setAdapter(new ViewPagerAdapter(
-                getSupportFragmentManager(), tabNames, fragments));
-
-        // Give the SlidingTabLayout the ViewPager
-        SlidingTabLayout slidingTabLayout = findViewById(R.id.tabs);
-        slidingTabLayout.setCustomTabColorizer(position -> new ThemeUtils(this).getColorSecondary());
-        // Attach the view pager to the tab strip
-        slidingTabLayout.setDistributeEvenly(true);
-        slidingTabLayout.setFontColor(android.R.color.white);
-        slidingTabLayout.setBackgroundColor(Color.DKGRAY);
-        slidingTabLayout.setViewPager(viewPager);
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        viewPager.setAdapter(new FileManagerTabsAdapter(this));
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(tabNames[position])).attach();
     }
 
     @Override
