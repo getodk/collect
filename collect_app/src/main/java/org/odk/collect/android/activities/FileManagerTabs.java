@@ -26,19 +26,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileManagerTabsAdapter;
 
 public class FileManagerTabs extends CollectAbstractActivity {
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.manage_files));
-        setSupportActionBar(toolbar);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.tabs_layout);
-        initToolbar();
+        initToolbar(getString(R.string.manage_files));
         setUpViewPager();
     }
 
