@@ -4,6 +4,8 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.StringData;
@@ -28,6 +30,7 @@ import java.util.Random;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -70,6 +73,12 @@ public class GeoPointWidgetTest {
     }
 
     @Test
+    public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
+        GeoPointWidget widget = createWidget(promptWithReadOnly());
+        assertThat(widget.startGeoButton.getVisibility(), equalTo(View.GONE));
+    }
+
+    @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), equalTo(null));
@@ -103,9 +112,24 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
-        GeoPointWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.startGeoButton.getVisibility(), equalTo(View.GONE));
+    public void clickingButtonForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        widget.setOnLongClickListener(listener);
+        widget.startGeoButton.performLongClick();
+
+        verify(listener).onLongClick(widget.startGeoButton);
+    }
+
+    @Test
+    public void cancelLongPress_callsCancelLongPressForButtonAndTextView() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        widget.startGeoButton = mock(Button.class);
+        widget.answerDisplay = mock(TextView.class);
+        widget.cancelLongPress();
+
+        verify(widget.startGeoButton).cancelLongPress();
+        verify(widget.answerDisplay).cancelLongPress();
     }
 
     @Test
@@ -128,21 +152,21 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void whenWidgetHasAppearanceAndIsReadOnly_buttonShowsCorrectText() {
+    public void ifWidgetHasMapsAndIsReadOnly_buttonShowsCorrectText() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
-        GeoPointWidget widget = createWidget(promptWithAppearance(PLACEMENT_MAP, true));
+        GeoPointWidget widget = createWidget(promptWithAppearance(MAPS, true));
         assertThat(widget.startGeoButton.getText().toString(), equalTo(widget.getContext().getString(R.string.geopoint_view_read_only)));
     }
 
     @Test
-    public void whenWidgetHasAppearanceAndNullAsAnswer_buttonShowsCorrectText() {
+    public void ifWidgetHasMapsAndNullAsAnswer_buttonShowsCorrectText() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
-        GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(PLACEMENT_MAP, null));
+        GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(MAPS, null));
         assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.get_point)));
     }
 
     @Test
-    public void whenWidgetHasAppearanceAndAnswer_buttonShowsCorrectText() {
+    public void ifWidgetHasMapsAndAnswer_buttonShowsCorrectText() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(MAPS, new StringData(answer)));
         assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.view_change_location)));
@@ -161,9 +185,19 @@ public class GeoPointWidgetTest {
     }
 
     @Test
+    public void whenPermissionIsNotGranted_buttonShouldNotLaunchAnyIntent() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        stubLocationPermissions(widget, false);
+        widget.startGeoButton.performClick();
+        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
+
+        assertNull(startedIntent);
+    }
+
+    @Test
     public void whenPromptDoesNotHaveAnswer_buttonShouldLaunchCorrectIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
-        stubAllRuntimePermissionsGranted(widget, true);
+        stubLocationPermissions(widget, true);
         widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
@@ -176,7 +210,7 @@ public class GeoPointWidgetTest {
     @Test
     public void whenPromptHasAnswer_buttonShouldLaunchCorrectIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        stubAllRuntimePermissionsGranted(widget, true);
+        stubLocationPermissions(widget, true);
         widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
@@ -187,10 +221,10 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void whenPromptHasPlacementMapAppearance_buttonShouldLaunchCorrectIntent() {
+    public void ifWidgetHasPlacementMaps_buttonShouldLaunchCorrectIntent() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearance(PLACEMENT_MAP, false));
-        stubAllRuntimePermissionsGranted(widget, true);
+        stubLocationPermissions(widget, true);
         widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
@@ -201,10 +235,10 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void whenPromptHasMapsAppearance_buttonShouldLaunchCorrectIntent() {
+    public void ifWidgetHasMaps_buttonShouldLaunchCorrectIntent() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearance(MAPS, false));
-        stubAllRuntimePermissionsGranted(widget, true);
+        stubLocationPermissions(widget, true);
         widget.startGeoButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
@@ -225,7 +259,7 @@ public class GeoPointWidgetTest {
         assertThat(bundle.getDouble(ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
     }
 
-    protected void stubAllRuntimePermissionsGranted(GeoPointWidget widget, boolean isGranted) {
+    protected void stubLocationPermissions(GeoPointWidget widget, boolean isGranted) {
         permissionUtils.setPermissionGranted(isGranted);
         widget.setPermissionUtils(permissionUtils);
     }
