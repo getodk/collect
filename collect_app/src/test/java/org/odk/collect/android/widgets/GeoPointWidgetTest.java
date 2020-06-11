@@ -21,6 +21,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -64,11 +65,13 @@ public class GeoPointWidgetTest {
 
     private QuestionDef questionDef;
     private MapConfigurator mapConfigurator;
+    private WaitingForDataRegistry waitingForDataRegistry;
 
     @Before
     public void setup() {
         questionDef = mock(QuestionDef.class);
         mapConfigurator = mock(MapConfigurator.class);
+        waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         when(questionDef.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
     }
 
@@ -93,7 +96,7 @@ public class GeoPointWidgetTest {
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(widget.getAnswer().getDisplayText(), equalTo(answer));
+        assertThat(widget.getAnswer().toString(), equalTo(answer));
     }
 
     @Test
@@ -135,6 +138,12 @@ public class GeoPointWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        assertThat(widget.answerDisplay.getText().toString(), equalTo(""));
+    }
+
+    @Test
+    public void whenPromptAnswerDoesNotHaveConvertibleString_textViewDisplaysEmptyString() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertThat(widget.answerDisplay.getText().toString(), equalTo(""));
     }
 
@@ -195,6 +204,16 @@ public class GeoPointWidgetTest {
     }
 
     @Test
+    public void whenPermissionIsGranted_buttonClickShouldSetTheLocationSavedOnTheMap() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoPointWidget widget = createWidget(prompt);
+        stubLocationPermissions(widget, true);
+        widget.startGeoButton.performClick();
+
+        verify(waitingForDataRegistry).waitForData(prompt.getIndex());
+    }
+
+    @Test
     public void whenPromptDoesNotHaveAnswer_buttonShouldLaunchCorrectIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         stubLocationPermissions(widget, true);
@@ -249,7 +268,7 @@ public class GeoPointWidgetTest {
     }
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
-        return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef, mapConfigurator);
+        return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef, mapConfigurator, waitingForDataRegistry);
     }
 
     private void assertBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, boolean readOnly, boolean draggableOnly) {

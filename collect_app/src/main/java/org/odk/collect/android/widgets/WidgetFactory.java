@@ -78,7 +78,7 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        questionWidget = new GeoPointWidget(context, questionDetails, questionDetails.getPrompt().getQuestion(), MapProvider.getConfigurator());
+                        questionWidget = new GeoPointWidget(context, questionDetails, questionDetails.getPrompt().getQuestion(), MapProvider.getConfigurator(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
                         questionWidget = new GeoShapeWidget(context, questionDetails, waitingForDataRegistry);

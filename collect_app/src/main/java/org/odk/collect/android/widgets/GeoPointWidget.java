@@ -37,7 +37,9 @@ import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -52,26 +54,28 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppeara
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoPointWidget extends QuestionWidget {
+public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
+    private final MapConfigurator mapConfigurator;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
     protected Button startGeoButton;
     protected TextView answerDisplay;
 
-    private final MapConfigurator mapConfigurator;
     private boolean readOnly;
     private boolean draggable = true;
     private boolean useMap;
     private double accuracyThreshold;
     private String stringAnswer;
 
-    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, MapConfigurator mapConfigurator) {
+    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, MapConfigurator mapConfigurator, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
         this.mapConfigurator = mapConfigurator;
+        this.waitingForDataRegistry = waitingForDataRegistry;
         determineMapProperties(questionDef);
 
         stringAnswer = getFormEntryPrompt().getAnswerText();
@@ -135,6 +139,19 @@ public class GeoPointWidget extends QuestionWidget {
         answerDisplay.cancelLongPress();
     }
 
+    @Override
+    public void setBinaryData(Object answer) {
+        stringAnswer = (String) answer;
+        answerDisplay.setText(getAnswerToDisplay(stringAnswer));
+
+        if (answerDisplay.getText().toString().equals("")) {
+            stringAnswer = "";
+        }
+
+        updateButtonLabelsAndVisibility(stringAnswer != null);
+        widgetValueChanged();
+    }
+
     private void determineMapProperties(QuestionDef questionDef) {
         // Determine the accuracy threshold to use.
         String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
@@ -150,18 +167,6 @@ public class GeoPointWidget extends QuestionWidget {
                 useMap = true;
             }
         }
-    }
-
-    private void setBinaryData(Object answer) {
-        stringAnswer = (String) answer;
-        answerDisplay.setText(getAnswerToDisplay(stringAnswer));
-
-        if (answerDisplay.getText().toString().equals("")) {
-            stringAnswer = "";
-        }
-
-        updateButtonLabelsAndVisibility(stringAnswer != null);
-        widgetValueChanged();
     }
 
     private String getAnswerToDisplay(String answer) {
@@ -203,6 +208,7 @@ public class GeoPointWidget extends QuestionWidget {
             getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
                 @Override
                 public void granted() {
+                    waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
                     startGeoActivity();
                 }
 
