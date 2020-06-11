@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
 import android.content.Intent;
 import android.view.Menu;
@@ -20,7 +20,7 @@ import timber.log.Timber;
 
 public class QRCodeMenuDelegate implements MenuDelegate {
 
-    static final int SELECT_PHOTO = 111;
+    public static final int SELECT_PHOTO = 111;
 
     private final FragmentActivity activity;
     private final ActivityAvailability activityAvailability;

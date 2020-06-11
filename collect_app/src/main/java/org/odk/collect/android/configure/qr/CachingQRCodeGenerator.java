@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
 import android.graphics.Bitmap;
 
@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.File;
@@ -60,7 +59,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
         if (shouldWriteToDisk) {
             Timber.i("Generating QRCode...");
             final long time = System.currentTimeMillis();
-            Bitmap bmp = QRCodeUtils.encode(preferencesString);
+            Bitmap bmp = new QRCodeUtils().encode(preferencesString);
             Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
 
             Timber.i("Saving QR Code to disk... : " + getQRCodeFilepath());

@@ -18,15 +18,9 @@ import android.content.SharedPreferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceImporter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -103,38 +97,6 @@ public final class SharedPreferencesUtils {
         prefs.put("admin", adminPrefs);
 
         return prefs;
-    }
-
-    public static boolean loadSharedPreferencesFromJSONFile(File src) {
-        boolean res = false;
-        BufferedReader br = null;
-
-        try {
-            String line = null;
-            StringBuilder builder = new StringBuilder();
-            br = new BufferedReader(new FileReader(src));
-
-            while ((line = br.readLine()) != null) {
-                builder.append(line);
-            }
-
-            new PreferenceImporter(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(builder.toString(), null);
-
-            Collect.getInstance().initializeJavaRosa();
-            res = true;
-        } catch (IOException e) {
-            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
-        }
-
-        return res;
     }
 
     public static Collection<String> getAllGeneralKeys() {

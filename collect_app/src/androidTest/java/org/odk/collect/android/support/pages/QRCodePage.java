@@ -22,33 +22,33 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage> {
-    public QRCodeTabsActivityPage(ActivityTestRule rule) {
+public class QRCodePage extends Page<QRCodePage> {
+    public QRCodePage(ActivityTestRule rule) {
         super(rule);
     }
 
     @Override
-    public QRCodeTabsActivityPage assertOnPage() {
+    public QRCodePage assertOnPage() {
         assertText(R.string.configure_via_qr_code);
         return this;
     }
 
-    public QRCodeTabsActivityPage clickScanFragment() {
+    public QRCodePage clickScanFragment() {
         onView(withText(R.string.scan_qr_code_fragment_title)).perform(click());
         return this;
     }
 
-    public QRCodeTabsActivityPage clickView() {
+    public QRCodePage clickView() {
         onView(withText(R.string.view_qr_code_fragment_title)).perform(click());
         return this;
     }
 
-    public QRCodeTabsActivityPage assertImageViewShowsImage(int resourceid, Bitmap image) {
+    public QRCodePage assertImageViewShowsImage(int resourceid, Bitmap image) {
         onView(withId(resourceid)).check(matches(DrawableMatcher.withBitmap(image)));
         return this;
     }
 
-    public QRCodeTabsActivityPage clickOnMenu() {
+    public QRCodePage clickOnMenu() {
         tryAgainOnFail(() -> {
             Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
             onView(withText(getTranslatedString(R.string.import_qrcode_sd))).check(matches(isDisplayed()));

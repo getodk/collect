@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.configure.qr.QRCodeMenuDelegate.SELECT_PHOTO;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -53,6 +54,7 @@ public class QRCodeMenuDelegateTest {
 
         ShadowActivity.IntentForResult intentForResult = shadowOf(activity).getNextStartedActivityForResult();
         assertThat(intentForResult, notNullValue());
+        assertThat(intentForResult.requestCode, is(SELECT_PHOTO));
         assertThat(intentForResult.intent.getAction(), is(Intent.ACTION_PICK));
         assertThat(intentForResult.intent.getType(), is("image/*"));
     }

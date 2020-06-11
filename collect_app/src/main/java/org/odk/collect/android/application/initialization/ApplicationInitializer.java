@@ -1,7 +1,6 @@
 package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -14,10 +13,10 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -31,18 +30,16 @@ public class ApplicationInitializer {
 
     private final Application context;
     private final CollectJobCreator collectJobCreator;
-    private final SharedPreferences metaSharedPreferences;
     private final UserAgentProvider userAgentProvider;
-    private final MigratorProvider migratorProvider;
+    private final PreferenceMigrator preferenceMigrator;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, SharedPreferences metaSharedPreferences, UserAgentProvider userAgentProvider, MigratorProvider migratorProvider) {
+    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator) {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
-        this.metaSharedPreferences = metaSharedPreferences;
         this.userAgentProvider = userAgentProvider;
-        this.migratorProvider = migratorProvider;
+        this.preferenceMigrator = preferenceMigrator;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
@@ -91,11 +88,7 @@ public class ApplicationInitializer {
     }
 
     private void performMigrations() {
-        migratorProvider.getGeneralMigrator().migrate(generalSharedPreferences.getSharedPreferences());
-        migratorProvider.getAdminMigrator().migrate(adminSharedPreferences.getSharedPreferences());
-        migratorProvider.getMetaMigrator().migrate(metaSharedPreferences);
-
-        AutoSendPreferenceMigrator.migrate();
+        preferenceMigrator.migrate();
     }
 
     private void initializeMapFrameworks() {

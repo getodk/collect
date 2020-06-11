@@ -16,14 +16,14 @@ package org.odk.collect.android.geo;
 
 import android.os.Bundle;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 import androidx.fragment.app.FragmentActivity;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 
 /**
  * Interface for a Fragment that renders a map view.  The plan is to have one

@@ -18,10 +18,14 @@ import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
+import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
+import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
+import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
+import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
@@ -39,8 +43,6 @@ import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
-import org.odk.collect.android.preferences.qr.ShowQRCodeFragment;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
@@ -175,8 +177,12 @@ public interface AppDependencyComponent {
 
     void inject(QuitFormDialogFragment quitFormDialogFragment);
 
+    void inject(BarCodeScannerFragment barCodeScannerFragment);
+
+    void inject(QRCodeScannerFragment qrCodeScannerFragment);
+
     void inject(FormChooserListActivity formChooserListActivity);
-  
+
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();

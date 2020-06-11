@@ -55,6 +55,12 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return new ServerSettingsPage(rule).assertOnPage();
     }
 
+    public MapsSettingsPage clickMaps() {
+        onData(PreferenceMatchers.withKey("maps")).perform(click());
+        return new MapsSettingsPage(rule).assertOnPage();
+    }
+
+
     public UserAndDeviceIdentitySettingsPage clickUserAndDeviceIdentity() {
         onData(PreferenceMatchers.withKey("user_and_device_identity")).perform(click());
         return new UserAndDeviceIdentitySettingsPage(rule).assertOnPage();

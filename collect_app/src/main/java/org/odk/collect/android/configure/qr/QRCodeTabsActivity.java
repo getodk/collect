@@ -1,10 +1,6 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,31 +9,19 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.configure.CollectSettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.QRCodeUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.async.Scheduler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.zip.DataFormatException;
-
-import timber.log.Timber;
-
 import javax.inject.Inject;
-
-import static org.odk.collect.android.preferences.qr.QRCodeMenuDelegate.SELECT_PHOTO;
 
 public class QRCodeTabsActivity extends CollectAbstractActivity {
 
@@ -58,12 +42,22 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     @Inject
     Scheduler scheduler;
 
+    @Inject
+    QRCodeDecoder qrCodeDecoder;
+
+    @Inject
+    CollectSettingsImporter collectSettingsImporter;
+
     private QRCodeMenuDelegate menuDelegate;
+    private QRCodeActivityResultDelegate activityResultDelegate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
+
+        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider, scheduler);
+        activityResultDelegate = new QRCodeActivityResultDelegate(this, collectSettingsImporter, qrCodeDecoder);
         setContentView(R.layout.tabs_layout);
 
         initToolbar(getString(R.string.configure_via_qr_code));
@@ -112,35 +106,6 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
-            try {
-                boolean qrCodeFound = false;
-                if (data != null) {
-                    final Uri imageUri = data.getData();
-                    if (imageUri != null) {
-                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-
-                        final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-                        if (bitmap != null) {
-                            String response = QRCodeUtils.decodeFromBitmap(bitmap);
-                            if (response != null) {
-                                qrCodeFound = true;
-                                QRUtils.importSettingsFromQR(this, response);
-                            }
-                        }
-                    }
-                }
-                if (!qrCodeFound) {
-                    ToastUtils.showLongToast(R.string.qr_code_not_found);
-                }
-            } catch (FormatException | NotFoundException | ChecksumException e) {
-                Timber.i(e);
-                ToastUtils.showLongToast(R.string.qr_code_not_found);
-            } catch (DataFormatException | IOException | OutOfMemoryError | IllegalArgumentException e) {
-                Timber.e(e);
-                ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
-            }
-        }
+        activityResultDelegate.onActivityResult(requestCode, resultCode, data);
     }
 }

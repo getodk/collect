@@ -5,11 +5,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.work.WorkManager;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.WriterException;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import org.json.JSONException;
 import org.junit.After;
@@ -18,9 +25,11 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.qr.QRCodeGenerator;
+import org.odk.collect.android.support.CallbackCountingTaskExecutorRule;
 import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;
 import org.odk.collect.android.support.IdlingResourceRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
@@ -28,6 +37,9 @@ import org.odk.collect.android.support.SchedulerIdlingResource;
 import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.QRCodePage;
+import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.Scheduler;
 
 import java.io.File;
@@ -43,7 +55,9 @@ public class ConfigureWithQRCodeTest {
 
     private final CollectTestRule rule = new CollectTestRule();
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
+    private final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
     private final TestScheduler testScheduler = new TestScheduler();
+    private final CallbackCountingTaskExecutorRule countingTaskExecutorRule = new CallbackCountingTaskExecutorRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -56,6 +70,11 @@ public class ConfigureWithQRCodeTest {
             .around(new ResetStateRule(new AppDependencyModule() {
 
                 @Override
+                public BarcodeViewDecoder providesBarcodeViewDecoder() {
+                    return stubBarcodeViewDecoder;
+                }
+
+                @Override
                 public QRCodeGenerator providesQRCodeGenerator(Context context) {
                     return stubQRCodeGenerator;
                 }
@@ -65,7 +84,9 @@ public class ConfigureWithQRCodeTest {
                     return testScheduler;
                 }
             }))
+            .around(countingTaskExecutorRule)
             .around(new IdlingResourceRule(new SchedulerIdlingResource(testScheduler)))
+            .around(new IdlingResourceRule(new CountingTaskExecutorIdlingResource(countingTaskExecutorRule)))
             .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
 
@@ -76,11 +97,37 @@ public class ConfigureWithQRCodeTest {
     }
 
     @Test
-    public void clickConfigureQRCode_opensScanner() {
+    public void clickConfigureQRCode_opensScanner_andThenScanning_importsSettings() {
+        QRCodePage qrCodePage = rule.mainMenu()
+                .clickOnMenu()
+                .clickConfigureQR();
+
+        stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
+        qrCodePage.checkIsToastWithMessageDisplayed(R.string.successfully_imported_settings);
+
+        new MainMenuPage(rule)
+                .assertOnPage()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickServerSettings()
+                .assertText("http://gallops.example");
+    }
+
+    @Test
+    public void clickConfigureQRCode_opensScanner_andThenScanning_whenUsingOldQR_importsSettingsAndMigrates() {
         rule.mainMenu()
                 .clickOnMenu()
-                .clickConfigureQR()
-                .checkIsIdDisplayed(R.id.zxing_barcode_surface);
+                .clickConfigureQR();
+
+        // Use QR code with maps settings from 1.22.0
+        stubBarcodeViewDecoder.scan("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_streets\"},\"admin\":{}}");
+
+        new MainMenuPage(rule)
+                .assertOnPage()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickMaps()
+                .assertText("OpenStreetMap");
     }
 
     @Test
@@ -170,6 +217,26 @@ public class ConfigureWithQRCodeTest {
             try (FileOutputStream out = new FileOutputStream(getQRCodeFilePath())) {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private static class StubBarcodeViewDecoder extends BarcodeViewDecoder {
+
+        MutableLiveData<BarcodeResult> liveData = new MutableLiveData<>();
+
+        @Override
+        public LiveData<BarcodeResult> waitForBarcode(DecoratedBarcodeView view) {
+            return liveData;
+        }
+
+        public void scan(String settings) {
+            try {
+                Result result = new Result(CompressionUtils.compress(settings), new byte[]{}, new ResultPoint[]{}, BarcodeFormat.AZTEC);
+                BarcodeResult barcodeResult = new BarcodeResult(result, null);
+                liveData.postValue(barcodeResult);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;

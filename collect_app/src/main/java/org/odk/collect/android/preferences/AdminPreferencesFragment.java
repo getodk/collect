@@ -25,7 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
+import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;

@@ -12,9 +12,10 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.configure.qr;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
@@ -26,9 +27,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Reader;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -39,32 +38,20 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.CompressionUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 
-public class QRCodeUtils {
+public class QRCodeUtils implements QRCodeDecoder {
 
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
 
-    private QRCodeUtils() {
-    }
-
-    public static String decodeFromBitmap(Bitmap bitmap) throws DataFormatException, IOException, FormatException, ChecksumException, NotFoundException, IllegalArgumentException {
-        Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<>(DecodeHintType.class);
-        tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-        tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.QR_CODE);
-        tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
-
-        Reader reader = new QRCodeMultiReader();
-        Result result = reader.decode(getBinaryBitmap(bitmap), tmpHintsMap);
-        return CompressionUtils.decompress(result.getText());
-    }
-
-    public static Bitmap encode(String data) throws IOException, WriterException {
+    public Bitmap encode(String data) throws IOException, WriterException {
         String compressedData = CompressionUtils.compress(data);
 
         // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
@@ -85,6 +72,31 @@ public class QRCodeUtils {
         }
 
         return bmp;
+    }
+
+    @Override
+    public String decode(InputStream inputStream) throws InvalidException, NotFoundException {
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        return decode(bitmap);
+    }
+
+    private String decode(Bitmap bitmap) throws InvalidException, NotFoundException {
+        Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<>(DecodeHintType.class);
+        tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.QR_CODE);
+        tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
+
+
+
+        try {
+            QRCodeMultiReader reader = new QRCodeMultiReader();
+            Result result = reader.decode(getBinaryBitmap(bitmap), tmpHintsMap);
+            return CompressionUtils.decompress(result.getText());
+        } catch (DataFormatException | IOException | IllegalArgumentException e) {
+            throw new InvalidException();
+        } catch (FormatException | com.google.zxing.NotFoundException | ChecksumException e) {
+            throw new NotFoundException();
+        }
     }
 
     @NonNull

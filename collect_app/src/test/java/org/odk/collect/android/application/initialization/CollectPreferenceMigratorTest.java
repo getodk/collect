@@ -17,7 +17,7 @@ import static org.odk.collect.android.application.initialization.migration.Share
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(RobolectricTestRunner.class)
-public class MigratorProviderTest {
+public class CollectPreferenceMigratorTest {
 
     private SharedPreferences generalPrefs;
     private SharedPreferences adminPrefs;
@@ -33,19 +33,19 @@ public class MigratorProviderTest {
     @Test
     public void shouldMigrateGoogleMapSettings() {
         initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "streets");
-        new MigratorProvider(metaPrefs).getGeneralMigrator().migrate(generalPrefs);
+        runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_NORMAL));
 
         initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "satellite");
-        new MigratorProvider(metaPrefs).getGeneralMigrator().migrate(generalPrefs);
+        runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_SATELLITE));
 
         initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "terrain\u200e");
-        new MigratorProvider(metaPrefs).getGeneralMigrator().migrate(generalPrefs);
+        runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_TERRAIN));
 
         initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "hybrid");
-        new MigratorProvider(metaPrefs).getGeneralMigrator().migrate(generalPrefs);
+        runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_HYBRID));
     }
 
@@ -79,7 +79,7 @@ public class MigratorProviderTest {
     @Test
     public void shouldMigrateOsmMapSettings() {
         initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
-        new MigratorProvider(metaPrefs).getGeneralMigrator().migrate(generalPrefs);
+        new CollectPreferenceMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
         assertPrefs(generalPrefs, "basemap_source", "osm");
 
         initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
@@ -156,9 +156,46 @@ public class MigratorProviderTest {
         assertPrefs(generalPrefs, "protocol", "odk_default");
     }
 
+    @Test
+    public void migratesAutosendSettings() {
+        initPrefs(generalPrefs,
+                "autosend_wifi", false,
+                "autosend_network", false
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "autosend", "off"
+        );
+
+        initPrefs(generalPrefs,
+                "autosend_wifi", true,
+                "autosend_network", false
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "autosend", "wifi_only"
+        );
+
+        initPrefs(generalPrefs,
+                "autosend_wifi", false,
+                "autosend_network", true
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "autosend", "cellular_only"
+        );
+
+        initPrefs(generalPrefs,
+                "autosend_wifi", true,
+                "autosend_network", true
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "autosend", "wifi_and_cellular"
+        );
+    }
+
     private void runMigrations() {
-        new MigratorProvider(metaPrefs).getGeneralMigrator().migrate(generalPrefs);
-        new MigratorProvider(metaPrefs).getAdminMigrator().migrate(adminPrefs);
-        new MigratorProvider(metaPrefs).getMetaMigrator().migrate(metaPrefs);
+        new CollectPreferenceMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
     }
 }
