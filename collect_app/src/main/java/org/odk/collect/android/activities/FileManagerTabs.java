@@ -39,12 +39,7 @@ public class FileManagerTabs extends CollectAbstractActivity {
 
         setContentView(R.layout.tabs_layout);
         initToolbar();
-
-        String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
-        viewPager.setAdapter(new FileManagerTabsAdapter(this));
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(tabNames[position])).attach();
+        setUpViewPager();
     }
 
     @Override
@@ -52,5 +47,13 @@ public class FileManagerTabs extends CollectAbstractActivity {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.notes);
+    }
+
+    private void setUpViewPager() {
+        String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        viewPager.setAdapter(new FileManagerTabsAdapter(this));
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(tabNames[position])).attach();
     }
 }
