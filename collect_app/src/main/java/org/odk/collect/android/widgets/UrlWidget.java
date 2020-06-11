@@ -21,7 +21,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -30,8 +29,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.views.MultiClickSafeButton;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -43,7 +42,7 @@ public class UrlWidget extends QuestionWidget {
 
     private final CustomTabHelper customTabHelper;
 
-    protected Button openUrlButton;
+    protected MultiClickSafeButton openUrlButton;
     protected TextView stringAnswer;
 
     public UrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper) {
@@ -105,13 +104,11 @@ public class UrlWidget extends QuestionWidget {
     }
 
     public void onButtonClick() {
-        if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
-            if (!isUrlEmpty(stringAnswer)) {
-                customTabHelper.bindCustomTabsService(getContext(), null);
-                customTabHelper.openUri(getContext(), getUri());
-            } else {
-                ToastUtils.showShortToast("No URL set");
-            }
+        if (!isUrlEmpty(stringAnswer)) {
+            customTabHelper.bindCustomTabsService(getContext(), null);
+            customTabHelper.openUri(getContext(), getUri());
+        } else {
+            ToastUtils.showShortToast("No URL set");
         }
     }
 
