@@ -15,7 +15,6 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -57,9 +56,6 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
     @Inject
     QRCodeGenerator qrCodeGenerator;
-
-    @Inject
-    StoragePathProvider storagePathProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +101,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
-        Uri uri = ContentUriProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(qrCodeGenerator.getQrCodeFilepath()), storagePathProvider);
+        Uri uri = ContentUriProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(qrCodeGenerator.getQrCodeFilepath()));
         FileUtils.grantFileReadPermissions(shareIntent, uri, this);
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
     }

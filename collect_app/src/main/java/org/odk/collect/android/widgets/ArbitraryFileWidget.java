@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import android.view.Gravity;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -38,6 +37,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
@@ -197,7 +197,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     private void openFile() {
 
         Uri fileUri = Uri.fromFile(new File(getInstanceFolder() + File.separator + binaryName));
-        Uri contentUri = FileProvider.getUriForFile(getContext(),
+        Uri contentUri = ContentUriProvider.getUriForFile(getContext(),
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File(getInstanceFolder() + File.separator + binaryName));
         Intent intent = new Intent();
