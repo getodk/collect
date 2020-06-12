@@ -17,12 +17,23 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -33,10 +44,15 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends BaseGeoWidget {
+public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver {
+    private final WaitingForDataRegistry waitingForDataRegistry;
+
+    protected Button startGeoButton;
+    protected TextView answerDisplay;
 
     public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails, waitingForDataRegistry);
+        super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
     public void startGeoActivity() {
@@ -46,18 +62,65 @@ public class GeoShapeWidget extends BaseGeoWidget {
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
-    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        startGeoButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.base_geo_widget_layout, null);
+
+        answerDisplay = answerView.findViewById(R.id.geo_answer_text);
+        answerDisplay.setTextColor(new ThemeUtils(context).getColorOnSurface());
+        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        startGeoButton = answerView.findViewById(R.id.simple_button);
+
+        if (prompt.isReadOnly()) {
+            startGeoButton.setVisibility(GONE);
+        } else {
+            startGeoButton.setText(getDefaultButtonLabel());
+            startGeoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+            startGeoButton.setOnClickListener(v -> {
+                if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
+                    this.onButtonClick();
+                }
+            });
+        }
+        String answerText = prompt.getAnswerText();
+        boolean dataAvailable = false;
+
+        if (answerText != null && !answerText.isEmpty()) {
+            dataAvailable = true;
+            setBinaryData(answerText);
+        }
+
+        updateButtonLabelsAndVisibility(dataAvailable);
+        return answerView;
     }
 
     @Override
-    public String getAnswerToDisplay(String answer) {
-        return answer;
+    public void clearAnswer() {
+        answerDisplay.setText(null);
+        updateButtonLabelsAndVisibility(false);
+        widgetValueChanged();
     }
 
     @Override
-    public String getDefaultButtonLabel() {
-        return getContext().getString(R.string.get_shape);
+    public void setOnLongClickListener(OnLongClickListener l) {
+        startGeoButton.setOnLongClickListener(l);
+        answerDisplay.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        startGeoButton.cancelLongPress();
+        answerDisplay.cancelLongPress();
+    }
+
+    @Override
+    public void setBinaryData(Object answer) {
+        answerDisplay.setText(answer.toString());
+        updateButtonLabelsAndVisibility(!answer.toString().isEmpty());
+        widgetValueChanged();
     }
 
     @Override
@@ -66,5 +129,27 @@ public class GeoShapeWidget extends BaseGeoWidget {
         return !s.isEmpty()
                 ? new StringData(s)
                 : null;
+    }
+
+    private void onButtonClick() {
+        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
+            @Override
+            public void granted() {
+                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+                startGeoActivity();
+            }
+
+            @Override
+            public void denied() {
+            }
+        });
+    }
+
+    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+        startGeoButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
+    }
+
+    private String getDefaultButtonLabel() {
+        return getContext().getString(R.string.get_shape);
     }
 }
