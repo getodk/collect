@@ -16,9 +16,9 @@
 
 package org.odk.collect.android.preferences;
 
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
 
 import timber.log.Timber;
 
@@ -27,9 +27,9 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 class DisabledPreferencesRemover {
 
     private final PreferencesActivity pa;
-    private final PreferenceFragment pf;
+    private final PreferenceFragmentCompat pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa, PreferenceFragment pf) {
+    DisabledPreferencesRemover(PreferencesActivity pa, PreferenceFragmentCompat pf) {
         this.pa = pa;
         this.pf = pf;
     }

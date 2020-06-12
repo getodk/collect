@@ -1,16 +1,21 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.view.View;
 
 import org.odk.collect.android.activities.CollectAbstractActivity;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceFragmentCompat;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class BasePreferenceFragment extends PreferenceFragment {
+public class BasePreferenceFragment extends PreferenceFragmentCompat {
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

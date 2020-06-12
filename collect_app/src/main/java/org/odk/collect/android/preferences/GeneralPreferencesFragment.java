@@ -17,8 +17,9 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceScreen;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -83,7 +84,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                     break;
             }
             if (basePreferenceFragment != null) {
-                getActivity().getFragmentManager()
+                getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.preferences_fragment_container, basePreferenceFragment)
                         .addToBackStack(null)
