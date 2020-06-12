@@ -24,7 +24,7 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -38,19 +38,22 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends BaseGeoWidget {
 
-    public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    private final MapConfigurator mapConfigurator;
+
+    public GeoTraceWidget(Context context, QuestionDetails questionDetails, MapConfigurator mapConfigurator, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails, waitingForDataRegistry);
+        this.mapConfigurator = mapConfigurator;
     }
 
     public void startGeoActivity() {
         Context context = getContext();
-        if (MapProvider.getConfigurator().isAvailable(context)) {
+        if (mapConfigurator.isAvailable(context)) {
             Intent intent = new Intent(context, GeoPolyActivity.class)
                 .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
                 .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
             ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
         } else {
-            MapProvider.getConfigurator().showUnavailableMessage(context);
+            mapConfigurator.showUnavailableMessage(context);
         }
     }
 

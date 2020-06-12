@@ -84,7 +84,7 @@ public class WidgetFactory {
                         questionWidget = new GeoShapeWidget(context, questionDetails, waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_GEOTRACE:
-                        questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry);
+                        questionWidget = new GeoTraceWidget(context, questionDetails, MapProvider.getConfigurator(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context, questionDetails, waitingForDataRegistry);
