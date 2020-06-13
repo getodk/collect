@@ -23,12 +23,13 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CompoundButton;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.preference.DialogPreference;
+import androidx.preference.PreferenceViewHolder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
@@ -42,7 +43,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
 import static org.odk.collect.android.utilities.ApplicationResetter.ResetAction.RESET_PREFERENCES;
 
-public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener {
+public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener, DialogInterface.OnClickListener {
     private AppCompatCheckBox preferences;
     private AppCompatCheckBox instances;
     private AppCompatCheckBox forms;
@@ -57,6 +58,24 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
     }
 
     @Override
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        preferences = (AppCompatCheckBox) holder.findViewById(R.id.preferences);
+        instances = (AppCompatCheckBox) holder.findViewById(R.id.instances);
+        forms = (AppCompatCheckBox) holder.findViewById(R.id.forms);
+        layers = (AppCompatCheckBox) holder.findViewById(R.id.layers);
+        cache = (AppCompatCheckBox) holder.findViewById(R.id.cache);
+        osmDroid = (AppCompatCheckBox) holder.findViewById(R.id.osmdroid);
+        preferences.setOnCheckedChangeListener(this);
+        instances.setOnCheckedChangeListener(this);
+        forms.setOnCheckedChangeListener(this);
+        layers.setOnCheckedChangeListener(this);
+        cache.setOnCheckedChangeListener(this);
+        osmDroid.setOnCheckedChangeListener(this);
+
+        super.onBindViewHolder(holder);
+    }
+
+    /*@Override
     public void onBindDialogView(View view) {
         preferences = view.findViewById(R.id.preferences);
         instances = view.findViewById(R.id.instances);
@@ -72,13 +91,13 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         osmDroid.setOnCheckedChangeListener(this);
 
         super.onBindDialogView(view);
-    }
-
+    }*/
+/*
     @Override
     public void showDialog(Bundle bundle) {
         super.showDialog(bundle);
         adjustResetButtonAccessibility();
-    }
+    }*/
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
@@ -221,8 +240,9 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        adjustResetButtonAccessibility();
+//        adjustResetButtonAccessibility();
     }
+/*
 
     private void adjustResetButtonAccessibility() {
         if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
@@ -236,6 +256,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
                     .setTextColor(getPartiallyTransparentColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor()));
         }
     }
+*/
 
     private int getPartiallyTransparentColor(int color) {
         return Color.argb(150, Color.red(color), Color.green(color), Color.blue(color));
