@@ -27,20 +27,8 @@ public class ResetDialogPreference extends DialogPreference {
 
     public static final String ARG_KEY = "reset_settings";
 
-    public ResetDialogPreference(Context context) {
-        this(context, null);
-    }
-
     public ResetDialogPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public ResetDialogPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, defStyleAttr);
-    }
-
-    public ResetDialogPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs);
     }
 
     @Override
