@@ -49,11 +49,12 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
+
         getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
-        addPreferencesFromResource(R.xml.admin_preferences);
+        setPreferencesFromResource(R.xml.admin_preferences, rootKey);
 
         findPreference("odk_preferences").setOnPreferenceClickListener(this);
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
@@ -62,6 +63,21 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
         findPreference("save_legacy_settings").setOnPreferenceClickListener(this);
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        ResetDialogPreference resetDialogPreference = null;
+        if (preference instanceof ResetDialogPreference) {
+            resetDialogPreference = (ResetDialogPreference) preference;
+        }
+        if (resetDialogPreference != null) {
+            ResetDialogPreferenceFragmentCompat dialogFragment = ResetDialogPreferenceFragmentCompat.newInstance(ResetDialogPreference.ARG_KEY);
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(getParentFragmentManager(), null);
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
     }
 
     @Override

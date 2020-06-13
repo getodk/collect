@@ -68,9 +68,7 @@ public class CaptionedListPreference extends ListPreference implements DialogInt
     @Override
     public void onClick(DialogInterface dialog, int which) {
         super.onClick();
-        if (which == DialogInterface.BUTTON_POSITIVE) {
-
-        }else if(which == DialogInterface.BUTTON_NEGATIVE){
+        if (which == DialogInterface.BUTTON_NEGATIVE) {
            dialog.dismiss();
         }
     }
