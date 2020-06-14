@@ -19,6 +19,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -56,6 +57,20 @@ public class MapsPreferences extends BasePreferenceFragment {
         return prefs;
     }
 
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        DialogFragment dialogFragment = null;
+        if (preference instanceof CaptionedListPreference) {
+            dialogFragment = ReferenceLayerPreferenceDialog.newInstance(preference.getKey());
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
+        if (dialogFragment != null) {
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(getParentFragmentManager(), null);
+        }
+    }
+
     /** Pops up the preference dialog that lets the user choose a reference layer. */
     public static void showReferenceLayerDialog(Activity activity) {
         // Unfortunately, the Preference class is designed so that it is impossible
@@ -80,6 +95,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         initReferenceLayerPref();
         if (autoShowReferenceLayerDialog) {
             populateReferenceLayerPref();
+//            referenceLayerPref.showDialog();
         }
     }
 
