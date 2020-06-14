@@ -3,24 +3,27 @@ package org.odk.collect.android.preferences;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowToast;
 
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 @RunWith(RobolectricTestRunner.class)
 public class AggregatePreferencesAdderTest {
 
     @Test
     public void whenPreferencesAreAdded_returnsTrue() {
-        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
+        PreferenceFragmentCompat fragment = mock(PreferenceFragmentCompat.class);
+//        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
         AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
 
         boolean result = loader.add();
@@ -30,8 +33,8 @@ public class AggregatePreferencesAdderTest {
     @Test
     public void whenAPreferenceHasAnIncorrectType_returnsFalse_andShowsToastError() {
         putBooleanToSharedPrefs("password", false);
-
-        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
+        PreferenceFragmentCompat fragment = mock(PreferenceFragmentCompat.class);
+//        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
         AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
 
         boolean result = loader.add();
@@ -42,11 +45,11 @@ public class AggregatePreferencesAdderTest {
     }
 
     private String getString(int id) {
-        return RuntimeEnvironment.application.getString(id);
+        return ApplicationProvider.getApplicationContext().getString(id);
     }
 
     private void putBooleanToSharedPrefs(String key, boolean value) {
-        PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application)
+        PreferenceManager.getDefaultSharedPreferences(ApplicationProvider.getApplicationContext())
                 .edit()
                 .putBoolean(key, value)
                 .apply();
