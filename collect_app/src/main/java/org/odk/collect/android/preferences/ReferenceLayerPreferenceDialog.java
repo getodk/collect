@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import androidx.preference.ListPreferenceDialogFragmentCompat;
 
 import org.odk.collect.android.R;
 
-public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragmentCompat {
+public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragmentCompat implements DialogInterface.OnClickListener {
 
     private CaptionedListPreference preference;
 
@@ -42,6 +43,16 @@ public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragment
         preference.updateContent();
 
         super.onBindDialogView(view);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        super.onClick(dialog, which);
+        listView = null;
+        captionView = null;
+        if (getDialog() != null) {
+            getDialog().dismiss();
+        }
     }
 
     @Override
