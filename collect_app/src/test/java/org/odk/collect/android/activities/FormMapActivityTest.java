@@ -1,11 +1,11 @@
 package org.odk.collect.android.activities;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.os.Looper.getMainLooper;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
@@ -148,13 +149,15 @@ public class FormMapActivityTest {
         assertThat(map.wasLatestZoomCallAnimated(), is(false));
     }
 
+    @LooperMode(PAUSED)
     @Test public void tappingOnLayerMenu_opensLayerDialog() {
-        List<Fragment> fragments = activity.getFragmentManager().getFragments();
+        List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
         assertThat(fragments, not(hasItem(isA(MapsPreferences.class))));
 
         activity.findViewById(R.id.layer_menu).performClick();
 
-        fragments = activity.getFragmentManager().getFragments();
+        activity.getSupportFragmentManager().executePendingTransactions();
+        fragments = activity.getSupportFragmentManager().getFragments();
         assertThat(fragments, hasItem(isA(MapsPreferences.class)));
     }
 

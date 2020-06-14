@@ -99,9 +99,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         if (autoShowReferenceLayerDialog) {
             populateReferenceLayerPref();
             /** Opens the dialog programmatically, rather than by a click from the user. */
-            dialogFragment = ReferenceLayerPreferenceDialog.newInstance("reference_layer");
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), null);
+            onDisplayPreferenceDialog(getPreferenceManager().findPreference("reference_layer"));
         }
     }
 
@@ -117,6 +115,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     public void onDestroyView() {
         super.onDestroyView();
         referenceLayerPref = null;
+        dialogFragment = null;
     }
 
     /**
