@@ -18,7 +18,6 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 public class ServerUrlEditTextPreferenceDialog extends EditTextPreferenceDialogFragmentCompat implements View.OnTouchListener {
 
-    private CustomEditTextPreference serverUrlEditTextPreference;
     private ListPopupWindow listPopupWindow;
 
     public static ServerUrlEditTextPreferenceDialog newInstance(String key) {
@@ -31,6 +30,7 @@ public class ServerUrlEditTextPreferenceDialog extends EditTextPreferenceDialogF
 
     @Override
     protected void onBindDialogView(View view) {
+        CustomEditTextPreference serverUrlEditTextPreference = null;
         if (getPreference() instanceof CustomEditTextPreference) {
             serverUrlEditTextPreference = (CustomEditTextPreference) getPreference();
         }
@@ -41,10 +41,12 @@ public class ServerUrlEditTextPreferenceDialog extends EditTextPreferenceDialogF
         editText.setFilters(new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
         editText.setOnTouchListener((View.OnTouchListener) this);
 
-        serverUrlEditTextPreference.setOnPreferenceClickListener(preference -> {
-            editText.requestFocus();
-            return true;
-        });
+        if (serverUrlEditTextPreference != null) {
+            serverUrlEditTextPreference.setOnPreferenceClickListener(preference -> {
+                editText.requestFocus();
+                return true;
+            });
+        }
 
         super.onBindDialogView(view);
     }

@@ -102,7 +102,7 @@ public class CaptionedListPreference extends ListPreference {
     }
 
     /** Saves the selected value to the preferences when the dialog is closed. */
-    public void onDialogClosed(boolean positiveResult) {
+    protected void onDialogClosed(boolean positiveResult) {
         CharSequence[] values = getEntryValues();
         if (positiveResult && clickedIndex >= 0 && values != null) {
             Object value = values[clickedIndex];

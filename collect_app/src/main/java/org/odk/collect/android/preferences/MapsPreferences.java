@@ -49,8 +49,6 @@ public class MapsPreferences extends BasePreferenceFragment {
     private CaptionedListPreference referenceLayerPref;
     private boolean autoShowReferenceLayerDialog;
 
-    private DialogFragment dialogFragment = null;
-
     public static MapsPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
@@ -61,6 +59,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
+        DialogFragment dialogFragment = null;
         MapsPreferences prefs = newInstance(false);
         prefs.autoShowReferenceLayerDialog = true;
         if (preference instanceof CaptionedListPreference) {
@@ -115,7 +114,6 @@ public class MapsPreferences extends BasePreferenceFragment {
     public void onDestroyView() {
         super.onDestroyView();
         referenceLayerPref = null;
-        dialogFragment = null;
     }
 
     /**

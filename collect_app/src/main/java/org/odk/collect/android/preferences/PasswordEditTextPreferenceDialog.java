@@ -13,8 +13,6 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 public class PasswordEditTextPreferenceDialog extends EditTextPreferenceDialogFragmentCompat implements View.OnTouchListener {
 
-    private CustomEditTextPreference passwordEditTextPreference;
-
     public static PasswordEditTextPreferenceDialog newInstance(String key) {
         PasswordEditTextPreferenceDialog fragment = new PasswordEditTextPreferenceDialog();
         Bundle b = new Bundle(1);
@@ -25,17 +23,19 @@ public class PasswordEditTextPreferenceDialog extends EditTextPreferenceDialogFr
 
     @Override
     protected void onBindDialogView(View view) {
+        CustomEditTextPreference passwordEditTextPreference = null;
         if (getPreference() instanceof CustomEditTextPreference) {
             passwordEditTextPreference = (CustomEditTextPreference) getPreference();
         }
         EditText editText = (EditText) view.findViewById(android.R.id.edit);
         editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
 
-        passwordEditTextPreference.setOnPreferenceClickListener(preference -> {
-            editText.requestFocus();
-            return true;
-        });
-
+        if (passwordEditTextPreference != null) {
+            passwordEditTextPreference.setOnPreferenceClickListener(preference -> {
+                editText.requestFocus();
+                return true;
+            });
+        }
         super.onBindDialogView(view);
     }
 

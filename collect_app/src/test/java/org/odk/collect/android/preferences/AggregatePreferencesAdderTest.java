@@ -9,6 +9,7 @@ import androidx.test.core.app.ApplicationProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
 
@@ -23,7 +24,6 @@ public class AggregatePreferencesAdderTest {
     @Test
     public void whenPreferencesAreAdded_returnsTrue() {
         PreferenceFragmentCompat fragment = mock(PreferenceFragmentCompat.class);
-//        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
         AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
 
         boolean result = loader.add();
@@ -33,8 +33,8 @@ public class AggregatePreferencesAdderTest {
     @Test
     public void whenAPreferenceHasAnIncorrectType_returnsFalse_andShowsToastError() {
         putBooleanToSharedPrefs("password", false);
-        PreferenceFragmentCompat fragment = mock(PreferenceFragmentCompat.class);
-//        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
+
+        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
         AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
 
         boolean result = loader.add();

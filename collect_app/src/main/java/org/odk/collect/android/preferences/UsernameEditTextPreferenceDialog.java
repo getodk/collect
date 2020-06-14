@@ -13,8 +13,6 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 public class UsernameEditTextPreferenceDialog extends EditTextPreferenceDialogFragmentCompat implements View.OnTouchListener {
 
-    private CustomEditTextPreference usernameEditTextPreference;
-
     public static UsernameEditTextPreferenceDialog newInstance(String key) {
         UsernameEditTextPreferenceDialog fragment = new UsernameEditTextPreferenceDialog();
         Bundle b = new Bundle(1);
@@ -25,16 +23,19 @@ public class UsernameEditTextPreferenceDialog extends EditTextPreferenceDialogFr
 
     @Override
     protected void onBindDialogView(View view) {
+        CustomEditTextPreference usernameEditTextPreference = null;
         if (getPreference() instanceof CustomEditTextPreference) {
             usernameEditTextPreference = (CustomEditTextPreference) getPreference();
         }
         EditText editText = (EditText) view.findViewById(android.R.id.edit);
         editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
-        usernameEditTextPreference.setOnPreferenceClickListener(preference -> {
-            editText.requestFocus();
-            return true;
-        });
 
+        if (usernameEditTextPreference != null) {
+            usernameEditTextPreference.setOnPreferenceClickListener(preference -> {
+                editText.requestFocus();
+                return true;
+            });
+        }
         super.onBindDialogView(view);
     }
 
