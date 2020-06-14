@@ -13,8 +13,6 @@ import org.odk.collect.android.R;
 
 public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragmentCompat implements DialogInterface.OnClickListener {
 
-    private CaptionedListPreference preference;
-
     public static ViewGroup listView;
     public static TextView captionView;
 
@@ -35,12 +33,16 @@ public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragment
     /** Called just after the dialog's main view has been created. */
     @Override
     protected void onBindDialogView(View view) {
+        CaptionedListPreference preference = null;
         if (getPreference() instanceof CaptionedListPreference) {
             preference = (CaptionedListPreference) getPreference();
         }
         listView = view.findViewById(R.id.list);
         captionView = view.findViewById(R.id.dialog_caption);
-        preference.updateContent();
+
+        if (preference != null) {
+            preference.updateContent();
+        }
 
         super.onBindDialogView(view);
     }

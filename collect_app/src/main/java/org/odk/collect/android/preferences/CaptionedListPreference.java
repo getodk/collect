@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;

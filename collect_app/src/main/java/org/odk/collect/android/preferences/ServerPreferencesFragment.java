@@ -125,6 +125,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public void onDestroyView() {
         dialogFragment = null;
+        serverUrlPreference = null;
+        usernamePreference = null;
+        passwordPreference = null;
+        selectedGoogleAccountPreference = null;
+
         super.onDestroyView();
     }
 
