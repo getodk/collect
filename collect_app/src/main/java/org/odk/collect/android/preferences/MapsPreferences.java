@@ -80,7 +80,6 @@ public class MapsPreferences extends BasePreferenceFragment {
         initReferenceLayerPref();
         if (autoShowReferenceLayerDialog) {
             populateReferenceLayerPref();
-            referenceLayerPref.showDialog();
         }
     }
 

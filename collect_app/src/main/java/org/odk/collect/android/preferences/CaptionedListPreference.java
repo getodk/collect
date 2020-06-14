@@ -36,6 +36,7 @@ public class CaptionedListPreference extends ListPreference implements DialogInt
         super(context, attrs);
         this.context = context;
         setDialogLayoutResource(R.layout.captioned_list_dialog);
+        setIconSpaceReserved(false);
         setPositiveButtonText(null);
     }
 
@@ -72,38 +73,14 @@ public class CaptionedListPreference extends ListPreference implements DialogInt
            dialog.dismiss();
         }
     }
-/*
-    @Override
-    protected void onPrepareDialogBuilder(android.app.AlertDialog.Builder builder) {
-        // Selecting an item will close the dialog, so we don't need the "OK" button.
-        builder.setPositiveButton(null, null);
-    }
-*/
-
-    /** Called just after the dialog's main view has been created. */
-    /*@Override protected void onBindDialogView(View view) {
-        super.onBindDialogView(view);
-        listView = view.findViewById(R.id.list);
-        captionView = view.findViewById(R.id.dialog_caption);
-        updateContent();
-    }*/
 
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         listView = (ViewGroup) holder.findViewById(R.id.list);
         captionView = (TextView) holder.findViewById(R.id.dialog_caption);
-
         updateContent();
     }
-
-    /*@Override
-    public void onActivityDestroy() {
-        super.onActivityDestroy();
-        if (getDialog() != null) {
-            getDialog().dismiss();
-        }
-    }*/
 
     /** Updates the contents of the dialog to show the items passed in by setItems etc. */
     public void updateContent() {
@@ -143,10 +120,9 @@ public class CaptionedListPreference extends ListPreference implements DialogInt
     /** When an item is clicked, record which item and then dismiss the dialog. */
     protected void onItemClicked(int index) {
         clickedIndex = index;
-//        onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
-//        getDialog().dismiss();
-
+        onDialogClosed(true);
     }
+
 
     /** Saves the selected value to the preferences when the dialog is closed. */
     protected void onDialogClosed(boolean positiveResult) {
@@ -157,11 +133,6 @@ public class CaptionedListPreference extends ListPreference implements DialogInt
                 setValue(value != null ? value.toString() : null);
             }
         }
-    }
-
-    /** Opens the dialog programmatically, rather than by a click from the user. */
-    public void showDialog() {
-//        showDialog(null);
     }
 
     public static class Item {
