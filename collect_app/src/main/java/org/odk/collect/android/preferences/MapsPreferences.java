@@ -60,8 +60,6 @@ public class MapsPreferences extends BasePreferenceFragment {
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment dialogFragment = null;
-        MapsPreferences prefs = newInstance(false);
-        prefs.autoShowReferenceLayerDialog = true;
         if (preference instanceof CaptionedListPreference) {
             dialogFragment = ReferenceLayerPreferenceDialog.newInstance(preference.getKey());
         } else {
