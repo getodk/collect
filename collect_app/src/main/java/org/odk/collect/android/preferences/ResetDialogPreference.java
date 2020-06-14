@@ -25,8 +25,6 @@ import org.odk.collect.android.R;
 
 public class ResetDialogPreference extends DialogPreference {
 
-    public static final String ARG_KEY = "reset_settings";
-
     public ResetDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

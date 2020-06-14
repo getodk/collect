@@ -76,6 +76,17 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
     }
 
     @Override
+    public void onDetach() {
+        preferences = null;
+        instances = null;
+        forms = null;
+        layers = null;
+        cache = null;
+        osmDroid = null;
+        super.onDetach();
+    }
+
+    @Override
     public void onClick(DialogInterface dialog, int which) {
         if (which == DialogInterface.BUTTON_POSITIVE) {
             resetSelected();
@@ -130,9 +141,9 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
     }
 
     private void showProgressDialog() {
-        progressDialog = ProgressDialog.show(getContext(),
-                        getContext().getString(R.string.please_wait),
-                        getContext().getString(R.string.reset_in_progress),
+        progressDialog = ProgressDialog.show(context,
+                        context.getString(R.string.please_wait),
+                        context.getString(R.string.reset_in_progress),
                         true);
     }
 
