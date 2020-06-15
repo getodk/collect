@@ -1706,7 +1706,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // from onResume(). This ensures that we do not preset this modal dialog if it's already
         // visible. Checking for shownAlertDialogIsGroupRepeat because the same field
         // alertDialog is being used for all alert dialogs in this activity.
-        if (alertDialog != null && alertDialog.isShowing() && shownAlertDialogIsGroupRepeat) {
+        if (shownAlertDialogIsGroupRepeat) {
             return;
         }
 
