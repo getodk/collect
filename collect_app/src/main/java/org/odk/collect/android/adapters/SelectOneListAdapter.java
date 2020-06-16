@@ -34,6 +34,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.AbstractSelectOneWidget;
 
 import java.util.List;
@@ -106,7 +107,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     @Override
     RadioButton createButton(final int index, ViewGroup parent) {
-        RadioButton radioButton = (RadioButton) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_one_item, null);
+        RadioButton radioButton = (RadioButton) LayoutInflater.from(parent.getContext()).inflate(getButtonLayout(), null);
         setUpButton(radioButton, index);
         radioButton.setOnClickListener(this);
         radioButton.setOnCheckedChangeListener(this);
@@ -118,6 +119,12 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         }
 
         return radioButton;
+    }
+
+    protected int getButtonLayout() {
+        return WidgetAppearanceUtils.isFlexAppearance(prompt)
+                ? R.layout.select_one_item_flex
+                : R.layout.select_one_item;
     }
 
     @Override

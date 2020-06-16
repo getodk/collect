@@ -67,7 +67,7 @@ import static org.odk.collect.android.widgets.QuestionWidget.isRTL;
 public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<AbstractSelectListAdapter.ViewHolder>
         implements Filterable {
 
-    private final FormEntryPrompt prompt;
+    protected final FormEntryPrompt prompt;
     private final ReferenceManager referenceManager;
     private final int numColumns;
     private final Context context;
@@ -235,6 +235,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     }
 
     abstract void onItemClick(Selection selection, View view);
+
+    abstract int getButtonLayout();
 
     abstract class ViewHolder extends RecyclerView.ViewHolder {
         AudioVideoImageTextLabel audioVideoImageTextLabel;
