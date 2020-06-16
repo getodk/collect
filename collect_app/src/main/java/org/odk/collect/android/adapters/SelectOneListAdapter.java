@@ -57,11 +57,9 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (noButtonsMode) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null));
-        } else {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.quick_select_layout, null));
-        }
+        return new ViewHolder(noButtonsMode
+                ? new FrameLayout(parent.getContext())
+                : LayoutInflater.from(parent.getContext()).inflate(R.layout.quick_select_layout, null));
     }
 
     @Override
