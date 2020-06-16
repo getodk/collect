@@ -170,7 +170,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
                     if (bitmap != null) {
                         ImageView imageView = new ImageView(context);
-                        imageView.setImageBitmap(ImageConverter.scaleImageToNewWidth(bitmap, context.getResources().getDisplayMetrics().widthPixels / numColumns));
+                        if (!WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt())) {
+                            bitmap = ImageConverter.scaleImageToNewWidth(bitmap, context.getResources().getDisplayMetrics().widthPixels / numColumns);
+                        }
+                        imageView.setImageBitmap(bitmap);
                         imageView.setAdjustViewBounds(true);
                         view = imageView;
                     } else {
