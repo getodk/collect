@@ -1,6 +1,5 @@
 package org.odk.collect.android.formentry.repeats;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.TextView;
 
