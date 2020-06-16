@@ -44,5 +44,5 @@ and update this document as the code evolves.
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code
 * Refactoring towards an OpenRosa abstraction (`OpenRosaAPIClient`) closer to its [documented API](https://docs.getodk.org/openrosa/) and takes care of all interactions with Aggregate, Central etc (currently some high level work interacts with `OpenRosaHttpInterface` directly)
 * `QuestionWiget` implementations are moving from defining their "answer" view programmatically to [implementing `onCreateAnswerView`](WIDGETS.md)
-* Removing Rx (and other async work) with LiveData + Scheduler abstraction
+* Replacing Rx (and other async work) with LiveData + Scheduler abstraction
 * Moving away from custom `SharedPreferences` abstractions (`GeneralSharedPreferences` and `AdminSharedPreferences`) to just using `SharedPreferences` interface

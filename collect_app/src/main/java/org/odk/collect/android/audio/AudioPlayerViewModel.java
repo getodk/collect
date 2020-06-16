@@ -30,7 +30,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     private final MutableLiveData<Exception> error = new MutableLiveData<>();
     private final Map<String, MutableLiveData<Integer>> positions = new HashMap<>();
 
-    private Cancellable postitionUpdatesCancellable;
+    private Cancellable positionUpdatesCancellable;
 
     AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
@@ -177,8 +177,8 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     private void schedulePositionUpdates() {
-        if (postitionUpdatesCancellable == null) {
-            postitionUpdatesCancellable = scheduler.schedule(() -> {
+        if (positionUpdatesCancellable == null) {
+            positionUpdatesCancellable = scheduler.schedule(() -> {
                 CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
 
                 if (currentlyPlaying != null) {
@@ -190,8 +190,8 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     private void cancelPositionUpdates() {
-        if (postitionUpdatesCancellable != null) {
-            postitionUpdatesCancellable.cancel();
+        if (positionUpdatesCancellable != null) {
+            positionUpdatesCancellable.cancel();
         }
     }
 

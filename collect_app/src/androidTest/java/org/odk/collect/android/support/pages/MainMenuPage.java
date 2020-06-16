@@ -71,7 +71,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public QRCodeTabsActivityPage clickConfigureQRWithAdminPassword(String password) {
         clickOnString(R.string.configure_via_qr_code);
-        inputText("blah");
+        inputText(password);
         clickOKOnDialog();
         return new QRCodeTabsActivityPage(rule).assertOnPage();
     }
