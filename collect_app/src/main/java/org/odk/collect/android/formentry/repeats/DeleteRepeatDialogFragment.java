@@ -9,23 +9,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
-    protected FormController formController = Collect.getInstance().getFormController();
+    private FormEntryViewModel viewModel;
     protected DeleteRepeatDialogCallback callback;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
+        viewModel = ViewModelProviders.of(requireActivity()).get(FormEntryViewModel.class);
         if (context instanceof DeleteRepeatDialogCallback) {
             callback = (DeleteRepeatDialogCallback) context;
         }
@@ -36,8 +37,8 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        String name = formController.getLastRepeatedGroupName();
-        int repeatcount = formController.getLastRepeatedGroupRepeatCount();
+        String name = viewModel.getLastRepeatedGroupName();
+        int repeatcount = viewModel.getLastRepeatedGroupRepeatCount();
         if (repeatcount != -1) {
             name += " (" + (repeatcount + 1) + ")";
         }
@@ -58,6 +59,7 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
             alertDialog.cancel();
             dismiss();
         };
+        setCancelable(false);
         alertDialog.setCancelable(false);
         alertDialog.setButton(BUTTON_POSITIVE, getActivity().getString(R.string.discard_group), quitListener);
         alertDialog.setButton(BUTTON_NEGATIVE, getActivity().getString(R.string.delete_repeat_no), quitListener);

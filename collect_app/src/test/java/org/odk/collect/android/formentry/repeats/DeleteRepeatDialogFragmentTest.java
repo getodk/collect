@@ -11,11 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.TestCase.assertTrue;
@@ -26,38 +25,36 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class DeleteRepeatDialogFragmentTest {
 
-    private ActivityController<FragmentActivity> activity;
     private FragmentManager fragmentManager;
     private DeleteRepeatDialogFragment dialogFragment;
+    private FormEntryViewModel formEntryViewModel;
 
     @Before
     public void setup() {
-        activity = RobolectricHelpers.buildThemedActivity(FragmentActivity.class);
-        activity.setup();
-        fragmentManager = activity.get().getSupportFragmentManager();
+        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
+        fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new DeleteRepeatDialogFragment();
 
-        dialogFragment.formController = mock(FormController.class);
         dialogFragment.callback = mock(DeleteRepeatDialogFragment.DeleteRepeatDialogCallback.class);
+        formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
     }
 
     @Test
     public void dialogIsNotCancellable() {
         dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        activity.get().finish();
-        assertThat(dialog.isShowing(), equalTo(true));
+        assertThat(shadowOf(dialogFragment.getDialog()).isCancelable(), equalTo(false));
     }
 
     @Test
     public void shouldShowCorrectMessage() {
-        when(dialogFragment.formController.getLastRepeatedGroupName()).thenReturn("blah");
-        when(dialogFragment.formController.getLastRepeatedGroupRepeatCount()).thenReturn(0);
+        when(formEntryViewModel.getLastRepeatedGroupName()).thenReturn("blah");
+        when(formEntryViewModel.getLastRepeatedGroupRepeatCount()).thenReturn(0);
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         String message = ((TextView) dialog.findViewById(android.R.id.message)).getText().toString();
