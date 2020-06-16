@@ -91,6 +91,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
                 autoAdvanceIcon.setVisibility(autoAdvance ? View.VISIBLE : View.GONE);
                 audioVideoImageTextLabel = v.findViewById(R.id.mediaLayout);
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
+                adjustAudioVideoImageTextLabelParams();
             }
         }
 

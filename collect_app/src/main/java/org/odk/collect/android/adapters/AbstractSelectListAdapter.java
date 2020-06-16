@@ -29,6 +29,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -281,6 +282,15 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                         FormEntryCaption.TEXT_FORM_IMAGE);
             }
             return imageURI;
+        }
+
+        void adjustAudioVideoImageTextLabelParams() {
+            if (WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt())) {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+                audioVideoImageTextLabel.findViewById(R.id.audio_video_image_text_label_container).setLayoutParams(params);
+                audioVideoImageTextLabel.findViewById(R.id.image_text_label_container).setLayoutParams(params);
+            }
         }
     }
 
