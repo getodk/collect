@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry.repeats;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.TextView;
 
@@ -22,7 +23,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
@@ -89,7 +89,7 @@ public class DeleteRepeatDialogFragmentTest {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
-        verify(dialogFragment.callback, times(1)).deleteGroup();
+        verify(dialogFragment.callback).deleteGroup();
     }
 
     @Test
@@ -97,6 +97,6 @@ public class DeleteRepeatDialogFragmentTest {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
-        verify(dialogFragment.callback, times(1)).onCancelled();
+        verify(dialogFragment.callback).onCancelled();
     }
 }
