@@ -207,7 +207,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         int itemPadding = context.getResources().getDimensionPixelSize(R.dimen.select_item_border);
         int paddingStartEnd = context.getResources().getDimensionPixelSize(WidgetAppearanceUtils.isFlexAppearance(prompt)
-                ? R.dimen.margin_extra_small
+                ? R.dimen.margin_small
                 : R.dimen.margin_standard);
         view.setPadding(paddingStartEnd, itemPadding, paddingStartEnd, itemPadding);
 
