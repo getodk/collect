@@ -52,6 +52,7 @@ import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -345,7 +346,7 @@ public class AppDependencyModule {
 
     @Provides
     public CollectSettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator) {
-        return new CollectSettingsImporter(preferencesProvider.getGeneralSharedPreferences(), preferencesProvider.getAdminSharedPreferences(), preferenceMigrator);
+        return new CollectSettingsImporter(preferencesProvider.getGeneralSharedPreferences(), preferencesProvider.getAdminSharedPreferences(), preferenceMigrator, json -> true, GeneralKeys.DEFAULTS, AdminKeys.getDefaults());
     }
 
     @Provides
