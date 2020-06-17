@@ -21,6 +21,7 @@ import org.odk.collect.android.application.initialization.migration.PreferenceMi
 import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
 import org.odk.collect.android.configure.CollectSettingsImporter;
+import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
@@ -80,6 +81,8 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -346,7 +349,16 @@ public class AppDependencyModule {
 
     @Provides
     public CollectSettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator) {
-        return new CollectSettingsImporter(preferencesProvider.getGeneralSharedPreferences(), preferencesProvider.getAdminSharedPreferences(), preferenceMigrator, json -> true, GeneralKeys.DEFAULTS, AdminKeys.getDefaults());
+        HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
+        Map<String, Object> adminDefaults = AdminKeys.getDefaults();
+        return new CollectSettingsImporter(
+                preferencesProvider.getGeneralSharedPreferences(),
+                preferencesProvider.getAdminSharedPreferences(),
+                preferenceMigrator,
+                new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
+                generalDefaults,
+                adminDefaults
+        );
     }
 
     @Provides
