@@ -96,6 +96,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private FeatureListener dragEndListener;
     private MyLocationNewOverlay myLocationOverlay;
     private LocationClient locationClient;
+    private OsmLocationClientWrapper osmLocationClientWrapper;
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
     private boolean clientWantsLocationUpdates;
@@ -184,7 +185,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 () -> new GoogleFusedLocationClient(getActivity().getApplication()));
         locationClient.setListener(this);
 
-        myLocationOverlay = new MyLocationNewOverlay(new OsmLocationClientWrapper(locationClient), map);
+        osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
+        myLocationOverlay = new MyLocationNewOverlay(osmLocationClientWrapper, map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
         Bitmap crosshairs = IconUtils.getBitmap(getActivity(), R.drawable.ic_crosshairs);
         myLocationOverlay.setDirectionArrow(crosshairs, crosshairs);
@@ -384,6 +386,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             if (point != null) {
                 gpsLocationListener.onPoint(point);
             }
+        }
+
+        if (myLocationOverlay != null) {
+            myLocationOverlay.onLocationChanged(location, osmLocationClientWrapper);
         }
     }
 
@@ -766,7 +772,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         @Override
         public boolean startLocationProvider(IMyLocationConsumer myLocationConsumer) {
             // locationClient.start launches async work and we need to be confident that
-            // getLastKnownLocation is never called before onClientStart
+            // getLastKnownLocation is never called before onClientStart so we don't let the OSM
+            // location overlay start the provider. We also ignore the location consumer passed in
+            // and instead explicitly forward location updates to the overlay from onLocationChanged
             return true;
         }
 
