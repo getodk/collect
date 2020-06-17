@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
+import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
@@ -71,6 +72,27 @@ public class CollectSettingsImporterTest {
     }
 
     @Test
+    public void whenKeysAlreadyExistInPrefs_overridesWithDefaults() throws Exception {
+        initPrefs(generalPrefs,
+                "key1", "existing",
+                "key2", false
+        );
+        initPrefs(adminPrefs,
+                "key1", 0
+        );
+
+        assertThat(importer.fromJSON(emptySettings()), is(true));
+
+        assertPrefs(generalPrefs,
+                "key1", "default",
+                "key2", true
+        );
+        assertPrefs(adminPrefs,
+                "key1", 5
+        );
+    }
+
+    @Test
     public void removesUnknownKeys() throws Exception {
         JSONObject json = emptySettingsObject()
                 .put("general", new JSONObject()
@@ -80,7 +102,7 @@ public class CollectSettingsImporterTest {
         assertThat(generalPrefs.contains("unknown_key"), is(false));
     }
 
-    @Test
+    @Test // Migrations might add/rename/move keys
     public void migratesPreferences_beforeLoadingDefaults() throws Exception {
         PreferenceMigrator migrator = () -> {
             if (generalPrefs.contains("key1")) {
@@ -92,7 +114,7 @@ public class CollectSettingsImporterTest {
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
-    @Test
+    @Test // Migrations might use old keys that are "unknown" to the app
     public void migratesPreferences_beforeClearingUnknowns() throws Exception {
         JSONObject json = emptySettingsObject()
                 .put("general", new JSONObject()

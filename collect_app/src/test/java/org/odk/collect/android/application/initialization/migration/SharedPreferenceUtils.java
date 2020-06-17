@@ -3,6 +3,7 @@ package org.odk.collect.android.application.initialization.migration;
 import android.content.SharedPreferences;
 
 import static org.junit.Assert.assertEquals;
+import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 
 public class SharedPreferenceUtils {
 
@@ -14,15 +15,7 @@ public class SharedPreferenceUtils {
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
         for (int i = 0; i + 1 < pairs.length; i += 2) {
-            if (pairs[i + 1] instanceof String) {
-                editor.putString((String) pairs[i], (String) pairs[i + 1]);
-            } else if (pairs[i + 1] instanceof Boolean) {
-                editor.putBoolean((String) pairs[i], (Boolean) pairs[i + 1]);
-            } else if (pairs[i + 1] instanceof Long) {
-                editor.putLong((String) pairs[i], (Long) pairs[i + 1]);
-            } else {
-                throw new IllegalArgumentException(pairs[i + 1].getClass().getSimpleName() + " not supported!");
-            }
+            put(editor, (String) pairs[i], pairs[i + 1]);
         }
         editor.commit();
     }

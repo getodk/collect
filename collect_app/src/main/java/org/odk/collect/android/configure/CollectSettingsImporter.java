@@ -37,6 +37,9 @@ public class CollectSettingsImporter {
             return false;
         }
 
+        generalSharedPrefs.edit().clear().apply();
+        adminSharedPrefs.edit().clear().apply();
+
         try {
             JSONObject jsonObject = new JSONObject(json);
 
