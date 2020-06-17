@@ -1,8 +1,6 @@
 package org.odk.collect.android.preferences;
 
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -16,7 +14,9 @@ import org.robolectric.shadows.ShadowToast;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class AggregatePreferencesAdderTest {
@@ -32,11 +32,13 @@ public class AggregatePreferencesAdderTest {
 
     @Test
     public void whenAPreferenceHasAnIncorrectType_returnsFalse_andShowsToastError() {
-        putBooleanToSharedPrefs("password", false);
+        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
+        PreferenceFragmentCompat fragment = mock(PreferenceFragmentCompat.class);
 
-        PreferenceFragment fragment = Robolectric.buildFragment(TestPreferenceFragment.class).create().resume().visible().get();
+        doThrow(ClassCastException.class).when(fragment).addPreferencesFromResource(R.xml.aggregate_preferences);
+        when(fragment.getActivity()).thenReturn(activity);
+
         AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
-
         boolean result = loader.add();
         assertFalse(result);
 
@@ -46,16 +48,5 @@ public class AggregatePreferencesAdderTest {
 
     private String getString(int id) {
         return ApplicationProvider.getApplicationContext().getString(id);
-    }
-
-    private void putBooleanToSharedPrefs(String key, boolean value) {
-        PreferenceManager.getDefaultSharedPreferences(ApplicationProvider.getApplicationContext())
-                .edit()
-                .putBoolean(key, value)
-                .apply();
-    }
-
-    public static class TestPreferenceFragment extends PreferenceFragment {
-
     }
 }
