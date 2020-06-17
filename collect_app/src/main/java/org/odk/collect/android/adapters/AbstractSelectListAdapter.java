@@ -95,8 +95,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         this.audioHelper = audioHelper;
         filteredItems = items;
         this.numColumns = numColumns;
-        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt())
-                || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
+        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt)
+                || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
     }
 
     @Override
@@ -121,9 +121,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                     filterResults.count = items.size();
                 } else {
                     List<SelectChoice> filteredList = new ArrayList<>();
-                    FormEntryPrompt formEntryPrompt = getFormEntryPrompt();
                     for (SelectChoice item : items) {
-                        if (formEntryPrompt.getSelectChoiceText(item).toLowerCase(Locale.US).contains(searchStr)) {
+                        if (prompt.getSelectChoiceText(item).toLowerCase(Locale.US).contains(searchStr)) {
                             filteredList.add(item);
                         }
                     }
@@ -146,7 +145,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     void setUpButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-        button.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), filteredItems.get(index)));
+        button.setText(FormEntryPromptUtils.getItemText(prompt, filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setOnLongClickListener(getODKViewParent(widget));
@@ -159,7 +158,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         String imageURI = selectChoice instanceof ExternalSelectChoice
                 ? ((ExternalSelectChoice) selectChoice).getImage()
-                : getFormEntryPrompt().getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+                : prompt.getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
 
         String errorMsg = null;
         if (imageURI != null) {
@@ -170,7 +169,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
                     if (bitmap != null) {
                         ImageView imageView = new ImageView(context);
-                        if (!WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt())) {
+                        if (!WidgetAppearanceUtils.isFlexAppearance(prompt)) {
                             bitmap = ImageConverter.scaleImageToNewWidth(bitmap, context.getResources().getDisplayMetrics().widthPixels / numColumns);
                         }
                         imageView.setImageBitmap(bitmap);
@@ -191,10 +190,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         if (errorMsg != null) {
             TextView missingImage = new TextView(context);
-            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
 
-            String choiceText = FormEntryPromptUtils.getItemText(getFormEntryPrompt(), selectChoice).toString();
+            String choiceText = FormEntryPromptUtils.getItemText(prompt, selectChoice).toString();
 
             if (!choiceText.isEmpty()) {
                 missingImage.setText(choiceText);
@@ -207,7 +206,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
 
         int itemPadding = context.getResources().getDimensionPixelSize(R.dimen.select_item_border);
-        int paddingStartEnd = context.getResources().getDimensionPixelSize(WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt())
+        int paddingStartEnd = context.getResources().getDimensionPixelSize(WidgetAppearanceUtils.isFlexAppearance(prompt)
                 ? R.dimen.margin_extra_small
                 : R.dimen.margin_standard);
         view.setPadding(paddingStartEnd, itemPadding, paddingStartEnd, itemPadding);
@@ -251,10 +250,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
                 view.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
-                view.setEnabled(!getFormEntryPrompt().isReadOnly());
+                view.setEnabled(!prompt.isReadOnly());
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
-                audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly());
+                audioVideoImageTextLabel.setEnabled(!prompt.isReadOnly());
             }
         }
 
@@ -264,17 +263,17 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
             SelectChoice item = items.get(index);
 
-            audioVideoImageTextLabel.setTag(getClipID(getFormEntryPrompt(), item));
+            audioVideoImageTextLabel.setTag(getClipID(prompt, item));
             audioVideoImageTextLabel.setTextView(textView);
 
             String imageURI = getImageURI(index, items);
-            String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "video");
-            String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(item, "big-image");
-            audioVideoImageTextLabel.setImageVideo(imageURI, videoURI, bigImageURI, getReferenceManager());
+            String videoURI = prompt.getSpecialFormSelectChoiceText(item, "video");
+            String bigImageURI = prompt.getSpecialFormSelectChoiceText(item, "big-image");
+            audioVideoImageTextLabel.setImageVideo(imageURI, videoURI, bigImageURI, referenceManager);
 
-            String audioURI = getPlayableAudioURI(getFormEntryPrompt(), item, getReferenceManager());
+            String audioURI = getPlayableAudioURI(prompt, item, referenceManager);
             if (audioURI != null) {
-                audioVideoImageTextLabel.setAudio(audioURI, getAudioHelper());
+                audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
             }
 
             textView.setGravity(Gravity.CENTER_VERTICAL);
@@ -285,35 +284,19 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             if (items.get(index) instanceof ExternalSelectChoice) {
                 imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
             } else {
-                imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
+                imageURI = prompt.getSpecialFormSelectChoiceText(items.get(index),
                         FormEntryCaption.TEXT_FORM_IMAGE);
             }
             return imageURI;
         }
 
         void adjustAudioVideoImageTextLabelParams() {
-            if (WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt())) {
+            if (WidgetAppearanceUtils.isFlexAppearance(prompt)) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 audioVideoImageTextLabel.findViewById(R.id.audio_video_image_text_label_container).setLayoutParams(params);
                 audioVideoImageTextLabel.findViewById(R.id.image_text_label_container).setLayoutParams(params);
             }
         }
-    }
-
-    private AudioHelper getAudioHelper() {
-        return audioHelper;
-    }
-
-    private ReferenceManager getReferenceManager() {
-        return referenceManager;
-    }
-
-    private FormEntryPrompt getFormEntryPrompt() {
-        return prompt;
-    }
-
-    private int getAnswerFontSize() {
-        return answerFontSize;
     }
 }
