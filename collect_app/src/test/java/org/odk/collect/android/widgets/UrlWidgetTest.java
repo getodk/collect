@@ -44,7 +44,6 @@ public class UrlWidgetTest {
     @Before
     public void setUp() {
         spyActivity = spy(widgetTestActivity());
-
         customTabHelper = mock(CustomTabHelper.class);
         listener = mock(OnLongClickListener.class);
     }
@@ -63,7 +62,7 @@ public class UrlWidgetTest {
     @Test
     public void usingReadOnlyOption_makeAllClickableElementsDisabled() {
         UrlWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.openUrlButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.getBinding().urlButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
@@ -76,19 +75,19 @@ public class UrlWidgetTest {
     @Test
     public void whenPromptHasAnswer_displaysAnswer() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.stringAnswer.getText().toString(), equalTo("blah"));
+        assertThat(widget.getBinding().urlAnswerText.getText().toString(), equalTo("blah"));
     }
 
     @Test
     public void whenPromptAnswerDoesNotHaveAnswer_displayEmptyString() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.stringAnswer.getText().toString(), equalTo(""));
+        assertThat(widget.getBinding().urlAnswerText.getText().toString(), equalTo(""));
     }
 
     @Test
     public void clickingButtonWhenUrlIsEmpty_doesNotCallOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        widget.openUrlButton.performClick();
+        widget.getBinding().urlButton.performClick();
 
         verify(customTabHelper, never()).bindCustomTabsService(null, null);
         verify(customTabHelper, never()).openUri(null, null);
@@ -97,7 +96,7 @@ public class UrlWidgetTest {
     @Test
     public void clickingButtonWhenUrlIsNotEmpty_callsOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        widget.openUrlButton.performClick();
+        widget.getBinding().urlButton.performClick();
 
         verify(customTabHelper).bindCustomTabsService(widget.getContext(), null);
         verify(customTabHelper).openUri(widget.getContext(), Uri.parse("blah"));
@@ -107,20 +106,9 @@ public class UrlWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
-        widget.openUrlButton.performLongClick();
+        widget.getBinding().urlButton.performLongClick();
 
-        verify(listener).onLongClick(widget.openUrlButton);
-    }
-
-    @Test
-    public void cancelLongPress_callsCancelLongPressForButtonAndTextView() {
-        UrlWidget widget = createWidget(promptWithAnswer(null));
-        widget.openUrlButton = mock(MultiClickSafeButton.class);
-        widget.stringAnswer = mock(TextView.class);
-        widget.cancelLongPress();
-
-        verify(widget.openUrlButton).cancelLongPress();
-        verify(widget.stringAnswer).cancelLongPress();
+        verify(listener).onLongClick(widget.getBinding().urlButton);
     }
 
     @Test

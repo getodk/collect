@@ -15,22 +15,20 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.views.MultiClickSafeButton;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -41,9 +39,7 @@ import org.odk.collect.android.views.MultiClickSafeButton;
 public class UrlWidget extends QuestionWidget {
 
     private final CustomTabHelper customTabHelper;
-
-    protected MultiClickSafeButton openUrlButton;
-    protected TextView stringAnswer;
+    private UrlWidgetAnswerBinding binding;
 
     public UrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper) {
         super(context, questionDetails);
@@ -52,20 +48,18 @@ public class UrlWidget extends QuestionWidget {
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.url_widget_answer, null);
-
-        openUrlButton = answerView.findViewById(R.id.url_button);
-        stringAnswer = answerView.findViewById(R.id.url_answer_text);
+        binding = UrlWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        View answerView = binding.getRoot();
 
         if (prompt.isReadOnly()) {
-            openUrlButton.setVisibility(GONE);
+            binding.urlButton.setVisibility(GONE);
         } else {
-            openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            openUrlButton.setOnClickListener(v -> onButtonClick());
+            binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.urlButton.setOnClickListener(v -> onButtonClick());
         }
 
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        stringAnswer.setText(prompt.getAnswerText());
+        binding.urlAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.urlAnswerText.setText(prompt.getAnswerText());
 
         return answerView;
     }
@@ -77,7 +71,7 @@ public class UrlWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String answerText = stringAnswer.getText().toString();
+        String answerText = binding.urlAnswerText.getText().toString();
         return !answerText.isEmpty()
                 ? new StringData(answerText)
                 : null;
@@ -85,14 +79,14 @@ public class UrlWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        openUrlButton.setOnLongClickListener(l);
+        binding.urlButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        openUrlButton.cancelLongPress();
-        stringAnswer.cancelLongPress();
+        binding.urlButton.cancelLongPress();
+        binding.urlAnswerText.cancelLongPress();
     }
 
     @Override
@@ -104,12 +98,16 @@ public class UrlWidget extends QuestionWidget {
     }
 
     public void onButtonClick() {
-        if (!isUrlEmpty(stringAnswer)) {
+        if (!isUrlEmpty(binding.urlAnswerText)) {
             customTabHelper.bindCustomTabsService(getContext(), null);
             customTabHelper.openUri(getContext(), getUri());
         } else {
             ToastUtils.showShortToast("No URL set");
         }
+    }
+
+    protected UrlWidgetAnswerBinding getBinding() {
+        return binding;
     }
 
     private boolean isUrlEmpty(TextView stringAnswer) {
@@ -118,6 +116,6 @@ public class UrlWidget extends QuestionWidget {
     }
 
     private Uri getUri() {
-        return Uri.parse(stringAnswer.getText().toString());
+        return Uri.parse(binding.urlAnswerText.getText().toString());
     }
 }
