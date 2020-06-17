@@ -30,11 +30,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 
-/**
- * Widget that allows user to open URLs from within the form
- *
- * @author Yaw Anokwa (yanokwa@gmail.com)
- */
 @SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {
 
