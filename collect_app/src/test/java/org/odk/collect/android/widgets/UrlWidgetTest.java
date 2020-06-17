@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets;
 import android.net.Uri;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.widget.TextView;
 
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 
@@ -15,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.CustomTabHelper;
-import org.odk.collect.android.views.MultiClickSafeButton;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
