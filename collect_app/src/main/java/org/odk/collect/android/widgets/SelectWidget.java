@@ -106,7 +106,6 @@ public abstract class SelectWidget extends ItemsWidget {
         return recyclerView;
     }
 
-
     void adjustRecyclerViewSize(AbstractSelectListAdapter adapter, RecyclerView recyclerView) {
         if (adapter.getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
             // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
