@@ -781,23 +781,22 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void checkFormUpdates() {
+        FormsDao formsDao = new FormsDao();
         for (DriveListItem item: driveList) {
-            if (item.getType() == DriveListItem.FILE && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
-                    item.setNewerVersion(true);
+            if (item.getType() == DriveListItem.FILE) {
+                try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
+                    if (cursor != null && cursor.moveToFirst() && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
+                        item.setNewerVersion(true);
+                    }
+                }
             }
         }
     }
 
     private boolean isNewerFormVersionAvailable(DriveListItem item) {
-        FormsDao formsDao = new FormsDao();
-        try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
-            if (cursor != null && cursor.moveToFirst()) {
-                Long lastModifiedLocal = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
-                Long lastModifiedServer = item.getDate().getValue();
-                return lastModifiedServer > lastModifiedLocal;
-            }
-        }
-        return false;
+        Long lastModifiedLocal = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
+        Long lastModifiedServer = item.getDate().getValue();
+        return lastModifiedServer > lastModifiedLocal;
     }
 
     private boolean areNewerMediaFilesAvailable(DriveListItem item) {
