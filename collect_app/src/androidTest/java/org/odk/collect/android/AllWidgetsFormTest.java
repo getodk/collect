@@ -20,14 +20,13 @@ import net.bytebuddy.utility.RandomString;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormActivityTestRule;
+import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
 import java.text.DecimalFormat;
@@ -833,7 +832,6 @@ public class AllWidgetsFormTest {
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
-    @Ignore("Fails on Firebase Test Lab with Nexus5, API 23")
     public void testGridSelectCompact2Appearance() {
 
        Screengrab.screenshot("grid-select-compact2");

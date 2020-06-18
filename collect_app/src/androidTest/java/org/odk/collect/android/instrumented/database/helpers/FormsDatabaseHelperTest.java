@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -28,6 +29,7 @@ import static org.odk.collect.android.instrumented.database.helpers.FormsDatabas
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
+@Ignore("`Parameterized` causes problems for Firebase sharding. Probably need to replace this at JUnit level")
 public class FormsDatabaseHelperTest extends SqlLiteHelperTest {
     enum Action { UPGRADE, DOWNGRADE }
 

@@ -27,6 +27,7 @@ import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.I
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
+@Ignore("`Parameterized` causes problems for Firebase sharding. Probably need to replace this at JUnit level")
 public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     private static final String DATABASE_PATH = InstancesDatabaseHelper.getDatabasePath();
 
@@ -66,7 +67,6 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     }
 
     @Test
-    @Ignore("Flakey. Should be replaced at a Robolectric level probably")
     public void testMigration() throws IOException {
         copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
         InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
