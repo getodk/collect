@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
+import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -22,14 +23,16 @@ public class CollectSettingsImporter {
     private final SettingsValidator settingsValidator;
     private final Map<String, Object> generalDefaults;
     private final Map<String, Object> adminDefaults;
+    private final JavaRosaInitializer javaRosaInitializer;
 
-    public CollectSettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults) {
+    public CollectSettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, JavaRosaInitializer javaRosaInitializer) {
         this.generalSharedPrefs = generalSharedPrefs;
         this.adminSharedPrefs = adminSharedPrefs;
         this.preferenceMigrator = preferenceMigrator;
         this.settingsValidator = settingsValidator;
         this.generalDefaults = generalDefaults;
         this.adminDefaults = adminDefaults;
+        this.javaRosaInitializer = javaRosaInitializer;
     }
 
     public boolean fromJSON(@NonNull String json) {
@@ -59,6 +62,8 @@ public class CollectSettingsImporter {
 
         loadDefaults(generalSharedPrefs, generalDefaults);
         loadDefaults(adminSharedPrefs, adminDefaults);
+
+        javaRosaInitializer.initialize();
 
         return true;
     }

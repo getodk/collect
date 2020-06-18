@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
+import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class CollectSettingsImporterTest {
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, mock(PreferenceMigrator.class), settingsValidator, generalDefaults, adminDefaults);
+        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, () -> { });
     }
 
     @Test
@@ -110,7 +111,7 @@ public class CollectSettingsImporterTest {
             }
         };
 
-        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults);
+        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
@@ -126,8 +127,20 @@ public class CollectSettingsImporterTest {
             }
         };
 
-        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults);
+        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
         assertThat(importer.fromJSON(json.toString()), is(true));
+    }
+
+    @Test
+    public void afterSettingsImportedAndMigrated_initializesJavaRosa() throws Exception {
+        final String[] key1ValueWhenCalled = {null};
+        JavaRosaInitializer javaRosaInitializer = () -> {
+            key1ValueWhenCalled[0] = generalPrefs.getString("key1", null);
+        };
+
+        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, javaRosaInitializer);
+        assertThat(importer.fromJSON(emptySettings()), is(true));
+        assertThat(key1ValueWhenCalled[0], is("default"));
     }
 
     private String emptySettings() throws Exception {

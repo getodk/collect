@@ -15,6 +15,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectPreferenceMigrator;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
@@ -348,7 +349,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CollectSettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator) {
+    public CollectSettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, Application application) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new CollectSettingsImporter(
@@ -357,7 +358,8 @@ public class AppDependencyModule {
                 preferenceMigrator,
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
-                adminDefaults
+                adminDefaults,
+                ((Collect) application)::initializeJavaRosa
         );
     }
 
