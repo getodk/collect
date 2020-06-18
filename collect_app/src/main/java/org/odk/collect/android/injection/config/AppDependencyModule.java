@@ -15,7 +15,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectPreferenceMigrator;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
@@ -43,6 +42,7 @@ import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
+import org.odk.collect.android.javarosawrapper.PropertyManagerJavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -351,7 +351,7 @@ public class AppDependencyModule {
 
     @Provides
     public JavaRosaInitializer providesJavaRosaInitializer(Application application) {
-        return ((Collect) application)::initializeJavaRosa;
+        return new PropertyManagerJavaRosaInitializer(application);
     }
 
     @Provides
