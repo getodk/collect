@@ -42,6 +42,7 @@ import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -349,7 +350,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CollectSettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, Application application) {
+    public JavaRosaInitializer providesJavaRosaInitializer(Application application) {
+        return ((Collect) application)::initializeJavaRosa;
+    }
+
+    @Provides
+    public CollectSettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new CollectSettingsImporter(
@@ -359,7 +365,7 @@ public class AppDependencyModule {
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
                 adminDefaults,
-                ((Collect) application)::initializeJavaRosa
+                javaRosaInitializer
         );
     }
 
