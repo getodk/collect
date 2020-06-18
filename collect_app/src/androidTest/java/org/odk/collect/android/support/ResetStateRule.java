@@ -67,7 +67,7 @@ public class ResetStateRule implements TestRule {
 
             // Any dependencies (PropertyManager for instance) will already have been
             // passed to JavaRosa so make sure everything is reset
-            ((Collect) context.getApplicationContext()).initializeJavaRosa();
+            ((Collect) context.getApplicationContext()).getComponent().javaRosaInitializer().initialize();
 
             base.evaluate();
         }

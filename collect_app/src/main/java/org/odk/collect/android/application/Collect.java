@@ -127,7 +127,6 @@ public class Collect extends Application {
         applicationInitializer.initializeLocale();
         fixGoogleBug154855417();
 
-        initializeJavaRosa();
         setupStrictMode();
     }
 

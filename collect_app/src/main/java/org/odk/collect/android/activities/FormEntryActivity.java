@@ -87,12 +87,12 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.formentry.FormLoadingDialogFragment;
-import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
+import org.odk.collect.android.formentry.FormLoadingDialogFragment;
+import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -112,6 +112,7 @@ import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
+import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -315,6 +316,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     StoragePathProvider storagePathProvider;
+
+    @Inject
+    JavaRosaInitializer javaRosaInitializer;
 
     @Inject
     WorkManager workManager;
@@ -2283,7 +2287,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
-                        Collect.getInstance().initializeJavaRosa();
+                        javaRosaInitializer.initialize();
                         loadForm();
                     }
 

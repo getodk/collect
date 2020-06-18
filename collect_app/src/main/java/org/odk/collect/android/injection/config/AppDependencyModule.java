@@ -340,8 +340,8 @@ public class AppDependencyModule {
 
     @Singleton
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator) {
-        return new ApplicationInitializer(application, collectJobCreator, userAgentProvider, preferenceMigrator);
+    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
+        return new ApplicationInitializer(application, collectJobCreator, userAgentProvider, preferenceMigrator, javaRosaInitializer);
     }
 
     @Provides

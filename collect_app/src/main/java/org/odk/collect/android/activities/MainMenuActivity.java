@@ -45,6 +45,7 @@ import org.odk.collect.android.configure.LegacySettingsFileReader;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
@@ -138,6 +139,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     CollectSettingsImporter collectSettingsImporter;
+
+    @Inject
+    JavaRosaInitializer javaRosaInitializer;
 
     private MainMenuViewModel viewModel;
 
@@ -588,7 +592,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             if (settings != null) {
                 if (collectSettingsImporter.fromJSON(settings)) {
                     ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                    Collect.getInstance().initializeJavaRosa();
+                    javaRosaInitializer.initialize();
                     recreate();
                 } else {
                     ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);

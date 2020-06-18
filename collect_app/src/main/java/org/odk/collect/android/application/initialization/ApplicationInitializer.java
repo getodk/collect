@@ -15,6 +15,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.geo.MapboxUtils;
+import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -32,14 +33,16 @@ public class ApplicationInitializer {
     private final CollectJobCreator collectJobCreator;
     private final UserAgentProvider userAgentProvider;
     private final PreferenceMigrator preferenceMigrator;
+    private final JavaRosaInitializer javaRosaInitializer;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator) {
+    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
+        this.javaRosaInitializer = javaRosaInitializer;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
@@ -57,6 +60,7 @@ public class ApplicationInitializer {
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initializeMapFrameworks();
+        javaRosaInitializer.initialize();
     }
 
     public void initializeLocale() {

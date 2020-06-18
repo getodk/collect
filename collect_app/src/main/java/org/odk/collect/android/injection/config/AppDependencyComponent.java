@@ -31,6 +31,7 @@ import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
+import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
@@ -40,6 +41,7 @@ import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
@@ -49,6 +51,7 @@ import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
+import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.widgets.ExStringWidget;
@@ -181,6 +184,10 @@ public interface AppDependencyComponent {
 
     void inject(QRCodeScannerFragment qrCodeScannerFragment);
 
+    void inject(PreferencesActivity preferencesActivity);
+
+    void inject(ApplicationResetter applicationResetter);
+
     void inject(FormChooserListActivity formChooserListActivity);
 
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
@@ -196,4 +203,6 @@ public interface AppDependencyComponent {
     AdminSharedPreferences adminSharedPreferences();
 
     PreferencesProvider preferencesProvider();
+
+    JavaRosaInitializer javaRosaInitializer();
 }
