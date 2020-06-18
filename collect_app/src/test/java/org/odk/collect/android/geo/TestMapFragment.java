@@ -135,6 +135,11 @@ public class TestMapFragment implements MapFragment {
     }
 
     @Override
+    public void setMarkerAnchorToBottomCenter(int featureId) {
+
+    }
+
+    @Override
     public MapPoint getMarkerPoint(int featureId) {
         return null;
     }
