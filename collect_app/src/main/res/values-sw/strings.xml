@@ -77,8 +77,7 @@
   <string name="list_failed_with_error">Kuorodheshwa kwa fomu kumeshindikana. %s.</string>
   <string name="loading_form">Fomu inakuja</string>
   <string name="load_remote_form_error">Hitilafu kupata orodha ya fomu</string>
-  <string name="location_provider_accuracy">Inatumia %1$s. Usahihi ni %2$s m.</string>
-  <string name="location_accuracy">Usahihi ni %1$s m</string>
+    <string name="location_accuracy">Usahihi ni %1$s m</string>
   <string name="manage_files">Futa fomu zilizohifadhiwa</string>
   <string name="mark_finished">Weka alama kuonesha fomu imekamilika</string>
   <string name="noselect_error">Samahani, hujachagua fomu zozote!</string>

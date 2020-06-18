@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.geo;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +23,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -34,6 +32,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -42,11 +41,13 @@ import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
@@ -62,6 +63,8 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.TilesOverlay;
+import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.io.File;
@@ -93,6 +96,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private FeatureListener dragEndListener;
     private MyLocationNewOverlay myLocationOverlay;
     private LocationClient locationClient;
+    private OsmLocationClientWrapper osmLocationClientWrapper;
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
     private boolean clientWantsLocationUpdates;
@@ -176,14 +180,17 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         addAttributionAndMapEventsOverlays();
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
-        myLocationOverlay = new MyLocationNewOverlay(map);
+
+        locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
+                () -> new GoogleFusedLocationClient(getActivity().getApplication()));
+        locationClient.setListener(this);
+
+        osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
+        myLocationOverlay = new MyLocationNewOverlay(osmLocationClientWrapper, map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
         Bitmap crosshairs = IconUtils.getBitmap(getActivity(), R.drawable.ic_crosshairs);
         myLocationOverlay.setDirectionArrow(crosshairs, crosshairs);
         myLocationOverlay.setPersonHotspot(crosshairs.getWidth() / 2.0f, crosshairs.getHeight() / 2.0f);
-
-        locationClient = LocationClients.clientForContext(getActivity());
-        locationClient.setListener(this);
 
         new Handler().postDelayed(() -> {
             // If the screen is rotated before the map is ready, this fragment
@@ -380,9 +387,17 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 gpsLocationListener.onPoint(point);
             }
         }
+
+        if (myLocationOverlay != null) {
+            myLocationOverlay.onLocationChanged(location, osmLocationClientWrapper);
+        }
     }
 
     @Override public void onClientStart() {
+        map.getOverlays().add(myLocationOverlay);
+        myLocationOverlay.setEnabled(true);
+        myLocationOverlay.enableMyLocation();
+
         Timber.i("Requesting location updates (to %s)", this);
         locationClient.requestLocationUpdates(this);
     }
@@ -395,20 +410,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
-            locationClient = LocationClients.clientForContext(getActivity());
+            locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
+                    () -> new GoogleFusedLocationClient(getActivity().getApplication()));
             locationClient.setListener(this);
         }
+
         if (enable) {
-            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                map.getOverlays().add(myLocationOverlay);
-                myLocationOverlay.setEnabled(true);
-                myLocationOverlay.enableMyLocation();
-                Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
-                locationClient.start();
-            } else {
-                showGpsDisabledAlert();
-            }
+            Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.start();
         } else {
             Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
             locationClient.stop();
@@ -750,6 +759,39 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 }
                 canvas.restore();
             }
+        }
+    }
+
+    private static class OsmLocationClientWrapper implements IMyLocationProvider {
+        private LocationClient locationClient;
+
+        OsmLocationClientWrapper(LocationClient locationClient) {
+            this.locationClient = locationClient;
+        }
+
+        @Override
+        public boolean startLocationProvider(IMyLocationConsumer myLocationConsumer) {
+            // locationClient.start launches async work and we need to be confident that
+            // getLastKnownLocation is never called before onClientStart so we don't let the OSM
+            // location overlay start the provider. We also ignore the location consumer passed in
+            // and instead explicitly forward location updates to the overlay from onLocationChanged
+            return true;
+        }
+
+        @Override
+        public void stopLocationProvider() {
+            locationClient.stop();
+        }
+
+        @Override
+        public Location getLastKnownLocation() {
+            return locationClient.getLastLocation();
+        }
+
+        @Override
+        public void destroy() {
+            locationClient.stop();
+            locationClient = null;
         }
     }
 }

@@ -61,8 +61,7 @@
   <string name="list_failed_with_error">فارم ‎%s‏ کی لیسٹینگ فیل ہوگئ۔</string>
   <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
   <string name="load_remote_form_error">فارم کی لیسٹینگ میں غلطی ہے</string>
-  <string name="location_provider_accuracy">‎%1$s‏ استعمال ہو رہا ہے، ‎%2$s‏ درستگی  میٹر ہے</string>
-  <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
+    <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
   <string name="manage_files">محفوظ شدہ فارم کو مٹا دیں۔</string>
   <string name="mark_finished">فارم کو حتمی کردیں</string>
   <string name="noselect_error">معافی، آپنے کسی فارم کا انتخاب نہیں کیا</string>

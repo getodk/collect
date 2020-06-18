@@ -76,8 +76,7 @@
   <string name="list_failed_with_error">Errore visualizzazione Elenco Moduli %s.</string>
   <string name="loading_form">Caricamento Modulo</string>
   <string name="load_remote_form_error">Errore nel recupero Elenco Moduli.</string>
-  <string name="location_provider_accuracy">Utilizzando %1$s. Precisione%2$s m.</string>
-  <string name="location_accuracy">Precisione: %1$s m</string>
+    <string name="location_accuracy">Precisione: %1$s m</string>
   <string name="manage_files">Elimina Modulo Salvato</string>
   <string name="mark_finished">Segna Modulo come Completato</string>
   <string name="noselect_error">Spiacenti, non hai selezionato alcun modulo!</string>

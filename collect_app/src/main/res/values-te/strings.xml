@@ -74,8 +74,7 @@
   <string name="list_failed_with_error">ఫారం జాబితా విఫలమైంది.%s</string>
   <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
   <string name="load_remote_form_error">ఫారం జాబితాను పొందడంలో లోపం జరిగింది </string>
-  <string name="location_provider_accuracy">%1$s ఉపయోగించబడుతోంది. దీని ఖచ్చితత్వం %2$s m.</string>
-  <string name="location_accuracy">ఖచ్చితత్వం %1$sm</string>
+    <string name="location_accuracy">ఖచ్చితత్వం %1$sm</string>
   <string name="manage_files">సేవ్ చేసిన ఫారంలను తొలగించండి </string>
   <string name="mark_finished">ఫారంను ఖరారు చేసినట్లుగా గుర్తించండి</string>
   <string name="noselect_error">క్షమించండి, మీరు ఏ ఫారంలను ఎంచుకోలేదు!</string>

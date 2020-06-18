@@ -67,8 +67,7 @@
   <string name="list_failed_with_error">列出表格失败. %s.</string>
   <string name="loading_form">正在加载表格</string>
   <string name="load_remote_form_error">获取表格列表错误</string>
-  <string name="location_provider_accuracy">使用 %1$s. 精度为  %2$s m.</string>
-  <string name="location_accuracy">精度为  %1$s m</string>
+    <string name="location_accuracy">精度为  %1$s m</string>
   <string name="manage_files">删除已保存表格</string>
   <string name="mark_finished">标记表格为完成</string>
   <string name="noselect_error">没有选定表格!</string>

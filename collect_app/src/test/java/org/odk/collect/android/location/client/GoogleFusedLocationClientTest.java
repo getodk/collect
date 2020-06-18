@@ -15,133 +15,125 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GoogleLocationClientTest {
+public class GoogleFusedLocationClientTest {
 
     @Mock FusedLocationProviderApi fusedLocationProviderApi;
     @Mock GoogleApiClient googleApiClient;
     @Mock LocationManager locationManager;
 
-    private GoogleLocationClient googleLocationClient;
+    private GoogleFusedLocationClient client;
 
     @Before
     public void setUp() {
-        googleLocationClient = new GoogleLocationClient(googleApiClient, fusedLocationProviderApi, locationManager);
+        client = new GoogleFusedLocationClient(googleApiClient, fusedLocationProviderApi, locationManager);
     }
 
     @Test
     public void startShouldCallLocationClientOnConnected() {
         doAnswer(new OnConnectedAnswer()).when(googleApiClient).connect();
-        doAnswer(new OnDisconnectedAnswer()).when(googleApiClient).disconnect();
 
-        TestClientListener testClientListener = new TestClientListener();
-        googleLocationClient.setListener(testClientListener);
+        LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
+        client.setListener(listener);
 
-        googleLocationClient.start();
-        assertTrue(testClientListener.wasStartCalled());
-        assertFalse(testClientListener.wasStartFailureCalled());
-        assertFalse(testClientListener.wasStopCalled());
+        client.start();
+        verify(listener).onClientStart();
+        verify(listener, never()).onClientStartFailure();
+        verify(listener, never()).onClientStop();
 
-        googleLocationClient.stop();
-        assertTrue(testClientListener.wasStartCalled());
-        assertFalse(testClientListener.wasStartFailureCalled());
-        assertTrue(testClientListener.wasStopCalled());
+        client.stop();
 
-        testClientListener.reset();
-
+        reset(listener);
         doAnswer(new OnConnectionFailedAnswer()).when(googleApiClient).connect();
 
-        googleLocationClient.start();
-        assertFalse(testClientListener.wasStartCalled());
-        assertTrue(testClientListener.wasStartFailureCalled());
-        assertFalse(testClientListener.wasStopCalled());
+        client.start();
+        verify(listener, never()).onClientStart();
+        verify(listener).onClientStartFailure();
+        verify(listener, never()).onClientStop();
 
-        // Necessary for Stop to be called.
-        when(googleApiClient.isConnected()).thenReturn(true);
-
-        googleLocationClient.stop();
-        assertFalse(testClientListener.wasStartCalled());
-        assertTrue(testClientListener.wasStartFailureCalled());
-        assertTrue(testClientListener.wasStopCalled());
+        client.stop();
+        verify(listener, never()).onClientStart();
+        verify(listener).onClientStartFailure();
+        verify(listener).onClientStop();
     }
 
     @Test
-    public void stopShouldDisconnectFromGoogleApiIfConnected() {
+    public void stopShouldDisconnectFromGoogleApiIfConnected_andAlwaysCallOnClientStopIfListenerSet() {
+        LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
+        client.setListener(listener);
 
-        TestClientListener testClientListener = new TestClientListener();
-        googleLocationClient.setListener(testClientListener);
-
-        // Call through to ApiClient.disconnect(), but don't do anything:
+        // Previously connected, disconnection succeeds
         when(googleApiClient.isConnected()).thenReturn(true);
-        googleLocationClient.stop();
+        client.stop();
+        verify(googleApiClient).disconnect();
+        verify(listener).onClientStop();
 
-        // ApiClient.disconnect() won't call through to stop in this instance:
-        assertFalse(testClientListener.wasStopCalled());
+        reset(listener);
 
+        // Previously connected, disconnection calls onConnectionSuspended
         doAnswer(new OnDisconnectedAnswer()).when(googleApiClient).disconnect();
+        client.stop();
+        verify(listener).onClientStop();
 
-        googleLocationClient.stop();
-        assertTrue(testClientListener.wasStopCalled());
+        reset(listener);
 
-        testClientListener.reset();
-
-        // Don't call through to ApiClient.disconnect():
+        // Not previously connected
         when(googleApiClient.isConnected()).thenReturn(false);
-        googleLocationClient.stop();
-
-        assertTrue(testClientListener.wasStopCalled());
+        client.stop();
+        verify(listener).onClientStop();
     }
 
     @Test
     public void requestingLocationUpdatesShouldUpdateCorrectListener() {
-        googleLocationClient.start();
+        client.start();
 
         TestLocationListener firstListener = new TestLocationListener();
-        googleLocationClient.requestLocationUpdates(firstListener);
+        client.requestLocationUpdates(firstListener);
 
         Location firstLocation = newMockLocation();
-        googleLocationClient.onLocationChanged(firstLocation);
+        client.onLocationChanged(firstLocation);
 
         assertSame(firstLocation, firstListener.getLastLocation());
 
         Location secondLocation = newMockLocation();
-        googleLocationClient.onLocationChanged(secondLocation);
+        client.onLocationChanged(secondLocation);
 
         assertSame(secondLocation, firstListener.getLastLocation());
 
         // Now stop updates:
-        googleLocationClient.stopLocationUpdates();
+        client.stopLocationUpdates();
 
         Location thirdLocation = newMockLocation();
-        googleLocationClient.onLocationChanged(thirdLocation);
+        client.onLocationChanged(thirdLocation);
 
         // Should still be second:
         assertSame(secondLocation, firstListener.getLastLocation());
 
         // Call requestLocationUpdates again with new listener:
         TestLocationListener secondListener = new TestLocationListener();
-        googleLocationClient.requestLocationUpdates(secondListener);
+        client.requestLocationUpdates(secondListener);
 
         Location fourthLocation = newMockLocation();
-        googleLocationClient.onLocationChanged(fourthLocation);
+        client.onLocationChanged(fourthLocation);
 
         // First listener should still have second location:
         assertSame(secondLocation, firstListener.getLastLocation());
         assertSame(fourthLocation, secondListener.getLastLocation());
 
         // Call stop() and make sure it called stopLocationUpdates():
-        googleLocationClient.stop();
+        client.stop();
 
         Location fifthLocation = newMockLocation();
-        googleLocationClient.onLocationChanged(fifthLocation);
+        client.onLocationChanged(fifthLocation);
 
         // Listener should still have fourth location:
         assertSame(fourthLocation, secondListener.getLastLocation());
@@ -149,19 +141,19 @@ public class GoogleLocationClientTest {
 
     @Test
     public void getLastLocationShouldCallBlockingConnectIfNotConnected() {
-        googleLocationClient.getLastLocation();
+        client.getLastLocation();
         verify(googleApiClient).blockingConnect();
 
         when(googleApiClient.isConnected()).thenReturn(true);
-        googleLocationClient.start();
+        client.start();
 
-        googleLocationClient.getLastLocation();
+        client.getLastLocation();
         verify(googleApiClient).blockingConnect(); // 'verify' checks if called *once*.
     }
 
     @Test
     public void canSetUpdateIntervalsShouldReturnTrue() {
-        assertTrue(googleLocationClient.canSetUpdateIntervals());
+        assertTrue(client.canSetUpdateIntervals());
     }
 
     private static Location newMockLocation() {
@@ -171,7 +163,7 @@ public class GoogleLocationClientTest {
     private class OnConnectedAnswer implements Answer<Object> {
         @Override
         public Object answer(InvocationOnMock invocation) throws Throwable {
-            googleLocationClient.onConnected(null);
+            client.onConnected(null);
             return null;
         }
     }
@@ -179,7 +171,7 @@ public class GoogleLocationClientTest {
     private class OnConnectionFailedAnswer implements Answer<Object> {
         @Override
         public Object answer(InvocationOnMock invocation) throws Throwable {
-            googleLocationClient.onConnectionFailed(new ConnectionResult(0));
+            client.onConnectionFailed(new ConnectionResult(0));
             return null;
         }
     }
@@ -187,7 +179,7 @@ public class GoogleLocationClientTest {
     private class OnDisconnectedAnswer implements Answer<Object> {
         @Override
         public Object answer(InvocationOnMock invocation) throws Throwable {
-            googleLocationClient.onConnectionSuspended(0);
+            client.onConnectionSuspended(0);
             return null;
         }
     }

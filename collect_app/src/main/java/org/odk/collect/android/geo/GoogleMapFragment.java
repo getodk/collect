@@ -15,7 +15,6 @@
 package org.odk.collect.android.geo;
 
 import android.annotation.SuppressLint;
-import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -26,6 +25,7 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.LocationListener;
@@ -49,11 +49,13 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -517,7 +519,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
-            locationClient = LocationClients.clientForContext(getActivity());
+            locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
+                    () -> new GoogleFusedLocationClient(getActivity().getApplication()));
             locationClient.setListener(this);
         }
         if (enable) {

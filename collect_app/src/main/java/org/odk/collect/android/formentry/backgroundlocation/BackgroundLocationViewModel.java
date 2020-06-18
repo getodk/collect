@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.client.GoogleLocationClient;
+import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
@@ -68,7 +68,7 @@ public class BackgroundLocationViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.equals(BackgroundLocationViewModel.class)) {
-                GoogleLocationClient googleLocationClient = new GoogleLocationClient(Collect.getInstance().getApplicationContext());
+                GoogleFusedLocationClient googleLocationClient = new GoogleFusedLocationClient(Collect.getInstance());
 
                 BackgroundLocationManager locationManager =
                         new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper());

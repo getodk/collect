@@ -77,8 +77,7 @@
   <string name="list_failed_with_error">Tworzenie listy formularzy nie powiodło się. %s</string>
   <string name="loading_form">Wczytywanie Formularza</string>
   <string name="load_remote_form_error">Błąd Pobierania Listy Formularzy</string>
-  <string name="location_provider_accuracy">Korzystam z %1$s. Dokładność rzędu %2$s m.</string>
-  <string name="location_accuracy">Dokładność rzędu %1$s m</string>
+    <string name="location_accuracy">Dokładność rzędu %1$s m</string>
   <string name="manage_files">Skasuj Zapisany Formularz</string>
   <string name="mark_finished">Zaznacz formularz jako zakończony</string>
   <string name="noselect_error">Przykro mi, nie zaznaczyłeś żadnego formularza!</string>

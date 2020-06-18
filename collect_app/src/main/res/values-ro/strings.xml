@@ -62,8 +62,7 @@
   <string name="list_failed_with_error">Afișarea formularului a eșuat. %s.</string>
   <string name="loading_form">Încărcare formular</string>
   <string name="load_remote_form_error">Eroare la preluarea listei de formulare</string>
-  <string name="location_provider_accuracy">Utilizat %1$s. Precizie de %2$s m.</string>
-  <string name="location_accuracy">Precizie de %1$s m</string>
+    <string name="location_accuracy">Precizie de %1$s m</string>
   <string name="manage_files">Ștergeți formular salvat</string>
   <string name="mark_finished">Marcați formularul ca finalizat</string>
   <string name="noselect_error">Ne pare rău, nu ați selectat niciun formular!</string>

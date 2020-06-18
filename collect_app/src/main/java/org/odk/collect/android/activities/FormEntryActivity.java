@@ -141,7 +141,7 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
@@ -1008,7 +1008,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menuDelegate.onPrepareOptionsMenu(menu);
 
         if (getFormController() != null && getFormController().currentFormCollectsBackgroundLocation()
-                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
             analytics.logEvent(LAUNCH_FORM_WITH_BG_LOCATION, getFormController().getCurrentFormIdentifierHash());
         }
         return true;
@@ -2047,7 +2047,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // Register to receive location provider change updates and write them to the audit log
         if (formController != null && formController.currentFormAuditsLocation()
-                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         }
 
@@ -2423,7 +2423,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // Register to receive location provider change updates and write them to the audit
         // log. onStart has already run but the formController was null so try again.
         if (formController.currentFormAuditsLocation()
-                && PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         }
 

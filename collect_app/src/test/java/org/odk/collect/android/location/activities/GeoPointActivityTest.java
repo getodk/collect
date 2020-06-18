@@ -12,15 +12,16 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.shadows.ShadowActivity;
 
 import static android.app.Activity.RESULT_OK;
 import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -39,7 +40,6 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
     private ActivityController<GeoPointActivity> activityController;
 
     private GeoPointActivity activity;
-    private ShadowActivity shadowActivity;
 
     @Mock
     LocationClient locationClient;
@@ -52,8 +52,7 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
         super.setUp();
         activityController = Robolectric.buildActivity(GeoPointActivity.class);
         activity = activityController.get();
-        shadowActivity = shadowOf(activity);
-        LocationClients.setTestClient(locationClient);
+        LocationClientProvider.setTestClient(locationClient);
     }
 
     @Test
@@ -79,12 +78,9 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
 
         activity.onLocationChanged(firstLocation);
 
-        // First update should only change dialog message (to avoid network location bug):
-        assertFalse(shadowActivity.isFinishing());
-        assertEquals(
-                activity.getDialogMessage(),
-                activity.getAccuracyMessage(firstLocation)
-        );
+        // First update should never result in a selected point to avoid network location bug:
+        assertFalse(activity.isFinishing());
+        assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(firstLocation)));
 
         // Second update with poor accuracy should change dialog message:
         float poorAccuracy = (float) GeoPointWidget.DEFAULT_LOCATION_ACCURACY + 1.0f;
@@ -94,11 +90,8 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
 
         activity.onLocationChanged(secondLocation);
 
-        assertFalse(shadowActivity.isFinishing());
-        assertEquals(
-                activity.getDialogMessage(),
-                activity.getProviderAccuracyMessage(secondLocation)
-        );
+        assertFalse(activity.isFinishing());
+        assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(secondLocation)));
 
         // Third location with good accuracy should change dialog and finish activity.
         float goodAccuracy = (float) GeoPointWidget.DEFAULT_LOCATION_ACCURACY - 1.0f;
@@ -108,15 +101,12 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
 
         activity.onLocationChanged(thirdLocation);
 
-        assertTrue(shadowActivity.isFinishing());
-        assertEquals(
-                activity.getDialogMessage(),
-                activity.getProviderAccuracyMessage(thirdLocation)
-        );
+        assertTrue(activity.isFinishing());
+        assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(thirdLocation)));
 
-        assertEquals(shadowActivity.getResultCode(), RESULT_OK);
+        assertEquals(shadowOf(activity).getResultCode(), RESULT_OK);
 
-        Intent resultIntent = shadowActivity.getResultIntent();
+        Intent resultIntent = shadowOf(activity).getResultIntent();
         String resultString = resultIntent.getStringExtra(LOCATION_RESULT);
 
         assertEquals(resultString, activity.getResultStringForLocation(thirdLocation));
@@ -130,9 +120,9 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
         when(locationClient.isLocationAvailable()).thenReturn(false);
 
         activity.onClientStart();
-        assertTrue(shadowActivity.isFinishing());
+        assertTrue(activity.isFinishing());
 
-        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        Intent nextStartedActivity = shadowOf(activity).getNextStartedActivity();
         assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
     }
 
@@ -142,9 +132,9 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
         activityController.start();
 
         activity.onClientStartFailure();
-        assertTrue(shadowActivity.isFinishing());
+        assertTrue(activity.isFinishing());
 
-        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        Intent nextStartedActivity = shadowOf(activity).getNextStartedActivity();
         assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
     }
 

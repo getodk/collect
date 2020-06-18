@@ -60,8 +60,7 @@
   <string name="list_failed_with_error">ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້ %s.</string>
   <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
   <string name="load_remote_form_error">ມີ​ຄວາມຜິດພາດ ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້</string>
-  <string name="location_provider_accuracy">ໃຊ້້ຄ່າພິກັດ %1$s. ຄ່າຄວາມຖືກຕ້ອງແມ່ນ %2$s m.</string>
-  <string name="location_accuracy">ຄ່າຄວາມຖືກຕ້ອງ​ແມ່ນ %1$s m</string>
+    <string name="location_accuracy">ຄ່າຄວາມຖືກຕ້ອງ​ແມ່ນ %1$s m</string>
   <string name="manage_files">ລຶບແບບຟອມທີ່ບັນທຶກໄວ້</string>
   <string name="mark_finished">ໝາຍແບບຟອມວ່າໄດ້ສຳເລັດແລ້ວ</string>
   <string name="noselect_error">ທ່ານບໍ່ທັນ​ໄດ້ເລືອກແບບຟອມ!</string>

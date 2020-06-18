@@ -89,8 +89,8 @@
     <string name="list_failed_with_error">Form listing failed. %s.</string>
     <string name="loading_form">Loading Form</string>
     <string name="load_remote_form_error">Error Getting Form List</string>
-    <string name="location_provider_accuracy">Using %1$s. Accuracy is %2$s m.</string>
-    <string name="location_accuracy">Accuracy is %1$s m</string>
+    <string name="location_accuracy">Accuracy: %1$s m</string>
+    <string name="location_provider">Location provider: %s</string>
     <string name="manage_files">Delete Saved Form</string>
     <string name="mark_finished">Mark form as finalized</string>
     <string name="noselect_error">Sorry, you have not selected any forms!</string>
@@ -364,10 +364,10 @@
         <item quantity="one">%d meter</item>
         <item quantity="other">%d meters</item>
     </plurals>
-    <string name="location_status_searching">Searching for GPS location, please wait&#8230;</string>
-    <string name="location_status_accuracy">GPS location accuracy: %.2f m</string>
-    <string name="location_status_acceptable">GPS location accuracy: %.2f m (acceptable)</string>
-    <string name="location_status_unacceptable">GPS location accuracy: %.2f m (unacceptable)</string>
+    <string name="location_status_searching">Searching for location, please wait&#8230;</string>
+    <string name="location_status_accuracy">Location accuracy: %.2f m</string>
+    <string name="location_status_acceptable">Location accuracy: %.2f m (acceptable)</string>
+    <string name="location_status_unacceptable">Location accuracy: %.2f m (unacceptable)</string>
     <string name="collection_status_paused">Points entered: %d</string>
     <string name="collection_status_placement">Points entered: %d (tap to place points)</string>
     <string name="collection_status_manual">Points entered: %d (manual recording)</string>

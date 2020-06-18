@@ -332,12 +332,9 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         return String.format("%s %s %s %s", point.lat, point.lon, point.alt, point.sd);
     }
 
-    public String formatLocationStatus(String provider, double sd) {
-        return getString(
-            R.string.location_provider_accuracy,
-            GeoUtils.capitalizeGps(provider),
-            new DecimalFormat("#.##").format(sd)
-        );
+    public String formatLocationStatus(String provider, double accuracyRadius) {
+        return getString(R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius))
+                + " " + getString(R.string.location_provider, GeoUtils.capitalizeGps(provider));
     }
 
     public void onDragEnd(int draggedFeatureId) {

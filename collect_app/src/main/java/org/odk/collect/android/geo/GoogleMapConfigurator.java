@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableSet;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -45,7 +45,7 @@ class GoogleMapConfigurator implements MapConfigurator {
                 R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
         }
         if (!isGooglePlayServicesAvailable(context)) {
-            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(context);
+            new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(context);
         }
     }
 
@@ -57,7 +57,7 @@ class GoogleMapConfigurator implements MapConfigurator {
     }
 
     private boolean isGooglePlayServicesAvailable(Context context) {
-        return PlayServicesUtil.isGooglePlayServicesAvailable(context);
+        return new PlayServicesChecker().isGooglePlayServicesAvailable(context);
     }
 
     @Override public MapFragment createMapFragment(Context context) {

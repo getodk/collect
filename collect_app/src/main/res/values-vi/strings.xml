@@ -62,8 +62,7 @@
   <string name="list_failed_with_error">Lỗi hiển thị biểu mẫu. %s.</string>
   <string name="loading_form">Tải biểu mẫu</string>
   <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
-  <string name="location_provider_accuracy">Sử dụng %1$s. Độ chính xác là %2$s m.</string>
-  <string name="location_accuracy">Độ chính xác là %1$s m</string>
+    <string name="location_accuracy">Độ chính xác là %1$s m</string>
   <string name="manage_files">Xoá biểu mẫu cũ</string>
   <string name="mark_finished">Đánh dấu biểu mẫu là hoàn thành</string>
   <string name="noselect_error">Xin lỗi, bạn không chọn biểu mẫu nào!</string>

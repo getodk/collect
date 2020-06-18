@@ -1,10 +1,14 @@
 package org.odk.collect.android.location.client;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -15,20 +19,16 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 /**
- * An implementation of {@link LocationClient} that uses Google Play
- * Services to retrieve the User's location.
+ * An implementation of {@link LocationClient} that uses Google Play Services to retrieve the
+ * User's location.
  * <p>
- * Should be used whenever there Google Play Services is present.
- * <p>
- * Package-private, use {@link LocationClients} to retrieve the correct
- * {@link LocationClient}.
+ * Should be used whenever there Google Play Services is present. In general, use
+ * {@link LocationClientProvider} to retrieve a configured {@link LocationClient}.
  */
-public class GoogleLocationClient
+public class GoogleFusedLocationClient
         extends BaseLocationClient
         implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
@@ -43,6 +43,12 @@ public class GoogleLocationClient
      */
     private static final long DEFAULT_FASTEST_UPDATE_INTERVAL = 2500;
 
+    /**
+     * Although FusedLocationProviderApi is deprecated, FusedLocationProviderClient which is
+     * supposed to replace it doesn't work until Google Play Services 11.6.0, released Nov 2017.
+     * Some of our users have really slow connections and old versions of Play Services so we should
+     * wait to switch APIs.
+     */
     @NonNull
     private final FusedLocationProviderApi fusedLocationProviderApi;
 
@@ -56,15 +62,16 @@ public class GoogleLocationClient
     private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
 
     /**
-     * Constructs a new GoogleLocationClient with the provided Context.
+     * Constructs a new GoogleFusedLocationClient with the provided Context.
      * <p>
      * This Constructor should be used normally.
      *
-     * @param context The Context where the GoogleLocationClient will be running.
+     * @param application The application. Used as the Context for building the GoogleApiClient because
+     *                    it doesn't release context.
      */
-    public GoogleLocationClient(@NonNull Context context) {
-        this(locationServicesClientForContext(context), LocationServices.FusedLocationApi,
-                (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
+    public GoogleFusedLocationClient(@NonNull Application application) {
+        this(locationServicesClientForContext(application), LocationServices.FusedLocationApi,
+                (LocationManager) application.getSystemService(Context.LOCATION_SERVICE));
     }
 
     /**
@@ -78,9 +85,9 @@ public class GoogleLocationClient
      * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
      *                                 location.
      */
-    GoogleLocationClient(@NonNull GoogleApiClient googleApiClient,
-                         @NonNull FusedLocationProviderApi fusedLocationProviderApi,
-                         @NonNull LocationManager locationManager) {
+    GoogleFusedLocationClient(@NonNull GoogleApiClient googleApiClient,
+                              @NonNull FusedLocationProviderApi fusedLocationProviderApi,
+                              @NonNull LocationManager locationManager) {
         super(locationManager);
 
         this.googleApiClient = googleApiClient;
@@ -104,9 +111,10 @@ public class GoogleLocationClient
 
         if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
+        }
 
-        } else {
-            onConnectionSuspended(0);
+        if (getListener() != null) {
+            getListener().onClientStop();
         }
     }
 
@@ -124,8 +132,8 @@ public class GoogleLocationClient
             return;
         }
 
+        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, locationListener);
         locationListener = null;
-        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, this);
     }
 
     @Override
@@ -151,7 +159,7 @@ public class GoogleLocationClient
 
     @Override
     public void setUpdateIntervals(long updateInterval, long fastestUpdateInterval) {
-        Timber.i("GoogleLocationClient setting update intervals: %d, %d", updateInterval, fastestUpdateInterval);
+        Timber.i("GoogleFusedLocationClient setting update intervals: %d, %d", updateInterval, fastestUpdateInterval);
 
         this.updateInterval = updateInterval;
         this.fastestUpdateInterval = fastestUpdateInterval;
@@ -159,13 +167,13 @@ public class GoogleLocationClient
 
     @Override
     public void resetUpdateIntervals() {
-        Timber.i("GoogleLocationClient resetting update intervals.");
+        Timber.i("GoogleFusedLocationClient resetting update intervals.");
 
         this.updateInterval = DEFAULT_UPDATE_INTERVAL;
         this.fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
     }
 
-    // GoogleLocationClient:
+    // GoogleFusedLocationClient:
 
     private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
@@ -188,9 +196,6 @@ public class GoogleLocationClient
 
     @Override
     public void onConnectionSuspended(int cause) {
-        if (getListener() != null) {
-            getListener().onClientStop();
-        }
     }
 
     // OnConnectionFailedListener:
