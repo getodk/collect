@@ -811,17 +811,14 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             }
 
             if (mediaFileList != null) {
-                for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
-                    File localMediaFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
-                    if (!localMediaFile.exists()) {
-                        return true;
-                    } else {
-                        Long lastModifiedLocal = localMediaFile.lastModified();
-                        Long lastModifiedServer = mediaFile.getModifiedTime().getValue();
-                        if (lastModifiedServer > lastModifiedLocal) {
-                            return true;
-                        }
-                    }
+                File localMediaFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFileList.get(0).getName());
+                if (!localMediaFile.exists()) {
+                    return true;
+                }
+                Long lastModifiedLocal = localMediaFile.lastModified();
+                Long lastModifiedServer = mediaFileList.get(0).getModifiedTime().getValue();
+                if (lastModifiedServer > lastModifiedLocal) {
+                    return true;
                 }
             }
         } catch (Exception e) {
