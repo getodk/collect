@@ -118,6 +118,9 @@ public interface MapFragment {
     /** Sets the icon for a marker. */
     void setMarkerIcon(int featureId, int drawableId);
 
+    /** Sets the anchor for a marker to bottom-center. */
+    void setMarkerAnchorToBottomCenter(int featureId);
+
     /** Gets the location of an existing marker. */
     MapPoint getMarkerPoint(int featureId);
 

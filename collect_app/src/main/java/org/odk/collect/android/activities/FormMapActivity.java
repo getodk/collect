@@ -265,6 +265,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private void updateSubmissionMarker(int featureId, String status, boolean enlarged) {
         int drawableId = getDrawableIdForStatus(status, enlarged);
         map.setMarkerIcon(featureId, drawableId);
+        map.setMarkerAnchorToBottomCenter(featureId);
     }
 
     /**

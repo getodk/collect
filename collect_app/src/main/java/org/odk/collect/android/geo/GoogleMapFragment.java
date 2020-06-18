@@ -253,6 +253,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
+    @Override public void setMarkerAnchorToBottomCenter(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setMarkerAnchorToBottomCenter();
+        }
+    }
+
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
@@ -648,6 +655,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         public void setIcon(int drawableId) {
             marker.setIcon(getBitmapDescriptor(drawableId));
+        }
+
+        void setMarkerAnchorToBottomCenter() {
+            marker.setAnchor(0.5f, 1.0f);
         }
 
         public MapPoint getPoint() {

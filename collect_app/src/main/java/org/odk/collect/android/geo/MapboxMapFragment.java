@@ -43,6 +43,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.sources.RasterSource;
@@ -322,6 +323,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {
             ((MarkerFeature) feature).setIcon(drawableId);
+        }
+    }
+
+    @Override public void setMarkerAnchorToBottomCenter(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setMarkerAnchorToBottomCenter();
         }
     }
 
@@ -758,6 +766,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         public void setIcon(int drawableId) {
             symbol.setIconImage(addIconImage(drawableId));
             symbolManager.update(symbol);
+        }
+
+        void setMarkerAnchorToBottomCenter() {
+            symbol.setIconAnchor(Property.ICON_ANCHOR_BOTTOM);
         }
 
         public MapPoint getPoint() {

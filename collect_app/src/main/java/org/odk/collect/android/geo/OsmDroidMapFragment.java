@@ -284,6 +284,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
+    @Override public void setMarkerAnchorToBottomCenter(int featureId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof MarkerFeature) {
+            ((MarkerFeature) feature).setMarkerAnchorToBottomCenter();
+        }
+    }
+
     @Override public @Nullable MapPoint getMarkerPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
@@ -614,6 +621,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
         public void setIcon(int drawableId) {
             marker.setIcon(ContextCompat.getDrawable(map.getContext(), drawableId));
+        }
+
+        void setMarkerAnchorToBottomCenter() {
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         }
 
         public MapPoint getPoint() {
