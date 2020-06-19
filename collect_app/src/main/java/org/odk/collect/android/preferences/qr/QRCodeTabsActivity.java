@@ -15,6 +15,7 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
@@ -34,7 +35,6 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -101,8 +101,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
-        Uri uri =
-                FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(qrCodeGenerator.getQrCodeFilepath()));
+        Uri uri = ContentUriProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(qrCodeGenerator.getQrCodeFilepath()));
         FileUtils.grantFileReadPermissions(shareIntent, uri, this);
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
     }

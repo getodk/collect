@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import androidx.core.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 
@@ -30,6 +29,7 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
@@ -166,7 +166,7 @@ public class ImageWidget extends BaseImageWidget {
             // the size. boo.
 
             try {
-                Uri uri = FileProvider.getUriForFile(getContext(),
+                Uri uri = ContentUriProvider.getUriForFile(getContext(),
                         BuildConfig.APPLICATION_ID + ".provider",
                         new File(new StoragePathProvider().getTmpFilePath()));
                 // if this gets modified, the onActivityResult in

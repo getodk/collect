@@ -33,7 +33,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 
 import com.google.android.material.button.MaterialButton;
@@ -46,6 +45,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -179,7 +179,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
         Intent intent = new Intent("android.intent.action.VIEW");
         Uri uri =
-                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
+                ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
         FileUtils.grantFileReadPermissions(intent, uri, getContext());
         intent.setDataAndType(uri, "video/*");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -229,7 +229,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             File bigImage = new File(referenceManager.deriveReference(bigImageURI).getLocalURI());
             Intent intent = new Intent("android.intent.action.VIEW");
             Uri uri =
-                    FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);
+                    ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);
             FileUtils.grantFileReadPermissions(intent, uri, getContext());
             intent.setDataAndType(uri, "image/*");
             getContext().startActivity(intent);
