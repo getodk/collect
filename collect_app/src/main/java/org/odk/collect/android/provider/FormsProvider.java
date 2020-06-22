@@ -25,8 +25,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -36,20 +34,17 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
+import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
     private static HashMap<String, String> sFormsProjectionMap;
-
-    public static final String FORMS_TABLE_NAME = "forms";    // smap
 
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
@@ -132,7 +127,7 @@ public class FormsProvider extends ContentProvider {
                         break;
 
                 default:
-                    //throw new IllegalArgumentException("Unknown URI " + uri);     smap don't throw exception this prevents crash when launching from fill blank form
+                    throw new IllegalArgumentException("Unknown URI " + uri);
             }
             c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
 

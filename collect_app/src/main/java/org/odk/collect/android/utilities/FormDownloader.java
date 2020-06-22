@@ -191,7 +191,7 @@ public class FormDownloader {
         }
 
         Map<String, String> parsedFields = null;
-        if (fileResult.isNew) {
+        if (fileResult != null && fileResult.file.exists()) {       // smap add check for exists
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
@@ -218,7 +218,7 @@ public class FormDownloader {
 
         boolean installed = false;
 
-        if ((stateListener == null || !stateListener.isTaskCanceled())) {    // smap remove check on empty message
+        if ((stateListener == null || !stateListener.isTaskCanceled()) && parsedFields != null) {    // smap remove check on empty message and check that parsed fields is not empty
             if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
                 installed = installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);   // Added organisation paths
             } else {
