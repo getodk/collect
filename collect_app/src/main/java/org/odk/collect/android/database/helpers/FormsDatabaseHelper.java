@@ -57,7 +57,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    public static final int DATABASE_VERSION = 15;     // smap
+    static final int DATABASE_VERSION = 16;     // smap
 
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
@@ -69,7 +69,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
         LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH};
 
-    private static final String[] COLUMN_NAMES_V15 = {_ID, DISPLAY_NAME, DESCRIPTION,
+    private static final String[] COLUMN_NAMES_V16 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
             LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH,
@@ -77,7 +77,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             TASKS_ONLY, // smap
             SOURCE};    // smap
 
-    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V15;  // smap
+    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V16;  // smap
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -95,7 +95,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV15(db);    // smap
+        createFormsTableV16(db);    // smap
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -104,8 +104,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         try {
             Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-            if(oldVersion < 15) {   // smap - start from 15
-                upgradeToVersion15(db);
+            if(oldVersion < 16) {   // smap - start from 16
+                upgradeToVersion16(db);
             }
 
             /* smap
@@ -138,230 +138,23 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-            createFormsTableV8(db);
 
-            Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
-            isDatabaseBeingMigrated = false;
-        } catch (SQLException e) {
-            isDatabaseBeingMigrated = false;
-            throw e;
-        }
-    }
 
-    private void upgradeToVersion2(SQLiteDatabase db) {
-        SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-        onCreate(db);
-    }
+    // smap sarting point for upgrades
+    private void upgradeToVersion16(SQLiteDatabase db) {
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");     // Version 5
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");   // Version 7
 
-    private void upgradeToVersion4(SQLiteDatabase db, int oldVersion) {
-        // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
-        // integer MODEL_VERSION to text VERSION
-        SQLiteUtils.dropTable(db, TEMP_FORMS_TABLE_NAME);
-        createFormsTableV4(db, TEMP_FORMS_TABLE_NAME);
-        db.execSQL("INSERT INTO "
-                + TEMP_FORMS_TABLE_NAME
-                + " ("
-                + _ID
-                + ", "
-                + DISPLAY_NAME
-                + ", "
-                + DESCRIPTION
-                + ", "
-                + JR_FORM_ID
-                + ", "
-                + MD5_HASH
-                + ", "
-                + DATE
-                + ", " // milliseconds
-                + FORM_MEDIA_PATH
-                + ", "
-                + FORM_FILE_PATH
-                + ", "
-                + LANGUAGE
-                + ", "
-                + SUBMISSION_URI
-                + ", "
-                + JR_VERSION
-                + ", "
-                + ((oldVersion != 3) ? ""
-                : (BASE64_RSA_PUBLIC_KEY + ", "))
-                + JRCACHE_FILE_PATH
-                + ") SELECT "
-                + _ID
-                + ", "
-                + DISPLAY_NAME
-                + ", "
-                + DESCRIPTION
-                + ", "
-                + JR_FORM_ID
-                + ", "
-                + MD5_HASH
-                + ", "
-                + DATE
-                + ", " // milliseconds
-                + FORM_MEDIA_PATH
-                + ", "
-                + FORM_FILE_PATH
-                + ", "
-                + LANGUAGE
-                + ", "
-                + SUBMISSION_URI
-                + ", "
-                + "CASE WHEN "
-                + MODEL_VERSION
-                + " IS NOT NULL THEN "
-                + "CAST("
-                + MODEL_VERSION
-                + " AS TEXT) ELSE NULL END, "
-                + ((oldVersion != 3) ? ""
-                : (BASE64_RSA_PUBLIC_KEY + ", "))
-                + JRCACHE_FILE_PATH + " FROM "
-                + FORMS_TABLE_NAME);
-
-        // risky failures here...
-        SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-        createFormsTableV4(db, FORMS_TABLE_NAME);
-        db.execSQL("INSERT INTO "
-                + FORMS_TABLE_NAME
-                + " ("
-                + _ID
-                + ", "
-                + DISPLAY_NAME
-                + ", "
-                + DESCRIPTION
-                + ", "
-                + JR_FORM_ID
-                + ", "
-                + MD5_HASH
-                + ", "
-                + DATE
-                + ", " // milliseconds
-                + FORM_MEDIA_PATH + ", "
-                + FORM_FILE_PATH + ", "
-                + LANGUAGE + ", "
-                + SUBMISSION_URI + ", "
-                + JR_VERSION + ", "
-                + BASE64_RSA_PUBLIC_KEY + ", "
-                + JRCACHE_FILE_PATH + ") SELECT "
-                + _ID + ", "
-                + DISPLAY_NAME
-                + ", "
-                + DESCRIPTION
-                + ", "
-                + JR_FORM_ID
-                + ", "
-                + MD5_HASH
-                + ", "
-                + DATE
-                + ", " // milliseconds
-                + FORM_MEDIA_PATH + ", "
-                + FORM_FILE_PATH + ", "
-                + LANGUAGE + ", "
-                + SUBMISSION_URI + ", "
-                + JR_VERSION + ", "
-                + BASE64_RSA_PUBLIC_KEY + ", "
-                + JRCACHE_FILE_PATH + " FROM "
-                + TEMP_FORMS_TABLE_NAME);
-        SQLiteUtils.dropTable(db, TEMP_FORMS_TABLE_NAME);
-    }
-
-    private void upgradeToVersion5(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");
-    }
-
-    private void upgradeToVersion6(SQLiteDatabase db) {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
-    }
 
-    private void upgradeToVersion7(SQLiteDatabase db) {
-        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
-        createFormsTableV7(db);
-        SQLiteUtils.copyRows(db, temporaryTable, COLUMN_NAMES_V7, FORMS_TABLE_NAME);
-        SQLiteUtils.dropTable(db, temporaryTable);
-    }
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, PROJECT, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, TASKS_ONLY, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, SOURCE, "text");
 
-    private void upgradeToVersion8(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");   // smap
     }
-
     // smap
-    private void upgradeToVersion15(SQLiteDatabase db) {
-        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
-        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
-        createFormsTableV15(db);
-        SQLiteUtils.copyRows(db, temporaryTable, COLUMN_NAMES_V15, FORMS_TABLE_NAME);
-        SQLiteUtils.dropTable(db, temporaryTable);
-    }
-
-    private void createFormsTableV4(SQLiteDatabase db, String tableName) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
-                + _ID + " integer primary key, "
-                + DISPLAY_NAME + " text not null, "
-                + DESCRIPTION + " text, "
-                + JR_FORM_ID + " text not null, "
-                + JR_VERSION + " text, "
-                + MD5_HASH + " text not null, "
-                + DATE + " integer not null, " // milliseconds
-                + FORM_MEDIA_PATH + " text not null, "
-                + FORM_FILE_PATH + " text not null, "
-                + LANGUAGE + " text, "
-                + SUBMISSION_URI + " text, "
-                + BASE64_RSA_PUBLIC_KEY + " text, "
-                + JRCACHE_FILE_PATH + " text not null, "
-                + AUTO_SEND + " text, "
-                + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
-    }
-
-    private void createFormsTableV7(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
-            + _ID + " integer primary key, "
-            + DISPLAY_NAME + " text not null, "
-            + DESCRIPTION + " text, "
-            + JR_FORM_ID + " text not null, "
-            + JR_VERSION + " text, "
-            + MD5_HASH + " text not null, "
-            + DATE + " integer not null, " // milliseconds
-            + FORM_MEDIA_PATH + " text not null, "
-            + FORM_FILE_PATH + " text not null, "
-            + LANGUAGE + " text, "
-            + SUBMISSION_URI + " text, "
-            + BASE64_RSA_PUBLIC_KEY + " text, "
-            + JRCACHE_FILE_PATH + " text not null, "
-            + AUTO_SEND + " text, "
-            + AUTO_DELETE + " text, "
-            + LAST_DETECTED_FORM_VERSION_HASH + " text);");
-    }
-
-    private void createFormsTableV8(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
-                + _ID + " integer primary key, "
-                + DISPLAY_NAME + " text not null, "
-                + DESCRIPTION + " text, "
-                + JR_FORM_ID + " text not null, "
-                + JR_VERSION + " text, "
-                + MD5_HASH + " text not null, "
-                + DATE + " integer not null, " // milliseconds
-                + FORM_MEDIA_PATH + " text not null, "
-                + FORM_FILE_PATH + " text not null, "
-                + LANGUAGE + " text, "
-                + SUBMISSION_URI + " text, "
-                + BASE64_RSA_PUBLIC_KEY + " text, "
-                + JRCACHE_FILE_PATH + " text not null, "
-                + AUTO_SEND + " text, "
-                + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
-                + GEOMETRY_XPATH + " text);");
-    }
-
-    // smap
-    private static void createFormsTableV15(SQLiteDatabase db) {
+    private static void createFormsTableV16(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "

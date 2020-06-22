@@ -430,8 +430,6 @@ public class MediaUtils {
      *
      * @param context The context.
      * @param uri The Uri to query.
-     * @see #isLocal(String)
-     * @see #getFile(Context, Uri)
      * @author paulburke
      */
     public static String getPath(final Context context, final Uri uri) {
