@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -20,13 +20,13 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
     private FormEntryViewModel viewModel;
-    protected DeleteRepeatDialogCallback callback;
+    private DeleteRepeatDialogCallback callback;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        viewModel = ViewModelProviders.of(requireActivity()).get(FormEntryViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(FormEntryViewModel.class);
         if (context instanceof DeleteRepeatDialogCallback) {
             callback = (DeleteRepeatDialogCallback) context;
         }
@@ -38,9 +38,9 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         String name = viewModel.getLastRepeatedGroupName();
-        int repeatcount = viewModel.getLastRepeatedGroupRepeatCount();
-        if (repeatcount != -1) {
-            name += " (" + (repeatcount + 1) + ")";
+        int repeatCount = viewModel.getLastRepeatedGroupRepeatCount();
+        if (repeatCount != -1) {
+            name += " (" + (repeatCount + 1) + ")";
         }
 
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();

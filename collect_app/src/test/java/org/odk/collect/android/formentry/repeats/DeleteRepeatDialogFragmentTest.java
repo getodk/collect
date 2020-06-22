@@ -20,9 +20,8 @@ import org.robolectric.shadows.ShadowDialog;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 import static org.robolectric.Shadows.shadowOf;
@@ -30,18 +29,24 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class DeleteRepeatDialogFragmentTest {
 
+    private TestActivity activity;
     private FragmentManager fragmentManager;
     private DeleteRepeatDialogFragment dialogFragment;
     private FormEntryViewModel formEntryViewModel;
 
     @Before
     public void setup() {
-        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
+        activity = RobolectricHelpers.createThemedActivity(TestActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new DeleteRepeatDialogFragment();
 
-        dialogFragment.callback = mock(DeleteRepeatDialogFragment.DeleteRepeatDialogCallback.class);
         formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
+    }
+
+    @Test
+    public void fragmentActivityShouldImplementDeleteRepeatDialogCallback() {
+        dialogFragment.show(fragmentManager, "TAG");
+        assertThat(dialogFragment.getActivity(), instanceOf(DeleteRepeatDialogFragment.DeleteRepeatDialogCallback.class));
     }
 
     @Test
@@ -87,15 +92,40 @@ public class DeleteRepeatDialogFragmentTest {
     public void clickingRemoveGroup_callsDeleteGroup() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        assertThat(activity.deleteGroupCalled, equalTo(false));
+
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
-        verify(dialogFragment.callback).deleteGroup();
+        assertThat(activity.deleteGroupCalled, equalTo(true));
     }
 
     @Test
     public void clickingCancel_callsOnCancelled() {
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        assertThat(activity.onCancelledCalled, equalTo(false));
+
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
-        verify(dialogFragment.callback).onCancelled();
+        assertThat(activity.onCancelledCalled, equalTo(true));
+    }
+
+    public static class TestActivity extends FragmentActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
+
+        private boolean deleteGroupCalled;
+        private boolean onCancelledCalled;
+
+        TestActivity() {
+            deleteGroupCalled = false;
+            onCancelledCalled = false;
+        }
+
+        @Override
+        public void deleteGroup() {
+            deleteGroupCalled = true;
+        }
+
+        @Override
+        public void onCancelled() {
+            onCancelledCalled = true;
+        }
     }
 }
