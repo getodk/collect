@@ -203,9 +203,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         CustomDatePickerDialog.CustomDatePickerDialogListener, RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
-        AudioControllerView.SwipableParent,
-        FormIndexAnimationHandler.Listener,
-        QuitFormDialogFragment.Listener {
+        AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
+        QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -1148,6 +1147,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void deleteGroup() {
+        FormController formController = getFormController();
+        if (formController != null && !formController.indexIsInFieldList()) {
+            showNextView();
+        } else {
+            refreshCurrentView();
+        }
+    }
+
+    @Override
+    public void onCancelled() {
+        refreshCurrentView();
     }
 
     /**
