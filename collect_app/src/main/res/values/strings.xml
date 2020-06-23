@@ -415,7 +415,7 @@
     <string name="version_number">Version: %s</string>
     <string name="id_number">ID: %s</string>
     <string name="odk_website">Visit the ODK website</string>
-    <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments.</string>
+    <string name="odk_website_summary">ODK is used to collect data for social good in challenging environments.</string>
     <string name="odk_forum">Join the ODK forum</string>
     <string name="odk_forum_summary">Join the forum to get support, request features, contribute code/translations! </string>
     <string name="all_open_source_licenses">Open source libraries/licenses</string>

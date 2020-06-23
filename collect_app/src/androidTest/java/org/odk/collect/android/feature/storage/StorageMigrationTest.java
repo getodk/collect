@@ -2,6 +2,7 @@ package org.odk.collect.android.feature.storage;
 
 import android.Manifest;
 
+import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;
 import org.odk.collect.android.support.IdlingResourceRule;
 import org.odk.collect.android.support.IntentServiceIdlingResource;
 import org.odk.collect.android.support.ResetStateRule;
@@ -24,7 +26,8 @@ import java.util.Arrays;
 @RunWith(AndroidJUnit4.class)
 public class StorageMigrationTest {
 
-    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    public final IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    private final CountingTaskExecutorRule countingTaskExecutorRule = new CountingTaskExecutorRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -33,8 +36,10 @@ public class StorageMigrationTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
             .around(new ResetStateRule(false))
-            .around(new CopyFormRule("formWithExternalFiles.xml", Arrays.asList("formWithExternalFiles-media/itemsets.csv", "formWithExternalFiles-media/fruits.xml", "formWithExternalFiles-media/fruits.csv", "formWithExternalFiles-media/last-saved.xml"), true))
+            .around(countingTaskExecutorRule)
             .around(new IdlingResourceRule(new IntentServiceIdlingResource(StorageMigrationService.SERVICE_NAME)))
+            .around(new IdlingResourceRule(new CountingTaskExecutorIdlingResource(countingTaskExecutorRule)))
+            .around(new CopyFormRule("formWithExternalFiles.xml", Arrays.asList("formWithExternalFiles-media/itemsets.csv", "formWithExternalFiles-media/fruits.xml", "formWithExternalFiles-media/fruits.csv", "formWithExternalFiles-media/last-saved.xml"), true))
             .around(rule);
 
     @Test

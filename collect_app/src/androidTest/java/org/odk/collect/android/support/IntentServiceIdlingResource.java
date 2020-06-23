@@ -17,7 +17,7 @@ public class IntentServiceIdlingResource implements IdlingResource {
 
     @Override
     public String getName() {
-        return IntentServiceIdlingResource.class.getName();
+        return serviceName;
     }
 
     @Override

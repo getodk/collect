@@ -317,7 +317,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity {
     }
 
     @Override public void onBackPressed() {
-        if (!formatPoints(map.getPolyPoints(featureId)).equals(originalAnswerString)) {
+        if (map != null && !formatPoints(map.getPolyPoints(featureId)).equals(originalAnswerString)) {
             showBackDialog();
         } else {
             finish();

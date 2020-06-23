@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.regression.BaseRegressionTest;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
@@ -21,7 +21,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
-public class FormHierarchyTest extends BaseRegressionTest {
+public class FormHierarchyTest {
+
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -32,7 +34,8 @@ public class FormHierarchyTest extends BaseRegressionTest {
             .around(new ResetStateRule())
             .around(new CopyFormRule("formHierarchy1.xml", null))
             .around(new CopyFormRule("formHierarchy2.xml", null))
-            .around(new CopyFormRule("formHierarchy3.xml", null));
+            .around(new CopyFormRule("formHierarchy3.xml", null))
+            .around(rule);
 
     @Test
     //https://github.com/opendatakit/collect/issues/2871

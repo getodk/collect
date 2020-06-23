@@ -43,6 +43,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -304,7 +305,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
         alertShowing = true;
         alertMsg = message;
-        alertDialog.show();
+        DialogUtils.showDialog(alertDialog, this);
     }
 
     @Override

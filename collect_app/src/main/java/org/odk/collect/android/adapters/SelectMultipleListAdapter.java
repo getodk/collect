@@ -71,9 +71,10 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         void bind(final int index) {
             super.bind(index);
             if (noButtonsMode) {
+                view.setBackground(null);
                 for (Selection selectedItem : selectedItems) {
                     if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
-                        view.getChildAt(0).setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
+                        view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
                         break;
                     }
                 }

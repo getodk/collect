@@ -106,6 +106,7 @@ import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
+import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
@@ -165,13 +166,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -336,6 +335,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     NetworkStateProvider connectivityProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -675,7 +677,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formPath.lastIndexOf('.'))
                         + "_";
                 final String fileSuffix = ".xml.save";
-                File cacheDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE));
+                File cacheDir = new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE));
                 File[] files = cacheDir.listFiles(pathname -> {
                     String name = pathname.getName();
                     return name.startsWith(filePrefix)
@@ -693,7 +695,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     candidate.getName().length()
                                             - fileSuffix.length());
                     File instanceDir = new File(
-                            new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator
+                            storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + File.separator
                                     + instanceDirName);
                     File instanceFile = new File(instanceDir,
                             instanceDirName + ".xml");
@@ -897,7 +899,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                StoragePathProvider storagePathProvider = new StoragePathProvider();
                 ImageConverter.execute(storagePathProvider.getTmpFilePath(), getWidgetWaitingForBinaryData(), this);
                 File fi = new File(storagePathProvider.getTmpFilePath());
 
@@ -1810,6 +1811,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * repeat of the current group.
      */
     private void createRepeatDialog() {
+        beenSwiped = true;
+
         // In some cases dialog might be present twice because refreshView() is being called
         // from onResume(). This ensures that we do not preset this modal dialog if it's already
         // visible. Checking for shownAlertDialogIsGroupRepeat because the same field
@@ -1818,12 +1821,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        beenSwiped = false;
         shownAlertDialogIsGroupRepeat = true;
 
         AddRepeatDialog.show(this, getFormController().getLastGroupText(), new AddRepeatDialog.Listener() {
             @Override
             public void onAddRepeatClicked() {
+                beenSwiped = false;
                 shownAlertDialogIsGroupRepeat = false;
                 formEntryViewModel.addRepeat(true);
                 formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
@@ -1831,6 +1834,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             @Override
             public void onCancelClicked() {
+                beenSwiped = false;
                 shownAlertDialogIsGroupRepeat = false;
 
                 // Make sure the error dialog will not disappear.
@@ -2157,7 +2161,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                         languages[whichButton]);
                                 String selection = FormsColumns.FORM_FILE_PATH
                                         + "=?";
-                                String[] selectArgs = {new StoragePathProvider().getFormDbPath(formPath)};
+                                String[] selectArgs = {storagePathProvider.getFormDbPath(formPath)};
                                 int updated = new FormsDao().updateForm(values, selection, selectArgs);
                                 Timber.i("Updated language to: %s in %d rows",
                                         languages[whichButton],
@@ -2512,7 +2516,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (formController.getInstanceFile() == null) {
-                    createInstanceDirectory(formController);
+                    FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
+                            storagePathProvider,
+                            System::currentTimeMillis
+                    );
+
+                    File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
+                    if (instanceFile != null) {
+                        formController.setInstanceFile(instanceFile);
+                    } else {
+                        showFormLoadErrorAndExit(getString(R.string.loading_form_failed));
+                    }
+
                     formControllerAvailable(formController);
 
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
@@ -2619,24 +2634,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private void createInstanceDirectory (FormController formController){
-        String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
-                Locale.ENGLISH).format(Calendar.getInstance().getTime());
-        String file = formPath.substring(formPath.lastIndexOf('/') + 1,
-                formPath.lastIndexOf('.'));
-        String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + file + "_"
-                + time;
-        if (FileUtils.createFolder(path)) {
-            File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
-            formController.setInstanceFile(instanceFile);
-        }
-    }
-
     /**
      * called by the FormLoaderTask if something goes wrong.
      */
     @Override
     public void loadingError(String errorMsg) {
+        showFormLoadErrorAndExit(errorMsg);
+    }
+
+    private void showFormLoadErrorAndExit(String errorMsg) {
         DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {
@@ -3071,8 +3077,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // If an answer has changed after saving one of previous answers that means it has been recalculated automatically
     private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
-        return !(mutableQuestionBeforeSave.getAnswerText() == null && immutableQuestionBeforeSave.getAnswerText() == null
-                || mutableQuestionBeforeSave.getAnswerText().equals(immutableQuestionBeforeSave.getAnswerText()));
+        return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
     }
 }
 

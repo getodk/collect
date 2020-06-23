@@ -32,7 +32,9 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage clickOnMenu() {
+        assertOnPage(); // Make sure we're on the Main Menu to prevent this being called early
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+        onView(withText(getTranslatedString(R.string.general_preferences))).check(matches(isDisplayed()));
         return this;
     }
 
