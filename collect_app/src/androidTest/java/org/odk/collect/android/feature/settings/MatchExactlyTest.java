@@ -35,4 +35,15 @@ public class MatchExactlyTest {
                 .assertTextNotDisplayed(R.string.get_forms);
     }
 
+    @Test
+    public void whenMatchExactlyEnabled_formManagementFormUpdateIsDisabled() {
+        rule.mainMenu()
+                .enableMatchExactly()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .assertDisabled(R.string.periodic_form_updates_check_title)
+                .assertDisabled(R.string.automatic_download)
+                .assertDisabled(R.string.hide_old_form_versions_setting_title);
+    }
 }

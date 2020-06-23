@@ -206,7 +206,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIfOptionIsDisabled(int string) {
+    public T assertDisabled(int string) {
         onView(withText(string)).check(matches(not(isEnabled())));
         return (T) this;
     }

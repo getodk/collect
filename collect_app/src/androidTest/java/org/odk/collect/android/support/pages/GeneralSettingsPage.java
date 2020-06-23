@@ -110,4 +110,9 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         onView(withText("Server")).check(doesNotExist());
         return this;
     }
+
+    public FormManagementPage clickFormManagement() {
+        onView(withText(getTranslatedString(R.string.form_management_preferences))).perform(click());
+        return new FormManagementPage(rule);
+    }
 }
