@@ -8,7 +8,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.databinding.RatingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.robolectric.RobolectricTestRunner;
@@ -29,7 +28,6 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 @RunWith(RobolectricTestRunner.class)
 public class RatingWidgetTest {
 
-    private RatingWidgetAnswerBinding binding;
     private RangeQuestion rangeQuestion;
 
     @Before
@@ -70,9 +68,10 @@ public class RatingWidgetTest {
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
         RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
-
         widget.clearAnswer();
+
         assertThat(widget.getAnswer(), nullValue());
+        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(0));
     }
 
     @Test
@@ -80,8 +79,8 @@ public class RatingWidgetTest {
         RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
-
         widget.clearAnswer();
+
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
@@ -90,8 +89,8 @@ public class RatingWidgetTest {
         RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
-
         widget.getBinding().ratingBar.setRating(4.0F);
+
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
@@ -106,8 +105,8 @@ public class RatingWidgetTest {
     @Test
     public void ratingBar_doesNotAllowUserToSetDecimalRating() {
         RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
-        widget.getBinding().ratingBar.setRating(4.5F);
-        assertThat(widget.getAnswer().getValue(), equalTo(2));
+        widget.getBinding().ratingBar.setRating(4.8F);
+        assertThat(widget.getAnswer().getValue(), equalTo(4));
     }
 
     @Test

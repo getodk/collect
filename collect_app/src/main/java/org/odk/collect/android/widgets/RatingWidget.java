@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 
 import androidx.core.content.ContextCompat;
 
@@ -55,12 +56,21 @@ public class RatingWidget extends QuestionWidget {
 
         binding.ratingBar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         binding.ratingBar.setNumStars(numberOfStars);
-        binding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
+        binding.ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                widgetValueChanged();
+                answer = (int) ratingBar.getRating();
+            }
+        });
         binding.ratingBar.setEnabled(!prompt.isReadOnly());
         binding.ratingBar.setStepSize(1.0F);
 
         if (prompt.getAnswerText() != null) {
             answer = Integer.parseInt(prompt.getAnswerText());
+            binding.ratingBar.setRating(answer);
+        } else {
+            binding.ratingBar.setRating(0);
         }
         return answerView;
     }
