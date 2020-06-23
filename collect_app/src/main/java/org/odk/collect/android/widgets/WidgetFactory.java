@@ -20,6 +20,7 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 /**
@@ -98,7 +99,7 @@ public class WidgetFactory {
                         } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
                             questionWidget = new StringNumberWidget(context, questionDetails, readOnlyOverride);
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
-                            questionWidget = new UrlWidget(context, questionDetails);
+                            questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
                         } else {
                             questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
                         }

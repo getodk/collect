@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/url_button"
+        style="@style/Widget.Collect.Button.Custom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/open_url"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_extra_small">
+    </org.odk.collect.android.views.MultiClickSafeButton>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/url_answer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:paddingStart="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"
+        android:textColor="?colorOnSurface"
+        android:textAppearance="@style/TextAppearance.Collect.Body1"
+        />
+
+</LinearLayout>
