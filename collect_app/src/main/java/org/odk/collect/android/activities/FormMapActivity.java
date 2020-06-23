@@ -278,15 +278,21 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
-        removeEnlargedMarkerIfExist(featureId);
+        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
+            removeEnlargedMarkerIfExist(featureId);
 
-        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
-        if (mappableFormInstance != null) {
-            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
-            updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
-            setUpSummarySheetDetails(mappableFormInstance);
+            FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
+            if (mappableFormInstance != null) {
+                map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
+                updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
+                setUpSummarySheetDetails(mappableFormInstance);
+            }
+            viewModel.setSelectedSubmissionId(featureId);
         }
-        viewModel.setSelectedSubmissionId(featureId);
+    }
+
+    private boolean isSummaryForGivenSubmissionDisplayed(int newSubmissionId) {
+        return viewModel.getSelectedSubmissionId() == newSubmissionId && summarySheet.getState() != BottomSheetBehavior.STATE_HIDDEN;
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -313,8 +319,6 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private void setUpSummarySheetDetails(MappableFormInstance mappableFormInstance) {
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-
         setUpSubmissionSheetNameAndLastChangedDate(mappableFormInstance);
         setUpSummarySheetIcon(mappableFormInstance.getStatus());
         adjustSubmissionSheetBasedOnItsStatus(mappableFormInstance);
