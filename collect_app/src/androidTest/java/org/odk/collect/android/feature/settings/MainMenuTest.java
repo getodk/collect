@@ -2,9 +2,9 @@ package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +18,7 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuTest {
+
     @Rule
     public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
