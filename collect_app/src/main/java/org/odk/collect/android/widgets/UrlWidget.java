@@ -15,94 +15,58 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.util.TypedValue;
-import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
+import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
+
+/**
+ * Widget that allows user to open URLs from within the form
+ *
+ * @author Yaw Anokwa (yanokwa@gmail.com)
+ */
 @SuppressLint("ViewConstructor")
-public class UrlWidget extends QuestionWidget {
+public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
+    private Uri uri;
+    final Button openUrlButton;
+    final TextView stringAnswer;
     private final CustomTabHelper customTabHelper;
-    private UrlWidgetAnswerBinding binding;
 
-    public UrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper) {
+    public UrlWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        this.customTabHelper = customTabHelper;
-    }
 
-    @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = UrlWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        View answerView = binding.getRoot();
+        openUrlButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), context.getString(R.string.open_url), getAnswerFontSize(), this);
 
-        if (prompt.isReadOnly()) {
-            binding.urlButton.setVisibility(GONE);
-        } else {
-            binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.urlButton.setOnClickListener(v -> onButtonClick());
+        stringAnswer = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
+
+        String s = questionDetails.getPrompt().getAnswerText();
+        if (s != null) {
+            stringAnswer.setText(s);
+            uri = Uri.parse(stringAnswer.getText().toString());
         }
 
-        binding.urlAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.urlAnswerText.setText(prompt.getAnswerText());
+        // finish complex layout
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(openUrlButton);
+        answerLayout.addView(stringAnswer);
+        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
 
-        return answerView;
-    }
-
-    @Override
-    public void clearAnswer() {
-        ToastUtils.showShortToast("URL is readonly");
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String answerText = binding.urlAnswerText.getText().toString();
-        return !answerText.isEmpty()
-                ? new StringData(answerText)
-                : null;
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        binding.urlButton.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        binding.urlButton.cancelLongPress();
-        binding.urlAnswerText.cancelLongPress();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (customTabHelper.getServiceConnection() != null) {
-            getContext().unbindService(customTabHelper.getServiceConnection());
-        }
-    }
-
-    public void onButtonClick() {
-        if (!isUrlEmpty(binding.urlAnswerText)) {
-            customTabHelper.bindCustomTabsService(getContext(), null);
-            customTabHelper.openUri(getContext(), getUri());
-        } else {
-            ToastUtils.showShortToast("No URL set");
-        }
-    }
-
-    protected UrlWidgetAnswerBinding getBinding() {
-        return binding;
+        customTabHelper = new CustomTabHelper();
     }
 
     private boolean isUrlEmpty(TextView stringAnswer) {
@@ -110,7 +74,44 @@ public class UrlWidget extends QuestionWidget {
                 || stringAnswer.getText().toString().isEmpty();
     }
 
-    private Uri getUri() {
-        return Uri.parse(binding.urlAnswerText.getText().toString());
+    @Override
+    public void clearAnswer() {
+        Toast.makeText(getContext(), "URL is readonly", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public IAnswerData getAnswer() {
+        String s = stringAnswer.getText().toString();
+        return !s.isEmpty()
+                ? new StringData(s)
+                : null;
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        openUrlButton.cancelLongPress();
+        stringAnswer.cancelLongPress();
+    }
+
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (customTabHelper.getServiceConnection() != null) {
+            getContext().unbindService(customTabHelper.getServiceConnection());
+        }
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        if (!isUrlEmpty(stringAnswer)) {
+            customTabHelper.bindCustomTabsService(getContext(), null);
+            customTabHelper.openUri(getContext(), uri);
+        } else {
+            Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
+        }
     }
 }
