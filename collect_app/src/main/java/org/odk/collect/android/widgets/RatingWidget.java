@@ -57,6 +57,7 @@ public class RatingWidget extends QuestionWidget {
         binding.ratingBar.setNumStars(numberOfStars);
         binding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
         binding.ratingBar.setEnabled(!prompt.isReadOnly());
+        binding.ratingBar.setStepSize(1.0F);
 
         if (prompt.getAnswerText() != null) {
             answer = Integer.parseInt(prompt.getAnswerText());

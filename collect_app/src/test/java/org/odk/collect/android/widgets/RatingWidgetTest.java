@@ -86,6 +86,31 @@ public class RatingWidgetTest {
     }
 
     @Test
+    public void changingRating_callsValueChangeListeners() {
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setValueChangedListener(valueChangedListener);
+
+        widget.getBinding().ratingBar.setRating(4.0F);
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void changingRating_updatesAnswer() {
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        widget.getBinding().ratingBar.setRating(4.0F);
+        assertThat(widget.getAnswer().getValue(), equalTo(4));
+    }
+
+
+    @Test
+    public void ratingBar_doesNotAllowUserToSetDecimalRating() {
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        widget.getBinding().ratingBar.setRating(4.5F);
+        assertThat(widget.getAnswer().getValue(), equalTo(2));
+    }
+
+    @Test
     public void clickingRatingBarForLong_callsLongClickListener() {
         View.OnLongClickListener listener = mock( View.OnLongClickListener.class);
         RatingWidget widget = createWidget(promptWithAnswer(null));
