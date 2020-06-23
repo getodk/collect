@@ -19,7 +19,6 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -212,11 +211,9 @@ public class FormMapActivity extends BaseGeoMapActivity {
         map.setClickListener(this::onClick);
         updateInstanceGeometry();
 
-        new Handler().postDelayed(() -> {
-            if (viewModel.getSelectedSubmissionId() != -1) {
-                onFeatureClicked(viewModel.getSelectedSubmissionId());
-            }
-        }, 500);
+        if (viewModel.getSelectedSubmissionId() != -1) {
+            onFeatureClicked(viewModel.getSelectedSubmissionId());
+        }
     }
 
     @SuppressWarnings("PMD.UnusedFormalParameter")
