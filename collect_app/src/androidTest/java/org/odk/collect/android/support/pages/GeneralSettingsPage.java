@@ -1,7 +1,6 @@
 package org.odk.collect.android.support.pages;
 
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.base.Default;
 import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
@@ -10,14 +9,12 @@ import org.odk.collect.android.R;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
-import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 
 public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
@@ -42,18 +39,14 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage openConstraintProcessing() {
-        scrollToAndClickText(getTranslatedString(R.string.constraint_behavior_title));
-//        onView(withText(getTranslatedString(R.string.constraint_behavior_title))).perform(nestedScrollTo(), click());
-//        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(ViewActions.scrollTo());
-//        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(click());
+        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(ViewActions.scrollTo());
+        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(click());
         return this;
     }
 
     public GeneralSettingsPage openShowGuidanceForQuestions() {
-        onView(withText(getTranslatedString(R.string.guidance_hint_title))).perform(nestedScrollTo(), click());
-//        clickOnString(R.string.guidance_hint_title);
-//        onData(PreferenceMatchers.withKey("guidance_hint")).perform(ViewActions.scrollTo());
-//        onData(PreferenceMatchers.withKey("guidance_hint")).perform(click());
+        onData(PreferenceMatchers.withKey("guidance_hint")).perform(ViewActions.scrollTo());
+        onData(PreferenceMatchers.withKey("guidance_hint")).perform(click());
         return this;
     }
 
@@ -114,9 +107,8 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage clickOnDefaultToFinalized() {
-        onView(withText(getTranslatedString(R.string.default_completed))).perform(nestedScrollTo(), click());
-//        onData(PreferenceMatchers.withKey("default_completed")).perform(ViewActions.scrollTo());
-//        onData(PreferenceMatchers.withKey("default_completed")).perform(click());
+        onData(PreferenceMatchers.withKey("default_completed")).perform(ViewActions.scrollTo());
+        onData(PreferenceMatchers.withKey("default_completed")).perform(click());
         return this;
     }
 
