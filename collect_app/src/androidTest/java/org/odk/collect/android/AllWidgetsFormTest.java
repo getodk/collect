@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Instrumentation.ActivityResult;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
@@ -47,7 +46,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
@@ -76,7 +74,6 @@ import static org.odk.collect.android.support.FormLoadingUtils.ALL_WIDGETS_FORM;
 public class AllWidgetsFormTest {
 
     private final Random random = new Random();
-    private final ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
     private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
 
     @ClassRule
@@ -250,14 +247,6 @@ public class AllWidgetsFormTest {
     }
 
     public void testUrlWidget() {
-        Uri uri = Uri.parse("http://getodk.org/");
-
-        intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
-                .respondWith(okResult);
-
-        Screengrab.screenshot("url");
-
-        onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
     }
 
