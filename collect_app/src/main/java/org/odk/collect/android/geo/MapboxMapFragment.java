@@ -313,9 +313,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
     }
 
-    @Override public int addMarker(MapPoint point, boolean draggable) {
+    @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable));
+        features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable, iconAnchor));
         return featureId;
     }
 
@@ -323,13 +323,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {
             ((MarkerFeature) feature).setIcon(drawableId);
-        }
-    }
-
-    @Override public void setMarkerAnchorToBottomCenter(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof MarkerFeature) {
-            ((MarkerFeature) feature).setMarkerAnchorToBottomCenter();
         }
     }
 
@@ -506,7 +499,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return new LatLng(point.lat, point.lon);
     }
 
-    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable) {
+    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
         return symbolManager.create(new SymbolOptions()
             .withLatLng(toLatLng(point))
             .withIconImage(addIconImage(R.drawable.ic_map_point))
@@ -514,7 +507,17 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             .withSymbolSortKey(10f)
             .withDraggable(draggable)
             .withTextOpacity(0f)
+            .withIconAnchor(getIconAnchorValue(iconAnchor))
         );
+    }
+
+    private String getIconAnchorValue(@IconAnchor String iconAnchor) {
+        switch (iconAnchor) {
+            case BOTTOM:
+                return Property.ICON_ANCHOR_BOTTOM;
+            default:
+                return Property.ICON_ANCHOR_CENTER;
+        }
     }
 
     private void moveOrAnimateCamera(CameraUpdate movement, boolean animate) {
@@ -754,11 +757,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private MapPoint point;
         private Symbol symbol;
 
-        MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable) {
+        MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
             this.featureId = featureId;
             this.symbolManager = symbolManager;
             this.point = point;
-            this.symbol = createSymbol(symbolManager, point, draggable);
+            this.symbol = createSymbol(symbolManager, point, draggable, iconAnchor);
             symbolManager.addClickListener(clickListener);
             symbolManager.addDragListener(dragListener);
         }
@@ -766,10 +769,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         public void setIcon(int drawableId) {
             symbol.setIconImage(addIconImage(drawableId));
             symbolManager.update(symbol);
-        }
-
-        void setMarkerAnchorToBottomCenter() {
-            symbol.setIconAnchor(Property.ICON_ANCHOR_BOTTOM);
         }
 
         public MapPoint getPoint() {
@@ -839,7 +838,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             this.closedPolygon = closedPolygon;
             for (MapPoint point : points) {
                 this.points.add(point);
-                this.symbols.add(createSymbol(symbolManager, point, true));
+                this.symbols.add(createSymbol(symbolManager, point, true, CENTER));
             }
             line = lineManager.create(new LineOptions()
                 .withLineColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.mapLine)))
@@ -875,7 +874,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 return;
             }
             points.add(point);
-            symbols.add(createSymbol(symbolManager, point, true));
+            symbols.add(createSymbol(symbolManager, point, true, CENTER));
             updateLine();
         }
 
