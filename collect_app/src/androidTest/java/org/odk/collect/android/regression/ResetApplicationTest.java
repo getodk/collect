@@ -71,10 +71,10 @@ public class ResetApplicationTest {
                 .clickOKOnDialog();
         new MainMenuPage(rule)
                 .clickFillBlankForm()
-                .checkIfTextDoesNotExist("All widgets")
+                .assertTextDoesNotExist("All widgets")
                 .pressBack(new MainMenuPage(rule))
                 .clickEditSavedForm()
-                .checkIfTextDoesNotExist("All widgets");
+                .assertTextDoesNotExist("All widgets");
     }
 
     @Test
@@ -138,9 +138,9 @@ public class ResetApplicationTest {
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .assertText(R.string.theme_light)
-                .checkIfTextDoesNotExist(R.string.theme_dark)
+                .assertTextDoesNotExist(R.string.theme_dark)
                 .assertText(R.string.use_device_language)
-                .checkIfTextDoesNotExist("español");
+                .assertTextDoesNotExist("español");
     }
 
     @Test

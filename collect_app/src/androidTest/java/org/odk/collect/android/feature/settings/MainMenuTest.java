@@ -41,7 +41,7 @@ public class MainMenuTest {
                 .pressBack(new AdminSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()
-                .checkIfTextDoesNotExist(R.string.configure_via_qr_code);
+                .assertTextDoesNotExist(R.string.configure_via_qr_code);
     }
 
 }

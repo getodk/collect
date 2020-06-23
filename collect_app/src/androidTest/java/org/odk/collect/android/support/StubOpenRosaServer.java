@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
@@ -101,7 +102,11 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     }
 
     public void addForm(String formLabel, String formXML) {
-        forms.add(new FormManifestEntry(formLabel, formXML));
+        forms.add(new FormManifestEntry(formLabel, formXML, "1"));
+    }
+
+    public void addForm(String formLabel, String formXML, String version) {
+        forms.add(new FormManifestEntry(formLabel, formXML, version));
     }
 
     public String getURL() {
@@ -129,7 +134,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     @NotNull
     @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
-    private InputStream getFormListResponse() {
+    private InputStream getFormListResponse() throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
                 .append("<?xml version='1.0' encoding='UTF-8' ?>\n")
@@ -138,12 +143,14 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         for (int i = 0; i < forms.size(); i++) {
             FormManifestEntry form = forms.get(i);
 
+            String hash = getMd5Hash(getFormXML(String.valueOf(i)));
+
             stringBuilder
                     .append("<xform>\n")
                     .append("<formID>" + i + "</formID>\n")
                     .append("<name>" + form.getFormLabel() + "</name>\n")
-                    .append("<version>1</version>\n")
-                    .append("<hash>md5:c28fc778a9291672badee04ac880a05d</hash>\n")
+                    .append("<version>" + form.getVersion() + "</version>\n")
+                    .append("<hash>md5:" + hash + "</hash>\n")
                     .append("<downloadUrl>" + getURL() + "/form?formId=" + i + "</downloadUrl>\n")
                     .append("</xform>\n");
         }
@@ -155,6 +162,11 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NotNull
     private InputStream getFormResponse(@NonNull URI uri) throws IOException {
         String formID = uri.getQuery().split("=")[1];
+        return getFormXML(formID);
+    }
+
+    @NotNull
+    private InputStream getFormXML(String formID) throws IOException {
         String xmlPath = forms.get(Integer.parseInt(formID)).getFormXML();
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
@@ -165,10 +177,12 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         private final String formLabel;
         private final String formXML;
+        private final String version;
 
-        FormManifestEntry(String formLabel, String formXML) {
+        FormManifestEntry(String formLabel, String formXML, String version) {
             this.formLabel = formLabel;
             this.formXML = formXML;
+            this.version = version;
         }
 
         public String getFormLabel() {
@@ -177,6 +191,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         public String getFormXML() {
             return formXML;
+        }
+
+        public String getVersion() {
+            return version;
         }
     }
 

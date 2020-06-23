@@ -1,6 +1,7 @@
 package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
+import android.webkit.MimeTypeMap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -10,11 +11,18 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.StubOpenRosaServer;
+import org.odk.collect.utilities.UserAgentProvider;
 
 @RunWith(AndroidJUnit4.class)
 public class MatchExactlyTest {
+
+    public final StubOpenRosaServer server = new StubOpenRosaServer();
 
     public CollectTestRule rule = new CollectTestRule();
 
@@ -25,8 +33,32 @@ public class MatchExactlyTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_PHONE_STATE
             ))
-            .around(new ResetStateRule())
+            .around(new ResetStateRule(new AppDependencyModule() {
+                @Override
+                public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
+                    return server;
+                }
+            }))
+            .around(new CopyFormRule("one-question.xml"))
+            .around(new CopyFormRule("one-question-repeat.xml"))
             .around(rule);
+
+    @Test
+    public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestSetOfFormsFromServer() {
+        server.addForm("One Question Updated", "one-question-updated.xml");
+        server.addForm("Two Question", "two-question.xml");
+
+        rule.mainMenu()
+                .setServer(server.getURL())
+                .enableMatchExactly()
+                .clickFillBlankForm()
+                .assertText("One Question")
+                .assertText("One Question Repeat")
+                .clickRefresh()
+                .assertText("Two Question") // Check new form downloaded
+                .assertText("One Question Updated") // Check updated form updated
+                .assertTextDoesNotExist("One Question Repeat"); // Check deleted form deleted
+    }
 
     @Test
     public void whenMatchExactlyEnabled_getBlankFormsButtonIsGone() {

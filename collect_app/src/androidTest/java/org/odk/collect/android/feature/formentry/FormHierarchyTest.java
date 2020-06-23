@@ -127,7 +127,7 @@ public class FormHierarchyTest {
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
-        page.checkIfTextDoesNotExist("Repeat Group 1");
+        page.assertTextDoesNotExist("Repeat Group 1");
     }
 
     @Test

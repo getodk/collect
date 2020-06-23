@@ -452,8 +452,8 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion()
                 .clickGoToArrow()
                 .assertText("n1")
-                .checkIfTextDoesNotExist("t1")
-                .checkIfTextDoesNotExist("t2");
+                .assertTextDoesNotExist("t1")
+                .assertTextDoesNotExist("t2");
     }
 
     @Test

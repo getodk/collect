@@ -165,5 +165,16 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
+
+    public MainMenuPage setServer(String url) {
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickServerSettings()
+                .clickOnURL()
+                .inputText(url)
+                .clickOKOnDialog()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
 }
 

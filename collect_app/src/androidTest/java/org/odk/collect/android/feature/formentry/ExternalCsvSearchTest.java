@@ -55,15 +55,15 @@ public class ExternalCsvSearchTest {
                 .assertText("Banana")
                 .assertText("Cherimoya")
                 .assertText("Carrot")
-                .checkIfTextDoesNotExist("Blueberry")
+                .assertTextDoesNotExist("Blueberry")
                 .swipeToPreviousQuestion()
                 .inputText("B")
                 .swipeToNextQuestion("Produce")
                 .assertText("Banana")
                 .assertText("Blueberry")
-                .checkIfTextDoesNotExist("Artichoke")
-                .checkIfTextDoesNotExist("Apple")
-                .checkIfTextDoesNotExist("Cherimoya")
-                .checkIfTextDoesNotExist("Carrot");
+                .assertTextDoesNotExist("Artichoke")
+                .assertTextDoesNotExist("Apple")
+                .assertTextDoesNotExist("Cherimoya")
+                .assertTextDoesNotExist("Carrot");
     }
 }

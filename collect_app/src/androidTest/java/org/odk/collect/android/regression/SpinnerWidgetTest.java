@@ -42,8 +42,8 @@ public class SpinnerWidgetTest {
                 .clickOnAreaWithIndex("TextView", 2)
                 .clickOnText("c")
                 .assertText("c")
-                .checkIfTextDoesNotExist("a")
-                .checkIfTextDoesNotExist("b")
+                .assertTextDoesNotExist("a")
+                .assertTextDoesNotExist("b")
                 .pressBack(new FormEntryPage("selectOneMinimal", rule))
                 .swipeToEndScreen()
                 .clickSaveAndExit();

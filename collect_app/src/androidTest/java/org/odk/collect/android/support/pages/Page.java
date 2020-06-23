@@ -115,13 +115,13 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIfTextDoesNotExist(String text) {
+    public T assertTextDoesNotExist(String text) {
         onView(withText(text)).check(doesNotExist());
         return (T) this;
     }
 
-    public T checkIfTextDoesNotExist(int string) {
-        return checkIfTextDoesNotExist(getTranslatedString(string));
+    public T assertTextDoesNotExist(int string) {
+        return assertTextDoesNotExist(getTranslatedString(string));
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {

@@ -59,7 +59,7 @@ public class FormEntrySettingsTest {
                 .openFormManagement()
                 .scrollToConstraintProcessing()
                 .checkIfConstraintProcessingIsDisabled()
-                .checkIfTextDoesNotExist(R.string.constraint_behavior_on_finalize)
+                .assertTextDoesNotExist(R.string.constraint_behavior_on_finalize)
                 .assertText(R.string.constraint_behavior_on_swipe)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
@@ -71,7 +71,7 @@ public class FormEntrySettingsTest {
                 .closeSoftKeyboard()
                 .pressBack(new ExitFormDialog("All widgets", rule))
                 .assertText(R.string.do_not_save)
-                .checkIfTextDoesNotExist(R.string.keep_changes)
+                .assertTextDoesNotExist(R.string.keep_changes)
                 .clickOnString(R.string.do_not_save);
     }
 
