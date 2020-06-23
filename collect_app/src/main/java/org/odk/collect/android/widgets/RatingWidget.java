@@ -19,11 +19,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 
 import androidx.core.content.ContextCompat;
 
@@ -32,6 +29,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.RatingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 
 @SuppressLint("ViewConstructor")
@@ -39,7 +37,7 @@ public class RatingWidget extends QuestionWidget {
 
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
 
-    private RatingBar ratingBar;
+    private RatingWidgetAnswerBinding binding;
     private int numberOfStars;
 
     Integer answer;
@@ -52,12 +50,12 @@ public class RatingWidget extends QuestionWidget {
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.rating_widget_answer, this);
+        binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        View answerView = binding.getRoot();
 
-        ratingBar = answerView.findViewById(R.id.rating_bar);
-        ratingBar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        ratingBar.setNumStars(numberOfStars);
-        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
+        binding.ratingBar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        binding.ratingBar.setNumStars(numberOfStars);
+        binding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
 
         if (prompt.getAnswerText() != null) {
             answer = Integer.parseInt(prompt.getAnswerText());
@@ -67,7 +65,7 @@ public class RatingWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        ratingBar.setOnLongClickListener(l);
+        binding.ratingBar.setOnLongClickListener(l);
     }
 
     @Override
@@ -77,8 +75,8 @@ public class RatingWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        answer = 0;
-        ratingBar.setRating(0);
+        answer = null;
+        binding.ratingBar.setRating(0);
         widgetValueChanged();
     }
 
