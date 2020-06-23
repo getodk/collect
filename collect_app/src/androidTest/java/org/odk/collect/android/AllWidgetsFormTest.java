@@ -251,14 +251,6 @@ public class AllWidgetsFormTest {
     }
 
     public void testUrlWidget() {
-        Uri uri = Uri.parse("http://getodk.org/");
-
-        intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
-                .respondWith(okResult);
-
-        Screengrab.screenshot("url");
-
-        onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
     }
 
