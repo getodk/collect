@@ -45,8 +45,26 @@ public class RatingWidgetTest {
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
         assertThat(widget.getAnswer().getValue(), equalTo(1));
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_noStarsAreHighlightedOnRatingBar() {
+        RatingWidget widget = createWidget(promptWithAnswer(null));
+        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(0.0F));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_correctNumberOfStarsAreHighlightedOnRatingBar() {
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData(("3"))));
+        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(3.0F));
+    }
+
+    @Test
+    public void usingReadOnly_makesAllClickableElementsDisabled() {
+        RatingWidget widget = createWidget(promptWithReadOnly());
+        assertThat(widget.getBinding().ratingBar.isEnabled(), equalTo(false));
     }
 
     @Test
@@ -65,6 +83,16 @@ public class RatingWidgetTest {
 
         widget.clearAnswer();
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingRatingBarForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock( View.OnLongClickListener.class);
+        RatingWidget widget = createWidget(promptWithAnswer(null));
+        widget.setOnLongClickListener(listener);
+        widget.getBinding().ratingBar.performLongClick();
+
+        verify(listener).onLongClick(widget.getBinding().ratingBar);
     }
 
     private RatingWidget createWidget(FormEntryPrompt prompt) {

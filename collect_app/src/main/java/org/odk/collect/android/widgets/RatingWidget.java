@@ -56,6 +56,7 @@ public class RatingWidget extends QuestionWidget {
         binding.ratingBar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         binding.ratingBar.setNumStars(numberOfStars);
         binding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
+        binding.ratingBar.setEnabled(!prompt.isReadOnly());
 
         if (prompt.getAnswerText() != null) {
             answer = Integer.parseInt(prompt.getAnswerText());
@@ -78,6 +79,10 @@ public class RatingWidget extends QuestionWidget {
         answer = null;
         binding.ratingBar.setRating(0);
         widgetValueChanged();
+    }
+
+    protected RatingWidgetAnswerBinding getBinding() {
+        return binding;
     }
 
     private int calculateColumns() {
