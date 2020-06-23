@@ -70,10 +70,6 @@ def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 android {
     compileSdkVersion(28)
 
-    viewBinding {
-        enabled = true
-    }
-
     defaultConfig {
         applicationId('org.odk.collect.android')
         minSdkVersion(21)
