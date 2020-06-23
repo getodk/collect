@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/experimental">
+
+    <SwitchPreferenceCompat
+        app:key="match_exactly"
+        app:title="@string/match_exactly"/>
+
+</PreferenceScreen>

@@ -1,14 +1,9 @@
 package org.odk.collect.android.support.pages;
 
-import android.content.SharedPreferences;
-
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.support.ActivityHelpers;
 
@@ -163,17 +158,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableMatchExactly() {
-        SharedPreferences preferences = ApplicationProvider.<Collect>getApplicationContext()
-                .getComponent()
-                .generalSharedPreferences()
-                .getSharedPreferences();
-
-        preferences.edit()
-                .putBoolean(GeneralKeys.KEY_MATCH_EXACTLY, true)
-                .apply();
-
         return clickOnMenu()
                 .clickGeneralSettings()
+                .clickExperimental()
+                .clickMatchExactly()
+                .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
 }

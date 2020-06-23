@@ -24,6 +24,7 @@ public class AndroidXPreferencesActivity extends CollectAbstractActivity {
     public static final int EXTRA_FRAGMENT_FORM_METADATA = 1;
     public static final int EXTRA_FRAGMENT_USER_INTERFACE = 2;
     public static final int EXTRA_FRAGMENT_CUSTOM_SERVER_PATHS = 3;
+    public static final int EXTRA_FRAGMENT_EXPERIMENTAL = 4;
 
     public static <T extends PreferenceFragmentCompat> void start(Activity activity, Class<T> fragmentClass) {
         Intent intent = new Intent(activity, AndroidXPreferencesActivity.class);
@@ -34,6 +35,8 @@ public class AndroidXPreferencesActivity extends CollectAbstractActivity {
             intent.putExtra(KEY_EXTRA_FRAGMENT, EXTRA_FRAGMENT_USER_INTERFACE);
         } else if (fragmentClass.isAssignableFrom(CustomServerPathsFragment.class)) {
             intent.putExtra(KEY_EXTRA_FRAGMENT, EXTRA_FRAGMENT_CUSTOM_SERVER_PATHS);
+        } else if (fragmentClass.isAssignableFrom(ExperimentalPreferencesFragment.class)) {
+            intent.putExtra(KEY_EXTRA_FRAGMENT, EXTRA_FRAGMENT_EXPERIMENTAL);
         }
 
         activity.startActivity(intent);
@@ -60,6 +63,11 @@ public class AndroidXPreferencesActivity extends CollectAbstractActivity {
                 case EXTRA_FRAGMENT_CUSTOM_SERVER_PATHS:
                     fragment = new CustomServerPathsFragment();
                     break;
+
+                case EXTRA_FRAGMENT_EXPERIMENTAL:
+                    fragment = new ExperimentalPreferencesFragment();
+                    break;
+
                 default:
                     fragment = null;
             }
