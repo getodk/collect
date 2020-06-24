@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
@@ -46,6 +48,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -66,14 +69,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-public class ServerPreferencesFragment extends BasePreferenceFragment implements OnBackPressedListener {
+public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 
     private EditTextPreference serverUrlPreference;
     private EditTextPreference usernamePreference;
     private EditTextPreference passwordPreference;
-    private ListPopupWindow listPopupWindow;
 
     @Inject
     OpenRosaXmlFetcher openRosaXMLFetcher;
@@ -82,6 +84,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Inject
     Analytics analytics;
 
+    private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
@@ -169,6 +172,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             urlDropdownSetup(editText);
             editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
             editText.setFilters(new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
+            editText.setOnTouchListener(this);
         });
 
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
@@ -261,6 +265,20 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 allowClickSelectedGoogleAccountPreference = true;
             }
         });
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        final int DRAWABLE_RIGHT = 2;
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getX() >= (v.getWidth() - ((EditText) v)
+                    .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                SoftKeyboardUtils.hideSoftKeyboard(v);
+                listPopupWindow.show();
+                return true;
+            }
+        }
+        return false;
     }
 
     private Preference.OnPreferenceChangeListener createChangeListener() {
