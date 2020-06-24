@@ -67,7 +67,9 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
         setContentView(R.layout.qrcode_tab);
+
         initToolbar();
+        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider, scheduler);
 
         new PermissionUtils().requestCameraPermission(this, new PermissionListener() {
             @Override
@@ -92,8 +94,6 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(fragmentTitleList[position])).attach();
-
-        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider, scheduler);
     }
 
     private void initToolbar() {
