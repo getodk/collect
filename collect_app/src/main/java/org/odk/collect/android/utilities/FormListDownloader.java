@@ -263,6 +263,7 @@ public class FormListDownloader {
                         }
                     }
                 }
+
                 formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
                         (version != null) ? version : majorMinorVersion, hash,
                         manifestFile != null ? manifestFile.getHash() : null,

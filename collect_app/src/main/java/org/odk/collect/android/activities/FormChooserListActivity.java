@@ -33,7 +33,6 @@ import androidx.loader.content.Loader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -124,11 +123,32 @@ public class FormChooserListActivity extends FormListActivity implements
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        Collect.getInstance().getContentResolver().delete(FormsColumns.CONTENT_URI, null, null);
-
                         HashMap<String, FormDetails> formList = formListDownloader.downloadFormList(true);
+
+                        // Delete forms not in list
+                        FormsDao formsDao = new FormsDao();
+                        Cursor allFormsCursor = formsDao.getFormsCursor();
+                        while (allFormsCursor.moveToNext()) {
+                            if (!formList.containsKey(allFormsCursor.getString(0))) {
+                                formsDao.deleteFormsFromIDs(new String[]{allFormsCursor.getString(13)});
+                            }
+                        }
+
+                        // Download new and updated forms in list
                         for (Map.Entry<String, FormDetails> formListing : formList.entrySet()) {
-                            new FormDownloader().downloadForms(asList(formListing.getValue()));
+                            FormDetails formDetails = formListing.getValue();
+
+                            Cursor formCursor = formsDao.getFormsCursorForFormId(formDetails.getFormId());
+
+                            if (formCursor.getCount() == 0) {
+                                new FormDownloader().downloadForms(asList(formDetails));
+                            } else {
+                                formCursor.moveToFirst();
+
+                                if (!formCursor.getString(8).equals(formDetails.getHash().split(":")[1])) {
+                                    new FormDownloader().downloadForms(asList(formDetails));
+                                }
+                            }
                         }
 
                         return null;
@@ -155,7 +175,7 @@ public class FormChooserListActivity extends FormListActivity implements
             diskSyncTask.setDiskSyncListener(this);
             diskSyncTask.execute((Void[]) null);
         }
-        sortingOptions = new int[] {
+        sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc,
         };
@@ -199,11 +219,14 @@ public class FormChooserListActivity extends FormListActivity implements
         final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
         final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, FormMapActivity.class);
         new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
-            @Override public void granted() {
+            @Override
+            public void granted() {
                 startActivity(intent);
             }
 
-            @Override public void denied() { }
+            @Override
+            public void denied() {
+            }
         });
     }
 
@@ -239,21 +262,21 @@ public class FormChooserListActivity extends FormListActivity implements
 
     private void setupAdapter() {
         String[] columnNames = {
-            FormsColumns.DISPLAY_NAME,
-            FormsColumns.JR_VERSION,
-            hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE,
-            FormsColumns.GEOMETRY_XPATH
+                FormsColumns.DISPLAY_NAME,
+                FormsColumns.JR_VERSION,
+                hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE,
+                FormsColumns.GEOMETRY_XPATH
         };
         int[] viewIds = {
-            R.id.form_title,
-            R.id.form_subtitle,
-            R.id.form_subtitle2,
-            R.id.map_view
+                R.id.form_title,
+                R.id.form_subtitle,
+                R.id.form_subtitle2,
+                R.id.map_view
         };
 
         listAdapter = new FormListAdapter(
-            listView, FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item,
-            this::onMapButtonClick, columnNames, viewIds);
+                listView, FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item,
+                this::onMapButtonClick, columnNames, viewIds);
         listView.setAdapter(listAdapter);
     }
 
