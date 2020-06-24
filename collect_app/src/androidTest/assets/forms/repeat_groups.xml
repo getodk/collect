@@ -7,6 +7,7 @@
                     <meta>
                         <instanceID/>
                     </meta>
+                    <text0>0</text0>
                     <repeatGroup>
                         <text1>1</text1>
                     </repeatGroup>
@@ -35,6 +36,9 @@
             </instance>
             <itext>
                 <translation lang="English">
+                    <text id="/data/text0">
+                        <value>text0</value>
+                    </text>
                     <text id="/data/repeatGroup:label">
                         <value>repeatGroup</value>
                     </text>
@@ -55,6 +59,9 @@
         </model>
     </h:head>
     <h:body>
+        <input ref="/data/text0">
+            <label ref="jr:itext('/data/text0')"/>
+        </input>
         <group ref="/data/repeatGroup">
             <label ref="jr:itext('/data/repeatGroup:label')"/>
             <repeat nodeset="/data/repeatGroup">
