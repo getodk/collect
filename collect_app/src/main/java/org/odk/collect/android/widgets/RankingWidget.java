@@ -98,7 +98,7 @@ public class RankingWidget extends ItemsWidget implements BinaryWidget {
         if (formController != null) {
             formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
         }
-        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(savedItems == null ? items : savedItems, getFormEntryPrompt().getIndex());
+        RankingWidgetDialog rankingWidgetDialog = new RankingWidgetDialog(savedItems == null ? items : savedItems, getFormEntryPrompt().getIndex());
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
     }
 
