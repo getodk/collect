@@ -94,13 +94,13 @@ public class FormDownloaderTest {
                 null, "basic", "2019121201",
                 "hash", null, false, false);
         FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl());
+        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
         List<FormDetails> forms = new ArrayList<>();
         forms.add(formDetails);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(formDetails), is("Success"));
     }
 
@@ -152,14 +152,14 @@ public class FormDownloaderTest {
                 "https://testserver/media-manifest.xml", "media", "2019121201",
                 "hash", "manifestHash", false, false);
         FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl());
-        doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt());
+        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
+        doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
         List<FormDetails> forms = new ArrayList<>();
         forms.add(formDetails);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(formDetails), is("Success"));
     }
 
@@ -210,13 +210,13 @@ public class FormDownloaderTest {
                 "https://testserver/manifest.xml", "basic-external-xml-instance", "20200101",
                 "hash", "manifestHash", false, false);
         FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl());
+        doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
         List<FormDetails> forms = new ArrayList<>();
         forms.add(test1);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(test1), is("Success"));
     }
 
@@ -261,13 +261,13 @@ public class FormDownloaderTest {
                 "https://testserver/manifest.xml", "basic-external-csv-instance", "20200101",
                 "hash", "manifestHash", false, false);
         FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl());
+        doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
         List<FormDetails> forms = new ArrayList<>();
         forms.add(test1);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(test1), is("Success"));
     }
 
@@ -309,14 +309,14 @@ public class FormDownloaderTest {
                 "https://testserver/media-manifest.xml", "basic-last-saved", "20200101",
                 "hash", "manifestHash", false, false);
         FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl());
-        doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt());
+        doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
+        doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
         List<FormDetails> forms = new ArrayList<>();
         forms.add(test1);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(test1), is("Success"));
     }
 
@@ -375,12 +375,12 @@ public class FormDownloaderTest {
                 "https://testserver/manifest.xml", "last-saved-attached", "20200101",
                 "hash", "manifestHash", false, false);
         FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl());
+        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
 
         List<FormDetails> forms = new ArrayList<>();
         forms.add(formDetails);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms);
+        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(formDetails), containsString("<label> node for itemset doesn't exist!"));
     }
 

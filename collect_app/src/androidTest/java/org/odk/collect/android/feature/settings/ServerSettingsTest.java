@@ -69,7 +69,7 @@ public class ServerSettingsTest {
 
                 .clickGetBlankForm()
                 .clickGetSelected()
-                .assertMessage("One Question (Version:: 1 ID: 0) - Success")
+                .assertMessage("One Question (Version:: 1 ID: one-question) - Success")
                 .clickOK(new MainMenuPage(rule))
 
                 .startBlankForm("One Question")

@@ -141,12 +141,12 @@ public class FormChooserListActivity extends FormListActivity implements
                             Cursor formCursor = formsDao.getFormsCursorForFormId(formDetails.getFormId());
 
                             if (formCursor.getCount() == 0) {
-                                new FormDownloader().downloadForms(asList(formDetails));
+                                new FormDownloader().downloadForms(asList(formDetails), null);
                             } else {
                                 formCursor.moveToFirst();
 
                                 if (!formCursor.getString(8).equals(formDetails.getHash().split(":")[1])) {
-                                    new FormDownloader().downloadForms(asList(formDetails));
+                                    new FormDownloader().downloadForms(asList(formDetails), null);
                                 }
                             }
                         }
