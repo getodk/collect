@@ -39,6 +39,9 @@ import org.odk.collect.android.forms.ServerFormListSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.openrosa.api.FormAPI;
+import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -49,6 +52,9 @@ import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
+
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -126,7 +132,16 @@ public class FormChooserListActivity extends FormListActivity implements
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        new ServerFormListSynchronizer(formRepository, formListDownloader, formDownloader).synchronize();
+                        FormAPI formAPI = () -> formListDownloader.downloadFormList(false).values().stream().map((Function<FormDetails, FormListItem>) formDetails -> new FormListItem(
+                                formDetails.getDownloadUrl(),
+                                formDetails.getFormId(),
+                                formDetails.getFormVersion(),
+                                formDetails.getHash(),
+                                formDetails.getFormName(),
+                                formDetails.getManifestUrl()
+                        )).collect(Collectors.toList());
+
+                        new ServerFormListSynchronizer(formRepository, formAPI, formDownloader).synchronize();
                         return null;
                     }
                 }.execute();

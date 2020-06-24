@@ -2,12 +2,11 @@ package org.odk.collect.android.forms;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.openrosa.api.FormAPI;
+import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.FormListDownloader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -19,13 +18,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.logic.FormDetails.toFormDetails;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormListSynchronizerTest {
 
-    private final List<FormDetails> formList = asList(
-            new FormDetails(null, "http://example.com/form-1", null, "form-1", "server", "form-1-hash", null, false, false),
-            new FormDetails(null, "http://example.com/form-2", null, "form-2", "server", "form-2-hash", null, false, false)
+    private final List<FormListItem> formList = asList(
+            new FormListItem("http://example.com/form-1", "form-1", "server", "form-1-hash", "Form 1", "http://example.com/form-1-manifest"),
+            new FormListItem("http://example.com/form-2", "form-2", "server", "form-2-hash", "Form 2", "http://example.com/form-2-manifest")
     );
 
     private ServerFormListSynchronizer synchronizer;
@@ -36,23 +36,19 @@ public class ServerFormListSynchronizerTest {
     public void setup() {
         formRepository = new InMemFormRepository();
 
-        FormListDownloader formListDownloader = mock(FormListDownloader.class);
-        HashMap<String, FormDetails> formListResponse = new HashMap<>();
-        for (FormDetails formDetails : formList) {
-            formListResponse.put(formDetails.getFormId(), formDetails);
-        }
-        when(formListDownloader.downloadFormList(true)).thenReturn(formListResponse);
+        FormAPI formAPI = mock(FormAPI.class);
+        when(formAPI.fetchFormList()).thenReturn(formList);
 
         formDownloader = mock(FormDownloader.class);
 
-        synchronizer = new ServerFormListSynchronizer(formRepository, formListDownloader, formDownloader);
+        synchronizer = new ServerFormListSynchronizer(formRepository, formAPI, formDownloader);
     }
 
     @Test
     public void whenNoFormsExist_downloadsAndSavesAllFormsInList() {
         synchronizer.synchronize();
-        verify(formDownloader).downloadForms(eq(asList(formList.get(0))), any());
-        verify(formDownloader).downloadForms(eq(asList(formList.get(1))), any());
+        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(0)))), any());
+        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
     }
 
     @Test
@@ -77,7 +73,7 @@ public class ServerFormListSynchronizerTest {
                 .build());
 
         synchronizer.synchronize();
-        verify(formDownloader).downloadForms(eq(asList(formList.get(1))), any());
+        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
     }
 
     @Test
@@ -90,7 +86,7 @@ public class ServerFormListSynchronizerTest {
                 .build());
 
         synchronizer.synchronize();
-        verify(formDownloader, never()).downloadForms(eq(asList(formList.get(1))), any());
+        verify(formDownloader, never()).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
     }
 
     private static class InMemFormRepository implements FormRepository {
