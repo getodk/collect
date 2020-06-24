@@ -44,9 +44,9 @@ public class MatchExactlyTest {
             .around(rule);
 
     @Test
-    public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestSetOfFormsFromServer() {
-        server.addForm("One Question Updated", "one-question-updated.xml");
-        server.addForm("Two Question", "two-question.xml");
+    public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestFormsFromServer() {
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        server.addForm("Two Question", "two_question", "two-question.xml");
 
         rule.mainMenu()
                 .setServer(server.getURL())

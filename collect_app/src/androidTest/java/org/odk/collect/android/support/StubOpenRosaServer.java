@@ -101,12 +101,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         this.password = password;
     }
 
-    public void addForm(String formLabel, String formXML) {
-        forms.add(new FormManifestEntry(formLabel, formXML, "1"));
-    }
-
-    public void addForm(String formLabel, String formXML, String version) {
-        forms.add(new FormManifestEntry(formLabel, formXML, version));
+    public void addForm(String formLabel, String id, String formXML) {
+        forms.add(new FormManifestEntry(formLabel, formXML, id, "1"));
     }
 
     public String getURL() {
@@ -147,7 +143,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
             stringBuilder
                     .append("<xform>\n")
-                    .append("<formID>" + i + "</formID>\n")
+                    .append("<formID>" + form.getID() + "</formID>\n")
                     .append("<name>" + form.getFormLabel() + "</name>\n")
                     .append("<version>" + form.getVersion() + "</version>\n")
                     .append("<hash>md5:" + hash + "</hash>\n")
@@ -177,11 +173,13 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         private final String formLabel;
         private final String formXML;
+        private final String id;
         private final String version;
 
-        FormManifestEntry(String formLabel, String formXML, String version) {
+        FormManifestEntry(String formLabel, String formXML, String id, String version) {
             this.formLabel = formLabel;
             this.formXML = formXML;
+            this.id = id;
             this.version = version;
         }
 
@@ -195,6 +193,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         public String getVersion() {
             return version;
+        }
+
+        public String getID() {
+            return id;
         }
     }
 

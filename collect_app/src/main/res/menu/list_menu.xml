@@ -15,6 +15,7 @@
         android:id="@+id/menu_refresh"
         android:icon="@drawable/ic_baseline_refresh_24"
         android:title="@string/refresh"
+        android:visible="false"
         app:showAsAction="always"/>
 
     <item

@@ -3,6 +3,7 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.activities.FormChooserListActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
@@ -167,6 +168,8 @@ public interface AppDependencyComponent {
     void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
 
     void inject(QuitFormDialogFragment quitFormDialogFragment);
+
+    void inject(FormChooserListActivity formChooserListActivity);
 
     RxEventBus rxEventBus();
 

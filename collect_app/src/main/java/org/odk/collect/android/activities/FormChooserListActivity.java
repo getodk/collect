@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,28 +21,43 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static java.util.Arrays.asList;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
@@ -60,10 +74,14 @@ public class FormChooserListActivity extends FormListActivity implements
     private static final boolean EXIT = true;
     private DiskSyncTask diskSyncTask;
 
+    @Inject
+    FormListDownloader formListDownloader;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_chooser_list);
+        DaggerUtils.getComponent(this).inject(this);
 
         setTitle(getString(R.string.enter_data));
 
@@ -86,6 +104,43 @@ public class FormChooserListActivity extends FormListActivity implements
                 finishAllActivities(FormChooserListActivity.this);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.findItem(R.id.menu_refresh).setVisible(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (super.onOptionsItemSelected(item)) {
+            return true;
+        } else {
+            if (item.getItemId() == R.id.menu_refresh) {
+                new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        Collect.getInstance().getContentResolver().delete(FormsColumns.CONTENT_URI, null, null);
+
+                        HashMap<String, FormDetails> formList = formListDownloader.downloadFormList(true);
+                        for (Map.Entry<String, FormDetails> formListing : formList.entrySet()) {
+                            new FormDownloader().downloadForms(asList(formListing.getValue()));
+                        }
+
+                        return null;
+                    }
+                }.execute();
+
+                return true;
+            } else {
+                return false;
+
+            }
+        }
     }
 
     private void init() {

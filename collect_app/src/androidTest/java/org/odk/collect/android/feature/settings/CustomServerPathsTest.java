@@ -47,7 +47,7 @@ public class CustomServerPathsTest {
     @Test // Issue number NODK-235 TestCase1
     public void changingFormListPathInSettings_changesFormListDownloadPath() {
         server.setFormListPath("/customPath");
-        server.addForm("Custom path form", "one-question.xml");
+        server.addForm("Custom path form", "one-question", "one-question.xml");
 
         new MainMenuPage(rule)
                 .clickOnMenu()
