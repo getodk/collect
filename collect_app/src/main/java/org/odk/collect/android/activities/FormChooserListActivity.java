@@ -34,10 +34,11 @@ import androidx.loader.content.Loader;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.ServerFormListSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -49,14 +50,10 @@ import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static java.util.Arrays.asList;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
@@ -72,6 +69,9 @@ public class FormChooserListActivity extends FormListActivity implements
 
     private static final boolean EXIT = true;
     private DiskSyncTask diskSyncTask;
+
+    @Inject
+    FormRepository formRepository;
 
     @Inject
     FormListDownloader formListDownloader;
@@ -126,34 +126,7 @@ public class FormChooserListActivity extends FormListActivity implements
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        HashMap<String, FormDetails> formList = formListDownloader.downloadFormList(true);
-
-                        // Delete forms not in list
-                        FormsDao formsDao = new FormsDao();
-                        Cursor allFormsCursor = formsDao.getFormsCursor();
-                        while (allFormsCursor.moveToNext()) {
-                            if (!formList.containsKey(allFormsCursor.getString(0))) {
-                                formsDao.deleteFormsFromIDs(new String[]{allFormsCursor.getString(13)});
-                            }
-                        }
-
-                        // Download new and updated forms in list
-                        for (Map.Entry<String, FormDetails> formListing : formList.entrySet()) {
-                            FormDetails formDetails = formListing.getValue();
-
-                            Cursor formCursor = formsDao.getFormsCursorForFormId(formDetails.getFormId());
-
-                            if (formCursor.getCount() == 0) {
-                                formDownloader.downloadForms(asList(formDetails), null);
-                            } else {
-                                formCursor.moveToFirst();
-
-                                if (!formCursor.getString(8).equals(formDetails.getHash().split(":")[1])) {
-                                    formDownloader.downloadForms(asList(formDetails), null);
-                                }
-                            }
-                        }
-
+                        new ServerFormListSynchronizer(formRepository, formListDownloader, formDownloader).synchronize();
                         return null;
                     }
                 }.execute();
