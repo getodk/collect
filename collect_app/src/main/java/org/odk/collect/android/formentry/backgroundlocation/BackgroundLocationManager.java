@@ -302,7 +302,7 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         LOCATION_PREF_DISABLED(R.string.background_location_disabled, true),
         PLAY_SERVICES_UNAVAILABLE(R.string.google_play_services_not_available, false),
         COLLECTING_LOCATION(R.string.background_location_enabled, true),
-        DISABLE_PREVENT_COLLECTING_LOCATION(R.string.smap_disable_prevent_background_location_enabled, true),
+        DISABLE_PREVENT_COLLECTING_LOCATION(R.string.smap_disable_prevent_background_location_enabled, true),   // smap
         PROVIDERS_DISABLED(-1, false);
 
         private int messageTextResourceId;

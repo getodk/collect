@@ -174,9 +174,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             if (intentString != null && intentString.length() != 0) {
                 readOnlyOverride = true;
 
-                exGroupPrompt = addIntentLaunchButton(context, questionPrompts, c, intentString);   // smap get the button back
-
                 // Start smap - auto launch
+                exGroupPrompt = addIntentLaunchButton(context, questionPrompts, c, intentString);   // smap get the button back
                 String auto = c.getFormElement().getAdditionalAttribute(null, "auto");
                 boolean autoLaunch = (auto != null && (auto.equals("yes") || auto.equals("true"))) ? true : false;
                 if(!autoLaunch) {
