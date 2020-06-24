@@ -67,6 +67,15 @@ public class FormDownloader {
     @Inject
     OpenRosaAPIClient openRosaAPIClient;
 
+    public FormDownloader(FormsDao formsDao, OpenRosaAPIClient openRosaAPIClient) {
+        this.formsDao = formsDao;
+        this.openRosaAPIClient = openRosaAPIClient;
+    }
+
+    /**
+     * Use {@link #FormDownloader(FormsDao, OpenRosaAPIClient)} instead
+     */
+    @Deprecated
     public FormDownloader() {
         Collect.getInstance().getComponent().inject(this);
     }

@@ -76,6 +76,9 @@ public class FormChooserListActivity extends FormListActivity implements
     @Inject
     FormListDownloader formListDownloader;
 
+    @Inject
+    FormDownloader formDownloader;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,12 +144,12 @@ public class FormChooserListActivity extends FormListActivity implements
                             Cursor formCursor = formsDao.getFormsCursorForFormId(formDetails.getFormId());
 
                             if (formCursor.getCount() == 0) {
-                                new FormDownloader().downloadForms(asList(formDetails), null);
+                                formDownloader.downloadForms(asList(formDetails), null);
                             } else {
                                 formCursor.moveToFirst();
 
                                 if (!formCursor.getString(8).equals(formDetails.getHash().split(":")[1])) {
-                                    new FormDownloader().downloadForms(asList(formDetails), null);
+                                    formDownloader.downloadForms(asList(formDetails), null);
                                 }
                             }
                         }
