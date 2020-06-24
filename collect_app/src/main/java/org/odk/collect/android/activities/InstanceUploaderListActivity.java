@@ -509,7 +509,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     private boolean showSentAndUnsentChoices() {
         String[] items = {getString(R.string.show_unsent_forms),
                 getString(R.string.show_sent_and_unsent_forms),
-                getString(R.string.smap_show_incomplete)};
+                getString(R.string.smap_show_incomplete)};  // smap
 
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)

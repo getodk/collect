@@ -14,19 +14,12 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -36,11 +29,6 @@ import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
-
-import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
  * Responsible for showing a history of:

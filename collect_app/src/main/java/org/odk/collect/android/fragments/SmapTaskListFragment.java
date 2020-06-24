@@ -72,8 +72,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
@@ -474,10 +474,10 @@ public class SmapTaskListFragment extends ListFragment
                 break;
             case BY_DATE_DESC:
                 sortOrder = "BY_DATE_DESC";
-            case BY_STATUS_PROJECT_ASC:
+            case BY_STATUS_ASC:
                 sortOrder = "BY_STATUS_ASC";
                 break;
-            case BY_STATUS_PROJECT_DESC:
+            case BY_STATUS_DESC:
                 sortOrder = "BY_STATUS_DESC";
                 break;
         }

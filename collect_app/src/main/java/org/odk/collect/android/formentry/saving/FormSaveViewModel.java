@@ -80,7 +80,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
-        if (isSaving()) {
+        if (isSaving() || formController == null) {
             return;
         }
 
@@ -287,7 +287,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         public SaveRequest getRequest() {
             return request;
         }
-
     }
 
     public static class SaveRequest {

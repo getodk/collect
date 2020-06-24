@@ -331,7 +331,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 Long removeMe = Long.valueOf(uploadedInstance);
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Timber.i("%d was already sent, removing from queue before restarting task",
+                    Timber.i("%d was already attempted, removing from queue before restarting task",
                             removeMe);
                 }
             }

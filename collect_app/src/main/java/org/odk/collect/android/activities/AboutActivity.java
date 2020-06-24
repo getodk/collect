@@ -93,7 +93,7 @@ public class AboutActivity extends CollectAbstractActivity implements
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.about_preferences) +
-                " " +
+                " " +           // smap add version
                 getString(R.string.version) +
                 " " +
                 getString(R.string.app_version));

@@ -182,8 +182,6 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
-//import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;  // smap commented
-//import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;    // smap commented
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
@@ -207,6 +205,7 @@ import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
  *         option)
  */
 
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, OnGestureListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
@@ -1457,7 +1456,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             saveAs.setEnabled(true);
             if (showInstanceName) {      // smap
                 saveAs.setVisibility(View.VISIBLE);
-                sa.setVisibility(View.VISIBLE);
+                sa.setVisibility(View.VISIBLE); // smap
             }
             saveAs.addTextChangedListener(new TextWatcher() {
                 @Override

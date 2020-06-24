@@ -6,8 +6,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_PROJECT_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 abstract class InstanceListActivity extends AppListActivity {
     protected String getSortingOrder() {
@@ -25,10 +25,10 @@ abstract class InstanceListActivity extends AppListActivity {
             case BY_DATE_DESC:
                 sortingOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
                 break;
-            case BY_STATUS_PROJECT_ASC:
+            case BY_STATUS_ASC:
                 sortingOrder = InstanceColumns.STATUS + " ASC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
-            case BY_STATUS_PROJECT_DESC:
+            case BY_STATUS_DESC:
                 sortingOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
         }
