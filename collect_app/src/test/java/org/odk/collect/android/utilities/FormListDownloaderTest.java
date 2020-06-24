@@ -9,7 +9,7 @@ import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.robolectric.RobolectricTestRunner;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class FormListDownloaderTest {
 
-    private final OpenRosaAPIClient serverClient = mock(OpenRosaAPIClient.class);
+    private final OpenRosaXMLFetcher serverClient = mock(OpenRosaXMLFetcher.class);
 
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {

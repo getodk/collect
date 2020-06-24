@@ -11,7 +11,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
@@ -42,14 +42,14 @@ public class FormDownloaderTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
-    OpenRosaAPIClient openRosaAPIClient;
+    OpenRosaXMLFetcher openRosaXMLFetcher;
 
     @Before
     public void overrideDependencyModule() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
                @Override
-               public OpenRosaAPIClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
-                   return openRosaAPIClient;
+               public OpenRosaXMLFetcher provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+                   return openRosaXMLFetcher;
                }
         });
     }
@@ -201,8 +201,8 @@ public class FormDownloaderTest {
         out.write(basicLastSaved);
         out.close();
 
-        when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("external-data.xml"));
-        when(openRosaAPIClient.getFile("https://testserver/external-data.xml",
+        when(openRosaXMLFetcher.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("external-data.xml"));
+        when(openRosaXMLFetcher.getFile("https://testserver/external-data.xml",
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
         FormDownloader downloader = spy(new FormDownloader());
@@ -252,8 +252,8 @@ public class FormDownloaderTest {
         out.write(basicLastSaved);
         out.close();
 
-        when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("external-data.csv"));
-        when(openRosaAPIClient.getFile("https://testserver/external-data.csv",
+        when(openRosaXMLFetcher.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("external-data.csv"));
+        when(openRosaXMLFetcher.getFile("https://testserver/external-data.csv",
                 null)).thenReturn(buildCsvExternalInstanceFetchResult());
 
         FormDownloader downloader = spy(new FormDownloader());
@@ -366,8 +366,8 @@ public class FormDownloaderTest {
         out.write(basicLastSaved);
         out.close();
 
-        when(openRosaAPIClient.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("last-saved.xml"));
-        when(openRosaAPIClient.getFile("https://testserver/last-saved.xml",
+        when(openRosaXMLFetcher.getXML("https://testserver/manifest.xml")).thenReturn(buildManifestFetchResult("last-saved.xml"));
+        when(openRosaXMLFetcher.getFile("https://testserver/last-saved.xml",
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
         FormDownloader downloader = spy(new FormDownloader());

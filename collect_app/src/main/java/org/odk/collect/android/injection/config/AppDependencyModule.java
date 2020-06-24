@@ -24,7 +24,7 @@ import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
@@ -116,8 +116,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public OpenRosaAPIClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
-        return new OpenRosaAPIClient(httpInterface, webCredentialsUtils);
+    public OpenRosaXMLFetcher provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+        return new OpenRosaXMLFetcher(httpInterface, webCredentialsUtils);
     }
 
     @Provides
@@ -128,20 +128,20 @@ public class AppDependencyModule {
     @Provides
     FormListDownloader provideDownloadFormListDownloader(
             Application application,
-            OpenRosaAPIClient openRosaAPIClient,
+            OpenRosaXMLFetcher openRosaXMLFetcher,
             WebCredentialsUtils webCredentialsUtils,
             FormsDao formsDao) {
         return new FormListDownloader(
                 application,
-                openRosaAPIClient,
+                openRosaXMLFetcher,
                 webCredentialsUtils,
                 formsDao
         );
     }
 
     @Provides
-    FormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaAPIClient openRosaAPIClient) {
-        return new FormDownloader(formsDao, openRosaAPIClient);
+    FormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
+        return new FormDownloader(formsDao, openRosaXMLFetcher);
     }
 
     @Provides

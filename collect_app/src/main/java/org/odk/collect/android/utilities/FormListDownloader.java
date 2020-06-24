@@ -28,7 +28,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
@@ -52,17 +52,17 @@ public class FormListDownloader {
             "http://openrosa.org/xforms/xformsList";
 
     private final WebCredentialsUtils webCredentialsUtils;
-    private final OpenRosaAPIClient openRosaAPIClient;
+    private final OpenRosaXMLFetcher openRosaXMLFetcher;
     private final Application application;
     private final FormsDao formsDao;
 
     public FormListDownloader(
             Application application,
-            OpenRosaAPIClient openRosaAPIClient,
+            OpenRosaXMLFetcher openRosaXMLFetcher,
             WebCredentialsUtils webCredentialsUtils,
             FormsDao formsDao) {
         this.application = application;
-        this.openRosaAPIClient = openRosaAPIClient;
+        this.openRosaXMLFetcher = openRosaXMLFetcher;
         this.webCredentialsUtils = webCredentialsUtils;
         this.formsDao = formsDao;
     }
@@ -110,7 +110,7 @@ public class FormListDownloader {
             }
         }
 
-        DocumentFetchResult result = openRosaAPIClient.getXML(downloadListUrl);
+        DocumentFetchResult result = openRosaXMLFetcher.getXML(downloadListUrl);
 
         clearTemporaryCredentials(url);
 
@@ -341,7 +341,7 @@ public class FormListDownloader {
             return null;
         }
 
-        DocumentFetchResult result = openRosaAPIClient.getXML(manifestUrl);
+        DocumentFetchResult result = openRosaXMLFetcher.getXML(manifestUrl);
 
         if (result.errorMessage != null) {
             return null;

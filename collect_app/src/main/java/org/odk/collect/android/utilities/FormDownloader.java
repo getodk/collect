@@ -31,7 +31,7 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -65,15 +65,15 @@ public class FormDownloader {
     FormsDao formsDao;
 
     @Inject
-    OpenRosaAPIClient openRosaAPIClient;
+    OpenRosaXMLFetcher openRosaXMLFetcher;
 
-    public FormDownloader(FormsDao formsDao, OpenRosaAPIClient openRosaAPIClient) {
+    public FormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
         this.formsDao = formsDao;
-        this.openRosaAPIClient = openRosaAPIClient;
+        this.openRosaXMLFetcher = openRosaXMLFetcher;
     }
 
     /**
-     * Use {@link #FormDownloader(FormsDao, OpenRosaAPIClient)} instead
+     * Use {@link #FormDownloader(FormsDao, OpenRosaXMLFetcher)} instead
      */
     @Deprecated
     public FormDownloader() {
@@ -427,7 +427,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = openRosaAPIClient.getFile(downloadUrl, null);
+                    is = openRosaXMLFetcher.getFile(downloadUrl, null);
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
@@ -556,7 +556,7 @@ public class FormDownloader {
 
         List<MediaFile> files = new ArrayList<>();
 
-        DocumentFetchResult result = openRosaAPIClient.getXML(fd.getManifestUrl());
+        DocumentFetchResult result = openRosaXMLFetcher.getXML(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;
