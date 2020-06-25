@@ -236,13 +236,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
     public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
     private long mTaskId;                                               // smap
-    private String mFormId;                                             // smap
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
     private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
     ProgressDialog progressBar = null;                                  // smap
     String swipeDirection;                                              // smap
-    FormInfo formInfo = null;                                           // smap
     private static final String KEY_SAVE_NAME = "saveName";
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
 
@@ -550,7 +548,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-                    formLoaderTask.execute(formPath, mFormId);      // Smap add mForm Id
+                    formLoaderTask.execute(formPath, Collect.getInstance().getFormId());      // Smap add formId
                 }
                 return;
             }
@@ -578,8 +576,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
             // get the formId and version for this instance...
 
-            formInfo = ContentResolverHelper.getFormDetails(uri);   // Smap increase scope of FormInfo
-            Collect.getInstance().setFormInfo(formInfo);            // smap
+            FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
 
             if (formInfo == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
@@ -587,6 +584,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             instancePath = formInfo.getInstancePath();
+            Collect.getInstance().setFormId(formInfo.getFormId());                                             // smap
 
             String jrFormId = formInfo.getFormId();
             String jrVersion = formInfo.getFormVersion();
@@ -633,34 +631,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else if (uriMimeType != null
                 && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
             formPath = ContentResolverHelper.getFormPath(uri);
-
-            // smap start
-            Cursor c = null;
-            try {
-                c = getContentResolver().query(uri, null, null, null,
-                        null);
-                if (c == null || c.getCount() != 1) {
-                    this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
-                    return;
-                } else {
-                    c.moveToFirst();
-
-                    String formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));     // smap
-                    String version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));     // smap
-                    formInfo = new FormInfo(null, formId, version);
-                    formInfo.source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));
-                    formInfo.name = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-                    formInfo.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
-
-                    Collect.getInstance().setFormInfo(formInfo);    // smap
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
-            // smap end
-
             if (formPath == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                 return;
@@ -718,11 +688,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
         mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);                   // smap
         mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
-        mFormId = formInfo.getFormId();                                             // smap
+
 
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-        //formLoaderTask.execute(formPath);		// smap replaced with background thread
-        formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);      // smap add formId
+        formLoaderTask.execute(formPath, Collect.getInstance().getFormId());		// smap replaced with background thread
+        //formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, Collect.getInstance().getFormId());      // smap add formId - disable
     }
 
     public Bundle getState() {
@@ -1938,7 +1908,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit);
 
-
         return true;
     }
 
@@ -2279,7 +2248,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         FormController formController = getFormController();
-        formInfo = Collect.getInstance().getFormInfo();    // smap
 
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(this);

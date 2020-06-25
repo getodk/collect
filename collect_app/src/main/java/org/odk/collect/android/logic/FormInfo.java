@@ -25,9 +25,6 @@ public class FormInfo {
     private final String formVersion;
     private final String formID;
     private final String instancePath;
-    public String source;                   // smap
-    public String name;                     // smap
-    public String submissionUri;            // smap
 
     public FormInfo(String instancePath, String formID, String formVersion) {
         this.instancePath = instancePath;

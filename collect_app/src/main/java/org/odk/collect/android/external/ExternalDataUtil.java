@@ -217,9 +217,8 @@ public final class ExternalDataUtil {
                                 new ExternalDataHandlerSearch(externalDataManager, displayColumns,
                                         value, imageColumn));
                     } else if (xpathfuncexpr.id.name.equalsIgnoreCase(SmapRemoteDataHandlerSearch.HANDLER_NAME)){       // smap
-                        FormInfo formInfo = Collect.getInstance().getFormInfo();
                         evaluationContext.addFunctionHandler(
-                                new SmapRemoteDataHandlerSearch(formInfo.getFormId(), displayColumns,
+                                new SmapRemoteDataHandlerSearch(Collect.getInstance().getFormId(), displayColumns,
                                         value, imageColumn));
                     }
 

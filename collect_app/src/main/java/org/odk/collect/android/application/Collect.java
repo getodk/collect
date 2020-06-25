@@ -101,7 +101,7 @@ public class Collect extends Application {
     private Location location = null;                   // smap
     private ArrayList<GeofenceEntry> geofences = new ArrayList<GeofenceEntry>();    // smap
     private boolean recordLocation = false;             // smap
-    private FormInfo formInfo = null;                   // smap
+    //private FormInfo formInfo = null;                   // smap
     private boolean tasksDownloading = false;           // smap
     // Keep a reference to form entry activity to allow cancel dialogs to be shown during remote calls
     private FormEntryActivity formEntryActivity = null; // smap
@@ -109,6 +109,7 @@ public class Collect extends Application {
     private HashMap<String, String> remoteCalls = null;                     // smap
     private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
     private FormRestartDetails mRestartDetails;                             // smap
+    private String formId;                                                  // smap
     @Inject
     UserAgentProvider userAgentProvider;
 
@@ -271,12 +272,11 @@ public class Collect extends Application {
     }
 
     // Begin Smap
-    // start, set and get location
-    public void setFormInfo(FormInfo v) {
-        formInfo = v;
+    public void setFormId(String v) {
+        formId = v;
     }
-    public FormInfo getFormInfo() {
-        return formInfo;
+    public String getFormId() {
+        return formId;
     }
 
     public void setLocation(Location l) {
