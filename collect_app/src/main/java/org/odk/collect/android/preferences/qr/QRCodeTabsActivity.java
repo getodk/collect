@@ -163,17 +163,19 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     boolean qrCodeFound = false;
-                    final Uri imageUri = data.getData();
-                    if (imageUri != null) {
-                        final InputStream imageStream = getContentResolver()
-                                .openInputStream(imageUri);
+                    if (data != null) {
+                        final Uri imageUri = data.getData();
+                        if (imageUri != null) {
+                            final InputStream imageStream = getContentResolver()
+                                    .openInputStream(imageUri);
 
-                        final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-                        if (bitmap != null) {
-                            String response = QRCodeUtils.decodeFromBitmap(bitmap);
-                            if (response != null) {
-                                qrCodeFound = true;
-                                SettingsUtils.applySettings(this, response);
+                            final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                            if (bitmap != null) {
+                                String response = QRCodeUtils.decodeFromBitmap(bitmap);
+                                if (response != null) {
+                                    qrCodeFound = true;
+                                    SettingsUtils.applySettings(this, response);
+                                }
                             }
                         }
                     }
