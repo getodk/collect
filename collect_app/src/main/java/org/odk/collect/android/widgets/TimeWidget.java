@@ -177,10 +177,11 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     }
 
     @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        view.clearFocus();
-        this.hourOfDay = view.getCurrentHour();
-        this.minuteOfHour = view.getCurrentMinute();
+    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        timePicker.clearFocus();
+
+        this.hourOfDay = timePicker.getCurrentHour();
+        this.minuteOfHour = timePicker.getCurrentMinute();
 
         setTimeLabel();
         widgetValueChanged();
