@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 
 import androidx.core.content.ContextCompat;
 
@@ -41,8 +40,6 @@ public class RatingWidget extends QuestionWidget {
     private RatingWidgetAnswerBinding binding;
     private int numberOfStars;
 
-    Integer answer;
-
     public RatingWidget(Context context, QuestionDetails questionDetails, RangeQuestion rangeQuestion) {
         super(context, questionDetails);
 
@@ -56,21 +53,12 @@ public class RatingWidget extends QuestionWidget {
 
         binding.ratingBar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         binding.ratingBar.setNumStars(numberOfStars);
-        binding.ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                widgetValueChanged();
-                answer = (int) ratingBar.getRating();
-            }
-        });
+        binding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
         binding.ratingBar.setEnabled(!prompt.isReadOnly());
         binding.ratingBar.setStepSize(1.0F);
 
         if (prompt.getAnswerText() != null) {
-            answer = Integer.parseInt(prompt.getAnswerText());
-            binding.ratingBar.setRating(answer);
-        } else {
-            binding.ratingBar.setRating(0);
+            binding.ratingBar.setRating(Integer.parseInt(prompt.getAnswerText()));
         }
         return answerView;
     }
@@ -82,14 +70,12 @@ public class RatingWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return answer != null ? new IntegerData(answer) : null;
+        return binding.ratingBar.getRating() == 0.0F ? null : new IntegerData((int) binding.ratingBar.getRating());
     }
 
     @Override
     public void clearAnswer() {
-        answer = null;
-        binding.ratingBar.setRating(0);
-        widgetValueChanged();
+        binding.ratingBar.setRating(0.0F);
     }
 
     protected RatingWidgetAnswerBinding getBinding() {

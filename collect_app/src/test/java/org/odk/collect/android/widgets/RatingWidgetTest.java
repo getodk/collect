@@ -37,14 +37,14 @@ public class RatingWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
+    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsZero() {
         assertThat(createWidget(promptWithAnswer(null)).getAnswer(), nullValue());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
-        assertThat(widget.getAnswer().getValue(), equalTo(1));
+        assertThat(widget.getAnswer().getValue(), equalTo(3));
     }
 
     @Test
@@ -67,16 +67,16 @@ public class RatingWidgetTest {
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(0));
+        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(0.0F));
     }
 
     @Test
     public void clearAnswer_callsValueChangeListeners() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
         widget.clearAnswer();
@@ -86,7 +86,7 @@ public class RatingWidgetTest {
 
     @Test
     public void changingRating_callsValueChangeListeners() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
         widget.getBinding().ratingBar.setRating(4.0F);
@@ -96,7 +96,7 @@ public class RatingWidgetTest {
 
     @Test
     public void changingRating_updatesAnswer() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
         widget.getBinding().ratingBar.setRating(4.0F);
         assertThat(widget.getAnswer().getValue(), equalTo(4));
     }
@@ -104,7 +104,7 @@ public class RatingWidgetTest {
 
     @Test
     public void ratingBar_doesNotAllowUserToSetDecimalRating() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("2")));
+        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
         widget.getBinding().ratingBar.setRating(4.8F);
         assertThat(widget.getAnswer().getValue(), equalTo(4));
     }
