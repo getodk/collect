@@ -20,7 +20,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.core.content.ContextCompat;
 
@@ -38,12 +37,11 @@ public class RatingWidget extends QuestionWidget {
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
 
     private RatingWidgetAnswerBinding binding;
-    private int numberOfStars;
 
     public RatingWidget(Context context, QuestionDetails questionDetails, RangeQuestion rangeQuestion) {
         super(context, questionDetails);
-
-        numberOfStars = rangeQuestion.getRangeEnd().intValue();
+        binding.ratingBar.setNumStars(rangeQuestion.getRangeEnd().intValue());
+        binding.ratingBar.setStepSize(1.0F);
     }
 
     @Override
@@ -51,11 +49,8 @@ public class RatingWidget extends QuestionWidget {
         binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
-        binding.ratingBar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        binding.ratingBar.setNumStars(numberOfStars);
         binding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
         binding.ratingBar.setEnabled(!prompt.isReadOnly());
-        binding.ratingBar.setStepSize(1.0F);
 
         if (prompt.getAnswerText() != null) {
             binding.ratingBar.setRating(Integer.parseInt(prompt.getAnswerText()));

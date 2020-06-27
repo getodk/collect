@@ -37,6 +37,12 @@ public class RatingWidgetTest {
     }
 
     @Test
+    public void ratingBarShowsCorrectNumberOfStars() {
+        RatingWidget widget = createWidget(promptWithReadOnly());
+        assertThat(widget.getBinding().ratingBar.getNumStars(), equalTo(5));
+    }
+
+    @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsZero() {
         assertThat(createWidget(promptWithAnswer(null)).getAnswer(), nullValue());
     }
@@ -100,7 +106,6 @@ public class RatingWidgetTest {
         widget.getBinding().ratingBar.setRating(4.0F);
         assertThat(widget.getAnswer().getValue(), equalTo(4));
     }
-
 
     @Test
     public void ratingBar_doesNotAllowUserToSetDecimalRating() {
