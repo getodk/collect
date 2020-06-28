@@ -691,8 +691,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
 
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-        formLoaderTask.execute(formPath, Collect.getInstance().getFormId());		// smap replaced with background thread
-        //formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, Collect.getInstance().getFormId());      // smap add formId - disable
+        //formLoaderTask.execute(formPath, Collect.getInstance().getFormId());		// smap replaced with background thread
+        formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, Collect.getInstance().getFormId());      // smap add formId
+        
     }
 
     public Bundle getState() {
