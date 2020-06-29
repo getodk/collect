@@ -123,10 +123,21 @@ public class FormChooserListActivity extends FormListActivity implements
         } else {
             if (item.getItemId() == R.id.menu_refresh) {
                 new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected void onPreExecute() {
+                        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+                    }
+
                     @Override
                     protected Void doInBackground(Void... voids) {
                         new ServerFormListSynchronizer(formRepository, formAPI, formDownloader).synchronize();
                         return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        findViewById(R.id.progressBar).setVisibility(View.GONE);
                     }
                 }.execute();
 
