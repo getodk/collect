@@ -40,7 +40,7 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.CollectSettingsImporter;
+import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.LegacySettingsFileReader;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
@@ -138,7 +138,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     PreferencesProvider preferencesProvider;
 
     @Inject
-    CollectSettingsImporter collectSettingsImporter;
+    SettingsImporter settingsImporter;
 
     @Inject
     JavaRosaInitializer javaRosaInitializer;
@@ -590,7 +590,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
 
             if (settings != null) {
-                if (collectSettingsImporter.fromJSON(settings)) {
+                if (settingsImporter.fromJSON(settings)) {
                     ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                     javaRosaInitializer.initialize();
                     recreate();

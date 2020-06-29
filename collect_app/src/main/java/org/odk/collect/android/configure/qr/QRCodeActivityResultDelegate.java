@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.configure.CollectSettingsImporter;
+import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.utilities.ActivityResultDelegate;
 
 import java.io.FileNotFoundException;
@@ -22,12 +22,12 @@ import static org.odk.collect.android.configure.qr.QRCodeMenuDelegate.SELECT_PHO
 public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
 
     private final Activity activity;
-    private final CollectSettingsImporter collectSettingsImporter;
+    private final SettingsImporter settingsImporter;
     private final QRCodeDecoder qrCodeDecoder;
 
-    public QRCodeActivityResultDelegate(Activity activity, CollectSettingsImporter collectSettingsImporter, QRCodeDecoder qrCodeDecoder) {
+    public QRCodeActivityResultDelegate(Activity activity, SettingsImporter settingsImporter, QRCodeDecoder qrCodeDecoder) {
         this.activity = activity;
-        this.collectSettingsImporter = collectSettingsImporter;
+        this.settingsImporter = settingsImporter;
         this.qrCodeDecoder = qrCodeDecoder;
     }
 
@@ -48,7 +48,7 @@ public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
                 try {
                     String response = qrCodeDecoder.decode(imageStream);
                     if (response != null) {
-                        if (collectSettingsImporter.fromJSON(response)) {
+                        if (settingsImporter.fromJSON(response)) {
                             showToast(R.string.successfully_imported_settings);
                             startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
                         } else {

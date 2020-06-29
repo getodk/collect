@@ -26,12 +26,12 @@ import static org.odk.collect.android.application.initialization.migration.Share
 
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
-public class CollectSettingsImporterTest {
+public class SettingsImporterTest {
 
     private SharedPreferences generalPrefs;
     private SharedPreferences adminPrefs;
     private SettingsValidator settingsValidator;
-    private CollectSettingsImporter importer;
+    private SettingsImporter importer;
 
     private final Map<String, Object> generalDefaults = new HashMap<String, Object>() {{
         put("key1", "default");
@@ -50,7 +50,7 @@ public class CollectSettingsImporterTest {
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, () -> { });
+        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, () -> { });
     }
 
     @Test
@@ -111,7 +111,7 @@ public class CollectSettingsImporterTest {
             }
         };
 
-        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
@@ -127,7 +127,7 @@ public class CollectSettingsImporterTest {
             }
         };
 
-        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
         assertThat(importer.fromJSON(json.toString()), is(true));
     }
 
@@ -138,7 +138,7 @@ public class CollectSettingsImporterTest {
             key1ValueWhenCalled[0] = generalPrefs.getString("key1", null);
         };
 
-        importer = new CollectSettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, javaRosaInitializer);
+        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, javaRosaInitializer);
         assertThat(importer.fromJSON(emptySettings()), is(true));
         assertThat(key1ValueWhenCalled[0], is("default"));
     }

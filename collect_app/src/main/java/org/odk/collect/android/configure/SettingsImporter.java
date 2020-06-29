@@ -15,7 +15,7 @@ import java.util.Set;
 
 import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 
-public class CollectSettingsImporter {
+public class SettingsImporter {
 
     private final SharedPreferences generalSharedPrefs;
     private final SharedPreferences adminSharedPrefs;
@@ -25,7 +25,7 @@ public class CollectSettingsImporter {
     private final Map<String, Object> adminDefaults;
     private final JavaRosaInitializer javaRosaInitializer;
 
-    public CollectSettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, JavaRosaInitializer javaRosaInitializer) {
+    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, JavaRosaInitializer javaRosaInitializer) {
         this.generalSharedPrefs = generalSharedPrefs;
         this.adminSharedPrefs = adminSharedPrefs;
         this.preferenceMigrator = preferenceMigrator;

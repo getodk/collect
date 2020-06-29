@@ -8,7 +8,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.CollectSettingsImporter;
+import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -26,7 +26,7 @@ import static org.odk.collect.android.utilities.CompressionUtils.decompress;
 public class QRCodeScannerFragment extends BarCodeScannerFragment {
 
     @Inject
-    CollectSettingsImporter collectSettingsImporter;
+    SettingsImporter settingsImporter;
 
     @Override
     public void onAttach(Context context) {
@@ -36,7 +36,7 @@ public class QRCodeScannerFragment extends BarCodeScannerFragment {
 
     @Override
     protected void handleScanningResult(BarcodeResult result) throws IOException, DataFormatException {
-        boolean importSuccess = collectSettingsImporter.fromJSON(decompress(result.getText()));
+        boolean importSuccess = settingsImporter.fromJSON(decompress(result.getText()));
 
         if (importSuccess) {
             ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));

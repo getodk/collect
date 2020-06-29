@@ -12,7 +12,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.configure.CollectSettingsImporter;
+import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferencesProvider;
@@ -46,7 +46,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     QRCodeDecoder qrCodeDecoder;
 
     @Inject
-    CollectSettingsImporter collectSettingsImporter;
+    SettingsImporter settingsImporter;
 
     private QRCodeMenuDelegate menuDelegate;
     private QRCodeActivityResultDelegate activityResultDelegate;
@@ -57,7 +57,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         DaggerUtils.getComponent(this).inject(this);
 
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider, scheduler);
-        activityResultDelegate = new QRCodeActivityResultDelegate(this, collectSettingsImporter, qrCodeDecoder);
+        activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder);
         setContentView(R.layout.tabs_layout);
 
         initToolbar(getString(R.string.configure_via_qr_code));

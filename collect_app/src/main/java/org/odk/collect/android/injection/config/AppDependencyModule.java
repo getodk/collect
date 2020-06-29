@@ -20,7 +20,7 @@ import org.odk.collect.android.application.initialization.CollectPreferenceMigra
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
-import org.odk.collect.android.configure.CollectSettingsImporter;
+import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
@@ -355,10 +355,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CollectSettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
+    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
-        return new CollectSettingsImporter(
+        return new SettingsImporter(
                 preferencesProvider.getGeneralSharedPreferences(),
                 preferencesProvider.getAdminSharedPreferences(),
                 preferenceMigrator,
