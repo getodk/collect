@@ -246,10 +246,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
                 view.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
-                view.setEnabled(!getFormEntryPrompt().isReadOnly());
+                view.setEnabled(!getFormEntryPrompt().isReadOnly()  && !readOnlyOverride);    // smap
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
-                audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly());
+                audioVideoImageTextLabel.setEnabled(!getFormEntryPrompt().isReadOnly()  && !readOnlyOverride);    // smap
             }
         }
 

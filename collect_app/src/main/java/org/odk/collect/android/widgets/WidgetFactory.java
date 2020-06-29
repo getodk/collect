@@ -165,9 +165,9 @@ public class WidgetFactory {
                 } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
                     questionWidget = new LikertWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
-                    questionWidget = new ListWidget(context, questionDetails, false, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new ListWidget(context, questionDetails, false, appearance.contains(WidgetAppearanceUtils.QUICK), readOnlyOverride);  //smap readOnlyOverride
                 } else if (appearance.contains(WidgetAppearanceUtils.LIST)) {
-                    questionWidget = new ListWidget(context, questionDetails, true, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new ListWidget(context, questionDetails, true, appearance.contains(WidgetAppearanceUtils.QUICK), readOnlyOverride);    //smap readOnlyOverride
                 } else if (appearance.equals(WidgetAppearanceUtils.LABEL)) {
                     questionWidget = new LabelWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.IMAGE_MAP)) {
@@ -187,9 +187,9 @@ public class WidgetFactory {
                 } else if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, questionDetails);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {
-                    questionWidget = new ListMultiWidget(context, questionDetails, false);
+                    questionWidget = new ListMultiWidget(context, questionDetails, false, readOnlyOverride);    //smap readOnlyOverride
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST)) {
-                    questionWidget = new ListMultiWidget(context, questionDetails, true);
+                    questionWidget = new ListMultiWidget(context, questionDetails, true, readOnlyOverride);     //smap readOnlyOverride
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LABEL)) {
                     questionWidget = new LabelWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {

@@ -66,7 +66,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
     final ArrayList<CheckBox> checkBoxes;
 
     @SuppressWarnings("unchecked")
-    public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel) {
+    public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean readOnlyOverride) {      //smap readOnlyOverride
         super(context, questionDetails);
 
         checkBoxes = new ArrayList<>();
@@ -85,8 +85,8 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                 AppCompatCheckBox c = new AppCompatCheckBox(getContext());
                 c.setTag(i);
                 c.setId(View.generateViewId());
-                c.setFocusable(!questionDetails.getPrompt().isReadOnly());
-                c.setEnabled(!questionDetails.getPrompt().isReadOnly());
+                c.setFocusable(!questionDetails.getPrompt().isReadOnly() && !readOnlyOverride);     // smap
+                c.setEnabled(!questionDetails.getPrompt().isReadOnly() && !readOnlyOverride);       //smap readOnlyOverride
 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
@@ -102,7 +102,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (getFormEntryPrompt().isReadOnly()) {
+                        if (getFormEntryPrompt().isReadOnly() || readOnlyOverride) {    //smap readOnlyOverride
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                             } else {

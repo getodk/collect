@@ -71,7 +71,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
 
     ArrayList<RadioButton> buttons;
 
-    public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance) {
+    public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance, boolean readOnlyOverride) {
         super(context, questionDetails);
 
         this.autoAdvance = autoAdvance;
@@ -94,8 +94,8 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
                 AppCompatRadioButton r = new AppCompatRadioButton(getContext());
                 r.setId(View.generateViewId());
                 r.setTag(i);
-                r.setEnabled(!questionDetails.getPrompt().isReadOnly());
-                r.setFocusable(!questionDetails.getPrompt().isReadOnly());
+                r.setEnabled(!questionDetails.getPrompt().isReadOnly() && !readOnlyOverride);   //smap readOnlyOverride
+                r.setFocusable(!questionDetails.getPrompt().isReadOnly() && !readOnlyOverride); //smap readOnlyOverride
 
                 buttons.add(r);
 
