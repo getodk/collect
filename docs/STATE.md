@@ -24,7 +24,7 @@ and update this document as the code evolves.
 * App stores data in flat files indexed in SQLite
 * Access to data in SQLite is done inconsistently through a mix of provider, helper and DAO objects
 * Raw access to database rows is favored over the use of domain objects
-* Preferences for the app use Android's Preferences abstraction (for UI also)
+* Settings for the app use (the now deprecated) Android's Preferences abstraction
 * Material Components styles are used in some places but app still uses AppCompat theme
 * Dagger is used to inject "black box" objects such as Activity and in some other places but isn't set up in a particularly advanced way
 * Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask (and some Rx)
@@ -44,5 +44,6 @@ and update this document as the code evolves.
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code
 * Refactoring towards an OpenRosa abstraction (`OpenRosaAPIClient`) closer to its [documented API](https://docs.getodk.org/openrosa/) and takes care of all interactions with Aggregate, Central etc (currently some high level work interacts with `OpenRosaHttpInterface` directly)
 * `QuestionWiget` implementations are moving from defining their "answer" view programmatically to [implementing `onCreateAnswerView`](WIDGETS.md)
+* Converting settings screens to using the new AndroidX Preferences framework as we touch them
 * Replacing Rx (and other async work) with LiveData + Scheduler abstraction
 * Moving away from custom `SharedPreferences` abstractions (`GeneralSharedPreferences` and `AdminSharedPreferences`) to just using `SharedPreferences` interface

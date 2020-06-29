@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,6 +18,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CountingScheduler;
 import org.odk.collect.android.support.CountingSchedulerIdlingResource;
@@ -119,7 +120,7 @@ public class ConfigureWithQRCodeTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickServerSettings()
-                .clickOnPassword()
+                .clickServerPassword()
                 .inputText("blah")
                 .clickOKOnDialog()
                 .pressBack(new GeneralSettingsPage(rule))

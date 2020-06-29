@@ -37,8 +37,12 @@ public class OkDialog extends Page<OkDialog> {
         return this;
     }
 
-    public OkDialog checkMessage(int messageStringId) {
-        onView(withText(getTranslatedString(messageStringId))).inRoot(isDialog()).check(matches(isDisplayed()));
+    public OkDialog assertMessage(int messageStringId) {
+        return assertMessage(getTranslatedString(messageStringId));
+    }
+
+    public OkDialog assertMessage(String message) {
+        onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()));
         return this;
     }
 

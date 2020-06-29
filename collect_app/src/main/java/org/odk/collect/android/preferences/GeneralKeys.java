@@ -10,7 +10,7 @@ public final class GeneralKeys {
     // server_preferences.xml
     public static final String KEY_PROTOCOL                 = "protocol";
 
-    // aggregate_preferences.xml
+    // odk_server_preferences.xmll
     public static final String KEY_SERVER_URL               = "server_url";
     public static final String KEY_USERNAME                 = "username";
     public static final String KEY_PASSWORD                 = "password";
@@ -89,7 +89,7 @@ public final class GeneralKeys {
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
-        // aggregate_preferences.xml
+        // odk_server_preferences.xmll
         hashMap.put(KEY_SERVER_URL,                 Collect.getInstance().getString(R.string.default_server_url));
         hashMap.put(KEY_USERNAME,                   "");
         hashMap.put(KEY_PASSWORD,                   "");

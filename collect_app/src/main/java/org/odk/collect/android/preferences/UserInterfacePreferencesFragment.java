@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -79,16 +80,21 @@ public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.user_interface_preferences, rootKey);
 
-        FragmentActivity activity = getActivity();
-        if (activity instanceof CollectAbstractActivity) {
-            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
-        }
-
         initThemePrefs();
         initNavigationPrefs();
         initFontSizePref();
         initLanguagePrefs();
         initSplashPrefs();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        FragmentActivity activity = getActivity();
+        if (activity instanceof CollectAbstractActivity) {
+            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
+        }
     }
 
     private void initThemePrefs() {
