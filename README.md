@@ -1,3 +1,9 @@
+# This repository has been forked from ODK Collect
+
+https://help.github.com/en/github/getting-started-with-github/fork-a-repo
+
+
+
 # ODK Collect
 ![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
