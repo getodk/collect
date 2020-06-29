@@ -2,6 +2,7 @@
 
 https://help.github.com/en/github/getting-started-with-github/fork-a-repo
 
+Read [here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) how to keep the fork synced to the main repository.
 
 
 # ODK Collect
