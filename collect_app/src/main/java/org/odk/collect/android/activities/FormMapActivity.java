@@ -278,6 +278,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+
         if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId);
 
