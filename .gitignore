@@ -29,6 +29,8 @@ collect_app/atempi/
 collect_app/src/atempi/
 collect_app/pop/
 collect_app/src/pop/
+collect_app/tdh/
+collect_app/src/tdh/
 
 # gradle env props
 secrets.properties
