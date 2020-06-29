@@ -33,6 +33,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.external.handler.ExternalDataSearchType.IN;
+import static org.odk.collect.android.external.handler.ExternalDataSearchType.NOT_IN;
+
 /**
  * Author: Meletis Margaritis
  * Date: 25/04/13
@@ -77,8 +80,8 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                         .build());
                         */
 
-        if (args.length != 4) {
-            Timber.e("4 arguments are needed to evaluate the %s function", HANDLER_NAME);
+        if (args.length != 4 && args.length != 6) {     // smap add support for 5th and 6th parameter
+            Timber.e("4 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);  // smap 5th, 6th parameter
             return "";
         }
 
@@ -86,6 +89,19 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
         String queriedColumn = XPathFuncExpr.toString(args[1]);
         String referenceColumn = XPathFuncExpr.toString(args[2]);
         String referenceValue = XPathFuncExpr.toString(args[3]);
+
+        // start smap
+        boolean multiSelect = (args.length == 6);
+        int index = 0;
+        String searchType = null;
+        if(multiSelect) {
+            try {
+                index = Integer.valueOf(XPathFuncExpr.toString(args[4]));
+            } catch (Exception e) {
+            }
+            searchType = XPathFuncExpr.toString(args[5]);
+        }
+        // smap
 
         // SCTO-545
         dataSetName = normalize(dataSetName);
@@ -103,11 +119,42 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             String selection = ExternalDataUtil.toSafeColumnName(referenceColumn) + "=?";
             String[] selectionArgs = {referenceValue};
 
+            // smap start - Add user specified selection if is is not matches
+            if(multiSelect && !searchType.equals("matches")) {
+                ExternalDataSearchType externalDataSearchType = ExternalDataSearchType.getByKeyword(
+                        searchType, ExternalDataSearchType.CONTAINS);
+                List<String> referenceValues = ExternalDataUtil.createListOfValues(referenceValue, externalDataSearchType.getKeyword().trim());
+                List<String> referenceColumns = ExternalDataUtil.createListOfColumns(referenceColumn);
+                selection = createMultiSelectExpression(referenceColumns, referenceValues, externalDataSearchType);
+                selectionArgs = externalDataSearchType.constructLikeArguments(referenceValues);
+            }
+            // smap end
+
             c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, columns, selection,
                     selectionArgs, null, null, null);
             if (c.getCount() > 0) {
-                c.moveToFirst();
-                return ExternalDataUtil.nullSafe(c.getString(0));
+                if(!multiSelect) {  // smap - use original processing if the   original 4 parameter format is used
+                    c.moveToFirst();
+                    return ExternalDataUtil.nullSafe(c.getString(0));
+                } else {  // smap
+                    StringBuilder result = new StringBuilder("");
+                    if(index < 0) {
+                        result.append(c.getCount());
+                    } else if(index == 0) {   // Get all
+                        c.moveToPosition(-1);
+                        int count = 0;
+                        while (c.moveToNext()) {
+                            if(count++ > 0) {
+                                result.append(" ");
+                            }
+                            result.append(ExternalDataUtil.nullSafe(c.getString(0)));
+                        }
+                    } else {    // Get 1
+                        c.moveToPosition(index - 1);        // If index is 1 get the first
+                        result.append(ExternalDataUtil.nullSafe(c.getString(0)));
+                    }
+                    return result.toString();
+                }
             } else {
                 Timber.i("Could not find a value in %s where the column %s has the value %s",
                         queriedColumn, referenceColumn, referenceValue);
@@ -121,5 +168,42 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                 c.close();
             }
         }
+    }
+
+    /*
+     * smap
+     */
+    protected String createMultiSelectExpression(List<String> queriedColumns,
+                                          List<String> queriedValues, ExternalDataSearchType type) {
+        StringBuilder sb = new StringBuilder();
+        if(type.equals(IN) && queriedColumns.size() > 0) {    // smap
+            sb.append(queriedColumns.get(0)).append(" in (");
+            int idx = 0;
+            for (String queriedValue : queriedValues) {
+                if (idx++ > 0) {
+                    sb.append(", ");
+                }
+                sb.append("?");
+            }
+            sb.append(")");
+        } else if(type.equals(NOT_IN) && queriedColumns.size() > 0) {    // smap
+            sb.append(queriedColumns.get(0)).append(" not in (");
+            int idx = 0;
+            for (String queriedValue : queriedValues) {
+                if (idx++ > 0) {
+                    sb.append(", ");
+                }
+                sb.append("?");
+            }
+            sb.append(")");
+        } else {
+            for (String queriedColumn : queriedColumns) {
+                if (sb.length() > 0) {
+                    sb.append(" OR ");
+                }
+                sb.append(queriedColumn).append(" LIKE ? ");
+            }
+        }
+        return sb.toString();
     }
 }
