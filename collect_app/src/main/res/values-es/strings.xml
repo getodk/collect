@@ -481,8 +481,7 @@
   <string name="include_password_dialog">Contraseñas incluidas en el Código</string>
   <string name="generate">Generar</string>
   <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
-  <string name="share_qrcode">Compartir código QR</string>
-  <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
+    <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
   <string name="invalid_range_widget">Esta opción tiene parámetros inválidos</string>

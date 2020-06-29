@@ -452,8 +452,7 @@
   <string name="include_password_dialog">Nenosiri limejumuishwa ndani ya kanuni</string>
   <string name="generate">Zalisha</string>
   <string name="invalid_qrcode">Kanuni za QR hazijajumuisha mipangilio sahihi</string>
-  <string name="share_qrcode">Shirikisha kanuni za QR</string>
-  <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
+    <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
   <string name="error_front_camera_unavailable">Kamera ya mbele haipo katika kifaa hiki</string>
   <string name="camera_error">Kifaa hiki hakina uwezo wa kutumia Kamera2 API.</string>
   <string name="invalid_range_widget">Widget hii  ina vigezo batili!</string>

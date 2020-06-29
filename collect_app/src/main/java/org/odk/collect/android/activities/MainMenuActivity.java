@@ -47,7 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.material.MaterialBanner;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
@@ -150,7 +150,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     GeneralSharedPreferences generalSharedPreferences;
 
     @Inject
-    MetaSharedPreferencesProvider metaSharedPreferencesProvider;
+    PreferencesProvider preferencesProvider;
 
     private MainMenuViewModel viewModel;
 
@@ -399,7 +399,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void initMapBox() {
-        SharedPreferences metaSharedPreferences = metaSharedPreferencesProvider.getMetaSharedPreferences();
+        SharedPreferences metaSharedPreferences = preferencesProvider.getMetaSharedPreferences();
         if (!metaSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED, false) && connectivityProvider.isDeviceOnline()) {
             // This "one weird trick" lets us initialize MapBox at app start when the internet is
             // most likely to be available. This is annoyingly needed for offline tiles to work.

@@ -476,8 +476,7 @@
   <string name="include_password_dialog">Hasło Zawarte w Kodzie</string>
   <string name="generate">Wygeneruj</string>
   <string name="invalid_qrcode">Kod QR nie zawiera poprawnych ustawień</string>
-  <string name="share_qrcode">Udostępnij kod QR</string>
-  <string name="take_picture_instruction">Dotknij ekran, by zrobić zdjęcie</string>
+    <string name="take_picture_instruction">Dotknij ekran, by zrobić zdjęcie</string>
   <string name="error_front_camera_unavailable">Przednia kamera nie jest dostępna w tym urządzeniu</string>
   <string name="camera_error">To urządzenie nie wspiera Camera2 API.</string>
   <string name="invalid_range_widget">Ten widget ma nieprawidłowe parametry!</string>

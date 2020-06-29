@@ -69,6 +69,13 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new QRCodeTabsActivityPage(rule).assertOnPage();
     }
 
+    public QRCodeTabsActivityPage clickConfigureQRWithAdminPassword(String password) {
+        clickOnString(R.string.configure_via_qr_code);
+        inputText(password);
+        clickOKOnDialog();
+        return new QRCodeTabsActivityPage(rule).assertOnPage();
+    }
+
     public FillBlankFormPage clickFillBlankForm() {
         onView(withId(R.id.enter_data)).perform(click());
         return new FillBlankFormPage(rule).assertOnPage();

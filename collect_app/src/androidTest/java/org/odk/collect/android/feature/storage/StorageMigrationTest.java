@@ -2,7 +2,6 @@ package org.odk.collect.android.feature.storage;
 
 import android.Manifest;
 
-import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -13,6 +12,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
+import org.odk.collect.android.support.CallbackCountingTaskExecutorRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;
 import org.odk.collect.android.support.IdlingResourceRule;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 public class StorageMigrationTest {
 
     public final IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
-    private final CountingTaskExecutorRule countingTaskExecutorRule = new CountingTaskExecutorRule();
+    private final CallbackCountingTaskExecutorRule countingTaskExecutorRule = new CallbackCountingTaskExecutorRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain

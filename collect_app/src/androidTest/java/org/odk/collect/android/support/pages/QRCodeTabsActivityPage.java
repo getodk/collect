@@ -29,7 +29,7 @@ public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage> {
 
     @Override
     public QRCodeTabsActivityPage assertOnPage() {
-        checkIsStringDisplayed(R.string.configure_via_qr_code);
+        assertText(R.string.configure_via_qr_code);
         return this;
     }
 
@@ -38,7 +38,7 @@ public class QRCodeTabsActivityPage extends Page<QRCodeTabsActivityPage> {
         return this;
     }
 
-    public QRCodeTabsActivityPage clickViewQRFragment() {
+    public QRCodeTabsActivityPage clickView() {
         onView(withText(R.string.view_qr_code_fragment_title)).perform(click());
         return this;
     }

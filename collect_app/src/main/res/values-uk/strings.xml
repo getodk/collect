@@ -455,8 +455,7 @@
   <string name="include_password_dialog">Паролі Включені в Код</string>
   <string name="generate">Згенерувати</string>
   <string name="invalid_qrcode">QR код не містить коректних налаштувань</string>
-  <string name="share_qrcode">Поділитись QR кодом</string>
-  <string name="take_picture_instruction">Щоб зробити знімок торкніться екрану</string>
+    <string name="take_picture_instruction">Щоб зробити знімок торкніться екрану</string>
   <string name="error_front_camera_unavailable">Фронтальна камера на цьому пристрої не доступна</string>
   <string name="camera_error">Цей пристрій не підтримує Camera2 API.</string>
   <string name="invalid_range_widget">Цей віджет має некоректні параметри!</string>

@@ -16,7 +16,7 @@ public class FormMetadataPage extends PreferencePage<FormMetadataPage> {
 
     @Override
     public FormMetadataPage assertOnPage() {
-        checkIsStringDisplayed(R.string.form_metadata_title);
+        assertText(R.string.form_metadata_title);
         return this;
     }
 

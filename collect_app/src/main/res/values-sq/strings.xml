@@ -377,8 +377,7 @@
   <string name="include_password_dialog">Fjalëkalimët të përfshirë në kod</string>
   <string name="generate">Gjenero</string>
   <string name="invalid_qrcode">Kodi QR nuk ka parametra të vlefshëm</string>
-  <string name="share_qrcode">Ndaj kodin QR</string>
-  <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
+    <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
   <string name="error_front_camera_unavailable">Ky aparat nuk ka maera të përparme</string>
   <string name="camera_error">Ky aparat nuk suporton Camera2 API.</string>
   <string name="invalid_range_widget">Ky widget ka parametra të paplotë!</string>

@@ -378,8 +378,7 @@
   <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>
   <string name="generate">व्युत्पन्न करा</string>
   <string name="invalid_qrcode">क्यूआर कोडमध्ये वैध सेटिंग्ज नाहीत</string>
-  <string name="share_qrcode">क्यूआर कोड सामायिक करा</string>
-  <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
+    <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
   <string name="camera_error">हे साधन कॅमेरॅ2 API ला समर्थन देत नाही.</string>
   <string name="invalid_range_widget">या विजेटमध्ये अवैध मापदंड आहेत!</string>
   <string name="form_entry_setting">फॉर्म प्रवेश सेटिंग्ज</string>

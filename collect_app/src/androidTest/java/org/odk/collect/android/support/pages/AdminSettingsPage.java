@@ -20,7 +20,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
     @Override
     public AdminSettingsPage assertOnPage() {
-        checkIsStringDisplayed(R.string.admin_preferences);
+        assertText(R.string.admin_preferences);
         return this;
     }
 

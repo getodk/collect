@@ -476,8 +476,7 @@
   <string name="include_password_dialog">Kata Sandi Disertakan di dalam Kode</string>
   <string name="generate">Generate</string>
   <string name="invalid_qrcode">QR code tidak mengandung pengaturan yang benar</string>
-  <string name="share_qrcode">Bagikan QR code</string>
-  <string name="take_picture_instruction">Sentuh layar untuk ambil gambar</string>
+    <string name="take_picture_instruction">Sentuh layar untuk ambil gambar</string>
   <string name="error_front_camera_unavailable">Kamera depan tidak tersedia dalam perangkat ini.</string>
   <string name="camera_error">Perangkat ini tidak mendukung Camera2 API.</string>
   <string name="invalid_range_widget">Widget ini memiliki parameter yang tidak valid.</string>

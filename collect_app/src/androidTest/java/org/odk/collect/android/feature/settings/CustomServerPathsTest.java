@@ -52,7 +52,7 @@ public class CustomServerPathsTest {
         new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
-                .openServerSettings()
+                .clickServerSettings()
                 .clickOnURL()
                 .inputText(server.getURL())
                 .clickOKOnDialog()
@@ -80,7 +80,7 @@ public class CustomServerPathsTest {
 
                 .clickOnMenu()
                 .clickGeneralSettings()
-                .openServerSettings()
+                .clickServerSettings()
                 .clickOnURL()
                 .inputText(server.getURL())
                 .clickOKOnDialog()

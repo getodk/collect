@@ -478,8 +478,7 @@
   <string name="include_password_dialog">Hesla zahrnuta v kódu</string>
   <string name="generate">Vytvořit</string>
   <string name="invalid_qrcode">Kód QR neobsahuje platná nastavení</string>
-  <string name="share_qrcode">Sdílet QR kód</string>
-  <string name="take_picture_instruction">Klepnutím na obrazovku udělejte snímek</string>
+    <string name="take_picture_instruction">Klepnutím na obrazovku udělejte snímek</string>
   <string name="error_front_camera_unavailable">Přední fotoaparát není v tomto zařízení k dispozici</string>
   <string name="camera_error">Toto zařízení nepodporuje API Camera2.</string>
   <string name="invalid_range_widget">Tento widget obsahuje neplatné parametry!</string>

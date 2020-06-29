@@ -219,8 +219,10 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void background_cancelsScheduler() {
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.background();
-        assertThat(fakeScheduler.isCancelled(), equalTo(true));
+
+        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true));
     }
 
     @Test
@@ -340,8 +342,10 @@ public class AudioPlayerViewModelTest {
 
     @Test
     public void onCleared_cancelsScheduler() {
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
         viewModel.onCleared();
-        assertThat(fakeScheduler.isCancelled(), equalTo(true));
+
+        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true));
     }
 
     @Test
@@ -352,7 +356,7 @@ public class AudioPlayerViewModelTest {
         verify(mediaPlayer).setOnCompletionListener(captor.capture());
         captor.getValue().onCompletion(mediaPlayer);
 
-        assertThat(fakeScheduler.isCancelled(), equalTo(true));
+        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true));
     }
 
     @Test

@@ -94,6 +94,11 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T assertText(int stringID) {
+        assertText(getTranslatedString(stringID));
+        return (T) this;
+    }
+
     public T checkIsTranslationDisplayed(String... text) {
         for (String s : text) {
             try {
@@ -117,11 +122,6 @@ abstract class Page<T extends Page<T>> {
 
     public T checkIfTextDoesNotExist(int string) {
         return checkIfTextDoesNotExist(getTranslatedString(string));
-    }
-
-    public T checkIsStringDisplayed(int stringID) {
-        assertText(getTranslatedString(stringID));
-        return (T) this;
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {

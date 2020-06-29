@@ -17,29 +17,21 @@
 package org.odk.collect.android.instrumented.settings;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.WriterException;
-
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceSaver;
-import org.odk.collect.android.preferences.qr.ObservableQRCodeGenerator;
+import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.zip.DataFormatException;
-
-import timber.log.Timber;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -54,10 +46,10 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 public class QrCodeTest {
 
     private final GeneralSharedPreferences preferences = GeneralSharedPreferences.getInstance();
-    private final QRCodeGenerator qrCodeGenerator = new ObservableQRCodeGenerator();
+    private final QRCodeGenerator qrCodeGenerator = new CachingQRCodeGenerator();
 
     @Test
-    public void importSettingsFromQrCode() throws JSONException, IOException, WriterException, DataFormatException, ChecksumException, NotFoundException, FormatException {
+    public void importSettingsFromQrCode() throws Exception {
         // reset preferences
         preferences.loadDefaultPreferences();
 
@@ -74,12 +66,13 @@ public class QrCodeTest {
         // verify that preferences values have been modified
         assertPreferenceHaveDefaultValue(keys, false);
 
-        // generate QrCode
-        final AtomicReference<Bitmap> generatedBitmap = new AtomicReference<>();
-        qrCodeGenerator.generateQRCode(new ArrayList<>())
-                .subscribe(generatedBitmap::set, Timber::e);
+        // generate and fetch QrCode
+        String filePath = qrCodeGenerator.generateQRCode(new ArrayList<>());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap qrCode = FileUtils.getBitmap(filePath, options);
 
-        assertNotNull(generatedBitmap.get());
+        assertNotNull(qrCode);
 
         // reset preferences
         preferences.loadDefaultPreferences();
@@ -88,7 +81,7 @@ public class QrCodeTest {
         assertPreferenceHaveDefaultValue(keys, true);
 
         // decode the generated bitmap
-        String result = QRCodeUtils.decodeFromBitmap(generatedBitmap.get());
+        String result = QRCodeUtils.decodeFromBitmap(qrCode);
         assertNotNull(result);
 
         String resultIfAllSharedPreferencesAreDefault = "{\"general\":{},\"admin\":{}}";

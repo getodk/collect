@@ -452,8 +452,7 @@
   <string name="include_password_dialog">Lozinka je dio Koda</string>
   <string name="generate">Generiši</string>
   <string name="invalid_qrcode">QR kod ne sadrži validna podešavanja</string>
-  <string name="share_qrcode">Podijeli QR kod</string>
-  <string name="take_picture_instruction">Dodirni ekran kako bi fotografisao</string>
+    <string name="take_picture_instruction">Dodirni ekran kako bi fotografisao</string>
   <string name="error_front_camera_unavailable">Prednja kamera nije dostupna na ovom uređaju</string>
   <string name="camera_error">Ovaj uređaj ne podržava Camera2 API.</string>
   <string name="invalid_range_widget">Ovaj widget ima nepravilne parametre!</string>

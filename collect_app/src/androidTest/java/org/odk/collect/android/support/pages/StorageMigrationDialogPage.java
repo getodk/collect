@@ -24,7 +24,7 @@ public class StorageMigrationDialogPage extends Page<StorageMigrationDialogPage>
 
     @Override
     public StorageMigrationDialogPage assertOnPage() {
-        checkIsStringDisplayed(R.string.storage_migration_dialog_title);
+        assertText(R.string.storage_migration_dialog_title);
         return this;
     }
 

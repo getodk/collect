@@ -30,8 +30,8 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
-import org.odk.collect.android.preferences.qr.ObservableQRCodeGenerator;
+import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -43,12 +43,17 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
+import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
+
+import java.io.File;
 
 import javax.inject.Singleton;
 
@@ -56,6 +61,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 
+import static androidx.core.content.FileProvider.getUriForFile;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 
 /**
@@ -179,16 +185,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    MetaSharedPreferencesProvider providesMetaSharedPreferencesProvider(Context context) {
-        return new MetaSharedPreferencesProvider(context);
+    PreferencesProvider providesPreferencesProvider(Context context) {
+        return new PreferencesProvider(context);
     }
 
     @Provides
-    InstallIDProvider providesInstallIDProvider(MetaSharedPreferencesProvider metaSharedPreferencesProvider) {
-        return new SharedPreferencesInstallIDProvider(
-                metaSharedPreferencesProvider.getMetaSharedPreferences(),
-                KEY_INSTALL_ID
-        );
+    InstallIDProvider providesInstallIDProvider(PreferencesProvider preferencesProvider) {
+        return new SharedPreferencesInstallIDProvider(preferencesProvider.getMetaSharedPreferences(), KEY_INSTALL_ID);
     }
 
     @Provides
@@ -272,8 +275,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public QRCodeGenerator providesQRCodeGenerator() {
-        return new ObservableQRCodeGenerator();
+    public QRCodeGenerator providesQRCodeGenerator(Context context) {
+        return new CachingQRCodeGenerator();
     }
 
     @Provides
@@ -282,8 +285,18 @@ public class AppDependencyModule {
     }
 
     @Provides
+    public FileProvider providesFileProvider(Context context) {
+        return filePath -> getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", new File(filePath));
+    }
+
+    @Provides
+    public Scheduler providesScheduler() {
+        return new CoroutineScheduler();
+    }
+
     @Singleton
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, MetaSharedPreferencesProvider metaSharedPreferencesProvider, UserAgentProvider userAgentProvider) {
-        return new ApplicationInitializer(application, collectJobCreator, metaSharedPreferencesProvider.getMetaSharedPreferences(), userAgentProvider);
+    @Provides
+    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, PreferencesProvider preferencesProvider, UserAgentProvider userAgentProvider) {
+        return new ApplicationInitializer(application, collectJobCreator, preferencesProvider.getMetaSharedPreferences(), userAgentProvider);
     }
 }

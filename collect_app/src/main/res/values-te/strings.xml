@@ -463,8 +463,7 @@
   <string name="include_password_dialog">పాస్వర్డ్ కోడ్ లో జోడించి ఉంది. </string>
   <string name="generate">రూపొందించండి</string>
   <string name="invalid_qrcode">QR కోడ్‌లో చెల్లుబాటు అయ్యే సెట్టింగ్‌లు లేవు</string>
-  <string name="share_qrcode">QR కోడ్‌ను షేర్ చేయండి</string>
-  <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
+    <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
   <string name="error_front_camera_unavailable">ముందు వైపు కెమెరా ఈ పరికరంలో లేదు</string>
   <string name="camera_error">ఈ పరికరం కెమెరా2 API కి మద్దతు ఇవ్వదు.</string>
   <string name="invalid_range_widget">ఈ విడ్జెట్ లో చెల్లని ప్రాతిపదికలు కలిగి ఉంది!</string>

@@ -24,7 +24,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
     @Override
     public GeneralSettingsPage assertOnPage() {
-        checkIsStringDisplayed(R.string.general_preferences);
+        assertText(R.string.general_preferences);
         return this;
     }
 
@@ -50,7 +50,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return this;
     }
 
-    public ServerSettingsPage openServerSettings() {
+    public ServerSettingsPage clickServerSettings() {
         onData(PreferenceMatchers.withKey("protocol")).perform(click());
         return new ServerSettingsPage(rule).assertOnPage();
     }

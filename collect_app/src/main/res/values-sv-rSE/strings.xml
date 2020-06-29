@@ -440,8 +440,7 @@ Dela ODK Collect med dem.</string>
   <string name="include_password_dialog">Koden innehåller lösenorden</string>
   <string name="generate">Generera</string>
   <string name="invalid_qrcode">QR-koden innehåller inga giltiga inställningar</string>
-  <string name="share_qrcode">Dela QR-koden</string>
-  <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
+    <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
   <string name="error_front_camera_unavailable">Frontkamera inte tillgänglig på denna enhet</string>
   <string name="camera_error">Denna enhet stöder inte Camera2 API:et.</string>
   <string name="invalid_range_widget">Ogiltiga parametrar för widget!</string>

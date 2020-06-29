@@ -47,7 +47,7 @@ public class SignatureWidgetTest {
                 .waitForRotationToEnd()
                 .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
                 .checkIsTranslationDisplayed("Exit Gather Signature", "Salir Adjuntar firma")
-                .checkIsStringDisplayed(R.string.keep_changes)
+                .assertText(R.string.keep_changes)
                 .clickIgnoreChanges()
                 .waitForRotationToEnd()
                 .clickWidgetButton()

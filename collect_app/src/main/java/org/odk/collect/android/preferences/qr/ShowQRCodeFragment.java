@@ -25,13 +25,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.async.Scheduler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,15 +41,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -56,7 +52,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
 public class ShowQRCodeFragment extends Fragment {
 
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final boolean[] checkedItems = {true, true};
     private final boolean[] passwordsSet = {true, true};
 
@@ -73,12 +68,17 @@ public class ShowQRCodeFragment extends Fragment {
 
     @Inject
     public Analytics analytics;
-    @Inject
-    public AdminSharedPreferences adminSharedPreferences;
-    @Inject
-    public GeneralSharedPreferences generalSharedPreferences;
+
     @Inject
     public QRCodeGenerator qrCodeGenerator;
+
+    @Inject
+    public PreferencesProvider preferencesProvider;
+
+    @Inject
+    public Scheduler scheduler;
+
+    private QRCodeViewModel qrCodeViewModel;
 
     @Nullable
     @Override
@@ -86,9 +86,29 @@ public class ShowQRCodeFragment extends Fragment {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        passwordsSet[0] = !((String) adminSharedPreferences.get(KEY_ADMIN_PW)).isEmpty();
-        passwordsSet[1] = !((String) generalSharedPreferences.get(KEY_PASSWORD)).isEmpty();
-        generateCode();
+        passwordsSet[0] = !preferencesProvider.getAdminSharedPreferences().getString(KEY_ADMIN_PW, "").isEmpty();
+        passwordsSet[1] = !preferencesProvider.getGeneralSharedPreferences().getString(KEY_PASSWORD, "").isEmpty();
+
+        qrCodeViewModel.getBitmap().observe(this.getViewLifecycleOwner(), bitmap -> {
+            if (bitmap != null) {
+                progressBar.setVisibility(GONE);
+                ivQRCode.setVisibility(VISIBLE);
+                ivQRCode.setImageBitmap(bitmap);
+            } else {
+                progressBar.setVisibility(VISIBLE);
+                ivQRCode.setVisibility(GONE);
+            }
+        });
+
+        qrCodeViewModel.getWarning().observe(this.getViewLifecycleOwner(), warning -> {
+            if (warning != null) {
+                tvPasswordWarning.setText(warning);
+                passwordStatus.setVisibility(VISIBLE);
+            } else {
+                passwordStatus.setVisibility(GONE);
+            }
+        });
+
         return view;
     }
 
@@ -96,51 +116,10 @@ public class ShowQRCodeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-    }
-
-    private void generateCode() {
-        progressBar.setVisibility(VISIBLE);
-        ivQRCode.setVisibility(GONE);
-        setPasswordWarning();
-
-        Disposable disposable = qrCodeGenerator.generateQRCode(getSelectedPasswordKeys())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bitmap -> {
-                    progressBar.setVisibility(GONE);
-                    ivQRCode.setVisibility(VISIBLE);
-                    ivQRCode.setImageBitmap(bitmap);
-                }, Timber::e);
-        compositeDisposable.add(disposable);
-    }
-
-    @Override
-    public void onDestroy() {
-        compositeDisposable.dispose();
-        super.onDestroy();
-    }
-
-    private void setPasswordWarning() {
-        if (!passwordsSet[0] && !passwordsSet[1]) {
-            // should not display password warning is passwords are not set
-            passwordStatus.setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        boolean showingAdminPassword = passwordsSet[0] && checkedItems[0];
-        boolean showingServerPassword = passwordsSet[1] && checkedItems[1];
-        CharSequence status;
-        if (showingAdminPassword && showingServerPassword) {
-            status = getText(R.string.qrcode_with_both_passwords);
-        } else if (showingAdminPassword) {
-            status = getText(R.string.qrcode_with_admin_password);
-        } else if (showingServerPassword) {
-            status = getText(R.string.qrcode_with_server_password);
-        } else {
-            status = getText(R.string.qrcode_without_passwords);
-        }
-        tvPasswordWarning.setText(status);
-        passwordStatus.setVisibility(VISIBLE);
+        qrCodeViewModel = new ViewModelProvider(
+                requireActivity(),
+                new QRCodeViewModel.Factory(qrCodeGenerator, preferencesProvider, scheduler)
+        ).get(QRCodeViewModel.class);
     }
 
     @OnClick(R.id.tvPasswordWarning)
@@ -158,7 +137,7 @@ public class ShowQRCodeFragment extends Fragment {
                     })
                     .setCancelable(false)
                     .setPositiveButton(R.string.generate, (dialog, which) -> {
-                        generateCode();
+                        qrCodeViewModel.setIncludedKeys(getSelectedPasswordKeys());
                         dialog.dismiss();
                     })
                     .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())

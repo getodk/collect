@@ -33,23 +33,24 @@ import static org.odk.collect.android.support.RobolectricHelpers.overrideAppDepe
 
 @RunWith(AndroidJUnit4.class)
 public class FormDownloadListActivityTest {
+
     @Rule public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock Analytics analytics;
 
     @Mock FormsDao formsDao;
 
-    private ActivityScenario<FormDownloadListActivity> downloadActivity;
-
     @Before public void setup() {
         overrideAppDependencyModule(new AppDependencyModule(analytics, formsDao));
-        downloadActivity = ActivityScenario.launch(FormDownloadListActivity.class);
     }
 
-    @Test public void tappingDownloadButton_logsAnalytics() {
+    @Test
+    public void tappingDownloadButton_logsAnalytics() {
         Cursor cursor = mock(Cursor.class);
         when(cursor.getCount()).thenReturn(0);
         when(formsDao.getFormsCursor()).thenReturn(cursor);
+
+        ActivityScenario<FormDownloadListActivity> downloadActivity = ActivityScenario.launch(FormDownloadListActivity.class);
 
         downloadActivity.onActivity(activity -> {
             activity.findViewById(R.id.add_button).setEnabled(true);
@@ -59,6 +60,7 @@ public class FormDownloadListActivityTest {
     }
 
     private static class AppDependencyModule extends org.odk.collect.android.injection.config.AppDependencyModule {
+
         Analytics analytics;
         FormsDao formsDao;
 

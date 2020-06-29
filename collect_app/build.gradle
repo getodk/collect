@@ -172,24 +172,14 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    dexOptions {
-        javaMaxHeapSize '2048M'
     }
 
     testOptions {
         unitTests {
             includeAndroidResources = true
             returnDefaultValues = true
-            all {
-                // https://discuss.circleci.com/t/11207/24
-                // it seems any number works, but 1024 - 2048 seem reasonable
-                maxHeapSize = "2048M"
-            }
         }
     }
 }
@@ -294,6 +284,7 @@ dependencies {
 
     implementation project(':nbi-stubs')
     implementation project(':material')
+    implementation project(':async')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.1"

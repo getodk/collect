@@ -493,7 +493,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             return true;
         }
 
-        try (Cursor formCursor = new FormsDao().getFormsCursorForFormId(formId)) {
+        try (Cursor formCursor = formsDao.getFormsCursorForFormId(formId)) {
             return formCursor != null && formCursor.getCount() == 0 // form does not already exist locally
                     || viewModel.getFormDetailsByFormId().get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
                     || viewModel.getFormDetailsByFormId().get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available

@@ -11,7 +11,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.ApplicationResetter;
 
@@ -68,7 +68,7 @@ public class ResetStateRule implements TestRule {
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
             PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
             context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
-            SharedPreferences metaSharedPreferences = new MetaSharedPreferencesProvider(context).getMetaSharedPreferences();
+            SharedPreferences metaSharedPreferences = new PreferencesProvider(context).getMetaSharedPreferences();
             metaSharedPreferences.edit().clear().commit();
 
             // Reset the app in both the old and new storage locations (just nuke dirs)

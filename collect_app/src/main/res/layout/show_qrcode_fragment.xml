@@ -13,6 +13,7 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -40,12 +41,12 @@
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="?colorError"
         android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:visibility="visible">
 
         <ImageView
@@ -53,20 +54,18 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:src="@android:drawable/ic_dialog_alert"
-            android:tint="?colorOnError"
-            />
+            android:tint="?colorOnError" />
 
         <TextView
             android:id="@+id/tvPasswordWarning"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="5dp"
-            android:textSize="15sp"
             android:gravity="center_vertical"
-            android:text="@string/qrcode_with_both_passwords"
+            android:padding="5dp"
             android:textColor="?colorOnError"
-            />
+            android:textSize="15sp"
+            tools:text="@string/qrcode_with_both_passwords" />
 
     </LinearLayout>
 </RelativeLayout>

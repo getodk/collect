@@ -12,7 +12,7 @@ public class ErrorDialog extends OkDialog {
     @Override
     public ErrorDialog assertOnPage() {
         super.assertOnPage();
-        checkIsStringDisplayed(R.string.error_occured);
+        assertText(R.string.error_occured);
         return this;
     }
 }
