@@ -91,8 +91,7 @@ jobs:
 
       - run:
           name: Assemble test build
-          command: |
-            ./gradlew ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
