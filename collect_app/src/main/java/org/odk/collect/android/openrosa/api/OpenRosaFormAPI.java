@@ -1,12 +1,11 @@
 package org.odk.collect.android.openrosa.api;
 
 import org.javarosa.xform.parse.XFormParser;
+import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.api.FormAPIError.Type;
 import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -23,29 +22,19 @@ public class OpenRosaFormAPI implements FormAPI {
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
 
-    private final OpenRosaHttpInterface openRosaHttpInterface;
-    private final WebCredentialsUtils webCredentialsUtils;
+    private final OpenRosaXMLFetcher openRosaXMLFetcher;
     private final String serverURL;
     private final String formListPath;
 
-    public OpenRosaFormAPI(OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, String serverURL, String formListPath) {
-        this.openRosaHttpInterface = openRosaHttpInterface;
-        this.webCredentialsUtils = webCredentialsUtils;
+    public OpenRosaFormAPI(OpenRosaXMLFetcher openRosaXMLFetcher, String serverURL, String formListPath) {
+        this.openRosaXMLFetcher = openRosaXMLFetcher;
         this.serverURL = serverURL;
         this.formListPath = formListPath;
     }
 
     @Override
     public List<FormListItem> fetchFormList() throws FormAPIError {
-        String downloadListUrl = serverURL;
-
-        while (downloadListUrl.endsWith("/")) {
-            downloadListUrl = downloadListUrl.substring(0, downloadListUrl.length() - 1);
-        }
-
-        downloadListUrl += formListPath;
-
-        OpenRosaXMLFetcher openRosaXMLFetcher = new OpenRosaXMLFetcher(openRosaHttpInterface, webCredentialsUtils);
+        String downloadListUrl = getURL();
         DocumentFetchResult result = openRosaXMLFetcher.getXML(downloadListUrl);
 
         // If we can't get the document, return the error, cancel the task
@@ -174,7 +163,7 @@ public class OpenRosaFormAPI implements FormAPI {
                     throw new FormAPIError(PARSE_ERROR, error);
                 }
 
-                formList.add(new FormListItem(downloadUrl, formId, version, hash, name, manifestUrl));
+                formList.add(new FormListItem(downloadUrl, formId, version, hash, formName, manifestUrl));
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -221,6 +210,18 @@ public class OpenRosaFormAPI implements FormAPI {
         }
 
         return formList;
+    }
+
+    @NotNull
+    private String getURL() {
+        String downloadListUrl = serverURL;
+
+        while (downloadListUrl.endsWith("/")) {
+            downloadListUrl = downloadListUrl.substring(0, downloadListUrl.length() - 1);
+        }
+
+        downloadListUrl += formListPath;
+        return downloadListUrl;
     }
 
     private static boolean isXformsListNamespacedElement(Element e) {

@@ -118,6 +118,10 @@ public class FormDetails implements Serializable {
     }
 
     public static FormDetails toFormDetails(FormListItem formListItem) {
+        return toFormDetails(formListItem, null, false, false);
+    }
+
+    public static FormDetails toFormDetails(FormListItem formListItem, String manifestFileHash, boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
         return new FormDetails(
                 formListItem.getName(),
                 formListItem.getDownloadURL(),
@@ -125,9 +129,9 @@ public class FormDetails implements Serializable {
                 formListItem.getFormID(),
                 formListItem.getVersion(),
                 formListItem.getHash(),
-                null,
-                false,
-                false
+                manifestFileHash,
+                isNewerFormVersionAvailable,
+                areNewerMediaFilesAvailable
         );
     }
 }

@@ -3,11 +3,13 @@ package org.odk.collect.android.injection.config;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
@@ -28,9 +30,12 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.api.FormAPI;
+import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
@@ -311,5 +316,14 @@ public class AppDependencyModule {
     @Provides
     public FormRepository providesFormRepository() {
         return new FormDaoFormRepository();
+    }
+
+    @Provides
+    public FormAPI providesFormAPI(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaXMLFetcher openRosaXMLFetcher) {
+        SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
+        String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, context.getString(R.string.default_server_url));
+        String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
+
+        return new OpenRosaFormAPI(openRosaXMLFetcher, serverURL, formListPath);
     }
 }

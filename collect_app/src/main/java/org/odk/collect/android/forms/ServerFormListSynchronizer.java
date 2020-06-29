@@ -48,7 +48,7 @@ public class ServerFormListSynchronizer {
             Optional<Form> formOnDevice = formsOnDevice.stream().filter(f -> f.getJrFormId().equals(formListItem.getFormID())).findFirst();
 
             if (!formOnDevice.isPresent() || !formOnDevice.get().getMD5Hash().equals(formListItem.getHash())) {
-                formDownloader.downloadForms(asList(toFormDetails(formListItem)), null);
+                formDownloader.downloadForms(asList(toFormDetails(formListItem, null, false, false)), null);
             }
         }
     }

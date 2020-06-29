@@ -2,7 +2,7 @@ package org.odk.collect.android.openrosa.api;
 
 public class FormAPIError extends Exception {
 
-    enum Type {
+    public enum Type {
         AUTH_REQUIRED,
         FETCH_ERROR,
         PARSE_ERROR,

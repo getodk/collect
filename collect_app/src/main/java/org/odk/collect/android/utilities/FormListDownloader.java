@@ -32,10 +32,12 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
+import org.odk.collect.android.openrosa.api.FormAPIError;
+import org.odk.collect.android.openrosa.api.FormListItem;
+import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.io.File;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,9 +49,6 @@ public class FormListDownloader {
     // used to store error message if one occurs
     public static final String DL_ERROR_MSG = "dlerrormessage";
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
-
-    private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
-            "http://openrosa.org/xforms/xformsList";
 
     private final WebCredentialsUtils webCredentialsUtils;
     private final OpenRosaXMLFetcher openRosaXMLFetcher;
@@ -92,8 +91,6 @@ public class FormListDownloader {
         String downloadPath = (url != null) ?
                 formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
 
-        downloadListUrl += downloadPath;
-
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<>();
@@ -110,213 +107,54 @@ public class FormListDownloader {
             }
         }
 
-        DocumentFetchResult result = openRosaXMLFetcher.getXML(downloadListUrl);
+        OpenRosaFormAPI openRosaFormAPI = new OpenRosaFormAPI(openRosaXMLFetcher, downloadListUrl, downloadPath);
 
-        clearTemporaryCredentials(url);
-
-        // If we can't get the document, return the error, cancel the task
-        if (result.errorMessage != null) {
-            if (result.responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                formList.put(DL_AUTH_REQUIRED, new FormDetails(result.errorMessage));
-            } else {
-                formList.put(DL_ERROR_MSG, new FormDetails(result.errorMessage));
-            }
-            return formList;
-        }
-
-        if (result.isOpenRosaResponse) {
-            // Attempt OpenRosa 1.0 parsing
-            Element xformsElement = result.doc.getRootElement();
-            if (!xformsElement.getName().equals("xforms")) {
-                String error = "root element is not <xforms> : " + xformsElement.getName();
-                Timber.e("Parsing OpenRosa reply -- %s", error);
-                formList.put(
-                        DL_ERROR_MSG,
-                        new FormDetails(application.getString(
-                                R.string.parse_openrosa_formlist_failed, error)));
-                return formList;
-            }
-            String namespace = xformsElement.getNamespace();
-            if (!isXformsListNamespacedElement(xformsElement)) {
-                String error = "root element namespace is incorrect:" + namespace;
-                Timber.e("Parsing OpenRosa reply -- %s", error);
-                formList.put(
-                        DL_ERROR_MSG,
-                        new FormDetails(application.getString(
-                                R.string.parse_openrosa_formlist_failed, error)));
-                return formList;
-            }
-            int elements = xformsElement.getChildCount();
-            for (int i = 0; i < elements; ++i) {
-                if (xformsElement.getType(i) != Element.ELEMENT) {
-                    // e.g., whitespace (text)
-                    continue;
-                }
-                Element xformElement = xformsElement.getElement(i);
-                if (!isXformsListNamespacedElement(xformElement)) {
-                    // someone else's extension?
-                    continue;
-                }
-                String name = xformElement.getName();
-                if (!name.equalsIgnoreCase("xform")) {
-                    // someone else's extension?
-                    continue;
-                }
-
-                // this is something we know how to interpret
-                String formId = null;
-                String formName = null;
-                String version = null;
-                String majorMinorVersion = null;
-                String description = null;
-                String downloadUrl = null;
-                String manifestUrl = null;
-                String hash = null;
-                // don't process descriptionUrl
-                int fieldCount = xformElement.getChildCount();
-                for (int j = 0; j < fieldCount; ++j) {
-                    if (xformElement.getType(j) != Element.ELEMENT) {
-                        // whitespace
-                        continue;
-                    }
-                    Element child = xformElement.getElement(j);
-                    if (!isXformsListNamespacedElement(child)) {
-                        // someone else's extension?
-                        continue;
-                    }
-                    String tag = child.getName();
-                    switch (tag) {
-                        case "formID":
-                            formId = XFormParser.getXMLText(child, true);
-                            if (formId != null && formId.length() == 0) {
-                                formId = null;
-                            }
-                            break;
-                        case "name":
-                            formName = XFormParser.getXMLText(child, true);
-                            if (formName != null && formName.length() == 0) {
-                                formName = null;
-                            }
-                            break;
-                        case "version":
-                            version = XFormParser.getXMLText(child, true);
-                            if (version != null && version.length() == 0) {
-                                version = null;
-                            }
-                            break;
-                        case "majorMinorVersion":
-                            majorMinorVersion = XFormParser.getXMLText(child, true);
-                            if (majorMinorVersion != null && majorMinorVersion.length() == 0) {
-                                majorMinorVersion = null;
-                            }
-                            break;
-                        case "descriptionText":
-                            description = XFormParser.getXMLText(child, true);
-                            if (description != null && description.length() == 0) {
-                                description = null;
-                            }
-                            break;
-                        case "downloadUrl":
-                            downloadUrl = XFormParser.getXMLText(child, true);
-                            if (downloadUrl != null && downloadUrl.length() == 0) {
-                                downloadUrl = null;
-                            }
-                            break;
-                        case "manifestUrl":
-                            manifestUrl = XFormParser.getXMLText(child, true);
-                            if (manifestUrl != null && manifestUrl.length() == 0) {
-                                manifestUrl = null;
-                            }
-                            break;
-                        case "hash":
-                            hash = XFormParser.getXMLText(child, true);
-                            if (hash != null && hash.length() == 0) {
-                                hash = null;
-                            }
-                            break;
-                    }
-                }
-                if (formId == null || downloadUrl == null || formName == null) {
-                    String error =
-                            "Forms list entry " + Integer.toString(i)
-                                    + " has missing or empty tags: formID, name, or downloadUrl";
-                    Timber.e("Parsing OpenRosa reply -- %s", error);
-                    formList.clear();
-                    formList.put(
-                            DL_ERROR_MSG,
-                            new FormDetails(application.getString(
-                                    R.string.parse_openrosa_formlist_failed, error)));
-                    return formList;
-                }
+        try {
+            List<FormListItem> formListItems = openRosaFormAPI.fetchFormList();
+            for (FormListItem listItem : formListItems) {
                 boolean isNewerFormVersionAvailable = false;
                 boolean areNewerMediaFilesAvailable = false;
                 ManifestFile manifestFile = null;
-                if (isThisFormAlreadyDownloaded(formId)) {
-                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(FormDownloader.getMd5Hash(hash));
-                    if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && manifestUrl != null) {
-                        manifestFile = getManifestFile(manifestUrl);
+
+                if (isThisFormAlreadyDownloaded(listItem.getFormID())) {
+                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(FormDownloader.getMd5Hash(listItem.getHash()));
+                    if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && listItem.getManifestURL() != null) {
+                        manifestFile = getManifestFile(listItem.getManifestURL());
                         if (manifestFile != null) {
                             List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
                             if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                                areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
+                                areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
                             }
                         }
                     }
                 }
 
-                formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
-                        (version != null) ? version : majorMinorVersion, hash,
+                FormDetails formDetails = FormDetails.toFormDetails(
+                        listItem,
                         manifestFile != null ? manifestFile.getHash() : null,
-                        isNewerFormVersionAvailable, areNewerMediaFilesAvailable));
-            }
-        } else {
-            // Aggregate 0.9.x mode...
-            // populate HashMap with form names and urls
-            Element formsElement = result.doc.getRootElement();
-            int formsCount = formsElement.getChildCount();
-            String formId = null;
-            for (int i = 0; i < formsCount; ++i) {
-                if (formsElement.getType(i) != Element.ELEMENT) {
-                    // whitespace
-                    continue;
-                }
-                Element child = formsElement.getElement(i);
-                String tag = child.getName();
-                if (tag.equals("formID")) {
-                    formId = XFormParser.getXMLText(child, true);
-                    if (formId != null && formId.length() == 0) {
-                        formId = null;
-                    }
-                }
-                if (tag.equalsIgnoreCase("form")) {
-                    String formName = XFormParser.getXMLText(child, true);
-                    if (formName != null && formName.length() == 0) {
-                        formName = null;
-                    }
-                    String downloadUrl = child.getAttributeValue(null, "url");
-                    downloadUrl = downloadUrl.trim();
-                    if (downloadUrl.length() == 0) {
-                        downloadUrl = null;
-                    }
-                    if (formName == null) {
-                        String error =
-                                "Forms list entry " + Integer.toString(i)
-                                        + " is missing form name or url attribute";
-                        Timber.e("Parsing OpenRosa reply -- %s", error);
-                        formList.clear();
-                        formList.put(
-                                DL_ERROR_MSG,
-                                new FormDetails(application.getString(
-                                        R.string.parse_legacy_formlist_failed, error)));
-                        return formList;
-                    }
-                    formList.put(formName,
-                            new FormDetails(formName, downloadUrl, null, formId, null, null, null, false, false));
+                        isNewerFormVersionAvailable,
+                        areNewerMediaFilesAvailable
+                );
 
-                    formId = null;
-                }
+                formList.put(listItem.getFormID(), formDetails);
+            }
+        } catch (FormAPIError formAPIError) {
+            switch (formAPIError.getType()) {
+                case AUTH_REQUIRED:
+                    formList.put(DL_AUTH_REQUIRED, new FormDetails(formAPIError.getMessage()));
+                    break;
+                case PARSE_ERROR:
+                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_openrosa_formlist_failed, formAPIError.getMessage())));
+                    break;
+                case LEGACY_PARSE_ERROR:
+                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_legacy_formlist_failed, formAPIError.getMessage())));
+                    break;
+                default:
+                    formList.put(DL_ERROR_MSG, new FormDetails(formAPIError.getMessage()));
             }
         }
+
+        clearTemporaryCredentials(url);
         return formList;
     }
 
@@ -476,9 +314,5 @@ public class FormListDownloader {
             }
         }
         return false;
-    }
-
-    private static boolean isXformsListNamespacedElement(Element e) {
-        return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
     }
 }

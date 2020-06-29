@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -40,9 +39,7 @@ import org.odk.collect.android.forms.ServerFormListSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -52,7 +49,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import javax.inject.Inject;
 
@@ -81,13 +77,7 @@ public class FormChooserListActivity extends FormListActivity implements
     FormDownloader formDownloader;
 
     @Inject
-    OpenRosaHttpInterface openRosaHttpInterface;
-
-    @Inject
-    WebCredentialsUtils webCredentialsUtils;
-
-    @Inject
-    GeneralSharedPreferences generalSharedPreferences;
+    FormAPI formAPI;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,11 +125,6 @@ public class FormChooserListActivity extends FormListActivity implements
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
-                        String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, getString(R.string.default_server_url));
-                        String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, getString(R.string.default_odk_formlist));
-
-                        FormAPI formAPI = new OpenRosaFormAPI(openRosaHttpInterface, webCredentialsUtils, serverURL, formListPath);
                         new ServerFormListSynchronizer(formRepository, formAPI, formDownloader).synchronize();
                         return null;
                     }
