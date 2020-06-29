@@ -115,16 +115,6 @@ jobs:
               --directories-to-pull /sdcard --timeout 20m
             fi
           no_output_timeout: 60m
-      - run:
-          name: Copy integration test results
-          command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
-              mkdir firebase
-              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
-            fi
-      - store_test_results:
-          path: firebase/
-          destination: /firebase/
 
 workflows:
   version: 2
