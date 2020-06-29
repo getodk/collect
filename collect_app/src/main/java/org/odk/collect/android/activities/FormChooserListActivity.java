@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -39,9 +40,9 @@ import org.odk.collect.android.forms.ServerFormListSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.FormListItem;
+import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -49,12 +50,9 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
-
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import javax.inject.Inject;
 
@@ -80,10 +78,16 @@ public class FormChooserListActivity extends FormListActivity implements
     FormRepository formRepository;
 
     @Inject
-    FormListDownloader formListDownloader;
+    FormDownloader formDownloader;
 
     @Inject
-    FormDownloader formDownloader;
+    OpenRosaHttpInterface openRosaHttpInterface;
+
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,18 +133,13 @@ public class FormChooserListActivity extends FormListActivity implements
         } else {
             if (item.getItemId() == R.id.menu_refresh) {
                 new AsyncTask<Void, Void, Void>() {
-
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        FormAPI formAPI = () -> formListDownloader.downloadFormList(false).values().stream().map((Function<FormDetails, FormListItem>) formDetails -> new FormListItem(
-                                formDetails.getDownloadUrl(),
-                                formDetails.getFormId(),
-                                formDetails.getFormVersion(),
-                                formDetails.getHash(),
-                                formDetails.getFormName(),
-                                formDetails.getManifestUrl()
-                        )).collect(Collectors.toList());
+                        SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
+                        String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, getString(R.string.default_server_url));
+                        String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, getString(R.string.default_odk_formlist));
 
+                        FormAPI formAPI = new OpenRosaFormAPI(openRosaHttpInterface, webCredentialsUtils, serverURL, formListPath);
                         new ServerFormListSynchronizer(formRepository, formAPI, formDownloader).synchronize();
                         return null;
                     }

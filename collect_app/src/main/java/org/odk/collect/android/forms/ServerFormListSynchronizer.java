@@ -1,6 +1,7 @@
 package org.odk.collect.android.forms;
 
 import org.odk.collect.android.openrosa.api.FormAPI;
+import org.odk.collect.android.openrosa.api.FormAPIError;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.utilities.FormDownloader;
 
@@ -23,11 +24,15 @@ public class ServerFormListSynchronizer {
     }
 
     public void synchronize() {
-        List<FormListItem> formsOnServer = formAPI.fetchFormList();
-        List<Form> formsOnDevice = formRepository.getAll();
+        try {
+            List<FormListItem> formsOnServer = formAPI.fetchFormList();
+            List<Form> formsOnDevice = formRepository.getAll();
 
-        deleteFormsNotServer(formsOnServer, formsOnDevice);
-        downloadNewAndUpdatedForms(formsOnServer, formsOnDevice);
+            deleteFormsNotServer(formsOnServer, formsOnDevice);
+            downloadNewAndUpdatedForms(formsOnServer, formsOnDevice);
+        } catch (FormAPIError ignored) {
+            // ignored
+        }
     }
 
     private void deleteFormsNotServer(List<FormListItem> formList, List<Form> formsOnDevice) {

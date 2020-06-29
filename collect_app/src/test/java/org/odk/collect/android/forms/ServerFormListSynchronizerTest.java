@@ -33,7 +33,7 @@ public class ServerFormListSynchronizerTest {
     private FormRepository formRepository;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         formRepository = new InMemFormRepository();
 
         FormAPI formAPI = mock(FormAPI.class);
