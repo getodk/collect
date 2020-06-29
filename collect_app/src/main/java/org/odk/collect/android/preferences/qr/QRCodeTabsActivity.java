@@ -121,14 +121,13 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SELECT_PHOTO) {
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    boolean qrCodeFound = false;
+        if (requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
+            try {
+                boolean qrCodeFound = false;
+                if (data != null) {
                     final Uri imageUri = data.getData();
                     if (imageUri != null) {
-                        final InputStream imageStream = getContentResolver()
-                                .openInputStream(imageUri);
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
 
                         final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
                         if (bitmap != null) {
@@ -139,18 +138,16 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
                             }
                         }
                     }
-                    if (!qrCodeFound) {
-                        ToastUtils.showLongToast(R.string.qr_code_not_found);
-                    }
-                } catch (FormatException | NotFoundException | ChecksumException e) {
-                    Timber.i(e);
-                    ToastUtils.showLongToast(R.string.qr_code_not_found);
-                } catch (DataFormatException | IOException | OutOfMemoryError | IllegalArgumentException e) {
-                    Timber.e(e);
-                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
-            } else {
-                Timber.i("Choosing QR code from sdcard cancelled");
+                if (!qrCodeFound) {
+                    ToastUtils.showLongToast(R.string.qr_code_not_found);
+                }
+            } catch (FormatException | NotFoundException | ChecksumException e) {
+                Timber.i(e);
+                ToastUtils.showLongToast(R.string.qr_code_not_found);
+            } catch (DataFormatException | IOException | OutOfMemoryError | IllegalArgumentException e) {
+                Timber.e(e);
+                ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
             }
         }
     }
