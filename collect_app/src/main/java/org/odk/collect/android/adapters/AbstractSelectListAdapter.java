@@ -148,6 +148,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         button.setText(FormEntryPromptUtils.getItemText(prompt, filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
+        button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
         button.setOnLongClickListener(getODKViewParent(widget));
     }
 
