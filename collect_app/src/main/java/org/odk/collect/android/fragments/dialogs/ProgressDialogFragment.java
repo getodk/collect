@@ -13,8 +13,6 @@ import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.R;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
