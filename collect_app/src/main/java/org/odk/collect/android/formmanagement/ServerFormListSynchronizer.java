@@ -1,5 +1,8 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.android.formmanagement;
 
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.openrosa.api.FormAPI;
 import org.odk.collect.android.openrosa.api.FormAPIError;
 import org.odk.collect.android.openrosa.api.FormListItem;
