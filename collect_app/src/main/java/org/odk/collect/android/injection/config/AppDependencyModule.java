@@ -14,7 +14,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.backgroundwork.CollectBackgroundWorkManager;
-import org.odk.collect.android.dao.FormDaoFormRepository;
+import org.odk.collect.android.dao.FormsDaoFormRepository;
 import org.odk.collect.android.dao.FormsDaoMediaFileRepository;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -143,8 +143,7 @@ public class AppDependencyModule {
         return new FormListDownloader(
                 application,
                 openRosaXMLFetcher,
-                webCredentialsUtils,
-                formsDao
+                webCredentialsUtils
         );
     }
 
@@ -317,7 +316,7 @@ public class AppDependencyModule {
 
     @Provides
     public FormRepository providesFormRepository() {
-        return new FormDaoFormRepository();
+        return new FormsDaoFormRepository();
     }
 
     @Provides

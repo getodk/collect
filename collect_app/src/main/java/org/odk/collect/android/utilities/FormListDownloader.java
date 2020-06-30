@@ -18,14 +18,14 @@ package org.odk.collect.android.utilities;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.FormsDaoFormRepository;
+import org.odk.collect.android.dao.FormsDaoMediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
@@ -51,17 +51,19 @@ public class FormListDownloader {
     private final WebCredentialsUtils webCredentialsUtils;
     private final OpenRosaXMLFetcher openRosaXMLFetcher;
     private final Application application;
-    private final FormsDao formsDao;
+    private final FormsDaoFormRepository formRepository;
+    private final FormsDaoMediaFileRepository mediaFileRepository;
 
     public FormListDownloader(
             Application application,
             OpenRosaXMLFetcher openRosaXMLFetcher,
-            WebCredentialsUtils webCredentialsUtils,
-            FormsDao formsDao) {
+            WebCredentialsUtils webCredentialsUtils) {
         this.application = application;
         this.openRosaXMLFetcher = openRosaXMLFetcher;
         this.webCredentialsUtils = webCredentialsUtils;
-        this.formsDao = formsDao;
+
+        formRepository = new FormsDaoFormRepository();
+        mediaFileRepository = new FormsDaoMediaFileRepository();
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
@@ -81,13 +83,8 @@ public class FormListDownloader {
             downloadListUrl = downloadListUrl.substring(0, downloadListUrl.length() - 1);
         }
 
-        // NOTE: /formlist must not be translated! It is the well-known path on the server.
-        String formListUrl = application.getString(
-                R.string.default_odk_formlist);
-
-        // When a url is supplied, we will use the default formList url
-        String downloadPath = (url != null) ?
-                formListUrl : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListUrl);
+        String formListPath = application.getString(R.string.default_odk_formlist);
+        String downloadPath = (url != null) ? formListPath : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListPath);
 
         // We populate this with available forms from the specified server.
         // <formname, details>
@@ -169,9 +166,7 @@ public class FormListDownloader {
     }
 
     private boolean isThisFormAlreadyDownloaded(String formId) {
-        try (Cursor cursor = formsDao.getFormsCursorForFormId(formId)) {
-            return cursor == null || cursor.getCount() > 0;
-        }
+        return formRepository.contains(formId);
     }
 
     private ManifestFile getManifestFile(FormAPI formAPI, String manifestUrl) {
@@ -191,30 +186,26 @@ public class FormListDownloader {
         if (md5Hash == null) {
             return false;
         }
-        try (Cursor cursor = formsDao.getFormsCursorForMd5Hash(md5Hash)) {
-            return cursor != null && cursor.getCount() == 0;
-        }
+
+        return formRepository.getAll().stream().noneMatch(f -> f.getMD5Hash().equals(md5Hash));
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
-        String mediaDirPath = formsDao.getFormMediaPath(formId, formVersion);
-        if (mediaDirPath != null) {
-            File[] localMediaFiles = new File(mediaDirPath).listFiles();
-            if (localMediaFiles != null) {
-                for (MediaFile newMediaFile : newMediaFiles) {
-                    if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
-                        return true;
-                    }
+        List<File> localMediaFiles = mediaFileRepository.getAll(formId, formVersion);
+        if (localMediaFiles != null) {
+            for (MediaFile newMediaFile : newMediaFiles) {
+                if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
+                    return true;
                 }
-            } else if (!newMediaFiles.isEmpty()) {
-                return true;
             }
+        } else if (!newMediaFiles.isEmpty()) {
+            return true;
         }
 
         return false;
     }
 
-    private static boolean isMediaFileAlreadyDownloaded(File[] localMediaFiles, MediaFile newMediaFile) {
+    private static boolean isMediaFileAlreadyDownloaded(List<File> localMediaFiles, MediaFile newMediaFile) {
         // TODO Zip files are ignored we should find a way to take them into account too
         if (newMediaFile.getFilename().endsWith(".zip")) {
             return true;

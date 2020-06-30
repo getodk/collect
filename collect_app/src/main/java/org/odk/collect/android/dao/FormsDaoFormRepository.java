@@ -7,12 +7,12 @@ import org.odk.collect.android.forms.FormRepository;
 
 import java.util.List;
 
-public class FormDaoFormRepository implements FormRepository {
+public class FormsDaoFormRepository implements FormRepository {
 
     @Override
     public boolean contains(String jrFormID) {
         try (Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormID)) {
-            return cursor == null || cursor.getCount() > 0;
+            return cursor != null && cursor.getCount() > 0;
         }
     }
 

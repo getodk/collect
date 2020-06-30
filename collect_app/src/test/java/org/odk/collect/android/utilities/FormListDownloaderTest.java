@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -47,8 +46,7 @@ public class FormListDownloaderTest {
         FormListDownloader downloader = new FormListDownloader(
                 RuntimeEnvironment.application,
                 serverClient,
-                new WebCredentialsUtils(),
-                new FormsDao()
+                new WebCredentialsUtils()
         );
 
         final Map<String, FormDetails> fetched = downloader.downloadFormList(null, null, null, false);
@@ -82,8 +80,7 @@ public class FormListDownloaderTest {
         FormListDownloader formListDownloader = new FormListDownloader(
                 RuntimeEnvironment.application,
                 serverClient,
-                new WebCredentialsUtils(),
-                new FormsDao()
+                new WebCredentialsUtils()
         );
 
         formListDownloader.downloadFormList("http://blah.com///", "user", "password", false);
