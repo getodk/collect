@@ -16,6 +16,7 @@
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorOnSurface">#000000</item>
+        <item name="android:textColorHint">#E3E3E3</item> // defines the hint color for search
         <item name="scrimBackground">@color/mtrl_scrim_color</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1

@@ -29,7 +29,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
@@ -113,7 +112,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         if (viewModelFactory == null) { // tests set their factories directly
             viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository());
         }
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FormMapViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
 
         Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")",
                 viewModel.getFormTitle(),
@@ -121,8 +120,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
-        summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        setUpSummarySheet();
 
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
@@ -136,9 +134,22 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    @Override public void onResume() {
-        super.onResume();
-        updateInstanceGeometry();
+    private void setUpSummarySheet() {
+        summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        summarySheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && viewModel.getSelectedSubmissionId() != -1) {
+                    updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
+                    viewModel.setSelectedSubmissionId(-1);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -154,6 +165,21 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateInstanceGeometry();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
@@ -182,7 +208,19 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
 
         map.setFeatureClickListener(this::onFeatureClicked);
+        map.setClickListener(this::onClick);
         updateInstanceGeometry();
+
+        if (viewModel.getSelectedSubmissionId() != -1) {
+            onFeatureClicked(viewModel.getSelectedSubmissionId());
+        }
+    }
+
+    @SuppressWarnings("PMD.UnusedFormalParameter")
+    private void onClick(MapPoint mapPoint) {
+        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
     }
 
     private void updateInstanceGeometry() {
@@ -207,18 +245,23 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private void updateMapFeatures() {
         points.clear();
         map.clearFeatures();
+        instancesByFeatureId.clear();
 
         List<MappableFormInstance> instances = viewModel.getMappableFormInstances();
         for (MappableFormInstance instance : instances) {
             MapPoint point = new MapPoint(instance.getLatitude(), instance.getLongitude());
-            int featureId = map.addMarker(point, false);
+            int featureId = map.addMarker(point, false, MapFragment.BOTTOM);
 
-            int drawableId = getDrawableIdForStatus(instance.getStatus());
-            map.setMarkerIcon(featureId, drawableId);
+            updateSubmissionMarker(featureId, instance.getStatus(), featureId == viewModel.getSelectedSubmissionId());
 
             instancesByFeatureId.put(featureId, instance);
             points.add(point);
         }
+    }
+
+    private void updateSubmissionMarker(int featureId, String status, boolean enlarged) {
+        int drawableId = getDrawableIdForStatus(status, enlarged);
+        map.setMarkerIcon(featureId, drawableId);
     }
 
     /**
@@ -235,12 +278,23 @@ public class FormMapActivity extends BaseGeoMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
-        FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
-        if (mappableFormInstance != null) {
-            map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
-            setUpSummarySheet(mappableFormInstance);
-            summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
+            removeEnlargedMarkerIfExist(featureId);
+
+            FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
+            if (mappableFormInstance != null) {
+                map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
+                updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
+                setUpSummarySheetDetails(mappableFormInstance);
+            }
+            viewModel.setSelectedSubmissionId(featureId);
         }
+    }
+
+    private boolean isSummaryForGivenSubmissionDisplayed(int newSubmissionId) {
+        return viewModel.getSelectedSubmissionId() == newSubmissionId && summarySheet.getState() != BottomSheetBehavior.STATE_HIDDEN;
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -252,50 +306,41 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    /**
-     * Build {@link FormMapViewModel} and its dependencies.
-     */
-    private class FormMapViewModelFactory implements ViewModelProvider.Factory {
-        private final Form form;
-        private final InstancesRepository instancesRepository;
-
-        FormMapViewModelFactory(Form form, InstancesRepository instancesRepository) {
-            this.form = form;
-            this.instancesRepository = instancesRepository;
-        }
-
-        @Override
-        @NonNull
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormMapViewModel(form, instancesRepository);
-        }
-    }
-
-    private static int getDrawableIdForStatus(String status) {
+    private static int getDrawableIdForStatus(String status, boolean enlarged) {
         switch (status) {
             case InstanceProviderAPI.STATUS_INCOMPLETE:
-                return R.drawable.ic_room_blue_24dp;
+                return enlarged ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
             case InstanceProviderAPI.STATUS_COMPLETE:
-                return R.drawable.ic_room_deep_purple_24dp;
+                return enlarged ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
             case InstanceProviderAPI.STATUS_SUBMITTED:
-                return R.drawable.ic_room_green_24dp;
+                return enlarged ? R.drawable.ic_room_green_48dp : R.drawable.ic_room_green_24dp;
             case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
-                return R.drawable.ic_room_red_24dp;
+                return enlarged ? R.drawable.ic_room_red_48dp : R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;
     }
 
-    private void setUpSummarySheet(MappableFormInstance mappableFormInstance) {
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+    private void setUpSummarySheetDetails(MappableFormInstance mappableFormInstance) {
+        setUpSubmissionSheetNameAndLastChangedDate(mappableFormInstance);
+        setUpSummarySheetIcon(mappableFormInstance.getStatus());
+        adjustSubmissionSheetBasedOnItsStatus(mappableFormInstance);
 
+        summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    private void setUpSubmissionSheetNameAndLastChangedDate(MappableFormInstance mappableFormInstance) {
         ((TextView) findViewById(R.id.submission_name)).setText(mappableFormInstance.getInstanceName());
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
         ((TextView) findViewById(R.id.status_text)).setText(instanceLastStatusChangeDate);
+    }
 
+    private void setUpSummarySheetIcon(String status) {
         ImageView statusImage = findViewById(R.id.status_icon);
-        statusImage.setImageDrawable(IconUtils.getSubmissionSummaryStatusIcon(this, mappableFormInstance.getStatus()));
+        statusImage.setImageDrawable(IconUtils.getSubmissionSummaryStatusIcon(this, status));
         statusImage.setBackground(null);
+    }
 
+    private void adjustSubmissionSheetBasedOnItsStatus(MappableFormInstance mappableFormInstance) {
         switch (mappableFormInstance.getClickAction()) {
             case DELETED_TOAST:
                 String deletedTime = getString(R.string.deleted_on_date_at_time);
@@ -320,7 +365,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         findViewById(R.id.info).setVisibility(View.GONE);
         Chip openFormButton = findViewById(R.id.openFormChip);
         openFormButton.setVisibility(View.VISIBLE);
-        openFormButton.setText(canEdit ? R.string.review_data : R.string.view_sent_forms);
+        openFormButton.setText(canEdit ? R.string.review_data : R.string.view_data);
         openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormButton.setOnClickListener(v -> {
             summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -346,5 +391,34 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private Intent getEditFormInstanceIntentFor(long instanceId) {
         Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
+    }
+
+    private void removeEnlargedMarkerIfExist(int newSubmissionId) {
+        if (viewModel.getSelectedSubmissionId() != -1 && viewModel.getSelectedSubmissionId() != newSubmissionId) {
+            updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
+        }
+    }
+
+    private String getSubmissionStatusFor(int submissionId) {
+        return instancesByFeatureId.get(submissionId).getStatus();
+    }
+
+    /**
+     * Build {@link FormMapViewModel} and its dependencies.
+     */
+    private class FormMapViewModelFactory implements ViewModelProvider.Factory {
+        private final Form form;
+        private final InstancesRepository instancesRepository;
+
+        FormMapViewModelFactory(Form form, InstancesRepository instancesRepository) {
+            this.form = form;
+            this.instancesRepository = instancesRepository;
+        }
+
+        @Override
+        @NonNull
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new FormMapViewModel(form, instancesRepository);
+        }
     }
 }

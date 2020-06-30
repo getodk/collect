@@ -242,9 +242,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    @Override public int addMarker(MapPoint point, boolean draggable) {
+    @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(map, point, draggable));
+        features.put(featureId, new MarkerFeature(map, point, draggable, iconAnchor));
         return featureId;
     }
 
@@ -302,6 +302,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             }
         }
         features.clear();
+        nextFeatureId = 1;
     }
 
     @Override public void setClickListener(@Nullable PointListener listener) {
@@ -587,7 +588,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
+    private Marker createMarker(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
         if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
         }
@@ -599,8 +600,25 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .snippet(point.alt + ";" + point.sd)
             .draggable(draggable)
             .icon(getBitmapDescriptor(R.drawable.ic_map_point))
-            .anchor(0.5f, 0.5f)  // center the icon on the position
+            .anchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor))  // center the icon on the position
         );
+    }
+
+    private float getIconAnchorValueX(@IconAnchor String iconAnchor) {
+        switch (iconAnchor) {
+            case BOTTOM:
+            default:
+                return 0.5f;
+        }
+    }
+
+    private float getIconAnchorValueY(@IconAnchor String iconAnchor) {
+        switch (iconAnchor) {
+            case BOTTOM:
+                return 1.0f;
+            default:
+                return 0.5f;
+        }
     }
 
     private BitmapDescriptor getBitmapDescriptor(int drawableId) {
@@ -644,8 +662,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private class MarkerFeature implements MapFeature {
         private Marker marker;
 
-        MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
-            marker = createMarker(map, point, draggable);
+        MarkerFeature(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
+            marker = createMarker(map, point, draggable, iconAnchor);
         }
 
         public void setIcon(int drawableId) {
@@ -688,7 +706,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 return;
             }
             for (MapPoint point : points) {
-                markers.add(createMarker(map, point, true));
+                markers.add(createMarker(map, point, true, CENTER));
             }
             update();
         }
@@ -744,7 +762,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(map, point, true));
+            markers.add(createMarker(map, point, true, CENTER));
             update();
         }
 

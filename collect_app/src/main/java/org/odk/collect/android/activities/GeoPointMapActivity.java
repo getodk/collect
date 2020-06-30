@@ -378,7 +378,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     /** Places the marker and enables the button to remove it. */
     private void placeMarker(MapPoint point) {
         map.clearFeatures();
-        featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked);
+        featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER);
         clearButton.setEnabled(true);
         captureLocation = true;
         setClear = false;
