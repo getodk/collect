@@ -3,6 +3,8 @@ package org.odk.collect.android.openrosa.api;
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
+import org.odk.collect.android.logic.ManifestFile;
+import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.api.FormAPIError.Type;
 import org.odk.collect.android.utilities.DocumentFetchResult;
@@ -10,8 +12,6 @@ import org.odk.collect.android.utilities.DocumentFetchResult;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
-import timber.log.Timber;
 
 import static org.odk.collect.android.openrosa.api.FormAPIError.Type.AUTH_REQUIRED;
 import static org.odk.collect.android.openrosa.api.FormAPIError.Type.FETCH_ERROR;
@@ -21,6 +21,9 @@ public class OpenRosaFormAPI implements FormAPI {
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
+
+    private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
+            "http://openrosa.org/xforms/xformsManifest";
 
     private final OpenRosaXMLFetcher openRosaXMLFetcher;
     private final String serverURL;
@@ -53,13 +56,11 @@ public class OpenRosaFormAPI implements FormAPI {
             Element xformsElement = result.doc.getRootElement();
             if (!xformsElement.getName().equals("xforms")) {
                 String error = "root element is not <xforms> : " + xformsElement.getName();
-                Timber.e("Parsing OpenRosa reply -- %s", error);
                 throw new FormAPIError(PARSE_ERROR, error);
             }
             String namespace = xformsElement.getNamespace();
             if (!isXformsListNamespacedElement(xformsElement)) {
                 String error = "root element namespace is incorrect:" + namespace;
-                Timber.e("Parsing OpenRosa reply -- %s", error);
                 throw new FormAPIError(PARSE_ERROR, error);
             }
 
@@ -158,7 +159,6 @@ public class OpenRosaFormAPI implements FormAPI {
                     String error =
                             "Forms list entry " + Integer.toString(i)
                                     + " has missing or empty tags: formID, name, or downloadUrl";
-                    Timber.e("Parsing OpenRosa reply -- %s", error);
                     formList.clear();
                     throw new FormAPIError(PARSE_ERROR, error);
                 }
@@ -198,7 +198,6 @@ public class OpenRosaFormAPI implements FormAPI {
                         String error =
                                 "Forms list entry " + Integer.toString(i)
                                         + " is missing form name or url attribute";
-                        Timber.e("Parsing OpenRosa reply -- %s", error);
                         formList.clear();
                         throw new FormAPIError(Type.LEGACY_PARSE_ERROR, error);
                     }
@@ -210,6 +209,100 @@ public class OpenRosaFormAPI implements FormAPI {
         }
 
         return formList;
+    }
+
+    @Override
+    public ManifestFile fetchManifest(String manifestURL) throws FormAPIError {
+        if (manifestURL == null) {
+            return null;
+        }
+
+        DocumentFetchResult result = openRosaXMLFetcher.getXML(manifestURL);
+
+        if (result.errorMessage != null) {
+            throw new FormAPIError(FETCH_ERROR, result.errorMessage);
+        }
+
+        if (!result.isOpenRosaResponse) {
+            throw new FormAPIError(PARSE_ERROR, "Manifest reply does not report an OpenRosa version — bad server?");
+        }
+
+        // Attempt OpenRosa 1.0 parsing
+        Element manifestElement = result.doc.getRootElement();
+
+        if (!manifestElement.getName().equals("manifest")) {
+            String error = String.format("Root element is not &lt;manifest\\&gt; — was %s", manifestElement.getName());
+            throw new FormAPIError(PARSE_ERROR, error);
+        }
+
+        if (!isXformsManifestNamespacedElement(manifestElement)) {
+            String namespace = manifestElement.getNamespace();
+            String error = String.format("Root element Namespace is incorrect: %s", namespace);
+            throw new FormAPIError(PARSE_ERROR, error);
+        }
+
+        int elements = manifestElement.getChildCount();
+        List<MediaFile> files = new ArrayList<>();
+        for (int i = 0; i < elements; ++i) {
+            if (manifestElement.getType(i) != Element.ELEMENT) {
+                // e.g., whitespace (text)
+                continue;
+            }
+            Element mediaFileElement = manifestElement.getElement(i);
+            if (!isXformsManifestNamespacedElement(mediaFileElement)) {
+                // someone else's extension?
+                continue;
+            }
+            String name = mediaFileElement.getName();
+            if (name.equalsIgnoreCase("mediaFile")) {
+                String filename = null;
+                String hash = null;
+                String downloadUrl = null;
+                // don't process descriptionUrl
+                int childCount = mediaFileElement.getChildCount();
+                for (int j = 0; j < childCount; ++j) {
+                    if (mediaFileElement.getType(j) != Element.ELEMENT) {
+                        // e.g., whitespace (text)
+                        continue;
+                    }
+                    Element child = mediaFileElement.getElement(j);
+                    if (!isXformsManifestNamespacedElement(child)) {
+                        // someone else's extension?
+                        continue;
+                    }
+                    String tag = child.getName();
+                    switch (tag) {
+                        case "filename":
+                            filename = XFormParser.getXMLText(child, true);
+                            if (filename != null && filename.length() == 0) {
+                                filename = null;
+                            }
+                            break;
+                        case "hash":
+                            hash = XFormParser.getXMLText(child, true);
+                            if (hash != null && hash.length() == 0) {
+                                hash = null;
+                            }
+                            break;
+                        case "downloadUrl":
+                            downloadUrl = XFormParser.getXMLText(child, true);
+                            if (downloadUrl != null && downloadUrl.length() == 0) {
+                                downloadUrl = null;
+                            }
+                            break;
+                    }
+                }
+
+                if (filename == null || downloadUrl == null || hash == null) {
+                    String error = String.format("Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl", i);
+                    throw new FormAPIError(PARSE_ERROR, error);
+                }
+
+                files.add(new MediaFile(filename, hash, downloadUrl));
+            }
+        }
+
+        return new ManifestFile(result.getHash(), files);
     }
 
     @NotNull
@@ -226,5 +319,9 @@ public class OpenRosaFormAPI implements FormAPI {
 
     private static boolean isXformsListNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
+    }
+
+    private static boolean isXformsManifestNamespacedElement(Element e) {
+        return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 }

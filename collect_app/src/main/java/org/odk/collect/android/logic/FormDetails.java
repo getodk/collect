@@ -128,7 +128,7 @@ public class FormDetails implements Serializable {
                 formListItem.getManifestURL(),
                 formListItem.getFormID(),
                 formListItem.getVersion(),
-                formListItem.getHash(),
+                formListItem.getHashWithPrefix(),
                 manifestFileHash,
                 isNewerFormVersionAvailable,
                 areNewerMediaFilesAvailable

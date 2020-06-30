@@ -22,7 +22,7 @@ public class FormListItem {
         return formID;
     }
 
-    public String getHash() {
+    public String getHashWithPrefix() {
         return hash;
     }
 

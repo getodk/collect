@@ -42,6 +42,7 @@ public final class Form {
     private final String autoDelete;
     private final String lastDetectedFormVersionHash;
     private final String geometryXPath;
+    private final String manifestHash;
 
     private Form(Form.Builder builder) {
         id = builder.id;
@@ -61,6 +62,7 @@ public final class Form {
         autoDelete = builder.autoDelete;
         lastDetectedFormVersionHash = builder.lastDetectedFormVersionHash;
         geometryXPath = builder.geometryXpath;
+        manifestHash = builder.manifestHash;
     }
 
     public static class Builder {
@@ -81,6 +83,7 @@ public final class Form {
         private String autoDelete;
         private String lastDetectedFormVersionHash;
         private String geometryXpath;
+        private String manifestHash;
 
         public Builder id(Long id) {
             this.id = id;
@@ -124,6 +127,11 @@ public final class Form {
 
         public Builder md5Hash(String md5Hash) {
             this.md5Hash = md5Hash;
+            return this;
+        }
+
+        public Builder manifestHash(String md5Hash) {
+            this.manifestHash = md5Hash;
             return this;
         }
 
@@ -242,6 +250,10 @@ public final class Form {
 
     public String getGeometryXpath() {
         return geometryXPath;
+    }
+
+    public String getManifestHash() {
+        return manifestHash;
     }
 
     @Override

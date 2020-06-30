@@ -19,4 +19,12 @@ public class FormAPIError extends Exception {
     public Type getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return "FormAPIError{" +
+                "type=" + type +
+                "message=" + getMessage() +
+                '}';
+    }
 }

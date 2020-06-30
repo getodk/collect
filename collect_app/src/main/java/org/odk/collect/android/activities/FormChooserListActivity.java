@@ -35,6 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.forms.ServerFormListSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -72,6 +73,9 @@ public class FormChooserListActivity extends FormListActivity implements
 
     @Inject
     FormRepository formRepository;
+
+    @Inject
+    MediaFileRepository mediaFileRepository;
 
     @Inject
     FormDownloader formDownloader;
@@ -131,7 +135,7 @@ public class FormChooserListActivity extends FormListActivity implements
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        new ServerFormListSynchronizer(formRepository, formAPI, formDownloader).synchronize();
+                        new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader).synchronize();
                         return null;
                     }
 
