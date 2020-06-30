@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import org.javarosa.core.model.SelectChoice;
@@ -80,7 +79,6 @@ public abstract class SelectWidget extends ItemsWidget {
 
     private RecyclerView getFlexRecyclerView(RecyclerView recyclerView) {
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getContext());
-        layoutManager.setFlexDirection(FlexDirection.ROW);
         recyclerView.setLayoutManager(layoutManager);
 
         return recyclerView;
