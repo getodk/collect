@@ -142,6 +142,11 @@ public final class ThemeUtils {
     }
 
     @ColorInt
+    public int getColorOnPrimary() {
+        return getAttributeValue(R.attr.colorOnPrimary);
+    }
+
+    @ColorInt
     public int getColorSecondary() {
         return getAttributeValue(R.attr.colorSecondary);
     }
