@@ -48,7 +48,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return this;
     }
 
-    public ServerSettingsPage openServerSettings() {
+    public ServerSettingsPage clickServerSettings() {
         clickOnString(R.string.server);
         return new ServerSettingsPage(rule).assertOnPage();
     }
