@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets;
 import android.app.Application;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -140,7 +139,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
         populateRecyclerView(getWidget());
 
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) (((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0));
         assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
 
         resetWidget();
@@ -178,7 +177,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     private static void clickChoice(SelectOneWidget widget, int index) {
-        ((AudioVideoImageTextLabel) getChoiceView(widget, index).getChildAt(0)).getLabelTextView().performClick();
+        ((AudioVideoImageTextLabel) getChoiceView(widget, index)).getLabelTextView().performClick();
     }
 
     private static ViewGroup getChoiceView(SelectOneWidget widget, int index) {
