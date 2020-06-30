@@ -339,7 +339,7 @@ public class FormMapActivityTest {
             case OPEN_READ_ONLY:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));
                 assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.VISIBLE));
-                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.view_sent_forms)));
+                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.view_data)));
                 break;
             case OPEN_EDIT:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));
