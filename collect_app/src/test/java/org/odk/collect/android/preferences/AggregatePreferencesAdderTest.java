@@ -35,7 +35,7 @@ public class AggregatePreferencesAdderTest {
         FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
         PreferenceFragmentCompat fragment = mock(PreferenceFragmentCompat.class);
 
-        doThrow(ClassCastException.class).when(fragment).addPreferencesFromResource(R.xml.aggregate_preferences);
+        doThrow(ClassCastException.class).when(fragment).addPreferencesFromResource(R.xml.odk_server_preferences);
         when(fragment.getActivity()).thenReturn(activity);
 
         AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
