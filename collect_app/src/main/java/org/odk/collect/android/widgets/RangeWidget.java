@@ -65,9 +65,10 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
     public
     TextView currentValue;
 
-    private int progress;
     public Slider slider;
     private LinearLayout view;
+
+    private int progress;
 
     private boolean isPickerAppearance;
 
@@ -144,7 +145,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
             answerTextView.setText(R.string.no_value_selected);
             pickerButton.setText(R.string.select_value);
         } else {
-            slider.setValue(progress);
+            slider.setValue(rangeStart.floatValue());
             actualValue = null;
             setUpActualValueLabel();
         }
@@ -163,7 +164,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
         slider.setValueFrom(rangeStart.floatValue());
         slider.setValueTo(rangeEnd.floatValue());
         slider.setStepSize(rangeStep.intValue());
-        slider.setValue(progress);
+        slider.setValue(actualValue == null ? rangeStart.floatValue(): actualValue.floatValue());
         slider.addOnChangeListener(this);
 
         slider.setOnTouchListener((v, event) -> {
@@ -290,9 +291,9 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
         if (rangeStart.compareTo(rangeEnd) == -1) {
-            actualValue = rangeStart.add(BigDecimal.valueOf(value).multiply(rangeStep));
+            actualValue = BigDecimal.valueOf(value);
         } else {
-            actualValue = rangeStart.subtract(BigDecimal.valueOf(value).multiply(rangeStep));
+            actualValue = BigDecimal.valueOf(value);
         }
 
         setUpActualValueLabel();

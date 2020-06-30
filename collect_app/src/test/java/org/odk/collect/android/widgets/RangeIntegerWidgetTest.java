@@ -53,13 +53,13 @@ public class RangeIntegerWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_sliderIsSetOnStartingIndex() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        assertThat(widget.slider.getValue(), equalTo(0.0F));
+        assertThat(widget.slider.getValue(), equalTo(1.0F));
     }
 
     @Test
     public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.slider.getValue(), equalTo(3.0F));
+        assertThat(widget.slider.getValue(), equalTo(4.0F));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         widget.slider.setValue(4.0F);
 
-        assertThat(widget.getAnswer().getValue(), equalTo(5));
+        assertThat(widget.getAnswer().getValue(), equalTo(4));
     }
 
     @Test
