@@ -3,8 +3,6 @@ package org.odk.collect.android.openrosa.api;
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.logic.ManifestFile;
-import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.api.FormAPIError.Type;
 import org.odk.collect.android.utilities.DocumentFetchResult;

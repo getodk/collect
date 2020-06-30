@@ -2,10 +2,10 @@ package org.odk.collect.android.forms;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.logic.ManifestFile;
-import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.openrosa.api.FormAPI;
 import org.odk.collect.android.openrosa.api.FormListItem;
+import org.odk.collect.android.openrosa.api.ManifestFile;
+import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.utilities.FormDownloader;
 
 import java.io.BufferedWriter;

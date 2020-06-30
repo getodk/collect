@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nafundi
+ * Copyright 2017 Nafundi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.openrosa.api;
 
-import java.util.List;
-
-public class ManifestFile {
+public class MediaFile {
+    private final String filename;
     private final String hash;
-    private final List<MediaFile> mediaFiles;
+    private final String downloadUrl;
 
-    public ManifestFile(String hash, List<MediaFile> mediaFiles) {
+    public MediaFile(String filename, String hash, String downloadUrl) {
+        this.filename = filename;
         this.hash = hash;
-        this.mediaFiles = mediaFiles;
+        this.downloadUrl = downloadUrl;
+    }
+
+    public String getFilename() {
+        return filename;
     }
 
     public String getHash() {
         return hash;
     }
 
-    public List<MediaFile> getMediaFiles() {
-        return mediaFiles;
+    public String getDownloadUrl() {
+        return downloadUrl;
     }
 }

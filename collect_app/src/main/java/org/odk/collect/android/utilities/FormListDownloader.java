@@ -27,12 +27,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDaoFormRepository;
 import org.odk.collect.android.dao.FormsDaoMediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.logic.ManifestFile;
-import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.api.FormAPI;
 import org.odk.collect.android.openrosa.api.FormAPIError;
 import org.odk.collect.android.openrosa.api.FormListItem;
+import org.odk.collect.android.openrosa.api.ManifestFile;
+import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.preferences.GeneralKeys;
 
