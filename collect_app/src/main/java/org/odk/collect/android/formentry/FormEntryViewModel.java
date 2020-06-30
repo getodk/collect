@@ -72,11 +72,11 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         if (jumpBackIndex != null) {
             jumpBackIndex = null;
-            analytics.logEvent(ADD_REPEAT, "Inline", formController.getCurrentFormIdentifierHash());
+           // analytics.logEvent(ADD_REPEAT, "Inline", formController.getCurrentFormIdentifierHash());   // smap
         } else if (fromPrompt) {
-            analytics.logEvent(ADD_REPEAT, "Prompt", formController.getCurrentFormIdentifierHash());
+            //analytics.logEvent(ADD_REPEAT, "Prompt", formController.getCurrentFormIdentifierHash());   // smap
         } else {
-            analytics.logEvent(ADD_REPEAT, "Hierarchy", formController.getCurrentFormIdentifierHash());
+            //analytics.logEvent(ADD_REPEAT, "Hierarchy", formController.getCurrentFormIdentifierHash());   // smap
         }
 
         formController.newRepeat();
@@ -95,7 +95,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             return;
         }
 
-        analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
+        //analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());  // smap
 
         if (jumpBackIndex != null) {
             formController.jumpToIndex(jumpBackIndex);

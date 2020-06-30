@@ -89,11 +89,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_late);
                     icon.setImageDrawable(d);
                 } else {
-                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_saved);
+                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_saved_circle);
                     icon.setImageDrawable(d);
 				}
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_COMPLETE)) {
-                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized);
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized_circle);
                 icon.setImageDrawable(d);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_REJECTED) || item.taskStatus.equals(Utilities.STATUS_T_CANCELLED)) {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_rejected);

@@ -93,6 +93,7 @@ import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -202,6 +203,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setContentView(R.layout.smap_main_layout);
         //ButterKnife.bind(this);  // banner
