@@ -226,9 +226,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
                     ? R.layout.range_widget_vertical
                     : R.layout.range_widget_horizontal;
 
-            @IdRes int seekBarId = appearance.contains(NO_TICKS_APPEARANCE)
-                    ? R.id.seek_bar_no_ticks
-                    : R.id.seek_bar;
+            @IdRes int seekBarId = R.id.seek_bar;
 
             loadAppearance(layoutId, seekBarId);
         }
@@ -239,20 +237,6 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
     private void loadAppearance(@LayoutRes int layoutId, @IdRes int seekBarId) {
         view = (LinearLayout) getLayoutInflater().inflate(layoutId, this, false);
         slider = view.findViewById(seekBarId);
-
-        @IdRes int hiddenSeekBarId;
-        if (seekBarId == R.id.seek_bar) {
-            hiddenSeekBarId = R.id.seek_bar_no_ticks;
-
-        } else if (seekBarId == R.id.seek_bar_no_ticks) {
-            hiddenSeekBarId = R.id.seek_bar;
-
-        } else {
-            Timber.w("Unknown SeekBar ID.");
-            return;
-        }
-
-        view.findViewById(hiddenSeekBarId).setVisibility(GONE);
     }
 
     public void setNumberPickerValue(int value) {

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -34,20 +35,14 @@ limitations under the License.
         android:layout_height="330dp">
 
         <com.google.android.material.slider.Slider
-            android:id="@+id/seek_bar_no_ticks"
-            android:layout_width="330dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layerType="software"
-            android:rotation="270"/>
-
-        <com.google.android.material.slider.Slider
             android:id="@+id/seek_bar"
             android:layout_width="330dp"
             android:layout_height="wrap_content"
+            app:thumbColor="?colorSecondary"
+            app:trackColorActive="?colorSecondary"
             android:layout_gravity="center"
             android:layerType="software"
-            android:rotation="270"/>
+            android:rotation="270" />
 
     </FrameLayout>
 
