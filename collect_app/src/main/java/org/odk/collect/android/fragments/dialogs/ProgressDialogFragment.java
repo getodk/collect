@@ -107,7 +107,6 @@ public class ProgressDialogFragment extends DialogFragment {
         }
 
         if (getArguments() != null) {
-            dialog.setCancelable(getArguments().getBoolean(CANCELABLE));
             setCancelable(getArguments().getBoolean(CANCELABLE));
         }
 
