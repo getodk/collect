@@ -31,16 +31,15 @@ limitations under the License.
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <SeekBar
+        <com.google.android.material.slider.Slider
             android:id="@+id/seek_bar_no_ticks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <SeekBar
+        <com.google.android.material.slider.Slider
             android:id="@+id/seek_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Base.Widget.AppCompat.SeekBar.Discrete" />
+            android:layout_height="wrap_content" />
 
     </FrameLayout>
 
