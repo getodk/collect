@@ -21,7 +21,7 @@ public class UserAndDeviceIdentitySettingsPage extends Page<UserAndDeviceIdentit
     }
 
     public FormMetadataPage clickFormMetadata() {
-        onData(PreferenceMatchers.withKey("form_metadata")).perform(click());
+        clickOnString(R.string.form_metadata);
         return new FormMetadataPage(rule);
     }
 }
