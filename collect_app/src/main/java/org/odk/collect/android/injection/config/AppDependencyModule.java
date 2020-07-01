@@ -44,6 +44,7 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.javarosawrapper.PropertyManagerJavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
@@ -350,8 +351,14 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public JavaRosaInitializer providesJavaRosaInitializer(Application application) {
-        return new PropertyManagerJavaRosaInitializer(application);
+    @Singleton
+    public PropertyManager providesPropertyManager(RxEventBus eventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
+        return new PropertyManager(eventBus, permissionUtils, deviceDetailsProvider);
+    }
+
+    @Provides
+    public JavaRosaInitializer providesJavaRosaInitializer(Application application, PropertyManager propertyManager) {
+        return new PropertyManagerJavaRosaInitializer(application, propertyManager);
     }
 
     @Provides

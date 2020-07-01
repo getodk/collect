@@ -94,10 +94,14 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager(Context context) {
-        Timber.i("calling constructor");
-
         Collect.getInstance().getComponent().inject(this);
         reload(context);
+    }
+
+    public PropertyManager(RxEventBus rxEventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
+        this.eventBus = rxEventBus;
+        this.permissionUtils = permissionUtils;
+        this.deviceDetailsProvider = deviceDetailsProvider;
     }
 
     public PropertyManager reload(Context context) {

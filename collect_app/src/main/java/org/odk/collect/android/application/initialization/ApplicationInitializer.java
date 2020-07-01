@@ -11,12 +11,18 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.javarosa.core.model.CoreModelModule;
+import org.javarosa.core.services.PrototypeManager;
+import org.javarosa.core.util.JavaRosaCoreModule;
+import org.javarosa.model.xform.XFormsModule;
+import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
+import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -60,12 +66,25 @@ public class ApplicationInitializer {
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initializeMapFrameworks();
-        javaRosaInitializer.initialize();
+        initializeJavaRosa();
     }
 
     public void initializeLocale() {
         Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(context);
+    }
+
+    private void initializeJavaRosa() {
+        javaRosaInitializer.initialize();
+
+        // Register prototypes for classes that FormDef uses
+        PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
+        PrototypeManager.registerPrototypes(CoreModelModule.classNames);
+        new XFormsModule().registerModule();
+
+        // When registering prototypes from Collect, a proguard exception also needs to be added
+        PrototypeManager.registerPrototype("org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction");
+        XFormParser.registerActionHandler(CollectSetGeopointActionHandler.ELEMENT_NAME, new CollectSetGeopointActionHandler());
     }
 
     private void initializeLogging() {
