@@ -152,6 +152,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private MainMenuViewModel viewModel;
 
+    private MapView mapView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -315,6 +317,14 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (mapView != null) {
+            mapView.onStart();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -327,6 +337,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setButtonsVisibility();
         invalidateOptionsMenu();
         setUpStorageMigrationBanner();
+        if (mapView != null) {
+            mapView.onResume();
+        }
     }
 
     private void setButtonsVisibility() {
@@ -344,11 +357,41 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             alertDialog.dismiss();
         }
         getContentResolver().unregisterContentObserver(contentObserver);
+        if (mapView != null) {
+            mapView.onPause();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mapView != null) {
+            mapView.onStop();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mapView != null) {
+            mapView.onSaveInstanceState(outState);
+        }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mapView != null) {
+            mapView.onLowMemory();
+        }
     }
 
     @Override
     public void onDestroy() {
         storageMigrationRepository.clearResult();
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
         super.onDestroy();
     }
 
@@ -403,7 +446,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             // This "one weird trick" lets us initialize MapBox at app start when the internet is
             // most likely to be available. This is annoyingly needed for offline tiles to work.
             try {
-                MapView mapView = new MapView(this);
+                mapView = new MapView(this);
                 FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
                 mapboxContainer.addView(mapView);
                 mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> {
