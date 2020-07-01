@@ -96,7 +96,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
     }
 
     protected void createLayout() {
-        adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext(), autoAdvance);
+        adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
 
         if (items != null) {
             recyclerView = setUpRecyclerView();
@@ -139,10 +139,6 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         }
 
         widgetValueChanged();
-    }
-
-    public boolean isAutoAdvance() {
-        return autoAdvance;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.database.Cursor;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -169,7 +168,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         populateRecyclerView(getWidget());
 
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) ((LinearLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0)).getChildAt(0);
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) (((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0));
         assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
     }
 

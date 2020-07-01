@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.flexbox.FlexboxLayoutManager;
+
 import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -68,9 +70,22 @@ public abstract class SelectWidget extends ItemsWidget {
     }
 
     protected RecyclerView setUpRecyclerView() {
-        numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
-
         RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
+
+        return WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt())
+                ? getFlexRecyclerView(recyclerView)
+                : getGridRecyclerView(recyclerView);
+    }
+
+    private RecyclerView getFlexRecyclerView(RecyclerView recyclerView) {
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        return recyclerView;
+    }
+
+    private RecyclerView getGridRecyclerView(RecyclerView recyclerView) {
+        numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
 
         if (numColumns == 1) {
             DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -79,7 +94,7 @@ public abstract class SelectWidget extends ItemsWidget {
             if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
                 DrawableCompat.setTint(DrawableCompat.wrap(drawable), new ThemeUtils(getContext()).getColorOnSurface());
             }
-            
+
             divider.setDrawable(drawable);
             recyclerView.addItemDecoration(divider);
         }
