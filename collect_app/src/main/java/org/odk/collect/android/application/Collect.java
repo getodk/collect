@@ -118,9 +118,8 @@ public class Collect extends Application {
         singleton = this;
 
         setupDagger();
-        applicationInitializer.initializePreferences();
-        applicationInitializer.initializeFrameworks();
-        applicationInitializer.initializeLocale();
+        applicationInitializer.initialize();
+        
         fixGoogleBug154855417();
 
         setupStrictMode();

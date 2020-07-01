@@ -1,6 +1,7 @@
 package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -20,8 +21,8 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.geo.MapboxUtils;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -39,19 +40,25 @@ public class ApplicationInitializer {
     private final CollectJobCreator collectJobCreator;
     private final UserAgentProvider userAgentProvider;
     private final PreferenceMigrator preferenceMigrator;
-    private final JavaRosaInitializer javaRosaInitializer;
+    private final PropertyManager propertyManager;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
+    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
         this.context = context;
         this.collectJobCreator = collectJobCreator;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
-        this.javaRosaInitializer = javaRosaInitializer;
+        this.propertyManager = propertyManager;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
+    }
+
+    public void initialize() {
+        initializePreferences();
+        initializeFrameworks();
+        initializeLocale();
     }
 
     public void initializePreferences() {
@@ -75,7 +82,9 @@ public class ApplicationInitializer {
     }
 
     private void initializeJavaRosa() {
-        javaRosaInitializer.initialize();
+        propertyManager.reload(context);
+        org.javarosa.core.services.PropertyManager
+                .setPropertyManager(propertyManager);
 
         // Register prototypes for classes that FormDef uses
         PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
@@ -116,7 +125,11 @@ public class ApplicationInitializer {
 
     private void initializeMapFrameworks() {
         try {
-            new com.google.android.gms.maps.MapView(context).onCreate(null);
+            Handler handler = new Handler(context.getMainLooper());
+            handler.post(() -> {
+                // This has to happen on the main thread but we might call `initialize` from tests
+                new com.google.android.gms.maps.MapView(context).onCreate(null);
+            });
             org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
             MapboxUtils.initMapbox();
         } catch (Exception | Error ignore) {

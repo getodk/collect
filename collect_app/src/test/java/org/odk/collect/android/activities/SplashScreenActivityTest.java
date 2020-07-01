@@ -18,8 +18,8 @@ import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsP
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -54,7 +54,7 @@ public class SplashScreenActivityTest {
             }
 
             @Override
-            public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
+            public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
                 return applicationInitializer;
             }
         });

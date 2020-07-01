@@ -18,6 +18,7 @@ import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
@@ -31,7 +32,6 @@ import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
@@ -204,5 +204,5 @@ public interface AppDependencyComponent {
 
     PreferencesProvider preferencesProvider();
 
-    JavaRosaInitializer javaRosaInitializer();
+    ApplicationInitializer applicationInitializer();
 }

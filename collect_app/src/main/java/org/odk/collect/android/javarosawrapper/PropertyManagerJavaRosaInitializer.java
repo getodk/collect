@@ -17,7 +17,5 @@ public class PropertyManagerJavaRosaInitializer implements JavaRosaInitializer {
     @Override
     public void initialize() {
         propertyManager.reload(application);
-        org.javarosa.core.services.PropertyManager
-                .setPropertyManager(propertyManager);
     }
 }
