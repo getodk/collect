@@ -17,7 +17,6 @@ package org.odk.collect.android.javarosawrapper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -33,16 +32,12 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.core.services.IPropertyManager;
-import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
-import org.javarosa.core.util.JavaRosaCoreModule;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
-import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
@@ -53,7 +48,6 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
-import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 
@@ -118,32 +112,6 @@ public class FormController {
             this.instanceName = FormNameUtils.normalizeFormName(instanceName, false);
             this.auditConfig = auditConfig;
         }
-    }
-
-    private static boolean isJavaRosaInitialized;
-
-    /**
-     * Isolate the initialization of JavaRosa into one method, called first
-     * by the Collect Application.  Called subsequently whenever the Preferences
-     * dialogs are exited (to potentially update username and email fields).
-     */
-    public static synchronized void initializeJavaRosa(IPropertyManager mgr) {
-        if (!isJavaRosaInitialized) {
-            // Register prototypes for classes that FormDef uses
-            PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
-            PrototypeManager.registerPrototypes(CoreModelModule.classNames);
-            new XFormsModule().registerModule();
-
-            // When registering prototypes from Collect, a proguard exception also needs to be added
-            PrototypeManager.registerPrototype("org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction");
-            XFormParser.registerActionHandler(CollectSetGeopointActionHandler.ELEMENT_NAME, new CollectSetGeopointActionHandler());
-
-            isJavaRosaInitialized = true;
-        }
-
-        // needed to override rms property manager
-        org.javarosa.core.services.PropertyManager
-                .setPropertyManager(mgr);
     }
 
     private final File mediaFolder;
