@@ -82,7 +82,7 @@ public class ApplicationInitializer {
     }
 
     private void initializeJavaRosa() {
-        propertyManager.reload(context);
+        propertyManager.reload();
         org.javarosa.core.services.PropertyManager
                 .setPropertyManager(propertyManager);
 

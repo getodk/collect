@@ -41,8 +41,6 @@ import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
-import org.odk.collect.android.javarosawrapper.PropertyManagerJavaRosaInitializer;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
@@ -352,17 +350,12 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public PropertyManager providesPropertyManager(RxEventBus eventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
-        return new PropertyManager(eventBus, permissionUtils, deviceDetailsProvider);
+    public PropertyManager providesPropertyManager(Application application, RxEventBus eventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
+        return new PropertyManager(application, eventBus, permissionUtils, deviceDetailsProvider);
     }
 
     @Provides
-    public JavaRosaInitializer providesJavaRosaInitializer(Application application, PropertyManager propertyManager) {
-        return new PropertyManagerJavaRosaInitializer(application, propertyManager);
-    }
-
-    @Provides
-    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, JavaRosaInitializer javaRosaInitializer) {
+    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
@@ -372,8 +365,7 @@ public class AppDependencyModule {
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
                 adminDefaults,
-                javaRosaInitializer
-        );
+                propertyManager);
     }
 
     @Provides

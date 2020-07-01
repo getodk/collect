@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.logic;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
@@ -79,6 +80,8 @@ public class PropertyManager implements IPropertyManager {
     @Inject
     PermissionUtils permissionUtils;
 
+    private final Context context;
+
     public String getName() {
         return "Property Manager";
     }
@@ -94,17 +97,20 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager(Context context) {
+        this.context = context;
         Collect.getInstance().getComponent().inject(this);
-        reload(context);
+
+        reload();
     }
 
-    public PropertyManager(RxEventBus rxEventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
+    public PropertyManager(Application application, RxEventBus rxEventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
         this.eventBus = rxEventBus;
         this.permissionUtils = permissionUtils;
         this.deviceDetailsProvider = deviceDetailsProvider;
+        this.context = application;
     }
 
-    public PropertyManager reload(Context context) {
+    public PropertyManager reload() {
         try {
             // Device-defined properties
             IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);

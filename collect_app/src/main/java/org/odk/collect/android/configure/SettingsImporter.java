@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
+import org.odk.collect.android.logic.PropertyManager;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -23,16 +23,16 @@ public class SettingsImporter {
     private final SettingsValidator settingsValidator;
     private final Map<String, Object> generalDefaults;
     private final Map<String, Object> adminDefaults;
-    private final JavaRosaInitializer javaRosaInitializer;
+    private final PropertyManager propertyManager;
 
-    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, JavaRosaInitializer javaRosaInitializer) {
+    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, PropertyManager propertyManager) {
         this.generalSharedPrefs = generalSharedPrefs;
         this.adminSharedPrefs = adminSharedPrefs;
         this.preferenceMigrator = preferenceMigrator;
         this.settingsValidator = settingsValidator;
         this.generalDefaults = generalDefaults;
         this.adminDefaults = adminDefaults;
-        this.javaRosaInitializer = javaRosaInitializer;
+        this.propertyManager = propertyManager;
     }
 
     public boolean fromJSON(@NonNull String json) {
@@ -63,7 +63,7 @@ public class SettingsImporter {
         loadDefaults(generalSharedPrefs, generalDefaults);
         loadDefaults(adminSharedPrefs, adminDefaults);
 
-        javaRosaInitializer.initialize();
+        propertyManager.reload();
 
         return true;
     }

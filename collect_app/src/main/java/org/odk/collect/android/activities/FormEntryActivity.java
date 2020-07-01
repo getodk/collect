@@ -112,7 +112,6 @@ import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -120,6 +119,7 @@ import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -318,7 +318,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     StoragePathProvider storagePathProvider;
 
     @Inject
-    JavaRosaInitializer javaRosaInitializer;
+    PropertyManager propertyManager;
 
     @Inject
     WorkManager workManager;
@@ -2287,7 +2287,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
-                        javaRosaInitializer.initialize();
+                        propertyManager.reload();
                         loadForm();
                     }
 

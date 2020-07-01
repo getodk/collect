@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
+import org.odk.collect.android.logic.PropertyManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,15 +42,22 @@ public class SettingsImporterTest {
         put("key1", 5);
     }};
 
+    private Context context;
+    private PropertyManager propertyManager;
+
     @Before
     public void setup() {
-        generalPrefs = getApplicationContext().getSharedPreferences("test1", Context.MODE_PRIVATE);
-        adminPrefs = getApplicationContext().getSharedPreferences("test2", Context.MODE_PRIVATE);
+        context = getApplicationContext();
+
+        generalPrefs = context.getSharedPreferences("test1", Context.MODE_PRIVATE);
+        adminPrefs = context.getSharedPreferences("test2", Context.MODE_PRIVATE);
 
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, () -> { });
+        propertyManager = mock(PropertyManager.class);
+
+        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, propertyManager);
     }
 
     @Test
@@ -111,7 +118,7 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, propertyManager);
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
@@ -127,18 +134,23 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> { });
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, propertyManager);
         assertThat(importer.fromJSON(json.toString()), is(true));
     }
 
     @Test
     public void afterSettingsImportedAndMigrated_initializesJavaRosa() throws Exception {
         final String[] key1ValueWhenCalled = {null};
-        JavaRosaInitializer javaRosaInitializer = () -> {
-            key1ValueWhenCalled[0] = generalPrefs.getString("key1", null);
+        propertyManager = new PropertyManager(context) {
+
+            @Override
+            public PropertyManager reload() {
+                key1ValueWhenCalled[0] = generalPrefs.getString("key1", null);
+                return this;
+            }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, javaRosaInitializer);
+        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, propertyManager);
         assertThat(importer.fromJSON(emptySettings()), is(true));
         assertThat(key1ValueWhenCalled[0], is("default"));
     }

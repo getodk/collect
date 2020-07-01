@@ -22,8 +22,8 @@ import android.os.Bundle;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.listeners.OnBackPressedListener;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
     private OnBackPressedListener onBackPressedListener;
 
     @Inject
-    JavaRosaInitializer javaRosaInitializer;
+    PropertyManager propertyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        javaRosaInitializer.initialize();
+        propertyManager.reload();
     }
 
     // If the onBackPressedListener is set then onBackPressed is delegated to it.

@@ -133,7 +133,7 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
 
         @Override
         public CharSequence provideSummary(EditTextPreference preference) {
-            String value = propertyManager.reload(getActivity()).getSingularProperty(propertyKey);
+            String value = propertyManager.reload().getSingularProperty(propertyKey);
             if (!TextUtils.isEmpty(value)) {
                 return value;
             } else {

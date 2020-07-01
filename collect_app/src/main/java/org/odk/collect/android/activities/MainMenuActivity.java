@@ -40,12 +40,11 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.LegacySettingsFileReader;
+import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
@@ -139,9 +138,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     SettingsImporter settingsImporter;
-
-    @Inject
-    JavaRosaInitializer javaRosaInitializer;
 
     private MainMenuViewModel viewModel;
 
@@ -592,7 +588,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             if (settings != null) {
                 if (settingsImporter.fromJSON(settings)) {
                     ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                    javaRosaInitializer.initialize();
                     recreate();
                 } else {
                     ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);

@@ -23,7 +23,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.javarosawrapper.JavaRosaInitializer;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -44,7 +44,7 @@ public class ApplicationResetter {
     StoragePathProvider storagePathProvider;
 
     @Inject
-    JavaRosaInitializer javaRosaInitializer;
+    PropertyManager propertyManager;
 
     public ApplicationResetter() {
         // This should probably just take arguments in the constructor rather than use Dagger
@@ -105,7 +105,7 @@ public class ApplicationResetter {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
 
-        javaRosaInitializer.initialize();
+        propertyManager.reload();
     }
 
     private void resetInstances() {
