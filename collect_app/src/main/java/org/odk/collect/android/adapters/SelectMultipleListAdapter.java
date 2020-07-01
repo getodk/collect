@@ -34,7 +34,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.SelectWidget;
 
 import java.util.List;
@@ -86,7 +85,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     @Override
     CheckBox createButton(final int index, ViewGroup parent) {
-        AppCompatCheckBox checkBox = (AppCompatCheckBox) LayoutInflater.from(parent.getContext()).inflate(getButtonLayout(), null);
+        AppCompatCheckBox checkBox = (AppCompatCheckBox) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_multi_item, null);
         setUpButton(checkBox, index);
         checkCheckBoxIfNeeded(checkBox, index); // perform before setting onCheckedChangeListener to avoid redundant calls of its body
 
@@ -100,12 +99,6 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         });
 
         return checkBox;
-    }
-
-    protected int getButtonLayout() {
-        return WidgetAppearanceUtils.isFlexAppearance(prompt)
-                ? R.layout.select_multi_item_flex
-                : R.layout.select_multi_item;
     }
 
     private void checkCheckBoxIfNeeded(CheckBox checkBox, int index) {

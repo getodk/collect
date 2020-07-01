@@ -235,8 +235,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     abstract void onItemClick(Selection selection, View view);
 
-    abstract int getButtonLayout();
-
     abstract class ViewHolder extends RecyclerView.ViewHolder {
         AudioVideoImageTextLabel audioVideoImageTextLabel;
         FrameLayout view;
