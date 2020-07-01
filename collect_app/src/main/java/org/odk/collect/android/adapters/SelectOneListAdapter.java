@@ -94,9 +94,13 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
         void bind(final int index) {
             super.bind(index);
-            if (noButtonsMode && filteredItems.get(index).getValue().equals(selectedValue)) {
-                view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
-                selectedItem = view;
+            if (noButtonsMode) {
+                if (filteredItems.get(index).getValue().equals(selectedValue)) {
+                    view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
+                    selectedItem = view;
+                } else {
+                    view.setBackground(null);
+                }
             }
         }
     }
