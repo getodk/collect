@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Map;
 
-import timber.log.Timber;
-
 public class LegacySettingsFileReader {
 
     private final StoragePathProvider storagePathProvider;
@@ -50,48 +48,25 @@ public class LegacySettingsFileReader {
     }
 
     private String readJSONFile(File src) throws IOException {
-        BufferedReader br = null;
+        StringBuilder builder = new StringBuilder();
 
-        try {
-            String line = null;
-            StringBuilder builder = new StringBuilder();
-            br = new BufferedReader(new FileReader(src));
-
+        try (BufferedReader br = new BufferedReader(new FileReader(src))) {
+            String line;
             while ((line = br.readLine()) != null) {
                 builder.append(line);
             }
 
             return builder.toString();
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
         }
     }
 
     private Pair<Map<String, Object>, Map<String, Object>> readSettingsFile(File src) throws IOException, ClassNotFoundException {
         // this should probably be in a thread if it ever gets big
-        ObjectInputStream input = null;
-        try {
-            input = new ObjectInputStream(new FileInputStream(src));
-
-            // first object is preferences
+        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(src))) {
             Map<String, Object> generalEntries = (Map<String, Object>) input.readObject();
             Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
 
             return new Pair<>(generalEntries, adminEntries);
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
         }
     }
 
