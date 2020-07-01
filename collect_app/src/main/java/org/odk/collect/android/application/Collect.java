@@ -224,8 +224,12 @@ public class Collect extends Application {
     }
 
     private void initMapProviders() {
-        new com.google.android.gms.maps.MapView(this).onCreate(null);
-        MapboxUtils.initMapbox();
+        try {
+            new com.google.android.gms.maps.MapView(this).onCreate(null);
+            MapboxUtils.initMapbox();
+        } catch (Exception | Error ignore) {
+            // ignored
+        }
     }
 
     private void setupDagger() {
