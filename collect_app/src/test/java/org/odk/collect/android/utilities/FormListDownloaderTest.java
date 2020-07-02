@@ -8,9 +8,8 @@ import org.junit.runner.RunWith;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -28,7 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class ServerFormsDetailsFetcherTest {
+public class FormListDownloaderTest {
 
     private final OpenRosaXMLFetcher serverClient = mock(OpenRosaXMLFetcher.class);
 
@@ -44,7 +43,7 @@ public class ServerFormsDetailsFetcherTest {
         when(serverClient.getXML("http://example.com/formList"))
                 .thenReturn(new DocumentFetchResult(doc, true, "blah"));
 
-        ServerFormsDetailsFetcher downloader = new ServerFormsDetailsFetcher(
+        FormListDownloader downloader = new FormListDownloader(
                 RuntimeEnvironment.application,
                 serverClient,
                 new WebCredentialsUtils()
@@ -78,7 +77,7 @@ public class ServerFormsDetailsFetcherTest {
     public void removesTrailingSlashesFromUrl() {
         when(serverClient.getXML(any())).thenReturn(new DocumentFetchResult("blah", 200));
 
-        ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(
+        FormListDownloader serverFormsDetailsFetcher = new FormListDownloader(
                 RuntimeEnvironment.application,
                 serverClient,
                 new WebCredentialsUtils()

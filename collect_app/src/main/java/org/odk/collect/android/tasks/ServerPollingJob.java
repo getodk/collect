@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+
 import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
@@ -31,11 +32,11 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.NotificationUtils;
 
@@ -47,13 +48,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
-import static org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher.DL_AUTH_REQUIRED;
-import static org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher.DL_ERROR_MSG;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
 
 public class ServerPollingJob extends Job {
@@ -66,7 +67,7 @@ public class ServerPollingJob extends Job {
     public static final String TAG = "serverPollingJob";
 
     @Inject
-    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+    FormListDownloader formListDownloader;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
@@ -85,11 +86,11 @@ public class ServerPollingJob extends Job {
             return Result.FAILURE;
         }
 
-        HashMap<String, FormDetails> formList = serverFormsDetailsFetcher.downloadFormList(true);
+        HashMap<String, FormDetails> formList = formListDownloader.downloadFormList(null, null, null, true);
 
         if (!formList.containsKey(DL_ERROR_MSG)) {
             if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                formList = serverFormsDetailsFetcher.downloadFormList(true);
+                formList = formListDownloader.downloadFormList(null, null, null, true);
 
                 if (formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                     return Result.FAILURE;

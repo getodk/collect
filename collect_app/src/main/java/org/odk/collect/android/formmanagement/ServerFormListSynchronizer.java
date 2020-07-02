@@ -25,7 +25,7 @@ public class ServerFormListSynchronizer {
 
     public void synchronize() throws FormAPIError {
         ServerFormsDetailsFetcher listDownloader = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI);
-        List<FormDetails> formList = listDownloader.downloadFormList();
+        List<FormDetails> formList = listDownloader.fetchFormDetails();
 
         List<Form> formsOnDevice = formRepository.getAll();
 

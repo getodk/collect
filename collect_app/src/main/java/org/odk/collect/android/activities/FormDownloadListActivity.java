@@ -40,7 +40,6 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
@@ -54,6 +53,7 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -70,8 +70,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher.DL_AUTH_REQUIRED;
-import static org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher.DL_ERROR_MSG;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -124,7 +124,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     WebCredentialsUtils webCredentialsUtils;
 
     @Inject
-    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+    FormListDownloader formListDownloader;
 
     @Inject
     NetworkStateProvider connectivityProvider;
@@ -319,7 +319,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 downloadFormListTask = null;
             }
 
-            downloadFormListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
+            downloadFormListTask = new DownloadFormListTask(formListDownloader);
             downloadFormListTask.setDownloaderListener(this);
 
             if (viewModel.isDownloadOnlyMode()) {

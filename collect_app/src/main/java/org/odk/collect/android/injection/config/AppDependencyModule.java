@@ -14,14 +14,13 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.backgroundwork.CollectBackgroundWorkManager;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.FormsDaoFormRepository;
 import org.odk.collect.android.dao.FormsDaoMediaFileRepository;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
@@ -31,8 +30,8 @@ import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.api.FormAPI;
 import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
@@ -54,6 +53,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
+import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -135,11 +135,11 @@ public class AppDependencyModule {
     }
 
     @Provides
-    ServerFormsDetailsFetcher provideDownloadFormListDownloader(
+    FormListDownloader formListDownloader(
             Application application,
             OpenRosaXMLFetcher openRosaXMLFetcher,
             WebCredentialsUtils webCredentialsUtils) {
-        return new ServerFormsDetailsFetcher(
+        return new FormListDownloader(
                 application,
                 openRosaXMLFetcher,
                 webCredentialsUtils
