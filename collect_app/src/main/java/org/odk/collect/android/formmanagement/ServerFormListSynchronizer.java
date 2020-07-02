@@ -6,7 +6,6 @@ import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.api.FormAPI;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class ServerFormListSynchronizer {

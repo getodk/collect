@@ -22,9 +22,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -56,7 +54,6 @@ public class ServerFormListSynchronizerTest {
         );
 
         formDownloader = new RecordingMultiFormDownloader();
-
         synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader);
     }
 
@@ -87,7 +84,7 @@ public class ServerFormListSynchronizerTest {
                 .build());
 
         synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), contains("form-2"));
+        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
     }
 
     @Test
@@ -101,7 +98,7 @@ public class ServerFormListSynchronizerTest {
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(emptyList());
 
         synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), contains("form-2"));
+        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
     }
 
     @Test
@@ -118,7 +115,7 @@ public class ServerFormListSynchronizerTest {
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(oldMediaFile));
 
         synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), contains("form-2"));
+        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
     }
 
     @Test
@@ -131,7 +128,7 @@ public class ServerFormListSynchronizerTest {
                 .build());
 
         synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), empty());
+        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-2"));
     }
 
     @Test
@@ -148,7 +145,7 @@ public class ServerFormListSynchronizerTest {
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(mediaFile));
 
         synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), empty());
+        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1"));
     }
 
     private void writeToFile(File mediaFile, String blah) throws IOException {
