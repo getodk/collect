@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:462257085307:android:64acb5e3c9e68ab5173bde",
         "android_client_info": {
-          "package_name": "org.odk.collect.android"
+          "package_name": "org.odk.hedera.collect"
         }
       },
       "oauth_client": [

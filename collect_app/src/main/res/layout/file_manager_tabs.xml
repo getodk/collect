@@ -31,7 +31,7 @@ limitations under the License.
             android:layout_below="@id/appBarLayout"
             android:orientation="vertical">
 
-        <org.odk.collect.android.views.SlidingTabLayout
+        <odk.hedera.collect.views.SlidingTabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

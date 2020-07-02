@@ -9,7 +9,7 @@ the specific language governing permissions and limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.odk.collect.android"
+    package="org.odk.hedera.collect"
     tools:ignore="GoogleAppIndexingWarning">
 
     <uses-feature
@@ -71,7 +71,7 @@ the specific language governing permissions and limitations under the License.
         android:xlargeScreens="true" />
 
     <application
-        android:name=".application.Collect"
+        android:name="odk.hedera.collect.application.Collect"
         android:icon="@drawable/notes"
         android:installLocation="auto"
         android:label="@string/app_name"
@@ -90,59 +90,59 @@ the specific language governing permissions and limitations under the License.
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".activities.MainMenuActivity" />
+        <activity android:name="odk.hedera.collect.activities.MainMenuActivity" />
         <activity
-            android:name=".activities.ScannerWithFlashlightActivity"
+            android:name="odk.hedera.collect.activities.ScannerWithFlashlightActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".activities.FormEntryActivity"
+            android:name="odk.hedera.collect.activities.FormEntryActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.NotificationActivity"
+            android:name="odk.hedera.collect.activities.NotificationActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".activities.DrawActivity"
+            android:name="odk.hedera.collect.activities.DrawActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.GoogleDriveActivity"
+            android:name="odk.hedera.collect.activities.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activities.InstanceChooserList" />
-        <activity android:name=".activities.FormChooserListActivity" />
-        <activity android:name=".activities.FormDownloadListActivity" />
+        <activity android:name="odk.hedera.collect.activities.InstanceChooserList" />
+        <activity android:name="odk.hedera.collect.activities.FormChooserListActivity" />
+        <activity android:name="odk.hedera.collect.activities.FormDownloadListActivity" />
         <activity
-            android:name=".activities.FileManagerTabs"
+            android:name="odk.hedera.collect.activities.FileManagerTabs"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activities.GoogleSheetsUploaderActivity"
+            android:name="odk.hedera.collect.activities.GoogleSheetsUploaderActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activities.InstanceUploaderListActivity"
+            android:name="odk.hedera.collect.activities.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".activities.InstanceUploaderActivity" />
-        <activity android:name=".activities.AboutActivity" />
-        <activity android:name=".preferences.qr.QRCodeTabsActivity" />
-        <activity android:name=".preferences.PreferencesActivity" />
-        <activity android:name=".preferences.AdminPreferencesActivity" />
-        <activity android:name=".preferences.AndroidXPreferencesActivity" />
-        <activity android:name=".activities.FormHierarchyActivity" />
-        <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
-        <activity android:name=".activities.GeoPointActivity" />
-        <activity android:name=".activities.GeoPointMapActivity" />
-        <activity android:name=".activities.GeoPolyActivity" />
-        <activity android:name=".activities.FormMapActivity" />
-        <activity android:name=".activities.BearingActivity" />
+        <activity android:name="odk.hedera.collect.activities.InstanceUploaderActivity" />
+        <activity android:name="odk.hedera.collect.activities.AboutActivity" />
+        <activity android:name="odk.hedera.collect.preferences.qr.QRCodeTabsActivity" />
+        <activity android:name="odk.hedera.collect.preferences.PreferencesActivity" />
+        <activity android:name="odk.hedera.collect.preferences.AdminPreferencesActivity" />
+        <activity android:name="odk.hedera.collect.preferences.AndroidXPreferencesActivity" />
+        <activity android:name="odk.hedera.collect.activities.FormHierarchyActivity" />
+        <activity android:name="odk.hedera.collect.activities.ViewOnlyFormHierarchyActivity" />
+        <activity android:name="odk.hedera.collect.activities.GeoPointActivity" />
+        <activity android:name="odk.hedera.collect.activities.GeoPointMapActivity" />
+        <activity android:name="odk.hedera.collect.activities.GeoPolyActivity" />
+        <activity android:name="odk.hedera.collect.activities.FormMapActivity" />
+        <activity android:name="odk.hedera.collect.activities.BearingActivity" />
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="odk.hedera.collect.activities.SplashScreenActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".activities.CaptureSelfieActivity" />
-        <activity android:name=".activities.WebViewActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivity" />
+        <activity android:name="odk.hedera.collect.activities.CaptureSelfieActivity" />
+        <activity android:name="odk.hedera.collect.activities.WebViewActivity" />
+        <activity android:name="odk.hedera.collect.activities.CaptureSelfieVideoActivity" />
 
         <!-- Configure this key by setting GOOGLE_MAPS_API_KEY in collect_app/secrets.properties. -->
         <meta-data
@@ -172,17 +172,17 @@ the specific language governing permissions and limitations under the License.
          -->
 
         <provider
-            android:name=".provider.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:name="odk.hedera.collect.provider.FormsProvider"
+            android:authorities="odk.hedera.collect.provider.odk.forms"
             android:exported="true" />
         <provider
-            android:name=".provider.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:name="odk.hedera.collect.provider.InstanceProvider"
+            android:authorities="odk.hedera.collect.provider.odk.instances"
             android:exported="true" />
 
         <activity-alias
             android:name=".activities.FormEntryActivity"
-            android:targetActivity=".activities.FormEntryActivity"
+            android:targetActivity="odk.hedera.collect.activities.FormEntryActivity"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -197,7 +197,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.InstanceChooserList"
-            android:targetActivity=".activities.InstanceChooserList"
+            android:targetActivity="odk.hedera.collect.activities.InstanceChooserList"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -211,7 +211,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormChooserList"
-            android:targetActivity=".activities.FormChooserListActivity"
+            android:targetActivity="odk.hedera.collect.activities.FormChooserListActivity"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -226,7 +226,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormDownloadList"
-            android:targetActivity=".activities.FormDownloadListActivity">
+            android:targetActivity="odk.hedera.collect.activities.FormDownloadListActivity">
             <intent-filter>
                 <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -236,7 +236,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.InstanceUploaderList"
-            android:targetActivity=".activities.InstanceUploaderListActivity" >
+            android:targetActivity="odk.hedera.collect.activities.InstanceUploaderListActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -247,7 +247,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.InstanceUploaderActivity"
-            android:targetActivity=".activities.InstanceUploaderActivity">
+            android:targetActivity="odk.hedera.collect.activities.InstanceUploaderActivity">
             <intent-filter>
                 <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -257,7 +257,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.SplashScreenActivity"
-            android:targetActivity=".activities.SplashScreenActivity">
+            android:targetActivity="odk.hedera.collect.activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -268,7 +268,7 @@ the specific language governing permissions and limitations under the License.
 
         <!-- Enable Shortcuts for Command Actions -->
         <activity
-            android:name=".activities.AndroidShortcuts"
+            android:name="odk.hedera.collect.activities.AndroidShortcuts"
             android:label="ODK Form"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -279,7 +279,7 @@ the specific language governing permissions and limitations under the License.
         </activity>
 
         <service
-            android:name=".storage.migration.StorageMigrationService"
+            android:name="odk.hedera.collect.storage.migration.StorageMigrationService"
             android:exported="false" />
 
     </application>

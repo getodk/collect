@@ -6,7 +6,7 @@
     android:layout_marginTop="@dimen/margin_small"
     android:orientation="vertical">
 
-    <org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel
+    <odk.hedera.collect.formentry.questions.AudioVideoImageTextLabel
         android:id="@+id/question_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2017 University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+package odk.hedera.collect.activities;
+
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.widget.Toolbar;
+
+import org.odk.hedera.collect.R;
+import odk.hedera.collect.adapters.ViewPagerAdapter;
+import odk.hedera.collect.fragments.DataManagerList;
+import odk.hedera.collect.fragments.FormManagerList;
+import odk.hedera.collect.utilities.ThemeUtils;
+import odk.hedera.collect.views.SlidingTabLayout;
+
+import java.util.ArrayList;
+
+public class FileManagerTabs extends CollectAbstractActivity {
+
+    private final DataManagerList dataManagerList = DataManagerList.newInstance();
+    private final FormManagerList formManagerList = FormManagerList.newInstance();
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(getString(R.string.manage_files));
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.file_manager_tabs);
+        initToolbar();
+
+        String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
+        // Get the ViewPager and set its PagerAdapter so that it can display items
+        ViewPager viewPager = findViewById(R.id.pager);
+
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(dataManagerList);
+        fragments.add(formManagerList);
+
+        viewPager.setAdapter(new ViewPagerAdapter(
+                getSupportFragmentManager(), tabNames, fragments));
+
+        // Give the SlidingTabLayout the ViewPager
+        SlidingTabLayout slidingTabLayout = findViewById(R.id.tabs);
+        slidingTabLayout.setCustomTabColorizer(position -> new ThemeUtils(this).getColorSecondary());
+        // Attach the view pager to the tab strip
+        slidingTabLayout.setDistributeEvenly(true);
+        slidingTabLayout.setFontColor(android.R.color.white);
+        slidingTabLayout.setBackgroundColor(Color.DKGRAY);
+        slidingTabLayout.setViewPager(viewPager);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.notes);
+    }
+}

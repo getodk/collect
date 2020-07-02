@@ -1,0 +1,144 @@
+package odk.hedera.collect.preferences;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.inputmethod.EditorInfo;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+
+import org.jetbrains.annotations.NotNull;
+import org.odk.hedera.collect.R;
+import odk.hedera.collect.activities.CollectAbstractActivity;
+import odk.hedera.collect.injection.DaggerUtils;
+import odk.hedera.collect.listeners.PermissionListener;
+import odk.hedera.collect.logic.PropertyManager;
+import odk.hedera.collect.metadata.InstallIDProvider;
+import odk.hedera.collect.utilities.PermissionUtils;
+import odk.hedera.collect.utilities.ToastUtils;
+import odk.hedera.collect.utilities.Validator;
+
+import javax.inject.Inject;
+
+import static odk.hedera.collect.logic.PropertyManager.PROPMGR_DEVICE_ID;
+import static odk.hedera.collect.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
+import static odk.hedera.collect.logic.PropertyManager.PROPMGR_SIM_SERIAL;
+import static odk.hedera.collect.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
+import static odk.hedera.collect.preferences.GeneralKeys.KEY_METADATA_EMAIL;
+import static odk.hedera.collect.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static odk.hedera.collect.preferences.MetaKeys.KEY_INSTALL_ID;
+
+public class FormMetadataFragment extends PreferenceFragmentCompat {
+
+    @Inject
+    InstallIDProvider installIDProvider;
+
+    @Inject
+    PermissionUtils permissionUtils;
+
+    private Preference emailPreference;
+    private EditTextPreference phonePreference;
+    private Preference installIDPreference;
+    private Preference deviceIDPreference;
+    private Preference simSerialPrererence;
+    private Preference subscriberIDPreference;
+
+
+    @Override
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.form_metadata_preferences, rootKey);
+
+        emailPreference = findPreference(KEY_METADATA_EMAIL);
+        phonePreference = findPreference(KEY_METADATA_PHONENUMBER);
+        installIDPreference = findPreference(KEY_INSTALL_ID);
+        deviceIDPreference = findPreference(PROPMGR_DEVICE_ID);
+        simSerialPrererence = findPreference(PROPMGR_SIM_SERIAL);
+        subscriberIDPreference = findPreference(PROPMGR_SUBSCRIBER_ID);
+
+        FragmentActivity activity = getActivity();
+        if (activity instanceof CollectAbstractActivity) {
+            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        setupPrefs();
+
+        if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
+            setupPrefsWithPermissions();
+        } else if (savedInstanceState == null) {
+            permissionUtils.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
+                @Override
+                public void granted() {
+                    setupPrefsWithPermissions();
+                }
+
+                @Override
+                public void denied() {
+                }
+            });
+        }
+
+        FragmentActivity activity = getActivity();
+        if (activity instanceof CollectAbstractActivity) {
+            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
+        }
+    }
+
+    private void setupPrefs() {
+        emailPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+            String newValueString = newValue.toString();
+            if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
+                ToastUtils.showLongToast(R.string.invalid_email_address);
+                return false;
+            }
+
+            return true;
+        });
+
+        phonePreference.setOnBindEditTextListener(editText -> editText.setInputType(EditorInfo.TYPE_CLASS_PHONE));
+        installIDPreference.setSummaryProvider(preference -> installIDProvider.getInstallID());
+    }
+
+    private void setupPrefsWithPermissions() {
+        PropertyManager propertyManager = new PropertyManager(getActivity());
+        deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
+        simSerialPrererence.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SIM_SERIAL));
+        subscriberIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SUBSCRIBER_ID));
+        phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
+    }
+
+    private class PropertyManagerPropertySummaryProvider implements Preference.SummaryProvider<EditTextPreference> {
+
+        private final PropertyManager propertyManager;
+        private final String propertyKey;
+
+        PropertyManagerPropertySummaryProvider(PropertyManager propertyManager, String propertyName) {
+            this.propertyManager = propertyManager;
+            this.propertyKey = propertyName;
+        }
+
+        @Override
+        public CharSequence provideSummary(EditTextPreference preference) {
+            String value = propertyManager.reload(getActivity()).getSingularProperty(propertyKey);
+            if (!TextUtils.isEmpty(value)) {
+                return value;
+            } else {
+                return getString(R.string.preference_not_available);
+            }
+        }
+    }
+}

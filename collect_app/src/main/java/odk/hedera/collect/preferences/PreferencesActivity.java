@@ -1,0 +1,71 @@
+/*
+ * Copyright 2018 Nafundi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package odk.hedera.collect.preferences;
+
+import android.app.Fragment;
+import android.os.Bundle;
+
+import org.odk.hedera.collect.R;
+import odk.hedera.collect.activities.CollectAbstractActivity;
+import odk.hedera.collect.application.Collect;
+import odk.hedera.collect.listeners.OnBackPressedListener;
+import odk.hedera.collect.utilities.ThemeUtils;
+
+public class PreferencesActivity extends CollectAbstractActivity {
+
+    public static final String TAG = "GeneralPreferencesFragment";
+    public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
+
+    private OnBackPressedListener onBackPressedListener;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_preferences_layout);
+        setTheme(new ThemeUtils(this).getSettingsTheme());
+
+        setTitle(R.string.general_preferences);
+        if (savedInstanceState == null) {
+            boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
+            Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.preferences_fragment_container, fragment, TAG)
+                    .commit();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Collect.getInstance().initializeJavaRosa();
+    }
+
+    // If the onBackPressedListener is set then onBackPressed is delegated to it.
+    @Override
+    public void onBackPressed() {
+        if (onBackPressedListener != null) {
+            onBackPressedListener.doBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+    }
+}

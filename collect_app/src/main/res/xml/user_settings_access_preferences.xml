@@ -7,7 +7,7 @@
         <CheckBoxPreference
             android:key="change_server"
             android:title="@string/server" />
-        <!--<org.odk.collect.android.preferences.ExtendedCheckboxPreference-->
+        <!--<odk.hedera.collect.preferences.ExtendedCheckboxPreference-->
             <!--android:key="change_submission_transport"-->
             <!--android:title="@string/submission_transport_admin_setting"-->
             <!--android:dependency="change_server"-->

@@ -18,4 +18,4 @@ limitations under the License.
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000"
-    tools:context=".activities.CaptureSelfieVideoActivity" />
+    tools:context="odk.hedera.collect.activities.CaptureSelfieVideoActivity" />
