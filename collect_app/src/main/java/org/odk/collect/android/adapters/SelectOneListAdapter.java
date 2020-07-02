@@ -34,6 +34,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.widgets.AbstractSelectOneWidget;
 
 import java.util.List;
@@ -43,25 +44,21 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     private String selectedValue;
     private final int playColor;
-    private final Boolean autoAdvance;
     private RadioButton selectedRadioButton;
     private View selectedItem;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context, Boolean autoAdvance) {
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
         super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedValue = selectedValue;
         this.playColor = playColor;
-        this.autoAdvance = autoAdvance;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (noButtonsMode) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null));
-        } else {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.quick_select_layout, null));
-        }
+        return new ViewHolder(noButtonsMode
+                ? new FrameLayout(parent.getContext())
+                : new AudioVideoImageTextLabel(parent.getContext()));
     }
 
     @Override
@@ -89,18 +86,21 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             if (noButtonsMode) {
                 view = (FrameLayout) v;
             } else {
-                autoAdvanceIcon = v.findViewById(R.id.auto_advance_icon);
-                autoAdvanceIcon.setVisibility(autoAdvance ? View.VISIBLE : View.GONE);
-                audioVideoImageTextLabel = v.findViewById(R.id.mediaLayout);
+                audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
+                adjustAudioVideoImageTextLabelParams();
             }
         }
 
         void bind(final int index) {
             super.bind(index);
-            if (noButtonsMode && filteredItems.get(index).getValue().equals(selectedValue)) {
-                view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
-                selectedItem = view;
+            if (noButtonsMode) {
+                if (filteredItems.get(index).getValue().equals(selectedValue)) {
+                    view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
+                    selectedItem = view;
+                } else {
+                    view.setBackground(null);
+                }
             }
         }
     }

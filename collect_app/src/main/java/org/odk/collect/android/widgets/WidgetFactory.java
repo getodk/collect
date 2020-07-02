@@ -136,11 +136,7 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N) && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
-                        || appearance.startsWith(WidgetAppearanceUtils.QUICKCOMPACT)
-                        || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK))) {
-                    questionWidget = new GridWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
-                } else if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
+                if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
                     questionWidget = new SelectOneAutocompleteWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
@@ -162,11 +158,7 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (!appearance.startsWith(WidgetAppearanceUtils.COMPACT_N)
-                        && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
-                            || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK))) {
-                    questionWidget = new GridMultiWidget(context, questionDetails);
-                } else if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
+                if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SpinnerMultiWidget(context, questionDetails);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, false);
