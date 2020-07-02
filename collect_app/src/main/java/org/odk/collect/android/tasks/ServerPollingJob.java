@@ -36,7 +36,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
@@ -105,12 +105,12 @@ public class ServerPollingJob extends Job {
 
             if (!newDetectedForms.isEmpty()) {
                 if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
-                    final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms, null);
+                    final HashMap<FormDetails, String> result = new MultiFormDownloader().downloadForms(newDetectedForms, null);
                     informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
                 } else {
                     for (FormDetails formDetails : newDetectedForms) {
                         String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
-                        String formVersionHash = FormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
+                        String formVersionHash = MultiFormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
                         if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
                             updateLastDetectedFormVersionHash(formDetails.getFormId(), formVersionHash);
                         } else {

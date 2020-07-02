@@ -19,7 +19,8 @@ import android.os.AsyncTask;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -48,8 +49,8 @@ public class DownloadFormsTask extends
 
     @Override
     protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
-        FormDownloader formDownloader = new FormDownloader();
-        return formDownloader.downloadForms(values[0], this);
+        MultiFormDownloader multiFormDownloader = new MultiFormDownloader();
+        return multiFormDownloader.downloadForms(values[0], this);
     }
 
     @Override

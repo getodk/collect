@@ -54,7 +54,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
@@ -147,8 +147,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    FormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
-        return new FormDownloader(formsDao, openRosaXMLFetcher);
+    MultiFormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
+        return new MultiFormDownloader(formsDao, openRosaXMLFetcher);
     }
 
     @Provides

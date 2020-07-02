@@ -37,7 +37,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class FormDownloaderTest {
+public class MultiFormDownloaderTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
@@ -89,11 +89,11 @@ public class FormDownloaderTest {
         out.write(basicNoMedia);
         out.close();
 
-        FormDownloader downloader = spy(new FormDownloader());
+        MultiFormDownloader downloader = spy(new MultiFormDownloader());
         FormDetails formDetails = new FormDetails("No media", "https://testserver/no-media.xml",
                 null, "basic", "2019121201",
                 "hash", null, false, false);
-        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
@@ -147,11 +147,11 @@ public class FormDownloaderTest {
         out.write(basicMedia);
         out.close();
 
-        FormDownloader downloader = spy(new FormDownloader());
+        MultiFormDownloader downloader = spy(new MultiFormDownloader());
         FormDetails formDetails = new FormDetails("Media", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "media", "2019121201",
                 "hash", "manifestHash", false, false);
-        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
         doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
         doReturn(true).when(downloader).installEverything(any(), any(), any());
@@ -205,11 +205,11 @@ public class FormDownloaderTest {
         when(openRosaXMLFetcher.getFile("https://testserver/external-data.xml",
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
-        FormDownloader downloader = spy(new FormDownloader());
+        MultiFormDownloader downloader = spy(new MultiFormDownloader());
         FormDetails test1 = new FormDetails("basic-external-xml-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-xml-instance", "20200101",
                 "hash", "manifestHash", false, false);
-        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
@@ -256,11 +256,11 @@ public class FormDownloaderTest {
         when(openRosaXMLFetcher.getFile("https://testserver/external-data.csv",
                 null)).thenReturn(buildCsvExternalInstanceFetchResult());
 
-        FormDownloader downloader = spy(new FormDownloader());
+        MultiFormDownloader downloader = spy(new MultiFormDownloader());
         FormDetails test1 = new FormDetails("basic-external-csv-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-csv-instance", "20200101",
                 "hash", "manifestHash", false, false);
-        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
@@ -304,11 +304,11 @@ public class FormDownloaderTest {
         out.write(basicLastSaved);
         out.close();
 
-        FormDownloader downloader = spy(new FormDownloader());
+        MultiFormDownloader downloader = spy(new MultiFormDownloader());
         FormDetails test1 = new FormDetails("Last Saved", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "basic-last-saved", "20200101",
                 "hash", "manifestHash", false, false);
-        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
         doReturn(true).when(downloader).installEverything(any(), any(), any());
@@ -370,11 +370,11 @@ public class FormDownloaderTest {
         when(openRosaXMLFetcher.getFile("https://testserver/last-saved.xml",
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
-        FormDownloader downloader = spy(new FormDownloader());
+        MultiFormDownloader downloader = spy(new MultiFormDownloader());
         FormDetails formDetails = new FormDetails("last-saved-attached", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "last-saved-attached", "20200101",
                 "hash", "manifestHash", false, false);
-        FormDownloader.FileResult result = new FormDownloader.FileResult(formXml, true);
+        MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
 
         List<FormDetails> forms = new ArrayList<>();

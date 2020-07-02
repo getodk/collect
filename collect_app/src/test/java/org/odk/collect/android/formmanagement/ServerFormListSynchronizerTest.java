@@ -5,11 +5,11 @@ import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.api.FormAPI;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
-import org.odk.collect.android.utilities.FormDownloader;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -22,14 +22,12 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.logic.FormDetails.toFormDetails;
 import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
@@ -41,7 +39,7 @@ public class ServerFormListSynchronizerTest {
     );
 
     private ServerFormListSynchronizer synchronizer;
-    private FormDownloader formDownloader;
+    private RecordingMultiFormDownloader formDownloader;
     private FormRepository formRepository;
     private MediaFileRepository mediaFileRepository;
 
@@ -54,10 +52,10 @@ public class ServerFormListSynchronizerTest {
         when(formAPI.fetchFormList()).thenReturn(formList);
 
         when(formAPI.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(
-                new MediaFile("blah.txt", getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file")))
+                new MediaFile("blah.txt", "md5:" + getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file")))
         );
 
-        formDownloader = mock(FormDownloader.class);
+        formDownloader = new RecordingMultiFormDownloader();
 
         synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader);
     }
@@ -65,8 +63,7 @@ public class ServerFormListSynchronizerTest {
     @Test
     public void whenNoFormsExist_downloadsAndSavesAllFormsInList() {
         synchronizer.synchronize();
-        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(0)))), any());
-        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
+        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
     }
 
     @Test
@@ -90,7 +87,7 @@ public class ServerFormListSynchronizerTest {
                 .build());
 
         synchronizer.synchronize();
-        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
+        assertThat(formDownloader.getDownloadedForms(), contains("form-2"));
     }
 
     @Test
@@ -104,7 +101,7 @@ public class ServerFormListSynchronizerTest {
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(emptyList());
 
         synchronizer.synchronize();
-        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
+        assertThat(formDownloader.getDownloadedForms(), contains("form-2"));
     }
 
     @Test
@@ -121,7 +118,7 @@ public class ServerFormListSynchronizerTest {
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(oldMediaFile));
 
         synchronizer.synchronize();
-        verify(formDownloader).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
+        assertThat(formDownloader.getDownloadedForms(), contains("form-2"));
     }
 
     @Test
@@ -134,7 +131,7 @@ public class ServerFormListSynchronizerTest {
                 .build());
 
         synchronizer.synchronize();
-        verify(formDownloader, never()).downloadForms(eq(asList(toFormDetails(formList.get(0)))), any());
+        assertThat(formDownloader.getDownloadedForms(), empty());
     }
 
     @Test
@@ -151,7 +148,7 @@ public class ServerFormListSynchronizerTest {
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(mediaFile));
 
         synchronizer.synchronize();
-        verify(formDownloader, never()).downloadForms(eq(asList(toFormDetails(formList.get(1)))), any());
+        assertThat(formDownloader.getDownloadedForms(), empty());
     }
 
     private void writeToFile(File mediaFile, String blah) throws IOException {
@@ -182,6 +179,20 @@ public class ServerFormListSynchronizerTest {
         @Override
         public void delete(Long id) {
             forms.removeIf(form -> form.getId().equals(id));
+        }
+    }
+
+    private static class RecordingMultiFormDownloader implements FormDownloader {
+
+        private final List<String> formsDownloaded = new ArrayList<>();
+
+        @Override
+        public void downloadForm(FormDetails form) {
+            formsDownloaded.add(form.getFormId());
+        }
+
+        public List<String> getDownloadedForms() {
+            return formsDownloaded;
         }
     }
 }

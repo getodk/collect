@@ -27,6 +27,7 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormDetails;
@@ -44,6 +45,7 @@ import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +58,7 @@ import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 
-public class FormDownloader {
+public class MultiFormDownloader implements FormDownloader {
 
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
@@ -67,16 +69,16 @@ public class FormDownloader {
     @Inject
     OpenRosaXMLFetcher openRosaXMLFetcher;
 
-    public FormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
+    public MultiFormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
         this.formsDao = formsDao;
         this.openRosaXMLFetcher = openRosaXMLFetcher;
     }
 
     /**
-     * Use {@link #FormDownloader(FormsDao, OpenRosaXMLFetcher)} instead
+     * Use {@link #MultiFormDownloader(FormsDao, OpenRosaXMLFetcher)} instead
      */
     @Deprecated
-    public FormDownloader() {
+    public MultiFormDownloader() {
         Collect.getInstance().getComponent().inject(this);
     }
 
@@ -99,6 +101,11 @@ public class FormDownloader {
             super("Task was cancelled");
             this.file = null;
         }
+    }
+
+    @Override
+    public void downloadForm(FormDetails form) {
+        downloadForms(Collections.singletonList(form), null);
     }
 
     public HashMap<FormDetails, String> downloadForms(List<FormDetails> toDownload, FormDownloaderListener stateListener) {

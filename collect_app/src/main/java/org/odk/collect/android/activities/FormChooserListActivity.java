@@ -47,7 +47,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 
@@ -78,7 +78,7 @@ public class FormChooserListActivity extends FormListActivity implements
     MediaFileRepository mediaFileRepository;
 
     @Inject
-    FormDownloader formDownloader;
+    MultiFormDownloader multiFormDownloader;
 
     @Inject
     FormAPI formAPI;
@@ -135,7 +135,7 @@ public class FormChooserListActivity extends FormListActivity implements
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader).synchronize();
+                        new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, multiFormDownloader).synchronize();
                         return null;
                     }
 

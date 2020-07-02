@@ -26,6 +26,8 @@ import androidx.annotation.Nullable;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDaoFormRepository;
 import org.odk.collect.android.dao.FormsDaoMediaFileRepository;
+import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.openrosa.api.FormAPI;
@@ -36,7 +38,7 @@ import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
@@ -51,11 +53,13 @@ public class FormListDownloader {
     public static final String DL_ERROR_MSG = "dlerrormessage";
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
 
-    private final WebCredentialsUtils webCredentialsUtils;
-    private final OpenRosaXMLFetcher openRosaXMLFetcher;
-    private final Application application;
-    private final FormsDaoFormRepository formRepository;
-    private final FormsDaoMediaFileRepository mediaFileRepository;
+    private final FormRepository formRepository;
+    private final MediaFileRepository mediaFileRepository;
+
+    private WebCredentialsUtils webCredentialsUtils;
+    private OpenRosaXMLFetcher openRosaXMLFetcher;
+    private Application application;
+    private FormAPI formAPI;
 
     public FormListDownloader(
             Application application,
@@ -67,6 +71,18 @@ public class FormListDownloader {
 
         formRepository = new FormsDaoFormRepository();
         mediaFileRepository = new FormsDaoMediaFileRepository();
+    }
+
+    public FormListDownloader(FormRepository formRepository,
+                              MediaFileRepository mediaFileRepository,
+                              FormAPI formAPI) {
+        this.formRepository = formRepository;
+        this.mediaFileRepository = mediaFileRepository;
+        this.formAPI = formAPI;
+    }
+
+    public HashMap<String, FormDetails> downloadFormList() {
+        return downloadFormListFromAPI(true, formAPI);
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
@@ -89,10 +105,6 @@ public class FormListDownloader {
         String formListPath = application.getString(R.string.default_odk_formlist);
         String downloadPath = (url != null) ? formListPath : settings.getString(GeneralKeys.KEY_FORMLIST_URL, formListPath);
 
-        // We populate this with available forms from the specified server.
-        // <formname, details>
-        HashMap<String, FormDetails> formList = new HashMap<>();
-
         if (url != null) {
             String host = Uri.parse(url).getHost();
 
@@ -106,6 +118,15 @@ public class FormListDownloader {
         }
 
         OpenRosaFormAPI formAPI = new OpenRosaFormAPI(openRosaXMLFetcher, downloadListUrl, downloadPath);
+        HashMap<String, FormDetails> result = downloadFormListFromAPI(alwaysCheckMediaFiles, formAPI);
+        clearTemporaryCredentials(url);
+        return result;
+    }
+
+    private HashMap<String, FormDetails> downloadFormListFromAPI(boolean alwaysCheckMediaFiles, FormAPI formAPI) {
+        // We populate this with available forms from the specified server.
+        // <formname, details>
+        HashMap<String, FormDetails> formList = new HashMap<>();
 
         try {
             List<FormListItem> formListItems = formAPI.fetchFormList();
@@ -115,7 +136,7 @@ public class FormListDownloader {
                 ManifestFile manifestFile = null;
 
                 if (isThisFormAlreadyDownloaded(listItem.getFormID())) {
-                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(FormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
+                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
                     if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && listItem.getManifestURL() != null) {
                         manifestFile = getManifestFile(formAPI, listItem.getManifestURL());
                         if (manifestFile != null) {
@@ -154,7 +175,6 @@ public class FormListDownloader {
             }
         }
 
-        clearTemporaryCredentials(url);
         return formList;
     }
 
@@ -195,6 +215,7 @@ public class FormListDownloader {
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
         List<File> localMediaFiles = mediaFileRepository.getAll(formId, formVersion);
+
         if (localMediaFiles != null) {
             for (MediaFile newMediaFile : newMediaFiles) {
                 if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {

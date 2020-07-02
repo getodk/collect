@@ -3,23 +3,11 @@ package org.odk.collect.android.formmanagement;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.FormAPIError;
-import org.odk.collect.android.openrosa.api.FormListItem;
-import org.odk.collect.android.openrosa.api.ManifestFile;
-import org.odk.collect.android.openrosa.api.MediaFile;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormDownloader;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import timber.log.Timber;
-
-import static java.util.Arrays.asList;
-import static org.odk.collect.android.logic.FormDetails.toFormDetails;
 
 public class ServerFormListSynchronizer {
 
@@ -36,51 +24,23 @@ public class ServerFormListSynchronizer {
     }
 
     public void synchronize() {
-        try {
-            List<FormListItem> formsOnServer = formAPI.fetchFormList();
-            List<Form> formsOnDevice = formRepository.getAll();
+        FormListDownloader listDownloader = new FormListDownloader(formRepository, mediaFileRepository, formAPI);
+        HashMap<String, FormDetails> formList = listDownloader.downloadFormList();
 
-            deleteFormsNotServer(formsOnServer, formsOnDevice);
-            downloadNewAndUpdatedForms(formsOnServer, formsOnDevice);
-        } catch (FormAPIError error) {
-            Timber.e(error);
-        }
-    }
+        List<Form> formsOnDevice = formRepository.getAll();
 
-    private void deleteFormsNotServer(List<FormListItem> formList, List<Form> formsOnDevice) {
         formsOnDevice.stream().forEach(form -> {
-            if (formList.stream().noneMatch(f -> form.getJrFormId().equals(f.getFormID()))) {
+            if (formList.values().stream().noneMatch(f -> form.getJrFormId().equals(f.getFormId()))) {
                 formRepository.delete(form.getId());
             }
         });
-    }
 
-    private void downloadNewAndUpdatedForms(List<FormListItem> formsOnServer, List<Form> formsOnDevice) throws FormAPIError {
-        for (FormListItem formOnServer : formsOnServer) {
-            Optional<Form> formOnDevice = formsOnDevice.stream().filter(f -> f.getJrFormId().equals(formOnServer.getFormID())).findFirst();
+        for (FormDetails form : formList.values()) {
+            boolean onDevice = formsOnDevice.stream().anyMatch(f -> f.getJrFormId().equals(form.getFormId()));
 
-            if (!formOnDevice.isPresent() || !formOnDevice.get().getMD5Hash().equals(formOnServer.getHashWithPrefix().split(":")[1])) {
-                formDownloader.downloadForms(asList(toFormDetails(formOnServer, null, false, false)), null);
-            } else if (formOnServer.getManifestURL() != null) {
-                ManifestFile serverManifest = formAPI.fetchManifest(formOnServer.getManifestURL());
-
-                if (isManifestDifferent(formOnDevice.get(), serverManifest)) {
-                    formDownloader.downloadForms(asList(toFormDetails(formOnServer, null, false, false)), null);
-                }
+            if (!onDevice || form.isNewerFormVersionAvailable() || form.areNewerMediaFilesAvailable()) {
+                formDownloader.downloadForm(form);
             }
         }
-    }
-
-    private boolean isManifestDifferent(Form formOnDevice, ManifestFile serverManifest) {
-        List<File> mediaFilesOnDevice = mediaFileRepository.getAll(formOnDevice.getJrFormId(), formOnDevice.getJrVersion());
-        List<String> deviceHashes = mediaFilesOnDevice.stream().map(FileUtils::getMd5Hash).collect(Collectors.toList());
-
-        for (MediaFile mediaFile : serverManifest.getMediaFiles()) {
-            if (!deviceHashes.contains(mediaFile.getHash())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
