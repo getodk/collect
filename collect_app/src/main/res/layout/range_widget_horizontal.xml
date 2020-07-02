@@ -18,8 +18,10 @@ limitations under the License.
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp">
+    android:paddingTop="@dimen/margin_large"
+    android:paddingBottom="@dimen/margin_large"
+    android:paddingStart="@dimen/margin_standard"
+    android:paddingEnd="@dimen/margin_standard">
 
     <TextView
         android:id="@+id/current_value"
