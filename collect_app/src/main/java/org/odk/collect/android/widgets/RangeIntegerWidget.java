@@ -19,14 +19,11 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.material.slider.Slider;
 
@@ -36,47 +33,61 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
+import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.math.BigDecimal;
-
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
 @SuppressLint("ViewConstructor")
 public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener, Slider.OnSliderTouchListener {
 
     private static final String VERTICAL_APPEARANCE = "vertical";
 
-    private RangeWidgetHorizontalBinding binding;
+    private Slider slider;
+    private TextView currentValue;
+    private TextView minValue;
+    private TextView maxValue;
 
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
     private BigDecimal rangeStep;
     private BigDecimal actualValue;
 
-    @Nullable
-    public
-    TextView currentValue;
-
-    public Slider slider;
-    private LinearLayout view;
-
     private boolean suppressFlingGesture;
 
     public RangeIntegerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        setUpWidgetParameters();
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = RangeWidgetHorizontalBinding.inflate(((Activity) context).getLayoutInflater());
-        View answerView = binding.getRoot();
+        String appearance = prompt.getQuestion().getAppearanceAttr();
 
+        View answerView;
+        if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
+            RangeWidgetVerticalBinding rangeWidgetVerticalBinding = RangeWidgetVerticalBinding
+                    .inflate(((Activity) context).getLayoutInflater());
+            answerView = rangeWidgetVerticalBinding.getRoot();
+
+            slider = rangeWidgetVerticalBinding.seekBar;
+            currentValue = rangeWidgetVerticalBinding.currentValue;
+            minValue = rangeWidgetVerticalBinding.minValue;
+            maxValue = rangeWidgetVerticalBinding.maxValue;
+        } else {
+            RangeWidgetHorizontalBinding rangeWidgetHorizontalBinding = RangeWidgetHorizontalBinding
+                    .inflate(((Activity) context).getLayoutInflater());
+            answerView = rangeWidgetHorizontalBinding.getRoot();
+
+            slider = rangeWidgetHorizontalBinding.seekBar;
+            currentValue = rangeWidgetHorizontalBinding.currentValue;
+            minValue = rangeWidgetHorizontalBinding.minValue;
+            maxValue = rangeWidgetHorizontalBinding.maxValue;
+        }
+
+        setUpWidgetParameters();
         if (prompt.isReadOnly()) {
-            binding.seekBar.setEnabled(false);
+            slider.setEnabled(false);
         }
 
         if (isWidgetValid()) {
@@ -85,11 +96,9 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
             } else {
                 setUpNullValue();
             }
-
             setUpActualValueLabel();
             setUpSeekBar();
         }
-
         return answerView;
     }
 
@@ -109,15 +118,13 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     public void clearAnswer() {
-
+        setUpNullValue();
+        widgetValueChanged();
     }
 
     private void setUpActualValueLabel() {
         String value = actualValue != null ? String.valueOf(actualValue.intValue()) : "";
-
-        if (currentValue != null) {
-            currentValue.setText(value);
-        }
+        currentValue.setText(value);
     }
 
     private void setUpNullValue() {
@@ -132,6 +139,9 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs();
+
+        minValue.setText(String.valueOf(rangeStart));
+        maxValue.setText(String.valueOf(rangeEnd));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -139,8 +149,9 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
         slider.setValueFrom(rangeStart.floatValue());
         slider.setValueTo(rangeEnd.floatValue());
         slider.setStepSize(rangeStep.intValue());
-        slider.setValue(actualValue == null ? rangeStart.floatValue(): actualValue.floatValue());
+        slider.setValue(actualValue == null ? rangeStart.floatValue() : actualValue.floatValue());
         slider.addOnChangeListener(this);
+        slider.addOnSliderTouchListener(this);
 
         slider.setOnTouchListener((v, event) -> {
             int action = event.getAction();

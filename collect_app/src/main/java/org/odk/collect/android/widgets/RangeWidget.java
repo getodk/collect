@@ -50,7 +50,6 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 public abstract class RangeWidget extends QuestionWidget implements ButtonClickListener, Slider.OnChangeListener, Slider.OnSliderTouchListener {
 
     private static final String VERTICAL_APPEARANCE = "vertical";
-    private static final String NO_TICKS_APPEARANCE = "no-ticks";
     private static final String PICKER_APPEARANCE = "picker";
 
     protected BigDecimal rangeStart;
@@ -169,7 +168,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
         slider.setValueFrom(rangeStart.floatValue());
         slider.setValueTo(rangeEnd.floatValue());
         slider.setStepSize(rangeStep.intValue());
-        slider.setValue(actualValue == null ? rangeStart.floatValue(): actualValue.floatValue());
+        slider.setValue(actualValue == null ? rangeStart.floatValue() : actualValue.floatValue());
         slider.addOnChangeListener(this);
 
         slider.setOnTouchListener((v, event) -> {
