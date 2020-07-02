@@ -23,6 +23,6 @@
         android:paddingLeft="@dimen/margin_standard"
         android:paddingStart="@dimen/margin_standard"
         android:contentDescription="@string/select_answer"
-        app:srcCompat="@drawable/expander_ic_right"/>
+        />
 
 </LinearLayout>
