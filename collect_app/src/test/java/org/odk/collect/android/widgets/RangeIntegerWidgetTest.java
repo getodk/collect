@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets;
 
+import android.view.View;
+
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -18,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -53,13 +56,15 @@ public class RangeIntegerWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_sliderIsSetOnStartingIndex() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        assertThat(widget.slider.getValue(), equalTo(1.0F));
+        assertThat(widget.getSlider().getValue(), equalTo(1.0F));
+        assertThat(widget.getCurrentValue().getText(), equalTo(""));
     }
 
     @Test
     public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.slider.getValue(), equalTo(4.0F));
+        assertThat(widget.getSlider().getValue(), equalTo(4.0F));
+        assertThat(widget.getCurrentValue().getText(), equalTo("4"));
     }
 
     @Test
@@ -68,7 +73,7 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         String toastText = ShadowToast.getTextOfLatestToast();
 
-        assertThat(widget.slider.isEnabled(), equalTo(false));
+        assertThat(widget.getSlider().isEnabled(), equalTo(false));
         assertThat(toastText, equalTo(widget.getContext().getString(R.string.invalid_range_widget)));
     }
 
@@ -78,7 +83,7 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         String toastText = ShadowToast.getTextOfLatestToast();
 
-        assertThat(widget.slider.isEnabled(), equalTo(false));
+        assertThat(widget.getSlider().isEnabled(), equalTo(false));
         assertThat(toastText, equalTo(widget.getContext().getString(R.string.invalid_range_widget)));
     }
 
@@ -86,26 +91,61 @@ public class RangeIntegerWidgetTest {
     public void sliderShouldShowCorrectAppearance() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
 
-        assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
-        assertThat(widget.slider.getValueTo(), equalTo(10.0F));
-        assertThat(widget.slider.getStepSize(), equalTo(1.0F));
+        assertThat(widget.getMinValue().getText(), equalTo("1"));
+        assertThat(widget.getMaxValue().getText(), equalTo("10"));
+
+        assertThat(widget.getSlider().getValueFrom(), equalTo(1.0F));
+        assertThat(widget.getSlider().getValueTo(), equalTo(10.0F));
+        assertThat(widget.getSlider().getStepSize(), equalTo(1.0F));
+    }
+
+
+    @Test
+    public void clearAnswer_clearsWidgetAnswer() {
+        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
+        widget.clearAnswer();
+
+        assertThat(widget.getAnswer(), nullValue());
+        assertThat(widget.getCurrentValue().getText(), equalTo(""));
+        assertThat(widget.getSlider().getValue(), equalTo(1.0F));
     }
 
     @Test
-    public void changingSliderValue_shouldUpdateAnswer() {
+    public void clearAnswer_callsValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        widget.slider.setValue(4.0F);
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+
+        widget.clearAnswer();
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void changingSliderValue_updatesAnswer() {
+        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        widget.getSlider().setValue(4.0F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(4));
+        assertThat(widget.getCurrentValue().getText(), equalTo("4"));
     }
 
     @Test
     public void changingSliderValue_callsValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.slider.setValue(4.0F);
+        widget.getSlider().setValue(4.0F);
 
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingSliderForLong_doesNotCallLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+
+        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        widget.setOnLongClickListener(listener);
+        widget.getSlider().performLongClick();
+
+        verify(listener, never()).onLongClick(widget.getSlider());
     }
 
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {
