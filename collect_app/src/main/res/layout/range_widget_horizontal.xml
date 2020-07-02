@@ -39,9 +39,9 @@ limitations under the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:thumbColor="?colorSecondary"
-            app:tickColor="#696969"
-            app:haloColor="#E2E2E2"
-            app:trackColorInactive="#E2E2E2"
+            app:tickColor="?colorOnBackground"
+            app:haloColor="?dividerColor"
+            app:trackColorInactive="?dividerColor"
             app:trackColorActive="?colorSecondary" />
 
     </FrameLayout>
