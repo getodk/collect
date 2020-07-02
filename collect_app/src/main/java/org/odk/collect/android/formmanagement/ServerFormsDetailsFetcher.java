@@ -48,14 +48,10 @@ public class ServerFormsDetailsFetcher {
     }
 
     public List<FormDetails> fetchFormDetails() throws FormAPIError {
-        return fetchFormDetails(true, formAPI);
+        return fetchFormDetails(true);
     }
 
-    public List<FormDetails> fetchFormDetails(boolean alwaysCheckMediaFiles) throws FormAPIError {
-        return fetchFormDetails(alwaysCheckMediaFiles, formAPI);
-    }
-
-    private List<FormDetails> fetchFormDetails(boolean alwaysCheckMediaFiles, FormAPI formAPI) throws FormAPIError {
+    public List<FormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormAPIError {
         List<FormListItem> formListItems = formAPI.fetchFormList();
         List<FormDetails> formDetailsList = new ArrayList<>();
 
@@ -66,7 +62,7 @@ public class ServerFormsDetailsFetcher {
 
             if (isThisFormAlreadyDownloaded(listItem.getFormID())) {
                 isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
-                if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && listItem.getManifestURL() != null) {
+                if ((!isNewerFormVersionAvailable || checkMediaFiles) && listItem.getManifestURL() != null) {
                     manifestFile = getManifestFile(formAPI, listItem.getManifestURL());
                     if (manifestFile != null) {
                         List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
