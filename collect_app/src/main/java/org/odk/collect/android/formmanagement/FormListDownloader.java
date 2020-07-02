@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.formmanagement;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -35,6 +35,9 @@ import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.util.HashMap;

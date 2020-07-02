@@ -31,11 +31,11 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.formmanagement.FormListDownloader;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.NotificationUtils;
 
@@ -47,13 +47,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
+import static org.odk.collect.android.formmanagement.FormListDownloader.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.formmanagement.FormListDownloader.DL_ERROR_MSG;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
-import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUIRED;
-import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
 
 public class ServerPollingJob extends Job {

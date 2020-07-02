@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formmanagement.FormListDownloader;
 import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralKeys;
