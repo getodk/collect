@@ -73,8 +73,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 
-    private EditTextPreference serverUrlPreference;
-    private EditTextPreference usernamePreference;
     private EditTextPreference passwordPreference;
 
     @Inject
@@ -157,8 +155,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         if (!new AggregatePreferencesAdder(this).add()) {
             return;
         }
-        serverUrlPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
-        usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
+        EditTextPreference serverUrlPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
+        EditTextPreference usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
         passwordPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
 
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
