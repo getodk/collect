@@ -42,12 +42,13 @@ import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
 
-public class FormListDownloader {
+public class ServerFormsDetailsFetcher {
 
     // used to store error message if one occurs
     public static final String DL_ERROR_MSG = "dlerrormessage";
@@ -61,7 +62,7 @@ public class FormListDownloader {
     private Application application;
     private FormAPI formAPI;
 
-    public FormListDownloader(
+    public ServerFormsDetailsFetcher(
             Application application,
             OpenRosaXMLFetcher openRosaXMLFetcher,
             WebCredentialsUtils webCredentialsUtils) {
@@ -73,16 +74,16 @@ public class FormListDownloader {
         mediaFileRepository = new FormsDaoMediaFileRepository();
     }
 
-    public FormListDownloader(FormRepository formRepository,
-                              MediaFileRepository mediaFileRepository,
-                              FormAPI formAPI) {
+    public ServerFormsDetailsFetcher(FormRepository formRepository,
+                                     MediaFileRepository mediaFileRepository,
+                                     FormAPI formAPI) {
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
         this.formAPI = formAPI;
     }
 
-    public HashMap<String, FormDetails> downloadFormList() {
-        return downloadFormListFromAPI(true, formAPI);
+    public List<FormDetails> downloadFormList() {
+        return new ArrayList<>(downloadFormListFromAPI(true, formAPI).values());
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {

@@ -21,7 +21,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
-import org.odk.collect.android.formmanagement.FormListDownloader;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
@@ -135,11 +135,11 @@ public class AppDependencyModule {
     }
 
     @Provides
-    FormListDownloader provideDownloadFormListDownloader(
+    ServerFormsDetailsFetcher provideDownloadFormListDownloader(
             Application application,
             OpenRosaXMLFetcher openRosaXMLFetcher,
             WebCredentialsUtils webCredentialsUtils) {
-        return new FormListDownloader(
+        return new ServerFormsDetailsFetcher(
                 application,
                 openRosaXMLFetcher,
                 webCredentialsUtils

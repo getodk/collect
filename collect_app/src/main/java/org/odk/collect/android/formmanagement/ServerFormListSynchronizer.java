@@ -24,18 +24,18 @@ public class ServerFormListSynchronizer {
     }
 
     public void synchronize() {
-        FormListDownloader listDownloader = new FormListDownloader(formRepository, mediaFileRepository, formAPI);
-        HashMap<String, FormDetails> formList = listDownloader.downloadFormList();
+        ServerFormsDetailsFetcher listDownloader = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI);
+        List<FormDetails> formList = listDownloader.downloadFormList();
 
         List<Form> formsOnDevice = formRepository.getAll();
 
         formsOnDevice.stream().forEach(form -> {
-            if (formList.values().stream().noneMatch(f -> form.getJrFormId().equals(f.getFormId()))) {
+            if (formList.stream().noneMatch(f -> form.getJrFormId().equals(f.getFormId()))) {
                 formRepository.delete(form.getId());
             }
         });
 
-        for (FormDetails form : formList.values()) {
+        for (FormDetails form : formList) {
             boolean onDevice = formsOnDevice.stream().anyMatch(f -> f.getJrFormId().equals(form.getFormId()));
 
             if (!onDevice || form.isNewerFormVersionAvailable() || form.areNewerMediaFilesAvailable()) {
