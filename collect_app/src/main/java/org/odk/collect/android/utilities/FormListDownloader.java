@@ -24,6 +24,10 @@ import java.util.List;
 
 import timber.log.Timber;
 
+/**
+ * @deprecated Use {@link ServerFormsDetailsFetcher instead}
+ */
+@Deprecated
 public class FormListDownloader {
 
     // used to store error message if one occurs
