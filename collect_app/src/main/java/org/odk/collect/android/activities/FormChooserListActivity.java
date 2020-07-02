@@ -41,6 +41,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.openrosa.api.FormAPI;
+import org.odk.collect.android.openrosa.api.FormAPIError;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -135,7 +136,11 @@ public class FormChooserListActivity extends FormListActivity implements
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, multiFormDownloader).synchronize();
+                        try {
+                            new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, multiFormDownloader).synchronize();
+                        } catch (FormAPIError ignored) {
+                            // Ignored
+                        }
                         return null;
                     }
 

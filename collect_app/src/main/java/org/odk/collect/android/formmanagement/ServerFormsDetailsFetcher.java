@@ -82,8 +82,8 @@ public class ServerFormsDetailsFetcher {
         this.formAPI = formAPI;
     }
 
-    public List<FormDetails> downloadFormList() {
-        return new ArrayList<>(downloadFormListFromAPI(true, formAPI).values());
+    public List<FormDetails> downloadFormList() throws FormAPIError {
+        return fetchFormDetails(true, formAPI);
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
@@ -119,44 +119,14 @@ public class ServerFormsDetailsFetcher {
         }
 
         OpenRosaFormAPI formAPI = new OpenRosaFormAPI(openRosaXMLFetcher, downloadListUrl, downloadPath);
-        HashMap<String, FormDetails> result = downloadFormListFromAPI(alwaysCheckMediaFiles, formAPI);
-        clearTemporaryCredentials(url);
-        return result;
-    }
-
-    private HashMap<String, FormDetails> downloadFormListFromAPI(boolean alwaysCheckMediaFiles, FormAPI formAPI) {
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<>();
 
         try {
-            List<FormListItem> formListItems = formAPI.fetchFormList();
-            for (FormListItem listItem : formListItems) {
-                boolean isNewerFormVersionAvailable = false;
-                boolean areNewerMediaFilesAvailable = false;
-                ManifestFile manifestFile = null;
-
-                if (isThisFormAlreadyDownloaded(listItem.getFormID())) {
-                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
-                    if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && listItem.getManifestURL() != null) {
-                        manifestFile = getManifestFile(formAPI, listItem.getManifestURL());
-                        if (manifestFile != null) {
-                            List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
-                            if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                                areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
-                            }
-                        }
-                    }
-                }
-
-                FormDetails formDetails = FormDetails.toFormDetails(
-                        listItem,
-                        manifestFile != null ? manifestFile.getHash() : null,
-                        isNewerFormVersionAvailable,
-                        areNewerMediaFilesAvailable
-                );
-
-                formList.put(listItem.getFormID(), formDetails);
+            List<FormDetails> formDetailsList = fetchFormDetails(alwaysCheckMediaFiles, formAPI);
+            for (FormDetails formDetails : formDetailsList) {
+                formList.put(formDetails.getFormId(), formDetails);
             }
         } catch (FormAPIError formAPIError) {
             Timber.e(formAPIError);
@@ -176,7 +146,43 @@ public class ServerFormsDetailsFetcher {
             }
         }
 
-        return formList;
+        HashMap<String, FormDetails> result = formList;
+        clearTemporaryCredentials(url);
+        return result;
+    }
+
+    private List<FormDetails> fetchFormDetails(boolean alwaysCheckMediaFiles, FormAPI formAPI) throws FormAPIError {
+        List<FormListItem> formListItems = formAPI.fetchFormList();
+        List<FormDetails> formDetailsList = new ArrayList<>();
+
+        for (FormListItem listItem : formListItems) {
+            boolean isNewerFormVersionAvailable = false;
+            boolean areNewerMediaFilesAvailable = false;
+            ManifestFile manifestFile = null;
+
+            if (isThisFormAlreadyDownloaded(listItem.getFormID())) {
+                isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
+                if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && listItem.getManifestURL() != null) {
+                    manifestFile = getManifestFile(formAPI, listItem.getManifestURL());
+                    if (manifestFile != null) {
+                        List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
+                        if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
+                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
+                        }
+                    }
+                }
+            }
+
+            FormDetails formDetails = FormDetails.toFormDetails(
+                    listItem,
+                    manifestFile != null ? manifestFile.getHash() : null,
+                    isNewerFormVersionAvailable,
+                    areNewerMediaFilesAvailable
+            );
+
+            formDetailsList.add(formDetails);
+        }
+        return formDetailsList;
     }
 
     private void clearTemporaryCredentials(@Nullable String url) {

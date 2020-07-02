@@ -5,6 +5,7 @@ import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.api.FormAPI;
+import org.odk.collect.android.openrosa.api.FormAPIError;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ServerFormListSynchronizer {
         this.formDownloader = formDownloader;
     }
 
-    public void synchronize() {
+    public void synchronize() throws FormAPIError {
         ServerFormsDetailsFetcher listDownloader = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI);
         List<FormDetails> formList = listDownloader.downloadFormList();
 

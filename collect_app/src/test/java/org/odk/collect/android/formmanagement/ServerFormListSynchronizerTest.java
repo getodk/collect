@@ -58,13 +58,13 @@ public class ServerFormListSynchronizerTest {
     }
 
     @Test
-    public void whenNoFormsExist_downloadsAndSavesAllFormsInList() {
+    public void whenNoFormsExist_downloadsAndSavesAllFormsInList() throws Exception {
         synchronizer.synchronize();
         assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
     }
 
     @Test
-    public void whenAFormExists_deletesFormsNotInList() {
+    public void whenAFormExists_deletesFormsNotInList() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(3L)
                 .jrFormId("form-3")
@@ -76,7 +76,7 @@ public class ServerFormListSynchronizerTest {
     }
 
     @Test
-    public void whenAFormExists_andListContainsUpdatedVersion_replacesFormWithListVersion() {
+    public void whenAFormExists_andListContainsUpdatedVersion_replacesFormWithListVersion() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
@@ -88,7 +88,7 @@ public class ServerFormListSynchronizerTest {
     }
 
     @Test
-    public void whenAFormExists_andHasNewMediaFileOnServer_replacesFormWithListVersion() {
+    public void whenAFormExists_andHasNewMediaFileOnServer_replacesFormWithListVersion() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
@@ -119,7 +119,7 @@ public class ServerFormListSynchronizerTest {
     }
 
     @Test
-    public void whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_doesNotDownload() {
+    public void whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_doesNotDownload() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(1L)
                 .jrFormId("form-1")
