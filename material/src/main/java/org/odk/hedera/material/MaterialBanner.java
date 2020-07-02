@@ -46,6 +46,11 @@ public class MaterialBanner extends FrameLayout {
         textView.setText(text);
     }
 
+    public void setText(CharSequence text) {
+        TextView textView = findViewById(R.id.text);
+        textView.setText(text);
+    }
+
     public void setActionText(String actionTitle) {
         Button button = findViewById(R.id.button);
         button.setText(actionTitle);

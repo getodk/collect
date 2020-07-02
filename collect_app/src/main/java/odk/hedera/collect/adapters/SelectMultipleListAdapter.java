@@ -53,7 +53,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
-                ? LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item_layout, null)
+                ? new FrameLayout(parent.getContext())
                 : new AudioVideoImageTextLabel(parent.getContext()));
     }
 
@@ -65,6 +65,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             } else {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
+                adjustAudioVideoImageTextLabelParams();
             }
         }
 
