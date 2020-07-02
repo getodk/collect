@@ -68,7 +68,6 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
     public RangeIntegerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         setUpWidgetParameters();
-//        addAnswerView(view, WidgetViewUtils.getStandardMargin(context));
     }
 
     @Override
