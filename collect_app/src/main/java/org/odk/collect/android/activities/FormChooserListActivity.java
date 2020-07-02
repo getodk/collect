@@ -28,29 +28,26 @@ import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.formmanagement.ServerFormListSynchronizer;
-import org.odk.collect.android.forms.FormRepository;
-import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.FormAPIError;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;
 
@@ -73,16 +70,11 @@ public class FormChooserListActivity extends FormListActivity implements
     private DiskSyncTask diskSyncTask;
 
     @Inject
-    FormRepository formRepository;
+    Scheduler scheduler;
 
     @Inject
-    MediaFileRepository mediaFileRepository;
-
-    @Inject
-    MultiFormDownloader multiFormDownloader;
-
-    @Inject
-    FormAPI formAPI;
+    BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
+    private BlankFormsListViewModel blankFormsListViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +83,15 @@ public class FormChooserListActivity extends FormListActivity implements
         DaggerUtils.getComponent(this).inject(this);
 
         setTitle(getString(R.string.enter_data));
+
+        blankFormsListViewModel = new ViewModelProvider(this, blankFormsListViewModelFactory).get(BlankFormsListViewModel.class);
+        blankFormsListViewModel.isSyncing().observe(this, syncing -> {
+            if (syncing) {
+                findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.progressBar).setVisibility(View.GONE);
+            }
+        });
 
         new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
@@ -127,29 +128,7 @@ public class FormChooserListActivity extends FormListActivity implements
             return true;
         } else {
             if (item.getItemId() == R.id.menu_refresh) {
-                new AsyncTask<Void, Void, Void>() {
-
-                    @Override
-                    protected void onPreExecute() {
-                        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-                        try {
-                            new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, multiFormDownloader).synchronize();
-                        } catch (FormAPIError ignored) {
-                            // Ignored
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        findViewById(R.id.progressBar).setVisibility(View.GONE);
-                    }
-                }.execute();
-
+                blankFormsListViewModel.syncWithServer();
                 return true;
             } else {
                 return false;

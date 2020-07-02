@@ -15,14 +15,20 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CountingScheduler;
+import org.odk.collect.android.support.CountingSchedulerIdlingResource;
+import org.odk.collect.android.support.IdlingResourceRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.StubOpenRosaServer;
+import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
 @RunWith(AndroidJUnit4.class)
 public class MatchExactlyTest {
 
     public final StubOpenRosaServer server = new StubOpenRosaServer();
+    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineScheduler());
 
     public CollectTestRule rule = new CollectTestRule();
 
@@ -38,7 +44,13 @@ public class MatchExactlyTest {
                 public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
                     return server;
                 }
+
+                @Override
+                public Scheduler providesScheduler() {
+                    return countingScheduler;
+                }
             }))
+            .around(new IdlingResourceRule(new CountingSchedulerIdlingResource(countingScheduler)))
             .around(new CopyFormRule("one-question.xml"))
             .around(new CopyFormRule("one-question-repeat.xml"))
             .around(rule);
