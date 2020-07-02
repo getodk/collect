@@ -52,7 +52,7 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
 
         BigDecimal actualValue;
         if (rangeStart.compareTo(rangeEnd) == -1) {
-            actualValue = rangeStart.add(new BigDecimal(progress).multiply(rangeStep));
+            actualValue = rangeStart.add(new BigDecimal(progress).multiply(rangeStep)).subtract(rangeStart);
         } else {
             actualValue = rangeStart.subtract(new BigDecimal(progress).multiply(rangeStep));
         }
