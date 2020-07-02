@@ -283,8 +283,7 @@ public class DriveHelper {
             return drive.files()
                     .list()
                     .setQ(query)
-                    .setFields(fields)
-                    .setOrderBy("modifiedTime desc");
+                    .setFields(fields);
         }
 
         public void downloadFile(String fileId, File file) throws IOException {
