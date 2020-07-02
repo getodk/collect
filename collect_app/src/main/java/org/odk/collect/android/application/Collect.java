@@ -24,7 +24,6 @@ import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -42,8 +41,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
@@ -137,10 +134,6 @@ public class Collect extends Application {
 
         initializeJavaRosa();
         setupStrictMode();
-
-        // Force inclusion of scoped storage strings so they can be translated
-        Timber.i("%s %s", getString(R.string.scoped_storage_banner_text),
-                                   getString(R.string.scoped_storage_learn_more));
     }
 
     /**
