@@ -187,6 +187,23 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
         return result;
     }
 
+    //for testing purposes
+    protected Slider getSlider() {
+        return slider;
+    }
+
+    protected TextView getCurrentValue() {
+        return currentValue;
+    }
+
+    protected TextView getMinValue() {
+        return minValue;
+    }
+
+    protected TextView getMaxValue() {
+        return maxValue;
+    }
+
     @Override
     public void onStopTrackingTouch(Slider slider) {
         suppressFlingGesture = false;
@@ -199,12 +216,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-        if (rangeStart.compareTo(rangeEnd) == -1) {
-            actualValue = BigDecimal.valueOf(value);
-        } else {
-            actualValue = BigDecimal.valueOf(value);
-        }
-
+        actualValue = BigDecimal.valueOf(value);
         setUpActualValueLabel();
         widgetValueChanged();
     }
