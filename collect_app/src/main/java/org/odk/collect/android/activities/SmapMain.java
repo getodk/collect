@@ -26,9 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -36,22 +34,17 @@ import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.SmapFormListFragment;
@@ -64,6 +57,7 @@ import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
+import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -101,7 +95,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -113,6 +106,7 @@ import javax.inject.Inject;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -134,7 +128,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private String mAlertMsg;
     private boolean mPaused = false;
 
-    private MapEntry mData;
+    //private MapEntry mData;
 
     public static final String EXTRA_REFRESH = "refresh";
     public static final String LOGIN_STATUS = "login_status";
@@ -154,8 +148,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private String mProgressMsg;
     public DownloadTasksTask mDownloadTasks;
 
+    SurveyDataViewModel model;
     private MainTaskListener listener = null;
     private NetworkReceiver networkReceiver = null;
+    private RefreshListener refreshListener = null;
 
     boolean listenerRegistered = false;
     private static List<TaskEntry> mTasks = null;
@@ -210,6 +206,13 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         initToolbar();
 
         // DaggerUtils.getComponent(this).inject(this);  // banner
+
+        model = new ViewModelProvider(this).get(SurveyDataViewModel.class);
+        model.getSurveyData().observe(this, surveyData -> {
+            // update U
+            Timber.i("-------------------------------------- Smap Main Activity got Data ");
+            updateData(surveyData);
+        });
 
         String[] tabNames = {getString(R.string.smap_forms), getString(R.string.smap_tasks), getString(R.string.smap_map)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
@@ -309,6 +312,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             filter.addAction("org.odk.collect.android.FormSaved");
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             registerReceiver(networkReceiver, filter);
+
+            refreshListener = new RefreshListener(this);   // Listen for updates to the form list
 
             listenerRegistered = true;
         }
@@ -1002,19 +1007,20 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     /*
      * Update fragments that use data sourced from the loader that called this method
      */
-    public void updateData(MapEntry data) {
-        mData = data;
-        formManagerList.setData(data);
-        taskManagerList.setData(data);
-        taskManagerMap.setData(data);
+    public void updateData(SurveyData data) {
+       // mData = data;
+        //formManagerList.setData(data); // loader
+        //taskManagerList.setData(data);
+        //taskManagerMap.setData(data);
         if(data != null) {
             setLocationTriggers(data.tasks);      // NFC and geofence triggers
         }
     }
 
-    public MapEntry getData() {
-        return mData;
-    }
+    // loader
+    //public MapEntry getData() {
+    //    return mData;
+    //}
 
     protected class MainTaskListener extends BroadcastReceiver {
 
@@ -1060,12 +1066,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     /*
      * Get / Set task loader
      */
-    public void setTaskLoader(MapDataLoader taskLoader) {
-       mTaskLoader = taskLoader;
-    }
-    public MapDataLoader getTaskLoader() {
-        return mTaskLoader;
-    }
+    //public void setTaskLoader(MapDataLoader taskLoader) {
+    //   mTaskLoader = taskLoader;
+    //}
+   // public MapDataLoader getTaskLoader() {
+   //     return mTaskLoader;
+    //}
 
     @Override
     protected void onPause() {
@@ -1134,4 +1140,21 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
 
      */
+
+    protected class RefreshListener extends BroadcastReceiver {
+
+        public RefreshListener (Context context) {
+            LocalBroadcastManager.getInstance(context).registerReceiver(this,
+                    new IntentFilter("org.smap.smapTask.refresh"));
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Timber.i("Intent received: " + intent.getAction());
+
+            model.loadData();
+
+        }
+    }
 }

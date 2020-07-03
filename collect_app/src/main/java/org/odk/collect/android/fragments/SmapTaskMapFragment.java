@@ -58,11 +58,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
+import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -81,6 +83,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
@@ -127,6 +130,8 @@ public class SmapTaskMapFragment extends Fragment
     private double tasksEast;
     private double tasksWest;
 
+    SurveyDataViewModel model;
+
     public static SmapTaskMapFragment newInstance() {
         return new SmapTaskMapFragment();
     }
@@ -151,6 +156,13 @@ public class SmapTaskMapFragment extends Fragment
 
         Timber.i("######## onViewCreated");
         super.onViewCreated(rootView, savedInstanceState);
+
+        model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
+        model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
+            // update U
+            Timber.i("-------------------------------------- Task Map Fragment got Data ");
+            setData(surveyData);
+        });
 
     }
 
@@ -375,7 +387,7 @@ public class SmapTaskMapFragment extends Fragment
         }
     }
 
-    public void setData(MapEntry data) {
+    public void setData(SurveyData data) {
         if(data != null) {
             showTasks(data.tasks);
             showPoints(data.points);

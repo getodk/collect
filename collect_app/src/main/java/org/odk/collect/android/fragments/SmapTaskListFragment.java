@@ -38,12 +38,14 @@ import org.odk.collect.android.activities.FormChooserListActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
+import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -61,11 +63,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
@@ -78,8 +82,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 /**
  * Responsible for displaying tasks on the main fieldTask screen
  */
-public class SmapTaskListFragment extends ListFragment
-        implements LoaderManager.LoaderCallbacks<MapEntry> {
+public class SmapTaskListFragment extends ListFragment {
+        // implements LoaderManager.LoaderCallbacks<MapEntry> {     // loader
 
     // request codes for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
@@ -114,6 +118,8 @@ public class SmapTaskListFragment extends ListFragment
 
     private TaskListArrayAdapter mAdapter;
 
+    SurveyDataViewModel model;
+
     public static SmapTaskListFragment newInstance() {
         return new SmapTaskListFragment();
     }
@@ -145,7 +151,7 @@ public class SmapTaskListFragment extends ListFragment
 
         mAdapter = new TaskListArrayAdapter(getActivity(), false);
         setListAdapter(mAdapter);
-        getLoaderManager().initLoader(TASK_LOADER_ID, null, this);
+        //getLoaderManager().initLoader(TASK_LOADER_ID, null, this);   // loader
 
         // Handle long item clicks
         ListView lv = getListView();
@@ -170,6 +176,13 @@ public class SmapTaskListFragment extends ListFragment
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc,
                 R.string.sort_by_status_asc, R.string.sort_by_status_desc
         };
+
+        model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
+        model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
+            // update U
+            Timber.i("-------------------------------------- Task List Fragment got Data ");
+            setData(surveyData);
+        });
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -227,33 +240,33 @@ public class SmapTaskListFragment extends ListFragment
     public void setUserVisibleHint(boolean isVisibleToUser) {
     }
 
-    @Override
-    public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
-        MapDataLoader taskLoader = new MapDataLoader(getContext());
-        ((SmapMain) getActivity()).setTaskLoader(taskLoader);
-        updateAdapter();
-        return taskLoader;
-    }
+    //@Override loader
+    //public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
+    //    MapDataLoader taskLoader = new MapDataLoader(getContext());
+    //    ((SmapMain) getActivity()).setTaskLoader(taskLoader);
+    //    updateAdapter();
+    //    return taskLoader;
+    //}
 
     /*
      * Load data in the taskListFragment, then update all fragments that show the data in this activity
      * Apparently Loader does not work when invoked from an activity only a fragment
      */
-    @Override
-    public void onLoadFinished(Loader<MapEntry> loader, MapEntry data) {
-        ((SmapMain) getActivity()).updateData(data);
-    }
+    //@Override   // loader
+    //public void onLoadFinished(Loader<MapEntry> loader, MapEntry data) {
+    //    ((SmapMain) getActivity()).updateData(data);
+    //}
 
-    @Override
-    public void onLoaderReset(Loader<MapEntry> loader) {
-        ((SmapMain) getActivity()).updateData(null);
-    }
+    //@Override   loader
+    //public void onLoaderReset(Loader<MapEntry> loader) {
+    //    ((SmapMain) getActivity()).updateData(null);
+    //}
 
     protected String getSortingOrderKey() {
         return TASK_MANAGER_LIST_SORTING_ORDER;
     }
 
-    public void setData(MapEntry data) {
+    public void setData(SurveyData data) {
         int count = 0;
         if(mAdapter != null) {
             if (data != null) {
@@ -262,6 +275,8 @@ public class SmapTaskListFragment extends ListFragment
                 mAdapter.setData(null);
             }
         }
+        //((SmapMain) getActivity()).updateData(data);  Loader
+
         FragmentActivity activity = (SmapMain) getActivity();
         if(activity != null) {
             TabLayout tabLayout = (TabLayout) (activity).findViewById(R.id.tabs);
@@ -511,11 +526,17 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     protected void updateAdapter() {
-        MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();
-        if(taskLoader != null) {
-            taskLoader.updateTaskSortOrder(getSortingOrder());
-            taskLoader.updateFilter(getFilterText());
-            taskLoader.forceLoad();
+        //MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();
+        //if(taskLoader != null) {
+        //    taskLoader.updateTaskSortOrder(getSortingOrder());
+        //    taskLoader.updateFilter(getFilterText());
+        //    taskLoader.forceLoad();
+        //}
+
+        if(model != null) {
+            model.updateFormSortOrder(getSortingOrder());
+            model.updateFilter(getFilterText());
+            model.loadData();
         }
     }
 

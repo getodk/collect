@@ -14,13 +14,17 @@
 
 package org.odk.collect.android.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +44,7 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
@@ -47,6 +52,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
+import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -63,11 +69,14 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
@@ -107,6 +116,8 @@ public class SmapFormListFragment extends ListFragment {
     private SharedPreferences adminPreferences;
 
     private TaskListArrayAdapter mAdapter;
+
+    SurveyDataViewModel model;
 
     public static SmapFormListFragment newInstance() {
         return new SmapFormListFragment();
@@ -165,6 +176,13 @@ public class SmapFormListFragment extends ListFragment {
                 R.string.smap_sort_by_project_asc, R.string.smap_sort_by_project_desc
         };
 
+        model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
+        model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
+            // update U
+            Timber.i("-------------------------------------- Form List Fragment got Data ");
+            setData(surveyData);
+        });
+
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -190,13 +208,13 @@ public class SmapFormListFragment extends ListFragment {
             SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.llParent), getString(R.string.smap_location_tracking));
         }
 
-        SmapMain main = (SmapMain) getActivity();
-        if(main != null) {
-            MapEntry data = main.getData();
-            if (data != null) {
-                setData(data);
-            }
-        }
+        //SmapMain main = (SmapMain) getActivity(); // loader
+        // if(main != null) {                       // loader
+        //    MapEntry data = main.getData();
+        //    if (data != null) {
+        //        setData(data);
+        //    }
+        //}
     }
 
     private void setupBottomSheet() {
@@ -229,7 +247,7 @@ public class SmapFormListFragment extends ListFragment {
         return TASK_MANAGER_LIST_SORTING_ORDER;
     }
 
-    public void setData(MapEntry data) {
+    public void setData(SurveyData data) {
         if(mAdapter != null) {
             if (data != null) {
                 mAdapter.setData(data.tasks);
@@ -473,11 +491,18 @@ public class SmapFormListFragment extends ListFragment {
     }
 
     protected void updateAdapter() {
-        MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();
-        if(taskLoader != null) {
-            taskLoader.updateFormSortOrder(getFormSortingOrder());
-            taskLoader.updateFilter(getFilterText());
-            taskLoader.forceLoad();
+
+        //MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();   // loader
+        //if(taskLoader != null) {                                                  // loader
+        //    taskLoader.updateFormSortOrder(getFormSortingOrder());                // loader
+        //    taskLoader.updateFilter(getFilterText());                             // loader
+        //    taskLoader.forceLoad();                                               // loader
+        //}                                                                         // loader
+
+        if(model != null) {
+            model.updateFormSortOrder(getFormSortingOrder());
+            model.updateFilter(getFilterText());
+            model.loadData();
         }
     }
 
