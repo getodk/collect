@@ -39,11 +39,11 @@ public class ChoicesRecyclerView extends RecyclerView {
         setAdapter(adapter);
     }
 
-    public void enableFlexboxLayout() {
+    private void enableFlexboxLayout() {
         setLayoutManager(new FlexboxLayoutManager(getContext()));
     }
 
-    public void enableGridLayout(int numColumns) {
+    private void enableGridLayout(int numColumns) {
         if (numColumns == 1) {
             DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
             Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.inset_divider_64dp);
