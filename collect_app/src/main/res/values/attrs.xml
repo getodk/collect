@@ -4,5 +4,6 @@
         <attr name="iconColor" format="color" />
         <attr name="dividerColor" format="color" />
         <attr name="dividerCompat" format="reference" />
+        <attr name="verticalRecyclerViewStyle" format="reference"/>
     </declare-styleable>
 </resources>

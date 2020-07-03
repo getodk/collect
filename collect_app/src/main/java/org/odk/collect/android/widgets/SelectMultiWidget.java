@@ -16,13 +16,13 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.views.ChoicesRecyclerView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -68,10 +68,9 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             // check if any values have spaces
             SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
 
-            RecyclerView recyclerView = setUpRecyclerView();
-            recyclerView.setAdapter(adapter);
+            ChoicesRecyclerView recyclerView = setUpRecyclerView(adapter);
             answerLayout.addView(recyclerView);
-            adjustRecyclerViewSize(adapter, recyclerView);
+            recyclerView.adjustRecyclerViewSize();
             addAnswerView(answerLayout);
         }
     }

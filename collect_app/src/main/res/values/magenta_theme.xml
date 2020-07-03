@@ -65,6 +65,7 @@
 
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
+        <item name="verticalRecyclerViewStyle">@style/VerticalRecyclerView</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Magenta.Theme" parent="Widget.AppCompat.SearchView">
