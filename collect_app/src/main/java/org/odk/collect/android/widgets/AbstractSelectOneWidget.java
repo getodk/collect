@@ -99,7 +99,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
 
         if (items != null) {
-            recyclerView = setUpRecyclerView(adapter);
+            recyclerView = new ChoicesRecyclerView(getContext(), adapter, isFlex, numColumns);
             answerLayout.addView(recyclerView);
             recyclerView.adjustRecyclerViewSize();
             addAnswerView(answerLayout);

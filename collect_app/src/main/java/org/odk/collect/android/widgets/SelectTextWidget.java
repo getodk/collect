@@ -27,6 +27,7 @@ import android.widget.TableLayout;
 
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
@@ -38,9 +39,13 @@ public abstract class SelectTextWidget extends SelectWidget {
     private static final String SEARCH_TEXT = "search_text";
 
     protected EditText searchStr;
+    protected int numColumns;
+    protected boolean isFlex;
 
     public SelectTextWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        isFlex = WidgetAppearanceUtils.isFlexAppearance(prompt.getPrompt());
+        numColumns = WidgetAppearanceUtils.getNumberOfColumns(prompt.getPrompt(), context);
     }
 
     @Override
