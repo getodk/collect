@@ -70,7 +70,6 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
 
             ChoicesRecyclerView recyclerView = new ChoicesRecyclerView(getContext(), adapter, isFlex, numColumns);
             answerLayout.addView(recyclerView);
-            recyclerView.adjustRecyclerViewSize();
             addAnswerView(answerLayout);
         }
     }
