@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -34,6 +33,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.views.ChoicesRecyclerView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import timber.log.Timber;
@@ -55,7 +55,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
     private String selectedValue;
     private final boolean autoAdvance;
     SelectOneListAdapter adapter;
-    private RecyclerView recyclerView;
+    private ChoicesRecyclerView recyclerView;
 
     public AbstractSelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
         super(context, questionDetails);
@@ -99,10 +99,9 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         adapter = new SelectOneListAdapter(items, selectedValue, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
 
         if (items != null) {
-            recyclerView = setUpRecyclerView();
-            recyclerView.setAdapter(adapter);
+            recyclerView = setUpRecyclerView(adapter);
             answerLayout.addView(recyclerView);
-            adjustRecyclerViewSize(adapter, recyclerView);
+            recyclerView.adjustRecyclerViewSize();
             addAnswerView(answerLayout);
         }
     }
