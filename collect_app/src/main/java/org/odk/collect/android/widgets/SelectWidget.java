@@ -68,7 +68,7 @@ public abstract class SelectWidget extends ItemsWidget {
         }
     }
 
-    protected void setUpSearchBox(Context context) {
+    protected void addSearchBox(Context context) {
         searchStr = new EditText(getContext());
         searchStr.setId(View.generateViewId());
         searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());

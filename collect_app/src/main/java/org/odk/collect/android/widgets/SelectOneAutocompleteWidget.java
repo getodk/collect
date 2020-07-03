@@ -33,7 +33,7 @@ public class SelectOneAutocompleteWidget extends AbstractSelectOneWidget {
     public SelectOneAutocompleteWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
         super(context, questionDetails, autoAdvance);
         createLayout();
-        setUpSearchBox(context);
+        addSearchBox(context);
     }
 
     @Override
