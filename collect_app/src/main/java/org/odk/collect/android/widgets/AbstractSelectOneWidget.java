@@ -47,7 +47,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public abstract class AbstractSelectOneWidget extends SelectTextWidget implements MultiChoiceWidget {
+public abstract class AbstractSelectOneWidget extends SelectWidget implements MultiChoiceWidget {
 
     @Nullable
     private AdvanceToNextListener listener;

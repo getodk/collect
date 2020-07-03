@@ -17,19 +17,37 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextWatcher;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 
 import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.WidgetViewUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
+import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 public abstract class SelectWidget extends ItemsWidget {
+    private static final String SEARCH_TEXT = "search_text";
+
     LinearLayout answerLayout;
+
+    protected EditText searchStr;
+    protected int numColumns;
+    protected boolean isFlex;
 
     public SelectWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        isFlex = WidgetAppearanceUtils.isFlexAppearance(questionDetails.getPrompt());
+        numColumns = WidgetAppearanceUtils.getNumberOfColumns(questionDetails.getPrompt(), context);
 
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -40,6 +58,64 @@ public abstract class SelectWidget extends ItemsWidget {
     @Override
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     public void setOnLongClickListener(OnLongClickListener l) {
+    }
+
+    @Override
+    protected void saveState() {
+        super.saveState();
+        if (searchStr != null) {
+            getState().putString(SEARCH_TEXT + getFormEntryPrompt().getIndex(), searchStr.getText().toString());
+        }
+    }
+
+    protected void setUpSearchBox(Context context) {
+        searchStr = new EditText(getContext());
+        searchStr.setId(View.generateViewId());
+        searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(pxFromDp(context, WidgetViewUtils.getStandardMargin(context)), 5,
+                pxFromDp(context, WidgetViewUtils.getStandardMargin(context)), 5);
+        searchStr.setLayoutParams(params);
+        setupChangeListener();
+        answerLayout.addView(searchStr, 0);
+
+        String searchText = null;
+        if (getState() != null) {
+            searchText = getState().getString(SEARCH_TEXT + getFormEntryPrompt().getIndex());
+        }
+        if (searchText != null && !searchText.isEmpty()) {
+            searchStr.setText(searchText);
+            Selection.setSelection(searchStr.getText(), searchStr.getText().toString().length());
+        } else {
+            doSearch("");
+        }
+    }
+
+    private void setupChangeListener() {
+        searchStr.addTextChangedListener(new TextWatcher() {
+            private String oldText = "";
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(oldText)) {
+                    doSearch(s.toString());
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                oldText = s.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+    }
+
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+    protected void doSearch(String searchStr) {
     }
 
     private void logAnalytics(QuestionDetails questionDetails) {
