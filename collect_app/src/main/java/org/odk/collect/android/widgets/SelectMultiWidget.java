@@ -38,7 +38,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWidget {
+public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget {
     private final List<Selection> ve;
     SelectMultipleListAdapter adapter;
 
