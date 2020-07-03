@@ -20,20 +20,17 @@ import android.content.Context;
 import android.widget.LinearLayout;
 
 import org.javarosa.core.model.SelectChoice;
-import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.ChoicesRecyclerView;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 public abstract class SelectWidget extends ItemsWidget {
     LinearLayout answerLayout;
-    protected int numColumns = 1;
 
     public SelectWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -43,13 +40,6 @@ public abstract class SelectWidget extends ItemsWidget {
     @Override
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     public void setOnLongClickListener(OnLongClickListener l) {
-    }
-
-    protected ChoicesRecyclerView setUpRecyclerView(AbstractSelectListAdapter adapter) {
-        boolean isFlex = WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt());
-        numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
-
-        return new ChoicesRecyclerView(getContext(), adapter, isFlex, numColumns);
     }
 
     private void logAnalytics(QuestionDetails questionDetails) {

@@ -68,7 +68,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             // check if any values have spaces
             SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
 
-            ChoicesRecyclerView recyclerView = setUpRecyclerView(adapter);
+            ChoicesRecyclerView recyclerView = new ChoicesRecyclerView(getContext(), adapter, isFlex, numColumns);
             answerLayout.addView(recyclerView);
             recyclerView.adjustRecyclerViewSize();
             addAnswerView(answerLayout);
