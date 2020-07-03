@@ -101,7 +101,6 @@ public abstract class AbstractSelectOneWidget extends SelectWidget implements Mu
         if (items != null) {
             recyclerView = new ChoicesRecyclerView(getContext(), adapter, isFlex, numColumns);
             answerLayout.addView(recyclerView);
-            recyclerView.adjustRecyclerViewSize();
             addAnswerView(answerLayout);
         }
     }

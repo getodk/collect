@@ -3,7 +3,6 @@ package org.odk.collect.android.views;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -15,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
+import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class ChoicesRecyclerView extends RecyclerView {
@@ -59,12 +58,16 @@ public class ChoicesRecyclerView extends RecyclerView {
         setLayoutManager(new GridLayoutManager(getContext(), numColumns));
     }
 
-    public void adjustRecyclerViewSize() {
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        adjustRecyclerViewSize();
+    }
+
+    private void adjustRecyclerViewSize() {
         if (getAdapter().getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
             // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            ((FormEntryActivity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.9);
+            getLayoutParams().height = (int) (ScreenUtils.getScreenHeight() * 0.9);
         } else {
             setNestedScrollingEnabled(false);
         }
