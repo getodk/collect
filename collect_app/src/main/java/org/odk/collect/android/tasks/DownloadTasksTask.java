@@ -705,7 +705,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         if(updateResponse.taskAssignments.size() > 0 ||
                 (updateResponse.taskCompletionInfo != null &&
-                        (updateResponse.taskCompletionInfo.size() > 0 || updateResponse.userTrail.size() > 0))) {
+                        updateResponse.taskCompletionInfo.size() > 0) || updateResponse.userTrail.size() > 0) {
 
             publishProgress(Collect.getInstance().getString(R.string.smap_update_task_status));
 
