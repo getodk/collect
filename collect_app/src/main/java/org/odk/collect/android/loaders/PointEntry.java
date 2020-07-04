@@ -1,7 +1,7 @@
 package org.odk.collect.android.loaders;
 
 /**
- * This class holds the per-item data in the {@link MapDataLoader}.
+ * This class holds the per-item location user trail data
  */
 public class PointEntry {
     public double lat;    // form or task

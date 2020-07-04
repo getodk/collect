@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;

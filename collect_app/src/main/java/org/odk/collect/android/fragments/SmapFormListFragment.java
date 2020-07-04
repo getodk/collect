@@ -14,17 +14,13 @@
 
 package org.odk.collect.android.fragments;
 
-import android.content.BroadcastReceiver;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,8 +46,6 @@ import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
-import org.odk.collect.android.loaders.MapDataLoader;
-import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -70,9 +64,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -178,7 +169,6 @@ public class SmapFormListFragment extends ListFragment {
 
         model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
-            // update U
             Timber.i("-------------------------------------- Form List Fragment got Data ");
             setData(surveyData);
         });

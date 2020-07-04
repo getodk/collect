@@ -50,13 +50,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
-import org.odk.collect.android.loaders.MapDataLoader;
-import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.logic.FormDetails;
@@ -71,18 +68,13 @@ import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.storage.migration.StorageMigrationDialog;
-import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -102,15 +94,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
@@ -136,8 +124,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private SmapFormListFragment formManagerList = SmapFormListFragment.newInstance();
     private SmapTaskListFragment taskManagerList = SmapTaskListFragment.newInstance();
     private SmapTaskMapFragment taskManagerMap = SmapTaskMapFragment.newInstance();
-
-    private MapDataLoader mTaskLoader = null;
 
     private NfcAdapter mNfcAdapter;        // NFC
     public PendingIntent mNfcPendingIntent;

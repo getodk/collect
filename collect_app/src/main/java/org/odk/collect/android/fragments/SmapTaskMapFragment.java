@@ -61,7 +61,6 @@ import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.SurveyData;
@@ -159,7 +158,6 @@ public class SmapTaskMapFragment extends Fragment
 
         model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
-            // update U
             Timber.i("-------------------------------------- Task Map Fragment got Data ");
             setData(surveyData);
         });
