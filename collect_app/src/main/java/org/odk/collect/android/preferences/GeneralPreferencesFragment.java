@@ -79,6 +79,9 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                 case "user_and_device_identity":
                     basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
                     break;
+            case "smap_preferences":
+                basePreferenceFragment = new SmapInterfacePreferences();  // smap
+                break;
             }
             if (basePreferenceFragment != null) {
                 getActivity().getFragmentManager()
