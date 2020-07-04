@@ -371,7 +371,6 @@
   <string name="record_geopoint">Rekam titik</string>
   <string name="gps_result">Lintang: %1$s\nBujur: %2$s\nKetinggian: %3$s m\nAkurasi: %4$s m</string>
   <string name="parser_exception">Pengecualian XPathParser: \"%s\"</string>
-  <string name="selected_answer">Terpilih: %s</string>
   <string name="version_number">Versi: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Kunjungi situs ODK </string>

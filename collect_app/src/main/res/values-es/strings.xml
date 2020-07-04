@@ -376,7 +376,6 @@
   <string name="record_geopoint">Registrando un punto</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="parser_exception">Excepción XPathParser: \"%s\"</string>
-  <string name="selected_answer">Seleccionado: %s</string>
   <string name="version_number">Versión: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visitar el sitio web</string>

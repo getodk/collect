@@ -327,7 +327,6 @@
   <string name="download_selected">Загрузить выбранные</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
   <string name="parser_exception">Исключение XPathParser: \"%s\"</string>
-  <string name="selected_answer">Выбрано: %s</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Вебсайт ODK</string>

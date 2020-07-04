@@ -356,7 +356,6 @@
   <string name="record_geopoint">Rekodi pointi</string>
   <string name="gps_result">Latitude: %1$s \nLongitude: %2$s \nUrefumwambao:%3$s m\nUsahihi: %4$s m</string>
   <string name="parser_exception">Isipokuwa ya XPathparser: \"%s\"</string>
-  <string name="selected_answer">Iliyochaguliwa: %s</string>
   <string name="version_number">Toleo: %s</string>
   <string name="id_number">Utambulisho: %s</string>
   <string name="odk_website">Tembelea tovuti ya ODK</string>

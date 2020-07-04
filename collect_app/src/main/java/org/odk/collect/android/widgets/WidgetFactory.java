@@ -146,7 +146,7 @@ public class WidgetFactory {
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
                 if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
-                    questionWidget = new SpinnerWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new SelectOneMinimalWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
                     questionWidget = new SelectOneAutocompleteWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
@@ -168,7 +168,7 @@ public class WidgetFactory {
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
                 if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
-                    questionWidget = new SpinnerMultiWidget(context, questionDetails);
+                    questionWidget = new SelectMultipleMinimalWidget(context, questionDetails);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, false);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST)) {

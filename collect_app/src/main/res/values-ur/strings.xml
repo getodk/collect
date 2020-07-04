@@ -319,7 +319,6 @@
   <string name="download_selected">منتخب کردہ ڈاؤنلوڈ کریں</string>
   <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <string name="parser_exception"> ایکس پاتھ پارسر ایکسپشن:\"%s\"</string>
-  <string name="selected_answer">منتخب شدہ: %s</string>
   <string name="version_number">ورژن:%s</string>
   <string name="id_number">آئی ڈی: %s</string>
   <string name="odk_website">او ڈی کے ویب سائٹ وزٹ کریں</string>

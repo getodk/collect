@@ -209,7 +209,6 @@
   <string name="install_openmapkit">እባክዎ OpenMapKitን ይጫኑ!</string>
   <string name="go_back">ተመለስ</string>
   <string name="download_selected">የተመረጠውን አውርድ</string>
-  <string name="selected_answer">ተመርጧል: 1 %s</string>
   <string name="version_number">ሥሪት: 1 %s</string>
   <string name="odk_website">የODKን ድረ ገፅ ይጎብኙ</string>
   <string name="odk_forum">የODKን መድረክ ይቀላቀሉ</string>

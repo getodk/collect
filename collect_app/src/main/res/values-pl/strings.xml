@@ -380,7 +380,6 @@
   <string name="record_geopoint">Zapisz punkt</string>
   <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
   <string name="parser_exception">Wyjątek XPathParser: \"%s\"</string>
-  <string name="selected_answer">Wybrany: %s</string>
   <string name="version_number">Wersja: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Odwiedź stronę ODK</string>

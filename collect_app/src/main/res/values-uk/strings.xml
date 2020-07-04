@@ -359,7 +359,6 @@
   <string name="record_geopoint">Записати точку</string>
   <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
-  <string name="selected_answer">Обрано: %s</string>
   <string name="version_number">Версія: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Перейти на сайт ODK</string>
