@@ -635,6 +635,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                 return;
             } else {
+
+                // start smap
+                try (Cursor c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
+                    // retrieve the form definition...
+                    c.moveToFirst();
+                    String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+                    Collect.getInstance().setFormId(jrformid);
+                }
+                // end smap
+
                 /**
                  * This is the fill-blank-form code path.See if there is a savepoint for this form
                  * that has never been explicitly saved by the user. If there is, open this savepoint(resume this filled-in form).
