@@ -43,14 +43,12 @@ import androidx.core.content.ContextCompat;
 public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     
     private int mLayout;
-    Context mContext;
     boolean mFormView;
     LayoutInflater mInflater;
     static String TAG = "TaskListArrayAdapter";
 	
     public TaskListArrayAdapter(Context context, boolean formView) {
 		super(context, R.layout.main_list);
-        mContext = context;
 		mLayout = R.layout.task_row;
 		mInflater = LayoutInflater.from(context);
 		mFormView = formView;
@@ -108,9 +106,9 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     	}
 
     	// mqp
-        View mapIconView = view.findViewById(R.id.map_view);
+        //View mapIconView = view.findViewById(R.id.map_view);
         //mapIconView.setVisibility(item.geometryXPath != null ? View.VISIBLE : View.GONE);  disable
-        mapIconView.setVisibility(View.GONE);       // disable
+        //mapIconView.setVisibility(View.GONE);       // disable
 
     	TextView taskNameText = view.findViewById(R.id.toptext);
     	if (taskNameText != null) {
@@ -143,7 +141,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
             }
         }
 
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
         view.startAnimation(animation);
 
     	return view;
