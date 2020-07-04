@@ -376,7 +376,6 @@
   <string name="record_geopoint">Memorizza un punto</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="parser_exception">Eccezione XPathParser: \"%s\"</string>
-  <string name="selected_answer">Selezionato: %s</string>
   <string name="version_number">Versione: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visitare il sito web ODK</string>

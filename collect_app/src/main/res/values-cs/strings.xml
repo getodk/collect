@@ -388,7 +388,6 @@
   <string name="record_geopoint">Zaznamenat bod</string>
   <string name="gps_result">Zeměpisná šířka:%1$s \n Zeměpisná délka: %2$s \n Výška: %3$s m \n Přesnost %4$sm</string>
   <string name="parser_exception">Výjimka XPathParser: \"%s\"</string>
-  <string name="selected_answer">Vybráno: %s</string>
   <string name="version_number">Verze: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Navštivte web ODK</string>

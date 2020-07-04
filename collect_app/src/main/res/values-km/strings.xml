@@ -336,7 +336,6 @@
   <string name="download_selected">ទាញយកនូវជំរើស</string>
   <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
-  <string name="selected_answer">បានជ្រើសរើស៖ %s</string>
   <string name="version_number">ជំនាន់: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">ចូលទៅកាន់គេហទំព័រ ODK</string>

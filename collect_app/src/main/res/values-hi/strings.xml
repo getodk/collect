@@ -308,7 +308,6 @@
   <string name="download_selected">डाउनलोड चयनित</string>
   <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
-  <string name="selected_answer">चयनित :%s</string>
   <string name="version_number">संस्करण: %s</string>
   <string name="odk_website">ODK वेबसाइट विजिट करें</string>
   <string name="odk_website_summary">ओपन डाटा किट (ODK ) विषम परिस्थितियों में सामाजिक डाटा इकठ्ठा करने में कार्य आता है.</string>

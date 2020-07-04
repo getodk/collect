@@ -382,7 +382,6 @@
   <string name="record_geopoint">Punkt erfassen</string>
   <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
-  <string name="selected_answer">Ausgewählt: %s</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">ODK-Webseite öffnen</string>

@@ -394,7 +394,6 @@
   <string name="record_geopoint">سجل نقطة</string>
   <string name="gps_result">خط العرض: %1$s\n خط الطول : %2$s\nالارتفاع : %3$s\nالدقة : %4$s متر</string>
   <string name="parser_exception">استثناء XPathParser: \"%s\"</string>
-  <string name="selected_answer">المحددة: %s</string>
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
   <string name="odk_website">زيارة موقع ODK</string>

@@ -262,7 +262,6 @@
   <string name="alert">Alertă</string>
   <string name="install_openmapkit">Vă rugăm instalați OpenMapKit!</string>
   <string name="go_back">Înapoi</string>
-  <string name="selected_answer">Selectat: %s</string>
   <string name="version_number">Versiunea %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Vest %1$s%2$s%3$s</string>

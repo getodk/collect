@@ -382,7 +382,6 @@
   <string name="record_geopoint">Tallenna piste</string>
   <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
   <string name="parser_exception">XPathParser-virhe: \"%s\"</string>
-  <string name="selected_answer">Valittu: %s</string>
   <string name="version_number">Versio: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Käy ODK:n verkkosivulla</string>

@@ -294,7 +294,6 @@
   <string name="download_selected">Allalaadimine valitud</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <string name="parser_exception">XPathParser Viga: \"%s\"</string>
-  <string name="selected_answer">Valitud: %s</string>
   <string name="version_number">Versoon: %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>

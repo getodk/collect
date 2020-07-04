@@ -291,7 +291,6 @@
   <string name="download_selected">Descarrega seleccionat</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <string name="parser_exception">Exceptio XPathParser: \"%s\"</string>
-  <string name="selected_answer">Seleccionat: %s</string>
   <string name="version_number">Versió: %s</string>
   <string name="odk_website">Visita la web d\'ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

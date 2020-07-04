@@ -382,7 +382,6 @@
   <string name="record_geopoint">Enregistrer un point</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
   <string name="parser_exception">Exception XPathParser: \\"%s\\"</string>
-  <string name="selected_answer">Sélectionné: %s</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visiter le site web de Open Data Kit</string>

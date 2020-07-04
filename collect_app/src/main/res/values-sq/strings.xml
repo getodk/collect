@@ -292,7 +292,6 @@
   <string name="download_selected">Shkarko të përzgjedhurat</string>
   <string name="gps_result">Gjerësi: %1$s\nGjatësi: %2$s\nLartësi: %3$sm\nSaktësi: %4$sm</string>
   <string name="parser_exception">Përjashtim XPathParser \"%s\"</string>
-  <string name="selected_answer">Përzgjedhur: %s</string>
   <string name="version_number">Versioni: %s</string>
   <string name="odk_website">Vizitoni faqen e ODK në internet</string>
   <string name="odk_website_summary">Open Data Kit (ODK) përdoret për mbledhur të dhëna për të mirën shoqërore në mjedise sfiduese.</string>

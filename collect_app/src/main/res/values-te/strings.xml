@@ -375,7 +375,6 @@
   <string name="record_geopoint">ఒక పాయింట్ రికార్డ్ చేయండి</string>
   <string name="gps_result">అక్షాంశం: %1$s\n రేఖాంశం:%2$s \n ఎత్తు: %3$sm\n ఖచ్చితత్వం: %4$sm</string>
   <string name="parser_exception">XPathParser మినహాయింపు: \"%s\"</string>
-  <string name="selected_answer">ఎంచుకున్నది: %s</string>
   <string name="version_number">వెర్షన్: %s</string>
   <string name="id_number">ID:%s</string>
   <string name="odk_website">ODK వెబ్‌సైట్‌ను సందర్శించండి</string>

@@ -318,7 +318,6 @@ Escolher Imagem</string>
   <string name="download_selected">Baixar selecionados</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
   <string name="parser_exception">Exceção XPathParser: \"%s\"</string>
-  <string name="selected_answer">Selecionado: %s</string>
   <string name="version_number">Versão: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visite o site ODK</string>
