@@ -88,10 +88,9 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
-        binding.geoAnswerText.setTextColor(new ThemeUtils(context).getColorOnSurface());
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        readOnly = getFormEntryPrompt().isReadOnly();
+        readOnly = prompt.isReadOnly();
         if (readOnly) {
             binding.simpleButton.setVisibility(GONE);
         } else {
