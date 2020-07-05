@@ -214,7 +214,9 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void whenPromptHasAnswer_buttonShouldLaunchCorrectIntent() {
+    public void whenPromptHasAnswerAndAccuracyThresholdValue_buttonShouldLaunchCorrectIntent() {
+        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("2.0");
+
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         stubLocationPermissions(widget, true);
         widget.getBinding().simpleButton.performClick();
@@ -223,7 +225,7 @@ public class GeoPointWidgetTest {
         Bundle bundle = startedIntent.getExtras();
 
         assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointActivity.class)));
-        assertBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer), DEFAULT_LOCATION_ACCURACY, false, true);
+        assertBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer), 2.0, false, true);
     }
 
     @Test
@@ -241,7 +243,7 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void ifWidgetHasMaps_buttonShouldLaunchCorrectIntent() {
+    public void ifWidgetHasMapsAndIsReadOnly_buttonShouldLaunchCorrectIntent() {
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
         GeoPointWidget widget = createWidget(promptWithAppearance(MAPS, false));
         stubLocationPermissions(widget, true);
