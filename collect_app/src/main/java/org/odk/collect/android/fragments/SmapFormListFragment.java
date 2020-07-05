@@ -176,6 +176,11 @@ public class SmapFormListFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void onDestroyView() {
+        rootView = null;
+        super.onDestroyView();
+    }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle bundle) {

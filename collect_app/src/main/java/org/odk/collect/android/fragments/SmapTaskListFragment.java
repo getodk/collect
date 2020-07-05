@@ -160,7 +160,6 @@ public class SmapTaskListFragment extends ListFragment {
 
     }
 
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
@@ -179,6 +178,11 @@ public class SmapTaskListFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void onDestroyView() {
+        rootView = null;
+        super.onDestroyView();
+    }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle bundle) {
