@@ -169,7 +169,7 @@ public class SmapTaskMapFragment extends Fragment
         rootView = null;
         super.onDestroyView();
     }
-    
+
     @Override
     public void onActivityCreated(Bundle b) {
         adminPreferences = getActivity().getSharedPreferences(

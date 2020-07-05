@@ -344,6 +344,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             try {
                 unregisterReceiver(listener);
                 unregisterReceiver(networkReceiver);
+                unregisterReceiver(refreshListener);
                 listener = null;
             } catch (Exception e) {
                 Timber.e("Error on unregister: " + e.getMessage());
@@ -1047,16 +1048,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
 
     }
-
-    /*
-     * Get / Set task loader
-     */
-    //public void setTaskLoader(MapDataLoader taskLoader) {
-    //   mTaskLoader = taskLoader;
-    //}
-   // public MapDataLoader getTaskLoader() {
-   //     return mTaskLoader;
-    //}
 
     @Override
     protected void onPause() {
