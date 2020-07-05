@@ -20,6 +20,7 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
@@ -77,7 +78,7 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        questionWidget = new GeoPointWidget(context, questionDetails);
+                        questionWidget = new GeoPointWidget(context, questionDetails, questionDetails.getPrompt().getQuestion(), MapProvider.getConfigurator());
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
                         questionWidget = new GeoShapeWidget(context, questionDetails);

@@ -37,4 +37,18 @@ public class QuestionWidgetHelpers {
                 .withReadOnly(true)
                 .build();
     }
+
+    public static FormEntryPrompt promptWithAppearance(String appearance, Boolean readOnly) {
+        return new MockFormEntryPromptBuilder()
+                .withReadOnly(readOnly)
+                .withAppearance(appearance)
+                .build();
+    }
+
+    public static FormEntryPrompt promptWithAppearanceAndAnswer(String appearance, IAnswerData answer) {
+        return new MockFormEntryPromptBuilder()
+                .withAnswer(answer)
+                .withAppearance(appearance)
+                .build();
+    }
 }

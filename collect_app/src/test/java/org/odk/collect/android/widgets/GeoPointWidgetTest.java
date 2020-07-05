@@ -1,8 +1,10 @@
 package org.odk.collect.android.widgets;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -10,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
@@ -21,9 +24,14 @@ import java.util.Random;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearanceAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
@@ -35,10 +43,14 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class GeoPointWidgetTest {
 
     private List<double[]> answerDoubles;
+    private QuestionDef questionDef;
+    private MapConfigurator mapConfigurator;
 
     @Before
     public void setup() {
         answerDoubles = getRandomDoubleArrayList();
+        questionDef = mock(QuestionDef.class);
+        mapConfigurator = mock(MapConfigurator.class);
     }
 
     @Test
@@ -114,8 +126,40 @@ public class GeoPointWidgetTest {
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
+    @Test
+    public void whenWidgetHasAppearanceAndNullAsAnswer_buttonShowsCorrectText() {
+        when(mapConfigurator.isAvailable(any())).thenReturn(true);
+        GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(PLACEMENT_MAP, null));
+        assertThat(((Button) widget.findViewById(R.id.simple_button)).getText(),
+                equalTo(widget.getContext().getString(R.string.get_point)));
+    }
+
+    @Test
+    public void whenWidgetHasAppearanceAndAnswer_buttonShowsCorrectText() {
+        when(mapConfigurator.isAvailable(any())).thenReturn(true);
+        GeoPointWidget widget = createWidget(promptWithAppearanceAndAnswer(PLACEMENT_MAP, new StringData(stringFromDoubleList(answerDoubles))));
+        assertThat(((Button) widget.findViewById(R.id.simple_button)).getText(),
+                equalTo(widget.getContext().getString(R.string.view_change_location)));
+    }
+
+    @Test
+    public void whenWidgetHasAnswer_buttonShowsCorrectText() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(stringFromDoubleList(answerDoubles))));
+
+        assertThat(((Button) widget.findViewById(R.id.simple_button)).getText(),
+                equalTo(widget.getContext().getString(R.string.change_location)));
+    }
+
+    @Test
+    public void whenWidgetHasNullAsAnswer_buttonShowsCorrectText() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+
+        assertThat(((Button) widget.findViewById(R.id.simple_button)).getText(),
+                equalTo(widget.getContext().getString(R.string.get_point)));
+    }
+
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
-        return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+        return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef, mapConfigurator);
     }
 
     private String stringFromDoubleList(List<double[]> doubleList) {
