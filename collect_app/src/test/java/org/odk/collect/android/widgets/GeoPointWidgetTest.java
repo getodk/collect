@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
