@@ -41,7 +41,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         themeUtils = new ThemeUtils(this);
-        setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
+        setTheme((this instanceof FormEntryActivity || this instanceof SmapMain) ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());      // smap
         super.onCreate(savedInstanceState);
 
         /**

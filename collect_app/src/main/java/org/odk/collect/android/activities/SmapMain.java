@@ -185,7 +185,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setContentView(R.layout.smap_main_layout);
         //ButterKnife.bind(this);  // banner
