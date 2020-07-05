@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -94,7 +95,7 @@ public class GeoPointWidgetTest {
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(widget.getAnswer().toString(), equalTo(answer));
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(answer));
     }
 
     @Test
