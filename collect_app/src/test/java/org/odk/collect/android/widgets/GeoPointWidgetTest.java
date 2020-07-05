@@ -74,7 +74,7 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
+    public void usingReadOnlyOption_doesNotShowTheGeoButton() {
         GeoPointWidget widget = createWidget(promptWithReadOnly());
         assertThat(widget.getBinding().simpleButton.getVisibility(), equalTo(View.GONE));
     }
@@ -181,7 +181,7 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void whenPermissionIsNotGranted_buttonShouldNotLaunchAnyIntent() {
+    public void whenPermissionIsNotGranted_buttonClickShouldNotLaunchAnyIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         stubLocationPermissions(widget, false);
         widget.getBinding().simpleButton.performClick();
@@ -191,7 +191,7 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void whenPermissionIsGranted_buttonClickShouldSetTheLocationSavedOnTheMap() {
+    public void whenPermissionIsGranted_buttonClickLaunchesIntentAndWaitsForLocationData() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoPointWidget widget = createWidget(prompt);
         stubLocationPermissions(widget, true);
