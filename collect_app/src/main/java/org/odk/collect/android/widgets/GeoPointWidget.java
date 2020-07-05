@@ -19,11 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
@@ -32,6 +28,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -63,8 +60,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     private final MapConfigurator mapConfigurator;
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    protected Button startGeoButton;
-    protected TextView answerDisplay;
+    private GeoWidgetAnswerBinding binding;
 
     private boolean readOnly;
     private boolean draggable = true;
@@ -89,22 +85,20 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.base_geo_widget_layout, null);
+        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        View answerView = binding.getRoot();
 
-        answerDisplay = answerView.findViewById(R.id.geo_answer_text);
-        answerDisplay.setTextColor(new ThemeUtils(context).getColorOnSurface());
-        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-        startGeoButton = answerView.findViewById(R.id.simple_button);
+        binding.geoAnswerText.setTextColor(new ThemeUtils(context).getColorOnSurface());
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         readOnly = getFormEntryPrompt().isReadOnly();
         if (readOnly) {
-            startGeoButton.setVisibility(GONE);
+            binding.simpleButton.setVisibility(GONE);
         } else {
-            startGeoButton.setText(getDefaultButtonLabel());
-            startGeoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.simpleButton.setText(getDefaultButtonLabel());
+            binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            startGeoButton.setOnClickListener(v -> onButtonClick());
+            binding.simpleButton.setOnClickListener(v -> onButtonClick());
         }
         return answerView;
     }
@@ -121,35 +115,39 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     @Override
     public void clearAnswer() {
         stringAnswer = null;
-        answerDisplay.setText(null);
+        binding.geoAnswerText.setText(null);
         updateButtonLabelsAndVisibility(false);
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        startGeoButton.setOnLongClickListener(l);
-        answerDisplay.setOnLongClickListener(l);
+        binding.simpleButton.setOnLongClickListener(l);
+        binding.geoAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        startGeoButton.cancelLongPress();
-        answerDisplay.cancelLongPress();
+        binding.simpleButton.cancelLongPress();
+        binding.geoAnswerText.cancelLongPress();
     }
 
     @Override
     public void setBinaryData(Object answer) {
         stringAnswer = (String) answer;
-        answerDisplay.setText(getAnswerToDisplay(stringAnswer));
+        binding.geoAnswerText.setText(getAnswerToDisplay(stringAnswer));
 
-        if (answerDisplay.getText().toString().equals("")) {
+        if (binding.geoAnswerText.getText().toString().equals("")) {
             stringAnswer = "";
         }
 
         updateButtonLabelsAndVisibility(stringAnswer != null);
         widgetValueChanged();
+    }
+
+    protected GeoWidgetAnswerBinding getBinding() {
+        return binding;
     }
 
     private void determineMapProperties(QuestionDef questionDef) {
@@ -190,14 +188,14 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (useMap) {
             if (readOnly) {
-                startGeoButton.setText(R.string.geopoint_view_read_only);
+                binding.simpleButton.setText(R.string.geopoint_view_read_only);
             } else {
-                startGeoButton.setText(
+                binding.simpleButton.setText(
                         dataAvailable ? R.string.view_change_location : R.string.get_point);
             }
         } else {
             if (!readOnly) {
-                startGeoButton.setText(
+                binding.simpleButton.setText(
                         dataAvailable ? R.string.change_location : R.string.get_point);
             }
         }

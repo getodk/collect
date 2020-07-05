@@ -32,7 +32,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.base_geo_widget_layout, null);
+        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.geo_widget_answer, null);
 
         answerDisplay = answerView.findViewById(R.id.geo_answer_text);
         answerDisplay.setTextColor(new ThemeUtils(context).getColorOnSurface());
