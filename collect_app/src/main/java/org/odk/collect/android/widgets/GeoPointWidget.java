@@ -33,7 +33,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -68,7 +67,8 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     private double accuracyThreshold;
     private String stringAnswer;
 
-    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, MapConfigurator mapConfigurator, WaitingForDataRegistry waitingForDataRegistry) {
+    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef,
+                          MapConfigurator mapConfigurator, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
         this.mapConfigurator = mapConfigurator;
         this.waitingForDataRegistry = waitingForDataRegistry;
