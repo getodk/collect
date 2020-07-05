@@ -34,6 +34,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import java.io.File;
 import java.util.Locale;
@@ -53,7 +54,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class AnnotateWidget extends BaseImageWidget {
+public class AnnotateWidget extends BaseImageWidget implements ButtonClickListener {
 
     Button captureButton;
     Button chooseButton;

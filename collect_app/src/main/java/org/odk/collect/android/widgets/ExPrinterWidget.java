@@ -29,6 +29,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
@@ -115,7 +116,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
+public class ExPrinterWidget extends QuestionWidget implements BinaryWidget, ButtonClickListener {
 
     final Button launchIntentButton;
 

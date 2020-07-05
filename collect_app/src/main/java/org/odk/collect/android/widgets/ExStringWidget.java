@@ -40,6 +40,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import java.util.Map;
 
@@ -92,7 +93,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * </pre>
  */
 @SuppressLint("ViewConstructor")
-public class ExStringWidget extends StringWidget implements BinaryWidget {
+public class ExStringWidget extends StringWidget implements BinaryWidget, ButtonClickListener {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
     protected static final String DATA_NAME = "value";

@@ -39,6 +39,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -49,7 +50,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Carl Hartung (chartung@nafundi.com)
  */
 @SuppressLint("ViewConstructor")
-public class BearingWidget extends QuestionWidget implements BinaryWidget {
+public class BearingWidget extends QuestionWidget implements BinaryWidget, ButtonClickListener {
     final Button getBearingButton;
     private final boolean isSensorAvailable;
     final EditText answer;

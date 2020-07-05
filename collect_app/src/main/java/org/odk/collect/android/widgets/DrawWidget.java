@@ -24,6 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -34,7 +35,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author BehrAtherton@gmail.com
  */
 @SuppressLint("ViewConstructor")
-public class DrawWidget extends BaseImageWidget {
+public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
 
     Button drawButton;
 
