@@ -2337,6 +2337,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onDestroy() {
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(null);
+            Collect.getInstance().setFormEntryActivity(this);   // smap
             // We have to call cancel to terminate the thread, otherwise it
             // lives on and retains the FEC in memory.
             // but only if it's done, otherwise the thread never returns
