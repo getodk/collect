@@ -147,8 +147,6 @@ public class WidgetFactory {
                 // This means normal appearances should be put before search().
                 if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SelectOneMinimalWidget(context, questionDetails);
-                } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
-                    questionWidget = new SelectOneAutocompleteWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
                 } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
                     questionWidget = new LikertWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
@@ -175,8 +173,6 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, questionDetails, true);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LABEL)) {
                     questionWidget = new LabelWidget(context, questionDetails);
-                } else if (appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE)) {
-                    questionWidget = new SelectMultipleAutocompleteWidget(context, questionDetails);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(context, questionDetails);
                 } else {

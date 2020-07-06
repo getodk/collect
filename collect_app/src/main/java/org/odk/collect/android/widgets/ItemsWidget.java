@@ -55,4 +55,9 @@ public abstract class ItemsWidget extends QuestionWidget {
             items = getFormEntryPrompt().getSelectChoices();
         }
     }
+
+    @Override
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+    public void setOnLongClickListener(OnLongClickListener l) {
+    }
 }

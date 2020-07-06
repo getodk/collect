@@ -51,7 +51,7 @@ import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.SelectWidget;
+import org.odk.collect.android.widgets.BaseSelectListWidget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,14 +78,14 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     boolean noButtonsMode;
 
     /**
-     * This creates a circular dependency between this class and {@link SelectWidget}. Dependencies
+     * This creates a circular dependency between this class and {@link org.odk.collect.android.widgets.BaseSelectListWidget}. Dependencies
      * for this class should be passed in at the constructor or setter level. Method calls back to
-     * {@link SelectWidget} can be replaced with listeners.
+     * {@link org.odk.collect.android.widgets.BaseSelectListWidget} can be replaced with listeners.
      */
     @Deprecated
-    SelectWidget widget;
+    BaseSelectListWidget widget;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
+    AbstractSelectListAdapter(List<SelectChoice> items, BaseSelectListWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
         this.context = context;
         this.items = items;
         this.widget = widget;

@@ -22,9 +22,7 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.views.ChoicesRecyclerView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
-import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,40 +36,27 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget {
-    private final List<Selection> ve;
-    SelectMultipleListAdapter adapter;
-
+public class SelectMultiWidget extends BaseSelectListWidget implements MultiChoiceWidget {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        //noinspection unchecked
-        ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
-                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
-        createLayout();
+        setUpRecyclerView();
+    }
+
+    private void setUpRecyclerView() {
+        adapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getNumOfColumns(), this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
+        binding.choicesRecyclerView.setUpChoicesRecyclerView(adapter, isFlex(), getNumOfColumns());
+        binding.choicesRecyclerView.adjustRecyclerViewSize();
     }
 
     @Override
     public void clearAnswer() {
-        adapter.clearAnswer();
+        ((SelectMultipleListAdapter) adapter).clearAnswer();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = adapter.getSelectedItems();
+        List<Selection> vc = ((SelectMultipleListAdapter) adapter).getSelectedItems();
         return vc.isEmpty() ? null : new SelectMultiData(vc);
-    }
-
-    private void createLayout() {
-        adapter = new SelectMultipleListAdapter(items, ve, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
-
-        if (items != null) {
-            // check if any values have spaces
-            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-
-            ChoicesRecyclerView recyclerView = new ChoicesRecyclerView(getContext(), adapter, isFlex, numColumns);
-            answerLayout.addView(recyclerView);
-            addAnswerView(answerLayout);
-        }
     }
 
     @Override
@@ -82,9 +67,15 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
     @Override
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
         if (isSelected) {
-            adapter.addItem(items.get(choiceIndex).selection());
+            ((SelectMultipleListAdapter) adapter).addItem(items.get(choiceIndex).selection());
         } else {
-            adapter.removeItem(items.get(choiceIndex).selection());
+            ((SelectMultipleListAdapter) adapter).removeItem(items.get(choiceIndex).selection());
         }
+    }
+
+    private List<Selection> getSelectedItems() {
+        return getFormEntryPrompt().getAnswerValue() == null
+                ? new ArrayList<>() :
+                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
     }
 }

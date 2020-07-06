@@ -34,7 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.widgets.SelectWidget;
+import org.odk.collect.android.widgets.SelectMultiWidget;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     private final int playColor;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectMultiWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
         super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedItems = selectedItems;
         this.playColor = playColor;
