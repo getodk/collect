@@ -3,10 +3,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/margin_small"
-    android:paddingTop="@dimen/margin_small"
-    android:paddingEnd="@dimen/margin_small"
-    android:paddingBottom="@dimen/margin_small">
+    android:padding="@dimen/margin_small">
 
     <RatingBar
         android:id="@+id/rating_bar"

@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RatingBar;
 
@@ -29,6 +28,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RatingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.UiUtils;
 
 @SuppressLint("ViewConstructor")
@@ -100,13 +100,7 @@ public class RatingWidget extends QuestionWidget {
     }
 
     private int calculateColumns(int widthOfStar) {
-        DisplayMetrics dm = getScreenDimensions((Activity) getContext());
-        return (dm.widthPixels - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET) / ((int) UiUtils.convertDpToPixel(widthOfStar, getContext()));
-    }
-
-    private DisplayMetrics getScreenDimensions(Activity activity) {
-        DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm;
+        return (ScreenUtils.getScreenWidth() - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET) /
+                ((int) UiUtils.convertDpToPixel(widthOfStar, getContext()));
     }
 }
