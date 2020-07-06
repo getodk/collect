@@ -62,7 +62,6 @@
             https://developer.android.com/reference/android/widget/ImageView.html#attr_android:tint
         -->
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
-        <item name="verticalRecyclerViewStyle">@style/VerticalRecyclerView</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Dark" parent="Widget.AppCompat.SearchView">

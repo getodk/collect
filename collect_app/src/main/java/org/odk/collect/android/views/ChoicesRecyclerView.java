@@ -3,6 +3,7 @@ package org.odk.collect.android.views;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -28,8 +29,15 @@ public class ChoicesRecyclerView extends RecyclerView {
      */
     private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
-    public ChoicesRecyclerView(@NonNull Context context, AbstractSelectListAdapter adapter, boolean isFlex, int numColumns) {
-        super(context, null, R.attr.verticalRecyclerViewStyle);
+    public ChoicesRecyclerView(@NonNull Context context) {
+        super(context);
+    }
+
+    public ChoicesRecyclerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public void setUpChoicesRecyclerView(AbstractSelectListAdapter adapter, boolean isFlex, int numColumns) {
         if (isFlex) {
             enableFlexboxLayout();
         } else {
@@ -62,13 +70,7 @@ public class ChoicesRecyclerView extends RecyclerView {
         addItemDecoration(divider);
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        adjustRecyclerViewSize();
-    }
-
-    private void adjustRecyclerViewSize() {
+    public void adjustRecyclerViewSize() {
         if (getAdapter().getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
             // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
             getLayoutParams().height = (int) (ScreenUtils.getScreenHeight() * 0.9);

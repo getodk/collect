@@ -49,7 +49,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class ItemsetWidget extends AbstractSelectOneWidget {
+public class ItemsetWidget extends SelectOneWidget {
 
     private static final String QUOTATION_MARK = "\"";
 
@@ -75,8 +75,6 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
         this.fileUtil = fileUtil;
 
         items = getItems();
-
-        createLayout();
     }
 
     @Override

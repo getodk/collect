@@ -35,7 +35,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.widgets.AbstractSelectOneWidget;
+import org.odk.collect.android.widgets.SelectOneWidget;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private View selectedItem;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, SelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
         super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedValue = selectedValue;
         this.playColor = playColor;
@@ -63,7 +63,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     @Override
     public void onClick(View v) {
-        ((AbstractSelectOneWidget) widget).onClick();
+        ((SelectOneWidget) widget).onClick();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         if (isChecked) {
             if (selectedRadioButton != null && buttonView != selectedRadioButton) {
                 selectedRadioButton.setChecked(false);
-                ((AbstractSelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
+                ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
             }
             selectedRadioButton = (RadioButton) buttonView;
             selectedValue = items.get((int) selectedRadioButton.getTag()).getValue();
@@ -131,7 +131,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             selectedItem = view;
             selectedValue = selection.getValue();
         }
-        ((AbstractSelectOneWidget) widget).onClick();
+        ((SelectOneWidget) widget).onClick();
     }
 
     public void clearAnswer() {
@@ -143,7 +143,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             selectedItem.setBackground(null);
             selectedItem = null;
         }
-        ((AbstractSelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
+        ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
     }
 
     public SelectChoice getSelectedItem() {

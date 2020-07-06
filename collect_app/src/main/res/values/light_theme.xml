@@ -56,7 +56,6 @@
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
-        <item name="verticalRecyclerViewStyle">@style/VerticalRecyclerView</item>
     </style>
 
     <style name="Theme.Collect.BaseLight.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">

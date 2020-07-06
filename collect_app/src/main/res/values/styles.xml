@@ -28,8 +28,4 @@
     <style name="Widget.Collect.BottomSheet.Modal" parent="Widget.Design.BottomSheet.Modal">
         <item name="behavior_peekHeight">300dp</item>
     </style>
-
-    <style name="VerticalRecyclerView" parent="android:Widget">
-        <item name="android:scrollbars">vertical</item>
-    </style>
 </resources>
