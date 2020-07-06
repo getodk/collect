@@ -1,3 +1,13 @@
+# HEDERA (ODK) Collect
+
+This repository has been [forked](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) from ODK Collect.
+The master branch is reserved for updated of the main ODK code, with the purpose of keeping it updated with the main development.
+
+Read [here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) how to keep the fork synced to the main repository.
+
+
+
+
 # ODK Collect
 ![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
