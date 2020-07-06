@@ -7,13 +7,15 @@ import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
+import androidx.work.WorkManager;
+
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.backgroundwork.CollectBackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -59,7 +61,7 @@ import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
-import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -284,8 +286,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BackgroundWorkManager providesBackgroundWorkManager() {
-        return new CollectBackgroundWorkManager();
+    public BackgroundWorkManager providesBackgroundWorkManager(Scheduler scheduler) {
+        return new JobManagerAndSchedulerBackgroundWorkManager(scheduler);
     }
 
     @Provides
@@ -309,8 +311,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Scheduler providesScheduler() {
-        return new CoroutineScheduler();
+    public Scheduler providesScheduler(Context context) {
+        return new CoroutineAndWorkManagerScheduler(WorkManager.getInstance(context));
     }
 
     @Singleton

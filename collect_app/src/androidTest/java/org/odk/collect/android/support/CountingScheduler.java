@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 
@@ -29,13 +30,13 @@ public class CountingScheduler implements Scheduler {
     }
 
     @Override
-    public Cancellable schedule(Runnable task, long period) {
+    public Cancellable scheduleInForeground(Runnable task, long repeatPeriod) {
         increment();
 
-        return wrappedScheduler.schedule(() -> {
+        return wrappedScheduler.scheduleInForeground(() -> {
             task.run();
             decrement();
-        }, period);
+        }, repeatPeriod);
     }
 
     public void setFinishedCallback(Runnable callback) {
@@ -62,5 +63,10 @@ public class CountingScheduler implements Scheduler {
         synchronized (lock) {
             return tasks;
         }
+    }
+
+    @Override
+    public boolean isRunning(@NotNull String tag) {
+        return wrappedScheduler.isRunning(tag);
     }
 }

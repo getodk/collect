@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.work.WorkManager;
 
 import com.google.zxing.WriterException;
 
@@ -27,7 +28,7 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class ConfigureWithQRCodeTest {
 
     private final CollectTestRule rule = new CollectTestRule();
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
-    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineScheduler());
+    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineAndWorkManagerScheduler(WorkManager.getInstance()));
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -61,7 +62,7 @@ public class ConfigureWithQRCodeTest {
                 }
 
                 @Override
-                public Scheduler providesScheduler() {
+                public Scheduler providesScheduler(Context context) {
                     return countingScheduler;
                 }
             }))

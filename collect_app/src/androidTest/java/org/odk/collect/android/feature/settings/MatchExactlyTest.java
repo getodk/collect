@@ -1,10 +1,12 @@
 package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
+import android.content.Context;
 import android.webkit.MimeTypeMap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.work.WorkManager;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,7 +22,8 @@ import org.odk.collect.android.support.CountingSchedulerIdlingResource;
 import org.odk.collect.android.support.IdlingResourceRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.StubOpenRosaServer;
-import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.android.support.pages.FillBlankFormPage;
+import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -32,7 +35,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class MatchExactlyTest {
 
     public final StubOpenRosaServer server = new StubOpenRosaServer();
-    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineScheduler());
+    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineAndWorkManagerScheduler(WorkManager.getInstance()));
 
     public CollectTestRule rule = new CollectTestRule();
 
@@ -50,7 +53,7 @@ public class MatchExactlyTest {
                 }
 
                 @Override
-                public Scheduler providesScheduler() {
+                public Scheduler providesScheduler(Context context) {
                     return countingScheduler;
                 }
             }))
@@ -61,16 +64,22 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestFormsFromServer() {
-        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        server.addForm("Two Question", "two_question", "two-question.xml");
+        server.addForm("One Question", "one_question", "one-question.xml");
+        server.addForm("One Question Repeat", "one_question_repeat", "one-question-repeat.xml");
 
-        rule.mainMenu()
+        FillBlankFormPage page = rule.mainMenu()
                 .setServer(server.getURL())
                 .enableMatchExactly()
                 .clickFillBlankForm()
                 .assertText("One Question")
-                .assertText("One Question Repeat")
-                .clickRefresh()
+                .assertText("One Question Repeat");
+
+        server.removeForm("One Question");
+        server.removeForm("One Question Repeat");
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        server.addForm("Two Question", "two_question", "two-question.xml");
+
+        page.clickRefresh()
                 .assertText("Two Question") // Check new form downloaded
                 .assertText("One Question Updated") // Check updated form updated
                 .assertTextDoesNotExist("One Question Repeat"); // Check deleted form deleted

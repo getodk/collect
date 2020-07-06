@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 
@@ -18,7 +19,7 @@ public class FakeScheduler implements Scheduler {
     }
 
     @Override
-    public Cancellable schedule(Runnable task, long period) {
+    public Cancellable scheduleInForeground(Runnable task, long repeatPeriod) {
         this.foregroundTask = task;
         return () -> {
             cancelled = true;
@@ -36,5 +37,10 @@ public class FakeScheduler implements Scheduler {
 
     public Boolean hasBeenCancelled() {
         return cancelled;
+    }
+
+    @Override
+    public boolean isRunning(@NotNull String tag) {
+        return false;
     }
 }
