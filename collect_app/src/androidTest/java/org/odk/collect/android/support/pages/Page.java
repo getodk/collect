@@ -345,8 +345,9 @@ abstract class Page<T extends Page<T>> {
         throw new RuntimeException("waitFor failed", failure);
     }
 
-    public void assertTextNotDisplayed(int string) {
+    public T assertTextNotDisplayed(int string) {
         onView(withText(getTranslatedString(string))).check(matches(not(isDisplayed())));
+        return (T) this;
     }
 }
 

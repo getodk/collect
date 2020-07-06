@@ -86,16 +86,10 @@ public class MatchExactlyTest {
     }
 
     @Test
-    public void whenMatchExactlyEnabled_getBlankFormsButtonIsGone() {
+    public void whenMatchExactlyEnabled_hidesUselessUI() {
         rule.mainMenu()
                 .enableMatchExactly()
-                .assertTextNotDisplayed(R.string.get_forms);
-    }
-
-    @Test
-    public void whenMatchExactlyEnabled_formManagementFormUpdateIsDisabled() {
-        rule.mainMenu()
-                .enableMatchExactly()
+                .assertTextNotDisplayed(R.string.get_forms)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()
