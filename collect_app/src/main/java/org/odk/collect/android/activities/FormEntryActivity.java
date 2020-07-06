@@ -2791,7 +2791,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // identification and removal in the same pass but removal has to be done in a loop that
         // starts from the end and itemset-based select choices will only be correctly recomputed
         // if accessed from beginning to end because the call on sameAs is what calls
-        // populateDynamicChoices. See https://github.com/github.com/getodk//javarosa/issues/436
+        // populateDynamicChoices. See https://github.com/getodk/javarosa/issues/436
         List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
         List<FormIndex> formIndexesToRemove = new ArrayList<>();
         for (ImmutableDisplayableQuestion questionBeforeSave : immutableQuestionsBeforeSave) {
