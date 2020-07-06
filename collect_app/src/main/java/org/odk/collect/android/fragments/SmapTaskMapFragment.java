@@ -189,7 +189,6 @@ public class SmapTaskMapFragment extends Fragment
 
     @Override
     public void onPause() {
-
         super.onPause();
     }
 
@@ -286,22 +285,6 @@ public class SmapTaskMapFragment extends Fragment
 
 
             mo = new MapLocationObserver(getContext(), this);
-            /*
-            location_button = getActivity().findViewById(R.id.show_location);
-            location_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Location location = mMap.getMyLocation();
-
-                    if (location != null) {
-                        LatLng myLocation = new LatLng(location.getLatitude(),
-                                location.getLongitude());
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
-                    }
-
-                }
-            });
-            */
 
             /*
              * Add multiline info window
@@ -402,11 +385,9 @@ public class SmapTaskMapFragment extends Fragment
 
     @Override
     public void onResume() {
-        //if(mHelper != null) {
-        //    mHelper.setBasemap();
-        //}
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        model.loadData();   // Update the user trail display with latest points
         super.onResume();
     }
 

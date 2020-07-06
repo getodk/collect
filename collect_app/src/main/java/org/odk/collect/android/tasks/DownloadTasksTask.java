@@ -643,7 +643,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	private void updateTaskStatusToServer() throws Exception {
 
         TaskResponse updateResponse = new TaskResponse();
-        //updateResponse.forms = tr.forms;
         
         // Add device id to response
         updateResponse.deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
@@ -677,7 +676,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
          */
         boolean sendLocation = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_USER_LOCATION);
         long lastTraceIdSent = 0;
-        if(tr.settings != null && sendLocation) {
+        if(sendLocation) {
             updateResponse.taskCompletionInfo = new ArrayList<>();   // Details on completed tasks
 
             for (TaskEntry t : nonSynchTasks) {
