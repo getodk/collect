@@ -18,6 +18,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.loaders.PointEntry;
+import org.odk.collect.android.loaders.Project;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,5 +35,6 @@ public class TaskResponse {
 	public List<FormLocator> forms;
     public FieldTaskSettings settings;
     public List<TaskCompletionInfo> taskCompletionInfo;
-    public ArrayList<PointEntry> userTrail;
+    public List<PointEntry> userTrail;
+    public List<Project> projects;
 }
