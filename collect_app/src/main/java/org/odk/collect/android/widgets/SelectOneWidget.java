@@ -24,7 +24,6 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
@@ -50,52 +49,29 @@ public class SelectOneWidget extends BaseSelectListWidget implements MultiChoice
     @Nullable
     private AdvanceToNextListener listener;
 
-    private String selectedValue;
     private final boolean autoAdvance;
 
     public SelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
         super(context, questionDetails);
-
-        if (questionDetails.getPrompt().getAnswerValue() != null) {
-            if (this instanceof ItemsetWidget) {
-                selectedValue = questionDetails.getPrompt().getAnswerValue().getDisplayText();
-            } else { // Regular SelectOneWidget
-                selectedValue = ((Selection) questionDetails.getPrompt().getAnswerValue().getValue()).getValue();
-            }
-        }
-
         this.autoAdvance = autoAdvance;
-
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
         }
-        setUpRecyclerView();
-    }
-
-    @Override
-    public void clearAnswer() {
-        if (adapter != null) {
-            ((SelectOneListAdapter) adapter).clearAnswer();
-        }
-
-        widgetValueChanged();
+        recyclerViewAdapter = new SelectOneListAdapter(items, getSelectedValue(), this, getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
     }
 
     @Override
     public IAnswerData getAnswer() {
-        SelectChoice selectChoice =  ((SelectOneListAdapter) adapter).getSelectedItem();
-
+        SelectChoice selectChoice =  ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
         return selectChoice == null
                 ? null
-                : this instanceof ItemsetWidget
-                    ? new StringData(selectChoice.getValue())
-                    : new SelectOneData(new Selection(selectChoice));
+                : new SelectOneData(new Selection(selectChoice));
     }
 
-    private void setUpRecyclerView() {
-        adapter = new SelectOneListAdapter(items, selectedValue, this, getNumOfColumns(), this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
-        binding.choicesRecyclerView.setUpChoicesRecyclerView(adapter, isFlex(), getNumOfColumns());
-        binding.choicesRecyclerView.adjustRecyclerViewSize();
+    protected String getSelectedValue() {
+        return getQuestionDetails().getPrompt().getAnswerValue() == null
+                ? null
+                : ((Selection) getQuestionDetails().getPrompt().getAnswerValue().getValue()).getValue();
     }
 
     /**
@@ -134,7 +110,7 @@ public class SelectOneWidget extends BaseSelectListWidget implements MultiChoice
 
     @Override
     public int getChoiceCount() {
-        return adapter.getItemCount();
+        return recyclerViewAdapter.getItemCount();
     }
 
     @Override
@@ -143,6 +119,6 @@ public class SelectOneWidget extends BaseSelectListWidget implements MultiChoice
         button.setTag(choiceIndex);
         button.setChecked(isSelected);
 
-        ((SelectOneListAdapter) adapter).onCheckedChanged(button, isSelected);
+        ((SelectOneListAdapter) recyclerViewAdapter).onCheckedChanged(button, isSelected);
     }
 }

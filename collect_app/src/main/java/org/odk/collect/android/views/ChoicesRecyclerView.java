@@ -37,13 +37,14 @@ public class ChoicesRecyclerView extends RecyclerView {
         super(context, attrs);
     }
 
-    public void setUpChoicesRecyclerView(AbstractSelectListAdapter adapter, boolean isFlex, int numColumns) {
+    public void initRecyclerView(AbstractSelectListAdapter adapter, boolean isFlex) {
         if (isFlex) {
             enableFlexboxLayout();
         } else {
-            enableGridLayout(numColumns);
+            enableGridLayout(adapter.getNumColumns());
         }
         setAdapter(adapter);
+        adjustRecyclerViewSize();
     }
 
     private void enableFlexboxLayout() {
@@ -70,7 +71,7 @@ public class ChoicesRecyclerView extends RecyclerView {
         addItemDecoration(divider);
     }
 
-    public void adjustRecyclerViewSize() {
+    private void adjustRecyclerViewSize() {
         if (getAdapter().getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
             // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
             getLayoutParams().height = (int) (ScreenUtils.getScreenHeight() * 0.9);

@@ -44,8 +44,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     private final int playColor;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectMultiWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectMultiWidget widget, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, widget, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedItems = selectedItems;
         this.playColor = playColor;
     }
@@ -141,10 +141,10 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         }
     }
 
+    @Override
     public void clearAnswer() {
         selectedItems.clear();
         notifyDataSetChanged();
-        widget.widgetValueChanged();
     }
 
     public List<Selection> getSelectedItems() {

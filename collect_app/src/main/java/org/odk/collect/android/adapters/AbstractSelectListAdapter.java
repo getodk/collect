@@ -85,7 +85,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     @Deprecated
     BaseSelectListWidget widget;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, BaseSelectListWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
+    AbstractSelectListAdapter(List<SelectChoice> items, BaseSelectListWidget widget, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
         this.context = context;
         this.items = items;
         this.widget = widget;
@@ -94,7 +94,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         this.answerFontSize = answerFontSize;
         this.audioHelper = audioHelper;
         filteredItems = items;
-        this.numColumns = numColumns;
+        this.numColumns = WidgetAppearanceUtils.getNumberOfColumns(prompt, context);
         noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt)
                 || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
     }
@@ -297,4 +297,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             }
         }
     }
+
+    public int getNumColumns() {
+        return numColumns;
+    }
+
+    public abstract void clearAnswer();
 }
