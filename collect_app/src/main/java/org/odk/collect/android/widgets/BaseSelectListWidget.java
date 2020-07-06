@@ -23,21 +23,27 @@ public abstract class BaseSelectListWidget extends ItemsWidget {
     private static final String SEARCH_TEXT = "search_text";
 
     protected SelectListWidgetAnswerBinding binding;
-    protected AbstractSelectListAdapter adapter;
+    protected AbstractSelectListAdapter recyclerViewAdapter;
 
     public BaseSelectListWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-
         logAnalytics(questionDetails);
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SelectListWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        if (isAutocomplete()) {
+        if (WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt())) {
             setUpSearchBox();
         }
         return binding.getRoot();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        binding.choicesRecyclerView.initRecyclerView(recyclerViewAdapter, WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
+        restoreSavedSearchText();
     }
 
     @Override
@@ -46,42 +52,29 @@ public abstract class BaseSelectListWidget extends ItemsWidget {
         getState().putString(SEARCH_TEXT + getFormEntryPrompt().getIndex(), binding.choicesSearchBox.getText().toString());
     }
 
-    protected boolean isFlex() {
-        return WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt());
+    @Override
+    public void setFocus(Context context) {
+        if (WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt())) {
+            SoftKeyboardUtils.showSoftKeyboard(binding.choicesSearchBox);
+        }
     }
 
-    protected boolean isAutocomplete() {
-        return WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt());
-    }
-
-    protected int getNumOfColumns() {
-        return WidgetAppearanceUtils.getNumberOfColumns(getQuestionDetails().getPrompt(), getContext());
+    @Override
+    public void clearAnswer() {
+        recyclerViewAdapter.clearAnswer();
+        widgetValueChanged();
     }
 
     protected void setUpSearchBox() {
         binding.choicesSearchBox.setVisibility(VISIBLE);
         binding.choicesSearchBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        setupChangeListener();
-        String searchText = null;
-        if (getState() != null) {
-            searchText = getState().getString(SEARCH_TEXT + getFormEntryPrompt().getIndex());
-        }
-        if (searchText != null && !searchText.isEmpty()) {
-            binding.choicesSearchBox.setText(searchText);
-            Selection.setSelection(binding.choicesSearchBox.getText(), binding.choicesSearchBox.getText().toString().length());
-        } else {
-            doSearch("");
-        }
-    }
-
-    private void setupChangeListener() {
         binding.choicesSearchBox.addTextChangedListener(new TextWatcher() {
             private String oldText = "";
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (!s.toString().equals(oldText)) {
-                    doSearch(s.toString());
+                    recyclerViewAdapter.getFilter().filter(s.toString());
                 }
             }
 
@@ -96,16 +89,14 @@ public abstract class BaseSelectListWidget extends ItemsWidget {
         });
     }
 
-    private void doSearch(String searchStr) {
-        if (adapter != null) {
-            adapter.getFilter().filter(searchStr);
+    private void restoreSavedSearchText() {
+        String searchText = null;
+        if (getState() != null) {
+            searchText = getState().getString(SEARCH_TEXT + getFormEntryPrompt().getIndex());
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        if (isAutocomplete()) {
-            SoftKeyboardUtils.showSoftKeyboard(binding.choicesSearchBox);
+        if (searchText != null && !searchText.isEmpty()) {
+            binding.choicesSearchBox.setText(searchText);
+            Selection.setSelection(binding.choicesSearchBox.getText(), binding.choicesSearchBox.getText().toString().length());
         }
     }
 

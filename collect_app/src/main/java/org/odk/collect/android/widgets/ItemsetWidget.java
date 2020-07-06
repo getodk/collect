@@ -24,11 +24,14 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -78,8 +81,24 @@ public class ItemsetWidget extends SelectOneWidget {
     }
 
     @Override
+    public IAnswerData getAnswer() {
+        SelectChoice selectChoice =  ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
+
+        return selectChoice == null
+                ? null
+                : new StringData(selectChoice.getValue());
+    }
+
+    @Override
     protected void readItems() {
         // Do nothing here. We want to read items from an external csv later.
+    }
+
+    @Override
+    protected String getSelectedValue() {
+        return getQuestionDetails().getPrompt().getAnswerValue() == null
+                ? null
+                : getQuestionDetails().getPrompt().getAnswerValue().getDisplayText();
     }
 
     private List<SelectChoice> getItems() {

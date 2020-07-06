@@ -39,37 +39,28 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
 public class SelectMultiWidget extends BaseSelectListWidget implements MultiChoiceWidget {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        setUpRecyclerView();
-    }
-
-    private void setUpRecyclerView() {
-        adapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getNumOfColumns(), this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
-        binding.choicesRecyclerView.setUpChoicesRecyclerView(adapter, isFlex(), getNumOfColumns());
-        binding.choicesRecyclerView.adjustRecyclerViewSize();
-    }
-
-    @Override
-    public void clearAnswer() {
-        ((SelectMultipleListAdapter) adapter).clearAnswer();
+        recyclerViewAdapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
     }
 
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = ((SelectMultipleListAdapter) adapter).getSelectedItems();
-        return vc.isEmpty() ? null : new SelectMultiData(vc);
+        List<Selection> selectedItems = ((SelectMultipleListAdapter) recyclerViewAdapter).getSelectedItems();
+        return selectedItems.isEmpty()
+                ? null
+                : new SelectMultiData(selectedItems);
     }
 
     @Override
     public int getChoiceCount() {
-        return adapter.getItemCount();
+        return recyclerViewAdapter.getItemCount();
     }
 
     @Override
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
         if (isSelected) {
-            ((SelectMultipleListAdapter) adapter).addItem(items.get(choiceIndex).selection());
+            ((SelectMultipleListAdapter) recyclerViewAdapter).addItem(items.get(choiceIndex).selection());
         } else {
-            ((SelectMultipleListAdapter) adapter).removeItem(items.get(choiceIndex).selection());
+            ((SelectMultipleListAdapter) recyclerViewAdapter).removeItem(items.get(choiceIndex).selection());
         }
     }
 

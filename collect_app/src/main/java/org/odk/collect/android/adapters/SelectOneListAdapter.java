@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
@@ -48,8 +47,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private View selectedItem;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, SelectOneWidget widget, int numColumns, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, widget, numColumns, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, SelectOneWidget widget, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, widget, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedValue = selectedValue;
         this.playColor = playColor;
     }
@@ -79,8 +78,6 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     }
 
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
-        ImageView autoAdvanceIcon;
-
         ViewHolder(View v) {
             super(v);
             if (noButtonsMode) {
@@ -134,6 +131,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         ((SelectOneWidget) widget).onClick();
     }
 
+    @Override
     public void clearAnswer() {
         if (selectedRadioButton != null) {
             selectedRadioButton.setChecked(false);
