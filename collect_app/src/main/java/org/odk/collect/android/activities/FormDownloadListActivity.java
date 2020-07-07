@@ -44,7 +44,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -207,7 +207,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         downloadButton = findViewById(R.id.add_button);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
         downloadButton.setOnClickListener(v -> {
-            ArrayList<FormDetails> filesToDownload = getFilesToDownload();
+            ArrayList<ServerFormDetails> filesToDownload = getFilesToDownload();
             viewModel.logDownloadAnalyticsEvent(formsDao.getCount(),
                     webCredentialsUtils.getServerUrlFromPreferences());
             startFormsDownload(filesToDownload);
@@ -401,8 +401,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         });
     }
 
-    private ArrayList<FormDetails> getFilesToDownload() {
-        ArrayList<FormDetails> filesToDownload = new ArrayList<>();
+    private ArrayList<ServerFormDetails> getFilesToDownload() {
+        ArrayList<ServerFormDetails> filesToDownload = new ArrayList<>();
 
         SparseBooleanArray sba = listView.getCheckedItemPositions();
         for (int i = 0; i < listView.getCount(); i++) {
@@ -419,7 +419,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      * starts the task to download the selected forms, also shows progress dialog
      */
     @SuppressWarnings("unchecked")
-    private void startFormsDownload(@NonNull ArrayList<FormDetails> filesToDownload) {
+    private void startFormsDownload(@NonNull ArrayList<ServerFormDetails> filesToDownload) {
         int totalCount = filesToDownload.size();
         if (totalCount > 0) {
             // show dialog box
@@ -521,7 +521,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      * Called when the form list has finished downloading. results will either contain a set of
      * <form_id, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */
-    public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
+    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> result) {
         DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
@@ -562,7 +562,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             ArrayList<String> ids = new ArrayList<>(viewModel.getFormDetailsByFormId().keySet());
             for (int i = 0; i < result.size(); i++) {
                 String formDetailsKey = ids.get(i);
-                FormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
+                ServerFormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
 
                 if (!displayOnlyUpdatedForms || (details.isNewerFormVersionAvailable() || details.areNewerMediaFilesAvailable())) {
                     HashMap<String, String> item = new HashMap<>();
@@ -604,13 +604,13 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                     viewModel.putFormResult(formId, false);
                 }
 
-                ArrayList<FormDetails> filesToDownload  = new ArrayList<>();
+                ArrayList<ServerFormDetails> filesToDownload  = new ArrayList<>();
 
-                for (FormDetails formDetails: viewModel.getFormDetailsByFormId().values()) {
-                    String formId = formDetails.getFormId();
+                for (ServerFormDetails serverFormDetails : viewModel.getFormDetailsByFormId().values()) {
+                    String formId = serverFormDetails.getFormId();
 
                     if (viewModel.getFormResults().containsKey(formId)) {
-                        filesToDownload.add(formDetails);
+                        filesToDownload.add(serverFormDetails);
                     }
                 }
 
@@ -692,7 +692,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void formsDownloadingComplete(HashMap<FormDetails, String> result) {
+    public void formsDownloadingComplete(HashMap<ServerFormDetails, String> result) {
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(null);
         }
@@ -704,11 +704,11 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         // Set result to true for forms which were downloaded
         if (viewModel.isDownloadOnlyMode()) {
-            for (FormDetails formDetails: result.keySet()) {
-                String successKey = result.get(formDetails);
+            for (ServerFormDetails serverFormDetails : result.keySet()) {
+                String successKey = result.get(serverFormDetails);
                 if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
-                    if (viewModel.getFormResults().containsKey(formDetails.getFormId())) {
-                        viewModel.putFormResult(formDetails.getFormId(), true);
+                    if (viewModel.getFormResults().containsKey(serverFormDetails.getFormId())) {
+                        viewModel.putFormResult(serverFormDetails.getFormId(), true);
                     }
                 }
             }
@@ -717,10 +717,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
     }
 
-    public static String getDownloadResultMessage(HashMap<FormDetails, String> result) {
-        Set<FormDetails> keys = result.keySet();
+    public static String getDownloadResultMessage(HashMap<ServerFormDetails, String> result) {
+        Set<ServerFormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
-        for (FormDetails k : keys) {
+        for (ServerFormDetails k : keys) {
             b.append(k.getFormName() + " ("
                     + ((k.getFormVersion() != null)
                     ? (Collect.getInstance().getString(R.string.version) + ": " + k.getFormVersion() + " ")

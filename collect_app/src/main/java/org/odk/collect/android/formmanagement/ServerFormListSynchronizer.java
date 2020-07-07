@@ -3,9 +3,8 @@ package org.odk.collect.android.formmanagement;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.openrosa.api.FormListApi;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class ServerFormListSynchronizer {
 
     public void synchronize() throws FormApiException {
         ServerFormsDetailsFetcher listDownloader = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI);
-        List<FormDetails> formList = listDownloader.fetchFormDetails();
+        List<ServerFormDetails> formList = listDownloader.fetchFormDetails();
 
         List<Form> formsOnDevice = formRepository.getAll();
 
@@ -35,7 +34,7 @@ public class ServerFormListSynchronizer {
             }
         });
 
-        for (FormDetails form : formList) {
+        for (ServerFormDetails form : formList) {
             boolean onDevice = formsOnDevice.stream().anyMatch(f -> f.getJrFormId().equals(form.getFormId()));
 
             if (!onDevice || form.isNewerFormVersionAvailable() || form.areNewerMediaFilesAvailable()) {

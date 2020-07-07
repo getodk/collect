@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.robolectric.RobolectricTestRunner;
@@ -49,10 +49,10 @@ public class FormListDownloaderTest {
                 new WebCredentialsUtils()
         );
 
-        final Map<String, FormDetails> fetched = downloader.downloadFormList(null, null, null, false);
+        final Map<String, ServerFormDetails> fetched = downloader.downloadFormList(null, null, null, false);
         assertEquals(2, fetched.size());
 
-        FormDetails f1 = fetched.get("one");
+        ServerFormDetails f1 = fetched.get("one");
         assertNull(f1.getErrorStr());
         assertEquals("The First Form", f1.getFormName());
         assertEquals("https://example.com/formXml?formId=one", f1.getDownloadUrl());
@@ -62,7 +62,7 @@ public class FormListDownloaderTest {
         assertFalse(f1.isNewerFormVersionAvailable());
         assertFalse(f1.areNewerMediaFilesAvailable());
 
-        FormDetails f2 = fetched.get("two");
+        ServerFormDetails f2 = fetched.get("two");
         assertNull(f2.getErrorStr());
         assertEquals("The Second Form", f2.getFormName());
         assertEquals("https://example.com/formXml?formId=two", f2.getDownloadUrl());

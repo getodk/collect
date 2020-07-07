@@ -13,7 +13,7 @@ import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
@@ -52,8 +52,8 @@ public class FormListDownloader {
         mediaFileRepository = new DatabaseMediaFileRepository();
     }
 
-    public HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username,
-                                                         @Nullable String password, boolean alwaysCheckMediaFiles) {
+    public HashMap<String, ServerFormDetails> downloadFormList(@Nullable String url, @Nullable String username,
+                                                               @Nullable String password, boolean alwaysCheckMediaFiles) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 application);
 
@@ -83,33 +83,33 @@ public class FormListDownloader {
         OpenRosaFormListApi formAPI = new OpenRosaFormListApi(openRosaXMLFetcher, downloadListUrl, downloadPath);
         // We populate this with available forms from the specified server.
         // <formname, details>
-        HashMap<String, FormDetails> formList = new HashMap<>();
+        HashMap<String, ServerFormDetails> formList = new HashMap<>();
 
         try {
             ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI);
-            List<FormDetails> formDetailsList = serverFormsDetailsFetcher.fetchFormDetails(alwaysCheckMediaFiles);
-            for (FormDetails formDetails : formDetailsList) {
-                formList.put(formDetails.getFormId(), formDetails);
+            List<ServerFormDetails> serverFormDetailsList = serverFormsDetailsFetcher.fetchFormDetails(alwaysCheckMediaFiles);
+            for (ServerFormDetails serverFormDetails : serverFormDetailsList) {
+                formList.put(serverFormDetails.getFormId(), serverFormDetails);
             }
         } catch (FormApiException formApiException) {
             Timber.e(formApiException);
 
             switch (formApiException.getType()) {
                 case AUTH_REQUIRED:
-                    formList.put(DL_AUTH_REQUIRED, new FormDetails(formApiException.getMessage()));
+                    formList.put(DL_AUTH_REQUIRED, new ServerFormDetails(formApiException.getMessage()));
                     break;
                 case PARSE_ERROR:
-                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_openrosa_formlist_failed, formApiException.getMessage())));
+                    formList.put(DL_ERROR_MSG, new ServerFormDetails(application.getString(R.string.parse_openrosa_formlist_failed, formApiException.getMessage())));
                     break;
                 case LEGACY_PARSE_ERROR:
-                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_legacy_formlist_failed, formApiException.getMessage())));
+                    formList.put(DL_ERROR_MSG, new ServerFormDetails(application.getString(R.string.parse_legacy_formlist_failed, formApiException.getMessage())));
                     break;
                 default:
-                    formList.put(DL_ERROR_MSG, new FormDetails(formApiException.getMessage()));
+                    formList.put(DL_ERROR_MSG, new ServerFormDetails(formApiException.getMessage()));
             }
         }
 
-        HashMap<String, FormDetails> result = formList;
+        HashMap<String, ServerFormDetails> result = formList;
         clearTemporaryCredentials(url);
         return result;
     }

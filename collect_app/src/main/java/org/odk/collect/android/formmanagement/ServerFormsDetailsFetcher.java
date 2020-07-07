@@ -18,7 +18,6 @@ package org.odk.collect.android.formmanagement;
 
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.FormListItem;
@@ -47,13 +46,13 @@ public class ServerFormsDetailsFetcher {
         this.formListAPI = formListAPI;
     }
 
-    public List<FormDetails> fetchFormDetails() throws FormApiException {
+    public List<ServerFormDetails> fetchFormDetails() throws FormApiException {
         return fetchFormDetails(true);
     }
 
-    public List<FormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormApiException {
+    public List<ServerFormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormApiException {
         List<FormListItem> formListItems = formListAPI.fetchFormList();
-        List<FormDetails> formDetailsList = new ArrayList<>();
+        List<ServerFormDetails> serverFormDetailsList = new ArrayList<>();
 
         for (FormListItem listItem : formListItems) {
             boolean isNewerFormVersionAvailable = false;
@@ -73,16 +72,22 @@ public class ServerFormsDetailsFetcher {
                 }
             }
 
-            FormDetails formDetails = FormDetails.toFormDetails(
-                    listItem,
-                    manifestFile != null ? manifestFile.getHash() : null,
+            String manifestFileHash = manifestFile != null ? manifestFile.getHash() : null;
+            ServerFormDetails serverFormDetails = new ServerFormDetails(
+                    listItem.getName(),
+                    listItem.getDownloadURL(),
+                    listItem.getManifestURL(),
+                    listItem.getFormID(),
+                    listItem.getVersion(),
+                    listItem.getHashWithPrefix(),
+                    manifestFileHash,
                     isNewerFormVersionAvailable,
                     areNewerMediaFilesAvailable
             );
 
-            formDetailsList.add(formDetails);
+            serverFormDetailsList.add(serverFormDetails);
         }
-        return formDetailsList;
+        return serverFormDetailsList;
     }
 
     private boolean isThisFormAlreadyDownloaded(String formId) {

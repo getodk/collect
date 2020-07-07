@@ -12,13 +12,12 @@
  * the License.
  */
 
-package org.odk.collect.android.logic;
-
-import org.odk.collect.android.openrosa.api.FormListItem;
+package org.odk.collect.android.formmanagement;
 
 import java.io.Serializable;
 
-public class FormDetails implements Serializable {
+public class ServerFormDetails implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private String errorStr;
@@ -32,13 +31,13 @@ public class FormDetails implements Serializable {
     private boolean isNewerFormVersionAvailable;
     private boolean areNewerMediaFilesAvailable;
 
-    public FormDetails(String error) {
+    public ServerFormDetails(String error) {
         errorStr = error;
     }
 
-    public FormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
-                       String formVersion, String hash, String manifestFileHash,
-                       boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
+    public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
+                             String formVersion, String hash, String manifestFileHash,
+                             boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
@@ -88,23 +87,5 @@ public class FormDetails implements Serializable {
 
     public boolean areNewerMediaFilesAvailable() {
         return areNewerMediaFilesAvailable;
-    }
-
-    public static FormDetails toFormDetails(FormListItem formListItem) {
-        return toFormDetails(formListItem, null, false, false);
-    }
-
-    public static FormDetails toFormDetails(FormListItem formListItem, String manifestFileHash, boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
-        return new FormDetails(
-                formListItem.getName(),
-                formListItem.getDownloadURL(),
-                formListItem.getManifestURL(),
-                formListItem.getFormID(),
-                formListItem.getVersion(),
-                formListItem.getHashWithPrefix(),
-                manifestFileHash,
-                isNewerFormVersionAvailable,
-                areNewerMediaFilesAvailable
-        );
     }
 }

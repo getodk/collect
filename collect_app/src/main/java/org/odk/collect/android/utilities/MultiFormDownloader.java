@@ -30,7 +30,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -104,17 +104,17 @@ public class MultiFormDownloader implements FormDownloader {
     }
 
     @Override
-    public void downloadForm(FormDetails form) {
+    public void downloadForm(ServerFormDetails form) {
         downloadForms(Collections.singletonList(form), null);
     }
 
-    public HashMap<FormDetails, String> downloadForms(List<FormDetails> toDownload, FormDownloaderListener stateListener) {
+    public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) {
         int total = toDownload.size();
         int count = 1;
 
-        final HashMap<FormDetails, String> result = new HashMap<>();
+        final HashMap<ServerFormDetails, String> result = new HashMap<>();
 
-        for (FormDetails fd : toDownload) {
+        for (ServerFormDetails fd : toDownload) {
             try {
                 String message = processOneForm(total, count++, fd, stateListener);
                 result.put(fd, message.isEmpty() ?
@@ -136,7 +136,7 @@ public class MultiFormDownloader implements FormDownloader {
      * @return an empty string for success, or a nonblank string with one or more error messages
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
-    private String processOneForm(int total, int count, FormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
+    private String processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
         if (stateListener != null) {
             stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         }
@@ -550,8 +550,8 @@ public class MultiFormDownloader implements FormDownloader {
     }
 
     String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
-                                                 FormDetails fd, int count,
-                                                 int total, FormDownloaderListener stateListener) throws Exception {
+                                         ServerFormDetails fd, int count,
+                                         int total, FormDownloaderListener stateListener) throws Exception {
         if (fd.getManifestUrl() == null) {
             return null;
         }

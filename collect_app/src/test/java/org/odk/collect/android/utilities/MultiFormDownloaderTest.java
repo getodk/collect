@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -90,18 +90,18 @@ public class MultiFormDownloaderTest {
         out.close();
 
         MultiFormDownloader downloader = spy(new MultiFormDownloader());
-        FormDetails formDetails = new FormDetails("No media", "https://testserver/no-media.xml",
+        ServerFormDetails serverFormDetails = new ServerFormDetails("No media", "https://testserver/no-media.xml",
                 null, "basic", "2019121201",
                 "hash", null, false, false);
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
+        doReturn(result).when(downloader).downloadXform(serverFormDetails.getFormName(), serverFormDetails.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
-        List<FormDetails> forms = new ArrayList<>();
-        forms.add(formDetails);
+        List<ServerFormDetails> forms = new ArrayList<>();
+        forms.add(serverFormDetails);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
-        assertThat(messages.get(formDetails), is("Success"));
+        HashMap<ServerFormDetails, String> messages = downloader.downloadForms(forms, null);
+        assertThat(messages.get(serverFormDetails), is("Success"));
     }
 
     /**
@@ -148,19 +148,19 @@ public class MultiFormDownloaderTest {
         out.close();
 
         MultiFormDownloader downloader = spy(new MultiFormDownloader());
-        FormDetails formDetails = new FormDetails("Media", "https://testserver/media.xml",
+        ServerFormDetails serverFormDetails = new ServerFormDetails("Media", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "media", "2019121201",
                 "hash", "manifestHash", false, false);
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
+        doReturn(result).when(downloader).downloadXform(serverFormDetails.getFormName(), serverFormDetails.getDownloadUrl(), null);
         doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
-        List<FormDetails> forms = new ArrayList<>();
-        forms.add(formDetails);
+        List<ServerFormDetails> forms = new ArrayList<>();
+        forms.add(serverFormDetails);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
-        assertThat(messages.get(formDetails), is("Success"));
+        HashMap<ServerFormDetails, String> messages = downloader.downloadForms(forms, null);
+        assertThat(messages.get(serverFormDetails), is("Success"));
     }
 
     /**
@@ -206,17 +206,17 @@ public class MultiFormDownloaderTest {
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
         MultiFormDownloader downloader = spy(new MultiFormDownloader());
-        FormDetails test1 = new FormDetails("basic-external-xml-instance", "https://testserver/form.xml",
+        ServerFormDetails test1 = new ServerFormDetails("basic-external-xml-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-xml-instance", "20200101",
                 "hash", "manifestHash", false, false);
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
-        List<FormDetails> forms = new ArrayList<>();
+        List<ServerFormDetails> forms = new ArrayList<>();
         forms.add(test1);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
+        HashMap<ServerFormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(test1), is("Success"));
     }
 
@@ -257,17 +257,17 @@ public class MultiFormDownloaderTest {
                 null)).thenReturn(buildCsvExternalInstanceFetchResult());
 
         MultiFormDownloader downloader = spy(new MultiFormDownloader());
-        FormDetails test1 = new FormDetails("basic-external-csv-instance", "https://testserver/form.xml",
+        ServerFormDetails test1 = new ServerFormDetails("basic-external-csv-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-csv-instance", "20200101",
                 "hash", "manifestHash", false, false);
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
-        List<FormDetails> forms = new ArrayList<>();
+        List<ServerFormDetails> forms = new ArrayList<>();
         forms.add(test1);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
+        HashMap<ServerFormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(test1), is("Success"));
     }
 
@@ -305,7 +305,7 @@ public class MultiFormDownloaderTest {
         out.close();
 
         MultiFormDownloader downloader = spy(new MultiFormDownloader());
-        FormDetails test1 = new FormDetails("Last Saved", "https://testserver/media.xml",
+        ServerFormDetails test1 = new ServerFormDetails("Last Saved", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "basic-last-saved", "20200101",
                 "hash", "manifestHash", false, false);
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
@@ -313,10 +313,10 @@ public class MultiFormDownloaderTest {
         doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
         doReturn(true).when(downloader).installEverything(any(), any(), any());
 
-        List<FormDetails> forms = new ArrayList<>();
+        List<ServerFormDetails> forms = new ArrayList<>();
         forms.add(test1);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
+        HashMap<ServerFormDetails, String> messages = downloader.downloadForms(forms, null);
         assertThat(messages.get(test1), is("Success"));
     }
 
@@ -371,17 +371,17 @@ public class MultiFormDownloaderTest {
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
         MultiFormDownloader downloader = spy(new MultiFormDownloader());
-        FormDetails formDetails = new FormDetails("last-saved-attached", "https://testserver/form.xml",
+        ServerFormDetails serverFormDetails = new ServerFormDetails("last-saved-attached", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "last-saved-attached", "20200101",
                 "hash", "manifestHash", false, false);
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
-        doReturn(result).when(downloader).downloadXform(formDetails.getFormName(), formDetails.getDownloadUrl(), null);
+        doReturn(result).when(downloader).downloadXform(serverFormDetails.getFormName(), serverFormDetails.getDownloadUrl(), null);
 
-        List<FormDetails> forms = new ArrayList<>();
-        forms.add(formDetails);
+        List<ServerFormDetails> forms = new ArrayList<>();
+        forms.add(serverFormDetails);
 
-        HashMap<FormDetails, String> messages = downloader.downloadForms(forms, null);
-        assertThat(messages.get(formDetails), containsString("<label> node for itemset doesn't exist!"));
+        HashMap<ServerFormDetails, String> messages = downloader.downloadForms(forms, null);
+        assertThat(messages.get(serverFormDetails), containsString("<label> node for itemset doesn't exist!"));
     }
 
     public static DocumentFetchResult buildManifestFetchResult(String filename) throws Exception {

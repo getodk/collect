@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
@@ -192,7 +191,7 @@ public class ServerFormListSynchronizerTest {
         private final List<String> formsDownloaded = new ArrayList<>();
 
         @Override
-        public void downloadForm(FormDetails form) {
+        public void downloadForm(ServerFormDetails form) {
             formsDownloaded.add(form.getFormId());
         }
 
