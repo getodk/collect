@@ -21,10 +21,10 @@ import androidx.annotation.Nullable;
 import android.widget.RadioButton;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -57,15 +57,20 @@ public class SelectOneWidget extends BaseSelectListWidget implements MultiChoice
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
         }
+    }
+
+    @Override
+    protected AbstractSelectListAdapter setUpAdapter() {
         recyclerViewAdapter = new SelectOneListAdapter(items, getSelectedValue(), this, getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
+        return recyclerViewAdapter;
     }
 
     @Override
     public IAnswerData getAnswer() {
-        SelectChoice selectChoice =  ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
-        return selectChoice == null
+        Selection selectedItem = ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
+        return selectedItem == null
                 ? null
-                : new SelectOneData(new Selection(selectChoice));
+                : new SelectOneData(selectedItem);
     }
 
     protected String getSelectedValue() {

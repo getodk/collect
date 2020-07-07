@@ -36,6 +36,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.widgets.SelectOneWidget;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SelectOneListAdapter extends AbstractSelectListAdapter
@@ -62,7 +63,9 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     @Override
     public void onClick(View v) {
-        ((SelectOneWidget) widget).onClick();
+        if (widget != null) {
+            ((SelectOneWidget) widget).onClick();
+        }
     }
 
     @Override
@@ -70,7 +73,9 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         if (isChecked) {
             if (selectedRadioButton != null && buttonView != selectedRadioButton) {
                 selectedRadioButton.setChecked(false);
-                ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
+                if (widget != null) {
+                    ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
+                }
             }
             selectedRadioButton = (RadioButton) buttonView;
             selectedValue = items.get((int) selectedRadioButton.getTag()).getValue();
@@ -114,7 +119,6 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         if (value != null && value.equals(selectedValue)) {
             radioButton.setChecked(true);
         }
-
         return radioButton;
     }
 
@@ -128,7 +132,21 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             selectedItem = view;
             selectedValue = selection.getValue();
         }
-        ((SelectOneWidget) widget).onClick();
+        if (widget != null) {
+            ((SelectOneWidget) widget).onClick();
+        }
+    }
+
+    @Override
+    public List<Selection> getSelectedItems() {
+        return getSelectedItem() == null ? null : Collections.singletonList(getSelectedItem());
+    }
+
+    @Override
+    public void updateSelectedItems(List<Selection> selectedItems) {
+        if (selectedItems != null && !selectedItems.isEmpty()) {
+            selectedValue = selectedItems.get(0).getValue();
+        }
     }
 
     @Override
@@ -141,14 +159,16 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             selectedItem.setBackground(null);
             selectedItem = null;
         }
-        ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
+        if (widget != null) {
+            ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
+        }
     }
 
-    public SelectChoice getSelectedItem() {
+    public Selection getSelectedItem() {
         if (selectedValue != null) {
             for (SelectChoice item : items) {
                 if (selectedValue.equalsIgnoreCase(item.getValue())) {
-                    return item;
+                    return item.selection();
                 }
             }
         }

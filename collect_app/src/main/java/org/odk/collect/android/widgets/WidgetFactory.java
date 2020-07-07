@@ -166,7 +166,7 @@ public class WidgetFactory {
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
                 if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
-                    questionWidget = new SelectMultipleMinimalWidget(context, questionDetails);
+                    questionWidget = new SelectMultiMinimalWidget(context, questionDetails);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, false);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST)) {

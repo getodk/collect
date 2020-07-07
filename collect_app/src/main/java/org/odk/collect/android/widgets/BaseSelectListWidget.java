@@ -42,7 +42,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        binding.choicesRecyclerView.initRecyclerView(recyclerViewAdapter, WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
+        binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
         restoreSavedSearchText();
     }
 
@@ -65,7 +65,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget {
         widgetValueChanged();
     }
 
-    protected void setUpSearchBox() {
+    private void setUpSearchBox() {
         binding.choicesSearchBox.setVisibility(VISIBLE);
         binding.choicesSearchBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         binding.choicesSearchBox.addTextChangedListener(new TextWatcher() {
@@ -112,4 +112,6 @@ public abstract class BaseSelectListWidget extends ItemsWidget {
             }
         }
     }
+
+    protected abstract AbstractSelectListAdapter setUpAdapter();
 }

@@ -19,7 +19,6 @@ package org.odk.collect.android.utilities;
 import android.content.Context;
 
 import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -125,8 +124,8 @@ public class FormEntryPromptUtils {
         return questionText;
     }
 
-    public static CharSequence getItemText(FormEntryPrompt formEntryPrompt, SelectChoice selectChoice) {
-        String choiceName = formEntryPrompt.getSelectChoiceText(selectChoice);
+    public static CharSequence getItemText(FormEntryPrompt formEntryPrompt, Selection selection) {
+        String choiceName = formEntryPrompt.getSelectItemText(selection);
         return choiceName != null ? StringUtils.textToHtml(choiceName) : "";
     }
 }

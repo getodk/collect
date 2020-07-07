@@ -40,7 +40,7 @@ import java.util.List;
 
 public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
-    private final List<Selection> selectedItems;
+    private List<Selection> selectedItems;
     private final int playColor;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
@@ -95,7 +95,9 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             } else {
                 removeItem(filteredItems.get(index).selection());
             }
-            widget.widgetValueChanged();
+            if (widget != null) {
+                widget.widgetValueChanged();
+            }
         });
 
         return checkBox;
@@ -147,7 +149,13 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         notifyDataSetChanged();
     }
 
+    @Override
     public List<Selection> getSelectedItems() {
         return selectedItems;
+    }
+
+    @Override
+    public void updateSelectedItems(List<Selection> selectedItems) {
+        this.selectedItems = selectedItems;
     }
 }

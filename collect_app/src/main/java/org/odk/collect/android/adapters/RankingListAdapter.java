@@ -57,7 +57,7 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
         FormController formController = Collect.getInstance().getFormController();
-        String itemName = String.valueOf(FormEntryPromptUtils.getItemText(formController.getQuestionPrompt(formIndex), items.get(position)));
+        String itemName = String.valueOf(FormEntryPromptUtils.getItemText(formController.getQuestionPrompt(formIndex), items.get(position).selection()));
         holder.textView.setText(itemName);
     }
 
