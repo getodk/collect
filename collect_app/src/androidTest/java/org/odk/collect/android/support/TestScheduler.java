@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.async.Work;
+import org.odk.collect.async.TaskSpec;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class TestScheduler implements Scheduler {
     private int tasks;
     private Runnable finishedCallback;
 
-    private final Map<String, Class> taggedWork = new HashMap<>();
+    private final Map<String, TaskSpec> taggedWork = new HashMap<>();
 
     public TestScheduler() {
         WorkManager workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext());
@@ -32,28 +32,28 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public Cancellable scheduleInForeground(@NotNull Runnable task, long repeatPeriod) {
+    public Cancellable repeat(@NotNull Runnable task, long repeatPeriod) {
         increment();
 
-        return wrappedScheduler.scheduleInForeground(() -> {
+        return wrappedScheduler.repeat(() -> {
             task.run();
             decrement();
         }, repeatPeriod);
     }
 
     @Override
-    public <T> void scheduleInBackground(@NotNull Supplier<T> task, @NotNull Consumer<T> callback) {
+    public <T> void runInBackground(@NotNull Supplier<T> task, @NotNull Consumer<T> callback) {
         increment();
 
-        wrappedScheduler.scheduleInBackground(task, t -> {
+        wrappedScheduler.runInBackground(task, t -> {
             callback.accept(t);
             decrement();
         });
     }
 
     @Override
-    public <T extends Work> void scheduleInBackground(@NotNull String tag, @NotNull Class<T> workClass, long repeatPeriod) {
-        taggedWork.put(tag, workClass);
+    public void scheduleInBackground(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
+        taggedWork.put(tag, spec);
     }
 
     @Override
@@ -61,11 +61,11 @@ public class TestScheduler implements Scheduler {
         return wrappedScheduler.isRunning(tag);
     }
 
-    public void runTaggedWork() throws Exception {
+    public void runTaggedWork() {
         Context applicationContext = ApplicationProvider.getApplicationContext();
 
-        for (Class workClass : taggedWork.values()) {
-            ((Work) workClass.newInstance()).doWork(applicationContext);
+        for (TaskSpec taskSpec : taggedWork.values()) {
+            taskSpec.getTask(applicationContext).run();
         }
     }
 

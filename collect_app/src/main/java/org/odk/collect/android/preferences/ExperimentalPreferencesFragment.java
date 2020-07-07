@@ -21,7 +21,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.async.Work;
+import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
 import javax.inject.Inject;
@@ -56,14 +56,14 @@ public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
         SwitchPreferenceCompat matchExactly = findPreference("match_exactly");
         matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
             if ((Boolean) newValue) {
-                scheduler.scheduleInBackground("match_exactly", SyncWork.class, 900000L);
+                scheduler.scheduleInBackground("match_exactly", new SyncTaskSpec(), 900000L);
             }
 
             return true;
         });
     }
 
-    public static class SyncWork implements Work {
+    public static class SyncTaskSpec implements TaskSpec {
 
         @Inject
         FormRepository formRepository;
@@ -77,27 +77,30 @@ public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
         @Inject
         FormDownloader formDownloader;
 
-        @NonNull
-        public void doWork(Context context) {
+        @NotNull
+        @Override
+        public Runnable getTask(@NotNull Context context) {
             DaggerUtils.getComponent(context).inject(this);
 
-            try {
-                new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader).synchronize();
-            } catch (FormApiException formAPIError) {
-                Timber.e(formAPIError);
-            }
+            return () -> {
+                try {
+                    new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader).synchronize();
+                } catch (FormApiException formAPIError) {
+                    Timber.e(formAPIError);
+                }
+            };
         }
 
         @NotNull
         @Override
-        public Class<? extends WorkerAdapter> getWorkerClass() {
+        public Class<? extends WorkerAdapter> getWorkManagerAdapter() {
             return Adapter.class;
         }
 
-        public static class Adapter extends WorkerAdapter<SyncWork> {
+        public static class Adapter extends WorkerAdapter {
 
             public Adapter(@NotNull Context context, @NotNull WorkerParameters workerParams) {
-                super(SyncWork.class, context, workerParams);
+                super(new SyncTaskSpec(), context, workerParams);
             }
         }
     }

@@ -9,23 +9,27 @@ import java.util.function.Supplier
 interface Scheduler {
 
     /**
-     * Schedule a task to run and then repeat
+     * Run a task and then repeat in the foreground
      *
      * @param task   the task to be run
      * @param repeatPeriod the period between each run of the task
      * @return object that allows task to be cancelled
      */
-    fun scheduleInForeground(task: Runnable, repeatPeriod: Long): Cancellable
+    fun repeat(task: Runnable, repeatPeriod: Long): Cancellable
 
     /**
-     * Schedule a task to run in the background (off the UI thread)
+     * Run a task in the background (off the UI thread)
      *
      * @param task     the task to be run
      * @param callback run on the foreground once the task is complete
      */
-    fun <T> scheduleInBackground(task: Supplier<T>, callback: Consumer<T>)
+    fun <T> runInBackground(task: Supplier<T>, callback: Consumer<T>)
 
-    fun <T : Work> scheduleInBackground(tag: String, workClass: Class<T>, repeatPeriod: Long)
+
+    /**
+     * Schedule a task to run in the background repeatedly even if the app isn't running
+     */
+    fun scheduleInBackground(tag: String, spec: TaskSpec, repeatPeriod: Long)
 
     /**
      * Returns true if a task scheduled with a tag is currently running

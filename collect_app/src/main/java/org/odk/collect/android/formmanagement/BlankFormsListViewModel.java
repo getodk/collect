@@ -40,7 +40,7 @@ public class BlankFormsListViewModel extends ViewModel {
     public void syncWithServer() {
         syncing.setValue(true);
 
-        scheduler.scheduleInBackground(() -> {
+        scheduler.runInBackground(() -> {
             try {
                 ServerFormListSynchronizer synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, multiFormDownloader);
                 synchronizer.synchronize();

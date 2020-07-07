@@ -178,7 +178,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     private void schedulePositionUpdates() {
         if (positionUpdatesCancellable == null) {
-            positionUpdatesCancellable = scheduler.scheduleInForeground(() -> {
+            positionUpdatesCancellable = scheduler.repeat(() -> {
                 CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
 
                 if (currentlyPlaying != null) {

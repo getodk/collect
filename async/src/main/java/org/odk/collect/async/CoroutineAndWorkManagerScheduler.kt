@@ -1,7 +1,9 @@
 package org.odk.collect.async
 
-import android.content.Context
-import androidx.work.*
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
@@ -12,13 +14,13 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
 
     constructor(workManager: WorkManager) : this(Dispatchers.Main, Dispatchers.IO, workManager) // Needed for Java construction
 
-    override fun <T> scheduleInBackground(task: Supplier<T>, callback: Consumer<T>) {
+    override fun <T> runInBackground(task: Supplier<T>, callback: Consumer<T>) {
         CoroutineScope(foreground).launch {
             callback.accept(withContext(background) { task.get() })
         }
     }
 
-    override fun scheduleInForeground(task: Runnable, repeatPeriod: Long): Cancellable {
+    override fun repeat(task: Runnable, repeatPeriod: Long): Cancellable {
         val repeatScope = CoroutineScope(foreground)
 
         repeatScope.launch {
@@ -31,9 +33,12 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
         return ScopeCancellable(repeatScope)
     }
 
-    override fun <T : Work> scheduleInBackground(tag: String, workClass: Class<T>, repeatPeriod: Long) {
-        val workRequest = PeriodicWorkRequest.Builder(workClass.newInstance().getWorkerClass<Work>(), repeatPeriod, TimeUnit.MILLISECONDS)
-                .build()
+    override fun scheduleInBackground(tag: String, spec: TaskSpec, repeatPeriod: Long) {
+        val workRequest = PeriodicWorkRequest.Builder(
+                spec.getWorkManagerAdapter(),
+                repeatPeriod,
+                TimeUnit.MILLISECONDS
+        ).build()
 
         workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
     }

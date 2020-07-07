@@ -81,7 +81,7 @@ import dagger.Component;
 })
 public interface AppDependencyComponent {
 
-    void inject(ExperimentalPreferencesFragment.SyncWork syncWork);
+    void inject(ExperimentalPreferencesFragment.SyncTaskSpec syncWork);
 
     void inject(ExperimentalPreferencesFragment experimentalPreferencesFragment);
 
