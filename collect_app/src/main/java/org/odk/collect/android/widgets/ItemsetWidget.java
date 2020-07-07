@@ -26,6 +26,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathExpression;
@@ -82,11 +83,11 @@ public class ItemsetWidget extends SelectOneWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        SelectChoice selectChoice =  ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
+        Selection selectedItem =  ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
 
-        return selectChoice == null
+        return selectedItem == null
                 ? null
-                : new StringData(selectChoice.getValue());
+                : new StringData(selectedItem.getValue());
     }
 
     @Override

@@ -20,6 +20,7 @@ import android.content.Context;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -39,12 +40,17 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
 public class SelectMultiWidget extends BaseSelectListWidget implements MultiChoiceWidget {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+    }
+
+    @Override
+    protected AbstractSelectListAdapter setUpAdapter() {
         recyclerViewAdapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
+        return recyclerViewAdapter;
     }
 
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> selectedItems = ((SelectMultipleListAdapter) recyclerViewAdapter).getSelectedItems();
+        List<Selection> selectedItems = recyclerViewAdapter.getSelectedItems();
         return selectedItems.isEmpty()
                 ? null
                 : new SelectMultiData(selectedItems);

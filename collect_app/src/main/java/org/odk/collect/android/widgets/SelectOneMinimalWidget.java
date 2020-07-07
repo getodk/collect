@@ -3,26 +3,32 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.SelectOneData;
+import org.javarosa.core.model.data.helper.Selection;
+import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 
-public class SelectOneMinimalWidget extends ItemsWidget {
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
+
+public class SelectOneMinimalWidget extends SelectMinimalWidget {
 
     public SelectOneMinimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-
+        recyclerViewAdapter = new SelectOneListAdapter(items, getSavedSelectedValue(), null, getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
+        updateAnswer();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return null;
+        Selection selectedItem = ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
+        return selectedItem == null
+                ? null
+                : new SelectOneData(selectedItem);
     }
 
-    @Override
-    public void clearAnswer() {
-
+    private String getSavedSelectedValue() {
+        return getQuestionDetails().getPrompt().getAnswerValue() == null
+                ? null
+                : ((Selection) getQuestionDetails().getPrompt().getAnswerValue().getValue()).getValue();
     }
 }

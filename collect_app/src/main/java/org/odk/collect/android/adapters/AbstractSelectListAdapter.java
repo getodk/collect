@@ -145,7 +145,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     void setUpButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-        button.setText(FormEntryPromptUtils.getItemText(prompt, filteredItems.get(index)));
+        button.setText(FormEntryPromptUtils.getItemText(prompt, filteredItems.get(index).selection()));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
@@ -194,7 +194,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
 
-            String choiceText = FormEntryPromptUtils.getItemText(prompt, selectChoice).toString();
+            String choiceText = FormEntryPromptUtils.getItemText(prompt, selectChoice.selection()).toString();
 
             if (!choiceText.isEmpty()) {
                 missingImage.setText(choiceText);
@@ -224,6 +224,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     }
 
     private ODKView getODKViewParent(ViewParent view) {
+        if (view == null) {
+            return null;
+        }
+
         ViewParent parent = view.getParent();
 
         if (parent != null) {
@@ -234,6 +238,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     }
 
     abstract void onItemClick(Selection selection, View view);
+
+    public abstract List<Selection> getSelectedItems();
+
+    public abstract void updateSelectedItems(List<Selection> selectedItems);
 
     abstract class ViewHolder extends RecyclerView.ViewHolder {
         AudioVideoImageTextLabel audioVideoImageTextLabel;
