@@ -26,13 +26,14 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.TraceProviderAPI.TraceColumns;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TraceUtilities {
 
     /*
      * Get the trail of points
      */
-    public static long getPoints(ArrayList<PointEntry> entries, int limit, boolean desc) {
+    public static long getPoints(List<PointEntry> entries, int limit, boolean desc) {
 
         String [] proj = {
                 TraceColumns._ID,

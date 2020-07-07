@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
+import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
@@ -279,6 +280,11 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
         String resp = gson.toJson(updateResponse);
+
+        for(PointEntry pe : updateResponse.userTrail) {
+            Timber.i("time: " + pe.time);
+        }
+        Timber.i("Repsonse: " + resp);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("assignInput", resp)
