@@ -1,9 +1,9 @@
 {
   "project_info": {
     "project_number": "462257085307",
-    "firebase_url": "https://opendatakit-debug.firebaseio.com",
-    "project_id": "opendatakit-debug",
-    "storage_bucket": "opendatakit-debug.appspot.com"
+    "firebase_url": "https://getodk-debug.firebaseio.com",
+    "project_id": "getodk-debug",
+    "storage_bucket": "getodk-debug.appspot.com"
   },
   "client": [
     {

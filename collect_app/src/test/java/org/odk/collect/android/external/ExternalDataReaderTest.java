@@ -89,7 +89,7 @@ public class ExternalDataReaderTest {
 
     /**
      * There are multiple features that ingest CSV files so the original file should not be modified.
-     * https://github.com/opendatakit/collect/issues/3335
+     * https://github.com/getodk/collect/issues/3335
      */
     @Test
     public void doImport_doesNotModifyOriginalCsv() {

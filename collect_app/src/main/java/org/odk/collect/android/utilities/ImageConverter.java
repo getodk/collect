@@ -119,7 +119,7 @@ public class ImageConverter {
 
     /**
      * Sometimes an image might be taken up sideways.
-     * https://github.com/opendatakit/collect/issues/36
+     * https://github.com/getodk/collect/issues/36
      */
     private static void rotateImageIfNeeded(String imagePath) {
         ExifInterface exif = null;

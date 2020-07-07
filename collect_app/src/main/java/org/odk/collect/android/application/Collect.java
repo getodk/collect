@@ -48,11 +48,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
-/**
- * The Open Data Kit Collect application.
- *
- * @author carlhartung
- */
 public class Collect extends Application {
     public static String defaultSysLanguage;
     private static Collect singleton;
