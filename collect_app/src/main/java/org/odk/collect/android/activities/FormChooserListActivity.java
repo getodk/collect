@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -41,6 +42,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DiskSyncTask;
@@ -68,6 +70,9 @@ public class FormChooserListActivity extends FormListActivity implements
 
     private static final boolean EXIT = true;
     private DiskSyncTask diskSyncTask;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
 
     @Inject
     Scheduler scheduler;
@@ -117,7 +122,10 @@ public class FormChooserListActivity extends FormListActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.findItem(R.id.menu_refresh).setVisible(true);
+
+        SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
+        boolean matchExactlyEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_MATCH_EXACTLY, false);
+        menu.findItem(R.id.menu_refresh).setVisible(matchExactlyEnabled);
 
         return true;
     }

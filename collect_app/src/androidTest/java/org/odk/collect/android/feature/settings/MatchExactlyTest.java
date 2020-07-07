@@ -24,6 +24,10 @@ import org.odk.collect.async.CoroutineScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
 @RunWith(AndroidJUnit4.class)
 public class MatchExactlyTest {
 
@@ -89,5 +93,13 @@ public class MatchExactlyTest {
                 .assertDisabled(R.string.periodic_form_updates_check_title)
                 .assertDisabled(R.string.automatic_download)
                 .assertDisabled(R.string.hide_old_form_versions_setting_title);
+    }
+
+    @Test
+    public void whenMatchExactlyEnabled_fillBlankFormRefreshButtonIsGone() {
+        rule.mainMenu()
+                .clickFillBlankForm();
+
+        onView(withId(R.id.menu_refresh)).check(doesNotExist());
     }
 }
