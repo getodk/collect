@@ -14,15 +14,19 @@ public class ServerFormListSynchronizer {
     private final MediaFileRepository mediaFileRepository;
     private final FormListApi formListAPI;
     private final FormDownloader formDownloader;
+    private final DiskFormsSynchronizer diskFormsSynchronizer;
 
-    public ServerFormListSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader) {
+    public ServerFormListSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer) {
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
         this.formListAPI = formListAPI;
         this.formDownloader = formDownloader;
+        this.diskFormsSynchronizer = diskFormsSynchronizer;
     }
 
     public void synchronize() throws FormApiException {
+        diskFormsSynchronizer.synchronize();
+
         ServerFormsDetailsFetcher listDownloader = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI);
         List<ServerFormDetails> formList = listDownloader.fetchFormDetails();
 

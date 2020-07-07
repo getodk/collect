@@ -38,7 +38,7 @@ public class ServerFormListSynchronizerTest {
     );
 
     private ServerFormListSynchronizer synchronizer;
-    private RecordingMultiFormDownloader formDownloader;
+    private RecordingFormDownloader formDownloader;
     private FormRepository formRepository;
     private MediaFileRepository mediaFileRepository;
 
@@ -54,8 +54,10 @@ public class ServerFormListSynchronizerTest {
                 new MediaFile("blah.txt", "md5:" + getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file")))
         );
 
-        formDownloader = new RecordingMultiFormDownloader();
-        synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, formDownloader);
+        formDownloader = new RecordingFormDownloader();
+        DiskFormsSynchronizer diskFormsSynchronizer = mock(DiskFormsSynchronizer.class);
+
+        synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, formDownloader, diskFormsSynchronizer);
     }
 
     @Test
@@ -186,7 +188,7 @@ public class ServerFormListSynchronizerTest {
         }
     }
 
-    private static class RecordingMultiFormDownloader implements FormDownloader {
+    private static class RecordingFormDownloader implements FormDownloader {
 
         private final List<String> formsDownloaded = new ArrayList<>();
 

@@ -13,6 +13,7 @@ import androidx.work.WorkerParameters;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormListSynchronizer;
 import org.odk.collect.android.forms.FormRepository;
@@ -84,7 +85,7 @@ public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
 
             return () -> {
                 try {
-                    new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader).synchronize();
+                    new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader, new DiskFormsSynchronizer()).synchronize();
                 } catch (FormApiException formAPIError) {
                     Timber.e(formAPIError);
                 }

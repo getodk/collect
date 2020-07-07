@@ -60,7 +60,6 @@ import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
-import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -152,8 +151,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);
-
-        new DiskSyncTask().execute(); // Needed so background tasks have up to date form list
 
         storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
