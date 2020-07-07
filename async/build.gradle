@@ -27,6 +27,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    lintOptions {
+        // There is a crash caused by this https://issuetracker.google.com/issues/151177986
+        disable "InvalidPeriodicWorkRequestInterval"
+    }
 }
 
 dependencies {

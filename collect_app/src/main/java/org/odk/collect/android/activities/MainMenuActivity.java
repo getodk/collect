@@ -42,7 +42,6 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.material.MaterialBanner;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
@@ -61,6 +60,7 @@ import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrationResult;
+import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -69,6 +69,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.material.MaterialBanner;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -151,6 +152,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);
+
+        new DiskSyncTask().execute(); // Needed so background tasks have up to date form list
 
         storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 

@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.work.WorkManager;
 
 import com.google.zxing.WriterException;
 
@@ -21,14 +20,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CountingScheduler;
-import org.odk.collect.android.support.CountingSchedulerIdlingResource;
 import org.odk.collect.android.support.IdlingResourceRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
+import org.odk.collect.android.support.SchedulerIdlingResource;
+import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 
 import java.io.File;
@@ -44,7 +42,7 @@ public class ConfigureWithQRCodeTest {
 
     private final CollectTestRule rule = new CollectTestRule();
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
-    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineAndWorkManagerScheduler(WorkManager.getInstance()));
+    private final TestScheduler testScheduler = new TestScheduler();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -63,10 +61,10 @@ public class ConfigureWithQRCodeTest {
 
                 @Override
                 public Scheduler providesScheduler(Context context) {
-                    return countingScheduler;
+                    return testScheduler;
                 }
             }))
-            .around(new IdlingResourceRule(new CountingSchedulerIdlingResource(countingScheduler)))
+            .around(new IdlingResourceRule(new SchedulerIdlingResource(testScheduler)))
             .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
 

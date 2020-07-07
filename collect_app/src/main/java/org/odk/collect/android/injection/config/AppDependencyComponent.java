@@ -81,6 +81,10 @@ import dagger.Component;
 })
 public interface AppDependencyComponent {
 
+    void inject(ExperimentalPreferencesFragment.SyncWork syncWork);
+
+    void inject(ExperimentalPreferencesFragment experimentalPreferencesFragment);
+
     @Component.Builder
     interface Builder {
 
@@ -173,8 +177,6 @@ public interface AppDependencyComponent {
     void inject(FormChooserListActivity formChooserListActivity);
   
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
-
-    void inject(ExperimentalPreferencesFragment.SyncWorker syncWorker);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

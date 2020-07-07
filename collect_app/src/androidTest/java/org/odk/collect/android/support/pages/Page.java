@@ -29,6 +29,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
@@ -348,6 +349,14 @@ abstract class Page<T extends Page<T>> {
     public T assertTextNotDisplayed(int string) {
         onView(withText(getTranslatedString(string))).check(matches(not(isDisplayed())));
         return (T) this;
+    }
+
+    protected void assertToolbarTitle(String title) {
+        onView(allOf(withText(title), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+    }
+
+    protected void assertToolbarTitle(int title) {
+        assertToolbarTitle(getTranslatedString(title));
     }
 }
 

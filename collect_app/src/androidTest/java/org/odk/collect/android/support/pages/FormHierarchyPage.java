@@ -6,12 +6,8 @@ import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 public class FormHierarchyPage extends Page<FormHierarchyPage> {
 
@@ -24,7 +20,7 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
 
     @Override
     public FormHierarchyPage assertOnPage() {
-        onView(allOf(withText(formName), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+        assertToolbarTitle(formName);
         return this;
     }
 

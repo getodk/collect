@@ -1,8 +1,9 @@
 package org.odk.collect.async
 
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
+import android.content.Context
+import androidx.work.*
 import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.coroutines.CoroutineContext
@@ -30,6 +31,14 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
         return ScopeCancellable(repeatScope)
     }
 
+    override fun <T : Work> scheduleInBackground(tag: String, workClass: Class<T>, repeatPeriod: Long) {
+        val workRequest = PeriodicWorkRequest.Builder(workClass.newInstance().getWorkerClass<Work>(), repeatPeriod, TimeUnit.MILLISECONDS)
+                .build()
+
+        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+    }
+
+
     override fun isRunning(tag: String): Boolean {
         return isWorkManagerWorkRunning(tag)
     }
@@ -53,3 +62,4 @@ private class ScopeCancellable(private val scope: CoroutineScope) : Cancellable 
         return true
     }
 }
+

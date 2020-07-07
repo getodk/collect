@@ -30,7 +30,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     @Override
     public FillBlankFormPage assertOnPage() {
-        assertText(R.string.enter_data);
+        assertToolbarTitle(R.string.enter_data);
         return this;
     }
 

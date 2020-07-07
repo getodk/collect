@@ -25,6 +25,8 @@ interface Scheduler {
      */
     fun <T> scheduleInBackground(task: Supplier<T>, callback: Consumer<T>)
 
+    fun <T : Work> scheduleInBackground(tag: String, workClass: Class<T>, repeatPeriod: Long)
+
     /**
      * Returns true if a task scheduled with a tag is currently running
      */
