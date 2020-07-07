@@ -17,7 +17,6 @@ package org.odk.collect.android.logic;
 import org.odk.collect.android.openrosa.api.FormListItem;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class FormDetails implements Serializable {
     private static final long serialVersionUID = 1L;

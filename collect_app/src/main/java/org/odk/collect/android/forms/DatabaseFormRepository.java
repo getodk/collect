@@ -1,13 +1,12 @@
-package org.odk.collect.android.dao;
+package org.odk.collect.android.forms;
 
 import android.database.Cursor;
 
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.dao.FormsDao;
 
 import java.util.List;
 
-public class FormsDaoFormRepository implements FormRepository {
+public class DatabaseFormRepository implements FormRepository {
 
     @Override
     public boolean contains(String jrFormID) {

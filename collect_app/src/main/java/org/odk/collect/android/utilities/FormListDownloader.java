@@ -8,9 +8,9 @@ import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.FormsDaoFormRepository;
-import org.odk.collect.android.dao.FormsDaoMediaFileRepository;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.forms.DatabaseFormRepository;
+import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
@@ -48,8 +48,8 @@ public class FormListDownloader {
         this.openRosaXMLFetcher = openRosaXMLFetcher;
         this.webCredentialsUtils = webCredentialsUtils;
 
-        formRepository = new FormsDaoFormRepository();
-        mediaFileRepository = new FormsDaoMediaFileRepository();
+        formRepository = new DatabaseFormRepository();
+        mediaFileRepository = new DatabaseMediaFileRepository();
     }
 
     public HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username,
