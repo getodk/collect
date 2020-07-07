@@ -97,7 +97,7 @@ public class ServerFormsDetailsFetcher {
         try {
             return formAPI.fetchManifest(manifestUrl);
         } catch (FormApiException formApiException) {
-            Timber.e(formApiException);
+            Timber.w(formApiException);
             return null;
         }
     }
