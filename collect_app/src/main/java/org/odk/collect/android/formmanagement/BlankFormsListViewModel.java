@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.openrosa.api.FormApi;
+import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.async.Scheduler;
@@ -20,16 +20,16 @@ public class BlankFormsListViewModel extends ViewModel {
     private final Scheduler scheduler;
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
-    private final FormApi formAPI;
+    private final FormListApi formListAPI;
     private final MultiFormDownloader multiFormDownloader;
 
     private final MutableLiveData<Boolean> syncing = new MutableLiveData<>(false);
 
-    public BlankFormsListViewModel(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormApi formAPI, MultiFormDownloader multiFormDownloader) {
+    public BlankFormsListViewModel(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, MultiFormDownloader multiFormDownloader) {
         this.scheduler = scheduler;
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
-        this.formAPI = formAPI;
+        this.formListAPI = formListAPI;
         this.multiFormDownloader = multiFormDownloader;
     }
 
@@ -42,7 +42,7 @@ public class BlankFormsListViewModel extends ViewModel {
 
         scheduler.scheduleInBackground(() -> {
             try {
-                ServerFormListSynchronizer synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, multiFormDownloader);
+                ServerFormListSynchronizer synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, multiFormDownloader);
                 synchronizer.synchronize();
             } catch (FormApiException ignored) {
                 // Ignored
@@ -57,22 +57,22 @@ public class BlankFormsListViewModel extends ViewModel {
         private final Scheduler scheduler;
         private final FormRepository formRepository;
         private final MediaFileRepository mediaFileRepository;
-        private final FormApi formAPI;
+        private final FormListApi formListAPI;
         private final MultiFormDownloader multiFormDownloader;
 
         @Inject
-        public Factory(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormApi formAPI, MultiFormDownloader multiFormDownloader) {
+        public Factory(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, MultiFormDownloader multiFormDownloader) {
             this.scheduler = scheduler;
             this.formRepository = formRepository;
             this.mediaFileRepository = mediaFileRepository;
-            this.formAPI = formAPI;
+            this.formListAPI = formListAPI;
             this.multiFormDownloader = multiFormDownloader;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(scheduler, formRepository, mediaFileRepository, formAPI, multiFormDownloader);
+            return (T) new BlankFormsListViewModel(scheduler, formRepository, mediaFileRepository, formListAPI, multiFormDownloader);
         }
     }
 }

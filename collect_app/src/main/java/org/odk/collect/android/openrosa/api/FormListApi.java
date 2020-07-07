@@ -2,7 +2,7 @@ package org.odk.collect.android.openrosa.api;
 
 import java.util.List;
 
-public interface FormApi {
+public interface FormListApi {
 
     List<FormListItem> fetchFormList() throws FormApiException;
 

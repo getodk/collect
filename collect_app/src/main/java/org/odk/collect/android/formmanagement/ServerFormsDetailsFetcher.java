@@ -19,7 +19,7 @@ package org.odk.collect.android.formmanagement;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.api.FormApi;
+import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
@@ -37,14 +37,14 @@ public class ServerFormsDetailsFetcher {
 
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
-    private final FormApi formAPI;
+    private final FormListApi formListAPI;
 
     public ServerFormsDetailsFetcher(FormRepository formRepository,
                                      MediaFileRepository mediaFileRepository,
-                                     FormApi formAPI) {
+                                     FormListApi formListAPI) {
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
-        this.formAPI = formAPI;
+        this.formListAPI = formListAPI;
     }
 
     public List<FormDetails> fetchFormDetails() throws FormApiException {
@@ -52,7 +52,7 @@ public class ServerFormsDetailsFetcher {
     }
 
     public List<FormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormApiException {
-        List<FormListItem> formListItems = formAPI.fetchFormList();
+        List<FormListItem> formListItems = formListAPI.fetchFormList();
         List<FormDetails> formDetailsList = new ArrayList<>();
 
         for (FormListItem listItem : formListItems) {
@@ -63,7 +63,7 @@ public class ServerFormsDetailsFetcher {
             if (isThisFormAlreadyDownloaded(listItem.getFormID())) {
                 isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
                 if ((!isNewerFormVersionAvailable || checkMediaFiles) && listItem.getManifestURL() != null) {
-                    manifestFile = getManifestFile(formAPI, listItem.getManifestURL());
+                    manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
                     if (manifestFile != null) {
                         List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
                         if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
@@ -89,13 +89,13 @@ public class ServerFormsDetailsFetcher {
         return formRepository.contains(formId);
     }
 
-    private ManifestFile getManifestFile(FormApi formAPI, String manifestUrl) {
+    private ManifestFile getManifestFile(FormListApi formListAPI, String manifestUrl) {
         if (manifestUrl == null) {
             return null;
         }
 
         try {
-            return formAPI.fetchManifest(manifestUrl);
+            return formListAPI.fetchManifest(manifestUrl);
         } catch (FormApiException formApiException) {
             Timber.w(formApiException);
             return null;

@@ -15,7 +15,7 @@ import static org.odk.collect.android.openrosa.api.FormApiException.Type.AUTH_RE
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.FETCH_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.PARSE_ERROR;
 
-public class OpenRosaFormApi implements FormApi {
+public class OpenRosaFormListApi implements FormListApi {
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
@@ -27,7 +27,7 @@ public class OpenRosaFormApi implements FormApi {
     private final String serverURL;
     private final String formListPath;
 
-    public OpenRosaFormApi(OpenRosaXmlFetcher openRosaXMLFetcher, String serverURL, String formListPath) {
+    public OpenRosaFormListApi(OpenRosaXmlFetcher openRosaXMLFetcher, String serverURL, String formListPath) {
         this.openRosaXMLFetcher = openRosaXMLFetcher;
         this.serverURL = serverURL;
         this.formListPath = formListPath;

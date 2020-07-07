@@ -6,7 +6,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.api.FormApi;
+import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
@@ -48,15 +48,15 @@ public class ServerFormListSynchronizerTest {
         formRepository = new InMemFormRepository();
         mediaFileRepository = mock(MediaFileRepository.class);
 
-        FormApi formAPI = mock(FormApi.class);
-        when(formAPI.fetchFormList()).thenReturn(formList);
+        FormListApi formListAPI = mock(FormListApi.class);
+        when(formListAPI.fetchFormList()).thenReturn(formList);
 
-        when(formAPI.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(
+        when(formListAPI.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(
                 new MediaFile("blah.txt", "md5:" + getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file")))
         );
 
         formDownloader = new RecordingMultiFormDownloader();
-        synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader);
+        synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, formDownloader);
     }
 
     @Test

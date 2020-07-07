@@ -16,7 +16,7 @@ import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.FormApiException;
-import org.odk.collect.android.openrosa.api.OpenRosaFormApi;
+import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.util.HashMap;
@@ -80,7 +80,7 @@ public class FormListDownloader {
             }
         }
 
-        OpenRosaFormApi formAPI = new OpenRosaFormApi(openRosaXMLFetcher, downloadListUrl, downloadPath);
+        OpenRosaFormListApi formAPI = new OpenRosaFormListApi(openRosaXMLFetcher, downloadListUrl, downloadPath);
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<>();
