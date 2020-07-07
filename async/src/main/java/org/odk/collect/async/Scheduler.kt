@@ -15,16 +15,7 @@ interface Scheduler {
      * @param repeatPeriod the period between each run of the task
      * @return object that allows task to be cancelled
      */
-    fun repeat(task: Runnable, repeatPeriod: Long): Cancellable
-
-    /**
-     * Run a task in the background (off the UI thread)
-     *
-     * @param task     the task to be run
-     * @param callback run on the foreground once the task is complete
-     */
-    fun <T> runInBackground(task: Supplier<T>, callback: Consumer<T>)
-
+    fun schedule(task: Runnable, repeatPeriod: Long): Cancellable
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running
@@ -35,6 +26,14 @@ interface Scheduler {
      * @param repeatPeriod the period between each run of the task
      */
     fun scheduleInBackground(tag: String, spec: TaskSpec, repeatPeriod: Long)
+
+    /**
+     * Run a task in the background (off the UI thread)
+     *
+     * @param task     the task to be run
+     * @param callback run on the foreground once the task is complete
+     */
+    fun <T> runInBackground(task: Supplier<T>, callback: Consumer<T>)
 
     /**
      * Returns true if a task scheduled with a tag is currently running

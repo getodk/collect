@@ -32,10 +32,10 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public Cancellable repeat(@NotNull Runnable task, long repeatPeriod) {
+    public Cancellable schedule(@NotNull Runnable task, long repeatPeriod) {
         increment();
 
-        return wrappedScheduler.repeat(() -> {
+        return wrappedScheduler.schedule(() -> {
             task.run();
             decrement();
         }, repeatPeriod);

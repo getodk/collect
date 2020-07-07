@@ -25,7 +25,7 @@ public class FakeScheduler implements Scheduler {
     }
 
     @Override
-    public Cancellable repeat(Runnable task, long repeatPeriod) {
+    public Cancellable schedule(Runnable task, long repeatPeriod) {
         this.foregroundTask = task;
         return () -> {
             cancelled = true;
