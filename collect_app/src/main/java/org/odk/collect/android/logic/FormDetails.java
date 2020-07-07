@@ -91,32 +91,6 @@ public class FormDetails implements Serializable {
         return areNewerMediaFilesAvailable;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        FormDetails that = (FormDetails) o;
-        return isNewerFormVersionAvailable() == that.isNewerFormVersionAvailable() &&
-                areNewerMediaFilesAvailable == that.areNewerMediaFilesAvailable &&
-                Objects.equals(getErrorStr(), that.getErrorStr()) &&
-                Objects.equals(getFormName(), that.getFormName()) &&
-                Objects.equals(getDownloadUrl(), that.getDownloadUrl()) &&
-                Objects.equals(getManifestUrl(), that.getManifestUrl()) &&
-                Objects.equals(formID, that.formID) &&
-                Objects.equals(getFormVersion(), that.getFormVersion()) &&
-                Objects.equals(getHash(), that.getHash()) &&
-                Objects.equals(getManifestFileHash(), that.getManifestFileHash());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getErrorStr(), getFormName(), getDownloadUrl(), getManifestUrl(), formID, getFormVersion(), getHash(), getManifestFileHash(), isNewerFormVersionAvailable(), areNewerMediaFilesAvailable);
-    }
-
     public static FormDetails toFormDetails(FormListItem formListItem) {
         return toFormDetails(formListItem, null, false, false);
     }
