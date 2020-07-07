@@ -415,7 +415,8 @@ public class FormController {
             return false;
         }
 
-        return ODKView.FIELD_LIST.equalsIgnoreCase(element.getAppearanceAttr());
+        //return ODKView.FIELD_LIST.equalsIgnoreCase(element.getAppearanceAttr());    // smap
+        return element.getAppearanceAttr() != null && element.getAppearanceAttr().toLowerCase().contains(ODKView.FIELD_LIST);   // smap contains
     }
 
     private boolean repeatIsFieldList(FormIndex index) {
@@ -617,7 +618,8 @@ public class FormController {
                             currentIndex);
                     if (element instanceof GroupDef) {
                         GroupDef gd = (GroupDef) element;
-                        if (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr())) {
+                        //if (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr())) {    // smap
+                        if(gd.getAppearanceAttr() != null && gd.getAppearanceAttr().toLowerCase().contains(ODKView.FIELD_LIST)) {   // smap contains
                             // jump to outermost containing field-list
                             FormEntryCaption[] fclist = this.getCaptionHierarchy(currentIndex);
                             for (FormEntryCaption caption : fclist) {
