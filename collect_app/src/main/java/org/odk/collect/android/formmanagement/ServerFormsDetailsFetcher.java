@@ -107,7 +107,7 @@ public class ServerFormsDetailsFetcher {
             return false;
         }
 
-        return formRepository.getAll().stream().noneMatch(f -> f.getMD5Hash().equals(md5Hash));
+        return formRepository.getByMd5Hash(md5Hash) == null;
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {

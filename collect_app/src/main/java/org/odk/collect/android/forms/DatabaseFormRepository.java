@@ -6,6 +6,8 @@ import org.odk.collect.android.dao.FormsDao;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public class DatabaseFormRepository implements FormRepository {
 
     @Override
@@ -19,6 +21,21 @@ public class DatabaseFormRepository implements FormRepository {
     public List<Form> getAll() {
         try (Cursor cursor = new FormsDao().getFormsCursor()) {
             return new FormsDao().getFormsFromCursor(cursor);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Form getByMd5Hash(String hash) {
+        FormsDao formsDao = new FormsDao();
+
+        try (Cursor cursor = formsDao.getFormsCursorForMd5Hash(hash)) {
+            if (cursor != null && cursor.getCount() > 0) {
+                List<Form> forms = formsDao.getFormsFromCursor(cursor);
+                return forms.get(0);
+            } else {
+                return null;
+            }
         }
     }
 

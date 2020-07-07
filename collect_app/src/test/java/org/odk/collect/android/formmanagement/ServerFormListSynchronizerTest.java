@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -171,6 +173,12 @@ public class ServerFormListSynchronizerTest {
         @Override
         public List<Form> getAll() {
             return new ArrayList<>(forms); // Avoid anything  mutating the list externally
+        }
+
+        @Nullable
+        @Override
+        public Form getByMd5Hash(String hash) {
+            return forms.stream().filter(form -> form.getMD5Hash().equals(hash)).findFirst().orElse(null);
         }
 
         @Override
