@@ -17,7 +17,7 @@ public class StringUtilsTest {
      * <p>
      * This is a silly test but it is here to guarantee this behaviour,
      * since without it the method causes a crash when processing text for
-     * questions with no plain text label. See opendatakit/opendatakit#1247.
+     * questions with no plain text label. See getodk/getodk#1247.
      */
     @Test
     public void textToHtml_BouncesNullInput() {

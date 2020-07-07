@@ -33,7 +33,7 @@ public class FormUtilsTest {
             .around(new CopyFormRule(BASIC_FORM));
 
     /* Verify that each host string matches only a single root translator, allowing for them to
-     be defined in any order. See: https://github.com/opendatakit/collect/issues/3334
+     be defined in any order. See: https://github.com/getodk/collect/issues/3334
     */
     @Test
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
@@ -63,7 +63,7 @@ public class FormUtilsTest {
      matching 'file' instead of 'file-csv'. According to the behavior in the test above,
      sessionRootTranslatorOrderDoesNotMatter, it is not actually a requirement to have the test
      below pass. This simply follows the cautionary remarks in the following issue:
-     https://github.com/opendatakit/collect/issues/3334
+     https://github.com/getodk/collect/issues/3334
      */
     @Test
     public void hostStringsOrderedCorrectly() throws Exception {

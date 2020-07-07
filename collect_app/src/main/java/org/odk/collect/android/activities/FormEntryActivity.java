@@ -895,7 +895,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                   Probably this approach should be used in all cases to get a file from an uri.
                   The approach which was used before and which is still used in other places
                   might be faulty because sometimes _data column might be not provided in an uri.
-                  e.g. https://github.com/opendatakit/collect/issues/705
+                  e.g. https://github.com/getodk/collect/issues/705
                   Let's test it here and then we can use the same code in other places if it works well.
                  */
                 Uri mediaUri = intent.getData();
@@ -2791,7 +2791,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // identification and removal in the same pass but removal has to be done in a loop that
         // starts from the end and itemset-based select choices will only be correctly recomputed
         // if accessed from beginning to end because the call on sameAs is what calls
-        // populateDynamicChoices. See https://github.com/opendatakit/javarosa/issues/436
+        // populateDynamicChoices. See https://github.com/getodk/javarosa/issues/436
         List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
         List<FormIndex> formIndexesToRemove = new ArrayList<>();
         for (ImmutableDisplayableQuestion questionBeforeSave : immutableQuestionsBeforeSave) {

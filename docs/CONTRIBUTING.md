@@ -20,7 +20,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. If you're going to be working on adding or changing any `QuestionWidget` objects it's a good idea to read our docs on [them](WIDGETS.md).
 
-1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment).
+1. [Set up your development environment](https://github.com/getodk/collect#setting-up-your-development-environment).
 
 1. To make sure you have the latest version of the code, set up this repository as [a remote for your fork](https://help.github.com/articles/configuring-a-remote-for-a-fork/) and then [sync your fork](https://help.github.com/articles/syncing-a-fork/).
 
@@ -28,7 +28,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
         git checkout -b NAME_OF_YOUR_BRANCH
 
-1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, put `@opendatakit-bot claim` as a comment on issue to say you are claiming it. If this is your first time contributing to the repo, the bot will send you an invite. Once you accept this invite, the bot will assign you to the issue. If there is no issue yet, create one to provide background on the problem you are solving.
+1. If there is an [issue](https://github.com/getodk/collect/issues) corresponding to what you will work on, put `@getodk-bot claim` as a comment on issue to say you are claiming it. If this is your first time contributing to the repo, the bot will send you an invite. Once you accept this invite, the bot will assign you to the issue. If there is no issue yet, create one to provide background on the problem you are solving.
 
 1. Once you've made incremental progress towards you goal, commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
 
@@ -38,11 +38,11 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
         git push
 
-1. Once you have completed your code changes, verify that you have followed the [style guidelines](https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md#style-guidelines).
+1. Once you have completed your code changes, verify that you have followed the [style guidelines](https://github.com/getodk/collect/blob/master/CONTRIBUTING.md#style-guidelines).
 
-1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
+1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `getodk/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
 
-1. Pull requests will be reviewed when committers have time. If you haven't received a review in 10 days, you may notify committers by putting `@opendatakit/collect` in a comment.
+1. Pull requests will be reviewed when committers have time. If you haven't received a review in 10 days, you may notify committers by putting `@getodk/collect` in a comment.
 
 ## Making sure your pull request is accepted
 1. Confirm that your code compiles.
@@ -63,7 +63,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Point out decisions you made and what alternatives you considered. If you're unsure about a particular approach, ask a question to make your own thinking clear and help the reviewer identify controversial parts of the proposed solution. For example: "here I returned a result object to represent the status after the transaction. I also considered throwing an exception in case of error but I didn't like that it made it unclear where an error happened. Which do you prefer and why?" This is particularly important for [work in progress pull requests](#work-in-progress-pull-requests).
 
-1. If your pull request makes user-facing changes, we likely need to update documentation. [File an issue on the docs repo](https://github.com/opendatakit/docs/issues/new) describing the changes.
+1. If your pull request makes user-facing changes, we likely need to update documentation. [File an issue on the docs repo](https://github.com/getodk/docs/issues/new) describing the changes.
 
 1. Follow the guidelines below.
 
@@ -80,7 +80,7 @@ We try to have at least two people review every pull request and we encourage ev
 - Is the code easy to understand and to maintain?
 - Is there sufficient detail to inform any changes to documentation?
 
-When a pull request is first created, @opendatakit-bot tags it as `needs review` to indicate that code review is needed. Community members review the code and leave their comments, verifying that the changes included are relevant and properly address the issue. A maintainer does a thorough code review and when satisfied with the code, tags the pull request as `needs testing` to indicate the need for a manual [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) pass. A pull request may go back and forth between `needs testing` and `needs review` until the behavior is thoroughly verified. Once the behavior has been thoroughly verified, the pull request is tagged as `behavior verified`. A maintainer then merges the changes. Pull requests that need more complete reviews including review of approach and/or appropriateness are tagged with `reviews wanted`. Any community member is encouraged to participate in the review process!
+When a pull request is first created, @getodk-bot tags it as `needs review` to indicate that code review is needed. Community members review the code and leave their comments, verifying that the changes included are relevant and properly address the issue. A maintainer does a thorough code review and when satisfied with the code, tags the pull request as `needs testing` to indicate the need for a manual [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) pass. A pull request may go back and forth between `needs testing` and `needs review` until the behavior is thoroughly verified. Once the behavior has been thoroughly verified, the pull request is tagged as `behavior verified`. A maintainer then merges the changes. Pull requests that need more complete reviews including review of approach and/or appropriateness are tagged with `reviews wanted`. Any community member is encouraged to participate in the review process!
 
 Small fixes that target very particular bugs may occasionally be merged without a second review.
 
@@ -93,6 +93,6 @@ If a pull request is already a non-draft (there is currently no way to move it b
 - Should specifically describe the proposed solution and feedback wanted.
 - Will not be merged until you remove `[WIP]` from the title.
 
-## Triage issues [![Open Source Helpers](https://www.codetriage.com/opendatakit/collect/badges/users.svg)](https://www.codetriage.com/opendatakit/collect)
+## Triage issues [![Open Source Helpers](https://www.codetriage.com/getodk/collect/badges/users.svg)](https://www.codetriage.com/getodk/collect)
 
-In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to opendatakit/collect on CodeTriage](https://www.codetriage.com/opendatakit/collect).
+In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to getodk/collect on CodeTriage](https://www.codetriage.com/getodk/collect).

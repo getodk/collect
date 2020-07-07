@@ -1,9 +1,9 @@
 {
   "project_info": {
     "project_number": "640412404956",
-    "firebase_url": "https://opendatakit-forks.firebaseio.com",
-    "project_id": "opendatakit-forks",
-    "storage_bucket": "opendatakit-forks.appspot.com"
+    "firebase_url": "https://getodk-forks.firebaseio.com",
+    "project_id": "getodk-forks",
+    "storage_bucket": "getodk-forks.appspot.com"
   },
   "client": [
     {

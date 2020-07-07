@@ -136,7 +136,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         setSupportActionBar(toolbar);
 
         FormController formController = Collect.getInstance().getFormController();
-        // https://github.com/opendatakit/collect/issues/998
+        // https://github.com/getodk/collect/issues/998
         if (formController == null) {
             finish();
             Timber.w("FormController is null");

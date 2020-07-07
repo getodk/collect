@@ -56,7 +56,7 @@ public class FormDownloaderTest {
 
     /**
      * Verifies that a form without media can successfully go through the download process. Regression
-     * test for https://github.com/opendatakit/collect/issues/3535.
+     * test for https://github.com/getodk/collect/issues/3535.
      *
      * The focus of this test is the form parsing behavior triggered by a download and how it
      * relates to a media folder that may or may not have been created. The downloading of forms and
@@ -167,7 +167,7 @@ public class FormDownloaderTest {
      * Forms with references to external secondary instance need to have the secondary instance
      * available at time of form parse.
      *
-     * See https://github.com/opendatakit/collect/issues/3635
+     * See https://github.com/getodk/collect/issues/3635
      */
     @Test
     public void downloadingFormWithXmlExternalSecondaryInstance_Succeeds() throws Exception {

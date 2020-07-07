@@ -43,7 +43,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-/** https://github.com/opendatakit/collect/issues/356
+/** https://github.com/getodk/collect/issues/356
  * Verify that the {@link DateWidget} and {@link DateTimeWidget} widget skips over
  * "daylight savings gaps".
  * This is needed on the day and time of a daylight savings transition because that date/time
