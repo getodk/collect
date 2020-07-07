@@ -28,6 +28,11 @@ interface Scheduler {
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running
+     *
+     * @param tag used to identify this task in future. Previously scheduled tasks using the same
+     * tag will be replaced
+     * @param spec defines the task to be run
+     * @param repeatPeriod the period between each run of the task
      */
     fun scheduleInBackground(tag: String, spec: TaskSpec, repeatPeriod: Long)
 
