@@ -11,7 +11,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
@@ -42,13 +42,13 @@ public class MultiFormDownloaderTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
-    OpenRosaXMLFetcher openRosaXMLFetcher;
+    OpenRosaXmlFetcher openRosaXMLFetcher;
 
     @Before
     public void overrideDependencyModule() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
                @Override
-               public OpenRosaXMLFetcher provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+               public OpenRosaXmlFetcher provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
                    return openRosaXMLFetcher;
                }
         });

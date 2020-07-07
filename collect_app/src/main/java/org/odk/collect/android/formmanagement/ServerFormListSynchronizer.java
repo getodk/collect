@@ -4,8 +4,8 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.FormAPIError;
+import org.odk.collect.android.openrosa.api.FormApi;
+import org.odk.collect.android.openrosa.api.FormApiException;
 
 import java.util.List;
 
@@ -13,17 +13,17 @@ public class ServerFormListSynchronizer {
 
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
-    private final FormAPI formAPI;
+    private final FormApi formAPI;
     private final FormDownloader formDownloader;
 
-    public ServerFormListSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormAPI formAPI, FormDownloader formDownloader) {
+    public ServerFormListSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormApi formAPI, FormDownloader formDownloader) {
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
         this.formAPI = formAPI;
         this.formDownloader = formDownloader;
     }
 
-    public void synchronize() throws FormAPIError {
+    public void synchronize() throws FormApiException {
         ServerFormsDetailsFetcher listDownloader = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI);
         List<FormDetails> formList = listDownloader.fetchFormDetails();
 

@@ -31,7 +31,7 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -67,15 +67,15 @@ public class MultiFormDownloader implements FormDownloader {
     FormsDao formsDao;
 
     @Inject
-    OpenRosaXMLFetcher openRosaXMLFetcher;
+    OpenRosaXmlFetcher openRosaXMLFetcher;
 
-    public MultiFormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
+    public MultiFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXMLFetcher) {
         this.formsDao = formsDao;
         this.openRosaXMLFetcher = openRosaXMLFetcher;
     }
 
     /**
-     * Use {@link #MultiFormDownloader(FormsDao, OpenRosaXMLFetcher)} instead
+     * Use {@link #MultiFormDownloader(FormsDao, OpenRosaXmlFetcher)} instead
      */
     @Deprecated
     public MultiFormDownloader() {

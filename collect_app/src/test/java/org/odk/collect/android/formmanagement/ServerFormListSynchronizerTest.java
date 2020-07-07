@@ -6,7 +6,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.api.FormAPI;
+import org.odk.collect.android.openrosa.api.FormApi;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
@@ -46,7 +46,7 @@ public class ServerFormListSynchronizerTest {
         formRepository = new InMemFormRepository();
         mediaFileRepository = mock(MediaFileRepository.class);
 
-        FormAPI formAPI = mock(FormAPI.class);
+        FormApi formAPI = mock(FormApi.class);
         when(formAPI.fetchFormList()).thenReturn(formList);
 
         when(formAPI.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(

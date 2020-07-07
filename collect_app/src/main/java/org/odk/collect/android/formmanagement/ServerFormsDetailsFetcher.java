@@ -19,8 +19,8 @@ package org.odk.collect.android.formmanagement;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.FormAPIError;
+import org.odk.collect.android.openrosa.api.FormApi;
+import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
@@ -37,21 +37,21 @@ public class ServerFormsDetailsFetcher {
 
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
-    private final FormAPI formAPI;
+    private final FormApi formAPI;
 
     public ServerFormsDetailsFetcher(FormRepository formRepository,
                                      MediaFileRepository mediaFileRepository,
-                                     FormAPI formAPI) {
+                                     FormApi formAPI) {
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
         this.formAPI = formAPI;
     }
 
-    public List<FormDetails> fetchFormDetails() throws FormAPIError {
+    public List<FormDetails> fetchFormDetails() throws FormApiException {
         return fetchFormDetails(true);
     }
 
-    public List<FormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormAPIError {
+    public List<FormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormApiException {
         List<FormListItem> formListItems = formAPI.fetchFormList();
         List<FormDetails> formDetailsList = new ArrayList<>();
 
@@ -89,15 +89,15 @@ public class ServerFormsDetailsFetcher {
         return formRepository.contains(formId);
     }
 
-    private ManifestFile getManifestFile(FormAPI formAPI, String manifestUrl) {
+    private ManifestFile getManifestFile(FormApi formAPI, String manifestUrl) {
         if (manifestUrl == null) {
             return null;
         }
 
         try {
             return formAPI.fetchManifest(manifestUrl);
-        } catch (FormAPIError formAPIError) {
-            Timber.e(formAPIError);
+        } catch (FormApiException formApiException) {
+            Timber.e(formApiException);
             return null;
         }
     }

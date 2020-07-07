@@ -31,9 +31,9 @@ import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
-import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.openrosa.api.FormApi;
+import org.odk.collect.android.openrosa.api.OpenRosaFormApi;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -125,8 +125,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public OpenRosaXMLFetcher provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
-        return new OpenRosaXMLFetcher(httpInterface, webCredentialsUtils);
+    public OpenRosaXmlFetcher provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+        return new OpenRosaXmlFetcher(httpInterface, webCredentialsUtils);
     }
 
     @Provides
@@ -137,7 +137,7 @@ public class AppDependencyModule {
     @Provides
     FormListDownloader formListDownloader(
             Application application,
-            OpenRosaXMLFetcher openRosaXMLFetcher,
+            OpenRosaXmlFetcher openRosaXMLFetcher,
             WebCredentialsUtils webCredentialsUtils) {
         return new FormListDownloader(
                 application,
@@ -147,7 +147,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    MultiFormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaXMLFetcher openRosaXMLFetcher) {
+    MultiFormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXMLFetcher) {
         return new MultiFormDownloader(formsDao, openRosaXMLFetcher);
     }
 
@@ -324,11 +324,11 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormAPI providesFormAPI(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaXMLFetcher openRosaXMLFetcher) {
+    public FormApi providesFormAPI(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaXmlFetcher openRosaXMLFetcher) {
         SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
         String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, context.getString(R.string.default_server_url));
         String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
 
-        return new OpenRosaFormAPI(openRosaXMLFetcher, serverURL, formListPath);
+        return new OpenRosaFormApi(openRosaXMLFetcher, serverURL, formListPath);
     }
 }

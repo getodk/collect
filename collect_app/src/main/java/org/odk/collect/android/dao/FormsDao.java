@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used to encap`sulate all access to the {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
+ * This class is used to encapsulate all access to the {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class FormsDao {

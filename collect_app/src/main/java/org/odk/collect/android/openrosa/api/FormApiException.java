@@ -1,6 +1,6 @@
 package org.odk.collect.android.openrosa.api;
 
-public class FormAPIError extends Exception {
+public class FormApiException extends Exception {
 
     public enum Type {
         AUTH_REQUIRED,
@@ -11,7 +11,7 @@ public class FormAPIError extends Exception {
 
     private final Type type;
 
-    public FormAPIError(Type type, String message) {
+    public FormApiException(Type type, String message) {
         super(message);
         this.type = type;
     }

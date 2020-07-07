@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.openrosa.api.FormAPI;
-import org.odk.collect.android.openrosa.api.FormAPIError;
+import org.odk.collect.android.openrosa.api.FormApi;
+import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.async.Scheduler;
 
@@ -20,12 +20,12 @@ public class BlankFormsListViewModel extends ViewModel {
     private final Scheduler scheduler;
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
-    private final FormAPI formAPI;
+    private final FormApi formAPI;
     private final MultiFormDownloader multiFormDownloader;
 
     private final MutableLiveData<Boolean> syncing = new MutableLiveData<>(false);
 
-    public BlankFormsListViewModel(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormAPI formAPI, MultiFormDownloader multiFormDownloader) {
+    public BlankFormsListViewModel(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormApi formAPI, MultiFormDownloader multiFormDownloader) {
         this.scheduler = scheduler;
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
@@ -44,7 +44,7 @@ public class BlankFormsListViewModel extends ViewModel {
             try {
                 ServerFormListSynchronizer synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, multiFormDownloader);
                 synchronizer.synchronize();
-            } catch (FormAPIError ignored) {
+            } catch (FormApiException ignored) {
                 // Ignored
             }
 
@@ -57,11 +57,11 @@ public class BlankFormsListViewModel extends ViewModel {
         private final Scheduler scheduler;
         private final FormRepository formRepository;
         private final MediaFileRepository mediaFileRepository;
-        private final FormAPI formAPI;
+        private final FormApi formAPI;
         private final MultiFormDownloader multiFormDownloader;
 
         @Inject
-        public Factory(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormAPI formAPI, MultiFormDownloader multiFormDownloader) {
+        public Factory(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormApi formAPI, MultiFormDownloader multiFormDownloader) {
             this.scheduler = scheduler;
             this.formRepository = formRepository;
             this.mediaFileRepository = mediaFileRepository;

@@ -14,9 +14,9 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.openrosa.OpenRosaXMLFetcher;
-import org.odk.collect.android.openrosa.api.FormAPIError;
-import org.odk.collect.android.openrosa.api.OpenRosaFormAPI;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.openrosa.api.OpenRosaFormApi;
 import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.util.HashMap;
@@ -35,14 +35,14 @@ public class FormListDownloader {
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
 
     private final WebCredentialsUtils webCredentialsUtils;
-    private final OpenRosaXMLFetcher openRosaXMLFetcher;
+    private final OpenRosaXmlFetcher openRosaXMLFetcher;
     private final Application application;
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
 
     public FormListDownloader(
             Application application,
-            OpenRosaXMLFetcher openRosaXMLFetcher,
+            OpenRosaXmlFetcher openRosaXMLFetcher,
             WebCredentialsUtils webCredentialsUtils) {
         this.application = application;
         this.openRosaXMLFetcher = openRosaXMLFetcher;
@@ -80,7 +80,7 @@ public class FormListDownloader {
             }
         }
 
-        OpenRosaFormAPI formAPI = new OpenRosaFormAPI(openRosaXMLFetcher, downloadListUrl, downloadPath);
+        OpenRosaFormApi formAPI = new OpenRosaFormApi(openRosaXMLFetcher, downloadListUrl, downloadPath);
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<>();
@@ -91,21 +91,21 @@ public class FormListDownloader {
             for (FormDetails formDetails : formDetailsList) {
                 formList.put(formDetails.getFormId(), formDetails);
             }
-        } catch (FormAPIError formAPIError) {
-            Timber.e(formAPIError);
+        } catch (FormApiException formApiException) {
+            Timber.e(formApiException);
 
-            switch (formAPIError.getType()) {
+            switch (formApiException.getType()) {
                 case AUTH_REQUIRED:
-                    formList.put(DL_AUTH_REQUIRED, new FormDetails(formAPIError.getMessage()));
+                    formList.put(DL_AUTH_REQUIRED, new FormDetails(formApiException.getMessage()));
                     break;
                 case PARSE_ERROR:
-                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_openrosa_formlist_failed, formAPIError.getMessage())));
+                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_openrosa_formlist_failed, formApiException.getMessage())));
                     break;
                 case LEGACY_PARSE_ERROR:
-                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_legacy_formlist_failed, formAPIError.getMessage())));
+                    formList.put(DL_ERROR_MSG, new FormDetails(application.getString(R.string.parse_legacy_formlist_failed, formApiException.getMessage())));
                     break;
                 default:
-                    formList.put(DL_ERROR_MSG, new FormDetails(formAPIError.getMessage()));
+                    formList.put(DL_ERROR_MSG, new FormDetails(formApiException.getMessage()));
             }
         }
 

@@ -18,15 +18,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class OpenRosaXMLFetcherTest {
+public class OpenRosaXmlFetcherTest {
 
     private OpenRosaHttpInterface httpInterface;
-    private OpenRosaXMLFetcher openRosaXMLFetcher;
+    private OpenRosaXmlFetcher openRosaXMLFetcher;
 
     @Before
     public void setup() {
         httpInterface = mock(OpenRosaHttpInterface.class);
-        openRosaXMLFetcher = new OpenRosaXMLFetcher(httpInterface, new WebCredentialsUtils());
+        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new WebCredentialsUtils());
     }
 
     @Test
