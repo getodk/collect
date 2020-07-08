@@ -99,9 +99,13 @@ public class ApplicationInitializer {
     }
 
     private void initializeMapFrameworks() {
-        new com.google.android.gms.maps.MapView(context).onCreate(null);
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
-        MapboxUtils.initMapbox();
+        try {
+            new com.google.android.gms.maps.MapView(context).onCreate(null);
+            org.osmdroid.config.Configuration.getInstance().setUserAgentValue(userAgentProvider.getUserAgent());
+            MapboxUtils.initMapbox();
+        } catch (Exception | Error ignore) {
+            // ignored
+        }
     }
 
     private static class CrashReportingTree extends Timber.Tree {
