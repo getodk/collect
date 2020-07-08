@@ -12,7 +12,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+
+import javax.inject.Inject;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
@@ -22,11 +25,17 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
     private FormEntryViewModel viewModel;
     private DeleteRepeatDialogCallback callback;
 
+    @Inject
+    Analytics analytics;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(FormEntryViewModel.class);
+        if (viewModel == null) {
+            viewModel = new ViewModelProvider(requireActivity(), new FormEntryViewModel.Factory(analytics)).get(FormEntryViewModel.class);
+        }
+
         if (context instanceof DeleteRepeatDialogCallback) {
             callback = (DeleteRepeatDialogCallback) context;
         }
