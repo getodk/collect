@@ -112,7 +112,7 @@ abstract class AppListFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
+        menu.clear();
         inflater.inflate(R.menu.list_menu, menu);
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
