@@ -28,16 +28,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
@@ -46,7 +42,6 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.material.MaterialBanner;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
@@ -89,8 +84,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_INITIALIZED;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
+
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
@@ -145,14 +140,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     VersionInformation versionInformation;
 
     @Inject
-    NetworkStateProvider connectivityProvider;
-
-    @Inject
     GeneralSharedPreferences generalSharedPreferences;
 
     private MainMenuViewModel viewModel;
-
-    private MapView mapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +153,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory(versionInformation)).get(MainMenuViewModel.class);
 
         initToolbar();
-        initMapBox();
         DaggerUtils.getComponent(this).inject(this);
 
         disableSmsIfNeeded();
@@ -317,14 +306,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (mapView != null) {
-            mapView.onStart();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
 
@@ -337,9 +318,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setButtonsVisibility();
         invalidateOptionsMenu();
         setUpStorageMigrationBanner();
-        if (mapView != null) {
-            mapView.onResume();
-        }
     }
 
     private void setButtonsVisibility() {
@@ -357,41 +335,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             alertDialog.dismiss();
         }
         getContentResolver().unregisterContentObserver(contentObserver);
-        if (mapView != null) {
-            mapView.onPause();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mapView != null) {
-            mapView.onStop();
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mapView != null) {
-            mapView.onSaveInstanceState(outState);
-        }
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        if (mapView != null) {
-            mapView.onLowMemory();
-        }
     }
 
     @Override
     public void onDestroy() {
         storageMigrationRepository.clearResult();
-        if (mapView != null) {
-            mapView.onDestroy();
-        }
         super.onDestroy();
     }
 
@@ -439,23 +387,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void initMapBox() {
-        if (!generalSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED, false) && connectivityProvider.isDeviceOnline()) {
-            // This "one weird trick" lets us initialize MapBox at app start when the internet is
-            // most likely to be available. This is annoyingly needed for offline tiles to work.
-            try {
-                mapView = new MapView(this);
-                FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
-                mapboxContainer.addView(mapView);
-                mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> {
-                    generalSharedPreferences.save(KEY_MAPBOX_INITIALIZED, true);
-                }));
-            } catch (Exception | Error ignored) {
-                // This will crash on devices where the arch for MapBox is not included
-            }
-        }
     }
 
     private void initToolbar() {
