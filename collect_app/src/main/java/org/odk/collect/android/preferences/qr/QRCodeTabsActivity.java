@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -35,9 +34,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.DataFormatException;
 
-import javax.inject.Inject;
-
 import timber.log.Timber;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.qr.QRCodeMenuDelegate.SELECT_PHOTO;
 
@@ -66,9 +65,9 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-        setContentView(R.layout.qrcode_tab);
+        setContentView(R.layout.tabs_layout);
 
-        initToolbar();
+        initToolbar(getString(R.string.configure_via_qr_code));
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider, scheduler);
 
         new PermissionUtils().requestCameraPermission(this, new PermissionListener() {
@@ -94,12 +93,6 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(fragmentTitleList[position])).attach();
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.configure_via_qr_code));
-        setSupportActionBar(toolbar);
     }
 
     @Override
