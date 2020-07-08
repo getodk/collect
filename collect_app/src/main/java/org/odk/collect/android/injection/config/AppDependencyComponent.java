@@ -22,6 +22,7 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
@@ -167,6 +168,8 @@ public interface AppDependencyComponent {
     void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
 
     void inject(QuitFormDialogFragment quitFormDialogFragment);
+
+    void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
     RxEventBus rxEventBus();
 
