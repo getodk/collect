@@ -21,6 +21,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
+import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
@@ -57,6 +58,7 @@ import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -338,5 +340,10 @@ public class AppDependencyModule {
         String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
 
         return new OpenRosaFormListApi(openRosaXMLFetcher, serverURL, formListPath);
+    }
+
+    @Provides
+    public DiskFormsSynchronizer providesDiskFormSynchronizer() {
+        return new FormsDirDiskFormsSynchronizer();
     }
 }

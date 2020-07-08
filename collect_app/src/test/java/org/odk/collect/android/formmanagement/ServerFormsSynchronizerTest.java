@@ -30,14 +30,14 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
-public class ServerFormListSynchronizerTest {
+public class ServerFormsSynchronizerTest {
 
     private final List<FormListItem> formList = asList(
             new FormListItem("http://example.com/form-1", "form-1", "server", "md5:form-1-hash", "Form 1", null),
             new FormListItem("http://example.com/form-2", "form-2", "server", "md5:form-2-hash", "Form 2", "http://example.com/form-2-manifest")
     );
 
-    private ServerFormListSynchronizer synchronizer;
+    private ServerFormsSynchronizer synchronizer;
     private RecordingFormDownloader formDownloader;
     private FormRepository formRepository;
     private MediaFileRepository mediaFileRepository;
@@ -57,7 +57,7 @@ public class ServerFormListSynchronizerTest {
         formDownloader = new RecordingFormDownloader();
         DiskFormsSynchronizer diskFormsSynchronizer = mock(DiskFormsSynchronizer.class);
 
-        synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, formDownloader, diskFormsSynchronizer);
+        synchronizer = new ServerFormsSynchronizer(formRepository, mediaFileRepository, formListAPI, formDownloader, diskFormsSynchronizer);
     }
 
     @Test

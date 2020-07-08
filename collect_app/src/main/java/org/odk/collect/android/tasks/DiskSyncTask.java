@@ -16,8 +16,8 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
-import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -32,7 +32,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        return new DiskFormsSynchronizer().synchronize();
+        return new FormsDirDiskFormsSynchronizer().synchronizeAndReturnError();
     }
 
     public void setDiskSyncListener(DiskSyncListener listener) {

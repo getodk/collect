@@ -8,7 +8,7 @@ import org.odk.collect.android.openrosa.api.FormListApi;
 
 import java.util.List;
 
-public class ServerFormListSynchronizer {
+public class ServerFormsSynchronizer {
 
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
@@ -16,7 +16,7 @@ public class ServerFormListSynchronizer {
     private final FormDownloader formDownloader;
     private final DiskFormsSynchronizer diskFormsSynchronizer;
 
-    public ServerFormListSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer) {
+    public ServerFormsSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer) {
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
         this.formListAPI = formListAPI;

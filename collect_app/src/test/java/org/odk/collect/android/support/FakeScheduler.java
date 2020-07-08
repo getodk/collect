@@ -49,4 +49,9 @@ public class FakeScheduler implements Scheduler {
     public boolean isRunning(@NotNull String tag) {
         return false;
     }
+
+    @Override
+    public void cancelInBackground(@NotNull String tag) {
+
+    }
 }

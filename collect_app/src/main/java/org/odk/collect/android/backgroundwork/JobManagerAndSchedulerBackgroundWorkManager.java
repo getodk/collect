@@ -8,9 +8,8 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
-import org.odk.collect.android.formmanagement.ServerFormListSynchronizer;
+import org.odk.collect.android.formmanagement.ServerFormsSynchronizer;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -18,6 +17,7 @@ import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -103,7 +103,7 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
 
             return () -> {
                 try {
-                    new ServerFormListSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader, new DiskFormsSynchronizer()).synchronize();
+                    new ServerFormsSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader, new FormsDirDiskFormsSynchronizer()).synchronize();
                 } catch (FormApiException formAPIError) {
                     Timber.e(formAPIError);
                 }
