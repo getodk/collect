@@ -78,6 +78,14 @@ public class FormsProvider extends ContentProvider {
         dbHelper = new FormsDatabaseHelper();
     }
 
+    @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here
+    public static void releaseDatabaseHelper() {
+        if (dbHelper != null) {
+            dbHelper.close();
+            dbHelper = null;
+        }
+    }
+
     @Override
     public boolean onCreate() {
 

@@ -3,6 +3,8 @@ package org.odk.collect.android.utilities;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kxml2.io.KXmlParser;
@@ -11,13 +13,16 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.provider.FormsProvider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.shadows.ShadowEnvironment;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.StringReader;
 import java.util.Map;
 
+import static android.os.Environment.MEDIA_MOUNTED;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -30,6 +35,16 @@ import static org.mockito.Mockito.when;
 public class FormListDownloaderTest {
 
     private final OpenRosaXmlFetcher serverClient = mock(OpenRosaXmlFetcher.class);
+
+    @Before
+    public void setup() {
+        ShadowEnvironment.setExternalStorageState(MEDIA_MOUNTED); // Required for ODK directories to be created
+    }
+
+    @After
+    public void teardown() {
+        FormsProvider.releaseDatabaseHelper();
+    }
 
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {
