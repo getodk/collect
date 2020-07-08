@@ -20,10 +20,13 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -79,7 +82,7 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        if (MapProvider.getConfigurator().isAvailable(context)) {
+                        if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP) || hasAppearance(questionDetails.getPrompt(), MAPS)) {
                             questionWidget = new GeoPointMapWidget(context, questionDetails, questionDetails.getPrompt().getQuestion(), waitingForDataRegistry);
                         } else {
                             questionWidget = new GeoPointWidget(context, questionDetails, questionDetails.getPrompt().getQuestion(), waitingForDataRegistry);

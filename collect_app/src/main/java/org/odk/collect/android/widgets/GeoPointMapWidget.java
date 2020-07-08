@@ -134,6 +134,7 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
         widgetValueChanged();
     }
 
+    // for testing purposes
     protected GeoWidgetAnswerBinding getBinding() {
         return binding;
     }
