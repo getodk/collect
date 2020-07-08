@@ -178,7 +178,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.app_name));
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);
         setSupportActionBar(toolbar);
     }
 
@@ -277,7 +277,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);
     }
 
     @Override
@@ -343,9 +343,25 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         if (listener != null) {
             try {
                 unregisterReceiver(listener);
-                unregisterReceiver(networkReceiver);
-                unregisterReceiver(refreshListener);
                 listener = null;
+            } catch (Exception e) {
+                Timber.e("Error on unregister: " + e.getMessage());
+                // Ignore - preumably already unregistered
+            }
+        }
+        if (networkReceiver != null) {
+            try {
+                unregisterReceiver(networkReceiver);
+                networkReceiver = null;
+            } catch (Exception e) {
+                Timber.e("Error on unregister: " + e.getMessage());
+                // Ignore - preumably already unregistered
+            }
+        }
+        if (refreshListener != null) {
+            try {
+                unregisterReceiver(refreshListener);
+                refreshListener = null;
             } catch (Exception e) {
                 Timber.e("Error on unregister: " + e.getMessage());
                 // Ignore - preumably already unregistered

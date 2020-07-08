@@ -386,7 +386,7 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onResume() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);
         model.loadData();   // Update the user trail display with latest points
         super.onResume();
     }
