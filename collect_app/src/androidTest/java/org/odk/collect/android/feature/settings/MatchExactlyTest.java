@@ -96,7 +96,7 @@ public class MatchExactlyTest {
     }
 
     @Test
-    public void whenMatchExactlyEnabled_fillBlankFormRefreshButtonIsGone() {
+    public void whenMatchExactlyNotEnabled_fillBlankFormRefreshButtonIsGone() {
         rule.mainMenu()
                 .clickFillBlankForm();
 
