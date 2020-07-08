@@ -43,6 +43,9 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
         workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
     }
 
+    override fun cancelInBackground(tag: String) {
+        workManager.cancelUniqueWork(tag)
+    }
 
     override fun isRunning(tag: String): Boolean {
         return isWorkManagerWorkRunning(tag)

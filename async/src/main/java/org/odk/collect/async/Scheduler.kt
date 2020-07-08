@@ -40,4 +40,6 @@ interface Scheduler {
      * Returns true if a task scheduled with a tag is currently running
      */
     fun isRunning(tag: String): Boolean
+
+    fun cancelInBackground(tag: String)
 }

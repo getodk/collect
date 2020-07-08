@@ -166,6 +166,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage(rule));
     }
 
+    public MainMenuPage disableMatchExactly() {
+        return enableMatchExactly();
+    }
+
     public MainMenuPage setServer(String url) {
         return clickOnMenu()
                 .clickGeneralSettings()

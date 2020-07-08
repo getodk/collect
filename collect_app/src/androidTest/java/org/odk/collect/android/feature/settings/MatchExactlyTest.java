@@ -63,9 +63,6 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestFormsFromServer() {
-        server.addForm("One Question", "one_question", "one-question.xml");
-        server.addForm("One Question Repeat", "one_question_repeat", "one-question-repeat.xml");
-
         FillBlankFormPage page = rule.mainMenu()
                 .setServer(server.getURL())
                 .enableMatchExactly()
@@ -73,8 +70,6 @@ public class MatchExactlyTest {
                 .assertText("One Question")
                 .assertText("One Question Repeat");
 
-        server.removeForm("One Question");
-        server.removeForm("One Question Repeat");
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         server.addForm("Two Question", "two_question", "two-question.xml");
 
@@ -86,13 +81,12 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyEnabled_getsLatestFormsFromServer_automaticallyAndRepeatedly() throws Exception {
-        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        server.addForm("Two Question", "two_question", "two-question.xml");
-
         MainMenuPage page = rule.mainMenu()
                 .setServer(server.getURL())
                 .enableMatchExactly();
 
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        server.addForm("Two Question", "two_question", "two-question.xml");
         testScheduler.runTaggedWork();
 
         page = page.clickFillBlankForm()
@@ -129,5 +123,23 @@ public class MatchExactlyTest {
                 .clickFillBlankForm();
 
         onView(withId(R.id.menu_refresh)).check(doesNotExist());
+    }
+
+    @Test
+    public void whenMatchExactlyDisabled_stopsSyncingAutomatically() {
+        MainMenuPage page = rule.mainMenu()
+                .setServer(server.getURL())
+                .enableMatchExactly()
+                .disableMatchExactly();
+
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        server.addForm("Two Question", "two_question", "two-question.xml");
+        testScheduler.runTaggedWork();
+
+        page.clickFillBlankForm()
+                .assertText("One Question")
+                .assertText("One Question Repeat")
+                .assertTextDoesNotExist("Two Question")
+                .assertTextDoesNotExist("One Question Updated");
     }
 }

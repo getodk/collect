@@ -45,6 +45,8 @@ public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
         matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
             if ((Boolean) newValue) {
                 backgroundWorkManager.scheduleMatchExactlySync();
+            } else {
+                backgroundWorkManager.cancelMatchExactlySync();
             }
 
             return true;

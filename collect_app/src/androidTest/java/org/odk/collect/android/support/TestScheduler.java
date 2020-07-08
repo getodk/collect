@@ -57,6 +57,11 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
+    public void cancelInBackground(@NotNull String tag) {
+        taggedWork.remove(tag);
+    }
+
+    @Override
     public boolean isRunning(@NotNull String tag) {
         return wrappedScheduler.isRunning(tag);
     }

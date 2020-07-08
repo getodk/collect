@@ -50,6 +50,11 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
     }
 
     @Override
+    public void cancelMatchExactlySync() {
+        scheduler.cancelInBackground(MATCH_EXACTLY_SYNC_TAG);
+    }
+
+    @Override
     public boolean isFormUploaderRunning() {
         return isRunning(AutoSendWorker.TAG);
     }
