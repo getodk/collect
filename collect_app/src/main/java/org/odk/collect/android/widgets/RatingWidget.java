@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import android.widget.RatingBar;
 
 import androidx.core.content.ContextCompat;
 
@@ -35,8 +34,9 @@ import org.odk.collect.android.utilities.UiUtils;
 public class RatingWidget extends QuestionWidget {
 
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
+    public static final int STANDARD_WIDTH_OF_STAR = 48;
 
-    private RatingBar ratingBar;
+    private RatingWidgetAnswerBinding binding;
 
     public RatingWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
@@ -44,63 +44,69 @@ public class RatingWidget extends QuestionWidget {
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        RatingWidgetAnswerBinding binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
-
 
         RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         int numberOfStars = rangeQuestion.getRangeEnd().intValue();
-        int columns = calculateColumns(48);
 
-        int rows = (int) Math.ceil((double) numberOfStars / columns);
+        int maxNumberOfStars = (int) ((ScreenUtils.getScreenWidth() - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET)
+                / UiUtils.convertDpToPixel(STANDARD_WIDTH_OF_STAR, getContext()));
 
-        if (rows == 1) {
-            binding.ratingBar.setVisibility(VISIBLE);
-            this.ratingBar = binding.ratingBar;
+        binding.ratingBar1.setStepSize(1.0F);
+        binding.ratingBar2.setStepSize(1.0F);
+
+        if (maxNumberOfStars < numberOfStars) {
+            binding.ratingBar1.setNumStars(maxNumberOfStars);
+            binding.ratingBar2.setNumStars(Math.min(numberOfStars - maxNumberOfStars, maxNumberOfStars));
+
+            binding.ratingBar2.setVisibility(View.VISIBLE);
         } else {
-            binding.ratingBar.setVisibility(GONE);
-            columns = calculateColumns(36);
-            rows = (int) Math.ceil((double) numberOfStars / columns);
-            if (rows == 1) {
-                binding.ratingBar2.setVisibility(VISIBLE);
-                this.ratingBar = binding.ratingBar2;
-            } else {
-                binding.ratingBar3.setVisibility(VISIBLE);
-                this.ratingBar = binding.ratingBar3;
-            }
+            binding.ratingBar1.setNumStars(numberOfStars);
         }
 
-        ratingBar.setNumStars(rangeQuestion.getRangeEnd().intValue());
-        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
-        ratingBar.setEnabled(!prompt.isReadOnly());
+        binding.ratingBar1.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            binding.ratingBar2.setRating(0);
+            widgetValueChanged();
+        });
+
+        binding.ratingBar2.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            binding.ratingBar1.setRating(maxNumberOfStars);
+            widgetValueChanged();
+        });
+
+        binding.ratingBar1.setEnabled(!prompt.isReadOnly());
+        binding.ratingBar2.setEnabled(!prompt.isReadOnly());
 
         if (prompt.getAnswerText() != null) {
-            ratingBar.setRating(Integer.parseInt(prompt.getAnswerText()));
+            int rating = Integer.parseInt(prompt.getAnswerText());
+            if (rating > maxNumberOfStars) {
+                binding.ratingBar2.setRating(rating - maxNumberOfStars);
+            } else {
+                binding.ratingBar1.setRating(rating);
+            }
         }
         return answerView;
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        ratingBar.setOnLongClickListener(l);
+        binding.ratingBar1.setOnLongClickListener(l);
+        binding.ratingBar2.setOnLongClickListener(l);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return ratingBar.getRating() == 0.0F ? null : new IntegerData((int) ratingBar.getRating());
+        return binding.ratingBar1.getRating() == 0.0F ? null :
+                new IntegerData((int) (binding.ratingBar1.getRating() + binding.ratingBar2.getRating()));
     }
 
     @Override
     public void clearAnswer() {
-        ratingBar.setRating(0.0F);
+        binding.ratingBar1.setRating(0.0F);
     }
 
-    protected RatingBar getRatingBar() {
-        return ratingBar;
-    }
-
-    private int calculateColumns(int widthOfStar) {
-        return (ScreenUtils.getScreenWidth() - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET) /
-                ((int) UiUtils.convertDpToPixel(widthOfStar, getContext()));
+    protected RatingWidgetAnswerBinding getBinding() {
+        return binding;
     }
 }

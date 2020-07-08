@@ -6,29 +6,16 @@
     android:padding="@dimen/margin_small">
 
     <RatingBar
-        android:id="@+id/rating_bar"
+        android:id="@+id/rating_bar1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:isIndicator="false"
-        android:stepSize="1" />
+        android:stepSize="1.0" />
 
     <RatingBar
         android:id="@+id/rating_bar2"
-        style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:isIndicator="false"
-        android:stepSize="1" />
-
-    <RatingBar
-        android:id="@+id/rating_bar3"
-        style="@style/Widget.AppCompat.RatingBar.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:isIndicator="false"
-        android:stepSize="1" />
+        android:stepSize="1.0" />
 
 </LinearLayout>
