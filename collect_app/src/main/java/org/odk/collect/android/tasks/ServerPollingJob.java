@@ -99,7 +99,7 @@ public class ServerPollingJob extends Job {
 
             List<ServerFormDetails> newDetectedForms = new ArrayList<>();
             for (ServerFormDetails serverFormDetails : formList.values()) {
-                if (serverFormDetails.isNewerFormVersionAvailable() || serverFormDetails.areNewerMediaFilesAvailable()) {
+                if (serverFormDetails.isUpdated()) {
                     newDetectedForms.add(serverFormDetails);
                 }
             }

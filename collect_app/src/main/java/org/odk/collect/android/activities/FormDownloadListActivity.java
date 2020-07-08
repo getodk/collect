@@ -495,8 +495,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         try (Cursor formCursor = formsDao.getFormsCursorForFormId(formId)) {
             return formCursor != null && formCursor.getCount() == 0 // form does not already exist locally
-                    || viewModel.getFormDetailsByFormId().get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
-                    || viewModel.getFormDetailsByFormId().get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
+                    || viewModel.getFormDetailsByFormId().get(formId).isUpdated(); // or a newer version of this form is available
         }
     }
 
@@ -564,7 +563,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 String formDetailsKey = ids.get(i);
                 ServerFormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
 
-                if (!displayOnlyUpdatedForms || (details.isNewerFormVersionAvailable() || details.areNewerMediaFilesAvailable())) {
+                if (!displayOnlyUpdatedForms || details.isUpdated()) {
                     HashMap<String, String> item = new HashMap<>();
                     item.put(FORMNAME, details.getFormName());
                     item.put(FORMID_DISPLAY,

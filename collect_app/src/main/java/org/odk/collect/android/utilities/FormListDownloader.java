@@ -86,7 +86,7 @@ public class FormListDownloader {
         HashMap<String, ServerFormDetails> formList = new HashMap<>();
 
         try {
-            ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI);
+            ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI, new FormsDirDiskFormsSynchronizer());
             List<ServerFormDetails> serverFormDetailsList = serverFormsDetailsFetcher.fetchFormDetails(alwaysCheckMediaFiles);
             for (ServerFormDetails serverFormDetails : serverFormDetailsList) {
                 formList.put(serverFormDetails.getFormId(), serverFormDetails);

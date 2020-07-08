@@ -37,13 +37,16 @@ public class ServerFormsDetailsFetcher {
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
     private final FormListApi formListAPI;
+    private final DiskFormsSynchronizer diskFormsSynchronizer;
 
     public ServerFormsDetailsFetcher(FormRepository formRepository,
                                      MediaFileRepository mediaFileRepository,
-                                     FormListApi formListAPI) {
+                                     FormListApi formListAPI,
+                                     DiskFormsSynchronizer diskFormsSynchronizer) {
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
         this.formListAPI = formListAPI;
+        this.diskFormsSynchronizer = diskFormsSynchronizer;
     }
 
     public List<ServerFormDetails> fetchFormDetails() throws FormApiException {
@@ -51,6 +54,8 @@ public class ServerFormsDetailsFetcher {
     }
 
     public List<ServerFormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormApiException {
+        diskFormsSynchronizer.synchronize();
+
         List<FormListItem> formListItems = formListAPI.fetchFormList();
         List<ServerFormDetails> serverFormDetailsList = new ArrayList<>();
 
@@ -59,7 +64,9 @@ public class ServerFormsDetailsFetcher {
             boolean areNewerMediaFilesAvailable = false;
             ManifestFile manifestFile = null;
 
-            if (isThisFormAlreadyDownloaded(listItem.getFormID())) {
+            boolean thisFormAlreadyDownloaded = isThisFormAlreadyDownloaded(listItem.getFormID());
+
+            if (thisFormAlreadyDownloaded) {
                 isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
                 if ((!isNewerFormVersionAvailable || checkMediaFiles) && listItem.getManifestURL() != null) {
                     manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
@@ -81,9 +88,8 @@ public class ServerFormsDetailsFetcher {
                     listItem.getVersion(),
                     listItem.getHashWithPrefix(),
                     manifestFileHash,
-                    isNewerFormVersionAvailable,
-                    areNewerMediaFilesAvailable
-            );
+                    !thisFormAlreadyDownloaded,
+                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable);
 
             serverFormDetailsList.add(serverFormDetails);
         }

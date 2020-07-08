@@ -11,25 +11,23 @@ import java.util.List;
 public class ServerFormsSynchronizer {
 
     private final FormRepository formRepository;
-    private final MediaFileRepository mediaFileRepository;
-    private final FormListApi formListAPI;
     private final FormDownloader formDownloader;
-    private final DiskFormsSynchronizer diskFormsSynchronizer;
+    private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
     public ServerFormsSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer) {
         this.formRepository = formRepository;
-        this.mediaFileRepository = mediaFileRepository;
-        this.formListAPI = formListAPI;
         this.formDownloader = formDownloader;
-        this.diskFormsSynchronizer = diskFormsSynchronizer;
+        this.serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+    }
+
+    public ServerFormsSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
+        this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
+        this.formRepository = formRepository;
+        this.formDownloader = formDownloader;
     }
 
     public void synchronize() throws FormApiException {
-        diskFormsSynchronizer.synchronize();
-
-        ServerFormsDetailsFetcher listDownloader = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI);
-        List<ServerFormDetails> formList = listDownloader.fetchFormDetails();
-
+        List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
         List<Form> formsOnDevice = formRepository.getAll();
 
         formsOnDevice.stream().forEach(form -> {
@@ -39,9 +37,7 @@ public class ServerFormsSynchronizer {
         });
 
         for (ServerFormDetails form : formList) {
-            boolean onDevice = formsOnDevice.stream().anyMatch(f -> f.getJrFormId().equals(form.getFormId()));
-
-            if (!onDevice || form.isNewerFormVersionAvailable() || form.areNewerMediaFilesAvailable()) {
+            if (form.isNew() || form.isUpdated()) {
                 formDownloader.downloadForm(form);
             }
         }

@@ -74,8 +74,7 @@ public class FormListDownloaderTest {
         assertNull(f1.getManifestUrl());
         assertEquals("one", f1.getFormId());
         assertNull(f1.getFormVersion());
-        assertFalse(f1.isNewerFormVersionAvailable());
-        assertFalse(f1.areNewerMediaFilesAvailable());
+        assertFalse(f1.isUpdated());
 
         ServerFormDetails f2 = fetched.get("two");
         assertNull(f2.getErrorStr());
@@ -84,8 +83,7 @@ public class FormListDownloaderTest {
         assertNull(f2.getManifestUrl());
         assertEquals("two", f2.getFormId());
         assertNull(f2.getFormVersion());
-        assertFalse(f1.isNewerFormVersionAvailable());
-        assertFalse(f1.areNewerMediaFilesAvailable());
+        assertFalse(f1.isUpdated());
     }
 
     @Test

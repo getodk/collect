@@ -1,8 +1,7 @@
-package org.odk.collect.android.formmanagement;
+package org.odk.collect.android.utilities;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 
 import java.io.File;
 import java.util.List;
