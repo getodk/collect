@@ -418,7 +418,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(String.format("%s %s", getString(R.string.app_name), viewModel.getVersion()));
+        setTitle("HEDERA Collect - based on ODK Collect 1.28");
+       // setTitle(String.format("%s %s", getString(R.string.app_name), viewModel.getVersion()));
+
         setSupportActionBar(toolbar);
     }
 
