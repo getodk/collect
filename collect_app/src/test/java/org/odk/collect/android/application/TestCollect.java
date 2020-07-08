@@ -1,5 +1,9 @@
 package org.odk.collect.android.application;
 
+import androidx.work.Configuration;
+import androidx.work.WorkManager;
+
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowApplication;
 
 import static org.robolectric.Shadows.shadowOf;
@@ -17,6 +21,13 @@ public class TestCollect extends Collect {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // We need this so WorkManager.getInstance doesn't explode
+        try {
+            WorkManager.initialize(RuntimeEnvironment.application, new Configuration.Builder().build());
+        } catch (IllegalStateException e) {
+            // initialize() explodes if it's already been called
+        }
 
         // We don't want to deal with permission checks in Robolectric
         ShadowApplication shadowApplication = shadowOf(this);

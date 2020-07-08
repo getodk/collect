@@ -31,6 +31,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
+import org.odk.collect.async.Scheduler;
 
 import java.util.List;
 
@@ -165,7 +166,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             }
 
             @Override
-            public AudioHelperFactory providesAudioHelperFactory() {
+            public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
                 return context -> audioHelper;
             }
 

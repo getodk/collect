@@ -1,11 +1,11 @@
 package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
-import android.content.Context;
 import android.webkit.MimeTypeMap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.work.WorkManager;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class MatchExactlyTest {
                 }
 
                 @Override
-                public Scheduler providesScheduler(Context context) {
+                public Scheduler providesScheduler(WorkManager workManager) {
                     return testScheduler;
                 }
             }))

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.work.WorkManager;
 
 import com.google.zxing.WriterException;
 
@@ -60,7 +61,7 @@ public class ConfigureWithQRCodeTest {
                 }
 
                 @Override
-                public Scheduler providesScheduler(Context context) {
+                public Scheduler providesScheduler(WorkManager workManager) {
                     return testScheduler;
                 }
             }))

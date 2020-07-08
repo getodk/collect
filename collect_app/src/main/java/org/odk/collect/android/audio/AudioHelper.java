@@ -10,12 +10,11 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.work.WorkManager;
 
-import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Object for setting up playback of audio clips with {@link AudioButton} and
@@ -39,15 +38,7 @@ public class AudioHelper {
     private final LifecycleOwner lifecycleOwner;
     private final AudioPlayerViewModel viewModel;
 
-    /**
-     * @param activity       The activity where controls will be displayed
-     * @param lifecycleOwner A representative lifecycle for controls - allows for differing activity and control lifecycle
-     */
-    public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
-        this(activity, lifecycleOwner, new CoroutineAndWorkManagerScheduler(WorkManager.getInstance(activity)), MediaPlayer::new);
-    }
-
-    AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, MediaPlayerFactory mediaPlayerFactory) {
+    public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, Supplier<MediaPlayer> mediaPlayerFactory) {
         this.lifecycleOwner = lifecycleOwner;
 
         AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(mediaPlayerFactory, scheduler);

@@ -3,8 +3,6 @@ package org.odk.collect.android.activities;
 import android.app.Application;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.work.Configuration;
-import androidx.work.WorkManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +14,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowAlertDialog;
 
@@ -31,8 +28,6 @@ public class InstanceUploaderListActivityTest {
 
     @Before
     public void setup() {
-        WorkManager.initialize(RuntimeEnvironment.application, new Configuration.Builder().build());
-
         analytics = mock(Analytics.class);
         overrideAppDependencyModule(new AppDependencyModule(
                 analytics,

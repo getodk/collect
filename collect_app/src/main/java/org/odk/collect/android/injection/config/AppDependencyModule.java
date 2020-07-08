@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
@@ -179,8 +180,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AudioHelperFactory providesAudioHelperFactory() {
-        return new ScreenContextAudioHelperFactory();
+    public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
+        return new ScreenContextAudioHelperFactory(scheduler, MediaPlayer::new);
     }
 
     @Provides
@@ -313,8 +314,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Scheduler providesScheduler(Context context) {
-        return new CoroutineAndWorkManagerScheduler(WorkManager.getInstance(context));
+    public WorkManager providesWorkManager(Context context) {
+        return WorkManager.getInstance(context);
+    }
+
+    @Provides
+    public Scheduler providesScheduler(WorkManager workManager) {
+        return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
     @Singleton
