@@ -6,6 +6,7 @@ import android.database.Cursor;
 import org.apache.commons.io.FileUtils;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -14,9 +15,6 @@ import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.upload.AutoSendWorker;
-import org.odk.collect.utilities.BackgroundWorkManager;
 
 import java.io.File;
 
@@ -106,11 +104,11 @@ public class StorageMigrator {
     }
 
     private boolean isFormUploaderRunning() {
-        return backgroundWorkManager.isRunning(AutoSendWorker.TAG);
+        return backgroundWorkManager.isFormUploaderRunning();
     }
 
     private boolean isFormDownloaderRunning() {
-        return backgroundWorkManager.isRunning(ServerPollingJob.TAG);
+        return backgroundWorkManager.isFormDownloaderRunning();
     }
 
     boolean moveAppDataToScopedStorage() {

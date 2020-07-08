@@ -63,7 +63,7 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.utilities.BackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;

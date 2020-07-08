@@ -4,12 +4,10 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.upload.AutoSendWorker;
-import org.odk.collect.utilities.BackgroundWorkManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -182,18 +180,18 @@ public class StorageMigratorTest {
     }
 
     private void whenFormDownloaderIsNotRunning() {
-        when(backgroundWorkManager.isRunning(ServerPollingJob.TAG)).thenReturn(false);
+        when(backgroundWorkManager.isFormDownloaderRunning()).thenReturn(false);
     }
 
     private void whenFormDownloaderIsRunning() {
-        when(backgroundWorkManager.isRunning(ServerPollingJob.TAG)).thenReturn(true);
+        when(backgroundWorkManager.isFormDownloaderRunning()).thenReturn(true);
     }
 
     private void whenFormUploaderIsNotRunning() {
-        when(backgroundWorkManager.isRunning(AutoSendWorker.TAG)).thenReturn(false);
+        when(backgroundWorkManager.isFormUploaderRunning()).thenReturn(false);
     }
 
     private void whenFormUploaderIsRunning() {
-        when(backgroundWorkManager.isRunning(AutoSendWorker.TAG)).thenReturn(true);
+        when(backgroundWorkManager.isFormUploaderRunning()).thenReturn(true);
     }
 }

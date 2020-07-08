@@ -18,6 +18,7 @@ import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
@@ -81,7 +82,7 @@ import dagger.Component;
 })
 public interface AppDependencyComponent {
 
-    void inject(ExperimentalPreferencesFragment.SyncTaskSpec syncWork);
+    void inject(JobManagerAndSchedulerBackgroundWorkManager.SyncTaskSpec syncWork);
 
     void inject(ExperimentalPreferencesFragment experimentalPreferencesFragment);
 
