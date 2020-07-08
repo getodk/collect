@@ -92,7 +92,7 @@ public class FormListDownloader {
                 formList.put(serverFormDetails.getFormId(), serverFormDetails);
             }
         } catch (FormApiException formApiException) {
-            Timber.e(formApiException);
+            Timber.w(formApiException);
 
             switch (formApiException.getType()) {
                 case AUTH_REQUIRED:
