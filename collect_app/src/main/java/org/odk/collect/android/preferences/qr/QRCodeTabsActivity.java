@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.viewpager2.widget.ViewPager2;
@@ -92,6 +93,12 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(fragmentTitleList[position])).attach();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
