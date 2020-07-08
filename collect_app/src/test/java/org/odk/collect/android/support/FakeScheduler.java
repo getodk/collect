@@ -20,7 +20,7 @@ public class FakeScheduler implements Scheduler {
     }
 
     @Override
-    public void scheduleInBackground(@NotNull String tag, @NotNull TaskSpec taskSpec, long repeatPeriod) {
+    public void scheduleInBackgroundWhenNetworkAvailable(@NotNull String tag, @NotNull TaskSpec taskSpec, long repeatPeriod) {
 
     }
 

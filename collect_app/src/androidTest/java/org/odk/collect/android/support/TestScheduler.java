@@ -52,7 +52,7 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public void scheduleInBackground(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
+    public void scheduleInBackgroundWhenNetworkAvailable(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
         taggedWork.put(tag, spec);
     }
 

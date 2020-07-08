@@ -57,7 +57,7 @@ public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
         SwitchPreferenceCompat matchExactly = findPreference("match_exactly");
         matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
             if ((Boolean) newValue) {
-                scheduler.scheduleInBackground("match_exactly", new SyncTaskSpec(), 900000L);
+                scheduler.scheduleInBackgroundWhenNetworkAvailable("match_exactly", new SyncTaskSpec(), 900000L);
             }
 
             return true;
