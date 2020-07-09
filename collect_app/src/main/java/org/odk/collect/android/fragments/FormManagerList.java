@@ -22,7 +22,6 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.R;
