@@ -22,7 +22,6 @@ public class RangeWidgetUtils {
         maxValue.setText(String.valueOf(rangeQuestion.getRangeEnd()));
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     public static void setUpSlider(RangeQuestion rangeQuestion, Slider slider, BigDecimal actualValue) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();

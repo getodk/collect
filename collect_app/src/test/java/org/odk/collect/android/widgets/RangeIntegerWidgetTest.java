@@ -8,11 +8,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowToast;
 
 import java.math.BigDecimal;
 
@@ -66,39 +64,6 @@ public class RangeIntegerWidgetTest {
         assertThat(widget.getSlider().getValue(), equalTo(4.0F));
         assertThat(widget.getCurrentValue().getText(), equalTo("4"));
     }
-
-    @Test
-    public void whenPromptHasRangeStepAsZero_invalidWidgetToastIsShownAndWidgetIsDisabled() {
-        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        String toastText = ShadowToast.getTextOfLatestToast();
-
-        assertThat(widget.getSlider().isEnabled(), equalTo(false));
-        assertThat(toastText, equalTo(widget.getContext().getString(R.string.invalid_range_widget)));
-    }
-
-    @Test
-    public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShownAndWidgetIsDisabled() {
-        when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        String toastText = ShadowToast.getTextOfLatestToast();
-
-        assertThat(widget.getSlider().isEnabled(), equalTo(false));
-        assertThat(toastText, equalTo(widget.getContext().getString(R.string.invalid_range_widget)));
-    }
-
-    @Test
-    public void sliderShouldShowCorrectAppearance() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-
-        assertThat(widget.getMinValue().getText(), equalTo("1"));
-        assertThat(widget.getMaxValue().getText(), equalTo("10"));
-
-        assertThat(widget.getSlider().getValueFrom(), equalTo(1.0F));
-        assertThat(widget.getSlider().getValueTo(), equalTo(10.0F));
-        assertThat(widget.getSlider().getStepSize(), equalTo(1.0F));
-    }
-
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
