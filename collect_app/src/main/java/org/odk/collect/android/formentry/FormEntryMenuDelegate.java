@@ -106,11 +106,6 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         return false;
     }
 
-    @Override
-    public void invalidateOptionsMenu() {
-        activity.invalidateOptionsMenu();
-    }
-
     private FormEntryViewModel getFormEntryViewModel() {
         return ViewModelProviders.of(activity).get(FormEntryViewModel.class);
     }

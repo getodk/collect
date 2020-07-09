@@ -1577,7 +1577,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * the progress bar.
      */
     public void showView(View next, AnimationType from) {
-        menuDelegate.invalidateOptionsMenu();
+        invalidateOptionsMenu();
 
         // disable notifications...
         if (inAnimation != null) {
