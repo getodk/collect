@@ -53,7 +53,7 @@ public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A
         MotionEvent motionEvent = mock(MotionEvent.class);
         when(motionEvent.getAction()).thenReturn(MotionEvent.ACTION_DOWN);
 
-        assertThat(getSpyWidget().webView.getVisibility(), is(View.VISIBLE));
-        assertThat(getSpyWidget().webView.isClickable(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().binding.imageMap.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().binding.imageMap.isClickable(), is(Boolean.FALSE));
     }
 }

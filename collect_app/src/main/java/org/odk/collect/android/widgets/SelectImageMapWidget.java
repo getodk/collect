@@ -72,7 +72,7 @@ public abstract class SelectImageMapWidget extends ItemsWidget {
     private final boolean isSingleSelect;
     protected List<Selection> selections = new ArrayList<>();
     private String imageMapFilePath;
-    private SelectImageMapWidgetAnswerBinding binding;
+    SelectImageMapWidgetAnswerBinding binding;
 
     public SelectImageMapWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
