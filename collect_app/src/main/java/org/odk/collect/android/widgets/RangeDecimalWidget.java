@@ -47,8 +47,6 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     private Slider slider;
     private TextView currentValue;
-    private TextView minValue;
-    private TextView maxValue;
 
     private BigDecimal actualValue;
 
@@ -65,6 +63,9 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
 
         View answerView;
+        TextView minValue;
+        TextView maxValue;
+
         if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
             RangeWidgetVerticalBinding rangeWidgetVerticalBinding = RangeWidgetVerticalBinding
                     .inflate(((Activity) context).getLayoutInflater());
@@ -151,14 +152,6 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     protected TextView getCurrentValue() {
         return currentValue;
-    }
-
-    protected TextView getMinValue() {
-        return minValue;
-    }
-
-    protected TextView getMaxValue() {
-        return maxValue;
     }
 
     @Override
