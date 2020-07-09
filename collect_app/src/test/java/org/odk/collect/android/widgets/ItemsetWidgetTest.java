@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets;
 import android.database.Cursor;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -97,8 +96,10 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @NonNull
     @Override
     public ItemsetWidget createWidget() {
-        return new ItemsetWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+        ItemsetWidget itemsetWidget = new ItemsetWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
                 false, parseTool, adapter, fileUtil);
+        itemsetWidget.onAttachedToWindow();
+        return itemsetWidget;
     }
 
     @NonNull
@@ -168,7 +169,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         populateRecyclerView(getWidget());
 
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) (((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0));
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) getSpyWidget().binding.choicesRecyclerView.getLayoutManager().getChildAt(0);
         assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
     }
 

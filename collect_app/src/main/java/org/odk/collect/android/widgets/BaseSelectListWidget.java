@@ -22,7 +22,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayable
 public abstract class BaseSelectListWidget extends ItemsWidget {
     private static final String SEARCH_TEXT = "search_text";
 
-    protected SelectListWidgetAnswerBinding binding;
+    SelectListWidgetAnswerBinding binding;
     protected AbstractSelectListAdapter recyclerViewAdapter;
 
     public BaseSelectListWidget(Context context, QuestionDetails questionDetails) {
