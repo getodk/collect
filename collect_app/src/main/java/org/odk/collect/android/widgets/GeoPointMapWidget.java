@@ -50,7 +50,7 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
 
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    private GeoWidgetAnswerBinding binding;
+    GeoWidgetAnswerBinding binding;
 
     private boolean readOnly;
     private boolean draggable = true;
@@ -132,11 +132,6 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
 
         updateButtonLabelsAndVisibility(stringAnswer != null);
         widgetValueChanged();
-    }
-
-    // for testing purposes
-    protected GeoWidgetAnswerBinding getBinding() {
-        return binding;
     }
 
     private void determineMapProperties(QuestionDef questionDef) {

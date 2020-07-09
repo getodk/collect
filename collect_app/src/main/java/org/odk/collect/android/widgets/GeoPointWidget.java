@@ -42,12 +42,11 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
-    public static final String DRAGGABLE_ONLY = "draggable";
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    private GeoWidgetAnswerBinding binding;
+    GeoWidgetAnswerBinding binding;
 
     private boolean readOnly;
     private double accuracyThreshold;
@@ -56,7 +55,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        determineMapProperties(questionDef);
+
+        // Determine the accuracy threshold to use.
+        String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
         stringAnswer = getFormEntryPrompt().getAnswerText();
         boolean dataAvailable = false;
@@ -129,16 +131,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
         widgetValueChanged();
     }
 
-    protected GeoWidgetAnswerBinding getBinding() {
-        return binding;
-    }
-
-    private void determineMapProperties(QuestionDef questionDef) {
-        // Determine the accuracy threshold to use.
-        String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
-        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
-    }
-
     private String getAnswerToDisplay(String answer) {
         try {
             if (answer != null && !answer.isEmpty()) {
@@ -188,7 +180,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
             intent.putExtra(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
         }
         intent.putExtra(READ_ONLY, readOnly);
-        intent.putExtra(DRAGGABLE_ONLY, false);
         intent.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
         ((Activity) context).startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);

@@ -34,7 +34,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.GeoPointWidget.ACCURACY_THRESHOLD;
 import static org.odk.collect.android.widgets.GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
-import static org.odk.collect.android.widgets.GeoPointWidget.DRAGGABLE_ONLY;
 import static org.odk.collect.android.widgets.GeoPointWidget.LOCATION;
 import static org.odk.collect.android.widgets.GeoPointWidget.READ_ONLY;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -67,21 +66,21 @@ public class GeoPointWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowTheGeoButton() {
         GeoPointWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.getBinding().simpleButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.simpleButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), equalTo(null));
-        assertThat(widget.getBinding().geoAnswerText.getText(), equalTo(""));
+        assertThat(widget.binding.geoAnswerText.getText(), equalTo(""));
     }
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveConvertibleString_returnsNull() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertThat(widget.getAnswer(), equalTo(null));
-        assertThat(widget.getBinding().geoAnswerText.getText(), equalTo(""));
+        assertThat(widget.binding.geoAnswerText.getText(), equalTo(""));
     }
 
     @Test
@@ -110,28 +109,28 @@ public class GeoPointWidgetTest {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
-        widget.getBinding().simpleButton.performLongClick();
+        widget.binding.simpleButton.performLongClick();
 
-        verify(listener).onLongClick(widget.getBinding().simpleButton);
+        verify(listener).onLongClick(widget.binding.simpleButton);
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.getBinding().geoAnswerText.getText().toString(), equalTo(""));
+        assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(""));
     }
 
     @Test
     public void whenPromptAnswerDoesNotHaveConvertibleString_textViewDisplaysEmptyString() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.getBinding().geoAnswerText.getText().toString(), equalTo(""));
+        assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(""));
     }
 
     @Test
     public void whenPromptHasAnswer_textViewDisplaysAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         String[] parts = answer.split(" ");
-        assertThat(widget.getBinding().geoAnswerText.getText().toString(), equalTo(widget.getContext().getString(
+        assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(widget.getContext().getString(
                 R.string.gps_result,
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(widget.getContext(), Double.parseDouble(parts[0]), "lat"),
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(widget.getContext(), Double.parseDouble(parts[1]), "lon"),
@@ -143,20 +142,20 @@ public class GeoPointWidgetTest {
     @Test
     public void whenPromptDoesNotHaveHasAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.getBinding().simpleButton.getText(), equalTo(widget.getContext().getString(R.string.get_point)));
+        assertThat(widget.binding.simpleButton.getText(), equalTo(widget.getContext().getString(R.string.get_point)));
     }
 
     @Test
     public void whenPromptHasAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(widget.getBinding().simpleButton.getText(), equalTo(widget.getContext().getString(R.string.change_location)));
+        assertThat(widget.binding.simpleButton.getText(), equalTo(widget.getContext().getString(R.string.change_location)));
     }
 
     @Test
     public void whenPermissionIsNotGranted_buttonClickShouldNotLaunchAnyIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         stubLocationPermissions(widget, false);
-        widget.getBinding().simpleButton.performClick();
+        widget.binding.simpleButton.performClick();
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
         assertNull(startedIntent);
@@ -167,7 +166,7 @@ public class GeoPointWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoPointWidget widget = createWidget(prompt);
         stubLocationPermissions(widget, true);
-        widget.getBinding().simpleButton.performClick();
+        widget.binding.simpleButton.performClick();
 
         verify(waitingForDataRegistry).waitForData(prompt.getIndex());
     }
@@ -176,13 +175,13 @@ public class GeoPointWidgetTest {
     public void whenPromptDoesNotHaveAnswer_buttonShouldLaunchCorrectIntent() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         stubLocationPermissions(widget, true);
-        widget.getBinding().simpleButton.performClick();
+        widget.binding.simpleButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
 
         assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointActivity.class)));
-        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false, false);
+        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false);
     }
 
     @Test
@@ -191,23 +190,22 @@ public class GeoPointWidgetTest {
 
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         stubLocationPermissions(widget, true);
-        widget.getBinding().simpleButton.performClick();
+        widget.binding.simpleButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
 
         assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointActivity.class)));
-        assertBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer), 2.0, false, false);
+        assertBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer), 2.0, false);
     }
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef,  waitingForDataRegistry);
     }
 
-    private void assertBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, boolean readOnly, boolean draggableOnly) {
+    private void assertBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, boolean readOnly) {
         assertThat(bundle.getDoubleArray(LOCATION), equalTo(location));
         assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
-        assertThat(bundle.getBoolean(DRAGGABLE_ONLY), equalTo(draggableOnly));
         assertThat(bundle.getDouble(ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
     }
 
