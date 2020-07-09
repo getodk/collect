@@ -31,6 +31,8 @@ collect_app/pop/
 collect_app/src/pop/
 collect_app/tdh/
 collect_app/src/tdh/
+collect_app/assignfield/
+collect_app/src/assignfield/
 
 # gradle env props
 secrets.properties
