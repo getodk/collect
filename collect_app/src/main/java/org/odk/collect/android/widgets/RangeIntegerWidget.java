@@ -31,11 +31,10 @@ import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
@@ -44,14 +43,13 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
     private static final String VERTICAL_APPEARANCE = "vertical";
 
+    private RangeQuestion rangeQuestion;
+
     private Slider slider;
     private TextView currentValue;
     private TextView minValue;
     private TextView maxValue;
 
-    private BigDecimal rangeStart;
-    private BigDecimal rangeEnd;
-    private BigDecimal rangeStep;
     private BigDecimal actualValue;
 
     private boolean suppressFlingGesture;
@@ -63,6 +61,8 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         String appearance = prompt.getQuestion().getAppearanceAttr();
+
+        rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
 
         View answerView;
         if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
@@ -85,12 +85,13 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
             maxValue = rangeWidgetHorizontalBinding.maxValue;
         }
 
-        setUpWidgetParameters();
+        RangeWidgetUtils.setUpWidgetParameters(rangeQuestion, minValue, maxValue);
+
         if (prompt.isReadOnly()) {
             slider.setEnabled(false);
         }
 
-        if (isWidgetValid()) {
+        if (RangeWidgetUtils.isWidgetValid(rangeQuestion, slider)) {
             if (getFormEntryPrompt().getAnswerValue() != null) {
                 actualValue = new BigDecimal(getFormEntryPrompt().getAnswerValue().getValue().toString());
             } else {
@@ -98,6 +99,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
             }
             setUpActualValueLabel();
             setUpSeekBar();
+
         }
         return answerView;
     }
@@ -128,63 +130,16 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
     }
 
     private void setUpNullValue() {
-        slider.setValue(rangeStart.floatValue());
+        slider.setValue(slider.getValueFrom());
         actualValue = null;
         setUpActualValueLabel();
     }
 
-    private void setUpWidgetParameters() {
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-
-        rangeStart = rangeQuestion.getRangeStart();
-        rangeEnd = rangeQuestion.getRangeEnd();
-        rangeStep = rangeQuestion.getRangeStep().abs();
-
-        minValue.setText(String.valueOf(rangeStart));
-        maxValue.setText(String.valueOf(rangeEnd));
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
     private void setUpSeekBar() {
-        slider.setValueFrom(rangeStart.floatValue());
-        slider.setValueTo(rangeEnd.floatValue());
-        slider.setStepSize(rangeStep.intValue());
-        slider.setValue(actualValue == null ? rangeStart.floatValue() : actualValue.floatValue());
+        RangeWidgetUtils.setUpSlider(rangeQuestion, slider, actualValue);
+        slider.setStepSize(rangeQuestion.getRangeStep().abs().intValue());
         slider.addOnChangeListener(this);
         slider.addOnSliderTouchListener(this);
-
-        slider.setOnTouchListener((v, event) -> {
-            int action = event.getAction();
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    v.getParent().requestDisallowInterceptTouchEvent(false);
-                    if (actualValue == null) {
-                        actualValue = rangeStart;
-                        setUpActualValueLabel();
-                    }
-                    break;
-            }
-            v.onTouchEvent(event);
-            return true;
-        });
-    }
-
-    private void disableWidget() {
-        ToastUtils.showLongToast(R.string.invalid_range_widget);
-        slider.setEnabled(false);
-    }
-
-    private boolean isWidgetValid() {
-        boolean result = true;
-        if (rangeStep.compareTo(BigDecimal.ZERO) == 0
-                || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(BigDecimal.ZERO) != 0) {
-            disableWidget();
-            result = false;
-        }
-        return result;
     }
 
     //for testing purposes
