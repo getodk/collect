@@ -17,7 +17,9 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
 
     @Override
     public void onCreateOptionsMenu(MenuInflater menuInflater, Menu menu) {
-
+        // FormChooserListActivity uses the list inflated in AppListActivityMenu. It probably
+        // makes sense to decouple this if we can so each Activity can have control over
+        // its own menu layout
     }
 
     @Override
@@ -35,7 +37,6 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
             return true;
         } else {
             return false;
-
         }
     }
 }
