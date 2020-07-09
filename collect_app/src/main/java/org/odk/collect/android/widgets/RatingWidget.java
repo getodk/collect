@@ -36,7 +36,7 @@ public class RatingWidget extends QuestionWidget {
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
     public static final int STANDARD_WIDTH_OF_STAR = 48;
 
-    private RatingWidgetAnswerBinding binding;
+    RatingWidgetAnswerBinding binding;
 
     public RatingWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
@@ -106,9 +106,5 @@ public class RatingWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         binding.ratingBar1.setRating(0.0F);
-    }
-
-    protected RatingWidgetAnswerBinding getBinding() {
-        return binding;
     }
 }
