@@ -66,12 +66,14 @@ public class RatingWidget extends QuestionWidget {
         }
 
         binding.ratingBar1.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            binding.ratingBar2.setRating(0);
+            binding.ratingBar1.setRating(rating);
+            binding.ratingBar2.setRating(0.0F);
             widgetValueChanged();
         });
 
         binding.ratingBar2.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             binding.ratingBar1.setRating(maxNumberOfStars);
+            binding.ratingBar2.setRating(rating);
             widgetValueChanged();
         });
 
