@@ -50,10 +50,6 @@ public class ServerFormsDetailsFetcher {
     }
 
     public List<ServerFormDetails> fetchFormDetails() throws FormApiException {
-        return fetchFormDetails(true);
-    }
-
-    public List<ServerFormDetails> fetchFormDetails(boolean checkMediaFiles) throws FormApiException {
         diskFormsSynchronizer.synchronize();
 
         List<FormListItem> formListItems = formListAPI.fetchFormList();
@@ -68,7 +64,7 @@ public class ServerFormsDetailsFetcher {
 
             if (thisFormAlreadyDownloaded) {
                 isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
-                if ((!isNewerFormVersionAvailable || checkMediaFiles) && listItem.getManifestURL() != null) {
+                if (!isNewerFormVersionAvailable && listItem.getManifestURL() != null) {
                     manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
                     if (manifestFile != null) {
                         List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();

@@ -86,11 +86,11 @@ public class ServerPollingJob extends Job {
             return Result.FAILURE;
         }
 
-        HashMap<String, ServerFormDetails> formList = formListDownloader.downloadFormList(null, null, null, true);
+        HashMap<String, ServerFormDetails> formList = formListDownloader.downloadFormList(null, null, null);
 
         if (!formList.containsKey(DL_ERROR_MSG)) {
             if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                formList = formListDownloader.downloadFormList(null, null, null, true);
+                formList = formListDownloader.downloadFormList(null, null, null);
 
                 if (formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                     return Result.FAILURE;

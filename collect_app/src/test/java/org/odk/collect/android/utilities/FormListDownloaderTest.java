@@ -64,7 +64,7 @@ public class FormListDownloaderTest {
                 new WebCredentialsUtils()
         );
 
-        final Map<String, ServerFormDetails> fetched = downloader.downloadFormList(null, null, null, false);
+        final Map<String, ServerFormDetails> fetched = downloader.downloadFormList(null, null, null);
         assertEquals(2, fetched.size());
 
         ServerFormDetails f1 = fetched.get("one");
@@ -96,7 +96,7 @@ public class FormListDownloaderTest {
                 new WebCredentialsUtils()
         );
 
-        serverFormsDetailsFetcher.downloadFormList("http://blah.com///", "user", "password", false);
+        serverFormsDetailsFetcher.downloadFormList("http://blah.com///", "user", "password");
         verify(serverClient).getXML("http://blah.com/formList");
     }
 
