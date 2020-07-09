@@ -156,5 +156,25 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withText(getTranslatedString(R.string.send_data_button, formCount))).perform(click());
         return new SendFinalizedFormPage(rule);
     }
+
+    public MainMenuPage enableMatchExactly() {
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickExperimental()
+                .clickMatchExactly()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
+
+    public MainMenuPage setServer(String url) {
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickServerSettings()
+                .clickOnURL()
+                .inputText(url)
+                .clickOKOnDialog()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
 }
 

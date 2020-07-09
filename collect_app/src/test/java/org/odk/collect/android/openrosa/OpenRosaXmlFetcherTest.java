@@ -18,15 +18,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class OpenRosaAPIClientTest {
+public class OpenRosaXmlFetcherTest {
 
     private OpenRosaHttpInterface httpInterface;
-    private OpenRosaAPIClient openRosaAPIClient;
+    private OpenRosaXmlFetcher openRosaXMLFetcher;
 
     @Before
     public void setup() {
         httpInterface = mock(OpenRosaHttpInterface.class);
-        openRosaAPIClient = new OpenRosaAPIClient(httpInterface, new WebCredentialsUtils());
+        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new WebCredentialsUtils());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class OpenRosaAPIClientTest {
                 200
         ));
 
-        DocumentFetchResult result = openRosaAPIClient.getXML("http://testurl");
+        DocumentFetchResult result = openRosaXMLFetcher.getXML("http://testurl");
         assertThat(result.responseCode, equalTo(0));
         assertThat(result.isOpenRosaResponse, equalTo(true));
         assertThat(result.errorMessage, nullValue());
@@ -50,7 +50,7 @@ public class OpenRosaAPIClientTest {
     public void getXML_whenUnsuccessful_returnsResultWithStatusAndErrorMessage() throws Exception {
         when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "", 500));
 
-        DocumentFetchResult result = openRosaAPIClient.getXML("http://testurl");
+        DocumentFetchResult result = openRosaXMLFetcher.getXML("http://testurl");
         assertThat(result.responseCode, equalTo(500));
         assertThat(result.errorMessage, equalTo("getXML failed while accessing http://testurl with status code: 500"));
     }
@@ -59,7 +59,7 @@ public class OpenRosaAPIClientTest {
     public void getXML_whenHttpInterfaceThrowsAnException_returnsResultWith0StatusAndErrorMessage() throws Exception {
         when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(new Exception());
 
-        DocumentFetchResult result = openRosaAPIClient.getXML("http://testurl");
+        DocumentFetchResult result = openRosaXMLFetcher.getXML("http://testurl");
         assertThat(result.responseCode, equalTo(0));
         assertThat(result.errorMessage, equalTo("Parsing failed with null while accessing http://testurl"));
     }

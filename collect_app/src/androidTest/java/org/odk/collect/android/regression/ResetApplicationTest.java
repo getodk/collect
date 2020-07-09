@@ -41,13 +41,13 @@ public class ResetApplicationTest {
                 .clickAdminSettings()
                 .clickOnResetApplication()
                 .assertText(R.string.reset_settings_dialog_title)
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .assertDisabled(R.string.reset_settings_button_reset)
                 .rotateToLandscape(new ResetApplicationDialog(rule))
                 .assertText(R.string.reset_settings_dialog_title)
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .assertDisabled(R.string.reset_settings_button_reset)
                 .rotateToPortrait(new ResetApplicationDialog(rule))
                 .assertText(R.string.reset_settings_dialog_title)
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset);
+                .assertDisabled(R.string.reset_settings_button_reset);
     }
 
     @Test
@@ -64,17 +64,17 @@ public class ResetApplicationTest {
                 .clickOnMenu()
                 .clickAdminSettings()
                 .clickOnResetApplication()
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .assertDisabled(R.string.reset_settings_button_reset)
                 .clickOnString(R.string.reset_saved_forms)
                 .clickOnString(R.string.reset_blank_forms)
                 .clickOnString(R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
         new MainMenuPage(rule)
                 .clickFillBlankForm()
-                .checkIfTextDoesNotExist("All widgets")
+                .assertTextDoesNotExist("All widgets")
                 .pressBack(new MainMenuPage(rule))
                 .clickEditSavedForm()
-                .checkIfTextDoesNotExist("All widgets");
+                .assertTextDoesNotExist("All widgets");
     }
 
     @Test
@@ -138,9 +138,9 @@ public class ResetApplicationTest {
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .assertText(R.string.theme_light)
-                .checkIfTextDoesNotExist(R.string.theme_dark)
+                .assertTextDoesNotExist(R.string.theme_dark)
                 .assertText(R.string.use_device_language)
-                .checkIfTextDoesNotExist("español");
+                .assertTextDoesNotExist("español");
     }
 
     @Test

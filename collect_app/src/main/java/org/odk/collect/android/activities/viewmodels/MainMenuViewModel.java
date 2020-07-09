@@ -1,5 +1,7 @@
 package org.odk.collect.android.activities.viewmodels;
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
@@ -8,20 +10,24 @@ import androidx.lifecycle.ViewModelProvider;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.version.VersionInformation;
 
 public class MainMenuViewModel extends ViewModel {
 
     private final VersionInformation version;
     private final AdminSharedPreferences adminSharedPreferences;
+    private final SharedPreferences generalSharedPreferences;
 
     MainMenuViewModel(VersionInformation versionInformation) {
-        this(versionInformation, AdminSharedPreferences.getInstance());
+        this(versionInformation, AdminSharedPreferences.getInstance(), GeneralSharedPreferences.getInstance().getSharedPreferences());
     }
 
-    private MainMenuViewModel(VersionInformation versionInformation, AdminSharedPreferences adminSharedPreferences) {
+    private MainMenuViewModel(VersionInformation versionInformation, AdminSharedPreferences adminSharedPreferences, SharedPreferences generalSharedPreferences) {
         this.version = versionInformation;
         this.adminSharedPreferences = adminSharedPreferences;
+        this.generalSharedPreferences = generalSharedPreferences;
     }
 
     public String getVersion() {
@@ -68,7 +74,10 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public boolean shouldGetBlankFormButtonBeVisible() {
-        return (boolean) adminSharedPreferences.get(AdminKeys.KEY_GET_BLANK);
+        boolean matchExactlyEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_MATCH_EXACTLY, false);
+        boolean buttonEnabled = (boolean) adminSharedPreferences.get(AdminKeys.KEY_GET_BLANK);
+
+        return !matchExactlyEnabled && buttonEnabled;
     }
 
     public boolean shouldDeleteSavedFormButtonBeVisible() {
@@ -96,7 +105,7 @@ public class MainMenuViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(versionInformation, AdminSharedPreferences.getInstance());
+            return (T) new MainMenuViewModel(versionInformation);
         }
     }
 }

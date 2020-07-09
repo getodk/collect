@@ -18,8 +18,9 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.utilities.MultiFormDownloader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,7 +33,7 @@ import java.util.HashMap;
  * @author carlhartung
  */
 public class DownloadFormsTask extends
-        AsyncTask<ArrayList<FormDetails>, String, HashMap<FormDetails, String>> implements FormDownloaderListener {
+        AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> implements FormDownloaderListener {
 
     private DownloadFormsTaskListener stateListener;
 
@@ -47,14 +48,13 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
-        FormDownloader formDownloader = new FormDownloader();
-        formDownloader.setDownloaderListener(this);
-        return formDownloader.downloadForms(values[0]);
+    protected HashMap<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
+        MultiFormDownloader multiFormDownloader = new MultiFormDownloader();
+        return multiFormDownloader.downloadForms(values[0], this);
     }
 
     @Override
-    protected void onCancelled(HashMap<FormDetails, String> formDetailsStringHashMap) {
+    protected void onCancelled(HashMap<ServerFormDetails, String> formDetailsStringHashMap) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingCancelled();
@@ -63,7 +63,7 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected void onPostExecute(HashMap<FormDetails, String> value) {
+    protected void onPostExecute(HashMap<ServerFormDetails, String> value) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingComplete(value);

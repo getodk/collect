@@ -41,10 +41,10 @@ public class FillBlankInvalidFormTest {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .checkIsSnackbarErrorVisible()
-                .checkIfTextDoesNotExist("Invalid events")
-                .checkIfTextDoesNotExist("invalid-form")
-                .checkIfTextDoesNotExist("setlocation-and-audit-location")
-                .checkIfTextDoesNotExist("setlocation-action-instance-load");
+                .assertTextDoesNotExist("Invalid events")
+                .assertTextDoesNotExist("invalid-form")
+                .assertTextDoesNotExist("setlocation-and-audit-location")
+                .assertTextDoesNotExist("setlocation-action-instance-load");
     }
 
 }

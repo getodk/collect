@@ -705,4 +705,6 @@
     <string name="preference_not_available">Not available</string>
     <string name="custom_server_paths">Custom server paths</string>
     <string name="legacy_custom_server_paths_summary">Will be removed in a future version. Please use /formList and /submission on your server.</string>
+    <string name="experimental">Experimental</string>
+    <string name="match_exactly">Exactly match server</string>
 </resources>

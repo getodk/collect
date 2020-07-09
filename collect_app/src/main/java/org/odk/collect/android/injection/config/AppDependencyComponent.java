@@ -3,6 +3,7 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.activities.FormChooserListActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
@@ -46,7 +47,7 @@ import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -105,7 +106,7 @@ public interface AppDependencyComponent {
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
 
-    void inject(FormDownloader formDownloader);
+    void inject(MultiFormDownloader multiFormDownloader);
 
     void inject(ServerPollingJob serverPollingJob);
 
@@ -169,6 +170,8 @@ public interface AppDependencyComponent {
 
     void inject(QuitFormDialogFragment quitFormDialogFragment);
 
+    void inject(FormChooserListActivity formChooserListActivity);
+  
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
     RxEventBus rxEventBus();

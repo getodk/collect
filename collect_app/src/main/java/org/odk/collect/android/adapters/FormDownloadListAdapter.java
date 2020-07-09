@@ -25,7 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,16 +37,16 @@ import static org.odk.collect.android.activities.FormDownloadListActivity.FORM_I
 public class FormDownloadListAdapter extends ArrayAdapter {
 
     private final ArrayList<HashMap<String, String>> filteredFormList;
-    private HashMap<String, FormDetails> formIdsToDetails;
+    private HashMap<String, ServerFormDetails> formIdsToDetails;
 
     public FormDownloadListAdapter(Context context, ArrayList<HashMap<String, String>> filteredFormList,
-                                   HashMap<String, FormDetails> formIdsToDetails) {
+                                   HashMap<String, ServerFormDetails> formIdsToDetails) {
         super(context, R.layout.form_chooser_list_item_multiple_choice, filteredFormList);
         this.filteredFormList = filteredFormList;
         this.formIdsToDetails = formIdsToDetails;
     }
 
-    public void setFromIdsToDetails(HashMap<String, FormDetails> formIdsToDetails) {
+    public void setFromIdsToDetails(HashMap<String, ServerFormDetails> formIdsToDetails) {
         this.formIdsToDetails = formIdsToDetails;
     }
 

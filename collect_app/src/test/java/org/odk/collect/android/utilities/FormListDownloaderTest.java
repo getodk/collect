@@ -3,22 +3,26 @@ package org.odk.collect.android.utilities;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.provider.FormsProvider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.shadows.ShadowEnvironment;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.StringReader;
 import java.util.Map;
 
+import static android.os.Environment.MEDIA_MOUNTED;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -30,7 +34,17 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class FormListDownloaderTest {
 
-    private final OpenRosaAPIClient serverClient = mock(OpenRosaAPIClient.class);
+    private final OpenRosaXmlFetcher serverClient = mock(OpenRosaXmlFetcher.class);
+
+    @Before
+    public void setup() {
+        ShadowEnvironment.setExternalStorageState(MEDIA_MOUNTED); // Required for ODK directories to be created
+    }
+
+    @After
+    public void teardown() {
+        FormsProvider.releaseDatabaseHelper();
+    }
 
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {
@@ -47,14 +61,13 @@ public class FormListDownloaderTest {
         FormListDownloader downloader = new FormListDownloader(
                 RuntimeEnvironment.application,
                 serverClient,
-                new WebCredentialsUtils(),
-                new FormsDao()
+                new WebCredentialsUtils()
         );
 
-        final Map<String, FormDetails> fetched = downloader.downloadFormList(null, null, null, false);
+        final Map<String, ServerFormDetails> fetched = downloader.downloadFormList(null, null, null, false);
         assertEquals(2, fetched.size());
 
-        FormDetails f1 = fetched.get("one");
+        ServerFormDetails f1 = fetched.get("one");
         assertNull(f1.getErrorStr());
         assertEquals("The First Form", f1.getFormName());
         assertEquals("https://example.com/formXml?formId=one", f1.getDownloadUrl());
@@ -64,7 +77,7 @@ public class FormListDownloaderTest {
         assertFalse(f1.isNewerFormVersionAvailable());
         assertFalse(f1.areNewerMediaFilesAvailable());
 
-        FormDetails f2 = fetched.get("two");
+        ServerFormDetails f2 = fetched.get("two");
         assertNull(f2.getErrorStr());
         assertEquals("The Second Form", f2.getFormName());
         assertEquals("https://example.com/formXml?formId=two", f2.getDownloadUrl());
@@ -79,14 +92,13 @@ public class FormListDownloaderTest {
     public void removesTrailingSlashesFromUrl() {
         when(serverClient.getXML(any())).thenReturn(new DocumentFetchResult("blah", 200));
 
-        FormListDownloader formListDownloader = new FormListDownloader(
+        FormListDownloader serverFormsDetailsFetcher = new FormListDownloader(
                 RuntimeEnvironment.application,
                 serverClient,
-                new WebCredentialsUtils(),
-                new FormsDao()
+                new WebCredentialsUtils()
         );
 
-        formListDownloader.downloadFormList("http://blah.com///", "user", "password", false);
+        serverFormsDetailsFetcher.downloadFormList("http://blah.com///", "user", "password", false);
         verify(serverClient).getXML("http://blah.com/formList");
     }
 

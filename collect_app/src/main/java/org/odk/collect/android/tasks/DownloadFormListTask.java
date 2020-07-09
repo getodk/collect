@@ -15,10 +15,11 @@
 package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
+
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.utilities.FormListDownloader;
 
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import java.util.HashMap;
  *
  * @author carlhartung
  */
-public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String, FormDetails>> {
+public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String, ServerFormDetails>> {
 
     private final FormListDownloader formListDownloader;
 
@@ -45,12 +46,12 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     }
 
     @Override
-    protected HashMap<String, FormDetails> doInBackground(Void... values) {
+    protected HashMap<String, ServerFormDetails> doInBackground(Void... values) {
         return formListDownloader.downloadFormList(url, username, password, false);
     }
 
     @Override
-    protected void onPostExecute(HashMap<String, FormDetails> value) {
+    protected void onPostExecute(HashMap<String, ServerFormDetails> value) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formListDownloadingComplete(value);

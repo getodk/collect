@@ -115,13 +115,13 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIfTextDoesNotExist(String text) {
+    public T assertTextDoesNotExist(String text) {
         onView(withText(text)).check(doesNotExist());
         return (T) this;
     }
 
-    public T checkIfTextDoesNotExist(int string) {
-        return checkIfTextDoesNotExist(getTranslatedString(string));
+    public T assertTextDoesNotExist(int string) {
+        return assertTextDoesNotExist(getTranslatedString(string));
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {
@@ -206,7 +206,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIfOptionIsDisabled(int string) {
+    public T assertDisabled(int string) {
         onView(withText(string)).check(matches(not(isEnabled())));
         return (T) this;
     }
@@ -343,6 +343,10 @@ abstract class Page<T extends Page<T>> {
         }
 
         throw new RuntimeException("waitFor failed", failure);
+    }
+
+    public void assertTextNotDisplayed(int string) {
+        onView(withText(getTranslatedString(string))).check(matches(not(isDisplayed())));
     }
 }
 

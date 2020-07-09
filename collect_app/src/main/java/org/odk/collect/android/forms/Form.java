@@ -24,6 +24,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Form {
+
     private final Long id;
     private final String displayName;
     private final String description;
@@ -233,10 +234,6 @@ public final class Form {
 
     public String getAutoDelete() {
         return autoDelete;
-    }
-
-    public String getLastDetectedFormVersionHash() {
-        return lastDetectedFormVersionHash;
     }
 
     public String getGeometryXpath() {

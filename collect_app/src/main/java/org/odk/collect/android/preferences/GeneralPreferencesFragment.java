@@ -50,6 +50,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         findPreference("maps").setOnPreferenceClickListener(this);
         findPreference("form_management").setOnPreferenceClickListener(this);
         findPreference("user_and_device_identity").setOnPreferenceClickListener(this);
+        findPreference("experimental").setOnPreferenceClickListener(this);
 
         if (!getArguments().getBoolean(INTENT_KEY_ADMIN_MODE)) {
             setPreferencesVisibility();
@@ -76,6 +77,9 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                     break;
                 case "user_and_device_identity":
                     basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
+                    break;
+                case "experimental":
+                    AndroidXPreferencesActivity.start(getActivity(), ExperimentalPreferencesFragment.class);
                     break;
             }
             if (basePreferenceFragment != null) {

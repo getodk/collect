@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class OpenRosaAPIClient {
+public class OpenRosaXmlFetcher {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
@@ -29,7 +29,7 @@ public class OpenRosaAPIClient {
     private final WebCredentialsUtils webCredentialsUtils;
 
     @Inject
-    public OpenRosaAPIClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public OpenRosaXmlFetcher(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
     }

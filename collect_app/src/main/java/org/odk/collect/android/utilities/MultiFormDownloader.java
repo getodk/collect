@@ -27,11 +27,12 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.logic.MediaFile;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -44,6 +45,7 @@ import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,26 +58,28 @@ import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 
-public class FormDownloader {
+public class MultiFormDownloader implements FormDownloader {
 
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-    private FormDownloaderListener stateListener;
-
-    private FormsDao formsDao;
+    @Inject
+    FormsDao formsDao;
 
     @Inject
-    OpenRosaAPIClient openRosaAPIClient;
+    OpenRosaXmlFetcher openRosaXMLFetcher;
 
-    public FormDownloader() {
-        Collect.getInstance().getComponent().inject(this);
+    public MultiFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXMLFetcher) {
+        this.formsDao = formsDao;
+        this.openRosaXMLFetcher = openRosaXMLFetcher;
     }
 
-    public void setDownloaderListener(FormDownloaderListener sl) {
-        synchronized (this) {
-            stateListener = sl;
-        }
+    /**
+     * Use {@link #MultiFormDownloader(FormsDao, OpenRosaXmlFetcher)} instead
+     */
+    @Deprecated
+    public MultiFormDownloader() {
+        Collect.getInstance().getComponent().inject(this);
     }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
@@ -99,16 +103,20 @@ public class FormDownloader {
         }
     }
 
-    public HashMap<FormDetails, String> downloadForms(List<FormDetails> toDownload) {
-        formsDao = new FormsDao();
+    @Override
+    public void downloadForm(ServerFormDetails form) {
+        downloadForms(Collections.singletonList(form), null);
+    }
+
+    public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) {
         int total = toDownload.size();
         int count = 1;
 
-        final HashMap<FormDetails, String> result = new HashMap<>();
+        final HashMap<ServerFormDetails, String> result = new HashMap<>();
 
-        for (FormDetails fd : toDownload) {
+        for (ServerFormDetails fd : toDownload) {
             try {
-                String message = processOneForm(total, count++, fd);
+                String message = processOneForm(total, count++, fd, stateListener);
                 result.put(fd, message.isEmpty() ?
                         Collect.getInstance().getString(R.string.success) : message);
             } catch (TaskCancelledException cd) {
@@ -128,7 +136,7 @@ public class FormDownloader {
      * @return an empty string for success, or a nonblank string with one or more error messages
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
-    private String processOneForm(int total, int count, FormDetails fd) throws TaskCancelledException {
+    private String processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
         if (stateListener != null) {
             stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         }
@@ -145,13 +153,13 @@ public class FormDownloader {
         try {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
-            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl());
+            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener);
 
             if (fd.getManifestUrl() != null) {
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                        count, total);
+                        count, total, stateListener);
                 if (error != null) {
                     message += error;
                 }
@@ -345,7 +353,7 @@ public class FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url) throws Exception {
+    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener) throws Exception {
         // clean up friendly form name...
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
@@ -360,7 +368,7 @@ public class FormDownloader {
             i++;
         }
 
-        downloadFile(f, url);
+        downloadFile(f, url, stateListener);
 
         boolean isNew = true;
 
@@ -404,7 +412,7 @@ public class FormDownloader {
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
      */
-    private void downloadFile(File file, String downloadUrl)
+    private void downloadFile(File file, String downloadUrl, FormDownloaderListener stateListener)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));
@@ -426,7 +434,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = openRosaAPIClient.getFile(downloadUrl, null);
+                    is = openRosaXMLFetcher.getFile(downloadUrl, null);
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
@@ -542,8 +550,8 @@ public class FormDownloader {
     }
 
     String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
-                                                 FormDetails fd, int count,
-                                                 int total) throws Exception {
+                                         ServerFormDetails fd, int count,
+                                         int total, FormDownloaderListener stateListener) throws Exception {
         if (fd.getManifestUrl() == null) {
             return null;
         }
@@ -555,7 +563,7 @@ public class FormDownloader {
 
         List<MediaFile> files = new ArrayList<>();
 
-        DocumentFetchResult result = openRosaAPIClient.getXML(fd.getManifestUrl());
+        DocumentFetchResult result = openRosaXMLFetcher.getXML(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;
@@ -670,7 +678,7 @@ public class FormDownloader {
                 File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
 
                 if (!finalMediaFile.exists()) {
-                    downloadFile(tempMediaFile, toDownload.getDownloadUrl());
+                    downloadFile(tempMediaFile, toDownload.getDownloadUrl(), stateListener);
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
                     String downloadFileHash = getMd5Hash(toDownload.getHash());
@@ -679,7 +687,7 @@ public class FormDownloader {
                         // if the hashes match, it's the same file
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
-                        downloadFile(tempMediaFile, toDownload.getDownloadUrl());
+                        downloadFile(tempMediaFile, toDownload.getDownloadUrl(), stateListener);
                     } else {
                         // exists, and the hash is the same
                         // no need to download it again

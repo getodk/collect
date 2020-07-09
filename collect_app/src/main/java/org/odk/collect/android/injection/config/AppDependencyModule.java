@@ -3,11 +3,13 @@ package org.odk.collect.android.injection.config;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
@@ -17,6 +19,10 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
+import org.odk.collect.android.forms.DatabaseFormRepository;
+import org.odk.collect.android.forms.DatabaseMediaFileRepository;
+import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.metadata.InstallIDProvider;
@@ -24,11 +30,14 @@ import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.openrosa.api.FormListApi;
+import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
@@ -45,6 +54,7 @@ import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
@@ -115,8 +125,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public OpenRosaAPIClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
-        return new OpenRosaAPIClient(httpInterface, webCredentialsUtils);
+    public OpenRosaXmlFetcher provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+        return new OpenRosaXmlFetcher(httpInterface, webCredentialsUtils);
     }
 
     @Provides
@@ -125,17 +135,20 @@ public class AppDependencyModule {
     }
 
     @Provides
-    FormListDownloader provideDownloadFormListDownloader(
+    FormListDownloader formListDownloader(
             Application application,
-            OpenRosaAPIClient openRosaAPIClient,
-            WebCredentialsUtils webCredentialsUtils,
-            FormsDao formsDao) {
+            OpenRosaXmlFetcher openRosaXMLFetcher,
+            WebCredentialsUtils webCredentialsUtils) {
         return new FormListDownloader(
                 application,
-                openRosaAPIClient,
-                webCredentialsUtils,
-                formsDao
+                openRosaXMLFetcher,
+                webCredentialsUtils
         );
+    }
+
+    @Provides
+    MultiFormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXMLFetcher) {
+        return new MultiFormDownloader(formsDao, openRosaXMLFetcher);
     }
 
     @Provides
@@ -298,5 +311,24 @@ public class AppDependencyModule {
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, PreferencesProvider preferencesProvider, UserAgentProvider userAgentProvider) {
         return new ApplicationInitializer(application, collectJobCreator, preferencesProvider.getMetaSharedPreferences(), userAgentProvider);
+    }
+
+    @Provides
+    public FormRepository providesFormRepository() {
+        return new DatabaseFormRepository();
+    }
+
+    @Provides
+    public MediaFileRepository providesMediaFileRepository() {
+        return new DatabaseMediaFileRepository();
+    }
+
+    @Provides
+    public FormListApi providesFormAPI(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaXmlFetcher openRosaXMLFetcher) {
+        SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
+        String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, context.getString(R.string.default_server_url));
+        String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
+
+        return new OpenRosaFormListApi(openRosaXMLFetcher, serverURL, formListPath);
     }
 }

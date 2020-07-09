@@ -52,9 +52,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
                 break;
             }
             try {
-                Uri deleteForm =
-                        Uri.withAppendedPath(FormsColumns.CONTENT_URI, param.toString());
-
+                Uri deleteForm = Uri.withAppendedPath(FormsColumns.CONTENT_URI, param.toString());
                 int wasDeleted = cr.delete(deleteForm, null, null);
                 deleted += wasDeleted;
             } catch (Exception ex) {

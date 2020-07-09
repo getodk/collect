@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.listeners;
 
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 
 import java.util.HashMap;
 
@@ -22,5 +22,5 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormListDownloaderListener {
-    void formListDownloadingComplete(HashMap<String, FormDetails> value);
+    void formListDownloadingComplete(HashMap<String, ServerFormDetails> value);
 }

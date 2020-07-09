@@ -38,7 +38,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
@@ -75,7 +75,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference passwordPreference;
 
     @Inject
-    OpenRosaAPIClient openRosaAPIClient;
+    OpenRosaXmlFetcher openRosaXMLFetcher;
     @Inject
     GoogleAccountsManager accountsManager;
     @Inject

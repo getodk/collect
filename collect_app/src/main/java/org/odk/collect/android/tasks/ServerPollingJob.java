@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+
 import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
@@ -31,12 +32,12 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.FormListDownloader;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
@@ -50,8 +51,8 @@ import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLA
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
@@ -85,36 +86,36 @@ public class ServerPollingJob extends Job {
             return Result.FAILURE;
         }
 
-        HashMap<String, FormDetails> formList = formListDownloader.downloadFormList(true);
+        HashMap<String, ServerFormDetails> formList = formListDownloader.downloadFormList(null, null, null, true);
 
         if (!formList.containsKey(DL_ERROR_MSG)) {
             if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                formList = formListDownloader.downloadFormList(true);
+                formList = formListDownloader.downloadFormList(null, null, null, true);
 
                 if (formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                     return Result.FAILURE;
                 }
             }
 
-            List<FormDetails> newDetectedForms = new ArrayList<>();
-            for (FormDetails formDetails : formList.values()) {
-                if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
-                    newDetectedForms.add(formDetails);
+            List<ServerFormDetails> newDetectedForms = new ArrayList<>();
+            for (ServerFormDetails serverFormDetails : formList.values()) {
+                if (serverFormDetails.isNewerFormVersionAvailable() || serverFormDetails.areNewerMediaFilesAvailable()) {
+                    newDetectedForms.add(serverFormDetails);
                 }
             }
 
             if (!newDetectedForms.isEmpty()) {
                 if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
-                    final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
+                    final HashMap<ServerFormDetails, String> result = new MultiFormDownloader().downloadForms(newDetectedForms, null);
                     informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
                 } else {
-                    for (FormDetails formDetails : newDetectedForms) {
-                        String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
-                        String formVersionHash = FormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
+                    for (ServerFormDetails serverFormDetails : newDetectedForms) {
+                        String manifestFileHash = serverFormDetails.getManifestFileHash() != null ? serverFormDetails.getManifestFileHash() : "";
+                        String formVersionHash = MultiFormDownloader.getMd5Hash(serverFormDetails.getHash()) + manifestFileHash;
                         if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
-                            updateLastDetectedFormVersionHash(formDetails.getFormId(), formVersionHash);
+                            updateLastDetectedFormVersionHash(serverFormDetails.getFormId(), formVersionHash);
                         } else {
-                            newDetectedForms.remove(formDetails);
+                            newDetectedForms.remove(serverFormDetails);
                         }
                     }
 
@@ -168,7 +169,7 @@ public class ServerPollingJob extends Job {
                 null);
     }
 
-    private void informAboutNewDownloadedForms(String title, HashMap<FormDetails, String> result) {
+    private void informAboutNewDownloadedForms(String title, HashMap<ServerFormDetails, String> result) {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
@@ -186,14 +187,14 @@ public class ServerPollingJob extends Job {
         new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
     }
 
-    private String getContentText(HashMap<FormDetails, String> result) {
+    private String getContentText(HashMap<ServerFormDetails, String> result) {
         return allFormsDownloadedSuccessfully(result)
                 ? Collect.getInstance().getString(R.string.success)
                 : Collect.getInstance().getString(R.string.failures);
     }
 
-    private boolean allFormsDownloadedSuccessfully(HashMap<FormDetails, String> result) {
-        for (Map.Entry<FormDetails, String> item : result.entrySet()) {
+    private boolean allFormsDownloadedSuccessfully(HashMap<ServerFormDetails, String> result) {
+        for (Map.Entry<ServerFormDetails, String> item : result.entrySet()) {
             if (!item.getValue().equals(Collect.getInstance().getString(R.string.success))) {
                 return false;
             }
