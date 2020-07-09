@@ -133,7 +133,6 @@
   <string name="choose_video">Escollir vídeo</string>
   <string name="choose_image">Escollir imatge</string>
   <string name="selected">Seleccionat:</string>
-  <string name="select_answer">Seleccionar resposta:</string>
   <string name="save_form_as">Anomena aquest formulari:</string>
   <string name="save_as_error">El nom no pot deixar-se en blanc</string>
   <string name="edit_prompt">Editar entrada:</string>
@@ -161,7 +160,6 @@
   <string name="parent_form_not_present">No es pot editar  aquest formulari desat perquè el formulari plantilla no hi és o s\'ha esborrat.\n\nForm ID: %1$s</string>
   <string name="launch_app">Llançament</string>
   <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
-  <string name="select_one">Selecciona una resposta</string>
   <string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
   <string name="save_and_close">Salva i Tanca</string>
   <string name="sign_button">Afegir Signatura</string>

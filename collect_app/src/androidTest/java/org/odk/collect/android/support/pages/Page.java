@@ -103,6 +103,13 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T assertTextDoesNotExist(String...  text) {
+        for (String t : text) {
+            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist());
+        }
+        return (T) this;
+    }
+
     public T checkIsTranslationDisplayed(String... text) {
         for (String s : text) {
             try {

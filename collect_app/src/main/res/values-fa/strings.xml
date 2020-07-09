@@ -116,7 +116,6 @@
   <string name="choose_video">انتخاب ویدیو</string>
   <string name="choose_image">انتخاب تصویر</string>
   <string name="selected">انتخاب شد:</string>
-  <string name="select_answer">انتخاب پاسخ</string>
   <string name="save_form_as">نام گذاری این فورم</string>
   <string name="save_as_error">نام ذخیره شده نباید خالی باشد!</string>
   <string name="edit_prompt">ویرایش عاجل</string>
@@ -137,7 +136,6 @@
   <string name="submission_deleted">ارسال حذف شد</string>
   <string name="version">نسخه:</string>
   <string name="launch_app">راه اندازی</string>
-  <string name="select_one">یک پاسخ را انتخاب کنید</string>
   <string name="save_and_close">ذخیره کردن و خروج</string>
   <string name="sign_button">جمع آوری امضا</string>
   <string name="markup_image">نشانه گذاری تصویر</string>

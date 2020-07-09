@@ -150,7 +150,6 @@
   <string name="choose_video">Оберіть відео</string>
   <string name="choose_image">Оберіть зображення</string>
   <string name="selected">Обрано:</string>
-  <string name="select_answer">Обрати відповідь</string>
   <string name="save_form_as">Назвіть анкету</string>
   <string name="save_as_error">Ім’я не може бути порожнім!</string>
   <string name="edit_prompt">Редагувати запит</string>
@@ -179,7 +178,6 @@
   <string name="parent_form_not_present">Неможливо відредагувати збережену анкету бо відповідна незаповнена анкета відсутня або була видалена.\n\nID анкети: %1$s</string>
   <string name="launch_app">Запустити</string>
   <string name="no_app">Потрібна програма відсутня. Будь ласка, введіть показники вручну.</string>
-  <string name="select_one">Оберіть одну відповідь</string>
   <string name="savepoint_used">Незбережені зміни відновлені з місця збереження!</string>
   <string name="save_and_close">Зберегти та закрити</string>
   <string name="sign_button">Отримати підпис</string>

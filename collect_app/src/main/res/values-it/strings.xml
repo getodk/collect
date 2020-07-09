@@ -153,7 +153,6 @@
   <string name="choose_video">Seleziona Video</string>
   <string name="choose_image">Seleziona Foto</string>
   <string name="selected">Selezionato:</string>
-  <string name="select_answer">Selezionare Risposta</string>
   <string name="save_form_as">Nome di questo modulo:</string>
   <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
   <string name="edit_prompt">Modifica Prompt</string>
@@ -182,7 +181,6 @@
   <string name="parent_form_not_present">Impossibile modificare questo modulo salvato perché il corrispondente modulo vuoto non esiste o è stato cancellato.\n\nModulo: %1$s</string>
   <string name="launch_app">Invio</string>
   <string name="no_app">L\'applicazione richiesta è mancante. Per piacere inserisci manualmente la lettura.</string>
-  <string name="select_one">Selezione una risposta</string>
   <string name="savepoint_used">Cambiamenti non salvati recuperati da punto salvato!</string>
   <string name="save_and_close">Salva e Chiudi</string>
   <string name="sign_button">Inserimento Firma</string>

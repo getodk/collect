@@ -150,7 +150,6 @@
   <string name="choose_video">వీడియోను ఎంచుకోండి</string>
   <string name="choose_image">ఫోటో ని ఎంచుకోండి</string>
   <string name="selected">ఎంచుకోబడింది:</string>
-  <string name="select_answer">సమాధానం ఎంచుకోండి</string>
   <string name="save_form_as">ఈ ఫారంకు పేరు పెట్టండి</string>
   <string name="save_as_error">సేవ్ చేసిన పేరు ఖాళీగా ఉండకూడదు!</string>
   <string name="edit_prompt">ప్రాంప్ట్ సవరించండి</string>
@@ -179,7 +178,6 @@
   <string name="parent_form_not_present">సంబంధిత ఖాళీ ఫారం లేనందున లేదా తొలగించబడినందున ఈ సేవ్ చేసిన ఫారంను సవరించడం సాధ్యం కాలేదు. \ N \ n ఫార్మ్ ఐడి:%1$s</string>
   <string name="launch_app">ప్రారంభం</string>
   <string name="no_app">అభ్యర్థించిన అప్లికేషన్ లేదు. దయచేసి రీడింగ్ మాన్యువల్‌గా నమోదు చేయండి.</string>
-  <string name="select_one">ఒక సమాధానం ఎంచుకోండి</string>
   <string name="savepoint_used">సేవ్ చేసినప్పటి  నుండి సేవ్ చేయని మార్పులు రికవర్ అయ్యాయి!</string>
   <string name="save_and_close">సేవ్ చేసి క్లోజ్ చెయ్యండి </string>
   <string name="sign_button">సంతకాన్ని సేకరించండి</string>

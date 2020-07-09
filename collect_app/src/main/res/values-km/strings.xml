@@ -152,7 +152,6 @@
   <string name="choose_video">ជ្រើសរើសវីដេអូ</string>
   <string name="choose_image">ជ្រើសរើសរូបថត</string>
   <string name="selected">បានជ្រើសរើសៈ</string>
-  <string name="select_answer">ជ្រើសរើសចម្លើយ</string>
   <string name="save_form_as">ឈ្មោះសំណុំ​បែប​បទនេះ</string>
   <string name="save_as_error">ឈ្មោះរក្សាទុកមិនអាចទទេ!</string>
   <string name="edit_prompt">កែប្រែ Prompt</string>
@@ -180,7 +179,6 @@
   <string name="parent_form_not_present">មិន​អាច​ធ្វើ​ការ​កែ​ប្រែ​សំុណុំ​បែប​បទ​ដែល​បាន​រក្សាទុក​ ពីព្រោះ​សំណុំបែប​បទ​ទទេ​ដែលត្រូវគ្នាមិន​នៅ ឬត្រូវ​បាន​លុប។ \n\nលេខ​សម្គាល់​សំណុំ​បែប​បទ: %1$s</string>
   <string name="launch_app">ដំណើរការ</string>
   <string name="no_app">ការ​ស្នើ​សុំ​របស់កម្មវិធី​បានបាត់បង់ ។​ សូមធ្វើការអាន​ដោយ​ដៃ ។</string>
-  <string name="select_one">ជ្រើសរើសចម្លើយមួយ</string>
   <string name="savepoint_used">ការផ្លាស់ប្តូរមិនបានរក្សាទុកត្រូវបានស្តារឡើងវិញពី savepoint!</string>
   <string name="save_and_close">រក្សាទុក និងបិទ</string>
   <string name="sign_button">ប្រមូលហត្ថលេខា</string>

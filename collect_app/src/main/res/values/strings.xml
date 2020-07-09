@@ -167,7 +167,6 @@
     <string name="choose_video">Choose Video</string>
     <string name="choose_image">Choose Image</string>
     <string name="selected">Selected: </string>
-    <string name="select_answer">Select Answer</string>
     <string name="save_form_as">Name this form</string>
     <string name="save_as_error">Saved name must not be blank!</string>
     <string name="edit_prompt">Edit Prompt</string>
@@ -191,7 +190,6 @@
     <string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
     <string name="launch_app">Launch</string>
     <string name="no_app">The requested application is missing. Please manually enter the reading.</string>
-    <string name="select_one">Select One Answer</string>
     <string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
     <string name="save_and_close">Save and Close</string>
     <string name="sign_button">Gather Signature</string>

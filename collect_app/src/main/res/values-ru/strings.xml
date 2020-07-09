@@ -150,7 +150,6 @@
   <string name="choose_video">Выберите видео</string>
   <string name="choose_image">Выберите изображение</string>
   <string name="selected">Выбрано:</string>
-  <string name="select_answer">Выбрать ответ</string>
   <string name="save_form_as">Сохранить данный опрос под названием:</string>
   <string name="save_as_error">Название не может быть пустым!</string>
   <string name="edit_prompt">Изменить вопрос</string>
@@ -179,7 +178,6 @@
   <string name="parent_form_not_present">Не удалось отредактировть сохранённый опрос, потому что соответствующий бланк опросника отсутствует или был удалён.\n\nID опросника: %1$s</string>
   <string name="launch_app">Запуск</string>
   <string name="no_app">Запрошенное приложение отсутствует. Пожалуйста, выполните ручной ввод.</string>
-  <string name="select_one">Выберите один из ответов</string>
   <string name="savepoint_used">Несохранённые изменения загружены из точки восстановления!</string>
   <string name="save_and_close">Сохранить и закрыть</string>
   <string name="sign_button">Взять подпись</string>
