@@ -88,7 +88,6 @@ public class GeoPointWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         assertThat(widget.getAnswer().getDisplayText(), equalTo(answer));
-        assertThat(widget.getBinding().geoAnswerText.getText(), equalTo(""));
     }
 
     @Test
