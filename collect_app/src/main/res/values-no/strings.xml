@@ -120,7 +120,6 @@
   <string name="choose_video">Velg video</string>
   <string name="choose_image">Velg bilde</string>
   <string name="selected">Valgt: </string>
-  <string name="select_answer">Velg svar</string>
   <string name="save_form_as">Lagre som:</string>
   <string name="save_as_error">Navnet kan ikke være blank!</string>
   <string name="edit_prompt">Rediger prompt</string>
@@ -147,7 +146,6 @@
   <string name="parent_form_not_present">Kan ikke endre dette lagrede skjemaet fordi den tilhørende skjemamalen ikke lenger er tilgjengelig eller er slettet.\n\nForm-ID: %1$s</string>
   <string name="launch_app">Start</string>
   <string name="no_app">Applikasjon mangler. Vennligst tast inn teksten manuelt</string>
-  <string name="select_one">Velg ett svaralternativ</string>
   <string name="savepoint_used">Ikke lagret endringer hentet fra lagringspunkt</string>
   <string name="save_and_close">Save and Close</string>
   <string name="sign_button">Gather Signature</string>

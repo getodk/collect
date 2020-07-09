@@ -124,7 +124,6 @@
   <string name="choose_video">Vali video</string>
   <string name="choose_image">Vali pilt</string>
   <string name="selected">Valitud:</string>
-  <string name="select_answer">Vali vastus</string>
   <string name="save_form_as">Vormi nimi</string>
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
   <string name="edit_prompt">Muuda küsimust</string>
@@ -152,7 +151,6 @@
   <string name="parent_form_not_present">Salvestatud vormi ei õnnestu muuta kuna vormi, kas ei ole olemas või on kustutatud. \n\nVormi ID: %1$s</string>
   <string name="launch_app">Alusta</string>
   <string name="no_app">Soovitud rakendust ei ole. Palun sisestage käsitsi.</string>
-  <string name="select_one">Valige üks vastus</string>
   <string name="savepoint_used">Salvestamata muudatused on taastatud!</string>
   <string name="save_and_close">Salvesta ja sulge</string>
   <string name="sign_button">Allkirja kogumine</string>

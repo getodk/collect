@@ -135,7 +135,6 @@
   <string name="choose_video">Zgjidh video</string>
   <string name="choose_image">Zgjidh imazh</string>
   <string name="selected">Përzgjedhur:</string>
-  <string name="select_answer">Zgjidh përgjigjen</string>
   <string name="save_form_as">Emërto formularin</string>
   <string name="save_as_error">Emri i ruajtur nuk mund të jetë bosh!</string>
   <string name="selected_google_account_text">Llogaria në Google</string>
@@ -162,7 +161,6 @@
   <string name="parent_form_not_present">Është e pamundur të modifikohet ky formular i ruajtur pasi formulari bosh që i korrespondon nuk gjendet apo është fshirë.\n\nForm ID: %1$s</string>
   <string name="launch_app">Nis</string>
   <string name="no_app">Aplikacioni i kërkuar mungon. Lutemi, futni të dhënat manualisht.</string>
-  <string name="select_one">Zgjidh një përgjigje</string>
   <string name="savepoint_used">Ndryshimet e paruajtura u rikthyen nga pika ku ishin ruajtur!</string>
   <string name="save_and_close">Ruaj dhe mbyll</string>
   <string name="sign_button">Merr firmën</string>

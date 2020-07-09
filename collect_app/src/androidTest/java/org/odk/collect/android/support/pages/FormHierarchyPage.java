@@ -1,11 +1,19 @@
 package org.odk.collect.android.support.pages;
 
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+<<<<<<< HEAD
+=======
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+>>>>>>> Improved tests
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -51,7 +59,14 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
     }
 
     public FormEntryPage clickOnQuestion(String questionLabel) {
+        onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(questionLabel))));
         clickOnText(questionLabel);
         return new FormEntryPage(formName, rule);
+    }
+
+    public FormHierarchyPage clickOnGroup(String groupLabel) {
+        onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(groupLabel))));
+        clickOnText(groupLabel);
+        return this;
     }
 }

@@ -145,7 +145,6 @@
   <string name="choose_video">Chagua video</string>
   <string name="choose_image">Chagua picha</string>
   <string name="selected">Chaguliwa:</string>
-  <string name="select_answer">Chagua jibu</string>
   <string name="save_form_as">Andika jina la fomu</string>
   <string name="save_as_error">Jina la Kuhifadhi halipaswi kuwa tupu!</string>
   <string name="edit_prompt">Hariri prompt</string>
@@ -174,7 +173,6 @@
   <string name="parent_form_not_present">Haiwezekani kurekebisha fomu hii kwa sababu fomu yake tupu haipo au imeshaondolewa..\n\nFomu ID: %1$s</string>
   <string name="launch_app">Anza</string>
   <string name="no_app">Ombi lilioombwa halipo. Tafadhali ingiza kwa Kuandika.</string>
-  <string name="select_one">Chagua jibu moja </string>
   <string name="savepoint_used">Mabadiliko ambayo hayakuwa yamehifadhiwa yamerudishwa!</string>
   <string name="save_and_close">Hifadhi na funga</string>
   <string name="sign_button">Pata sahihi</string>

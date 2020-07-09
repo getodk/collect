@@ -112,7 +112,6 @@
   <string name="choose_video">ቪዲዮ ይምረጡ</string>
   <string name="choose_image">ምስል ይምረጡ</string>
   <string name="selected">ተመርጧል:</string>
-  <string name="select_answer">መልሱን ይምረጡ</string>
   <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
   <string name="selected_google_account_text">የ Google መለያ</string>
@@ -137,7 +136,6 @@
   <string name="deleted_on_date_at_time">\'የተሰረዘዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
   <string name="version">ስሪት:</string>
   <string name="launch_app">አስጀምር</string>
-  <string name="select_one">አንድ መልስ ብቻ ይምረጡ</string>
   <string name="savepoint_used">ያልተቀመጡ ለውጦች በጥንቃቄ ተመልሰዋል!</string>
   <string name="save_and_close">አስቀምጥ እና ዝጋ</string>
   <string name="sign_button">ፊርማ ያሰባስቡ</string>
