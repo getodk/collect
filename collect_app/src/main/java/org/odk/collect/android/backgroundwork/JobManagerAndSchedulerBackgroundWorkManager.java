@@ -1,32 +1,14 @@
 package org.odk.collect.android.backgroundwork;
 
-import android.content.Context;
-
-import androidx.work.WorkerParameters;
-
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 
-import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.formmanagement.FormDownloader;
-import org.odk.collect.android.formmanagement.ServerFormsSynchronizer;
-import org.odk.collect.android.forms.FormRepository;
-import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.openrosa.api.FormApiException;
-import org.odk.collect.android.openrosa.api.FormListApi;
+import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.async.TaskSpec;
-import org.odk.collect.async.WorkerAdapter;
 
 import java.util.Set;
-
-import javax.inject.Inject;
-
-import timber.log.Timber;
 
 /**
  * Abstraction that sits on top of {@link com.evernote.android.job.JobManager} and
@@ -46,7 +28,7 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
 
     @Override
     public void scheduleMatchExactlySync() {
-        scheduler.scheduleInBackgroundWhenNetworkAvailable(MATCH_EXACTLY_SYNC_TAG, new SyncTaskSpec(), 900000L);
+        scheduler.scheduleInBackgroundWhenNetworkAvailable(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), 900000L);
     }
 
     @Override
@@ -82,45 +64,4 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
         return false;
     }
 
-    public static class SyncTaskSpec implements TaskSpec {
-
-        @Inject
-        FormRepository formRepository;
-
-        @Inject
-        MediaFileRepository mediaFileRepository;
-
-        @Inject
-        FormListApi formAPI;
-
-        @Inject
-        FormDownloader formDownloader;
-
-        @NotNull
-        @Override
-        public Runnable getTask(@NotNull Context context) {
-            DaggerUtils.getComponent(context).inject(this);
-
-            return () -> {
-                try {
-                    new ServerFormsSynchronizer(formRepository, mediaFileRepository, formAPI, formDownloader, new FormsDirDiskFormsSynchronizer()).synchronize();
-                } catch (FormApiException formAPIError) {
-                    Timber.e(formAPIError);
-                }
-            };
-        }
-
-        @NotNull
-        @Override
-        public Class<? extends WorkerAdapter> getWorkManagerAdapter() {
-            return Adapter.class;
-        }
-
-        public static class Adapter extends WorkerAdapter {
-
-            public Adapter(@NotNull Context context, @NotNull WorkerParameters workerParams) {
-                super(new SyncTaskSpec(), context, workerParams);
-            }
-        }
-    }
 }

@@ -6,16 +6,15 @@ import androidx.lifecycle.MutableLiveData;
 public class ServerFormsSyncRepository {
 
     private final MutableLiveData<Boolean> syncing = new MutableLiveData<>(false);
-
     public LiveData<Boolean> isSyncing() {
         return syncing;
     }
 
     public void startSync() {
-        syncing.setValue(true);
+        syncing.postValue(true);
     }
 
     public void finishSync() {
-        syncing.setValue(false);
+        syncing.postValue(false);
     }
 }
