@@ -52,6 +52,8 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppeara
  */
 public class WidgetFactory {
 
+    private static final String PICKER_APPEARANCE = "picker";
+
     private WidgetFactory() {
 
     }
@@ -212,10 +214,18 @@ public class WidgetFactory {
                 } else {
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:
-                            questionWidget = new RangeIntegerWidget(context, questionDetails);
+                            if (prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
+                                questionWidget = new RangePickerIntegerWidget(context, questionDetails);
+                            } else {
+                                questionWidget = new RangeIntegerWidget(context, questionDetails);
+                            }
                             break;
                         case Constants.DATATYPE_DECIMAL:
-                            questionWidget = new RangeDecimalWidget(context, questionDetails);
+                            if (prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
+                                questionWidget = new RangePickerDecimalWidget(context, questionDetails);
+                            } else {
+                                questionWidget = new RangeDecimalWidget(context, questionDetails);
+                            }
                             break;
                         default:
                             questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
