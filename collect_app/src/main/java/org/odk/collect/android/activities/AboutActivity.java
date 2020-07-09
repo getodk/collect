@@ -41,15 +41,17 @@ import timber.log.Timber;
 public class AboutActivity extends CollectAbstractActivity implements
         AboutListAdapter.AboutItemClickListener {
 
-    private static final String LICENSES_HTML_PATH = "file:///android_asset/open_source_licenses.html";
+    private static final String LICENSES_HTML_PATH = "https://docs.getodk.org/getting-started/";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
-    private static final String ODK_WEBSITE = "https://getodk.org";
-    private static final String ODK_FORUM = "https://forum.getodk.org";
+    private static final String ODK_WEBSITE = "https://hedera.online";
+    private static final String ODK_FORUM = "mailto:contact@hedera.online";
 
     private CustomTabHelper websiteTabHelper;
     private CustomTabHelper forumTabHelper;
+    private CustomTabHelper licensuriTabHelper;
     private Uri websiteUri;
     private Uri forumUri;
+    private Uri licensuri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +62,7 @@ public class AboutActivity extends CollectAbstractActivity implements
         int[][] items = {
                 {R.drawable.ic_website, R.string.odk_website, R.string.odk_website_summary},
                 {R.drawable.ic_forum, R.string.odk_forum, R.string.odk_forum_summary},
-                {R.drawable.ic_share, R.string.tell_your_friends, R.string.tell_your_friends_msg},
-                {R.drawable.ic_review_rate, R.string.leave_a_review, R.string.leave_a_review_msg},
+
                 {R.drawable.ic_stars, R.string.all_open_source_licenses, R.string.all_open_source_licenses_msg}
         };
 
@@ -73,9 +74,11 @@ public class AboutActivity extends CollectAbstractActivity implements
 
         websiteTabHelper = new CustomTabHelper();
         forumTabHelper = new CustomTabHelper();
+        licensuriTabHelper = new CustomTabHelper();
 
         websiteUri = Uri.parse(ODK_WEBSITE);
         forumUri = Uri.parse(ODK_FORUM);
+        licensuri = Uri.parse(LICENSES_HTML_PATH);
     }
 
     private void initToolbar() {
@@ -95,49 +98,9 @@ public class AboutActivity extends CollectAbstractActivity implements
                     forumTabHelper.openUri(this, forumUri);
                     break;
                 case 2:
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_TEXT,
-                            getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
-                                    + getPackageName());
-                    startActivity(Intent.createChooser(shareIntent,
-                            getString(R.string.tell_your_friends)));
+                    licensuriTabHelper.openUri(this, licensuri);
                     break;
-                case 3:
-                    boolean intentStarted = false;
-                    try {
-                        // Open the google play store app if present
-                        Intent intent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=" + getPackageName()));
-                        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-                        for (ResolveInfo info : list) {
-                            ActivityInfo activity = info.activityInfo;
-                            if (activity.name.contains("com.google.android")) {
-                                ComponentName name = new ComponentName(
-                                        activity.applicationInfo.packageName,
-                                        activity.name);
-                                intent.setComponent(name);
-                                startActivity(intent);
-                                intentStarted = true;
-                            }
-                        }
-                    } catch (android.content.ActivityNotFoundException anfe) {
-                        Toast.makeText(Collect.getInstance(),
-                                getString(R.string.activity_not_found, "market view"),
-                                Toast.LENGTH_SHORT).show();
-                        Timber.d(anfe);
-                    }
-                    if (!intentStarted) {
-                        // Show a list of all available browsers if user doesn't have a default browser
-                        startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
-                    }
-                    break;
-                case 4:
-                    Intent intent = new Intent(this, WebViewActivity.class);
-                    intent.putExtra(CustomTabHelper.OPEN_URL, LICENSES_HTML_PATH);
-                    startActivity(intent);
-                    break;
+
             }
         }
     }

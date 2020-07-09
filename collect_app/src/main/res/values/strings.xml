@@ -404,10 +404,11 @@
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
     <string name="id_number">ID: %s</string>
-    <string name="odk_website">Visit the ODK website</string>
-    <string name="odk_website_summary">ODK is used to collect data for social good in challenging environments.</string>
-    <string name="odk_forum">Join the ODK forum</string>
-    <string name="odk_forum_summary">Join the forum to get support, request features, contribute code/translations! </string>
+    <string name="odk_website">Visit our website https://hedera.online</string>
+    <string name="odk_website_summary">Digital Solutions for Sustainable Development</string>
+    <string name="odk_forum">Contact us</string>
+    <string name="odk_forum_summary">¿Do you have questions? Write us to
+        contact@hedera.online</string>
     <string name="all_open_source_licenses">Open source libraries/licenses</string>
     <string name="all_open_source_licenses_msg">We stand on the shoulders of giants!</string>
 
