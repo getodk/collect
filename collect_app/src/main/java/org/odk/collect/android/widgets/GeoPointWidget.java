@@ -45,11 +45,11 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final double accuracyThreshold;
 
     GeoWidgetAnswerBinding binding;
 
     private boolean readOnly;
-    private double accuracyThreshold;
     private String stringAnswer;
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry) {
