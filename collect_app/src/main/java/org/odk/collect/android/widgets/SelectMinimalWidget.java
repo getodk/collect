@@ -30,14 +30,18 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryW
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SelectMinimalWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        binding.choicesSearchBox.setOnClickListener(v -> {
-            FormController formController = Collect.getInstance().getFormController();
-            if (formController != null) {
-                formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
-            }
-            SelectMinimalDialog dialog = new SelectMinimalDialog(recyclerViewAdapter, getFormEntryPrompt());
-            dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "SelectMinimalDialog");
-        });
+        if (prompt.isReadOnly()) {
+            binding.choicesSearchBox.setEnabled(false);
+        } else {
+            binding.choicesSearchBox.setOnClickListener(v -> {
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
+                }
+                SelectMinimalDialog dialog = new SelectMinimalDialog(recyclerViewAdapter, getFormEntryPrompt());
+                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "SelectMinimalDialog");
+            });
+        }
         return binding.getRoot();
     }
 
