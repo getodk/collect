@@ -91,6 +91,7 @@ the specific language governing permissions and limitations under the License.
         </provider>
 
         <activity android:name=".activities.MainMenuActivity" />
+        <activity android:name=".activities.HomeScreenActivity" />
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
             android:screenOrientation="portrait"
