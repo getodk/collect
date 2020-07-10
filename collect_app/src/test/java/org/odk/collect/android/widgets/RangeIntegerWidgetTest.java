@@ -41,7 +41,7 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsZero() {
+    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
         assertThat(createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion)).getAnswer(), nullValue());
     }
 
@@ -54,15 +54,15 @@ public class RangeIntegerWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_sliderIsSetOnStartingIndex() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        assertThat(widget.getSlider().getValue(), equalTo(1.0F));
-        assertThat(widget.getCurrentValue().getText(), equalTo(""));
+        assertThat(widget.slider.getValue(), equalTo(1.0F));
+        assertThat(widget.currentValue.getText(), equalTo(""));
     }
 
     @Test
     public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.getSlider().getValue(), equalTo(4.0F));
-        assertThat(widget.getCurrentValue().getText(), equalTo("4"));
+        assertThat(widget.slider.getValue(), equalTo(4.0F));
+        assertThat(widget.currentValue.getText(), equalTo("4"));
     }
 
     @Test
@@ -71,8 +71,8 @@ public class RangeIntegerWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertThat(widget.getCurrentValue().getText(), equalTo(""));
-        assertThat(widget.getSlider().getValue(), equalTo(1.0F));
+        assertThat(widget.currentValue.getText(), equalTo(""));
+        assertThat(widget.slider.getValue(), equalTo(1.0F));
     }
 
     @Test
@@ -87,17 +87,17 @@ public class RangeIntegerWidgetTest {
     @Test
     public void changingSliderValue_updatesAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        widget.getSlider().setValue(4.0F);
+        widget.slider.setValue(4.0F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(4));
-        assertThat(widget.getCurrentValue().getText(), equalTo("4"));
+        assertThat(widget.currentValue.getText(), equalTo("4"));
     }
 
     @Test
     public void changingSliderValue_callsValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.getSlider().setValue(4.0F);
+        widget.slider.setValue(4.0F);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
@@ -108,9 +108,9 @@ public class RangeIntegerWidgetTest {
 
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
-        widget.getSlider().performLongClick();
+        widget.slider.performLongClick();
 
-        verify(listener, never()).onLongClick(widget.getSlider());
+        verify(listener, never()).onLongClick(widget.slider);
     }
 
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {

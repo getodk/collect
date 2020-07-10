@@ -34,23 +34,20 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.views.CustomRangeSlider;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener, Slider.OnSliderTouchListener {
-
+public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener {
     private static final String VERTICAL_APPEARANCE = "vertical";
 
     private RangeQuestion rangeQuestion;
-
-    private Slider slider;
-    private TextView currentValue;
-
     private BigDecimal actualValue;
 
-    private boolean suppressFlingGesture;
+    CustomRangeSlider slider;
+    TextView currentValue;
 
     public RangeDecimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -71,7 +68,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
                     .inflate(((Activity) context).getLayoutInflater());
             answerView = rangeWidgetVerticalBinding.getRoot();
 
-            slider = rangeWidgetVerticalBinding.seekBar;
+            slider = rangeWidgetVerticalBinding.slider;
             currentValue = rangeWidgetVerticalBinding.currentValue;
             minValue = rangeWidgetVerticalBinding.minValue;
             maxValue = rangeWidgetVerticalBinding.maxValue;
@@ -80,7 +77,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
                     .inflate(((Activity) context).getLayoutInflater());
             answerView = rangeWidgetHorizontalBinding.getRoot();
 
-            slider = rangeWidgetHorizontalBinding.seekBar;
+            slider = rangeWidgetHorizontalBinding.slider;
             currentValue = rangeWidgetHorizontalBinding.currentValue;
             minValue = rangeWidgetHorizontalBinding.minValue;
             maxValue = rangeWidgetHorizontalBinding.maxValue;
@@ -96,7 +93,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
             if (getFormEntryPrompt().getAnswerValue() != null) {
                 actualValue = new BigDecimal(getFormEntryPrompt().getAnswerValue().getValue().toString());
             } else {
-                setUpNullValue();
+                actualValue = RangeWidgetUtils.setUpNullValue(slider, currentValue);
             }
             setUpActualValueLabel();
             setUpSeekBar();
@@ -117,12 +114,12 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return suppressFlingGesture;
+        return slider.suppressFlingGesture;
     }
 
     @Override
     public void clearAnswer() {
-        setUpNullValue();
+        actualValue = RangeWidgetUtils.setUpNullValue(slider, currentValue);
         widgetValueChanged();
     }
 
@@ -133,35 +130,9 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         currentValue.setText(value);
     }
 
-    private void setUpNullValue() {
-        slider.setValue(slider.getValueFrom());
-        actualValue = null;
-        setUpActualValueLabel();
-    }
-
     private void setUpSeekBar() {
         RangeWidgetUtils.setUpSlider(rangeQuestion, slider, actualValue);
         slider.addOnChangeListener(this);
-        slider.addOnSliderTouchListener(this);
-    }
-
-    //for testing purposes
-    protected Slider getSlider() {
-        return slider;
-    }
-
-    protected TextView getCurrentValue() {
-        return currentValue;
-    }
-
-    @Override
-    public void onStopTrackingTouch(Slider slider) {
-        suppressFlingGesture = false;
-    }
-
-    @Override
-    public void onStartTrackingTouch(Slider slider) {
-        suppressFlingGesture = true;
     }
 
     @Override

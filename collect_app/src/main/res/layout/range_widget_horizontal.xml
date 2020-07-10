@@ -34,8 +34,8 @@ limitations under the License.
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/seek_bar"
+        <org.odk.collect.android.views.CustomRangeSlider
+            android:id="@+id/slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:thumbColor="?colorSecondary"

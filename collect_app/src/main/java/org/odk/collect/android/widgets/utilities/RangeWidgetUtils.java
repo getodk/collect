@@ -4,11 +4,10 @@ import android.annotation.SuppressLint;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
-import com.google.android.material.slider.Slider;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.views.CustomRangeSlider;
 
 import java.math.BigDecimal;
 
@@ -23,7 +22,7 @@ public class RangeWidgetUtils {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setUpSlider(RangeQuestion rangeQuestion, Slider slider, BigDecimal actualValue) {
+    public static void setUpSlider(RangeQuestion rangeQuestion, CustomRangeSlider slider, BigDecimal actualValue) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -48,7 +47,13 @@ public class RangeWidgetUtils {
         });
     }
 
-    public static boolean isWidgetValid(RangeQuestion rangeQuestion, Slider slider) {
+    public static BigDecimal setUpNullValue(CustomRangeSlider slider, TextView currentValue) {
+        slider.setValue(slider.getValueFrom());
+        currentValue.setText("");
+        return null;
+    }
+
+    public static boolean isWidgetValid(RangeQuestion rangeQuestion, CustomRangeSlider slider) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -62,7 +67,7 @@ public class RangeWidgetUtils {
         return result;
     }
 
-    private static void disableWidget(Slider slider) {
+    private static void disableWidget(CustomRangeSlider slider) {
         ToastUtils.showLongToast(R.string.invalid_range_widget);
         slider.setEnabled(false);
     }
