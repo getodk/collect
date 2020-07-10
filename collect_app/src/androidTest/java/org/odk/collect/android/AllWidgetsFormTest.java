@@ -23,9 +23,6 @@ import tools.fastlane.screengrab.locale.LocaleTestRule;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -207,17 +204,7 @@ public class AllWidgetsFormTest {
     }
 
     public void testExPrinterWidget() {
-        onView(withText("Initiate Printing")).perform(click());
-
         Screengrab.screenshot("ex-printer");
-
-        intending(hasAction("org.opendatakit.sensors.ZebraPrinter"));
-        intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
-
-        // There is also a BroadcastIntent that sends the data but we don't
-        // have a way to test that currently.
-        // Will probably move that out to a helper class we can Unit test in Robolectric and
-        // inject here.
 
         onView(withText("Ex printer widget")).perform(swipeLeft());
     }
