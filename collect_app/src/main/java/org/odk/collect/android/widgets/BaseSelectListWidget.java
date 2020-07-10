@@ -15,11 +15,12 @@ import org.odk.collect.android.databinding.SelectListWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
-public abstract class BaseSelectListWidget extends ItemsWidget {
+public abstract class BaseSelectListWidget extends ItemsWidget implements MultiChoiceWidget {
     private static final String SEARCH_TEXT = "search_text";
 
     SelectListWidgetAnswerBinding binding;
@@ -63,6 +64,11 @@ public abstract class BaseSelectListWidget extends ItemsWidget {
     public void clearAnswer() {
         recyclerViewAdapter.clearAnswer();
         widgetValueChanged();
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return recyclerViewAdapter.getItemCount();
     }
 
     private void setUpSearchBox() {

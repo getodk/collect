@@ -23,7 +23,6 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends BaseSelectListWidget implements MultiChoiceWidget {
+public class SelectMultiWidget extends BaseSelectListWidget {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
@@ -54,11 +53,6 @@ public class SelectMultiWidget extends BaseSelectListWidget implements MultiChoi
         return selectedItems.isEmpty()
                 ? null
                 : new SelectMultiData(selectedItems);
-    }
-
-    @Override
-    public int getChoiceCount() {
-        return recyclerViewAdapter.getItemCount();
     }
 
     @Override
