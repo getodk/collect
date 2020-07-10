@@ -2747,15 +2747,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         if (formController.indexIsInFieldList()) {
-            updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
-
-            odkView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            // Some widgets may call widgetValueChanged from a non-main thread but odkView can only be modified from the main thread
+            runOnUiThread(new Runnable() {
                 @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    if (!odkView.isDisplayed(changedWidget)) {
-                        odkView.scrollTo(changedWidget);
-                    }
-                    odkView.removeOnLayoutChangeListener(this);
+                public void run() {
+                    updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
+
+                    odkView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                        @Override
+                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                            if (!odkView.isDisplayed(changedWidget)) {
+                                odkView.scrollTo(changedWidget);
+                            }
+                            odkView.removeOnLayoutChangeListener(this);
+                        }
+                    });
                 }
             });
         }
@@ -2811,10 +2817,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
 
             if (formIndexesToRemove.contains(questionBeforeSave.getFormIndex())) {
-                // Some widgets may call widgetValueChanged from a non-main thread but odkView can
-                // only be modified from the main thread
-                final int indexToRemove = i;
-                runOnUiThread(() -> odkView.removeWidgetAt(indexToRemove));
+                odkView.removeWidgetAt(i);
             }
         }
 
@@ -2823,9 +2826,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
                 // The values of widgets in intent groups are set by the view so widgetValueChanged
                 // is never called. This means readOnlyOverride can always be set to false.
-                final int targetIndex = i;
-                runOnUiThread(() -> odkView.addWidgetForQuestion(questionsAfterSave[targetIndex],
-                        false, targetIndex));
+                odkView.addWidgetForQuestion(questionsAfterSave[i], false, i);
             }
         }
     }
