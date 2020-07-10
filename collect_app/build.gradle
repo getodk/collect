@@ -94,6 +94,10 @@ android {
             applicationId "org.smap.smapTask.android.assignfield"
             versionName "6.204-assignfield"
         }
+        informEd {
+            applicationId "org.smap.smapTask.android.informEd"
+            versionName "6.204-informEd"
+        }
     }
 
     buildTypes {

@@ -33,6 +33,8 @@ collect_app/tdh/
 collect_app/src/tdh/
 collect_app/assignfield/
 collect_app/src/assignfield/
+collect_app/informEd/
+collect_app/src/informEd/
 
 # gradle env props
 secrets.properties

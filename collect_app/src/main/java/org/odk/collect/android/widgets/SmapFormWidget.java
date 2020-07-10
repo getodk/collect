@@ -237,7 +237,12 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         String instancePath = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
         FormIndex formIndex = Collect.getInstance().getFormController().getFormIndex();
 
-        Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex, (String) Collect.getInstance().getFormEntryActivity().getTitle()));
+        String title = null;
+        FormEntryActivity fea = Collect.getInstance().getFormEntryActivity();
+        if(fea != null) {
+            title = (String) fea.getTitle();
+        }
+        Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex, title));
 
         // 2. Set form details to be launched in collect app
         Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id, mfd.formName));
