@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.widget.RadioButton;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -24,6 +25,15 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
         return selectedItem == null
                 ? null
                 : new SelectOneData(selectedItem);
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        RadioButton button = new RadioButton(getContext());
+        button.setTag(choiceIndex);
+        button.setChecked(isSelected);
+
+        ((SelectOneListAdapter) recyclerViewAdapter).onCheckedChanged(button, isSelected);
     }
 
     private String getSavedSelectedValue() {

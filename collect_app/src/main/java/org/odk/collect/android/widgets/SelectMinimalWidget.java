@@ -15,11 +15,12 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.List;
 
-public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryWidget {
-    private SelectMinimalWidgetAnswerBinding binding;
+public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryWidget, MultiChoiceWidget {
+    SelectMinimalWidgetAnswerBinding binding;
     protected AbstractSelectListAdapter recyclerViewAdapter;
 
     public SelectMinimalWidget(Context context, QuestionDetails prompt) {
@@ -56,6 +57,11 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryW
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     @Override
     public void onButtonClick(int buttonId) {
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return recyclerViewAdapter.getItemCount();
     }
 
     void updateAnswer() {
