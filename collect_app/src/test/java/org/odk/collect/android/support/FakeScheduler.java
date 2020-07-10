@@ -38,6 +38,10 @@ public class FakeScheduler implements Scheduler {
     }
 
     public void runBackgroundTask() {
+        if (backgroundTask == null) {
+            return;
+        }
+
         backgroundTask.run();
     }
 
