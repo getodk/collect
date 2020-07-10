@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,8 +30,6 @@ import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
-import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.views.CustomRangeSlider;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
@@ -41,8 +38,6 @@ import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
 public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener {
-    private static final String VERTICAL_APPEARANCE = "vertical";
-
     private RangeQuestion rangeQuestion;
     private BigDecimal actualValue;
 
@@ -55,39 +50,11 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        String appearance = prompt.getQuestion().getAppearanceAttr();
-
         rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
+        Object[] layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
 
-        View answerView;
-        TextView minValue;
-        TextView maxValue;
-
-        if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
-            RangeWidgetVerticalBinding rangeWidgetVerticalBinding = RangeWidgetVerticalBinding
-                    .inflate(((Activity) context).getLayoutInflater());
-            answerView = rangeWidgetVerticalBinding.getRoot();
-
-            slider = rangeWidgetVerticalBinding.slider;
-            currentValue = rangeWidgetVerticalBinding.currentValue;
-            minValue = rangeWidgetVerticalBinding.minValue;
-            maxValue = rangeWidgetVerticalBinding.maxValue;
-        } else {
-            RangeWidgetHorizontalBinding rangeWidgetHorizontalBinding = RangeWidgetHorizontalBinding
-                    .inflate(((Activity) context).getLayoutInflater());
-            answerView = rangeWidgetHorizontalBinding.getRoot();
-
-            slider = rangeWidgetHorizontalBinding.slider;
-            currentValue = rangeWidgetHorizontalBinding.currentValue;
-            minValue = rangeWidgetHorizontalBinding.minValue;
-            maxValue = rangeWidgetHorizontalBinding.maxValue;
-        }
-
-        RangeWidgetUtils.setUpWidgetParameters(rangeQuestion, minValue, maxValue);
-
-        if (prompt.isReadOnly()) {
-            slider.setEnabled(false);
-        }
+        slider = (CustomRangeSlider) layoutElements[1];
+        currentValue = (TextView) layoutElements[2];
 
         if (RangeWidgetUtils.isWidgetValid(rangeQuestion, slider)) {
             if (getFormEntryPrompt().getAnswerValue() != null) {
@@ -98,7 +65,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
             setUpActualValueLabel();
             setUpSeekBar();
         }
-        return answerView;
+        return (View) layoutElements[0];
     }
 
     @Override

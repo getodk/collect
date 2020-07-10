@@ -19,12 +19,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndRangeQuestion;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
 public class RangeWidgetUtilsTest {
 
     private RangeQuestion rangeQuestion;
     private CustomRangeSlider slider;
+    private TextView sampleTextView1;
+    private TextView sampleTextView2;
 
     @Before
     public void setup() {
@@ -32,6 +36,8 @@ public class RangeWidgetUtilsTest {
 
         ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
         slider = new CustomRangeSlider(ApplicationProvider.getApplicationContext());
+        sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
+        sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
@@ -39,9 +45,13 @@ public class RangeWidgetUtilsTest {
     }
 
     @Test
+    public void usingReadOnlyOption_disablesTheSlider() {
+        Object[] objects = RangeWidgetUtils.setUpLayoutElements(widgetTestActivity(), promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        assertThat(((CustomRangeSlider) objects[1]).isEnabled(), equalTo(false));
+    }
+
+    @Test
     public void setUpWidgetParameters_showsCorrectMinAndMaxValues() {
-        TextView sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
-        TextView sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
         RangeWidgetUtils.setUpWidgetParameters(rangeQuestion, sampleTextView1, sampleTextView2);
 
         assertThat(sampleTextView1.getText(), equalTo("1"));
@@ -60,12 +70,11 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void setUpNullValue_returnsNullValueAndSetsCorrectValuesInSliderAndAnswerTextView() {
-        TextView sampleTextView = new TextView(ApplicationProvider.getApplicationContext());
-        BigDecimal value = RangeWidgetUtils.setUpNullValue(slider, sampleTextView);
+        BigDecimal value = RangeWidgetUtils.setUpNullValue(slider, sampleTextView1);
 
         assertThat(value, equalTo(null));
         assertThat(slider.getValue(), equalTo(slider.getValueFrom()));
-        assertThat(sampleTextView.getText(), equalTo(""));
+        assertThat(sampleTextView1.getText(), equalTo(""));
     }
 
     @Test
