@@ -213,7 +213,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
         String appearance = getFormEntryPrompt().getQuestion().getAppearanceAttr();
 
         if (appearance == null) {
-            loadAppearance(R.layout.range_widget_horizontal, R.id.seek_bar);
+            loadAppearance(R.layout.range_widget_horizontal, R.id.slider);
 
         } else if (appearance.contains(PICKER_APPEARANCE)) {
             pickerButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_value), getAnswerFontSize(), this);
@@ -231,7 +231,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
                     ? R.layout.range_widget_vertical
                     : R.layout.range_widget_horizontal;
 
-            @IdRes int seekBarId = R.id.seek_bar;
+            @IdRes int seekBarId = R.id.slider;
 
             loadAppearance(layoutId, seekBarId);
         }

@@ -56,17 +56,10 @@ public class RangeDecimalWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_sliderIsSetOnStartingIndex() {
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        assertThat(widget.getSlider().getValue(), equalTo(1.5F));
-        assertThat(widget.getCurrentValue().getText(), equalTo(""));
-    }
-
-    @Test
     public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
         RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("2.5")));
-        assertThat(widget.getSlider().getValue(), equalTo(2.5F));
-        assertThat(widget.getCurrentValue().getText(), equalTo("2.5"));
+        assertThat(widget.slider.getValue(), equalTo(2.5F));
+        assertThat(widget.currentValue.getText(), equalTo("2.5"));
     }
 
     @Test
@@ -75,8 +68,6 @@ public class RangeDecimalWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertThat(widget.getCurrentValue().getText(), equalTo(""));
-        assertThat(widget.getSlider().getValue(), equalTo(1.5F));
     }
 
     @Test
@@ -91,17 +82,17 @@ public class RangeDecimalWidgetTest {
     @Test
     public void changingSliderValue_updatesAnswer() {
         RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        widget.getSlider().setValue(2.5F);
+        widget.slider.setValue(2.5F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(2.5));
-        assertThat(widget.getCurrentValue().getText(), equalTo("2.5"));
+        assertThat(widget.currentValue.getText(), equalTo("2.5"));
     }
 
     @Test
     public void changingSliderValue_callsValueChangeListener() {
         RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.getSlider().setValue(2.5F);
+        widget.slider.setValue(2.5F);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
@@ -112,9 +103,9 @@ public class RangeDecimalWidgetTest {
 
         RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
-        widget.getSlider().performLongClick();
+        widget.slider.performLongClick();
 
-        verify(listener, never()).onLongClick(widget.getSlider());
+        verify(listener, never()).onLongClick(widget.slider);
     }
 
     private RangeDecimalWidget createWidget(FormEntryPrompt prompt) {
