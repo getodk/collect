@@ -7,7 +7,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
@@ -31,7 +30,6 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
-import org.odk.collect.async.Scheduler;
 
 import java.util.List;
 
@@ -55,7 +53,9 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        return new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
+        SelectOneWidget selectOneWidget = new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
+        selectOneWidget.onAttachedToWindow();
+        return selectOneWidget;
     }
 
     @Rule
@@ -140,7 +140,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
         populateRecyclerView(getWidget());
 
-        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) (((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0));
+        AudioVideoImageTextLabel avitLabel = (AudioVideoImageTextLabel) getSpyWidget().binding.choicesRecyclerView.getLayoutManager().getChildAt(0);
         assertThat(avitLabel.isEnabled(), is(Boolean.FALSE));
 
         resetWidget();
@@ -152,7 +152,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
         populateRecyclerView(getWidget());
 
-        FrameLayout view = (FrameLayout) ((RecyclerView) getSpyWidget().answerLayout.getChildAt(0)).getLayoutManager().getChildAt(0);
+        FrameLayout view = (FrameLayout) getSpyWidget().binding.choicesRecyclerView.getLayoutManager().getChildAt(0);
         assertThat(view.isEnabled(), is(Boolean.FALSE));
     }
 
@@ -163,11 +163,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             @Override
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;
-            }
-
-            @Override
-            public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
-                return context -> audioHelper;
             }
 
             @Override
@@ -182,7 +177,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     private static ViewGroup getChoiceView(SelectOneWidget widget, int index) {
-        return (ViewGroup) widget.getChoicesList().getChildAt(index);
+        return (ViewGroup) widget.binding.choicesRecyclerView.getChildAt(index);
     }
 
     private static final List<Pair<String, String>> REFERENCES = asList(
