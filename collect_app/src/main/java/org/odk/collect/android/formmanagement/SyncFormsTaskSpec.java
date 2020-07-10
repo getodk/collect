@@ -20,7 +20,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
     ServerFormsSynchronizer serverFormsSynchronizer;
 
     @Inject
-    ServerFormsSyncRepository serverFormsSyncRepository;
+    SyncStatusRepository syncStatusRepository;
 
     @NotNull
     @Override
@@ -28,13 +28,16 @@ public class SyncFormsTaskSpec implements TaskSpec {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
+            if (!syncStatusRepository.startSync()) {
+                return;
+            }
+
             try {
-                serverFormsSyncRepository.startSync();
                 serverFormsSynchronizer.synchronize();
             } catch (FormApiException formAPIError) {
                 Timber.w(formAPIError);
             } finally {
-                serverFormsSyncRepository.finishSync();
+                syncStatusRepository.finishSync();
             }
         };
     }

@@ -23,7 +23,7 @@ public class BlankFormsListViewModelTest {
 
     @Test
     public void whenRepositoryStartSync_isSyncing_isTrue() {
-        ServerFormsSyncRepository syncRepository = new ServerFormsSyncRepository();
+        SyncStatusRepository syncRepository = new SyncStatusRepository();
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Scheduler.class), mock(FormRepository.class), mock(MediaFileRepository.class), mock(FormListApi.class), mock(FormDownloader.class), mock(DiskFormsSynchronizer.class), syncRepository, mock(PreferencesProvider.class));
         LiveData<Boolean> syncing = viewModel.isSyncing();
@@ -34,7 +34,7 @@ public class BlankFormsListViewModelTest {
 
     @Test
     public void syncWithServer_starsSyncOnRepository() {
-        ServerFormsSyncRepository syncRepository = new ServerFormsSyncRepository();
+        SyncStatusRepository syncRepository = new SyncStatusRepository();
         FakeScheduler fakeScheduler = new FakeScheduler();
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(fakeScheduler, mock(FormRepository.class), mock(MediaFileRepository.class), mock(FormListApi.class), mock(FormDownloader.class), mock(DiskFormsSynchronizer.class), syncRepository, mock(PreferencesProvider.class));
@@ -46,7 +46,7 @@ public class BlankFormsListViewModelTest {
 
     @Test
     public void syncWithServer_whenTaskFinishes_finishesSyncOnRepository() {
-        ServerFormsSyncRepository syncRepository = new ServerFormsSyncRepository();
+        SyncStatusRepository syncRepository = new SyncStatusRepository();
         FakeScheduler fakeScheduler = new FakeScheduler();
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(fakeScheduler, mock(FormRepository.class), mock(MediaFileRepository.class), mock(FormListApi.class), mock(FormDownloader.class), mock(DiskFormsSynchronizer.class), syncRepository, mock(PreferencesProvider.class));

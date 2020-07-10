@@ -25,10 +25,10 @@ public class BlankFormsListViewModel extends ViewModel {
     private final FormListApi formListAPI;
     private final FormDownloader multiFormDownloader;
     private final DiskFormsSynchronizer diskFormsSynchronizer;
-    private final ServerFormsSyncRepository syncRepository;
+    private final SyncStatusRepository syncRepository;
     private final PreferencesProvider preferencesProvider;
 
-    public BlankFormsListViewModel(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer, ServerFormsSyncRepository syncRepository, PreferencesProvider preferencesProvider) {
+    public BlankFormsListViewModel(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer, SyncStatusRepository syncRepository, PreferencesProvider preferencesProvider) {
         this.scheduler = scheduler;
         this.formRepository = formRepository;
         this.mediaFileRepository = mediaFileRepository;
@@ -71,7 +71,7 @@ public class BlankFormsListViewModel extends ViewModel {
         private final FormListApi formListAPI;
         private final FormDownloader formDownloader;
         private final DiskFormsSynchronizer diskFormsSynchronizer;
-        private final ServerFormsSyncRepository syncRepository;
+        private final SyncStatusRepository syncRepository;
         private final PreferencesProvider preferencesProvider;
 
         @Inject
@@ -80,7 +80,7 @@ public class BlankFormsListViewModel extends ViewModel {
                        MediaFileRepository mediaFileRepository,
                        FormListApi formListAPI, FormDownloader formDownloader,
                        DiskFormsSynchronizer diskFormsSynchronizer,
-                       ServerFormsSyncRepository syncRepository,
+                       SyncStatusRepository syncRepository,
                        PreferencesProvider preferencesProvider
         ) {
             this.scheduler = scheduler;

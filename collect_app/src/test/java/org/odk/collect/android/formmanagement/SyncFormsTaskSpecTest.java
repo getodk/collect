@@ -15,17 +15,21 @@ import org.robolectric.RobolectricTestRunner;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class SyncFormsTaskSpecTest {
 
     private ServerFormsSynchronizer serverFormsSynchronizer;
-    private ServerFormsSyncRepository serverFormsSyncRepository;
+    private SyncStatusRepository syncStatusRepository;
 
     @Before
     public void setup() {
         serverFormsSynchronizer = mock(ServerFormsSynchronizer.class);
-        serverFormsSyncRepository = mock(ServerFormsSyncRepository.class);
+        syncStatusRepository = mock(SyncStatusRepository.class);
+        when(syncStatusRepository.startSync()).thenReturn(true);
 
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
@@ -35,36 +39,48 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public ServerFormsSyncRepository providesServerFormSyncRepository() {
-                return serverFormsSyncRepository;
+            public SyncStatusRepository providesServerFormSyncRepository() {
+                return syncStatusRepository;
             }
         });
     }
 
     @Test
     public void setsRepositoryToSyncing_runsSync_thenSetsRepositoryToNotSyncing() throws Exception {
-        InOrder inOrder = inOrder(serverFormsSyncRepository, serverFormsSynchronizer);
+        InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
         Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
         task.run();
 
-        inOrder.verify(serverFormsSyncRepository).startSync();
+        inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(serverFormsSyncRepository).finishSync();
+        inOrder.verify(syncStatusRepository).finishSync();
     }
 
     @Test
     public void whenSynchronizingFails_setsRepositoryToNotSyncing() throws Exception {
         doThrow(new FormApiException(FormApiException.Type.AUTH_REQUIRED, "")).when(serverFormsSynchronizer).synchronize();
-        InOrder inOrder = inOrder(serverFormsSyncRepository, serverFormsSynchronizer);
+        InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
         Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
         task.run();
 
-        inOrder.verify(serverFormsSyncRepository).startSync();
+        inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(serverFormsSyncRepository).finishSync();
+        inOrder.verify(syncStatusRepository).finishSync();
+    }
+
+    @Test
+    public void whenStartSyncReturnsFalse_doesNothing() throws Exception {
+        when(syncStatusRepository.startSync()).thenReturn(false);
+
+        SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
+        Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.run();
+
+        verify(serverFormsSynchronizer, never()).synchronize();
+        verify(syncStatusRepository, never()).finishSync();
     }
 }

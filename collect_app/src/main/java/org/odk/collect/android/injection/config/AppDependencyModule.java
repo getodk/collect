@@ -25,7 +25,7 @@ import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.ServerFormsSyncRepository;
+import org.odk.collect.android.formmanagement.SyncStatusRepository;
 import org.odk.collect.android.formmanagement.ServerFormsSynchronizer;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
@@ -358,8 +358,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public ServerFormsSyncRepository providesServerFormSyncRepository() {
-        return new ServerFormsSyncRepository();
+    public SyncStatusRepository providesServerFormSyncRepository() {
+        return new SyncStatusRepository();
     }
 
     @Provides
