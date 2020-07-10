@@ -28,6 +28,15 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
                 : new SelectMultiData(selectedItems);
     }
 
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        if (isSelected) {
+            ((SelectMultipleListAdapter) recyclerViewAdapter).addItem(items.get(choiceIndex).selection());
+        } else {
+            ((SelectMultipleListAdapter) recyclerViewAdapter).removeItem(items.get(choiceIndex).selection());
+        }
+    }
+
     private List<Selection> getSavedSelectedItems() {
         return getFormEntryPrompt().getAnswerValue() == null
                 ? new ArrayList<>() :
