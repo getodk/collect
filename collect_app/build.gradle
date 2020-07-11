@@ -283,7 +283,7 @@ dependencies {
 
     // Android Architecture Components:
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"     // smap
+    //implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"     // smap
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // smap aws
@@ -357,10 +357,10 @@ dependencies {
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 
-    androidTestImplementation "android.arch.work:work-testing:1.0.1"
+    //androidTestImplementation "android.arch.work:work-testing:1.0.1"
 
     // smap
-    implementation "com.android.support:design:28.2.0"
+    //implementation "com.android.support:design:28.2.0"
     androidTestImplementation "androidx.work:work-testing:2.3.4"
 }
 

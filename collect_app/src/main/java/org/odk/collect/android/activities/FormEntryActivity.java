@@ -1100,7 +1100,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
             case R.id.menu_comment:              // smap
-                if (formController.currentPromptIsQuestion()) {
+                if (formController != null && formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 Timber.i(getIntent().getData().toString());
