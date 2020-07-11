@@ -912,8 +912,8 @@ public class Utilities {
         }
         String out = null;
         if (msg != null) {
-            if (msg.contains("Unauthorized")) {
-                out = Collect.getInstance().getString(R.string.smap_unauth);
+            if (msg.contains("Unauthorized") || msg.contains(": 401")) {
+                out = Collect.getInstance().getString(R.string.smap_login_unauthorized);
             } else if(msg.contains("Unable to resolve host")) {
                 out = msg + ". " + Collect.getInstance().getString(R.string.no_connection);
             } else {

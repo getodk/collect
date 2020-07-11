@@ -573,7 +573,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        	Timber.i("Info: Download cancelled by user.");
 
 	        } catch (Exception e) {	
-	        	
+
 	        	Timber.e("Error:" + " for URL " + taskURL);
                 e.printStackTrace();
                 String msg = Utilities.translateMsg(e, null);
