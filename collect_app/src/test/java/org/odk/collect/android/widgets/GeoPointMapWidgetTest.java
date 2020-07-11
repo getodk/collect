@@ -68,12 +68,6 @@ public class GeoPointMapWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_doesNotShowTheGeoButton() {
-        GeoPointMapWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.binding.simpleButton.getVisibility(), equalTo(View.GONE));
-    }
-
-    @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), equalTo(null));
@@ -177,6 +171,19 @@ public class GeoPointMapWidgetTest {
         widget.binding.simpleButton.performClick();
 
         verify(waitingForDataRegistry).waitForData(prompt.getIndex());
+    }
+
+    @Test
+    public void whenPromptIsReadOnly_buttonShouldLaunchCorrectIntent() {
+        GeoPointMapWidget widget = createWidget(promptWithReadOnly());
+        stubLocationPermissions(widget, true);
+        widget.binding.simpleButton.performClick();
+
+        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
+        Bundle bundle = startedIntent.getExtras();
+
+        assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointMapActivity.class)));
+        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, true, true);
     }
 
     @Test

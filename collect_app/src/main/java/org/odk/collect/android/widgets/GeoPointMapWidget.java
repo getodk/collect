@@ -77,17 +77,12 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
+        readOnly = prompt.isReadOnly();
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        readOnly = prompt.isReadOnly();
-        if (readOnly) {
-            binding.simpleButton.setVisibility(GONE);
-        } else {
-            binding.simpleButton.setText(getDefaultButtonLabel());
-            binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.simpleButton.setOnClickListener(v -> onButtonClick());
 
-            binding.simpleButton.setOnClickListener(v -> onButtonClick());
-        }
         return answerView;
     }
 
@@ -202,9 +197,5 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
         intent.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
         ((Activity) context).startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);
-    }
-
-    private String getDefaultButtonLabel() {
-        return getContext().getString(R.string.get_location);
     }
 }
