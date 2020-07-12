@@ -20,11 +20,15 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.TextUtils;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListPopupWindow;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
@@ -35,6 +39,8 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
+import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -64,11 +70,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 
-    protected CustomEditTextPreference serverUrlPreference;
-    protected CustomEditTextPreference usernamePreference;
-    protected CustomEditTextPreference passwordPreference;
-
-    private DialogFragment dialogFragment;
+    private EditTextPreference serverUrlPreference;
+    private EditTextPreference usernamePreference;
+    private EditTextPreference passwordPreference;
+    private ListPopupWindow listPopupWindow;
 
     @Inject
     OpenRosaXmlFetcher openRosaXMLFetcher;
@@ -98,38 +103,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     @Override
-    public void onDisplayPreferenceDialog(Preference preference) {
-        if (preference instanceof CustomEditTextPreference) {
-            switch (preference.getKey()) {
-                case "server_url":
-                    dialogFragment = ServerUrlEditTextPreferenceDialog.newInstance(preference.getKey());
-                    break;
-                case "username":
-                    dialogFragment = UsernameEditTextPreferenceDialog.newInstance(preference.getKey());
-                    break;
-                case "password":
-                    dialogFragment = PasswordEditTextPreferenceDialog.newInstance(preference.getKey());
-                    break;
-                case "google_sheets_url":
-                    dialogFragment = GoogleSheetsUrlEditTextPreferenceDialog.newInstance(preference.getKey());
-                    break;
-            }
-        } else {
-            super.onDisplayPreferenceDialog(preference);
-        }
-        if (dialogFragment != null) {
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), null);
-        }
-    }
-
-    @Override
     public void onDestroyView() {
-        dialogFragment = null;
         serverUrlPreference = null;
         usernamePreference = null;
         passwordPreference = null;
         selectedGoogleAccountPreference = null;
+        listPopupWindow = null;
 
         super.onDestroyView();
     }
@@ -179,19 +158,32 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         if (!new AggregatePreferencesAdder(this).add()) {
             return;
         }
-
-        serverUrlPreference = (CustomEditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
-        usernamePreference = (CustomEditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
-        passwordPreference = (CustomEditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
+        serverUrlPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
+        usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
+        passwordPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
 
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
 
+        serverUrlPreference.setOnBindEditTextListener(editText -> {
+            urlDropdownSetup(editText);
+            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
+        });
+
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
 
+        usernamePreference.setOnBindEditTextListener(editText -> {
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
+        });
+
         passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
+
+        passwordPreference.setOnBindEditTextListener(editText -> {
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
+        });
 
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
@@ -208,12 +200,29 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         });
     }
 
+    private void urlDropdownSetup(EditText editText) {
+        listPopupWindow = new ListPopupWindow(getActivity());
+        setupUrlDropdownAdapter(listPopupWindow);
+        listPopupWindow.setAnchorView(editText);
+        listPopupWindow.setModal(true);
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            editText.setText(ChangingServerUrlUtils.getUrlList().get(position));
+            listPopupWindow.dismiss();
+        });
+    }
+
+    public void setupUrlDropdownAdapter(ListPopupWindow listPopupWindow) {
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
+        listPopupWindow.setAdapter(adapter);
+    }
+
     public void addGooglePreferences() {
         addPreferencesFromResource(R.xml.google_preferences);
         selectedGoogleAccountPreference = findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
 
-        CustomEditTextPreference googleSheetsUrlPreference = (CustomEditTextPreference) findPreference(
+        EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 GeneralKeys.KEY_GOOGLE_SHEETS_URL);
+        googleSheetsUrlPreference.setOnBindEditTextListener(editText -> editText.setFilters(new InputFilter[] {new ControlCharacterFilter(), new WhitespaceFilter() }));
         googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
         String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
@@ -271,7 +280,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                         preference.setSummary(newValue.toString());
                         ChangingServerUrlUtils.addUrlToList(url);
-                        ((ServerUrlEditTextPreferenceDialog) dialogFragment).setupUrlDropdownAdapter();
+                        setupUrlDropdownAdapter(listPopupWindow);
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;
