@@ -17,20 +17,13 @@
 package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.text.TextUtils;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListPopupWindow;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.preference.EditTextPreference;
+import androidx.fragment.app.DialogFragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
@@ -41,14 +34,11 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
-import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
-import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -69,12 +59,15 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, OnBackPressedListener {
+public class ServerPreferencesFragment extends BasePreferenceFragment implements OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
-    protected EditTextPreference serverUrlPreference;
-    protected EditTextPreference usernamePreference;
-    protected EditTextPreference passwordPreference;
+
+    protected CustomEditTextPreference serverUrlPreference;
+    protected CustomEditTextPreference usernamePreference;
+    protected CustomEditTextPreference passwordPreference;
+
+    private DialogFragment dialogFragment;
 
     @Inject
     OpenRosaXmlFetcher openRosaXMLFetcher;
@@ -83,7 +76,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Inject
     Analytics analytics;
 
-    private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
@@ -101,8 +93,39 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.server_preferences);
-
         initProtocolPrefs();
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        if (preference instanceof CustomEditTextPreference) {
+            switch (preference.getKey()) {
+                case "server_url":
+                    dialogFragment = ServerUrlEditTextPreferenceDialog.newInstance(preference.getKey());
+                    break;
+                case "username":
+                    dialogFragment = UsernameEditTextPreferenceDialog.newInstance(preference.getKey());
+                    break;
+                case "password":
+                    dialogFragment = PasswordEditTextPreferenceDialog.newInstance(preference.getKey());
+                    break;
+                case "google_sheets_url":
+                    dialogFragment = GoogleSheetsUrlEditTextPreferenceDialog.newInstance(preference.getKey());
+                    break;
+            }
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
+        if (dialogFragment != null) {
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(getParentFragmentManager(), null);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        dialogFragment = null;
+        super.onDestroyView();
     }
 
     private void initProtocolPrefs() {
@@ -151,41 +174,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             return;
         }
 
-        serverUrlPreference = (EditTextPreference) findPreference(
-                GeneralKeys.KEY_SERVER_URL);
-        usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
-        passwordPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
+        serverUrlPreference = (CustomEditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
+        usernamePreference = (CustomEditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
+        passwordPreference = (CustomEditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
 
-        urlDropdownSetup();
-
-//        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
-//        serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
-//        serverUrlPreference.getEditText().setFilters(
-//                new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
 
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
-//        usernamePreference.getEditText().setFilters(
-//                new InputFilter[]{new ControlCharacterFilter()});
 
         passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
-//        passwordPreference.getEditText().setFilters(
-//                new InputFilter[]{new ControlCharacterFilter()});
-        serverUrlPreference.setOnPreferenceClickListener(preference -> {
-//            serverUrlPreference.getEditText().requestFocus();
-            return true;
-        });
-        usernamePreference.setOnPreferenceClickListener(preference -> {
-//            usernamePreference.getEditText().requestFocus();
-            return true;
-        });
-        passwordPreference.setOnPreferenceClickListener(preference -> {
-//            passwordPreference.getEditText().requestFocus();
-            return true;
-        });
 
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
@@ -201,7 +201,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         addPreferencesFromResource(R.xml.google_preferences);
         selectedGoogleAccountPreference = findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
 
-        EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
+        CustomEditTextPreference googleSheetsUrlPreference = (CustomEditTextPreference) findPreference(
                 GeneralKeys.KEY_GOOGLE_SHEETS_URL);
         googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
@@ -210,16 +210,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
                     + getString(R.string.google_sheets_url_hint));
         }
-
-//        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
-//                new ControlCharacterFilter(), new WhitespaceFilter()
-//        });
-
-//        googleSheetsUrlPreference.setOnPreferenceClickListener(preference -> {
-//            googleSheetsUrlPreference.getEditText().requestFocus();
-//            return true;
-//        });
-
         initAccountPreferences();
     }
 
@@ -253,36 +243,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         });
     }
 
-    private void urlDropdownSetup() {
-        listPopupWindow = new ListPopupWindow(getActivity());
-        setupUrlDropdownAdapter();
-//        listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
-        listPopupWindow.setModal(true);
-        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-//            serverUrlPreference.getEditText().setText(ChangingServerUrlUtils.getUrlList().get(position));
-            listPopupWindow.dismiss();
-        });
-    }
-
-    private void setupUrlDropdownAdapter() {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
-        listPopupWindow.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        final int DRAWABLE_RIGHT = 2;
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (event.getX() >= (v.getWidth() - ((EditText) v)
-                    .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                SoftKeyboardUtils.hideSoftKeyboard(v);
-                listPopupWindow.show();
-                return true;
-            }
-        }
-        return false;
-    }
-
     private Preference.OnPreferenceChangeListener createChangeListener() {
         return (preference, newValue) -> {
             switch (preference.getKey()) {
@@ -300,7 +260,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                         preference.setSummary(newValue.toString());
                         ChangingServerUrlUtils.addUrlToList(url);
-                        setupUrlDropdownAdapter();
+                        ((ServerUrlEditTextPreferenceDialog) dialogFragment).setupUrlDropdownAdapter();
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;

@@ -6,7 +6,7 @@
         android:title="@string/selected_google_account_text"
         app:iconSpaceReserved="false" />
 
-    <EditTextPreference
+    <org.odk.collect.android.preferences.CustomEditTextPreference
         android:dialogTitle="@string/google_sheets_url"
         android:inputType="textNoSuggestions"
         android:key="google_sheets_url"

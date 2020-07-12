@@ -1,19 +1,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditTextPreference
+    <org.odk.collect.android.preferences.CustomEditTextPreference
         android:dialogTitle="@string/change_server_url"
         android:inputType="textNoSuggestions"
         android:key="server_url"
         android:title="@string/server_url"
         app:iconSpaceReserved="false" />
-    <EditTextPreference
+    <org.odk.collect.android.preferences.CustomEditTextPreference
         android:dialogTitle="@string/change_username"
         android:inputType="textNoSuggestions"
         android:key="username"
         android:title="@string/username"
         app:iconSpaceReserved="false" />
-    <EditTextPreference
+    <org.odk.collect.android.preferences.CustomEditTextPreference
         android:dialogTitle="@string/change_password"
         android:inputType="textPassword"
         android:key="password"
