@@ -24,6 +24,7 @@ import android.text.TextUtils;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
@@ -194,7 +195,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
-                AndroidXPreferencesActivity.start(getActivity(), CustomServerPathsFragment.class);
+                Fragment fragment = new CustomServerPathsFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.preferences_fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             } else {
                 return false;

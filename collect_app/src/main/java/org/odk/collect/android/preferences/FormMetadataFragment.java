@@ -98,6 +98,17 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        emailPreference = null;
+        phonePreference = null;
+        installIDPreference = null;
+        deviceIDPreference = null;
+        simSerialPrererence = null;
+        subscriberIDPreference = null;
+        super.onDestroyView();
+    }
+
     private void setupPrefs() {
         emailPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             String newValueString = newValue.toString();

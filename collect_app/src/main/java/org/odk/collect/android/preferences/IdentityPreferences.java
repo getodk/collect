@@ -16,6 +16,7 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.Fragment;
 import androidx.preference.CheckBoxPreference;
 
 import org.odk.collect.android.R;
@@ -51,7 +52,12 @@ public class IdentityPreferences extends BasePreferenceFragment {
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
-                AndroidXPreferencesActivity.start(getActivity(), FormMetadataFragment.class);
+                Fragment fragment = new FormMetadataFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.preferences_fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             }
             return false;

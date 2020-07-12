@@ -19,6 +19,7 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
@@ -61,14 +62,14 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
-            BasePreferenceFragment basePreferenceFragment = null;
+            PreferenceFragmentCompat basePreferenceFragment = null;
             boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
             switch (preference.getKey()) {
                 case "protocol":
                     basePreferenceFragment = ServerPreferencesFragment.newInstance(adminMode);
                     break;
                 case "user_interface":
-                    AndroidXPreferencesActivity.start(getActivity(), UserInterfacePreferencesFragment.class);
+                    basePreferenceFragment =  new UserInterfacePreferencesFragment();
                     break;
                 case "maps":
                     basePreferenceFragment = MapsPreferences.newInstance(adminMode);
