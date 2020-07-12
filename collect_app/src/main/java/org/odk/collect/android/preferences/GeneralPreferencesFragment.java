@@ -81,7 +81,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                     basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
                     break;
                 case "experimental":
-                    AndroidXPreferencesActivity.start(getActivity(), ExperimentalPreferencesFragment.class);
+                    basePreferenceFragment = new ExperimentalPreferencesFragment();
                     break;
             }
             if (basePreferenceFragment != null) {
