@@ -9,32 +9,38 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/general_preferences">
 
     <Preference
         android:icon="@drawable/ic_cloud"
         android:key="protocol"
-        android:title="@string/server_settings_title" />
+        android:title="@string/server_settings_title"
+        app:iconSpaceReserved="false" />
     <Preference
         android:icon="@drawable/ic_phonelink_setup"
         android:key="user_interface"
-        android:title="@string/client" />
+        android:title="@string/client"
+        app:iconSpaceReserved="false" />
     <Preference
         android:icon="@drawable/ic_map_accent_color"
         android:key="maps"
-        android:title="@string/maps" />
+        android:title="@string/maps"
+        app:iconSpaceReserved="false" />
     <Preference
         android:icon="@drawable/ic_assignment"
         android:key="form_management"
-        android:title="@string/form_management_preferences" />
+        android:title="@string/form_management_preferences"
+        app:iconSpaceReserved="false" />
     <Preference
         android:icon="@drawable/ic_face"
         android:key="user_and_device_identity"
-        android:title="@string/user_and_device_identity_title" />
+        android:title="@string/user_and_device_identity_title"
+        app:iconSpaceReserved="false" />
     <Preference
         android:icon="@drawable/ic_baseline_warning_24"
         android:key="experimental"
-        android:title="@string/experimental" />
+        android:title="@string/experimental"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

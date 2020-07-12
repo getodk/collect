@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/server_preferences">
 
     <ListPreference
         android:entries="@array/protocol_entries"
         android:entryValues="@array/protocol_entry_values"
         android:key="protocol"
-        android:title="@string/type" />
+        android:title="@string/type"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>
