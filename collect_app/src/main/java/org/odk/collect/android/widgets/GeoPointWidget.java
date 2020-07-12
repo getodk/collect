@@ -36,13 +36,12 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.widgets.GeoPointMapWidget.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
+import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
 
 @SuppressLint("ViewConstructor")
 public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver {
-    public static final String LOCATION = "gp";
-    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
-    public static final String READ_ONLY = "readOnly";
-    public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final double accuracyThreshold;
@@ -179,7 +178,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             intent.putExtra(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
         }
-        intent.putExtra(READ_ONLY, readOnly);
         intent.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
         ((Activity) context).startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);

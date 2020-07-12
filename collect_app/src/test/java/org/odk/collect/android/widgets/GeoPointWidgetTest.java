@@ -32,10 +32,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.GeoPointWidget.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
-import static org.odk.collect.android.widgets.GeoPointWidget.LOCATION;
-import static org.odk.collect.android.widgets.GeoPointWidget.READ_ONLY;
+import static org.odk.collect.android.widgets.GeoPointMapWidget.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
+import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
@@ -181,7 +180,7 @@ public class GeoPointWidgetTest {
         Bundle bundle = startedIntent.getExtras();
 
         assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointActivity.class)));
-        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false);
+        assertBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY);
     }
 
     @Test
@@ -196,16 +195,15 @@ public class GeoPointWidgetTest {
         Bundle bundle = startedIntent.getExtras();
 
         assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPointActivity.class)));
-        assertBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer), 2.0, false);
+        assertBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer), 2.0);
     }
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef,  waitingForDataRegistry);
     }
 
-    private void assertBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, boolean readOnly) {
+    private void assertBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold) {
         assertThat(bundle.getDoubleArray(LOCATION), equalTo(location));
-        assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
         assertThat(bundle.getDouble(ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
     }
 
