@@ -51,10 +51,10 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-        Object[] layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
 
-        slider = (SuppressFlingGestureSlider) layoutElements[1];
-        currentValue = (TextView) layoutElements[2];
+        slider = layoutElements.getSlider();
+        currentValue = layoutElements.getCurrentValue();
 
         if (RangeWidgetUtils.isWidgetValid(rangeQuestion, slider)) {
             if (getFormEntryPrompt().getAnswerValue() != null) {
@@ -65,7 +65,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
             setUpActualValueLabel();
             setUpSeekBar();
         }
-        return (View) layoutElements[0];
+        return layoutElements.getAnswerView();
     }
 
     @Override
