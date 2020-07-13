@@ -529,9 +529,11 @@
 <!--
     <string name="submission_transport_admin_setting">Submission transport</string>
 -->
+<!--
     <string name="select_value">Select value</string>
     <string name="edit_value">Edit value</string>
     <string name="no_value_selected">No value selected</string>
+-->
     <string name="form_delete_message">Deleting selected forms</string>
     <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="search">Search</string>
