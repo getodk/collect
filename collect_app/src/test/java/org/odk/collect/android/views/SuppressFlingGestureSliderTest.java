@@ -12,25 +12,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(RobolectricTestRunner.class)
-public class CustomRangeSliderTest {
+public class SuppressFlingGestureSliderTest {
 
-    private CustomRangeSlider slider;
+    private SuppressFlingGestureSlider slider;
 
     @Before
     public void setUp() {
         ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
-        slider = new CustomRangeSlider(ApplicationProvider.getApplicationContext());
+        slider = new SuppressFlingGestureSlider(ApplicationProvider.getApplicationContext());
     }
 
     @Test
     public void onStartTrackingTouch_suppressesFlingGesture() {
         slider.onStartTrackingTouch(slider);
-        assertThat(slider.suppressFlingGesture, equalTo(true));
+        assertThat(slider.isSuppressFlingGesture(), equalTo(true));
     }
 
     @Test
     public void onStopTrackingTouch_doesNotSuppressFlingGesture() {
         slider.onStopTrackingTouch(slider);
-        assertThat(slider.suppressFlingGesture, equalTo(false));
+        assertThat(slider.isSuppressFlingGesture(), equalTo(false));
     }
 }

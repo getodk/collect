@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.views.CustomRangeSlider;
+import org.odk.collect.android.views.SuppressFlingGestureSlider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
 
@@ -26,7 +26,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class RangeWidgetUtilsTest {
 
     private RangeQuestion rangeQuestion;
-    private CustomRangeSlider slider;
+    private SuppressFlingGestureSlider slider;
     private TextView sampleTextView1;
     private TextView sampleTextView2;
 
@@ -35,7 +35,7 @@ public class RangeWidgetUtilsTest {
         rangeQuestion = mock(RangeQuestion.class);
 
         ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
-        slider = new CustomRangeSlider(ApplicationProvider.getApplicationContext());
+        slider = new SuppressFlingGestureSlider(ApplicationProvider.getApplicationContext());
         sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
@@ -47,7 +47,7 @@ public class RangeWidgetUtilsTest {
     @Test
     public void usingReadOnlyOption_disablesTheSlider() {
         Object[] objects = RangeWidgetUtils.setUpLayoutElements(widgetTestActivity(), promptWithReadOnlyAndRangeQuestion(rangeQuestion));
-        assertThat(((CustomRangeSlider) objects[1]).isEnabled(), equalTo(false));
+        assertThat(((SuppressFlingGestureSlider) objects[1]).isEnabled(), equalTo(false));
     }
 
     @Test

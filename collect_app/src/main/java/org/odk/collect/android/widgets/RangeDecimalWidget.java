@@ -31,7 +31,7 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.views.CustomRangeSlider;
+import org.odk.collect.android.views.SuppressFlingGestureSlider;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     private RangeQuestion rangeQuestion;
     private BigDecimal actualValue;
 
-    CustomRangeSlider slider;
+    SuppressFlingGestureSlider slider;
     TextView currentValue;
 
     public RangeDecimalWidget(Context context, QuestionDetails prompt) {
@@ -53,7 +53,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
         Object[] layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
 
-        slider = (CustomRangeSlider) layoutElements[1];
+        slider = (SuppressFlingGestureSlider) layoutElements[1];
         currentValue = (TextView) layoutElements[2];
 
         if (RangeWidgetUtils.isWidgetValid(rangeQuestion, slider)) {
