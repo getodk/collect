@@ -13,7 +13,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.views.SuppressFlingGestureSlider;
+import org.odk.collect.android.views.TrackingTouchSlider;
 
 import java.math.BigDecimal;
 
@@ -25,10 +25,10 @@ public class RangeWidgetUtils {
 
     public static class RangeWidgetLayoutElements {
         View answerView;
-        SuppressFlingGestureSlider slider;
+        TrackingTouchSlider slider;
         TextView currentValue;
 
-        public RangeWidgetLayoutElements(View answerView, SuppressFlingGestureSlider slider, TextView currentValue) {
+        public RangeWidgetLayoutElements(View answerView, TrackingTouchSlider slider, TextView currentValue) {
             this.answerView = answerView;
             this.slider = slider;
             this.currentValue = currentValue;
@@ -38,7 +38,7 @@ public class RangeWidgetUtils {
             return answerView;
         }
 
-        public SuppressFlingGestureSlider getSlider() {
+        public TrackingTouchSlider getSlider() {
             return slider;
         }
 
@@ -49,7 +49,7 @@ public class RangeWidgetUtils {
 
     public static RangeWidgetLayoutElements setUpLayoutElements(Context context, FormEntryPrompt prompt) {
         View answerView;
-        SuppressFlingGestureSlider slider;
+        TrackingTouchSlider slider;
         TextView currentValue;
         TextView minValue;
         TextView maxValue;
@@ -90,7 +90,7 @@ public class RangeWidgetUtils {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setUpSlider(RangeQuestion rangeQuestion, SuppressFlingGestureSlider slider, BigDecimal actualValue) {
+    public static void setUpSlider(RangeQuestion rangeQuestion, TrackingTouchSlider slider, BigDecimal actualValue) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -115,13 +115,13 @@ public class RangeWidgetUtils {
         });
     }
 
-    public static BigDecimal setUpNullValue(SuppressFlingGestureSlider slider, TextView currentValue) {
+    public static BigDecimal setUpNullValue(TrackingTouchSlider slider, TextView currentValue) {
         slider.setValue(slider.getValueFrom());
         currentValue.setText("");
         return null;
     }
 
-    public static boolean isWidgetValid(RangeQuestion rangeQuestion, SuppressFlingGestureSlider slider) {
+    public static boolean isWidgetValid(RangeQuestion rangeQuestion, TrackingTouchSlider slider) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -135,7 +135,7 @@ public class RangeWidgetUtils {
         return result;
     }
 
-    private static void disableWidget(SuppressFlingGestureSlider slider) {
+    private static void disableWidget(TrackingTouchSlider slider) {
         ToastUtils.showLongToast(R.string.invalid_range_widget);
         slider.setEnabled(false);
     }
