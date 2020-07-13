@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.views.SuppressFlingGestureSlider;
+import org.odk.collect.android.views.TrackingTouchSlider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
 
@@ -19,14 +19,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndRangeQuestion;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
 public class RangeWidgetUtilsTest {
+    private static final String VERTICAL_APPEARANCE = "vertical";
 
     private RangeQuestion rangeQuestion;
-    private SuppressFlingGestureSlider slider;
+    private TrackingTouchSlider slider;
     private TextView sampleTextView1;
     private TextView sampleTextView2;
 
@@ -35,7 +36,7 @@ public class RangeWidgetUtilsTest {
         rangeQuestion = mock(RangeQuestion.class);
 
         ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
-        slider = new SuppressFlingGestureSlider(ApplicationProvider.getApplicationContext());
+        slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext());
         sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
@@ -46,8 +47,24 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void usingReadOnlyOption_disablesTheSlider() {
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(widgetTestActivity(), promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
+                widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(layoutElements.getSlider().isEnabled(), equalTo(false));
+    }
+
+    @Test
+    public void setUpLayoutElements_shouldShowHorizontalCorrectSlider() {
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
+                widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        assertThat(layoutElements.getSlider().getRotation(), equalTo(0.0F));
+    }
+
+    @Test
+    public void setUpLayoutElements_shouldShowVerticalCorrectSlider() {
+        when(rangeQuestion.getAppearanceAttr()).thenReturn(VERTICAL_APPEARANCE);
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
+                widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        assertThat(layoutElements.getSlider().getRotation(), equalTo(270.0F));
     }
 
     @Test

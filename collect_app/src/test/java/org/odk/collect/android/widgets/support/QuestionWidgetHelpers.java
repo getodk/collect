@@ -39,14 +39,14 @@ public class QuestionWidgetHelpers {
                 .build();
     }
 
-    public static FormEntryPrompt promptWithRangeQuestionAndAnswer(QuestionDef questionDef, IAnswerData answer) {
+    public static FormEntryPrompt promptWithQuestionDefAndAnswer(QuestionDef questionDef, IAnswerData answer) {
         return new MockFormEntryPromptBuilder()
                 .withQuestion(questionDef)
                 .withAnswer(answer)
                 .build();
     }
 
-    public static FormEntryPrompt promptWithReadOnlyAndRangeQuestion(QuestionDef questionDef) {
+    public static FormEntryPrompt promptWithReadOnlyAndQuestionDef(QuestionDef questionDef) {
         return new MockFormEntryPromptBuilder()
                 .withReadOnly(true)
                 .withQuestion(questionDef)

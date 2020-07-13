@@ -22,8 +22,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithRangeQuestionAndAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndRangeQuestion;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 /**
@@ -46,25 +46,25 @@ public class RangeDecimalWidgetTest {
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
-        assertThat(createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion)).getAnswer(), nullValue());
+        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer(), nullValue());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("2.5")));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         assertThat(widget.getAnswer().getValue(), equalTo(2.5));
     }
 
     @Test
     public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("2.5")));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         assertThat(widget.slider.getValue(), equalTo(2.5F));
         assertThat(widget.currentValue.getText(), equalTo("2.5"));
     }
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("2.5")));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
@@ -72,7 +72,7 @@ public class RangeDecimalWidgetTest {
 
     @Test
     public void clearAnswer_callsValueChangeListener() {
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
         widget.clearAnswer();
@@ -81,7 +81,7 @@ public class RangeDecimalWidgetTest {
 
     @Test
     public void changingSliderValue_updatesAnswer() {
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.setValue(2.5F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(2.5));
@@ -90,7 +90,7 @@ public class RangeDecimalWidgetTest {
 
     @Test
     public void changingSliderValue_callsValueChangeListener() {
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.slider.setValue(2.5F);
 
@@ -101,7 +101,7 @@ public class RangeDecimalWidgetTest {
     public void clickingSliderForLong_doesNotCallLongClickListener() {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
 
-        RangeDecimalWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
         widget.slider.performLongClick();
 
