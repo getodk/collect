@@ -170,4 +170,12 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/every_six_hours</item>
         <item>@string/every_24_hours</item>
     </string-array>
+
+    <string-array name="form_update_mode_entries">
+        <item>@string/manually</item>
+    </string-array>
+
+    <string-array name="form_update_mode_values">
+        <item>@string/form_update_mode_manual</item>
+    </string-array>
 </resources>

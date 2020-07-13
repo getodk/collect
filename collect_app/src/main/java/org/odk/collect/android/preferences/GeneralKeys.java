@@ -58,6 +58,7 @@ public final class GeneralKeys {
     public static final String KEY_GUIDANCE_HINT            = "guidance_hint";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
     public static final String KEY_MATCH_EXACTLY            = "match_exactly";
+    public static final String KEY_FORM_UPDATE_MODE         = "form_update_mode";
 
     // identity_preferences.xml
     public static final String KEY_ANALYTICS                = "analytics";
@@ -111,6 +112,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
         hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);
         hashMap.put(KEY_BACKGROUND_LOCATION,        true);
+        hashMap.put(KEY_FORM_UPDATE_MODE,           "manual");
         // form_metadata_preferences.xml
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");

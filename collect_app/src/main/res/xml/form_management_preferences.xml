@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/form_management_preferences">
 
     <PreferenceCategory
         android:title="@string/form_update_category">
+
+        <ListPreference
+            android:dialogTitle="@string/form_update_mode_settings_title"
+            android:entries="@array/form_update_mode_entries"
+            android:entryValues="@array/form_update_mode_values"
+            android:key="form_update_mode"
+            android:title="@string/form_update_mode_title" />
+
         <ListPreference
             android:dialogTitle="@string/periodic_form_updates_check_title"
             android:entries="@array/periodic_form_updates_check_entries"

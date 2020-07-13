@@ -16,8 +16,8 @@ public class FormManagementPage extends Page<FormManagementPage> {
         return this;
     }
 
-    public UpdateBlankFormsPage clickUpdateForms() {
+    public UpdateBlankFormsModePage clickUpdateForms() {
         clickOnString(R.string.form_update_mode_title);
-        return new UpdateBlankFormsPage(rule).assertOnPage();
+        return new UpdateBlankFormsModePage(rule).assertOnPage();
     }
 }
