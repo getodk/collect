@@ -23,7 +23,31 @@ public class RangeWidgetUtils {
     private RangeWidgetUtils() {
     }
 
-    public static Object[] setUpLayoutElements(Context context, FormEntryPrompt prompt) {
+    public static class RangeWidgetLayoutElements {
+        View answerView;
+        SuppressFlingGestureSlider slider;
+        TextView currentValue;
+
+        public RangeWidgetLayoutElements(View answerView, SuppressFlingGestureSlider slider, TextView currentValue) {
+            this.answerView = answerView;
+            this.slider = slider;
+            this.currentValue = currentValue;
+        }
+
+        public View getAnswerView() {
+            return answerView;
+        }
+
+        public SuppressFlingGestureSlider getSlider() {
+            return slider;
+        }
+
+        public TextView getCurrentValue() {
+            return currentValue;
+        }
+    }
+
+    public static RangeWidgetLayoutElements setUpLayoutElements(Context context, FormEntryPrompt prompt) {
         View answerView;
         SuppressFlingGestureSlider slider;
         TextView currentValue;
@@ -57,7 +81,7 @@ public class RangeWidgetUtils {
             slider.setEnabled(false);
         }
 
-        return new Object[] {answerView, slider, currentValue};
+        return new RangeWidgetLayoutElements(answerView, slider, currentValue);
     }
 
     static void setUpWidgetParameters(RangeQuestion rangeQuestion, TextView minValue, TextView maxValue) {
