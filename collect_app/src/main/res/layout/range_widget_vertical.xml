@@ -34,7 +34,7 @@ limitations under the License.
         android:layout_width="50dp"
         android:layout_height="330dp">
 
-        <org.odk.collect.android.views.SuppressFlingGestureSlider
+        <org.odk.collect.android.views.TrackingTouchSlider
             android:id="@+id/slider"
             android:layout_width="330dp"
             android:layout_height="wrap_content"

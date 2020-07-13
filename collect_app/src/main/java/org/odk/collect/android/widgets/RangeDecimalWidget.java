@@ -31,7 +31,7 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.views.SuppressFlingGestureSlider;
+import org.odk.collect.android.views.TrackingTouchSlider;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     private RangeQuestion rangeQuestion;
     private BigDecimal actualValue;
 
-    SuppressFlingGestureSlider slider;
+    TrackingTouchSlider slider;
     TextView currentValue;
 
     public RangeDecimalWidget(Context context, QuestionDetails prompt) {
@@ -81,7 +81,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return slider.isSuppressFlingGesture();
+        return slider.isTrackingTouch();
     }
 
     @Override
