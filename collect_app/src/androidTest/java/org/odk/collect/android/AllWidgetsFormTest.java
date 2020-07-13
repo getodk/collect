@@ -45,7 +45,7 @@ public class AllWidgetsFormTest {
     @ClassRule
     public static final LocaleTestRule LOCALE_TEST_RULE = new LocaleTestRule();
 
-    public AllWidgetsFormTestRule activityTestRule = new AllWidgetsFormTestRule();
+    public FormActivityTestRule activityTestRule = new FormActivityTestRule(ALL_WIDGETS_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -620,11 +620,4 @@ public class AllWidgetsFormTest {
 
     }
     //endregion
-
-    private static class AllWidgetsFormTestRule extends FormActivityTestRule {
-
-        AllWidgetsFormTestRule() {
-            super(ALL_WIDGETS_FORM);
-        }
-    }
 }
