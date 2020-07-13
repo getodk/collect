@@ -45,7 +45,7 @@ public class RangeDecimalWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsZero() {
+    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
         assertThat(createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion)).getAnswer(), nullValue());
     }
 
