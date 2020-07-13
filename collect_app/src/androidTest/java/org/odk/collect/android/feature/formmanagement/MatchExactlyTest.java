@@ -1,4 +1,4 @@
-package org.odk.collect.android.feature.settings;
+package org.odk.collect.android.feature.formmanagement;
 
 import android.Manifest;
 import android.webkit.MimeTypeMap;

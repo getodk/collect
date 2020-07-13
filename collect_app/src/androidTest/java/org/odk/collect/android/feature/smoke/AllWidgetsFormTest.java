@@ -1,4 +1,4 @@
-package org.odk.collect.android;
+package org.odk.collect.android.feature.smoke;
 
 import android.Manifest;
 import android.content.Context;

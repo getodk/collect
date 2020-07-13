@@ -1,4 +1,4 @@
-package org.odk.collect.android.feature.settings;
+package org.odk.collect.android.feature.smoke;
 
 import android.Manifest;
 import android.webkit.MimeTypeMap;
@@ -10,18 +10,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.StubOpenRosaServer;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.utilities.UserAgentProvider;
 
 @RunWith(AndroidJUnit4.class)
-public class ServerSettingsTest {
+public class GetAndSubmitFormTest {
 
     public final StubOpenRosaServer server = new StubOpenRosaServer();
 
@@ -44,50 +42,23 @@ public class ServerSettingsTest {
             .around(rule);
 
     @Test
-    public void whenUsingODKServer_canAddCredentialsForServer() {
-        server.setCredentials("Joe", "netsky");
+    public void canGetBlankForm_fillItIn_andSubmit() {
         server.addForm("One Question", "one-question", "one-question.xml");
 
         rule.mainMenu()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickServerSettings()
-                .clickOnURL()
-                .inputText(server.getURL())
-                .clickOKOnDialog()
-                .assertText(server.getURL())
-                .clickServerUsername()
-                .inputText("Joe")
-                .clickOKOnDialog()
-                .assertText("Joe")
-                .clickServerPassword()
-                .inputText("netsky")
-                .clickOKOnDialog()
-                .assertText("********")
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
+                .setServer(server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("One Question (Version:: 1 ID: one-question) - Success")
-                .clickOK(new MainMenuPage(rule));
-    }
+                .clickOK(new MainMenuPage(rule))
 
-    /**
-     * This test could definitely be extended to cover form download/submit with the creation
-     * of a stub
-     * {@link org.odk.collect.android.utilities.gdrive.DriveHelper} and
-     * {@link org.odk.collect.android.utilities.gdrive.GoogleAccountsManager}
-     */
-    @Test
-    public void selectingGoogleAccount_showsGoogleAccountSettings() {
-        rule.mainMenu()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickServerSettings()
-                .clickOnServerType()
-                .clickOnString(R.string.server_platform_google_sheets)
-                .assertText(R.string.selected_google_account_text)
-                .assertText(R.string.google_sheets_url);
+                .startBlankForm("One Question")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickSendFinalizedForm(1)
+                .clickOnForm("One Question")
+                .clickSendSelected()
+                .assertText("One Question - Success");
     }
 }
