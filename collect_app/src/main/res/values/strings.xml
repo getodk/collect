@@ -710,4 +710,5 @@
     <string name="form_update_mode_settings_title">Update blank forms</string>
     <string name="manually">Manually</string>
     <string name="form_update_mode_title">Mode</string>
+    <string name="previously_downloaded_only">Previously downloaded forms only</string>
 </resources>

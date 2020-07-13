@@ -190,5 +190,15 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
+
+    public MainMenuPage enablePreviouslyDownloadedOnlyUpdates() {
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOnString(R.string.previously_downloaded_only)
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
 }
 
