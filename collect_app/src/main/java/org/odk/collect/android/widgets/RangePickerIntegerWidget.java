@@ -61,6 +61,10 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
         binding.widgetButton.setText(getFormEntryPrompt().getAnswerValue() != null ? getContext().getString(R.string.edit_value) : getContext().getString(R.string.select_value));
         binding.widgetButton.setOnClickListener(v -> onButtonClick());
 
+        if (prompt.isReadOnly()) {
+            binding.widgetButton.setEnabled(false);
+        }
+
         return answerView;
     }
 
