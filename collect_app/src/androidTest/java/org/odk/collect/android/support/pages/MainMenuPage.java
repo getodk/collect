@@ -180,5 +180,16 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
+
+    public MainMenuPage enableManualUpdates() {
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOnString(R.string.manually)
+                .pressBack(new FormManagementPage(rule))
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
 }
 

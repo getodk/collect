@@ -15,4 +15,9 @@ public class FormManagementPage extends Page<FormManagementPage> {
         assertToolbarTitle(getTranslatedString(R.string.form_management_preferences));
         return this;
     }
+
+    public UpdateBlankFormsPage clickUpdateForms() {
+        clickOnString(R.string.form_update_mode_title);
+        return new UpdateBlankFormsPage(rule).assertOnPage();
+    }
 }
