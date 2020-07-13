@@ -81,7 +81,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return slider.suppressFlingGesture;
+        return slider.isSuppressFlingGesture();
     }
 
     @Override

@@ -149,7 +149,6 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.RangeWidget;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -2620,15 +2619,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onNumberPickerValueSelected(int widgetId, int value) {
-        if (currentView != null) {
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-                if (qw instanceof RangeWidget && widgetId == qw.getId()) {
-                    ((RangeWidget) qw).setNumberPickerValue(value);
-                    widgetValueChanged(qw);
-                    return;
-                }
-            }
-        }
     }
 
     @Override
