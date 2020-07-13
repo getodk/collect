@@ -55,19 +55,19 @@ public class RangePickerDecimalWidgetTest {
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         int index = 0;
 
-        for (float i = 5.5F; i >= 1.5F; i -= 0.5F, index++) {
+        for (double i = 5.5F; i >= 1.5F; i -= 0.5F, index++) {
             assertThat(widget.displayedValuesForNumberPicker[index], equalTo(String.valueOf(i)));
         }
     }
 
     @Test
     public void whenRangeStartIsGreaterThanRangeEnd_widgetsSetsCorrectValuesForNumberPicker() {
-        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
-        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+        when(rangeQuestion.getRangeStart()).thenReturn(new BigDecimal("5.5"));
+        when(rangeQuestion.getRangeEnd()).thenReturn(new BigDecimal("1.5"));
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         int index = 0;
 
-        for (float i = 1.5F; i <= 5.5F; i += 0.5F, index++) {
+        for (double i = 1.5F; i <= 5.5F; i += 0.5F, index++) {
             assertThat(widget.displayedValuesForNumberPicker[index], equalTo(String.valueOf(i)));
         }
     }
@@ -85,7 +85,7 @@ public class RangePickerDecimalWidgetTest {
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
-        assertThat(widget.getAnswer().getValue(), equalTo(2.5F));
+        assertThat(widget.getAnswer().getValue(), equalTo(2.5));
     }
 
     @Test
@@ -135,19 +135,19 @@ public class RangePickerDecimalWidgetTest {
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setNumberPickerValue(4);
 
-        assertThat(widget.getAnswer().getValue(), equalTo(6));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("6"));
+        assertThat(widget.getAnswer().getValue(), equalTo(3.5));
+        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("3.5"));
     }
 
     @Test
     public void setNumberPickerValue_whenRangeStartIsGreaterThenRangeEnd_updatesAnswer() {
-        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
-        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+        when(rangeQuestion.getRangeStart()).thenReturn(new BigDecimal("5.5"));
+        when(rangeQuestion.getRangeEnd()).thenReturn(new BigDecimal("1.5"));
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setNumberPickerValue(4);
 
-        assertThat(widget.getAnswer().getValue(), equalTo(5.0F));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("5"));
+        assertThat(widget.getAnswer().getValue(), equalTo(3.5));
+        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("3.5"));
     }
 
     @Test

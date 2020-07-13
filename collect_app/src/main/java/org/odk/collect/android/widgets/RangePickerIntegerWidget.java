@@ -5,13 +5,11 @@ import android.content.Context;
 import android.view.View;
 
 import org.javarosa.core.model.RangeQuestion;
-import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
@@ -145,7 +143,7 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
 
     private void setUpDisplayedValuesForNumberPicker() {
         int index = 0;
-        displayedValuesForNumberPicker = new String[elementCount +1];
+        displayedValuesForNumberPicker = new String[elementCount + 1];
 
         if (rangeEnd.compareTo(rangeStart) > -1) {
             for (int i = rangeEnd.intValue(); i >= rangeStart.intValue(); i -= rangeStep.abs().intValue()) {

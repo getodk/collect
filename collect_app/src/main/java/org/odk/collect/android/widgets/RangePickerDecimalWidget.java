@@ -52,7 +52,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
             } else {
                 setUpNullValue();
             }
-            setUpDisplayedValuesForNumberPicker();
+            setUpDisplayedValuesForDecimalNumberPicker();
         }
 
         binding.widgetAnswerText.setText(getFormEntryPrompt().getAnswerValue() != null ? String.valueOf(actualValue) : getContext().getString(R.string.no_value_selected));
@@ -90,7 +90,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
 
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
-        rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : new BigDecimal(0.5F);
+        rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : new BigDecimal("0.5");
     }
 
     private void setUpNullValue() {
@@ -142,9 +142,9 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         }
     }
 
-    private void setUpDisplayedValuesForNumberPicker() {
+    private void setUpDisplayedValuesForDecimalNumberPicker() {
         int index = 0;
-        displayedValuesForNumberPicker = new String[elementCount +1];
+        displayedValuesForNumberPicker = new String[elementCount + 1];
 
         if (rangeEnd.compareTo(rangeStart) > -1) {
             for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
