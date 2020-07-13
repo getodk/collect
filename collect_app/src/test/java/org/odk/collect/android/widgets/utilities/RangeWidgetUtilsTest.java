@@ -46,8 +46,8 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void usingReadOnlyOption_disablesTheSlider() {
-        Object[] objects = RangeWidgetUtils.setUpLayoutElements(widgetTestActivity(), promptWithReadOnlyAndRangeQuestion(rangeQuestion));
-        assertThat(((SuppressFlingGestureSlider) objects[1]).isEnabled(), equalTo(false));
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(widgetTestActivity(), promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        assertThat(layoutElements.getSlider().isEnabled(), equalTo(false));
     }
 
     @Test
