@@ -117,10 +117,6 @@ the specific language governing permissions and limitations under the License.
             android:label="@string/app_name" />
 
         <activity android:name=".activities.SmapLoginActivity" />
-
-        <activity android:name=".activities.ScanQRCodeActivity"
-            android:screenOrientation="portrait"
-            />
         <!-- smap add app_name to label -->
         <activity
             android:name=".activities.FormEntryActivity"

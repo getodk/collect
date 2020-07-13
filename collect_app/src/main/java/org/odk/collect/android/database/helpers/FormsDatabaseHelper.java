@@ -57,31 +57,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    static final int DATABASE_VERSION = 16;     // smap
-
-    private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
-            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
-            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            LAST_DETECTED_FORM_VERSION_HASH};
-
-    private static final String[] COLUMN_NAMES_V8 = {_ID, DISPLAY_NAME, DESCRIPTION,
-        JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
-        SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-        LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH};
-
-    private static final String[] COLUMN_NAMES_V16 = {_ID, DISPLAY_NAME, DESCRIPTION,
-            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
-            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH,
-            PROJECT,    // smap
-            TASKS_ONLY, // smap
-            SOURCE};    // smap
-
-    static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V16;  // smap
-
-    // These exist in database versions 2 and 3, but not in 4...
-    private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
-    private static final String MODEL_VERSION = "modelVersion";
+    static final int DATABASE_VERSION = 17;     // smap
 
     private static boolean isDatabaseBeingMigrated;
 
@@ -95,7 +71,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV16(db);    // smap
+        createFormsTableV17(db);    // smap
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -104,31 +80,9 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         try {
             Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-            if(oldVersion < 16) {   // smap - start from 16
-                upgradeToVersion16(db);
+            if(oldVersion < 17) {   // smap - start from 17
+                upgradeToVersion17(db);
             }
-
-            /* smap
-            switch (oldVersion) {
-                case 1:
-                    upgradeToVersion2(db);
-                case 2:
-                case 3:
-                    upgradeToVersion4(db, oldVersion);
-                case 4:
-                    upgradeToVersion5(db);
-                case 5:
-                    upgradeToVersion6(db);
-                case 6:
-                    upgradeToVersion7(db);
-                case 7:
-                    upgradeToVersion8(db);
-                    break;
-                default:
-                    Timber.i("Unknown version %d", oldVersion);
-
-            }
-             */
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;
@@ -141,20 +95,21 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
 
     // smap sarting point for upgrades
-    private void upgradeToVersion16(SQLiteDatabase db) {
+    private void upgradeToVersion17(SQLiteDatabase db) {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");     // Version 5
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");   // Version 7
 
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
 
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, PROJECT, "text");
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, TASKS_ONLY, "text");
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, SOURCE, "text");
 
+        //SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
+
     }
     // smap
-    private static void createFormsTableV16(SQLiteDatabase db) {
+    private static void createFormsTableV17(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -193,6 +148,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         boolean isDatabaseHelperOutOfDate = false;
         try {
             SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
+            Timber.i("++++++ Current database version: " + db.getVersion());
             isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
             db.close();
         } catch (SQLException e) {
