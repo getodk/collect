@@ -41,7 +41,7 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer(), nullValue());
     }
 
