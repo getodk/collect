@@ -23,15 +23,14 @@ import timber.log.Timber;
 
 public class RangePickerIntegerWidget extends QuestionWidget  {
 
-    protected String[] displayedValuesForNumberPicker;
-    protected BigDecimal rangeStart;
-    protected BigDecimal rangeEnd;
-    protected BigDecimal rangeStep;
-    protected BigDecimal actualValue;
-    protected int elementCount;
-
     WidgetAnswerBinding binding;
+    String[] displayedValuesForNumberPicker;
 
+    private BigDecimal rangeStart;
+    private BigDecimal rangeEnd;
+    private BigDecimal rangeStep;
+    private BigDecimal actualValue;
+    private int elementCount;
     private int progress;
 
     public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails) {
