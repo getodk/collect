@@ -5,17 +5,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
+import org.odk.collect.android.databinding.WidgetAnswerBinding;
+import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
 
 import java.math.BigDecimal;
+
+import timber.log.Timber;
 
 public class RangeWidgetUtils {
     private static final String VERTICAL_APPEARANCE = "vertical";
@@ -115,13 +121,111 @@ public class RangeWidgetUtils {
         });
     }
 
+    public static BigDecimal setUpRangePickerWidget(Context context, WidgetAnswerBinding binding, FormEntryPrompt prompt, RangeQuestion rangeQuestion) {
+        BigDecimal actualValue = null;
+
+        if (RangeWidgetUtils.isRangePickerWidgetValid(rangeQuestion, binding.widgetButton)) {
+            if (prompt.getAnswerValue() != null) {
+                actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
+
+                binding.widgetAnswerText.setText(String.valueOf(actualValue));
+                binding.widgetButton.setText(context.getString(R.string.edit_value));
+            } else {
+                setUpNullValueForRangePicker(binding);
+            }
+        }
+
+        if (prompt.isReadOnly()) {
+            binding.widgetButton.setEnabled(false);
+        }
+
+        return actualValue;
+    }
+
     public static BigDecimal setUpNullValue(TrackingTouchSlider slider, TextView currentValue) {
         slider.setValue(slider.getValueFrom());
         currentValue.setText("");
         return null;
     }
 
+    public static BigDecimal setUpNullValueForRangePicker(WidgetAnswerBinding binding) {
+        binding.widgetAnswerText.setText(R.string.no_value_selected);
+        binding.widgetButton.setText(R.string.select_value);
+        return null;
+    }
+
+    public static String[] setUpDisplayedValuesForNumberPicker(BigDecimal rangeStart, BigDecimal rangeStep, BigDecimal rangeEnd, Boolean isIntegerDataType) {
+        int index = 0;
+        int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
+        String[] displayedValuesForNumberPicker = new String[elementCount + 1];
+
+        if (rangeEnd.compareTo(rangeStart) > -1) {
+            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
+                displayedValuesForNumberPicker[index] = getDisplayValue(i, isIntegerDataType);
+                index++;
+            }
+        } else {
+            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) < 1; i = i.add(rangeStep.abs())) {
+                displayedValuesForNumberPicker[index] = getDisplayValue(i, isIntegerDataType);
+                index++;
+            }
+        }
+        return displayedValuesForNumberPicker;
+    }
+
+    private static String getDisplayValue(BigDecimal value, Boolean isIntegerDataType) {
+        if (isIntegerDataType) {
+            int intValue = value.intValue();
+            return String.valueOf(intValue);
+        } else {
+            return String.valueOf(value.doubleValue());
+        }
+    }
+
+    public static void showNumberPickerDialog(Context context, String[] displayedValuesForNumberPicker, int id, int progress) {
+        NumberPickerDialog dialog = NumberPickerDialog.newInstance(id, displayedValuesForNumberPicker, progress);
+
+        try {
+            dialog.show(((FormEntryActivity) context).getSupportFragmentManager(), NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
+        } catch (ClassCastException e) {
+            Timber.i(e);
+        }
+    }
+
+    public static int getNumberPickerProgress(WidgetAnswerBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
+                                              BigDecimal rangeEnd, int value) {
+
+        int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
+
+        BigDecimal actualValue;
+        BigDecimal multiply = new BigDecimal(elementCount - value).multiply(rangeStep);
+
+        if (rangeStart.compareTo(rangeEnd) == -1) {
+            binding.widgetAnswerText.setText(String.valueOf(rangeStart.add(multiply)));
+            actualValue = rangeStart.add(multiply);
+        } else {
+            actualValue = rangeStart.subtract(multiply);
+        }
+        binding.widgetButton.setText(R.string.edit_value);
+
+        return actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
+    }
+
     public static boolean isWidgetValid(RangeQuestion rangeQuestion, TrackingTouchSlider slider) {
+        if (!checkWidgetValid(rangeQuestion)) {
+            slider.setEnabled(false);
+        }
+        return checkWidgetValid(rangeQuestion);
+    }
+
+    private static boolean isRangePickerWidgetValid(RangeQuestion rangeQuestion, Button widgetButton) {
+        if (!checkWidgetValid(rangeQuestion)) {
+            widgetButton.setEnabled(false);
+        }
+        return checkWidgetValid(rangeQuestion);
+    }
+
+    private static boolean checkWidgetValid(RangeQuestion rangeQuestion) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -129,14 +233,9 @@ public class RangeWidgetUtils {
         boolean result = true;
         if (rangeStep.compareTo(BigDecimal.ZERO) == 0
                 || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(BigDecimal.ZERO) != 0) {
-            disableWidget(slider);
+            ToastUtils.showLongToast(R.string.invalid_range_widget);
             result = false;
         }
         return result;
-    }
-
-    private static void disableWidget(TrackingTouchSlider slider) {
-        ToastUtils.showLongToast(R.string.invalid_range_widget);
-        slider.setEnabled(false);
     }
 }

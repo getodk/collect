@@ -8,19 +8,13 @@ import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
-import timber.log.Timber;
-
 public class RangePickerDecimalWidget extends QuestionWidget {
-
     WidgetAnswerBinding binding;
     String[] displayedValuesForNumberPicker;
 
@@ -28,8 +22,6 @@ public class RangePickerDecimalWidget extends QuestionWidget {
     private BigDecimal rangeEnd;
     private BigDecimal rangeStep;
     private BigDecimal actualValue;
-
-    private int elementCount;
     private int progress;
 
     public RangePickerDecimalWidget(Context context, QuestionDetails questionDetails) {
@@ -41,28 +33,18 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
-        setUpWidgetParameters();
-        if (isWidgetValid()) {
-            elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
-            if (getFormEntryPrompt().getAnswerValue() != null) {
-                actualValue = new BigDecimal(getFormEntryPrompt().getAnswerValue().getValue().toString());
-                progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
+        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
+        setUpWidgetParameters(rangeQuestion);
 
-                binding.widgetAnswerText.setText(String.valueOf(actualValue));
-            } else {
-                setUpNullValue();
-            }
-            setUpDisplayedValuesForDecimalNumberPicker();
+        actualValue = RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt, rangeQuestion);
+        if (actualValue != null) {
+            progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
+        } else {
+            progress = 0;
         }
 
-        binding.widgetAnswerText.setText(getFormEntryPrompt().getAnswerValue() != null ? String.valueOf(actualValue) : getContext().getString(R.string.no_value_selected));
-        binding.widgetButton.setText(getFormEntryPrompt().getAnswerValue() != null ? getContext().getString(R.string.edit_value) : getContext().getString(R.string.select_value));
+        displayedValuesForNumberPicker = RangeWidgetUtils.setUpDisplayedValuesForNumberPicker(rangeStart, rangeStep, rangeEnd, false);
         binding.widgetButton.setOnClickListener(v -> onButtonClick());
-
-        if (prompt.isReadOnly()) {
-            binding.widgetButton.setEnabled(false);
-        }
-
         return answerView;
     }
 
@@ -85,9 +67,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         widgetValueChanged();
     }
 
-    private void setUpWidgetParameters() {
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-
+    private void setUpWidgetParameters(RangeQuestion rangeQuestion) {
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : new BigDecimal("0.5");
@@ -95,67 +75,15 @@ public class RangePickerDecimalWidget extends QuestionWidget {
 
     private void setUpNullValue() {
         progress = 0;
-        actualValue = null;
-        binding.widgetAnswerText.setText(R.string.no_value_selected);
-        binding.widgetButton.setText(R.string.select_value);
+        actualValue = RangeWidgetUtils.setUpNullValueForRangePicker(binding);
     }
 
     private void onButtonClick() {
-        showNumberPickerDialog();
-    }
-
-    private void disableWidget() {
-        ToastUtils.showLongToast(R.string.invalid_range_widget);
-        binding.widgetButton.setEnabled(false);
-    }
-
-    private boolean isWidgetValid() {
-        boolean result = true;
-        if (rangeStep.compareTo(BigDecimal.ZERO) == 0
-                || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(BigDecimal.ZERO) != 0) {
-            disableWidget();
-            result = false;
-        }
-        return result;
+        RangeWidgetUtils.showNumberPickerDialog(getContext(), displayedValuesForNumberPicker, getId(), progress);
     }
 
     public void setNumberPickerValue(int value) {
-        if (rangeStart.compareTo(rangeEnd) == -1) {
-            actualValue = rangeStart.add(new BigDecimal(elementCount - value).multiply(rangeStep));
-        } else {
-            actualValue = rangeStart.subtract(new BigDecimal(elementCount - value).multiply(rangeStep));
-        }
-
-        progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
-
-        binding.widgetAnswerText.setText(String.valueOf(actualValue));
-        binding.widgetButton.setText(R.string.edit_value);
-    }
-
-    private void showNumberPickerDialog() {
-        NumberPickerDialog dialog = NumberPickerDialog.newInstance(getId(), displayedValuesForNumberPicker, progress);
-
-        try {
-            dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
-        } catch (ClassCastException e) {
-            Timber.i(e);
-        }
-    }
-
-    private void setUpDisplayedValuesForDecimalNumberPicker() {
-        int index = 0;
-        displayedValuesForNumberPicker = new String[elementCount + 1];
-
-        if (rangeEnd.compareTo(rangeStart) > -1) {
-            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
-                displayedValuesForNumberPicker[index] = String.valueOf(i.doubleValue());
-                index++;
-            }
-        } else {
-            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) < 1; i = i.add(rangeStep.abs())) {
-                displayedValuesForNumberPicker[index] = String.valueOf(i.doubleValue());
-                index++;
-            }
-        }
+        progress = RangeWidgetUtils.getNumberPickerProgress(binding, rangeStart, rangeStep, rangeEnd, value);
+        actualValue = new BigDecimal((String) binding.widgetAnswerText.getText());
     }
 }
