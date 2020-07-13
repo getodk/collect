@@ -54,8 +54,8 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
             } else {
                 setUpNullValue();
             }
+            setUpDisplayedValuesForNumberPicker();
         }
-        setUpDisplayedValuesForNumberPicker();
 
         binding.widgetAnswerText.setText(getFormEntryPrompt().getAnswerValue() != null ? String.valueOf(actualValue) : getContext().getString(R.string.no_value_selected));
         binding.widgetButton.setText(getFormEntryPrompt().getAnswerValue() != null ? getContext().getString(R.string.edit_value) : getContext().getString(R.string.select_value));
