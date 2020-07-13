@@ -7,19 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreferenceCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.injection.DaggerUtils;
 
-import javax.inject.Inject;
-
 public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
-
-    @Inject
-    BackgroundWorkManager backgroundWorkManager;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -40,17 +33,6 @@ public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
         if (activity instanceof CollectAbstractActivity) {
             ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
         }
-
-        SwitchPreferenceCompat matchExactly = findPreference("match_exactly");
-        matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
-            if ((Boolean) newValue) {
-                backgroundWorkManager.scheduleMatchExactlySync();
-            } else {
-                backgroundWorkManager.cancelMatchExactlySync();
-            }
-
-            return true;
-        });
     }
 
 }

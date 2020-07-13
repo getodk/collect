@@ -74,14 +74,16 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public boolean shouldGetBlankFormButtonBeVisible() {
-        boolean matchExactlyEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_MATCH_EXACTLY, false);
         boolean buttonEnabled = (boolean) adminSharedPreferences.get(AdminKeys.KEY_GET_BLANK);
-
-        return !matchExactlyEnabled && buttonEnabled;
+        return !isMatchExactlyEnabled() && buttonEnabled;
     }
 
     public boolean shouldDeleteSavedFormButtonBeVisible() {
         return (boolean) adminSharedPreferences.get(AdminKeys.KEY_DELETE_SAVED);
+    }
+
+    private boolean isMatchExactlyEnabled() {
+        return "match_exactly".equals(generalSharedPreferences.getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
     }
 
     @NotNull

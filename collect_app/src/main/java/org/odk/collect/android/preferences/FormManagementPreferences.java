@@ -21,6 +21,7 @@ import android.preference.Preference;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
@@ -43,6 +45,9 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
     @Inject
     GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    BackgroundWorkManager backgroundWorkManager;
 
     public static FormManagementPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -67,12 +72,21 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
 
-        boolean matchExactlyEnabled = generalSharedPreferences.getSharedPreferences()
-                .getBoolean(GeneralKeys.KEY_MATCH_EXACTLY, false);
-
+        boolean matchExactlyEnabled = isMatchExactlyEnabled();
         findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(!matchExactlyEnabled);
         findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(!matchExactlyEnabled);
         findPreference(KEY_HIDE_OLD_FORM_VERSIONS).setEnabled(!matchExactlyEnabled);
+
+        Preference matchExactly = findPreference(KEY_FORM_UPDATE_MODE);
+        matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (newValue.equals("match_exactly")) {
+                backgroundWorkManager.scheduleMatchExactlySync();
+            } else {
+                backgroundWorkManager.cancelMatchExactlySync();
+            }
+
+            return true;
+        });
     }
 
     private void initListPref(String key) {
@@ -143,6 +157,10 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 return true;
             }
         });
+    }
+
+    private boolean isMatchExactlyEnabled() {
+        return "match_exactly".equals(generalSharedPreferences.getSharedPreferences().getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
     }
 
 }

@@ -57,7 +57,6 @@ public final class GeneralKeys {
     public static final String KEY_IMAGE_SIZE               = "image_size";
     public static final String KEY_GUIDANCE_HINT            = "guidance_hint";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
-    public static final String KEY_MATCH_EXACTLY            = "match_exactly";
     public static final String KEY_FORM_UPDATE_MODE         = "form_update_mode";
 
     // identity_preferences.xml
@@ -107,7 +106,6 @@ public final class GeneralKeys {
         hashMap.put(KEY_HIGH_RESOLUTION,            true);
         hashMap.put(KEY_IMAGE_SIZE,                 "original_image_size");
         hashMap.put(KEY_INSTANCE_SYNC,              true);
-        hashMap.put(KEY_MATCH_EXACTLY,              false);
         hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
         hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);

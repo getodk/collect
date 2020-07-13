@@ -29,8 +29,7 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     public boolean isSyncingAvailable() {
-        SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
-        return generalSharedPreferences.getBoolean(GeneralKeys.KEY_MATCH_EXACTLY, false);
+        return isMatchExactlyEnabled();
     }
 
     public LiveData<Boolean> isSyncing() {
@@ -51,6 +50,11 @@ public class BlankFormsListViewModel extends ViewModel {
 
             return null;
         }, ignored -> syncRepository.finishSync());
+    }
+
+    private boolean isMatchExactlyEnabled() {
+        SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
+        return "match_exactly".equals(generalSharedPreferences.getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
     }
 
     public static class Factory implements ViewModelProvider.Factory {

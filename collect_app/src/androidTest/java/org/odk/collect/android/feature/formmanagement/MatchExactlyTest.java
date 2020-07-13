@@ -118,7 +118,7 @@ public class MatchExactlyTest {
         MainMenuPage page = rule.mainMenu()
                 .setServer(server.getURL())
                 .enableMatchExactly()
-                .disableMatchExactly();
+                .enableManualUpdates();
 
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         server.addForm("Two Question", "two_question", "two-question.xml");

@@ -157,19 +157,6 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new SendFinalizedFormPage(rule);
     }
 
-    public MainMenuPage enableMatchExactly() {
-        return clickOnMenu()
-                .clickGeneralSettings()
-                .clickExperimental()
-                .clickMatchExactly()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
-    }
-
-    public MainMenuPage disableMatchExactly() {
-        return enableMatchExactly();
-    }
-
     public MainMenuPage setServer(String url) {
         return clickOnMenu()
                 .clickGeneralSettings()
@@ -197,6 +184,16 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOnString(R.string.previously_downloaded_only)
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
+
+    public MainMenuPage enableMatchExactly() {
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOnString(R.string.match_exactly)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
