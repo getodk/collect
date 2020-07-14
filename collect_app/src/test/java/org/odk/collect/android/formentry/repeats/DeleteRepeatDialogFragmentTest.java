@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -22,8 +22,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.RETURNS_MOCKS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -32,7 +34,6 @@ public class DeleteRepeatDialogFragmentTest {
     private TestActivity activity;
     private FragmentManager fragmentManager;
     private DeleteRepeatDialogFragment dialogFragment;
-    private FormEntryViewModel formEntryViewModel;
 
     @Before
     public void setup() {
@@ -40,7 +41,9 @@ public class DeleteRepeatDialogFragmentTest {
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new DeleteRepeatDialogFragment();
 
-        formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
+        dialogFragment.formController = mock(FormController.class, RETURNS_MOCKS);
+        when(dialogFragment.formController.getLastRepeatedGroupName()).thenReturn("blah");
+        when(dialogFragment.formController.getLastRepeatedGroupRepeatCount()).thenReturn(0);
     }
 
     @Test
@@ -57,8 +60,6 @@ public class DeleteRepeatDialogFragmentTest {
 
     @Test
     public void shouldShowCorrectMessage() {
-        when(formEntryViewModel.getLastRepeatedGroupName()).thenReturn("blah");
-        when(formEntryViewModel.getLastRepeatedGroupRepeatCount()).thenReturn(0);
         dialogFragment.show(fragmentManager, "TAG");
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         String message = ((TextView) dialog.findViewById(android.R.id.message)).getText().toString();
@@ -96,6 +97,8 @@ public class DeleteRepeatDialogFragmentTest {
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
         assertThat(activity.deleteGroupCalled, equalTo(true));
+
+        verify(dialogFragment.formController).deleteRepeat();
     }
 
     @Test
@@ -114,8 +117,6 @@ public class DeleteRepeatDialogFragmentTest {
         private boolean onCancelledCalled;
 
         TestActivity() {
-            deleteGroupCalled = false;
-            onCancelledCalled = false;
         }
 
         @Override

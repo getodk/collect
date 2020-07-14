@@ -21,6 +21,7 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
     private DeleteRepeatDialogCallback callback;
+    FormController formController = Collect.getInstance().getFormController();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -36,7 +37,6 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        FormController formController = Collect.getInstance().getFormController();
         String name = formController.getLastRepeatedGroupName();
         int repeatCount = formController.getLastRepeatedGroupRepeatCount();
         if (repeatCount != -1) {
@@ -51,7 +51,6 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
                 case BUTTON_POSITIVE: // yes
                     formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
                     formController.deleteRepeat();
-
                     callback.deleteGroup();
                     break;
 

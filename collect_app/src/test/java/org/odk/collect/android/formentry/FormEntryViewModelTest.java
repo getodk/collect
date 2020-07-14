@@ -109,16 +109,4 @@ public class FormEntryViewModelTest {
         viewModel.cancelRepeatPrompt();
         assertThat(viewModel.getError().getValue(), equalTo("OH NO"));
     }
-
-    @Test
-    public void getLastRepeatedGroupName_returnsCorrectGroupName() {
-        when(formController.getLastRepeatedGroupName()).thenReturn("blah");
-        assertThat(viewModel.getLastRepeatedGroupName(), equalTo("blah"));
-    }
-
-    @Test
-    public void getLastRepeatedGroupRepeatCount_returnsCorrectGroupRepeatCount() {
-        when(formController.getLastRepeatedGroupRepeatCount()).thenReturn(1);
-        assertThat(viewModel.getLastRepeatedGroupRepeatCount(), equalTo(1));
-    }
 }
