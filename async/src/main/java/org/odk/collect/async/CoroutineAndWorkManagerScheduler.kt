@@ -17,7 +17,7 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
         }
     }
 
-    override fun foregroundImmediate(foreground: Runnable, repeatPeriod: Long): Cancellable {
+    override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
         val repeatScope = CoroutineScope(this.foreground)
 
         repeatScope.launch {

@@ -24,14 +24,11 @@ import android.database.Cursor;
 import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.backgroundwork.BackgroundWorkUtils;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -77,7 +74,7 @@ public class ServerPollingJob extends Job {
 
     @Override
     @NonNull
-    protected Result onRunJob(@NonNull Params params) {
+    public Result onRunJob(@NonNull Params params) {
         if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
             return Result.FAILURE;
         }
@@ -126,30 +123,15 @@ public class ServerPollingJob extends Job {
         }
     }
 
-    public static void schedulePeriodicJob(String selectedOption) {
-        if (selectedOption.equals(Collect.getInstance().getString(R.string.never_value))) {
-            JobManager.instance().cancelAllForTag(TAG);
-        } else {
-            long period = BackgroundWorkUtils.getPeriodInMilliseconds(selectedOption);
-
-            new JobRequest.Builder(TAG)
-                    .setPeriodic(period, 300000)
-                    .setUpdateCurrent(true)
-                    .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                    .build()
-                    .schedule();
-        }
-    }
-
     private boolean wasThisNewerFormVersionAlreadyDetected(String formVersionHash) {
         Cursor cursor = new FormsDao().getFormsCursor(LAST_DETECTED_FORM_VERSION_HASH + "=?", new String[]{formVersionHash});
         return cursor == null || cursor.getCount() > 0;
     }
 
     private void informAboutNewAvailableForms() {
-        Intent intent = new Intent(getContext(), FormDownloadListActivity.class);
+        Intent intent = new Intent(Collect.getInstance(), FormDownloadListActivity.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(Collect.getInstance(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationUtils.showNotification(
                 contentIntent,
@@ -162,7 +144,7 @@ public class ServerPollingJob extends Job {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(Collect.getInstance(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationUtils.showNotification(contentIntent,
                 FORM_UPDATE_NOTIFICATION_ID,

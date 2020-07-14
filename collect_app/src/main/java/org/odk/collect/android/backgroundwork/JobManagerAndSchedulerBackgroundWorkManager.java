@@ -1,12 +1,19 @@
 package org.odk.collect.android.backgroundwork;
 
+import android.content.Context;
+
+import androidx.work.WorkerParameters;
+
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.TaskSpec;
+import org.odk.collect.async.WorkerAdapter;
 
 import java.util.Set;
 
@@ -29,6 +36,11 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
     @Override
     public void scheduleMatchExactlySync(long repeatPeriod) {
         scheduler.networkDeferred(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), repeatPeriod);
+    }
+
+    @Override
+    public void scheduleAutoUpdate() {
+        scheduler.networkDeferred(ServerPollingJob.TAG, new AutoUpdateTaskSpec(), 900000L);
     }
 
     @Override
@@ -64,4 +76,28 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
         return false;
     }
 
+    private static class AutoUpdateTaskSpec implements TaskSpec {
+
+        @NotNull
+        @Override
+        public Runnable getTask(@NotNull Context context) {
+            return () -> {
+                ServerPollingJob serverPollingJob = new ServerPollingJob();
+                serverPollingJob.onRunJob(null);
+            };
+        }
+
+        @NotNull
+        @Override
+        public Class<? extends WorkerAdapter> getWorkManagerAdapter() {
+            return Adapter.class;
+        }
+
+        public static class Adapter extends WorkerAdapter {
+
+            Adapter(@NotNull Context context, @NotNull WorkerParameters workerParams) {
+                super(new AutoUpdateTaskSpec(), context, workerParams);
+            }
+        }
+    }
 }

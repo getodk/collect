@@ -75,10 +75,12 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         Preference matchExactly = findPreference(KEY_FORM_UPDATE_MODE);
         matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
+            backgroundWorkManager.cancelMatchExactlySync();
+
             if (newValue.equals("match_exactly")) {
                 backgroundWorkManager.scheduleMatchExactlySync(900000L);
-            } else {
-                backgroundWorkManager.cancelMatchExactlySync();
+            } else if (newValue.equals("previously_downloaded")) {
+                backgroundWorkManager.scheduleAutoUpdate();
             }
 
             updateDisabledPrefs((String) newValue);
