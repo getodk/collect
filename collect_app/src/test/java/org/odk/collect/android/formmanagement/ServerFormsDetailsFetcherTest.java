@@ -59,8 +59,8 @@ public class ServerFormsDetailsFetcherTest {
     @Test
     public void whenNoFormsExist_isNew() throws Exception {
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
-        assertThat(serverFormDetails.get(0).isNew(), is(true));
-        assertThat(serverFormDetails.get(1).isNew(), is(true));
+        assertThat(serverFormDetails.get(0).isNotOnDevice(), is(true));
+        assertThat(serverFormDetails.get(1).isNotOnDevice(), is(true));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class ServerFormsDetailsFetcherTest {
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(0).isUpdated(), is(false));
-        assertThat(serverFormDetails.get(0).isNew(), is(false));
+        assertThat(serverFormDetails.get(0).isNotOnDevice(), is(false));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class ServerFormsDetailsFetcherTest {
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(1).isUpdated(), is(false));
-        assertThat(serverFormDetails.get(1).isNew(), is(false));
+        assertThat(serverFormDetails.get(1).isNotOnDevice(), is(false));
     }
 
     private void writeToFile(File mediaFile, String blah) throws IOException {

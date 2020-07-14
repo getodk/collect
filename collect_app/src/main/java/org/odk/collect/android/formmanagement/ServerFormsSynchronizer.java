@@ -37,7 +37,7 @@ public class ServerFormsSynchronizer {
         });
 
         for (ServerFormDetails form : formList) {
-            if (form.isNew() || form.isUpdated()) {
+            if (form.isNotOnDevice() || form.isUpdated()) {
                 formDownloader.downloadForm(form);
             }
         }
