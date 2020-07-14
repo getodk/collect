@@ -2,8 +2,6 @@ package org.odk.collect.android.widgets;
 
 import android.view.View;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -16,7 +14,6 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowToast;
 
 import java.math.BigDecimal;
 
@@ -73,11 +70,6 @@ public class RangePickerIntegerWidgetTest {
     }
 
     @Test
-    public void usingReadOnly_showsDisabledPickerButton() {
-        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).binding.widgetButton.isEnabled(), equalTo(false));
-    }
-
-    @Test
     public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer(), nullValue());
     }
@@ -86,18 +78,6 @@ public class RangePickerIntegerWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         assertThat(widget.getAnswer().getValue(), equalTo(4));
-    }
-
-    @Test
-    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoValueSelected() {
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo(widget.getContext().getString(R.string.no_value_selected)));
-    }
-
-    @Test
-    public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("4"));
     }
 
     @Test
@@ -119,6 +99,25 @@ public class RangePickerIntegerWidgetTest {
     }
 
     @Test
+    public void setNumberPickerValue_updatesAnswer() {
+        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.setNumberPickerValue(4);
+
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("6"));
+    }
+
+    @Test
+    public void setNumberPickerValue_whenRangeStartIsGreaterThenRangeEnd_updatesAnswer() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+
+        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.setNumberPickerValue(4);
+
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("5"));
+    }
+
+    @Test
     public void clickingPickerButton_showsNumberPickerDialog() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.binding.widgetButton.performClick();
@@ -128,26 +127,6 @@ public class RangePickerIntegerWidgetTest {
         shadowOf(getMainLooper()).idle();
 
         assertNotNull(numberPickerDialog);
-    }
-
-    @Test
-    public void setNumberPickerValue_updatesAnswer() {
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setNumberPickerValue(4);
-
-        assertThat(widget.getAnswer().getValue(), equalTo(6));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("6"));
-    }
-
-    @Test
-    public void setNumberPickerValue_whenRangeStartIsGreaterThenRangeEnd_updatesAnswer() {
-        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
-        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setNumberPickerValue(4);
-
-        assertThat(widget.getAnswer().getValue(), equalTo(5));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("5"));
     }
 
     @Test
@@ -161,28 +140,6 @@ public class RangePickerIntegerWidgetTest {
 
         verify(listener).onLongClick(widget.binding.widgetButton);
         verify(listener).onLongClick(widget.binding.widgetAnswerText);
-    }
-
-    @Test
-    public void whenRangeQuestionHasZeroRangeStep_invalidWidgetToastIsShownAndSliderIsDisabled() {
-        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        String toastText = ShadowToast.getTextOfLatestToast();
-
-        assertThat(widget.binding.widgetButton.isEnabled(), equalTo(false));
-        assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
-    }
-
-    @Test
-    public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShownAndSliderIsDisabled() {
-        when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        String toastText = ShadowToast.getTextOfLatestToast();
-
-        assertThat(widget.binding.widgetButton.isEnabled(), equalTo(false));
-        assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
     }
 
     private RangePickerIntegerWidget createWidget(FormEntryPrompt prompt) {

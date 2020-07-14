@@ -5,10 +5,12 @@ import android.widget.TextView;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.javarosa.core.model.RangeQuestion;
+import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.views.TrackingTouchSlider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
@@ -17,8 +19,10 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
@@ -26,6 +30,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class RangeWidgetUtilsTest {
     private static final String VERTICAL_APPEARANCE = "vertical";
 
+    private WidgetAnswerBinding binding;
     private RangeQuestion rangeQuestion;
     private TrackingTouchSlider slider;
     private TextView sampleTextView1;
@@ -33,13 +38,15 @@ public class RangeWidgetUtilsTest {
 
     @Before
     public void setup() {
-        rangeQuestion = mock(RangeQuestion.class);
-
         ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
+
         slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext());
         sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
+        binding = WidgetAnswerBinding.inflate((widgetTestActivity()).getLayoutInflater());
+
+        rangeQuestion = mock(RangeQuestion.class);
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
@@ -49,7 +56,54 @@ public class RangeWidgetUtilsTest {
     public void usingReadOnlyOption_disablesTheSlider() {
         RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
-        assertThat(layoutElements.getSlider().isEnabled(), equalTo(false));
+        assertFalse(layoutElements.getSlider().isEnabled());
+    }
+
+    @Test
+    public void usingReadOnlyOption_disablesPickerButton() {
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        assertFalse(binding.widgetButton.isEnabled());
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoValueSelected() {
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        assertThat(binding.widgetAnswerText.getText(), equalTo(widgetTestActivity().getString(R.string.no_value_selected)));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
+                rangeQuestion, new StringData("4")));
+        assertThat(binding.widgetAnswerText.getText(), equalTo("4"));
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_pickerButtonShowsNoValueSelected() {
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        assertThat(binding.widgetButton.getText(), equalTo(widgetTestActivity().getString(R.string.select_value)));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_pickerButtonShowsCorrectAnswer() {
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
+                rangeQuestion, new StringData("4")));
+        assertThat(binding.widgetButton.getText(), equalTo(widgetTestActivity().getString(R.string.edit_value)));
+    }
+
+    @Test
+    public void setNumberPickerValue_updatesAnswer() {
+        RangeWidgetUtils.getNumberPickerProgress(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
+        assertThat(binding.widgetAnswerText.getText(), equalTo("6"));
+    }
+
+    @Test
+    public void setNumberPickerValue_whenRangeStartIsGreaterThenRangeEnd_updatesAnswer() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+
+        RangeWidgetUtils.getNumberPickerProgress(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
+        assertThat(binding.widgetAnswerText.getText(), equalTo("5"));
     }
 
     @Test
@@ -95,22 +149,48 @@ public class RangeWidgetUtilsTest {
     }
 
     @Test
-    public void whenRangeQuestionHasZeroRangeStep_invalidWidgetToastIsShownAndSliderIsDisabled() {
+    public void whenRangeQuestionHasZeroRangeStep_invalidWidgetToastIsShown() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        RangeWidgetUtils.isWidgetValid(rangeQuestion, slider);
-        String toastText = ShadowToast.getTextOfLatestToast();
+        assertThat(RangeWidgetUtils.checkWidgetValid(rangeQuestion), equalTo(false));
 
-        assertThat(slider.isEnabled(), equalTo(false));
+        String toastText = ShadowToast.getTextOfLatestToast();
         assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
     }
 
     @Test
-    public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShownAndSliderIsDisabled() {
+    public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShown() {
+        when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
+        assertThat(RangeWidgetUtils.checkWidgetValid(rangeQuestion), equalTo(false));
+
+        String toastText = ShadowToast.getTextOfLatestToast();
+        assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
+    }
+
+    @Test
+    public void whenRangeQuestionHasZeroRangeStep_sliderIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
+        RangeWidgetUtils.isWidgetValid(rangeQuestion, slider);
+        assertFalse(slider.isEnabled());
+    }
+
+    @Test
+    public void whenPromptHasInvalidWidgetParameters_sliderIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
         RangeWidgetUtils.isWidgetValid(rangeQuestion, slider);
-        String toastText = ShadowToast.getTextOfLatestToast();
+        assertFalse(slider.isEnabled());
+    }
 
-        assertThat(slider.isEnabled(), equalTo(false));
-        assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
+    @Test
+    public void whenRangeQuestionHasZeroRangeStep_pickerButtonIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        assertFalse(binding.widgetButton.isEnabled());
+    }
+
+    @Test
+    public void whenPromptHasInvalidWidgetParameters_pickerButtonIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        assertFalse(binding.widgetButton.isEnabled());
     }
 }

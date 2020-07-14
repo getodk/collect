@@ -121,7 +121,8 @@ public class RangeWidgetUtils {
         });
     }
 
-    public static BigDecimal setUpRangePickerWidget(Context context, WidgetAnswerBinding binding, FormEntryPrompt prompt, RangeQuestion rangeQuestion) {
+    public static BigDecimal setUpRangePickerWidget(Context context, WidgetAnswerBinding binding, FormEntryPrompt prompt) {
+        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         BigDecimal actualValue = null;
 
         if (RangeWidgetUtils.isRangePickerWidgetValid(rangeQuestion, binding.widgetButton)) {
@@ -132,6 +133,7 @@ public class RangeWidgetUtils {
                 binding.widgetButton.setText(context.getString(R.string.edit_value));
             } else {
                 setUpNullValueForRangePicker(binding);
+                binding.widgetButton.setText(context.getString(R.string.select_value));
             }
         }
 
@@ -201,11 +203,11 @@ public class RangeWidgetUtils {
         BigDecimal multiply = new BigDecimal(elementCount - value).multiply(rangeStep);
 
         if (rangeStart.compareTo(rangeEnd) == -1) {
-            binding.widgetAnswerText.setText(String.valueOf(rangeStart.add(multiply)));
             actualValue = rangeStart.add(multiply);
         } else {
             actualValue = rangeStart.subtract(multiply);
         }
+        binding.widgetAnswerText.setText(String.valueOf(actualValue));
         binding.widgetButton.setText(R.string.edit_value);
 
         return actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
@@ -218,14 +220,7 @@ public class RangeWidgetUtils {
         return checkWidgetValid(rangeQuestion);
     }
 
-    private static boolean isRangePickerWidgetValid(RangeQuestion rangeQuestion, Button widgetButton) {
-        if (!checkWidgetValid(rangeQuestion)) {
-            widgetButton.setEnabled(false);
-        }
-        return checkWidgetValid(rangeQuestion);
-    }
-
-    private static boolean checkWidgetValid(RangeQuestion rangeQuestion) {
+    static boolean checkWidgetValid(RangeQuestion rangeQuestion) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -237,5 +232,12 @@ public class RangeWidgetUtils {
             result = false;
         }
         return result;
+    }
+
+    private static boolean isRangePickerWidgetValid(RangeQuestion rangeQuestion, Button widgetButton) {
+        if (!checkWidgetValid(rangeQuestion)) {
+            widgetButton.setEnabled(false);
+        }
+        return checkWidgetValid(rangeQuestion);
     }
 }

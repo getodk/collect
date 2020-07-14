@@ -2,8 +2,6 @@ package org.odk.collect.android.widgets;
 
 import android.view.View;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -16,8 +14,6 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowToast;
-
 import java.math.BigDecimal;
 
 import static android.os.Looper.getMainLooper;
@@ -73,11 +69,6 @@ public class RangePickerDecimalWidgetTest {
     }
 
     @Test
-    public void usingReadOnly_showsDisabledPickerButton() {
-        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).binding.widgetButton.isEnabled(), equalTo(false));
-    }
-
-    @Test
     public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer(), nullValue());
     }
@@ -86,18 +77,6 @@ public class RangePickerDecimalWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         assertThat(widget.getAnswer().getValue(), equalTo(2.5));
-    }
-
-    @Test
-    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoValueSelected() {
-        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo(widget.getContext().getString(R.string.no_value_selected)));
-    }
-
-    @Test
-    public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
-        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("2.5"));
     }
 
     @Test
@@ -119,6 +98,25 @@ public class RangePickerDecimalWidgetTest {
     }
 
     @Test
+    public void setNumberPickerValue_updatesAnswer() {
+        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.setNumberPickerValue(4);
+
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("3.5"));
+    }
+
+    @Test
+    public void setNumberPickerValue_whenRangeStartIsGreaterThenRangeEnd_updatesAnswer() {
+        when(rangeQuestion.getRangeStart()).thenReturn(new BigDecimal("5.5"));
+        when(rangeQuestion.getRangeEnd()).thenReturn(new BigDecimal("1.5"));
+
+        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.setNumberPickerValue(4);
+
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("3.5"));
+    }
+
+    @Test
     public void clickingPickerButton_showsNumberPickerDialog() {
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.binding.widgetButton.performClick();
@@ -128,26 +126,6 @@ public class RangePickerDecimalWidgetTest {
         shadowOf(getMainLooper()).idle();
 
         assertNotNull(numberPickerDialog);
-    }
-
-    @Test
-    public void setNumberPickerValue_updatesAnswer() {
-        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setNumberPickerValue(4);
-
-        assertThat(widget.getAnswer().getValue(), equalTo(3.5));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("3.5"));
-    }
-
-    @Test
-    public void setNumberPickerValue_whenRangeStartIsGreaterThenRangeEnd_updatesAnswer() {
-        when(rangeQuestion.getRangeStart()).thenReturn(new BigDecimal("5.5"));
-        when(rangeQuestion.getRangeEnd()).thenReturn(new BigDecimal("1.5"));
-        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setNumberPickerValue(4);
-
-        assertThat(widget.getAnswer().getValue(), equalTo(3.5));
-        assertThat(widget.binding.widgetAnswerText.getText(), equalTo("3.5"));
     }
 
     @Test
@@ -161,28 +139,6 @@ public class RangePickerDecimalWidgetTest {
 
         verify(listener).onLongClick(widget.binding.widgetButton);
         verify(listener).onLongClick(widget.binding.widgetAnswerText);
-    }
-
-    @Test
-    public void whenRangeQuestionHasZeroRangeStep_invalidWidgetToastIsShownAndSliderIsDisabled() {
-        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-
-        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        String toastText = ShadowToast.getTextOfLatestToast();
-
-        assertThat(widget.binding.widgetButton.isEnabled(), equalTo(false));
-        assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
-    }
-
-    @Test
-    public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShownAndSliderIsDisabled() {
-        when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(3));
-
-        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        String toastText = ShadowToast.getTextOfLatestToast();
-
-        assertThat(widget.binding.widgetButton.isEnabled(), equalTo(false));
-        assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
     }
 
     private RangePickerDecimalWidget createWidget(FormEntryPrompt prompt) {

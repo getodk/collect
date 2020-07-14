@@ -33,10 +33,9 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-        setUpWidgetParameters(rangeQuestion);
+        setUpWidgetParameters();
 
-        actualValue = RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt, rangeQuestion);
+        actualValue = RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
         if (actualValue != null) {
             progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
         } else {
@@ -67,7 +66,9 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         widgetValueChanged();
     }
 
-    private void setUpWidgetParameters(RangeQuestion rangeQuestion) {
+    private void setUpWidgetParameters() {
+        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
+
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : new BigDecimal("0.5");
