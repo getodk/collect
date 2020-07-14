@@ -47,16 +47,10 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
         alertDialog.setTitle(getActivity().getString(R.string.delete_repeat_ask));
         alertDialog.setMessage(getActivity().getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
-            switch (i) {
-                case BUTTON_POSITIVE: // yes
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
-                    formController.deleteRepeat();
-                    callback.deleteGroup();
-                    break;
-
-                case BUTTON_NEGATIVE: // no
-                    callback.onCancelled();
-                    break;
+            if (i == BUTTON_POSITIVE) { // yes
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
+                formController.deleteRepeat();
+                callback.deleteGroup();
             }
             alertDialog.cancel();
             dismiss();
@@ -71,6 +65,5 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
 
     public interface DeleteRepeatDialogCallback {
         void deleteGroup();
-        void onCancelled();
     }
 }

@@ -798,7 +798,4 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             goUpLevel();
         }
     }
-
-    @Override
-    public void onCancelled() {}
 }

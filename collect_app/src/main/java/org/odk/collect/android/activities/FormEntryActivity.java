@@ -1159,11 +1159,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    @Override
-    public void onCancelled() {
-        refreshCurrentView();
-    }
-
     /**
      * If we're loading, then we pass the loading thread to our next instance.
      */

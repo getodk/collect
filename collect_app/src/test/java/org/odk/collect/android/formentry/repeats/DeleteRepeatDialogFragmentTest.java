@@ -101,20 +101,9 @@ public class DeleteRepeatDialogFragmentTest {
         verify(dialogFragment.formController).deleteRepeat();
     }
 
-    @Test
-    public void clickingCancel_callsOnCancelled() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        assertThat(activity.onCancelledCalled, equalTo(false));
-
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
-        assertThat(activity.onCancelledCalled, equalTo(true));
-    }
-
     public static class TestActivity extends FragmentActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
 
         private boolean deleteGroupCalled;
-        private boolean onCancelledCalled;
 
         TestActivity() {
         }
@@ -122,11 +111,6 @@ public class DeleteRepeatDialogFragmentTest {
         @Override
         public void deleteGroup() {
             deleteGroupCalled = true;
-        }
-
-        @Override
-        public void onCancelled() {
-            onCancelledCalled = true;
         }
     }
 }
