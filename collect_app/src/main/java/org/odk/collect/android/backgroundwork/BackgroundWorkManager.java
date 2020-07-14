@@ -6,7 +6,7 @@ public interface BackgroundWorkManager {
 
     boolean isFormDownloaderRunning();
 
-    void scheduleMatchExactlySync();
+    void scheduleMatchExactlySync(long repeatPeriod);
 
     void cancelMatchExactlySync();
 }

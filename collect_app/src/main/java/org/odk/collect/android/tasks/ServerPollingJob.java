@@ -31,6 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.backgroundwork.BackgroundWorkUtils;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -58,11 +59,6 @@ import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
 
 public class ServerPollingJob extends Job {
-
-    private static final long FIFTEEN_MINUTES_PERIOD = 900000;
-    private static final long ONE_HOUR_PERIOD = 3600000;
-    private static final long SIX_HOURS_PERIOD = 21600000;
-    private static final long ONE_DAY_PERIOD = 86400000;
 
     public static final String TAG = "serverPollingJob";
 
@@ -134,14 +130,7 @@ public class ServerPollingJob extends Job {
         if (selectedOption.equals(Collect.getInstance().getString(R.string.never_value))) {
             JobManager.instance().cancelAllForTag(TAG);
         } else {
-            long period = FIFTEEN_MINUTES_PERIOD;
-            if (selectedOption.equals(Collect.getInstance().getString(R.string.every_one_hour_value))) {
-                period = ONE_HOUR_PERIOD;
-            } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_six_hours_value))) {
-                period = SIX_HOURS_PERIOD;
-            } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_24_hours_value))) {
-                period = ONE_DAY_PERIOD;
-            }
+            long period = BackgroundWorkUtils.getPeriodInMilliseconds(selectedOption);
 
             new JobRequest.Builder(TAG)
                     .setPeriodic(period, 300000)

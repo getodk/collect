@@ -22,11 +22,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
-import org.odk.collect.android.tasks.ServerPollingJob;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
+import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
@@ -66,7 +66,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         Collect.getInstance().getComponent().inject(this);
 
         initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
-        initPref(KEY_AUTOMATIC_UPDATE);  
+        initPref(KEY_AUTOMATIC_UPDATE);
         initListPref(KEY_CONSTRAINT_BEHAVIOR);
         initListPref(KEY_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
@@ -80,7 +80,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         Preference matchExactly = findPreference(KEY_FORM_UPDATE_MODE);
         matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue.equals("match_exactly")) {
-                backgroundWorkManager.scheduleMatchExactlySync();
+                backgroundWorkManager.scheduleMatchExactlySync(900000L);
             } else {
                 backgroundWorkManager.cancelMatchExactlySync();
             }
@@ -100,17 +100,19 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 preference.setSummary(entry);
 
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                    ServerPollingJob.schedulePeriodicJob((String) newValue);
+//                    ServerPollingJob.schedulePeriodicJob((String) newValue);
+//
+//                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
+//
+//                    if (newValue.equals(getString(R.string.never_value))) {
+//                        Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
+//                        if (automaticUpdatePreference != null) {
+//                            automaticUpdatePreference.setEnabled(false);
+//                        }
+//                    }
+//                    getActivity().recreate();
 
-                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
-
-                    if (newValue.equals(getString(R.string.never_value))) {
-                        Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
-                        if (automaticUpdatePreference != null) {
-                            automaticUpdatePreference.setEnabled(false);
-                        }
-                    }
-                    getActivity().recreate();
+                    backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds((String) newValue));
                 }
                 return true;
             });

@@ -239,7 +239,6 @@
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected" />
         </module>
-        <module name="CommentsIndentation" />
         <module name="EmptyForIteratorPad" />
         <module name="TypecastParenPad" />
         <module name="CovariantEquals" />

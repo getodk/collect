@@ -173,7 +173,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOnString(R.string.manually)
+                .clickOption(R.string.manually)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
@@ -183,7 +183,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOnString(R.string.previously_downloaded_only)
+                .clickOption(R.string.previously_downloaded_only)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
@@ -193,7 +193,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOnString(R.string.match_exactly)
+                .clickOption(R.string.match_exactly)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
