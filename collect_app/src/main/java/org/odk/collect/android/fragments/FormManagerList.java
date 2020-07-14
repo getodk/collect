@@ -179,23 +179,19 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     private void deleteSelectedForms() {
         // only start if no other task is running
         if (backgroundTasks.deleteFormsTask == null) {
-            runDeleteSelectedFormsTask();
+            Bundle args = new Bundle();
+            args.putSerializable(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.form_delete_message));
+            args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
+            DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
+
+            backgroundTasks.deleteFormsTask = new DeleteFormsTask();
+            backgroundTasks.deleteFormsTask
+                    .setContentResolver(getActivity().getContentResolver());
+            backgroundTasks.deleteFormsTask.setDeleteListener(this);
+            backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
         } else {
             ToastUtils.showLongToast(R.string.file_delete_in_progress);
         }
-    }
-
-    private void runDeleteSelectedFormsTask() {
-        Bundle args = new Bundle();
-        args.putSerializable(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.form_delete_message));
-        args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
-        DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
-
-        backgroundTasks.deleteFormsTask = new DeleteFormsTask();
-        backgroundTasks.deleteFormsTask
-                .setContentResolver(getActivity().getContentResolver());
-        backgroundTasks.deleteFormsTask.setDeleteListener(this);
-        backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
     }
 
     @Override
