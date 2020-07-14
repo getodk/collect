@@ -64,6 +64,18 @@ public class FormManagementSettingsTest {
     }
 
     @Test
+    public void whenPreviouslyDownloadedOnlyEnabled_disablesPrefs() {
+        rule.mainMenu()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOption(R.string.previously_downloaded_only)
+                .assertEnabled(R.string.form_update_frequency_title)
+                .assertEnabled(R.string.automatic_download);
+    }
+
+    @Test
     public void whenMatchExactlyEnabled_disablesPrefs() {
         rule.mainMenu()
                 .clickOnMenu()
@@ -71,6 +83,7 @@ public class FormManagementSettingsTest {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.match_exactly)
+                .assertEnabled(R.string.form_update_frequency_title)
                 .assertDisabled(R.string.automatic_download);
     }
 

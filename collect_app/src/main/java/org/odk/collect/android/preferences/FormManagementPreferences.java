@@ -90,6 +90,9 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         if (formUpdateMode.equals("match_exactly")) {
             findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
             findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
+        } else if (formUpdateMode.equals("previously_downloaded")) {
+            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(true);
+            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
         } else {
             findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
             findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
