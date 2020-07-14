@@ -101,16 +101,10 @@ public class MatchExactlyTest {
     }
 
     @Test
-    public void whenMatchExactlyEnabled_hidesUselessUI() {
+    public void whenMatchExactlyEnabled_hidesGetBlankForms() {
         rule.mainMenu()
                 .enableMatchExactly()
-                .assertTextNotDisplayed(R.string.get_forms)
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickFormManagement()
-                .assertDisabled(R.string.periodic_form_updates_check_title)
-                .assertDisabled(R.string.automatic_download)
-                .assertDisabled(R.string.hide_old_form_versions_setting_title);
+                .assertTextNotDisplayed(R.string.get_forms);
     }
 
     @Test

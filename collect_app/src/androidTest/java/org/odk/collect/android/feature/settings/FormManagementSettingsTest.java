@@ -52,6 +52,29 @@ public class FormManagementSettingsTest {
             .around(rule);
 
     @Test
+    public void whenManualUpdatesEnabled_disablesPrefs() {
+        rule.mainMenu()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOption(R.string.manually)
+                .assertDisabled(R.string.form_update_frequency_title)
+                .assertDisabled(R.string.automatic_download);
+    }
+
+    @Test
+    public void whenMatchExactlyEnabled_disablesPrefs() {
+        rule.mainMenu()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOption(R.string.match_exactly)
+                .assertDisabled(R.string.automatic_download);
+    }
+
+    @Test
     public void whenMatchExactlyEnabled_changingAutomaticUpdateFrequency_changesTaskFrequency() {
         List<TestScheduler.DeferredTask> deferredTasks = testScheduler.getDeferredTasks();
         assertThat(deferredTasks, is(empty()));

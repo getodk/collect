@@ -33,7 +33,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -72,10 +71,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
 
-        boolean matchExactlyEnabled = isMatchExactlyEnabled();
-        findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(!matchExactlyEnabled);
-        findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(!matchExactlyEnabled);
-        findPreference(KEY_HIDE_OLD_FORM_VERSIONS).setEnabled(!matchExactlyEnabled);
+        updateDisabledPrefs(generalSharedPreferences.getSharedPreferences().getString(KEY_FORM_UPDATE_MODE, null));
 
         Preference matchExactly = findPreference(KEY_FORM_UPDATE_MODE);
         matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -85,8 +81,19 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 backgroundWorkManager.cancelMatchExactlySync();
             }
 
+            updateDisabledPrefs((String) newValue);
             return true;
         });
+    }
+
+    private void updateDisabledPrefs(String formUpdateMode) {
+        if (formUpdateMode.equals("match_exactly")) {
+            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
+        } else {
+            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
+        }
     }
 
     private void initListPref(String key) {
@@ -159,10 +166,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 return true;
             }
         });
-    }
-
-    private boolean isMatchExactlyEnabled() {
-        return "match_exactly".equals(generalSharedPreferences.getSharedPreferences().getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
     }
 
 }
