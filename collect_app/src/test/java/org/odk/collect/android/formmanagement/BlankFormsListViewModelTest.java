@@ -33,7 +33,7 @@ public class BlankFormsListViewModelTest {
     }
 
     @Test
-    public void syncWithServer_starsSyncOnRepository() {
+    public void syncWithServer_startsSyncOnRepository() {
         SyncStatusRepository syncRepository = new SyncStatusRepository();
         FakeScheduler fakeScheduler = new FakeScheduler();
 
