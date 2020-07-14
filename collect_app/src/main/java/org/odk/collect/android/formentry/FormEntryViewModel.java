@@ -123,14 +123,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public String getLastRepeatedGroupName() {
-        return formController.getLastRepeatedGroupName();
-    }
-
-    public int getLastRepeatedGroupRepeatCount() {
-        return formController.getLastRepeatedGroupRepeatCount();
-    }
-
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Analytics analytics;

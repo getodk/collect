@@ -368,7 +368,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
             beenSwiped = true;
-            showNextView(getFormController());
+            showNextView();
         });
 
         backButton = findViewById(R.id.form_back_button);
@@ -1152,11 +1152,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void deleteGroup() {
         FormController formController = getFormController();
-        if (formController != null) {
-            formController.deleteRepeat();
-        }
         if (formController != null && !formController.indexIsInFieldList()) {
-            showNextView(formController);
+            showNextView();
         } else {
             refreshCurrentView();
         }
@@ -1446,10 +1443,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * a question, an ask repeat dialog, or the submit screen. Also saves
      * answers to the data model after checking constraints.
      */
-    private void showNextView(FormController formController) {
+    private void showNextView() {
         state = null;
         try {
-
+            FormController formController = getFormController();
             if (saveBeforeNextView(formController)) {
                 return;
             }
@@ -2173,7 +2170,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !beenSwiped) {
                     beenSwiped = true;
-                    showNextView(getFormController());
+                    showNextView();
                     return true;
                 }
                 break;
@@ -2474,7 +2471,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void next() {
         if (!beenSwiped) {
             beenSwiped = true;
-            showNextView(getFormController());
+            showNextView();
         }
     }
 
@@ -2558,7 +2555,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (velocityX > 0) {
                     if (e1.getX() > e2.getX()) {
                         Timber.e("showNextView VelocityX is bogus! %f > %f", e1.getX(), e2.getX());
-                        showNextView(getFormController());
+                        showNextView();
                     } else {
                         showPreviousView();
                     }
@@ -2567,7 +2564,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         Timber.e("showPreviousView VelocityX is bogus! %f < %f", e1.getX(), e2.getX());
                         showPreviousView();
                     } else {
-                        showNextView(getFormController());
+                        showNextView();
                     }
                 }
                 return true;

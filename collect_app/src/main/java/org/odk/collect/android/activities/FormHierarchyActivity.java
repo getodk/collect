@@ -45,7 +45,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
@@ -787,10 +786,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
 
     @Override
     public void deleteGroup() {
-        FormController formController = Collect.getInstance().getFormController();
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
-        formController.deleteRepeat();
-
         if (didDeleteLastRepeatItem()) {
             // goUpLevel would put us in a weird state after deleting the last item;
             // just go back one event instead.

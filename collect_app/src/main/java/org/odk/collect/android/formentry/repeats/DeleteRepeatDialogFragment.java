@@ -9,32 +9,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.formentry.FormEntryViewModel;
-
-import javax.inject.Inject;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.javarosawrapper.FormController;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
-    private FormEntryViewModel viewModel;
     private DeleteRepeatDialogCallback callback;
-
-    @Inject
-    Analytics analytics;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
-        if (viewModel == null) {
-            viewModel = new ViewModelProvider(requireActivity(), new FormEntryViewModel.Factory(analytics)).get(FormEntryViewModel.class);
-        }
 
         if (context instanceof DeleteRepeatDialogCallback) {
             callback = (DeleteRepeatDialogCallback) context;
@@ -46,8 +36,9 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        String name = viewModel.getLastRepeatedGroupName();
-        int repeatCount = viewModel.getLastRepeatedGroupRepeatCount();
+        FormController formController = Collect.getInstance().getFormController();
+        String name = formController.getLastRepeatedGroupName();
+        int repeatCount = formController.getLastRepeatedGroupRepeatCount();
         if (repeatCount != -1) {
             name += " (" + (repeatCount + 1) + ")";
         }
@@ -58,6 +49,9 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {
             switch (i) {
                 case BUTTON_POSITIVE: // yes
+                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
+                    formController.deleteRepeat();
+
                     callback.deleteGroup();
                     break;
 
