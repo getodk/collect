@@ -64,7 +64,7 @@ public class FormListDownloaderTest {
                 new WebCredentialsUtils()
         );
 
-        final Map<String, ServerFormDetails> fetched = downloader.downloadFormList(null, null, null, false);
+        final Map<String, ServerFormDetails> fetched = downloader.downloadFormList(null, null, null);
         assertEquals(2, fetched.size());
 
         ServerFormDetails f1 = fetched.get("one");
@@ -74,8 +74,7 @@ public class FormListDownloaderTest {
         assertNull(f1.getManifestUrl());
         assertEquals("one", f1.getFormId());
         assertNull(f1.getFormVersion());
-        assertFalse(f1.isNewerFormVersionAvailable());
-        assertFalse(f1.areNewerMediaFilesAvailable());
+        assertFalse(f1.isUpdated());
 
         ServerFormDetails f2 = fetched.get("two");
         assertNull(f2.getErrorStr());
@@ -84,8 +83,7 @@ public class FormListDownloaderTest {
         assertNull(f2.getManifestUrl());
         assertEquals("two", f2.getFormId());
         assertNull(f2.getFormVersion());
-        assertFalse(f1.isNewerFormVersionAvailable());
-        assertFalse(f1.areNewerMediaFilesAvailable());
+        assertFalse(f1.isUpdated());
     }
 
     @Test
@@ -98,7 +96,7 @@ public class FormListDownloaderTest {
                 new WebCredentialsUtils()
         );
 
-        serverFormsDetailsFetcher.downloadFormList("http://blah.com///", "user", "password", false);
+        serverFormsDetailsFetcher.downloadFormList("http://blah.com///", "user", "password");
         verify(serverClient).getXML("http://blah.com/formList");
     }
 

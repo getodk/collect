@@ -105,6 +105,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         forms.add(new FormManifestEntry(formLabel, formXML, id, "1"));
     }
 
+    public void removeForm(String formLabel) {
+        forms.removeIf(formManifestEntry -> formManifestEntry.getFormLabel().equals(formLabel));
+    }
+
     public String getURL() {
         return "https://" + HOST;
     }

@@ -84,9 +84,4 @@ public class QRCodeMenuDelegate implements MenuDelegate {
     public void onPrepareOptionsMenu(Menu menu) {
 
     }
-
-    @Override
-    public void invalidateOptionsMenu() {
-
-    }
 }

@@ -1,7 +1,9 @@
 package org.odk.collect.android.support;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.TaskSpec;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -13,12 +15,17 @@ public class FakeScheduler implements Scheduler {
     private Boolean cancelled = false;
 
     @Override
-    public <T> void scheduleInBackground(Supplier<T> task, Consumer<T> callback) {
+    public <T> void runInBackground(Supplier<T> task, Consumer<T> callback) {
         backgroundTask = () -> callback.accept(task.get());
     }
 
     @Override
-    public Cancellable schedule(Runnable task, long period) {
+    public void scheduleInBackgroundWhenNetworkAvailable(@NotNull String tag, @NotNull TaskSpec taskSpec, long repeatPeriod) {
+
+    }
+
+    @Override
+    public Cancellable schedule(Runnable task, long repeatPeriod) {
         this.foregroundTask = task;
         return () -> {
             cancelled = true;
@@ -31,10 +38,24 @@ public class FakeScheduler implements Scheduler {
     }
 
     public void runBackgroundTask() {
+        if (backgroundTask == null) {
+            return;
+        }
+
         backgroundTask.run();
     }
 
     public Boolean hasBeenCancelled() {
         return cancelled;
+    }
+
+    @Override
+    public boolean isRunning(@NotNull String tag) {
+        return false;
+    }
+
+    @Override
+    public void cancelInBackground(@NotNull String tag) {
+
     }
 }

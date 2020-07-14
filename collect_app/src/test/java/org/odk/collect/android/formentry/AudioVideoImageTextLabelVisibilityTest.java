@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry;
 
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.logic.FileReference;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.async.Scheduler;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
@@ -76,7 +78,7 @@ public class AudioVideoImageTextLabelVisibilityTest {
         textView = new TextView(RuntimeEnvironment.application);
 
         TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
-        audioHelper = new AudioHelper(activity, activity.getViewLifecycle());
+        audioHelper = new AudioHelper(activity, activity.getViewLifecycle(), mock(Scheduler.class), () -> mock(MediaPlayer.class));
 
         audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
 

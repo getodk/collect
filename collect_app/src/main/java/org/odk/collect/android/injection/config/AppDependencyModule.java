@@ -4,8 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
+
+import androidx.work.WorkManager;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
@@ -13,12 +16,17 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.backgroundwork.CollectBackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
+import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
+import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.formmanagement.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.ServerFormsSynchronizer;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
@@ -54,13 +62,14 @@ import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
-import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.utilities.BackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
@@ -147,8 +156,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    MultiFormDownloader providesFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXMLFetcher) {
+    MultiFormDownloader providesMultiFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXMLFetcher) {
         return new MultiFormDownloader(formsDao, openRosaXMLFetcher);
+    }
+
+    @Provides
+    FormDownloader providesFormDownloader(MultiFormDownloader multiFormDownloader) {
+        return multiFormDownloader;
     }
 
     @Provides
@@ -169,8 +183,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AudioHelperFactory providesAudioHelperFactory() {
-        return new ScreenContextAudioHelperFactory();
+    public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
+        return new ScreenContextAudioHelperFactory(scheduler, MediaPlayer::new);
     }
 
     @Provides
@@ -278,8 +292,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BackgroundWorkManager providesBackgroundWorkManager() {
-        return new CollectBackgroundWorkManager();
+    public BackgroundWorkManager providesBackgroundWorkManager(Scheduler scheduler) {
+        return new JobManagerAndSchedulerBackgroundWorkManager(scheduler);
     }
 
     @Provides
@@ -303,8 +317,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Scheduler providesScheduler() {
-        return new CoroutineScheduler();
+    public WorkManager providesWorkManager(Context context) {
+        return WorkManager.getInstance(context);
+    }
+
+    @Provides
+    public Scheduler providesScheduler(WorkManager workManager) {
+        return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
     @Singleton
@@ -330,5 +349,26 @@ public class AppDependencyModule {
         String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
 
         return new OpenRosaFormListApi(openRosaXMLFetcher, serverURL, formListPath);
+    }
+
+    @Provides
+    public DiskFormsSynchronizer providesDiskFormSynchronizer() {
+        return new FormsDirDiskFormsSynchronizer();
+    }
+
+    @Provides
+    @Singleton
+    public SyncStatusRepository providesServerFormSyncRepository() {
+        return new SyncStatusRepository();
+    }
+
+    @Provides
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, DiskFormsSynchronizer diskFormsSynchronizer) {
+        return new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+    }
+
+    @Provides
+    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
+        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formRepository, formDownloader);
     }
 }

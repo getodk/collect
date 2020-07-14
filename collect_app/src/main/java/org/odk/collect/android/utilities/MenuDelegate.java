@@ -15,6 +15,4 @@ public interface MenuDelegate {
     void onPrepareOptionsMenu(Menu menu);
 
     boolean onOptionsItemSelected(MenuItem item);
-
-    void invalidateOptionsMenu();
 }

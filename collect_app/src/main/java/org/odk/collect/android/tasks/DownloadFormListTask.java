@@ -47,7 +47,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     @Override
     protected HashMap<String, ServerFormDetails> doInBackground(Void... values) {
-        return formListDownloader.downloadFormList(url, username, password, false);
+        return formListDownloader.downloadFormList(url, username, password);
     }
 
     @Override

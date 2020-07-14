@@ -79,8 +79,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         holder.formSubtitle.setText(formAtPosition.get(FORMID_DISPLAY));
 
         if (formIdsToDetails.get(formIDAtPosition) != null
-                && (formIdsToDetails.get(formIDAtPosition).isNewerFormVersionAvailable()
-                || formIdsToDetails.get(formIDAtPosition).areNewerMediaFilesAvailable())) {
+                && formIdsToDetails.get(formIDAtPosition).isUpdated()) {
             holder.formUpdateAlert.setVisibility(View.VISIBLE);
         } else {
             holder.formUpdateAlert.setVisibility(View.GONE);

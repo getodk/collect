@@ -1,16 +1,15 @@
 package org.odk.collect.android.formmanagement;
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.odk.collect.android.forms.FormRepository;
-import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormApiException;
-import org.odk.collect.android.utilities.MultiFormDownloader;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;
@@ -18,61 +17,61 @@ import javax.inject.Inject;
 public class BlankFormsListViewModel extends ViewModel {
 
     private final Scheduler scheduler;
-    private final FormRepository formRepository;
-    private final MediaFileRepository mediaFileRepository;
-    private final FormListApi formListAPI;
-    private final MultiFormDownloader multiFormDownloader;
+    private final SyncStatusRepository syncRepository;
+    private final ServerFormsSynchronizer serverFormsSynchronizer;
+    private final PreferencesProvider preferencesProvider;
 
-    private final MutableLiveData<Boolean> syncing = new MutableLiveData<>(false);
-
-    public BlankFormsListViewModel(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, MultiFormDownloader multiFormDownloader) {
+    public BlankFormsListViewModel(Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
         this.scheduler = scheduler;
-        this.formRepository = formRepository;
-        this.mediaFileRepository = mediaFileRepository;
-        this.formListAPI = formListAPI;
-        this.multiFormDownloader = multiFormDownloader;
+        this.syncRepository = syncRepository;
+        this.serverFormsSynchronizer = serverFormsSynchronizer;
+        this.preferencesProvider = preferencesProvider;
+    }
+
+    public boolean isSyncingAvailable() {
+        SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
+        return generalSharedPreferences.getBoolean(GeneralKeys.KEY_MATCH_EXACTLY, false);
     }
 
     public LiveData<Boolean> isSyncing() {
-        return syncing;
+        return syncRepository.isSyncing();
     }
 
     public void syncWithServer() {
-        syncing.setValue(true);
+        if (!syncRepository.startSync()) {
+            return;
+        }
 
-        scheduler.scheduleInBackground(() -> {
+        scheduler.runInBackground(() -> {
             try {
-                ServerFormListSynchronizer synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, multiFormDownloader);
-                synchronizer.synchronize();
+                serverFormsSynchronizer.synchronize();
             } catch (FormApiException ignored) {
                 // Ignored
             }
 
             return null;
-        }, ignored -> syncing.setValue(false));
+        }, ignored -> syncRepository.finishSync());
     }
 
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Scheduler scheduler;
-        private final FormRepository formRepository;
-        private final MediaFileRepository mediaFileRepository;
-        private final FormListApi formListAPI;
-        private final MultiFormDownloader multiFormDownloader;
+        private final SyncStatusRepository syncRepository;
+        private final ServerFormsSynchronizer serverFormsSynchronizer;
+        private final PreferencesProvider preferencesProvider;
 
         @Inject
-        public Factory(Scheduler scheduler, FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, MultiFormDownloader multiFormDownloader) {
+        public Factory(Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
             this.scheduler = scheduler;
-            this.formRepository = formRepository;
-            this.mediaFileRepository = mediaFileRepository;
-            this.formListAPI = formListAPI;
-            this.multiFormDownloader = multiFormDownloader;
+            this.syncRepository = syncRepository;
+            this.serverFormsSynchronizer = serverFormsSynchronizer;
+            this.preferencesProvider = preferencesProvider;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(scheduler, formRepository, mediaFileRepository, formListAPI, multiFormDownloader);
+            return (T) new BlankFormsListViewModel(scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider);
         }
     }
 }

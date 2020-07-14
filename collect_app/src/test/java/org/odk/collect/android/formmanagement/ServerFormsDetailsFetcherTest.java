@@ -23,22 +23,20 @@ import javax.annotation.Nullable;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
-public class ServerFormListSynchronizerTest {
+public class ServerFormsDetailsFetcherTest {
 
     private final List<FormListItem> formList = asList(
             new FormListItem("http://example.com/form-1", "form-1", "server", "md5:form-1-hash", "Form 1", null),
             new FormListItem("http://example.com/form-2", "form-2", "server", "md5:form-2-hash", "Form 2", "http://example.com/form-2-manifest")
     );
 
-    private ServerFormListSynchronizer synchronizer;
-    private RecordingMultiFormDownloader formDownloader;
+    private ServerFormsDetailsFetcher fetcher;
     private FormRepository formRepository;
     private MediaFileRepository mediaFileRepository;
 
@@ -54,42 +52,31 @@ public class ServerFormListSynchronizerTest {
                 new MediaFile("blah.txt", "md5:" + getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file")))
         );
 
-        formDownloader = new RecordingMultiFormDownloader();
-        synchronizer = new ServerFormListSynchronizer(formRepository, mediaFileRepository, formListAPI, formDownloader);
+        DiskFormsSynchronizer diskFormsSynchronizer = mock(DiskFormsSynchronizer.class);
+        fetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
     }
 
     @Test
-    public void whenNoFormsExist_downloadsAndSavesAllFormsInList() throws Exception {
-        synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
+    public void whenNoFormsExist_isNew() throws Exception {
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(0).isNotOnDevice(), is(true));
+        assertThat(serverFormDetails.get(1).isNotOnDevice(), is(true));
     }
 
     @Test
-    public void whenAFormExists_deletesFormsNotInList() throws Exception {
-        formRepository.save(new Form.Builder()
-                .id(3L)
-                .jrFormId("form-3")
-                .md5Hash("form-3-hash")
-                .build());
-
-        synchronizer.synchronize();
-        assertThat(formRepository.contains("form-3"), is(false));
-    }
-
-    @Test
-    public void whenAFormExists_andListContainsUpdatedVersion_replacesFormWithListVersion() throws Exception {
+    public void whenAFormExists_andListContainsUpdatedVersion_isUpdated() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .md5Hash("form-2-hash-old")
                 .build());
 
-        synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(1).isUpdated(), is(true));
     }
 
     @Test
-    public void whenAFormExists_andHasNewMediaFileOnServer_replacesFormWithListVersion() throws Exception {
+    public void whenAFormExists_andHasNewMediaFileOnServer_isUpdated() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
@@ -98,12 +85,12 @@ public class ServerFormListSynchronizerTest {
                 .build());
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(emptyList());
 
-        synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(1).isUpdated(), is(true));
     }
 
     @Test
-    public void whenAFormExists_andHasUpdatedMediaFileOnServer_replacesFormWithListVersion() throws Exception {
+    public void whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdated() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
@@ -115,12 +102,12 @@ public class ServerFormListSynchronizerTest {
         writeToFile(oldMediaFile, "blah before");
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(oldMediaFile));
 
-        synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1", "form-2"));
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(1).isUpdated(), is(true));
     }
 
     @Test
-    public void whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_doesNotDownload() throws Exception {
+    public void whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isNotNewOrUpdated() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(1L)
                 .jrFormId("form-1")
@@ -128,12 +115,13 @@ public class ServerFormListSynchronizerTest {
                 .md5Hash("form-1-hash")
                 .build());
 
-        synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-2"));
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(0).isUpdated(), is(false));
+        assertThat(serverFormDetails.get(0).isNotOnDevice(), is(false));
     }
 
     @Test
-    public void whenFormExists_doesNotDownload() throws Exception {
+    public void whenFormExists_isNotNewOrUpdated() throws Exception {
         formRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
@@ -145,8 +133,9 @@ public class ServerFormListSynchronizerTest {
         writeToFile(mediaFile, "blah");
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(mediaFile));
 
-        synchronizer.synchronize();
-        assertThat(formDownloader.getDownloadedForms(), containsInAnyOrder("form-1"));
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(1).isUpdated(), is(false));
+        assertThat(serverFormDetails.get(1).isNotOnDevice(), is(false));
     }
 
     private void writeToFile(File mediaFile, String blah) throws IOException {
@@ -186,7 +175,7 @@ public class ServerFormListSynchronizerTest {
         }
     }
 
-    private static class RecordingMultiFormDownloader implements FormDownloader {
+    private static class RecordingFormDownloader implements FormDownloader {
 
         private final List<String> formsDownloaded = new ArrayList<>();
 

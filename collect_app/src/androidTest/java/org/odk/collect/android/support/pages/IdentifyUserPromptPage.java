@@ -9,13 +9,10 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
 
@@ -28,7 +25,7 @@ public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
 
     @Override
     public IdentifyUserPromptPage assertOnPage() {
-        onView(allOf(withText(formName), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+        assertToolbarTitle(formName);
         onView(withText(getTranslatedString(R.string.enter_identity))).check(matches(isDisplayed()));
         return this;
     }

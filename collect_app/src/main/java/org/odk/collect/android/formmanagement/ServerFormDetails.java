@@ -28,8 +28,8 @@ public class ServerFormDetails implements Serializable {
     private String formVersion;
     private String hash;
     private String manifestFileHash;
-    private boolean isNewerFormVersionAvailable;
-    private boolean areNewerMediaFilesAvailable;
+    private boolean isNotOnDevice;
+    private boolean isUpdated;
 
     public ServerFormDetails(String error) {
         errorStr = error;
@@ -37,7 +37,7 @@ public class ServerFormDetails implements Serializable {
 
     public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
                              String formVersion, String hash, String manifestFileHash,
-                             boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
+                             boolean isNotOnDevice, boolean isUpdated) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
@@ -45,8 +45,8 @@ public class ServerFormDetails implements Serializable {
         this.formVersion = formVersion;
         this.hash = hash;
         this.manifestFileHash = manifestFileHash;
-        this.isNewerFormVersionAvailable = isNewerFormVersionAvailable;
-        this.areNewerMediaFilesAvailable = areNewerMediaFilesAvailable;
+        this.isNotOnDevice = isNotOnDevice;
+        this.isUpdated = isUpdated;
     }
 
     public String getErrorStr() {
@@ -81,11 +81,11 @@ public class ServerFormDetails implements Serializable {
         return manifestFileHash;
     }
 
-    public boolean isNewerFormVersionAvailable() {
-        return isNewerFormVersionAvailable;
+    public boolean isNotOnDevice() {
+        return isNotOnDevice;
     }
 
-    public boolean areNewerMediaFilesAvailable() {
-        return areNewerMediaFilesAvailable;
+    public boolean isUpdated() {
+        return isUpdated;
     }
 }

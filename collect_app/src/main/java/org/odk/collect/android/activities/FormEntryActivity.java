@@ -316,6 +316,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     StoragePathProvider storagePathProvider;
 
+    @Inject
+    WorkManager workManager;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     /**
@@ -1574,7 +1577,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * the progress bar.
      */
     public void showView(View next, AnimationType from) {
-        menuDelegate.invalidateOptionsMenu();
+        invalidateOptionsMenu();
 
         // disable notifications...
         if (inAnimation != null) {
@@ -2490,7 +2493,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         .addTag(AutoSendWorker.TAG)
                         .setConstraints(constraints)
                         .build();
-        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG,
+        workManager.beginUniqueWork(AutoSendWorker.TAG,
                 ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
     }
 

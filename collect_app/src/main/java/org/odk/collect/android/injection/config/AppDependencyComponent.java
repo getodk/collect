@@ -18,7 +18,7 @@ import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
@@ -31,6 +31,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -80,6 +81,10 @@ import dagger.Component;
         AppDependencyModule.class
 })
 public interface AppDependencyComponent {
+
+    void inject(SyncFormsTaskSpec syncWork);
+
+    void inject(ExperimentalPreferencesFragment experimentalPreferencesFragment);
 
     @Component.Builder
     interface Builder {
@@ -173,8 +178,6 @@ public interface AppDependencyComponent {
     void inject(FormChooserListActivity formChooserListActivity);
   
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
-
-    RxEventBus rxEventBus();
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

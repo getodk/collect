@@ -53,7 +53,7 @@ public class FormListDownloader {
     }
 
     public HashMap<String, ServerFormDetails> downloadFormList(@Nullable String url, @Nullable String username,
-                                                               @Nullable String password, boolean alwaysCheckMediaFiles) {
+                                                               @Nullable String password) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 application);
 
@@ -86,8 +86,8 @@ public class FormListDownloader {
         HashMap<String, ServerFormDetails> formList = new HashMap<>();
 
         try {
-            ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI);
-            List<ServerFormDetails> serverFormDetailsList = serverFormsDetailsFetcher.fetchFormDetails(alwaysCheckMediaFiles);
+            ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formAPI, new FormsDirDiskFormsSynchronizer());
+            List<ServerFormDetails> serverFormDetailsList = serverFormsDetailsFetcher.fetchFormDetails();
             for (ServerFormDetails serverFormDetails : serverFormDetailsList) {
                 formList.put(serverFormDetails.getFormId(), serverFormDetails);
             }

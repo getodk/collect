@@ -5,6 +5,7 @@ import android.webkit.MimeTypeMap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.work.WorkManager;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,12 +16,13 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.CountingScheduler;
-import org.odk.collect.android.support.CountingSchedulerIdlingResource;
 import org.odk.collect.android.support.IdlingResourceRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.SchedulerIdlingResource;
 import org.odk.collect.android.support.StubOpenRosaServer;
-import org.odk.collect.async.CoroutineScheduler;
+import org.odk.collect.android.support.TestScheduler;
+import org.odk.collect.android.support.pages.FillBlankFormPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -32,7 +34,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class MatchExactlyTest {
 
     public final StubOpenRosaServer server = new StubOpenRosaServer();
-    private final CountingScheduler countingScheduler = new CountingScheduler(new CoroutineScheduler());
+    private final TestScheduler testScheduler = new TestScheduler();
 
     public CollectTestRule rule = new CollectTestRule();
 
@@ -50,43 +52,63 @@ public class MatchExactlyTest {
                 }
 
                 @Override
-                public Scheduler providesScheduler() {
-                    return countingScheduler;
+                public Scheduler providesScheduler(WorkManager workManager) {
+                    return testScheduler;
                 }
             }))
-            .around(new IdlingResourceRule(new CountingSchedulerIdlingResource(countingScheduler)))
+            .around(new IdlingResourceRule(new SchedulerIdlingResource(testScheduler)))
             .around(new CopyFormRule("one-question.xml"))
             .around(new CopyFormRule("one-question-repeat.xml"))
             .around(rule);
 
     @Test
     public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestFormsFromServer() {
-        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        server.addForm("Two Question", "two_question", "two-question.xml");
-
-        rule.mainMenu()
+        FillBlankFormPage page = rule.mainMenu()
                 .setServer(server.getURL())
                 .enableMatchExactly()
                 .clickFillBlankForm()
                 .assertText("One Question")
-                .assertText("One Question Repeat")
-                .clickRefresh()
+                .assertText("One Question Repeat");
+
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        server.addForm("Two Question", "two_question", "two-question.xml");
+
+        page.clickRefresh()
                 .assertText("Two Question") // Check new form downloaded
                 .assertText("One Question Updated") // Check updated form updated
                 .assertTextDoesNotExist("One Question Repeat"); // Check deleted form deleted
     }
 
     @Test
-    public void whenMatchExactlyEnabled_getBlankFormsButtonIsGone() {
-        rule.mainMenu()
-                .enableMatchExactly()
-                .assertTextNotDisplayed(R.string.get_forms);
+    public void whenMatchExactlyEnabled_getsLatestFormsFromServer_automaticallyAndRepeatedly() throws Exception {
+        MainMenuPage page = rule.mainMenu()
+                .setServer(server.getURL())
+                .enableMatchExactly();
+
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        server.addForm("Two Question", "two_question", "two-question.xml");
+        testScheduler.runTaggedWork();
+
+        page = page.clickFillBlankForm()
+                .assertText("Two Question")
+                .assertText("One Question Updated")
+                .assertTextDoesNotExist("One Question Repeat")
+                .pressBack(new MainMenuPage(rule));
+
+        server.removeForm("Two Question");
+        testScheduler.runTaggedWork();
+
+        page.assertOnPage()
+                .clickFillBlankForm()
+                .assertText("One Question Updated")
+                .assertTextDoesNotExist("Two Question");
     }
 
     @Test
-    public void whenMatchExactlyEnabled_formManagementFormUpdateIsDisabled() {
+    public void whenMatchExactlyEnabled_hidesUselessUI() {
         rule.mainMenu()
                 .enableMatchExactly()
+                .assertTextNotDisplayed(R.string.get_forms)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()
@@ -101,5 +123,23 @@ public class MatchExactlyTest {
                 .clickFillBlankForm();
 
         onView(withId(R.id.menu_refresh)).check(doesNotExist());
+    }
+
+    @Test
+    public void whenMatchExactlyDisabled_stopsSyncingAutomatically() {
+        MainMenuPage page = rule.mainMenu()
+                .setServer(server.getURL())
+                .enableMatchExactly()
+                .disableMatchExactly();
+
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        server.addForm("Two Question", "two_question", "two-question.xml");
+        testScheduler.runTaggedWork();
+
+        page.clickFillBlankForm()
+                .assertText("One Question")
+                .assertText("One Question Repeat")
+                .assertTextDoesNotExist("Two Question")
+                .assertTextDoesNotExist("One Question Updated");
     }
 }

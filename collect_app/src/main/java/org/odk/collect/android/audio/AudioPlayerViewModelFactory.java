@@ -1,17 +1,21 @@
 package org.odk.collect.android.audio;
 
+import android.media.MediaPlayer;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.async.Scheduler;
 
+import java.util.function.Supplier;
+
 class AudioPlayerViewModelFactory implements ViewModelProvider.Factory {
 
-    private final MediaPlayerFactory mediaPlayerFactory;
+    private final Supplier<MediaPlayer> mediaPlayerFactory;
     private final Scheduler scheduler;
 
-    AudioPlayerViewModelFactory(MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
+    AudioPlayerViewModelFactory(Supplier<MediaPlayer> mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
         this.scheduler = scheduler;
     }

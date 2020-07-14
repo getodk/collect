@@ -19,6 +19,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -410,12 +411,12 @@ public class AudioPlayerViewModelTest {
         assertThat(error.getValue(), equalTo(null));
     }
 
-    private static class RecordingMockMediaPlayerFactory implements MediaPlayerFactory {
+    private static class RecordingMockMediaPlayerFactory implements Supplier<MediaPlayer> {
 
         List<MediaPlayer> createdInstances = new ArrayList<>();
 
         @Override
-        public MediaPlayer create() {
+        public MediaPlayer get() {
             MediaPlayer mock = mock(MediaPlayer.class);
             createdInstances.add(mock);
 

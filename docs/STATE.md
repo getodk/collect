@@ -47,3 +47,4 @@ and update this document as the code evolves.
 * Converting settings screens to using the new AndroidX Preferences framework as we touch them
 * Replacing Rx (and other async work) with LiveData + Scheduler abstraction
 * Moving away from custom `SharedPreferences` abstractions (`GeneralSharedPreferences` and `AdminSharedPreferences`) to just using `SharedPreferences` interface
+* Replacing `..Factory` and `..Provider` objects with the new Java `Supplier` interface as much as possible
