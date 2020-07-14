@@ -54,7 +54,7 @@ public class BlankFormsListViewModelTest {
         LiveData<Boolean> syncing = syncRepository.isSyncing();
         viewModel.syncWithServer();
 
-        fakeScheduler.runBackgroundTask();
+        fakeScheduler.runBackground();
         assertThat(syncing.getValue(), is(false));
     }
 
@@ -69,7 +69,7 @@ public class BlankFormsListViewModelTest {
         when(syncRepository.startSync()).thenReturn(false);
         viewModel.syncWithServer();
 
-        fakeScheduler.runBackgroundTask();
+        fakeScheduler.runBackground();
         verify(serverFormsSynchronizer, never()).synchronize();
         verify(syncRepository, never()).finishSync();
     }

@@ -82,7 +82,7 @@ public class QRCodeMenuDelegateTest {
     public void clickingOnShare_whenQRCodeIsGenerated_startsShareIntent() throws Exception {
         when(qrCodeGenerator.generateQRCode(any())).thenReturn("qr.png");
         when(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"));
-        fakeScheduler.runBackgroundTask();
+        fakeScheduler.runBackground();
 
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_share));
 

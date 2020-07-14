@@ -206,7 +206,7 @@ public class AudioPlayerViewModelTest {
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
 
         viewModel.stop();
         assertThat(position.getValue(), equalTo(0));
@@ -287,11 +287,11 @@ public class AudioPlayerViewModelTest {
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(duration.getValue(), equalTo(1000));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(24135);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(duration.getValue(), equalTo(24135));
     }
 
@@ -303,12 +303,12 @@ public class AudioPlayerViewModelTest {
 
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(duration1.getValue(), equalTo(1000));
 
         viewModel.play(new Clip("clip2", "file://audio.mp3"));
         when(mediaPlayer.getCurrentPosition()).thenReturn(2500);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(duration2.getValue(), equalTo(2500));
     }
 
@@ -367,7 +367,7 @@ public class AudioPlayerViewModelTest {
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
         when(mediaPlayer.getCurrentPosition()).thenReturn(1000);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
 
         ArgumentCaptor<MediaPlayer.OnCompletionListener> captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener.class);
         verify(mediaPlayer).setOnCompletionListener(captor.capture());

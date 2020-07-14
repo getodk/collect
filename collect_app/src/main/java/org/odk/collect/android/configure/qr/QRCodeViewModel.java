@@ -60,7 +60,7 @@ class QRCodeViewModel extends ViewModel {
     }
 
     private void generateQRCode() {
-        scheduler.runInBackground(
+        scheduler.immediate(
                 () -> {
                     try {
                         String filePath = qrCodeGenerator.generateQRCode(includedKeys);

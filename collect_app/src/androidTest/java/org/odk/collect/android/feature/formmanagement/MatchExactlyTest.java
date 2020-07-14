@@ -83,7 +83,7 @@ public class MatchExactlyTest {
 
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         server.addForm("Two Question", "two_question", "two-question.xml");
-        testScheduler.runTaggedWork();
+        testScheduler.runDeferredTasks();
 
         page = page.clickFillBlankForm()
                 .assertText("Two Question")
@@ -92,7 +92,7 @@ public class MatchExactlyTest {
                 .pressBack(new MainMenuPage(rule));
 
         server.removeForm("Two Question");
-        testScheduler.runTaggedWork();
+        testScheduler.runDeferredTasks();
 
         page.assertOnPage()
                 .clickFillBlankForm()
@@ -122,7 +122,7 @@ public class MatchExactlyTest {
 
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         server.addForm("Two Question", "two_question", "two-question.xml");
-        testScheduler.runTaggedWork();
+        testScheduler.runDeferredTasks();
 
         page.clickFillBlankForm()
                 .assertText("One Question")

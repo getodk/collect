@@ -28,12 +28,12 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
 
     @Override
     public void scheduleMatchExactlySync() {
-        scheduler.scheduleInBackgroundWhenNetworkAvailable(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), 900000L);
+        scheduler.networkDeferred(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), 900000L);
     }
 
     @Override
     public void cancelMatchExactlySync() {
-        scheduler.cancelInBackground(MATCH_EXACTLY_SYNC_TAG);
+        scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
     }
 
     @Override

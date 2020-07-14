@@ -41,7 +41,7 @@ public class BlankFormsListViewModel extends ViewModel {
             return;
         }
 
-        scheduler.runInBackground(() -> {
+        scheduler.immediate(() -> {
             try {
                 serverFormsSynchronizer.synchronize();
             } catch (FormApiException ignored) {

@@ -32,32 +32,32 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public Cancellable schedule(@NotNull Runnable task, long repeatPeriod) {
+    public Cancellable foregroundImmediate(@NotNull Runnable foreground, long repeatPeriod) {
         increment();
 
-        return wrappedScheduler.schedule(() -> {
-            task.run();
+        return wrappedScheduler.foregroundImmediate(() -> {
+            foreground.run();
             decrement();
         }, repeatPeriod);
     }
 
     @Override
-    public <T> void runInBackground(@NotNull Supplier<T> task, @NotNull Consumer<T> callback) {
+    public <T> void immediate(@NotNull Supplier<T> foreground, @NotNull Consumer<T> background) {
         increment();
 
-        wrappedScheduler.runInBackground(task, t -> {
-            callback.accept(t);
+        wrappedScheduler.immediate(foreground, t -> {
+            background.accept(t);
             decrement();
         });
     }
 
     @Override
-    public void scheduleInBackgroundWhenNetworkAvailable(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
+    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
         taggedWork.put(tag, spec);
     }
 
     @Override
-    public void cancelInBackground(@NotNull String tag) {
+    public void cancelDeferred(@NotNull String tag) {
         taggedWork.remove(tag);
     }
 
@@ -66,7 +66,7 @@ public class TestScheduler implements Scheduler {
         return wrappedScheduler.isRunning(tag);
     }
 
-    public void runTaggedWork() {
+    public void runDeferredTasks() {
         Context applicationContext = ApplicationProvider.getApplicationContext();
 
         for (TaskSpec taskSpec : taggedWork.values()) {
