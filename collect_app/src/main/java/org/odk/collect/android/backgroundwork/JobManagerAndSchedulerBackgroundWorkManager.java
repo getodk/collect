@@ -39,8 +39,8 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
     }
 
     @Override
-    public void scheduleAutoUpdate() {
-        scheduler.networkDeferred(ServerPollingJob.TAG, new AutoUpdateTaskSpec(), 900000L);
+    public void scheduleAutoUpdate(long repeatPeriod) {
+        scheduler.networkDeferred(ServerPollingJob.TAG, new AutoUpdateTaskSpec(), repeatPeriod);
     }
 
     @Override

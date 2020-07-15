@@ -80,7 +80,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
             if (newValue.equals("match_exactly")) {
                 backgroundWorkManager.scheduleMatchExactlySync(900000L);
             } else if (newValue.equals("previously_downloaded")) {
-                backgroundWorkManager.scheduleAutoUpdate();
+                backgroundWorkManager.scheduleAutoUpdate(getPeriodInMilliseconds((String) newValue));
             }
 
             updateDisabledPrefs((String) newValue);
@@ -112,19 +112,14 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 preference.setSummary(entry);
 
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-//                    ServerPollingJob.schedulePeriodicJob((String) newValue);
-//
-//                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
-//
-//                    if (newValue.equals(getString(R.string.never_value))) {
-//                        Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
-//                        if (automaticUpdatePreference != null) {
-//                            automaticUpdatePreference.setEnabled(false);
-//                        }
-//                    }
-//                    getActivity().recreate();
+                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
 
-                    backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds((String) newValue));
+                    String formUpdateMode = generalSharedPreferences.getSharedPreferences().getString(KEY_FORM_UPDATE_MODE, null);
+                    if (formUpdateMode.equals("match_exactly")) {
+                        backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds((String) newValue));
+                    } else if (formUpdateMode.equals("previously_downloaded")) {
+                        backgroundWorkManager.scheduleAutoUpdate(getPeriodInMilliseconds((String) newValue));
+                    }
                 }
                 return true;
             });

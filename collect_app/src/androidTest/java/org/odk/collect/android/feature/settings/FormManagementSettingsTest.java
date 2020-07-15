@@ -111,4 +111,29 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks.get(0).getTag(), is(matchExactlyTag));
         assertThat(deferredTasks.get(0).getRepeatPeriod(), is(1000L * 60 * 60));
     }
+
+    @Test
+    public void whenPreviouslyDownloadedOnlyEnabled_changingAutomaticUpdateFrequency_changesTaskFrequency() {
+        List<TestScheduler.DeferredTask> deferredTasks = testScheduler.getDeferredTasks();
+        assertThat(deferredTasks, is(empty()));
+
+        FormManagementPage page = rule.mainMenu()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOption(R.string.previously_downloaded_only);
+
+        deferredTasks = testScheduler.getDeferredTasks();
+        assertThat(deferredTasks.size(), is(1));
+        String previouslyDownloadedTag = deferredTasks.get(0).getTag();
+
+        page.clickAutomaticUpdateFrequency()
+                .clickOption(R.string.every_one_hour);
+
+        deferredTasks = testScheduler.getDeferredTasks();
+        assertThat(deferredTasks.size(), is(1));
+        assertThat(deferredTasks.get(0).getTag(), is(previouslyDownloadedTag));
+        assertThat(deferredTasks.get(0).getRepeatPeriod(), is(1000L * 60 * 60));
+    }
 }
