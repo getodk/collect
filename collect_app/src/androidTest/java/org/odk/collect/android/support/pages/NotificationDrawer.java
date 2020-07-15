@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class NotificationDrawer {
 
@@ -41,10 +42,21 @@ public class NotificationDrawer {
         clearAll.click();
     }
 
+    public void pressBack() {
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.pressBack();
+    }
+
     @NotNull
     private UiDevice waitForNotification(String appName) {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.wait(Until.hasObject(By.textStartsWith(appName)), 2000L);
         return device;
+    }
+
+    public NotificationDrawer assertNoNotification(String appName) {
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        assertThat(device.findObject(By.text(appName)), nullValue());
+        return this;
     }
 }

@@ -53,6 +53,7 @@ public class PreviouslyDownloadedOnlyTest {
                 }
             }))
             .around(new CopyFormRule("one-question.xml"))
+            .around(new CopyFormRule("two-question.xml"))
             .around(rule);
 
     @Test
@@ -64,8 +65,32 @@ public class PreviouslyDownloadedOnlyTest {
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         testScheduler.runDeferredTasks();
         NotificationDrawer.open()
-                .assertNotification("Collect", "Form updates available")
+                .assertNotification("ODK Collect", "Form updates available")
                 .clearAll();
+
+        server.addForm("Two Question Updated", "two_question", "two-question-updated.xml");
+        testScheduler.runDeferredTasks();
+        NotificationDrawer.open()
+                .assertNotification("ODK Collect", "Form updates available")
+                .clearAll();
+    }
+
+    @Test // this should probably be tested outside of Espresso instead
+    public void whenPreviouslyDownloadedOnlyEnabled_andFormUpdateNotificationHasAlreadyBeenSent_doesntNotifyAgain() {
+        rule.mainMenu()
+                .setServer(server.getURL())
+                .enablePreviouslyDownloadedOnlyUpdates();
+
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testScheduler.runDeferredTasks();
+        NotificationDrawer.open()
+                .assertNotification("ODK Collect", "Form updates available")
+                .clearAll();
+
+        testScheduler.runDeferredTasks();
+        NotificationDrawer.open()
+                .assertNoNotification("ODK Collect")
+                .pressBack();
     }
 
     @Test

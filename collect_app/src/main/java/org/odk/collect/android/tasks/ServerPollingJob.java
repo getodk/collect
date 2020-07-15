@@ -102,17 +102,18 @@ public class ServerPollingJob extends Job {
                     final HashMap<ServerFormDetails, String> result = new MultiFormDownloader().downloadForms(newDetectedForms, null);
                     informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
                 } else {
+                    boolean needsNotification = false;
+
                     for (ServerFormDetails serverFormDetails : newDetectedForms) {
                         String manifestFileHash = serverFormDetails.getManifestFileHash() != null ? serverFormDetails.getManifestFileHash() : "";
                         String formVersionHash = MultiFormDownloader.getMd5Hash(serverFormDetails.getHash()) + manifestFileHash;
                         if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
+                            needsNotification = true;
                             updateLastDetectedFormVersionHash(serverFormDetails.getFormId(), formVersionHash);
-                        } else {
-                            newDetectedForms.remove(serverFormDetails);
                         }
                     }
 
-                    if (!newDetectedForms.isEmpty()) {
+                    if (needsNotification) {
                         informAboutNewAvailableForms();
                     }
                 }
