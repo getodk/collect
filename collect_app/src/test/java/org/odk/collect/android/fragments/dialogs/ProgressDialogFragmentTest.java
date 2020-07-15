@@ -107,6 +107,22 @@ public class ProgressDialogFragmentTest {
     }
 
     @Test
+    public void setCancellable_makesTheDialogNotCancellable() {
+        activityScenario.onActivity(activity -> {
+            ProgressDialogFragment fragment = new ProgressDialogFragment();
+
+            Bundle args = new Bundle();
+            args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
+
+            fragment.setArguments(args);
+            fragment.show(activity.getSupportFragmentManager(), "TAG");
+            shadowOf(getMainLooper()).idle();
+
+            assertThat(shadowOf(fragment.getDialog()).isCancelable(), equalTo(false));
+        });
+    }
+
+    @Test
     public void cancelling_callsCancelOnCancellable() {
         activityScenario.onActivity(activity -> {
             ProgressDialogFragment.Cancellable cancellable = mock(ProgressDialogFragment.Cancellable.class);

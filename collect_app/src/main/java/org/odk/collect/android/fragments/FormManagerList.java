@@ -14,25 +14,28 @@
 
 package org.odk.collect.android.fragments;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.loader.content.CursorLoader;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import androidx.annotation.NonNull;
-import androidx.loader.content.CursorLoader;
 import timber.log.Timber;
 
 /**
@@ -45,7 +48,7 @@ import timber.log.Timber;
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
     private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
-    BackgroundTasks backgroundTasks; // handled across orientation changes
+    private BackgroundTasks backgroundTasks; // handled across orientation changes
     private AlertDialog alertDialog;
 
     public static FormManagerList newInstance() {
@@ -85,11 +88,16 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                 && backgroundTasks.deleteFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
             deleteComplete(backgroundTasks.deleteFormsTask.getDeleteCount());
         }
+        if (backgroundTasks.deleteFormsTask == null) {
+            DialogUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
+        }
     }
 
     @Override
     public void onPause() {
-        backgroundTasks.diskSyncTask.setDiskSyncListener(null);
+        if (backgroundTasks.diskSyncTask != null) {
+            backgroundTasks.diskSyncTask.setDiskSyncListener(null);
+        }
         if (backgroundTasks.deleteFormsTask != null) {
             backgroundTasks.deleteFormsTask.setDeleteListener(null);
         }
@@ -153,6 +161,17 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         alertDialog.show();
     }
 
+    @Override
+    public void progressUpdate(Integer progress, Integer total) {
+        String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message), progress, total);
+        ProgressDialogFragment existingDialog = (ProgressDialogFragment) requireActivity().getSupportFragmentManager()
+                .findFragmentByTag(ProgressDialogFragment.class.getName());
+
+        if (existingDialog != null) {
+            existingDialog.setMessage(message);
+        }
+    }
+
     /**
      * Deletes the selected files.First from the database then from the file
      * system
@@ -160,6 +179,11 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     private void deleteSelectedForms() {
         // only start if no other task is running
         if (backgroundTasks.deleteFormsTask == null) {
+            Bundle args = new Bundle();
+            args.putSerializable(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.form_delete_message));
+            args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
+            DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
+
             backgroundTasks.deleteFormsTask = new DeleteFormsTask();
             backgroundTasks.deleteFormsTask
                     .setContentResolver(getActivity().getContentResolver());
@@ -202,6 +226,8 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             getListView().setItemChecked(i, false);
         }
         deleteButton.setEnabled(false);
+
+        DialogUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
     }
 
     @Override

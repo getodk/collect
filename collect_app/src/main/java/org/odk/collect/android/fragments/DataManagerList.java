@@ -154,16 +154,11 @@ public class DataManagerList extends InstanceListFragment
         alertDialog.setMessage(getString(R.string.delete_confirm,
                 String.valueOf(getCheckedCount())));
         DialogInterface.OnClickListener dialogYesNoListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        switch (i) {
-                            case DialogInterface.BUTTON_POSITIVE: // delete
-                                deleteSelectedInstances();
-                                if (getListView().getCount() == getCheckedCount()) {
-                                    toggleButton.setEnabled(false);
-                                }
-                                break;
+                (dialog, i) -> {
+                    if (i == DialogInterface.BUTTON_POSITIVE) { // delete
+                        deleteSelectedInstances();
+                        if (getListView().getCount() == getCheckedCount()) {
+                            toggleButton.setEnabled(false);
                         }
                     }
                 };

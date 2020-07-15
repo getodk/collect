@@ -29,7 +29,7 @@ import timber.log.Timber;
  * @author norman86@gmail.com
  * @author mitchellsundt@gmail.com
  */
-public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
+public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     private ContentResolver cr;
     private DeleteFormsListener dl;
@@ -55,12 +55,24 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
                 Uri deleteForm = Uri.withAppendedPath(FormsColumns.CONTENT_URI, param.toString());
                 int wasDeleted = cr.delete(deleteForm, null, null);
                 deleted += wasDeleted;
+
+                successCount++;
+                publishProgress(successCount, toDeleteCount);
             } catch (Exception ex) {
                 Timber.e("Exception during delete of: %s exception: %s", param.toString(), ex.toString());
             }
         }
         successCount = deleted;
         return deleted;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        synchronized (this) {
+            if (dl != null) {
+                dl.progressUpdate(values[0], values[1]);
+            }
+        }
     }
 
     @Override
