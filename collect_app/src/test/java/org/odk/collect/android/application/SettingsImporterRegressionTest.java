@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.mapbox.mapboxsdk.maps.Style;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +19,13 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 @RunWith(AndroidJUnit4.class)
@@ -56,5 +63,21 @@ public class SettingsImporterRegressionTest {
         SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_USGS));
         assertThat(prefs.getString(KEY_USGS_MAP_STYLE, null), is("hybrid"));
+    }
+
+    @Test
+    public void googleMapsSatellite() {
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"google_maps\",\"map_basemap_behavior\":\"satellite\"},\"admin\":{}}");
+        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_GOOGLE));
+        assertThat(prefs.getString(KEY_GOOGLE_MAP_STYLE, null), is(String.valueOf(GoogleMap.MAP_TYPE_SATELLITE)));
+    }
+
+    @Test
+    public void mapboxLight() {
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"mapbox_maps\",\"map_basemap_behavior\":\"mapbox_light\"},\"admin\":{}}");
+        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_MAPBOX));
+        assertThat(prefs.getString(KEY_MAPBOX_MAP_STYLE, null), is(String.valueOf(Style.LIGHT)));
     }
 }
