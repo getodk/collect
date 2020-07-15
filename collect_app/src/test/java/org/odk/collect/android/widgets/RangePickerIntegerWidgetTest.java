@@ -10,18 +10,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 
 import java.math.BigDecimal;
 
-import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,7 +26,6 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mock
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class RangePickerIntegerWidgetTest {
@@ -115,18 +111,6 @@ public class RangePickerIntegerWidgetTest {
         widget.setNumberPickerValue(4);
 
         assertThat(widget.getAnswer().getDisplayText(), equalTo("5"));
-    }
-
-    @Test
-    public void clickingPickerButton_showsNumberPickerDialog() {
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.binding.widgetButton.performClick();
-
-        NumberPickerDialog numberPickerDialog = (NumberPickerDialog) widgetActivity.getActivity().getSupportFragmentManager()
-                .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
-        shadowOf(getMainLooper()).idle();
-
-        assertNotNull(numberPickerDialog);
     }
 
     @Test

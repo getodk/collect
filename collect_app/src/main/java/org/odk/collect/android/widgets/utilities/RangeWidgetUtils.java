@@ -184,11 +184,11 @@ public class RangeWidgetUtils {
         }
     }
 
-    public static void showNumberPickerDialog(Context context, String[] displayedValuesForNumberPicker, int id, int progress) {
+    public static void showNumberPickerDialog(FormEntryActivity activity, String[] displayedValuesForNumberPicker, int id, int progress) {
         NumberPickerDialog dialog = NumberPickerDialog.newInstance(id, displayedValuesForNumberPicker, progress);
 
         try {
-            dialog.show(((FormEntryActivity) context).getSupportFragmentManager(), NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
+            dialog.show(activity.getSupportFragmentManager(), NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
         } catch (ClassCastException e) {
             Timber.i(e);
         }

@@ -9,6 +9,7 @@ import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
@@ -82,7 +83,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
     }
 
     private void onButtonClick() {
-        RangeWidgetUtils.showNumberPickerDialog(getContext(), displayedValuesForNumberPicker, getId(), progress);
+        RangeWidgetUtils.showNumberPickerDialog((FormEntryActivity) getContext(), displayedValuesForNumberPicker, getId(), progress);
     }
 
     public void setNumberPickerValue(int value) {
