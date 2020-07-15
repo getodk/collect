@@ -45,6 +45,18 @@ public class NotificationDrawer {
         return this;
     }
 
+    public NotificationDrawer assertNotification(String appName, String title, String body) {
+        UiDevice device = waitForNotification(appName);
+
+        UiObject2 titleElement = device.findObject(By.text(title));
+        assertThat(titleElement.getText(), is(title));
+
+        UiObject2 bodyElement = device.findObject(By.text(body));
+        assertThat(bodyElement.getText(), is(body));
+
+        return this;
+    }
+
     public <D extends Page<D>> D clickNotification(String appName, String title, String expectedTextOnClick, D destination) {
         UiDevice device = waitForNotification(appName);
         UiObject2 titleElement = device.findObject(By.text(title));

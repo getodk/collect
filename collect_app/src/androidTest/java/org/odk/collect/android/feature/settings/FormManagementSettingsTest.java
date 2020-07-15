@@ -1,6 +1,7 @@
 package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
+import android.webkit.MimeTypeMap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -12,14 +13,21 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.IdlingResourceRule;
+import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.SchedulerIdlingResource;
 import org.odk.collect.android.support.StubOpenRosaServer;
 import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.pages.FormManagementPage;
+import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.NotificationDrawer;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.List;
 
@@ -30,8 +38,10 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class FormManagementSettingsTest {
 
-    public final StubOpenRosaServer server = new StubOpenRosaServer();
+    private final StubOpenRosaServer server = new StubOpenRosaServer();
     private final TestScheduler testScheduler = new TestScheduler();
+    private final NotificationDrawerRule notificationDrawer = new NotificationDrawerRule();
+
 
     public CollectTestRule rule = new CollectTestRule();
 
@@ -47,7 +57,13 @@ public class FormManagementSettingsTest {
                 public Scheduler providesScheduler(WorkManager workManager) {
                     return testScheduler;
                 }
+
+                @Override
+                public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
+                    return server;
+                }
             }))
+            .around(notificationDrawer)
             .around(new IdlingResourceRule(new SchedulerIdlingResource(testScheduler)))
             .around(rule);
 
@@ -135,5 +151,29 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks.size(), is(1));
         assertThat(deferredTasks.get(0).getTag(), is(previouslyDownloadedTag));
         assertThat(deferredTasks.get(0).getRepeatPeriod(), is(1000L * 60 * 60));
+    }
+
+    @Test
+    public void whenPreviouslyDownloadedOnlyEnabled_checkingAutoDownload_downloadsUpdatedForms() throws Exception {
+        FormManagementPage page = rule.mainMenu()
+                .setServer(server.getURL())
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOption(R.string.previously_downloaded_only)
+                .clickOnString(R.string.automatic_download);
+
+        FormLoadingUtils.copyFormToStorage("one-question.xml");
+        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testScheduler.runDeferredTasks();
+
+        page.pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+                .clickFillBlankForm()
+                .assertText("One Question Updated");
+
+        notificationDrawer.open()
+                .assertNotification("ODK Collect", "ODK auto-download results", "Success");
     }
 }
