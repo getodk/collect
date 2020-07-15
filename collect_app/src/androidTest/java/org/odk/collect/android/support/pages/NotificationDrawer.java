@@ -2,6 +2,7 @@ package org.odk.collect.android.support.pages;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.Direction;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
@@ -15,16 +16,16 @@ import static org.hamcrest.Matchers.nullValue;
 @SuppressWarnings("PMD.NonThreadSafeSingleton")
 public class NotificationDrawer {
 
-    private static boolean isOpen;
+    private boolean isOpen;
 
-    public static NotificationDrawer open() {
+    public NotificationDrawer open() {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.openNotification();
         isOpen = true;
         return new NotificationDrawer();
     }
 
-    public static void teardown() {
+    public void teardown() {
         if (isOpen) {
             UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -32,21 +33,24 @@ public class NotificationDrawer {
             if (clearAll != null) {
                 clearAll.click();
             } else {
-                device.pressBack();
+                pressBack();
             }
 
             isOpen = false;
         }
     }
 
-    public NotificationDrawer assertNotification(String appName, String title) {
+    public NotificationDrawer assertAndDismissNotification(String appName, String title) {
         UiDevice device = waitForNotification(appName);
         UiObject2 titleElement = device.findObject(By.text(title));
         assertThat(titleElement.getText(), is(title));
+
+        titleElement.swipe(Direction.RIGHT, 1.0f);
+        isOpen = false;
         return this;
     }
 
-    public NotificationDrawer assertNotification(String appName, String title, String body) {
+    public NotificationDrawer assertAndDismissNotification(String appName, String title, String body) {
         UiDevice device = waitForNotification(appName);
 
         UiObject2 titleElement = device.findObject(By.text(title));
@@ -55,6 +59,8 @@ public class NotificationDrawer {
         UiObject2 bodyElement = device.findObject(By.text(body));
         assertThat(bodyElement.getText(), is(body));
 
+        titleElement.swipe(Direction.RIGHT, 1.0f);
+        isOpen = false;
         return this;
     }
 
@@ -66,13 +72,6 @@ public class NotificationDrawer {
         device.wait(Until.hasObject(By.textStartsWith(expectedTextOnClick)), 2000L);
         isOpen = false;
         return destination.assertOnPage();
-    }
-
-    public void clearAll() {
-        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        UiObject2 clearAll = device.findObject(By.text("CLEAR ALL"));
-        clearAll.click();
-        isOpen = false;
     }
 
     public void pressBack() {

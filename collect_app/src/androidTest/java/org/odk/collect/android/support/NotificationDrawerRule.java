@@ -6,6 +6,8 @@ import org.junit.runners.model.Statement;
 import org.odk.collect.android.support.pages.NotificationDrawer;
 
 public class NotificationDrawerRule implements TestRule {
+
+    private final NotificationDrawer notificationDrawer = new NotificationDrawer();
     
     @Override
     public Statement apply(Statement base, Description description) {
@@ -15,13 +17,13 @@ public class NotificationDrawerRule implements TestRule {
                 try {
                     base.evaluate();
                 } finally {
-                    NotificationDrawer.teardown();
+                    notificationDrawer.teardown();
                 }
             }
         };
     }
 
     public NotificationDrawer open() {
-        return NotificationDrawer.open();
+        return notificationDrawer.open();
     }
 }

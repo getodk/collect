@@ -42,13 +42,12 @@ public class PreviouslyDownloadedOnlyTest {
         testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
-                .assertNotification("ODK Collect", "Form updates available")
-                .clearAll();
+                .assertAndDismissNotification("ODK Collect", "Form updates available");
 
         testDependencies.server.addForm("Two Question Updated", "two_question", "two-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
-                .assertNotification("ODK Collect", "Form updates available");
+                .assertAndDismissNotification("ODK Collect", "Form updates available");
     }
 
     @Test // this should probably be tested outside of Espresso instead
@@ -60,8 +59,7 @@ public class PreviouslyDownloadedOnlyTest {
         testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
-                .assertNotification("ODK Collect", "Form updates available")
-                .clearAll();
+                .assertAndDismissNotification("ODK Collect", "Form updates available");
 
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
