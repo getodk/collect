@@ -16,8 +16,10 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsImporterRegressionTest {
@@ -46,5 +48,13 @@ public class SettingsImporterRegressionTest {
         SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_CARTO));
         assertThat(prefs.getString(KEY_CARTO_MAP_STYLE, null), is("positron"));
+    }
+
+    @Test
+    public void usgsHybrid() {
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_usgs_sat\"},\"admin\":{}}");
+        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_USGS));
+        assertThat(prefs.getString(KEY_USGS_MAP_STYLE, null), is("hybrid"));
     }
 }

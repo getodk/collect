@@ -131,7 +131,8 @@ public final class GeneralKeys {
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
         // map_preferences.xml
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
-        hashMap.put(KEY_CARTO_MAP_STYLE,             "positron");
+        hashMap.put(KEY_CARTO_MAP_STYLE,            "positron");
+        hashMap.put(KEY_USGS_MAP_STYLE,             "topographic");
         return hashMap;
     }
 
