@@ -24,6 +24,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ import com.google.api.services.drive.Drive;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
@@ -108,6 +110,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Inject
     GoogleAccountsManager accountsManager;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
 
     @Inject
     NetworkStateProvider connectivityProvider;
@@ -550,6 +555,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 break;
 
             case R.id.back_button:
+                folderIdStack.pop();
                 backButton.setEnabled(false);
                 rootButton.setEnabled(false);
                 downloadButton.setEnabled(false);
@@ -559,7 +565,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     if (folderIdStack.empty()) {
                         parentId = ROOT_KEY;
                     } else {
-                        parentId = folderIdStack.pop();
+                        parentId = folderIdStack.peek();
                     }
                     listFiles(parentId);
                     currentPath.pop();
@@ -605,7 +611,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private class RetrieveDriveFileContentsAsyncTask extends
-            AsyncTask<String, HashMap<String, Object>, HashMap<String, Object>> {
+            AsyncTask<String, Void, HashMap<String, Object>> {
         private TaskListener listener;
 
         private ProgressDialog progressDialog;
@@ -701,7 +707,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                         nextPage.put(PARENT_ID_KEY, parentId);
                         nextPage.put(CURRENT_ID_KEY, currentDir);
                         nextPage.put(FILE_LIST_KEY, driveFileListPage);
-                        publishProgress(nextPage);
+                        filterForms(nextPage);
+                        publishProgress();
                     } catch (IOException e) {
                         if (!isCancelled()) {
                             Timber.e(e, "Exception thrown while accessing the file list");
@@ -711,6 +718,12 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             }
             return results;
 
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            updateAdapter();
         }
 
         @Override
@@ -729,45 +742,103 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             }
         }
 
-        @SafeVarargs
-        @Override
-        protected final void onProgressUpdate(HashMap<String, Object>... values) {
-            super.onProgressUpdate(values);
-            List<com.google.api.services.drive.model.File> fileList =
-                    (List<com.google.api.services.drive.model.File>) values[0]
-                            .get(FILE_LIST_KEY);
-            String parentId = (String) values[0].get(PARENT_ID_KEY);
-            String currentDir = (String) values[0].get(CURRENT_ID_KEY);
+    }
 
-            List<DriveListItem> dirs = new ArrayList<>();
-            List<DriveListItem> forms = new ArrayList<>();
+    private void filterForms(HashMap<String, Object> pageDetails) {
+        List<com.google.api.services.drive.model.File> fileList =
+                (List<com.google.api.services.drive.model.File>) pageDetails.get(FILE_LIST_KEY);
+        String parentId = (String) pageDetails.get(PARENT_ID_KEY);
+        String currentDir = (String) pageDetails.get(CURRENT_ID_KEY);
 
-            for (com.google.api.services.drive.model.File f : fileList) {
-                String type = f.getMimeType();
-                switch (type) {
-                    case "application/xml":
-                    case "text/xml":
-                    case "application/xhtml":
-                    case "text/xhtml":
-                    case "application/xhtml+xml":
-                        forms.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
-                                DriveListItem.FILE, f.getId(), currentDir));
-                        break;
-                    case "application/vnd.google-apps.folder":
-                        dirs.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
-                                DriveListItem.DIR, f.getId(), parentId));
-                        break;
-                    default:
-                        // skip the rest of the files
-                        break;
+        List<DriveListItem> dirs = new ArrayList<>();
+        List<DriveListItem> forms = new ArrayList<>();
+
+        for (com.google.api.services.drive.model.File f : fileList) {
+            String type = f.getMimeType();
+            switch (type) {
+                case "application/xml":
+                case "text/xml":
+                case "application/xhtml":
+                case "text/xhtml":
+                case "application/xhtml+xml":
+                    forms.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                            DriveListItem.FILE, f.getId(), currentDir));
+                    break;
+                case "application/vnd.google-apps.folder":
+                    dirs.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                            DriveListItem.DIR, f.getId(), parentId));
+                    break;
+                default:
+                    // skip the rest of the files
+                    break;
+            }
+        }
+        Collections.sort(dirs);
+        Collections.sort(forms);
+        driveList.addAll(dirs);
+        driveList.addAll(forms);
+        checkFormUpdates();
+    }
+
+    private void checkFormUpdates() {
+        FormsDao formsDao = new FormsDao();
+        for (DriveListItem item: driveList) {
+            if (item.getType() == DriveListItem.FILE) {
+                try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
+                    if (cursor != null && cursor.moveToFirst() && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
+                        item.setNewerVersion(true);
+                    }
                 }
             }
-            Collections.sort(dirs);
-            Collections.sort(forms);
-            driveList.addAll(dirs);
-            driveList.addAll(forms);
-            updateAdapter();
         }
+    }
+
+    private boolean isNewerFormVersionAvailable(DriveListItem item) {
+        Long lastModifiedLocal = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
+        Long lastModifiedServer = item.getDate().getValue();
+        return lastModifiedServer > lastModifiedLocal;
+    }
+
+    private boolean areNewerMediaFilesAvailable(DriveListItem item) {
+        String mediaDirName = FileUtils.constructMediaPath(item.getName());
+
+        try {
+            List<com.google.api.services.drive.model.File> mediaFileList;
+            try {
+                mediaFileList = getMediaFiles(item);
+            } catch (MultipleFoldersFoundException exception) {
+                return false;
+            }
+
+            if (mediaFileList != null) {
+                for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
+                    File localMediaFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
+                    if (!localMediaFile.exists()) {
+                        return true;
+                    } else {
+                        Long lastModifiedLocal = localMediaFile.lastModified();
+                        Long lastModifiedServer = mediaFile.getModifiedTime().getValue();
+                        if (lastModifiedServer > lastModifiedLocal) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Timber.w(e);
+        }
+        return false;
+    }
+
+    private List<com.google.api.services.drive.model.File> getMediaFiles(DriveListItem item) throws MultipleFoldersFoundException, IOException {
+        String mediaDirName = FileUtils.constructMediaPath(item.getName());
+        String folderId = driveHelper.getIDOfFolderWithName(mediaDirName, item.getParentId(), false);
+        if (folderId != null) {
+            List<com.google.api.services.drive.model.File> mediaFileList;
+            mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
+            return mediaFileList;
+        }
+        return null;
     }
 
     private class GetFileTask extends
@@ -795,19 +866,16 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
                     String mediaDirName = FileUtils.constructMediaPath(fileItem.getName());
 
-                    String folderId;
+                    List<com.google.api.services.drive.model.File> mediaFileList;
                     try {
-                        folderId = driveHelper.getIDOfFolderWithName(mediaDirName, fileItem.getParentId(), false);
+                        mediaFileList = getMediaFiles(fileItem);
                     } catch (MultipleFoldersFoundException exception) {
                         results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
                         return results;
                     }
 
-                    if (folderId != null) {
-                        List<com.google.api.services.drive.model.File> mediaFileList;
-                        mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
-
-                        FileUtils.createFolder(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName);
+                    if (mediaFileList != null) {
+                        FileUtils.createFolder(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName);
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                             String filePath = mediaDirName + File.separator + mediaFile.getName();
@@ -825,7 +893,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         }
 
         private void downloadFile(@NonNull String fileId, String fileName) throws IOException {
-            File file = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + fileName);
+            File file = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + fileName);
             driveHelper.downloadFile(fileId, file);
         }
 

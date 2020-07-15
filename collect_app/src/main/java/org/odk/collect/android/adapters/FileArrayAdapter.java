@@ -52,12 +52,14 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         TextView formTitle;
         TextView formSubtitle;
         CheckBox checkBox;
+        TextView formUpdateAlert;
 
         ViewHolder(View view) {
             imageView = view.findViewById(R.id.image);
             formTitle = view.findViewById(R.id.form_title);
             formSubtitle = view.findViewById(R.id.form_subtitle);
             checkBox = view.findViewById(R.id.checkbox);
+            formUpdateAlert = view.findViewById(R.id.form_update_alert);
         }
 
         void onBind(DriveListItem item) {
@@ -76,10 +78,12 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank_circle);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.VISIBLE);
+                formUpdateAlert.setVisibility(item.isNewerVersion() ? View.VISIBLE : View.GONE);
             } else {
                 Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_folder);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.GONE);
+                formUpdateAlert.setVisibility(View.GONE);
             }
 
             formTitle.setText(item.getName());
