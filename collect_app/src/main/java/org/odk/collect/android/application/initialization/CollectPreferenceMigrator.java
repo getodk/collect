@@ -100,9 +100,9 @@ public class CollectPreferenceMigrator implements PreferenceMigrator {
                         .withValues("osmdroid", "openmap_stamen_terrain")
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_STAMEN)
 
-                        .withValues("osmdroid", "openmap_carto_positron")
+                        .withValues("osmdroid", "openmap_cartodb_positron")
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "positron")
-                        .withValues("osmdroid", "openmap_carto_darkmatter")
+                        .withValues("osmdroid", "openmap_cartodb_darkmatter")
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "dark_matter"),
 
                 translateValue("other_protocol").toValue("odk_default").forKey("protocol"),

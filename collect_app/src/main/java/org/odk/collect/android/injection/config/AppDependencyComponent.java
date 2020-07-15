@@ -19,6 +19,7 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
@@ -205,4 +206,6 @@ public interface AppDependencyComponent {
     PreferencesProvider preferencesProvider();
 
     ApplicationInitializer applicationInitializer();
+
+    SettingsImporter settingsImporter();
 }

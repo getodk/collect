@@ -98,11 +98,11 @@ public class CollectPreferenceMigratorTest {
         runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "stamen");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_carto_positron");
+        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_positron");
         runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "carto", "carto_map_style", "positron");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_carto_darkmatter");
+        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_darkmatter");
         runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "carto", "carto_map_style", "dark_matter");
     }
