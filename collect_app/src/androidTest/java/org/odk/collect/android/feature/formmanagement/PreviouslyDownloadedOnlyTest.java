@@ -17,6 +17,8 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.StubOpenRosaServer;
+import org.odk.collect.android.support.TestDependencies;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.pages.GetBlankFormPage;
 import org.odk.collect.android.support.pages.NotificationDrawer;
@@ -29,31 +31,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class PreviouslyDownloadedOnlyTest {
 
-    public final StubOpenRosaServer server = new StubOpenRosaServer();
-    private final TestScheduler testScheduler = new TestScheduler();
-
+    public TestDependencies testDependencies = new TestDependencies();
     public NotificationDrawerRule notificationDrawer = new NotificationDrawerRule();
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.GET_ACCOUNTS
-            ))
-            .around(new ResetStateRule(new AppDependencyModule() {
-                @Override
-                public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
-                    return server;
-                }
-
-                @Override
-                public Scheduler providesScheduler(WorkManager workManager) {
-                    return testScheduler;
-                }
-            }))
+    public RuleChain chain = TestRuleChain.chain(testDependencies)
+            .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
             .around(notificationDrawer)
             .around(new CopyFormRule("one-question.xml"))
             .around(new CopyFormRule("two-question.xml"))
@@ -62,17 +46,17 @@ public class PreviouslyDownloadedOnlyTest {
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_notifiesOnFormUpdates_automaticallyAndRepeatedly() {
         rule.mainMenu()
-                .setServer(server.getURL())
+                .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates();
 
-        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testScheduler.runDeferredTasks();
+        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
                 .assertNotification("ODK Collect", "Form updates available")
                 .clearAll();
 
-        server.addForm("Two Question Updated", "two_question", "two-question-updated.xml");
-        testScheduler.runDeferredTasks();
+        testDependencies.server.addForm("Two Question Updated", "two_question", "two-question-updated.xml");
+        testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
                 .assertNotification("ODK Collect", "Form updates available");
     }
@@ -80,16 +64,16 @@ public class PreviouslyDownloadedOnlyTest {
     @Test // this should probably be tested outside of Espresso instead
     public void whenPreviouslyDownloadedOnlyEnabled_andFormUpdateNotificationHasAlreadyBeenSent_doesntNotifyAgain() {
         rule.mainMenu()
-                .setServer(server.getURL())
+                .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates();
 
-        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testScheduler.runDeferredTasks();
+        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
                 .assertNotification("ODK Collect", "Form updates available")
                 .clearAll();
 
-        testScheduler.runDeferredTasks();
+        testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
                 .assertNoNotification("ODK Collect");
     }
@@ -97,11 +81,11 @@ public class PreviouslyDownloadedOnlyTest {
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_clickingOnNotification_navigatesToGetBlankForm() {
         rule.mainMenu()
-                .setServer(server.getURL())
+                .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates();
 
-        server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testScheduler.runDeferredTasks();
+        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.scheduler.runDeferredTasks();
 
         notificationDrawer.open()
                 .clickNotification("Collect", "Form updates available", "Get Blank Form", new GetBlankFormPage(rule))
