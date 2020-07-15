@@ -14,6 +14,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.StubOpenRosaServer;
 import org.odk.collect.android.support.TestScheduler;
@@ -31,6 +32,7 @@ public class PreviouslyDownloadedOnlyTest {
     public final StubOpenRosaServer server = new StubOpenRosaServer();
     private final TestScheduler testScheduler = new TestScheduler();
 
+    public NotificationDrawerRule notificationDrawer = new NotificationDrawerRule();
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
@@ -52,6 +54,7 @@ public class PreviouslyDownloadedOnlyTest {
                     return testScheduler;
                 }
             }))
+            .around(notificationDrawer)
             .around(new CopyFormRule("one-question.xml"))
             .around(new CopyFormRule("two-question.xml"))
             .around(rule);
@@ -64,15 +67,14 @@ public class PreviouslyDownloadedOnlyTest {
 
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         testScheduler.runDeferredTasks();
-        NotificationDrawer.open()
+        notificationDrawer.open()
                 .assertNotification("ODK Collect", "Form updates available")
                 .clearAll();
 
         server.addForm("Two Question Updated", "two_question", "two-question-updated.xml");
         testScheduler.runDeferredTasks();
-        NotificationDrawer.open()
-                .assertNotification("ODK Collect", "Form updates available")
-                .clearAll();
+        notificationDrawer.open()
+                .assertNotification("ODK Collect", "Form updates available");
     }
 
     @Test // this should probably be tested outside of Espresso instead
@@ -83,14 +85,13 @@ public class PreviouslyDownloadedOnlyTest {
 
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         testScheduler.runDeferredTasks();
-        NotificationDrawer.open()
+        notificationDrawer.open()
                 .assertNotification("ODK Collect", "Form updates available")
                 .clearAll();
 
         testScheduler.runDeferredTasks();
-        NotificationDrawer.open()
-                .assertNoNotification("ODK Collect")
-                .pressBack();
+        notificationDrawer.open()
+                .assertNoNotification("ODK Collect");
     }
 
     @Test
@@ -102,7 +103,7 @@ public class PreviouslyDownloadedOnlyTest {
         server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         testScheduler.runDeferredTasks();
 
-        NotificationDrawer.open()
+        notificationDrawer.open()
                 .clickNotification("Collect", "Form updates available", "Get Blank Form", new GetBlankFormPage(rule))
                 .assertText(R.string.newer_version_of_a_form_info)
                 .assertOnPage();

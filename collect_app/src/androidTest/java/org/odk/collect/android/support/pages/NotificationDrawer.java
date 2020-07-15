@@ -14,10 +14,28 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class NotificationDrawer {
 
+    private static boolean isOpen = false;
+
     public static NotificationDrawer open() {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.openNotification();
+        isOpen = true;
         return new NotificationDrawer();
+    }
+
+    public static void teardown() {
+        if (isOpen) {
+            UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+            UiObject2 clearAll = device.findObject(By.text("CLEAR ALL"));
+            if (clearAll != null) {
+                clearAll.click();
+            } else {
+                device.pressBack();
+            }
+
+            isOpen = false;
+        }
     }
 
     public NotificationDrawer assertNotification(String appName, String title) {
@@ -33,6 +51,7 @@ public class NotificationDrawer {
         titleElement.click();
 
         device.wait(Until.hasObject(By.textStartsWith(expectedTextOnClick)), 2000L);
+        isOpen = false;
         return destination.assertOnPage();
     }
 
@@ -40,11 +59,13 @@ public class NotificationDrawer {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject2 clearAll = device.findObject(By.text("CLEAR ALL"));
         clearAll.click();
+        isOpen = false;
     }
 
     public void pressBack() {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.pressBack();
+        isOpen = false;
     }
 
     @NotNull
