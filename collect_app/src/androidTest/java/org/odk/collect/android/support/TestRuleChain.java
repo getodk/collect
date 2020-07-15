@@ -8,6 +8,10 @@ import org.junit.rules.RuleChain;
 
 public class TestRuleChain {
 
+    private TestRuleChain() {
+
+    }
+
     public static RuleChain chain() {
         return chain(false, new TestDependencies());
     }

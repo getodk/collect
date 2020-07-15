@@ -1,29 +1,19 @@
 package org.odk.collect.android.feature.formmanagement;
 
 import android.Manifest;
-import android.webkit.MimeTypeMap;
 
 import androidx.test.rule.GrantPermissionRule;
-import androidx.work.WorkManager;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.NotificationDrawerRule;
-import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.StubOpenRosaServer;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.pages.GetBlankFormPage;
-import org.odk.collect.android.support.pages.NotificationDrawer;
-import org.odk.collect.async.Scheduler;
-import org.odk.collect.utilities.UserAgentProvider;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;

@@ -12,9 +12,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
+@SuppressWarnings("PMD.NonThreadSafeSingleton")
 public class NotificationDrawer {
 
-    private static boolean isOpen = false;
+    private static boolean isOpen;
 
     public static NotificationDrawer open() {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());

@@ -14,8 +14,6 @@ import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.StorageMigrationDialogPage;
 
-import java.util.Arrays;
-
 import static java.util.Arrays.asList;
 
 @RunWith(AndroidJUnit4.class)
