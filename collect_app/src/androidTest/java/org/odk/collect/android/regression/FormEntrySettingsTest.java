@@ -74,6 +74,4 @@ public class FormEntrySettingsTest {
                 .assertTextDoesNotExist(R.string.keep_changes)
                 .clickOnString(R.string.do_not_save);
     }
-
 }
-

@@ -1,18 +1,18 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.PreferenceMatchers;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -39,14 +39,12 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage openConstraintProcessing() {
-        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(ViewActions.scrollTo());
-        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(click());
+        scrollToViewAndClickText(getTranslatedString(R.string.constraint_behavior_title));
         return this;
     }
 
     public GeneralSettingsPage openShowGuidanceForQuestions() {
-        onData(PreferenceMatchers.withKey("guidance_hint")).perform(ViewActions.scrollTo());
-        onData(PreferenceMatchers.withKey("guidance_hint")).perform(click());
+        scrollToViewAndClickText(getTranslatedString(R.string.guidance_hint_title));
         return this;
     }
 
@@ -72,32 +70,33 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage checkIfUserInterfaceOptionIsDisplayed() {
-        onData(PreferenceMatchers.withKey("user_interface")).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.client))).check(matches(isDisplayed()));
         return this;
     }
 
     public GeneralSettingsPage checkIfMapsOptionIsDisplayed() {
-        onData(PreferenceMatchers.withKey("maps")).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.maps))).check(matches(isDisplayed()));
         return this;
     }
 
     public GeneralSettingsPage checkIfFormManagementOptionIsDisplayed() {
-        onData(PreferenceMatchers.withKey("form_management")).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.form_management_preferences))).check(matches(isDisplayed()));
         return this;
     }
 
     public GeneralSettingsPage checkIfUserAndDeviceIdentityIsDisplayed() {
-        onData(PreferenceMatchers.withKey("user_and_device_identity")).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.user_and_device_identity_title))).check(matches(isDisplayed()));
         return this;
     }
 
     public GeneralSettingsPage scrollToConstraintProcessing() {
-        onData(PreferenceMatchers.withKey("constraint_behavior")).perform(ViewActions.scrollTo());
+        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions
+                .actionOnItem(hasDescendant(withText(getTranslatedString(R.string.constraint_behavior_title))), scrollTo()));
         return this;
     }
 
     public GeneralSettingsPage checkIfConstraintProcessingIsDisabled() {
-        onData(PreferenceMatchers.withKey("constraint_behavior")).check(matches(not(isEnabled())));
+        onView(withText(getTranslatedString(R.string.constraint_behavior_title))).check(matches(not(isEnabled())));
         return this;
     }
 
@@ -107,8 +106,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage clickOnDefaultToFinalized() {
-        onData(PreferenceMatchers.withKey("default_completed")).perform(ViewActions.scrollTo());
-        onData(PreferenceMatchers.withKey("default_completed")).perform(click());
+        scrollToViewAndClickText(getTranslatedString(R.string.default_completed));
         return this;
     }
 
