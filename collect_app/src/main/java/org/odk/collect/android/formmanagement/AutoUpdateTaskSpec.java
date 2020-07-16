@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.formmanagement;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -29,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -37,7 +37,6 @@ import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
-import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
@@ -55,6 +54,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAS
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
+import static org.odk.collect.android.utilities.NotificationUtils.showNotification;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
@@ -69,6 +69,9 @@ public class AutoUpdateTaskSpec implements TaskSpec {
 
     @Inject
     MultiFormDownloader multiFormDownloader;
+
+    @Inject
+    NotificationManager notificationManager;
 
     DatabaseNotificationRepository notificationRepository;
 
@@ -89,9 +92,9 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                 if (!newDetectedForms.isEmpty()) {
                     if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(newDetectedForms, null);
-                        notifyAboutDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
+                        notifyAboutDownloadedForms(context.getString(R.string.download_forms_result), result, context);
                     } else {
-                        notifyAboutUpdatedForms(newDetectedForms);
+                        notifyAboutUpdatedForms(newDetectedForms, context);
                     }
                 }
             } catch (FormApiException e) {
@@ -113,7 +116,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         }
     }
 
-    private void notifyAboutUpdatedForms(List<ServerFormDetails> newDetectedForms) {
+    private void notifyAboutUpdatedForms(List<ServerFormDetails> newDetectedForms, Context context) {
         boolean needsNotification = false;
 
         for (ServerFormDetails serverFormDetails : newDetectedForms) {
@@ -127,15 +130,18 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         }
 
         if (needsNotification) {
-            Intent intent = new Intent(Collect.getInstance(), FormDownloadListActivity.class);
+            Intent intent = new Intent(context, FormDownloadListActivity.class);
             intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
-            PendingIntent contentIntent = PendingIntent.getActivity(Collect.getInstance(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationUtils.showNotification(
-                    contentIntent,
-                    FORM_UPDATE_NOTIFICATION_ID,
+            showNotification(
+                    context,
+                    notificationManager,
                     R.string.form_updates_available,
-                    null);
+                    null,
+                    contentIntent,
+                    FORM_UPDATE_NOTIFICATION_ID
+            );
         }
     }
 
@@ -174,27 +180,31 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         return newDetectedForms;
     }
 
-    private void notifyAboutDownloadedForms(String title, HashMap<ServerFormDetails, String> result) {
-        Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
+    private void notifyAboutDownloadedForms(String title, HashMap<ServerFormDetails, String> result, @NotNull Context context) {
+        Intent intent = new Intent(context, NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
-        PendingIntent contentIntent = PendingIntent.getActivity(Collect.getInstance(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationUtils.showNotification(contentIntent,
-                FORM_UPDATE_NOTIFICATION_ID,
+        showNotification(
+                context,
+                notificationManager,
                 R.string.odk_auto_download_notification_title,
-                getContentText(result));
+                getContentText(context, result),
+                contentIntent,
+                FORM_UPDATE_NOTIFICATION_ID
+        );
     }
 
-    private String getContentText(HashMap<ServerFormDetails, String> result) {
-        return allFormsDownloadedSuccessfully(result)
-                ? Collect.getInstance().getString(R.string.success)
-                : Collect.getInstance().getString(R.string.failures);
+    private String getContentText(Context context, HashMap<ServerFormDetails, String> result) {
+        return allFormsDownloadedSuccessfully(context, result)
+                ? context.getString(R.string.success)
+                : context.getString(R.string.failures);
     }
 
-    private boolean allFormsDownloadedSuccessfully(HashMap<ServerFormDetails, String> result) {
+    private boolean allFormsDownloadedSuccessfully(Context context, HashMap<ServerFormDetails, String> result) {
         for (Map.Entry<ServerFormDetails, String> item : result.entrySet()) {
-            if (!item.getValue().equals(Collect.getInstance().getString(R.string.success))) {
+            if (!item.getValue().equals(context.getString(R.string.success))) {
                 return false;
             }
         }

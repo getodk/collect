@@ -2,6 +2,7 @@ package org.odk.collect.android.injection.config;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -410,5 +411,10 @@ public class AppDependencyModule {
     @Provides
     public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
         return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formRepository, formDownloader);
+    }
+
+    @Provides
+    public NotificationManager providesNotificationManager(Context context) {
+        return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 }
