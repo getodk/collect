@@ -63,7 +63,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
                 actualValue = RangeWidgetUtils.setUpNullValue(slider, currentValue);
             }
             setUpActualValueLabel();
-            setUpSeekBar();
+            setUpSlider(prompt);
         }
         return layoutElements.getAnswerView();
     }
@@ -93,15 +93,14 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
         currentValue.setText(value);
     }
 
-    private void setUpSeekBar() {
-        RangeWidgetUtils.setUpSlider(rangeQuestion, slider, actualValue);
-        slider.setStepSize(rangeQuestion.getRangeStep().abs().intValue());
+    private void setUpSlider(FormEntryPrompt prompt) {
+        RangeWidgetUtils.setUpSlider(prompt, rangeQuestion, slider, actualValue, true);
         slider.addOnChangeListener(this);
     }
 
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-        actualValue = BigDecimal.valueOf(value);
+        actualValue = RangeWidgetUtils.setUpSliderValue(getFormEntryPrompt(), slider, rangeQuestion, value);
         setUpActualValueLabel();
         widgetValueChanged();
     }

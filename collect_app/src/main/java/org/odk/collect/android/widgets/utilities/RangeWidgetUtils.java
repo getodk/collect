@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.slider.Slider;
+
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -25,6 +27,7 @@ import timber.log.Timber;
 
 public class RangeWidgetUtils {
     private static final String VERTICAL_APPEARANCE = "vertical";
+    private static final String NO_TICKS_APPEARANCE = "no-ticks";
 
     private RangeWidgetUtils() {
     }
@@ -96,16 +99,24 @@ public class RangeWidgetUtils {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setUpSlider(RangeQuestion rangeQuestion, TrackingTouchSlider slider, BigDecimal actualValue) {
+    public static void setUpSlider(FormEntryPrompt prompt, RangeQuestion rangeQuestion, TrackingTouchSlider slider,
+                                   BigDecimal actualValue, boolean isIntegerType) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
-        BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
+        BigDecimal rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : BigDecimal.valueOf(0.5);
 
         slider.setValueFrom(rangeStart.floatValue());
         slider.setValueTo(rangeEnd.floatValue());
-        slider.setStepSize(rangeStep.floatValue() != 0 ? rangeStep.floatValue() : 0.5F);
-        slider.setValue(actualValue == null ? rangeStart.floatValue() : actualValue.floatValue());
 
+        if (prompt.getQuestion().getAppearanceAttr() == null || !prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
+            if (isIntegerType) {
+                slider.setStepSize(rangeStep.intValue());
+            } else {
+                slider.setStepSize(rangeStep.floatValue());
+            }
+        }
+
+        slider.setValue(actualValue == null ? rangeStart.floatValue() : actualValue.floatValue());
         slider.setOnTouchListener((v, event) -> {
             int action = event.getAction();
             switch (action) {
@@ -148,6 +159,28 @@ public class RangeWidgetUtils {
         slider.setValue(slider.getValueFrom());
         currentValue.setText("");
         return null;
+    }
+
+    public static BigDecimal setUpSliderValue(FormEntryPrompt prompt, Slider slider, RangeQuestion rangeQuestion, float value) {
+        if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
+            BigDecimal rangeStart = rangeQuestion.getRangeStart();
+            BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
+            BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
+
+            float actualValue;
+            if (rangeEnd.compareTo(rangeStart) > -1) {
+                int progress = (int) ((value - rangeStart.floatValue()) / rangeStep.floatValue());
+                actualValue = rangeStart.floatValue() + progress * rangeStep.floatValue();
+            } else {
+                int progress = (int) ((value - rangeEnd.floatValue()) / rangeStep.floatValue());
+                actualValue = rangeStart.floatValue() - progress * rangeStep.floatValue();
+            }
+
+            slider.setValue(actualValue);
+            return BigDecimal.valueOf(actualValue);
+        }
+
+        return BigDecimal.valueOf(value);
     }
 
     public static BigDecimal setUpNullValueForRangePicker(WidgetAnswerBinding binding) {
