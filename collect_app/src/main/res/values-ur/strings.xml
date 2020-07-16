@@ -533,7 +533,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">او ڈی کے کولیکٹ  کالز نہیں کرتا، لیکن یہ آپ کےڈیوائس  کے بارے میں مخصوص خصوصیات جیسے فون نمبر اور ڈیوائس آئی ڈٰی تک رسائی حاصل کرنے کی ضرورت ہے.</string>
   <string name="form_update_category">فارم اپ ڈیٹ</string>
   <string name="periodic_form_updates_check_title">دورانیہ فارم اپ ڈیٹ چیک</string>
-  <string name="never">کبھی نہیں</string>
   <string name="every_fifteen_minutes">ہر پندرہ منٹ</string>
   <string name="every_one_hour">ہر گھنٹے </string>
   <string name="every_six_hours">ہر چھ گھنٹے </string>

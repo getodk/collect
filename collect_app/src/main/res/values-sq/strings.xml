@@ -441,7 +441,6 @@
   <string name="camera_runtime_permission_denied_title">Lejo aksesin në kamera</string>
   <string name="record_audio_runtime_permission_denied_title">Lejo aksesin në regjistrimin audio</string>
   <string name="periodic_form_updates_check_title">Kontroll periodik për forma të rifreskuara</string>
-  <string name="never">Asnjëherë</string>
   <string name="every_fifteen_minutes">Çdo pesëmbëdhjetë minuta</string>
   <string name="every_one_hour">Çdo një orë</string>
   <string name="every_six_hours">Çdo gjashtë orë</string>

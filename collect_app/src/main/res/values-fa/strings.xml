@@ -289,7 +289,6 @@
   <string name="record_audio_runtime_permission_denied_title">ثبت مجوز صوتی</string>
   <string name="get_accounts_runtime_permission_denied_title">دریافت مجوز حساب ها</string>
   <string name="form_update_category">آپدیت فورم</string>
-  <string name="never">هرگز</string>
   <string name="every_fifteen_minutes">هر پانزده دقیقه بعد</string>
   <string name="every_one_hour">هر ساعت</string>
   <string name="every_six_hours">هر شش ساعت</string>

@@ -310,7 +310,6 @@
   <string name="no">Nee</string>
   <string name="form_update_category">Formulier update</string>
   <string name="periodic_form_updates_check_title">Periodieke check op formulier updates</string>
-  <string name="never">Nooit</string>
   <string name="every_fifteen_minutes">Elke vijftien minuten</string>
   <string name="every_one_hour">Elk uur</string>
   <string name="every_six_hours">Elke zes uur</string>

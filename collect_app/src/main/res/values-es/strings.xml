@@ -611,7 +611,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">La aplicación  no hace llamadas pero necesita acceso a ciertas propiedades del teléfono como el número telefónico y el IMEI.</string>
   <string name="form_update_category">Actualizar Formulario</string>
   <string name="periodic_form_updates_check_title">Buscar actualizaciones de formularios</string>
-  <string name="never">Nunca</string>
   <string name="every_fifteen_minutes">Cada 15 minutos</string>
   <string name="every_one_hour">Cada hora</string>
   <string name="every_six_hours">Cada 6 horas</string>
