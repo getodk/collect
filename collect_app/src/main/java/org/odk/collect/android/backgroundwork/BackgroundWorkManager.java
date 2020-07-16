@@ -8,7 +8,7 @@ public interface BackgroundWorkManager {
 
     void scheduleMatchExactlySync(long repeatPeriod);
 
-    void cancelMatchExactlySync();
-
     void scheduleAutoUpdate(long repeatPeriod);
+
+    void cancelWork();
 }

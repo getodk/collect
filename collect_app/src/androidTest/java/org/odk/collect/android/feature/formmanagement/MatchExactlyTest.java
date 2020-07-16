@@ -14,6 +14,10 @@ import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FillBlankFormPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+
 @RunWith(AndroidJUnit4.class)
 public class MatchExactlyTest {
 
@@ -78,20 +82,12 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyDisabled_stopsSyncingAutomatically() {
-        MainMenuPage page = rule.mainMenu()
+        rule.mainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly()
                 .enableManualUpdates();
 
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testDependencies.server.addForm("Two Question", "two_question", "two-question.xml");
-        testDependencies.scheduler.runDeferredTasks();
-
-        page.clickFillBlankForm()
-                .assertText("One Question")
-                .assertText("One Question Repeat")
-                .assertTextDoesNotExist("Two Question")
-                .assertTextDoesNotExist("One Question Updated");
+        assertThat(testDependencies.scheduler.getDeferredTasks(), is(empty()));
     }
 
 }

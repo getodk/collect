@@ -37,8 +37,9 @@ public class SchedulerBackgroundWorkManager implements BackgroundWorkManager {
     }
 
     @Override
-    public void cancelMatchExactlySync() {
+    public void cancelWork() {
         scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
+        scheduler.cancelDeferred(ServerPollingJob.TAG);
     }
 
     @Override

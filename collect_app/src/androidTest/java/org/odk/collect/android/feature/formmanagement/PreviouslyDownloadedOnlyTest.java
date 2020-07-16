@@ -18,6 +18,9 @@ import org.odk.collect.android.support.pages.GetBlankFormPage;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 
 public class PreviouslyDownloadedOnlyTest {
 
@@ -95,5 +98,15 @@ public class PreviouslyDownloadedOnlyTest {
                 .clickFillBlankForm();
 
         onView(withId(R.id.menu_refresh)).check(doesNotExist());
+    }
+
+    @Test
+    public void whenPreviouslyDownloadedOnlyDisabled_stopsCheckingForUpdates() {
+        rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+                .enablePreviouslyDownloadedOnlyUpdates()
+                .enableManualUpdates();
+
+        assertThat(testDependencies.scheduler.getDeferredTasks(), is(empty()));
     }
 }

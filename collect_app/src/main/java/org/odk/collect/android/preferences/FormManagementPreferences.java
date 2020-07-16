@@ -77,7 +77,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         Preference matchExactly = findPreference(KEY_FORM_UPDATE_MODE);
         matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
-            backgroundWorkManager.cancelMatchExactlySync();
+            backgroundWorkManager.cancelWork();
 
             String period = generalSharedPreferences.getSharedPreferences().getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
 
