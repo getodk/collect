@@ -26,12 +26,9 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
-/**
- * @author James Knight
- */
-
 @RunWith(RobolectricTestRunner.class)
 public class RangeDecimalWidgetTest {
+    private static final String NO_TICKS_APPEARANCE = "no-ticks";
 
     private RangeQuestion rangeQuestion;
 
@@ -60,6 +57,27 @@ public class RangeDecimalWidgetTest {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         assertThat(widget.slider.getValue(), equalTo(2.5F));
         assertThat(widget.currentValue.getText(), equalTo("2.5"));
+    }
+
+    @Test
+    public void whenSliderIsDiscrete_widgetShowsCorrectSliderValues() {
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+
+        assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
+        assertThat(widget.slider.getValueTo(), equalTo(5.5F));
+        assertThat(widget.slider.getStepSize(), equalTo(0.5F));
+        assertThat(widget.slider.getValue(), equalTo(2.5F));
+    }
+
+    @Test
+    public void whenSliderIsContinuous_widgetShowsCorrectSliderValues() {
+        when(rangeQuestion.getAppearanceAttr()).thenReturn(NO_TICKS_APPEARANCE);
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+
+        assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
+        assertThat(widget.slider.getValueTo(), equalTo(5.5F));
+        assertThat(widget.slider.getStepSize(), equalTo(0.0F));
+        assertThat(widget.slider.getValue(), equalTo(2.5F));
     }
 
     @Test

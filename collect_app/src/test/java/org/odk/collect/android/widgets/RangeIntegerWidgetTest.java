@@ -28,6 +28,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class RangeIntegerWidgetTest {
+    private static final String NO_TICKS_APPEARANCE = "no-ticks";
 
     private RangeQuestion rangeQuestion;
 
@@ -63,6 +64,27 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         assertThat(widget.slider.getValue(), equalTo(4.0F));
         assertThat(widget.currentValue.getText(), equalTo("4"));
+    }
+
+    @Test
+    public void whenSliderIsDiscrete_widgetShowsCorrectSliderValues() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+
+        assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
+        assertThat(widget.slider.getValueTo(), equalTo(10.0F));
+        assertThat(widget.slider.getStepSize(), equalTo(1.0F));
+        assertThat(widget.slider.getValue(), equalTo(4.0F));
+    }
+
+    @Test
+    public void whenSliderIsContinuous_widgetShowsCorrectSliderValues() {
+        when(rangeQuestion.getAppearanceAttr()).thenReturn(NO_TICKS_APPEARANCE);
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+
+        assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
+        assertThat(widget.slider.getValueTo(), equalTo(10.0F));
+        assertThat(widget.slider.getStepSize(), equalTo(0.0F));
+        assertThat(widget.slider.getValue(), equalTo(4.0F));
     }
 
     @Test

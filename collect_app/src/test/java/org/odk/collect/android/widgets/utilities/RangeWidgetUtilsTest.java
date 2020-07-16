@@ -134,16 +134,6 @@ public class RangeWidgetUtilsTest {
     }
 
     @Test
-    public void setUpSlider_shouldShowCorrectSlider() {
-        RangeWidgetUtils.setUpSlider(rangeQuestion, slider, new BigDecimal("5"));
-
-        assertThat(slider.getValueFrom(), equalTo(1.0F));
-        assertThat(slider.getValueTo(), equalTo(10.0F));
-        assertThat(slider.getStepSize(), equalTo(1.0F));
-        assertThat(slider.getValue(), equalTo(5.0F));
-    }
-
-    @Test
     public void setUpNullValue_returnsNullValueAndSetsCorrectValuesInSliderAndAnswerTextView() {
         BigDecimal value = RangeWidgetUtils.setUpNullValue(slider, sampleTextView1);
 
