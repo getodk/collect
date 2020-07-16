@@ -4,9 +4,6 @@ import android.content.Context;
 
 import androidx.work.WorkerParameters;
 
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobManager;
-
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
 import org.odk.collect.android.tasks.ServerPollingJob;
@@ -15,21 +12,17 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
-import java.util.Set;
-
 /**
- * Abstraction that sits on top of {@link com.evernote.android.job.JobManager} and
- * {@link androidx.work.WorkManager}. Implementation of {@link BackgroundWorkManager} which objects
- * can use to interact with background work without having to care what underlying framework is
- * being used.
+ * Abstraction that sits on top of {@link Scheduler}. Implementation of {@link BackgroundWorkManager} which
+ * can be used to interact with background work without having to care about underlying framework and details.
  */
-public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWorkManager {
+public class SchedulerBackgroundWorkManager implements BackgroundWorkManager {
 
     private static final String MATCH_EXACTLY_SYNC_TAG = "match_exactly";
 
     private final Scheduler scheduler;
 
-    public JobManagerAndSchedulerBackgroundWorkManager(Scheduler scheduler) {
+    public SchedulerBackgroundWorkManager(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
 
@@ -59,21 +52,7 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
     }
 
     private boolean isRunning(String tag) {
-        if (ServerPollingJob.TAG.equals(tag)) {
-            return isJobManagerWorkRunning(tag);
-        }
-
         return scheduler.isRunning(tag);
-    }
-
-    private boolean isJobManagerWorkRunning(String tag) {
-        Set<Job> jobs = JobManager.instance().getAllJobsForTag(tag);
-        for (Job job : jobs) {
-            if (!job.isFinished()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static class AutoUpdateTaskSpec implements TaskSpec {
@@ -83,7 +62,7 @@ public class JobManagerAndSchedulerBackgroundWorkManager implements BackgroundWo
         public Runnable getTask(@NotNull Context context) {
             return () -> {
                 ServerPollingJob serverPollingJob = new ServerPollingJob();
-                serverPollingJob.onRunJob(null);
+                serverPollingJob.onRunJob();
             };
         }
 

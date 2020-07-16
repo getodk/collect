@@ -6,8 +6,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobManagerCreateException;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -21,7 +19,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.geo.MapboxUtils;
-import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -37,16 +34,14 @@ import timber.log.Timber;
 public class ApplicationInitializer {
 
     private final Application context;
-    private final CollectJobCreator collectJobCreator;
     private final UserAgentProvider userAgentProvider;
     private final PreferenceMigrator preferenceMigrator;
     private final PropertyManager propertyManager;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
         this.context = context;
-        this.collectJobCreator = collectJobCreator;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
@@ -68,7 +63,6 @@ public class ApplicationInitializer {
 
     public void initializeFrameworks() {
         NotificationUtils.createNotificationChannel(context);
-        initializeJobManager();
         JodaTimeAndroid.init(context);
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -101,16 +95,6 @@ public class ApplicationInitializer {
             Timber.plant(new CrashReportingTree());
         } else {
             Timber.plant(new Timber.DebugTree());
-        }
-    }
-
-    private void initializeJobManager() {
-        try {
-            JobManager
-                    .create(context)
-                    .addJobCreator(collectJobCreator);
-        } catch (JobManagerCreateException e) {
-            Timber.e(e);
         }
     }
 

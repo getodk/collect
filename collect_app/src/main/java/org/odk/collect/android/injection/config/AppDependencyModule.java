@@ -19,7 +19,7 @@ import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.application.initialization.CollectPreferenceMigrator;
 import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
-import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.SchedulerBackgroundWorkManager;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -41,7 +41,6 @@ import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -298,13 +297,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CollectJobCreator providesCollectJobCreator() {
-        return new CollectJobCreator();
-    }
-
-    @Provides
     public BackgroundWorkManager providesBackgroundWorkManager(Scheduler scheduler) {
-        return new JobManagerAndSchedulerBackgroundWorkManager(scheduler);
+        return new SchedulerBackgroundWorkManager(scheduler);
     }
 
     @Provides
@@ -339,8 +333,8 @@ public class AppDependencyModule {
 
     @Singleton
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
-        return new ApplicationInitializer(application, collectJobCreator, userAgentProvider, preferenceMigrator, propertyManager);
+    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager);
     }
 
     @Provides

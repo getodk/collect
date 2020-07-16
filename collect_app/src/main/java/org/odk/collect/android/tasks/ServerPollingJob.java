@@ -23,8 +23,6 @@ import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 
-import com.evernote.android.job.Job;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
@@ -55,7 +53,7 @@ import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUI
 import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
 
-public class ServerPollingJob extends Job {
+public class ServerPollingJob {
 
     public static final String TAG = "serverPollingJob";
 
@@ -72,11 +70,10 @@ public class ServerPollingJob extends Job {
         Collect.getInstance().getComponent().inject(this);
     }
 
-    @Override
     @NonNull
-    public Result onRunJob(@NonNull Params params) {
+    public void onRunJob() {
         if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
-            return Result.FAILURE;
+            return;
         }
 
         HashMap<String, ServerFormDetails> formList = formListDownloader.downloadFormList(null, null, null);
@@ -86,7 +83,7 @@ public class ServerPollingJob extends Job {
                 formList = formListDownloader.downloadFormList(null, null, null);
 
                 if (formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
-                    return Result.FAILURE;
+                    return;
                 }
             }
 
@@ -118,9 +115,6 @@ public class ServerPollingJob extends Job {
                     }
                 }
             }
-            return Result.SUCCESS;
-        } else {
-            return Result.FAILURE;
         }
     }
 
