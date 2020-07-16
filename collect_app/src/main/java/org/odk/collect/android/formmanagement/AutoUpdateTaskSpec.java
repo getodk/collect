@@ -70,10 +70,13 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     @Inject
     MultiFormDownloader multiFormDownloader;
 
+    DatabaseNotificationRepository notificationRepository;
+
     @NotNull
     @Override
     public Runnable getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
+        notificationRepository = new DatabaseNotificationRepository();
 
         return () -> {
             if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
@@ -114,11 +117,12 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         boolean needsNotification = false;
 
         for (ServerFormDetails serverFormDetails : newDetectedForms) {
+            String formHash = serverFormDetails.getHash();
             String manifestFileHash = serverFormDetails.getManifestFileHash() != null ? serverFormDetails.getManifestFileHash() : "";
-            String formVersionHash = MultiFormDownloader.getMd5Hash(serverFormDetails.getHash()) + manifestFileHash;
-            if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
+
+            if (!notificationRepository.hasFormUpdateBeenNotified(formHash, manifestFileHash)) {
                 needsNotification = true;
-                updateLastDetectedFormVersionHash(serverFormDetails.getFormId(), formVersionHash);
+                notificationRepository.markFormUpdateNotified(serverFormDetails.getFormId(), formHash, manifestFileHash);
             }
         }
 
@@ -170,11 +174,6 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         return newDetectedForms;
     }
 
-    private boolean wasThisNewerFormVersionAlreadyDetected(String formVersionHash) {
-        Cursor cursor = new FormsDao().getFormsCursor(LAST_DETECTED_FORM_VERSION_HASH + "=?", new String[]{formVersionHash});
-        return cursor == null || cursor.getCount() > 0;
-    }
-
     private void notifyAboutDownloadedForms(String title, HashMap<ServerFormDetails, String> result) {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
@@ -185,12 +184,6 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                 FORM_UPDATE_NOTIFICATION_ID,
                 R.string.odk_auto_download_notification_title,
                 getContentText(result));
-    }
-
-    private void updateLastDetectedFormVersionHash(String formId, String formVersionHash) {
-        ContentValues values = new ContentValues();
-        values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
-        new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
     }
 
     private String getContentText(HashMap<ServerFormDetails, String> result) {
@@ -206,5 +199,23 @@ public class AutoUpdateTaskSpec implements TaskSpec {
             }
         }
         return true;
+    }
+
+    private static class DatabaseNotificationRepository {
+
+        public void markFormUpdateNotified(String formId, String formHash, String manifestHash) {
+            String formVersionHash = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
+
+            ContentValues values = new ContentValues();
+            values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
+            new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
+        }
+
+        public boolean hasFormUpdateBeenNotified(String formHash, String manifestHash) {
+            String formVersionHash = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
+
+            Cursor cursor = new FormsDao().getFormsCursor(LAST_DETECTED_FORM_VERSION_HASH + "=?", new String[]{formVersionHash});
+            return cursor == null || cursor.getCount() > 0;
+        }
     }
 }
