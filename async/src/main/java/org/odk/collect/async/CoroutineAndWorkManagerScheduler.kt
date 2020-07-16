@@ -37,6 +37,7 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
 
         val worker = spec.getWorkManagerAdapter()
         val workRequest = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
+                .addTag(tag)
                 .setConstraints(constraints)
                 .build()
 

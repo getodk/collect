@@ -1,16 +1,9 @@
 package org.odk.collect.android.backgroundwork;
 
-import android.content.Context;
-
-import androidx.work.WorkerParameters;
-
-import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.formmanagement.AutoUpdateTaskSpec;
 import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
-import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.async.TaskSpec;
-import org.odk.collect.async.WorkerAdapter;
 
 /**
  * Abstraction that sits on top of {@link Scheduler}. Implementation of {@link BackgroundWorkManager} which
@@ -19,6 +12,7 @@ import org.odk.collect.async.WorkerAdapter;
 public class SchedulerBackgroundWorkManager implements BackgroundWorkManager {
 
     private static final String MATCH_EXACTLY_SYNC_TAG = "match_exactly";
+    public static final String AUTO_UPDATE_TAG = "serverPollingJob";
 
     private final Scheduler scheduler;
 
@@ -33,13 +27,13 @@ public class SchedulerBackgroundWorkManager implements BackgroundWorkManager {
 
     @Override
     public void scheduleAutoUpdate(long repeatPeriod) {
-        scheduler.networkDeferred(ServerPollingJob.TAG, new AutoUpdateTaskSpec(), repeatPeriod);
+        scheduler.networkDeferred(AUTO_UPDATE_TAG, new AutoUpdateTaskSpec(), repeatPeriod);
     }
 
     @Override
     public void cancelWork() {
         scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
-        scheduler.cancelDeferred(ServerPollingJob.TAG);
+        scheduler.cancelDeferred(AUTO_UPDATE_TAG);
     }
 
     @Override
@@ -49,35 +43,10 @@ public class SchedulerBackgroundWorkManager implements BackgroundWorkManager {
 
     @Override
     public boolean isFormDownloaderRunning() {
-        return isRunning(ServerPollingJob.TAG);
+        return isRunning(AUTO_UPDATE_TAG);
     }
 
     private boolean isRunning(String tag) {
         return scheduler.isRunning(tag);
-    }
-
-    private static class AutoUpdateTaskSpec implements TaskSpec {
-
-        @NotNull
-        @Override
-        public Runnable getTask(@NotNull Context context) {
-            return () -> {
-                ServerPollingJob serverPollingJob = new ServerPollingJob();
-                serverPollingJob.onRunJob();
-            };
-        }
-
-        @NotNull
-        @Override
-        public Class<? extends WorkerAdapter> getWorkManagerAdapter() {
-            return Adapter.class;
-        }
-
-        public static class Adapter extends WorkerAdapter {
-
-            Adapter(@NotNull Context context, @NotNull WorkerParameters workerParams) {
-                super(new AutoUpdateTaskSpec(), context, workerParams);
-            }
-        }
     }
 }
