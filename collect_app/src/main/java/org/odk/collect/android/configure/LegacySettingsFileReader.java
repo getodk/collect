@@ -29,15 +29,15 @@ public class LegacySettingsFileReader {
         try {
             if (j.exists()) {
                 String settings = readJSONFile(j);
-                f.delete();
+                j.delete();
                 return settings;
             } else if (f.exists()) {
                 Pair<Map<String, Object>, Map<String, Object>> settings = readSettingsFile(f);
-                j.delete();
+                f.delete();
 
                 return new JSONObject()
-                        .put("general", settings.first)
-                        .put("admin", settings.second)
+                        .put("general", new JSONObject(settings.first))
+                        .put("admin", new JSONObject(settings.second))
                         .toString();
             } else {
                 return null;
