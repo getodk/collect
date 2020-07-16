@@ -21,8 +21,10 @@ public class BackgroundWorkUtils {
             return SIX_HOURS_PERIOD;
         } else if (period.equals(Collect.getInstance().getString(R.string.every_24_hours_value))) {
             return ONE_DAY_PERIOD;
-        } else {
+        } else if (period.equals(Collect.getInstance().getString(R.string.every_fifteen_minutes_value))) {
             return FIFTEEN_MINUTES_PERIOD;
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 }

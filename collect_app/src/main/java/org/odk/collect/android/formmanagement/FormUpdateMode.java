@@ -1,0 +1,21 @@
+package org.odk.collect.android.formmanagement;
+
+import android.content.Context;
+
+import org.odk.collect.android.R;
+
+public enum FormUpdateMode {
+    MANUAL(R.string.form_update_mode_manual),
+    PREVIOUSLY_DOWNLOADED_ONLY(R.string.form_update_mode_previously_downloaded),
+    MATCH_EXACTLY(R.string.form_update_mode_match_exactly);
+
+    private final int string;
+
+    FormUpdateMode(int string) {
+        this.string = string;
+    }
+
+    public String getValue(Context context) {
+        return context.getString(string);
+    }
+}

@@ -106,7 +106,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_HIGH_RESOLUTION,            true);
         hashMap.put(KEY_IMAGE_SIZE,                 "original_image_size");
         hashMap.put(KEY_INSTANCE_SYNC,              true);
-        hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
+        hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "every_fifteen_minutes");
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
         hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);
         hashMap.put(KEY_BACKGROUND_LOCATION,        true);
