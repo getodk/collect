@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.async.Scheduler;

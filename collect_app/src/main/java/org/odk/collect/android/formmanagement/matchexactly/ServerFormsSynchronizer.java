@@ -1,5 +1,9 @@
-package org.odk.collect.android.formmanagement;
+package org.odk.collect.android.formmanagement.matchexactly;
 
+import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
+import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;

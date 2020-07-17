@@ -2,6 +2,7 @@ package org.odk.collect.android.formmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 
