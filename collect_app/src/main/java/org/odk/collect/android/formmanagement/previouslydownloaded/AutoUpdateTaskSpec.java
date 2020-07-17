@@ -21,17 +21,25 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.DatabaseNotificationRepository;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
+import org.odk.collect.android.notifications.NotificationRepository;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.inject.Inject;
+
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
@@ -47,25 +55,31 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     @Inject
     MultiFormDownloader multiFormDownloader;
 
-    DatabaseNotificationRepository notificationRepository;
-
     @NotNull
     @Override
     public Runnable getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
-        notificationRepository = new DatabaseNotificationRepository();
+        NotificationRepository notificationRepository = new DatabaseNotificationRepository();
+        NotificationManagerNotifier notifier = new NotificationManagerNotifier(context);
 
         return () -> {
             if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
                 return;
             }
 
-            new ServerFormsUpdateNotifier(
-                    multiFormDownloader,
+            List<ServerFormDetails> newUpdates = new ServerFormsUpdateChecker(
                     serverFormsDetailsFetcher,
-                    new DatabaseNotificationRepository(),
-                    new NotificationManagerNotifier(context)
-            ).checkAndNotify();
+                    notificationRepository
+            ).check();
+
+            if (!newUpdates.isEmpty()) {
+                if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                    final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(newUpdates, null);
+                    notifier.onUpdatesDownloaded(result);
+                } else {
+                    notifier.onUpdatesAvailable();
+                }
+            }
         };
     }
 

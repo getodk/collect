@@ -9,7 +9,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.network.ConnectivityProvider;
 
 import java.util.HashMap;
 import java.util.Map;
