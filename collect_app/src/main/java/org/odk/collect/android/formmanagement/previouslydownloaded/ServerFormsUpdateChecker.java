@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement.previouslydownloaded;
 import org.jetbrains.annotations.Nullable;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.notifications.NotificationRepository;
+import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.openrosa.api.FormApiException;
 
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ import static java.util.Collections.emptyList;
 public class ServerFormsUpdateChecker {
 
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
-    private final NotificationRepository notificationRepository;
+    private final FormRepository formRepository;
 
-    public ServerFormsUpdateChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, NotificationRepository notificationRepository) {
+    public ServerFormsUpdateChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
-        this.notificationRepository = notificationRepository;
+        this.formRepository = formRepository;
     }
 
     public List<ServerFormDetails> check() {
@@ -30,9 +30,9 @@ public class ServerFormsUpdateChecker {
                 String formHash = serverFormDetails.getHash();
                 String manifestFileHash = serverFormDetails.getManifestFileHash() != null ? serverFormDetails.getManifestFileHash() : "";
 
-                if (!notificationRepository.hasFormUpdateBeenNotified(formHash, manifestFileHash)) {
+                if (formRepository.getByLastDetectedUpdate(formHash, manifestFileHash) == null) {
                     newUpdates.add(serverFormDetails);
-                    notificationRepository.markFormUpdateNotified(serverFormDetails.getFormId(), formHash, manifestFileHash);
+                    formRepository.setLastDetectedUpdated(serverFormDetails.getFormId(), formHash, manifestFileHash);
                 }
             }
 

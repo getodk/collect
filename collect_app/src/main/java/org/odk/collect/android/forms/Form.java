@@ -63,6 +63,10 @@ public final class Form {
         geometryXPath = builder.geometryXpath;
     }
 
+    public String getLastDetectedFormVersionHash() {
+        return lastDetectedFormVersionHash;
+    }
+
     public static class Builder {
         private Long id;
         private String displayName;
@@ -81,6 +85,30 @@ public final class Form {
         private String autoDelete;
         private String lastDetectedFormVersionHash;
         private String geometryXpath;
+
+        public Builder() {
+
+        }
+
+        public Builder(Form form) {
+            id = form.id;
+            displayName = form.displayName;
+            description = form.description;
+            jrFormId = form.jrFormId;
+            jrVersion = form.jrVersion;
+            formFilePath = form.formFilePath;
+            submissionUri = form.submissionUri;
+            base64RSAPublicKey = form.base64RSAPublicKey;
+            md5Hash = form.md5Hash;
+            date = form.date;
+            jrCacheFilePath = form.jrCacheFilePath;
+            formMediaPath = form.formMediaPath;
+            language = form.language;
+            autoSend = form.autoSend;
+            autoDelete = form.autoDelete;
+            lastDetectedFormVersionHash = form.lastDetectedFormVersionHash;
+            geometryXpath = form.geometryXPath;
+        }
 
         public Builder id(Long id) {
             this.id = id;

@@ -23,11 +23,10 @@ import androidx.work.WorkerParameters;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.notifications.DatabaseNotificationRepository;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
-import org.odk.collect.android.notifications.NotificationRepository;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
@@ -55,11 +54,13 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     @Inject
     MultiFormDownloader multiFormDownloader;
 
+    @Inject
+    FormRepository formRepository;
+
     @NotNull
     @Override
     public Runnable getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
-        NotificationRepository notificationRepository = new DatabaseNotificationRepository();
         NotificationManagerNotifier notifier = new NotificationManagerNotifier(context);
 
         return () -> {
@@ -67,10 +68,8 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                 return;
             }
 
-            List<ServerFormDetails> newUpdates = new ServerFormsUpdateChecker(
-                    serverFormsDetailsFetcher,
-                    notificationRepository
-            ).check();
+            ServerFormsUpdateChecker checker = new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formRepository);
+            List<ServerFormDetails> newUpdates = checker.check();
 
             if (!newUpdates.isEmpty()) {
                 if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {

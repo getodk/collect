@@ -241,7 +241,7 @@ public class FormsDao {
     /**
      * Returns all forms available through the cursor and closes the cursor.
      */
-    public List<Form> getFormsFromCursor(Cursor cursor) {
+    public static List<Form> getFormsFromCursor(Cursor cursor) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
             try {
