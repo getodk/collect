@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.notifications.NotificationRepository;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.MultiFormDownloader;
@@ -22,7 +23,6 @@ public class ServerFormsUpdateNotifier {
     private final Notifier notifier;
 
     public ServerFormsUpdateNotifier(MultiFormDownloader multiFormDownloader, ServerFormsDetailsFetcher serverFormsDetailsFetcher, NotificationRepository notificationRepository, Notifier notifier) {
-
         this.multiFormDownloader = multiFormDownloader;
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
         this.notificationRepository = notificationRepository;
@@ -101,12 +101,5 @@ public class ServerFormsUpdateNotifier {
 
     private void notifyAboutDownloadedForms(HashMap<ServerFormDetails, String> result) {
         notifier.onUpdatesDownloaded(result);
-    }
-
-    interface Notifier {
-
-        void onUpdatesAvailable();
-
-        void onUpdatesDownloaded(HashMap<ServerFormDetails, String> result);
     }
 }

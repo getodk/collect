@@ -412,9 +412,4 @@ public class AppDependencyModule {
     public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
         return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formRepository, formDownloader);
     }
-
-    @Provides
-    public NotificationManager providesNotificationManager(Context context) {
-        return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-    }
 }
