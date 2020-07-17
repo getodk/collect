@@ -40,7 +40,12 @@ public class InMemFormRepository implements FormRepository {
         String lastDetectedVersion = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
 
         return forms.stream().filter(f -> {
-            return f.getLastDetectedFormVersionHash().equals(lastDetectedVersion);
+            String formLastDetectedVersion = f.getLastDetectedFormVersionHash();
+            if (formLastDetectedVersion != null) {
+                return formLastDetectedVersion.equals(lastDetectedVersion);
+            } else {
+                return false;
+            }
         }).findFirst().orElse(null);
     }
 
@@ -52,12 +57,13 @@ public class InMemFormRepository implements FormRepository {
     @Override
     public void setLastDetectedUpdated(String jrFormId, String formHash, String manifestHash) {
         Form form = forms.stream().filter(f -> f.getJrFormId().equals(jrFormId)).findFirst().orElse(null);
-        forms.remove(form);
 
-        Form newForm = new Form.Builder(form)
-                .lastDetectedFormVersionHash(MultiFormDownloader.getMd5Hash(formHash) + manifestHash)
-                .build();
+        if (form != null) {
+            forms.remove(form);
+            forms.add(new Form.Builder(form)
+                    .lastDetectedFormVersionHash(MultiFormDownloader.getMd5Hash(formHash) + manifestHash)
+                    .build());
+        }
 
-        forms.add(newForm);
     }
 }

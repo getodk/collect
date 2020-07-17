@@ -53,22 +53,6 @@ public class PreviouslyDownloadedOnlyTest {
                 .assertAndDismissNotification("ODK Collect", "Form updates available");
     }
 
-    @Test // this should probably be tested outside of Espresso instead
-    public void whenPreviouslyDownloadedOnlyEnabled_andFormUpdateNotificationHasAlreadyBeenSent_doesntNotifyAgain() {
-        rule.mainMenu()
-                .setServer(testDependencies.server.getURL())
-                .enablePreviouslyDownloadedOnlyUpdates();
-
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testDependencies.scheduler.runDeferredTasks();
-        notificationDrawer.open()
-                .assertAndDismissNotification("ODK Collect", "Form updates available");
-
-        testDependencies.scheduler.runDeferredTasks();
-        notificationDrawer.open()
-                .assertNoNotification("ODK Collect");
-    }
-
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_clickingOnNotification_navigatesToGetBlankForm() {
         rule.mainMenu()

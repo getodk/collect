@@ -63,10 +63,6 @@ public final class Form {
         geometryXPath = builder.geometryXpath;
     }
 
-    public String getLastDetectedFormVersionHash() {
-        return lastDetectedFormVersionHash;
-    }
-
     public static class Builder {
         private Long id;
         private String displayName;
@@ -266,6 +262,10 @@ public final class Form {
 
     public String getGeometryXpath() {
         return geometryXPath;
+    }
+
+    public String getLastDetectedFormVersionHash() {
+        return lastDetectedFormVersionHash;
     }
 
     @Override

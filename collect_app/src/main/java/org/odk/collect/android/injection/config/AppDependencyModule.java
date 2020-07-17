@@ -2,7 +2,6 @@ package org.odk.collect.android.injection.config;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;

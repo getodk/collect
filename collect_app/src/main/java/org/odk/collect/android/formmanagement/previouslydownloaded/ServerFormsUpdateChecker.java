@@ -24,7 +24,7 @@ public class ServerFormsUpdateChecker {
     public List<ServerFormDetails> check() {
         try {
             List<ServerFormDetails> updatedForms = fetchUpdatedForms();
-           List<ServerFormDetails > newUpdates = new ArrayList<>();
+            List<ServerFormDetails> newUpdates = new ArrayList<>();
 
             for (ServerFormDetails serverFormDetails : updatedForms) {
                 String formHash = serverFormDetails.getHash();
