@@ -94,8 +94,16 @@ public class RangeWidgetUtils {
     }
 
     static void setUpWidgetParameters(RangeQuestion rangeQuestion, TextView minValue, TextView maxValue) {
-        minValue.setText(String.valueOf(rangeQuestion.getRangeStart()));
-        maxValue.setText(String.valueOf(rangeQuestion.getRangeEnd()));
+        BigDecimal rangeStart = rangeQuestion.getRangeStart();
+        BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
+
+        if (rangeEnd.compareTo(rangeStart) > -1) {
+            minValue.setText(String.valueOf(rangeStart));
+            maxValue.setText(String.valueOf(rangeEnd));
+        } else {
+            minValue.setText(String.valueOf(rangeEnd));
+            maxValue.setText(String.valueOf(rangeStart));
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -105,8 +113,13 @@ public class RangeWidgetUtils {
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : BigDecimal.valueOf(0.5);
 
-        slider.setValueFrom(rangeStart.floatValue());
-        slider.setValueTo(rangeEnd.floatValue());
+        if (rangeEnd.compareTo(rangeStart) > -1) {
+            slider.setValueFrom(rangeStart.floatValue());
+            slider.setValueTo(rangeEnd.floatValue());
+        } else {
+            slider.setValueFrom(rangeEnd.floatValue());
+            slider.setValueTo(rangeStart.floatValue());
+        }
 
         if (prompt.getQuestion().getAppearanceAttr() == null || !prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
             if (isIntegerType) {
@@ -116,7 +129,7 @@ public class RangeWidgetUtils {
             }
         }
 
-        slider.setValue(actualValue == null ? rangeStart.floatValue() : actualValue.floatValue());
+        slider.setValue(actualValue == null ? slider.getValueFrom() : actualValue.floatValue());
         slider.setOnTouchListener((v, event) -> {
             int action = event.getAction();
             switch (action) {
@@ -164,17 +177,10 @@ public class RangeWidgetUtils {
     public static BigDecimal setUpSliderValue(FormEntryPrompt prompt, Slider slider, RangeQuestion rangeQuestion, float value) {
         if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
             BigDecimal rangeStart = rangeQuestion.getRangeStart();
-            BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
             BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
 
-            float actualValue;
-            if (rangeEnd.compareTo(rangeStart) > -1) {
-                int progress = (int) ((value - rangeStart.floatValue()) / rangeStep.floatValue());
-                actualValue = rangeStart.floatValue() + progress * rangeStep.floatValue();
-            } else {
-                int progress = (int) ((value - rangeEnd.floatValue()) / rangeStep.floatValue());
-                actualValue = rangeStart.floatValue() - progress * rangeStep.floatValue();
-            }
+            int progress = (int) ((value - rangeStart.floatValue()) / rangeStep.floatValue());
+            float  actualValue = rangeStart.floatValue() + progress * rangeStep.floatValue();
 
             slider.setValue(actualValue);
             return BigDecimal.valueOf(actualValue);
