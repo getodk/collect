@@ -97,7 +97,7 @@ public class DateWidgetTest {
 
     @Test
     public void clearAnswer_callValueChangeListener() {
-        DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate())));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
 
@@ -105,7 +105,7 @@ public class DateWidgetTest {
     }
 
     public void clickingButtonForLong_callsLongClickListener() {
-        DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate())));
         widget.setOnLongClickListener(listener);
         widget.binding.widgetButton.performLongClick();
 
