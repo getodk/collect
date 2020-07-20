@@ -115,14 +115,12 @@ public class MetaPreferenceMigrator implements PreferenceMigrator {
                         .withValues(true, false).toPairs("autosend", "wifi_only")
                         .withValues(true, true).toPairs("autosend", "wifi_and_cellular"),
 
-                translateKey("periodic_form_updates_check").toKey("form_update_mode")
-                        .fromValue("never").toValue("manual"),
-
                 extractNewKey("form_update_mode").fromKey("periodic_form_updates_check")
-                        .formValue("every_fifteen_minutes").toValues("every_fifteen_minutes", "previously_downloaded")
-                        .formValue("every_one_hour").toValues("every_one_hour", "previously_downloaded")
-                        .formValue("every_six_hours").toValues("every_six_hours", "previously_downloaded")
-                        .formValue("every_24_hours").toValues("every_24_hours", "previously_downloaded")
+                        .fromValue("never").toValues("every_fifteen_minutes", "manual")
+                        .fromValue("every_fifteen_minutes").toValues("every_fifteen_minutes", "previously_downloaded")
+                        .fromValue("every_one_hour").toValues("every_one_hour", "previously_downloaded")
+                        .fromValue("every_six_hours").toValues("every_six_hours", "previously_downloaded")
+                        .fromValue("every_24_hours").toValues("every_24_hours", "previously_downloaded")
         );
     }
 

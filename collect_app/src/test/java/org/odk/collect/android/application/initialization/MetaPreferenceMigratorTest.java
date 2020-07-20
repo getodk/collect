@@ -204,11 +204,9 @@ public class MetaPreferenceMigratorTest {
                 "periodic_form_updates_check", "never"
         );
         runMigrations();
-
-        // We don't need to check `periodic_form_updates_check` as
-        // it will be handled by defaults being loaded for missing keys
         assertPrefs(generalPrefs,
-                "form_update_mode", "manual"
+                "form_update_mode", "manual",
+                "periodic_form_updates_check", "every_fifteen_minutes"
         );
 
         List<String> periods = asList("every_fifteen_minutes", "every_one_hour", "every_six_hours", "every_24_hours");

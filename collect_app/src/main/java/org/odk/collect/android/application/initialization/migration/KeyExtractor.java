@@ -26,7 +26,7 @@ public class KeyExtractor implements Migration {
         return this;
     }
 
-    public KeyExtractor formValue(Object oldValue) {
+    public KeyExtractor fromValue(Object oldValue) {
         this.tempOldValue = oldValue;
         return this;
     }
@@ -38,6 +38,10 @@ public class KeyExtractor implements Migration {
 
     @Override
     public void apply(SharedPreferences prefs) {
+        if (prefs.contains(newKey)) {
+            return;
+        }
+
         Object oldValue = prefs.getAll().get(oldKey);
         SharedPreferences.Editor editor = prefs.edit();
         Pair newValues = translatedValues.get(oldValue);
