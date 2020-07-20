@@ -113,7 +113,8 @@ public final class AdminKeys {
             KEY_MOVING_BACKWARDS,
             ALLOW_OTHER_WAYS_OF_EDITING_FORM,
             KEY_MAPS,
-            KEY_QR_CODE_SCANNER
+            KEY_QR_CODE_SCANNER,
+            KEY_ADMIN_PW
     );
 
     static Collection<String> serverKeys = Collections.singletonList(

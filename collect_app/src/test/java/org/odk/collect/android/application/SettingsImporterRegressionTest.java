@@ -18,6 +18,7 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
@@ -30,6 +31,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsImporterRegressionTest {
+
 
     private SettingsImporter settingsImporter;
     private PreferencesProvider preferencesProvider;
@@ -79,5 +81,12 @@ public class SettingsImporterRegressionTest {
         SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_MAPBOX));
         assertThat(prefs.getString(KEY_MAPBOX_MAP_STYLE, null), is(String.valueOf(Style.LIGHT)));
+    }
+
+    @Test
+    public void adminPW() {
+        settingsImporter.fromJSON("{\"general\":{\"periodic_form_updates_check\":\"every_fifteen_minutes\"},\"admin\":{\"admin_pw\":\"blah\"}}");
+        SharedPreferences prefs = preferencesProvider.getAdminSharedPreferences();
+        assertThat(prefs.getString(KEY_ADMIN_PW, null), is("blah"));
     }
 }
