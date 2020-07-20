@@ -11,7 +11,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.List;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static java.util.Arrays.asList;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefsEmpty;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
@@ -193,6 +196,32 @@ public class MetaPreferenceMigratorTest {
         assertPrefs(generalPrefs,
                 "autosend", "wifi_and_cellular"
         );
+    }
+
+    @Test
+    public void migratesFormUpdateModeSettings() {
+        initPrefs(generalPrefs,
+                "periodic_form_updates_check", "never"
+        );
+        runMigrations();
+
+        // We don't need to check `periodic_form_updates_check` as
+        // it will be handled by defaults being loaded for missing keys
+        assertPrefs(generalPrefs,
+                "form_update_mode", "manual"
+        );
+
+        List<String> periods = asList("every_fifteen_minutes", "every_one_hour", "every_six_hours", "every_24_hours");
+        for (String period : periods) {
+            initPrefs(generalPrefs,
+                    "periodic_form_updates_check", period
+            );
+            runMigrations();
+            assertPrefs(generalPrefs,
+                    "periodic_form_updates_check", period,
+                    "form_update_mode", "previously_downloaded"
+            );
+        }
     }
 
     private void runMigrations() {

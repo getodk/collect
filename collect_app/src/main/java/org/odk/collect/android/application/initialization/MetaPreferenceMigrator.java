@@ -112,7 +112,20 @@ public class MetaPreferenceMigrator implements PreferenceMigrator {
                         .withValues(false, false).toPairs("autosend", "off")
                         .withValues(false, true).toPairs("autosend", "cellular_only")
                         .withValues(true, false).toPairs("autosend", "wifi_only")
-                        .withValues(true, true).toPairs("autosend", "wifi_and_cellular")
+                        .withValues(true, true).toPairs("autosend", "wifi_and_cellular"),
+
+                translateKey("periodic_form_updates_check").toKey("form_update_mode")
+                        .fromValue("never").toValue("manual"),
+
+                prefs -> {
+                    List<String> periods = asList("every_fifteen_minutes", "every_one_hour", "every_six_hours", "every_24_hours");
+
+                    if (periods.contains(prefs.getString("periodic_form_updates_check", "equals"))) {
+                        prefs.edit()
+                                .putString("form_update_mode", "previously_downloaded")
+                                .apply();
+                    }
+                }
         );
     }
 
