@@ -2,8 +2,6 @@ package org.odk.collect.android.application.initialization.migration;
 
 import android.content.SharedPreferences;
 
-import androidx.core.util.Pair;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +10,7 @@ import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 public class KeyExtractor implements Migration {
 
     private final String newKey;
-    private final Map<Object, Pair> translatedValues = new HashMap<>();
+    private final Map<Object, Object> translatedValues = new HashMap<>();
 
     private String oldKey;
     private Object tempOldValue;
@@ -31,8 +29,8 @@ public class KeyExtractor implements Migration {
         return this;
     }
 
-    public KeyExtractor toValues(String oldKeyValue, String newKeyValue) {
-        translatedValues.put(tempOldValue, new Pair<>(oldKeyValue, newKeyValue));
+    public KeyExtractor toValue(String newKeyValue) {
+        translatedValues.put(tempOldValue, newKeyValue);
         return this;
     }
 
@@ -44,11 +42,10 @@ public class KeyExtractor implements Migration {
 
         Object oldValue = prefs.getAll().get(oldKey);
         SharedPreferences.Editor editor = prefs.edit();
-        Pair newValues = translatedValues.get(oldValue);
+        Object newValue = translatedValues.get(oldValue);
 
-        if (newValues != null) {
-            put(editor, oldKey, newValues.first);
-            put(editor, newKey, newValues.second);
+        if (newValue != null) {
+            put(editor, newKey, newValue);
             editor.apply();
         }
     }

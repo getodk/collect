@@ -220,6 +220,37 @@ public class MetaPreferenceMigratorTest {
                     "form_update_mode", "previously_downloaded"
             );
         }
+
+        initPrefs(generalPrefs,
+                "protocol", "google_sheets"
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "form_update_mode", "manual"
+        );
+
+        initPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "periodic_form_updates_check", "every_24_hours"
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "form_update_mode", "manual",
+                "periodic_form_updates_check", "every_24_hours"
+        );
+
+        initPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "periodic_form_updates_check", "never"
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "form_update_mode", "manual",
+                "periodic_form_updates_check", "every_fifteen_minutes"
+        );
     }
 
     private void runMigrations() {

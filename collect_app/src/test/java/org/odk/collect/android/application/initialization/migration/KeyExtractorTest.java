@@ -33,7 +33,7 @@ public class KeyExtractorTest {
         );
 
         extractNewKey("newKey").fromKey("oldKey")
-                .fromValue("oldBlah").toValues("blah1", "blah2")
+                .fromValue("oldBlah").toValue("newBlah")
                 .apply(prefs);
 
         assertPrefs(prefs,
@@ -47,7 +47,7 @@ public class KeyExtractorTest {
         initPrefs(prefs);
 
         extractNewKey("newKey").fromKey("oldKey")
-                .fromValue("oldBlah").toValues("blah1", "blah2")
+                .fromValue("oldBlah").toValue("newBlah")
                 .apply(prefs);
 
         assertPrefsEmpty(prefs);

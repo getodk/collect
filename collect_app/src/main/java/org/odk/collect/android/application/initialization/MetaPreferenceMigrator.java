@@ -13,10 +13,10 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.extractNewKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.removeKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.extractNewKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateValue;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
@@ -115,12 +115,17 @@ public class MetaPreferenceMigrator implements PreferenceMigrator {
                         .withValues(true, false).toPairs("autosend", "wifi_only")
                         .withValues(true, true).toPairs("autosend", "wifi_and_cellular"),
 
+                extractNewKey("form_update_mode").fromKey("protocol")
+                        .fromValue("google_sheets").toValue("manual"),
+
                 extractNewKey("form_update_mode").fromKey("periodic_form_updates_check")
-                        .fromValue("never").toValues("every_fifteen_minutes", "manual")
-                        .fromValue("every_fifteen_minutes").toValues("every_fifteen_minutes", "previously_downloaded")
-                        .fromValue("every_one_hour").toValues("every_one_hour", "previously_downloaded")
-                        .fromValue("every_six_hours").toValues("every_six_hours", "previously_downloaded")
-                        .fromValue("every_24_hours").toValues("every_24_hours", "previously_downloaded")
+                        .fromValue("never").toValue("manual")
+                        .fromValue("every_fifteen_minutes").toValue("previously_downloaded")
+                        .fromValue("every_one_hour").toValue("previously_downloaded")
+                        .fromValue("every_six_hours").toValue("previously_downloaded")
+                        .fromValue("every_24_hours").toValue("previously_downloaded"),
+
+                translateValue("never").toValue("every_fifteen_minutes").forKey("periodic_form_updates_check")
         );
     }
 
