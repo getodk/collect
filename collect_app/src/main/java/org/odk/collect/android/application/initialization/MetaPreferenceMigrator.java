@@ -16,6 +16,7 @@ import static org.odk.collect.android.application.initialization.migration.Migra
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.removeKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.extractNewKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateValue;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
@@ -117,15 +118,11 @@ public class MetaPreferenceMigrator implements PreferenceMigrator {
                 translateKey("periodic_form_updates_check").toKey("form_update_mode")
                         .fromValue("never").toValue("manual"),
 
-                prefs -> {
-                    List<String> periods = asList("every_fifteen_minutes", "every_one_hour", "every_six_hours", "every_24_hours");
-
-                    if (periods.contains(prefs.getString("periodic_form_updates_check", "equals"))) {
-                        prefs.edit()
-                                .putString("form_update_mode", "previously_downloaded")
-                                .apply();
-                    }
-                }
+                extractNewKey("form_update_mode").fromKey("periodic_form_updates_check")
+                        .formValue("every_fifteen_minutes").toValues("every_fifteen_minutes", "previously_downloaded")
+                        .formValue("every_one_hour").toValues("every_one_hour", "previously_downloaded")
+                        .formValue("every_six_hours").toValues("every_six_hours", "previously_downloaded")
+                        .formValue("every_24_hours").toValues("every_24_hours", "previously_downloaded")
         );
     }
 
