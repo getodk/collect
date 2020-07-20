@@ -97,8 +97,15 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     }
 
     private void initToolbar() {
-        getToolbar().inflateMenu(R.menu.select_minimal_dialog_menu);
         getToolbar().setNavigationIcon(R.drawable.ic_arrow_back);
+
+        if (WidgetAppearanceUtils.isAutocomplete(viewModel.getFormEntryPrompt())) {
+            addSearchBar();
+        }
+    }
+
+    private void addSearchBar() {
+        getToolbar().inflateMenu(R.menu.select_minimal_dialog_menu);
 
         searchView = (SearchView) getToolbar().getMenu().findItem(R.id.menu_filter).getActionView();
         searchView.setQueryHint(getResources().getString(R.string.search));
