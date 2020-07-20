@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
+import org.odk.collect.android.formmanagement.FormUpdateMode;
 
 import javax.inject.Inject;
 
@@ -90,10 +91,15 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
             String period = sharedPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
 
-            if (newValue.equals(MATCH_EXACTLY.getValue(getActivity()))) {
-                backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds(period));
-            } else if (newValue.equals(PREVIOUSLY_DOWNLOADED_ONLY.getValue(getActivity()))) {
-                backgroundWorkManager.scheduleAutoUpdate(getPeriodInMilliseconds(period));
+            switch (FormUpdateMode.parse(getActivity(), (String) newValue)) {
+                case MANUAL:
+                    break;
+                case PREVIOUSLY_DOWNLOADED_ONLY:
+                    backgroundWorkManager.scheduleAutoUpdate(getPeriodInMilliseconds(period));
+                    break;
+                case MATCH_EXACTLY:
+                    backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds(period));
+                    break;
             }
 
             updateDisabledPrefs((String) newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
@@ -103,19 +109,25 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     }
 
     private void updateDisabledPrefs(String formUpdateMode, String protocol) {
-        if (protocol.equals(getString(R.string.protocol_google_sheets))) {
+        if (Protocol.parse(getActivity(), protocol) == Protocol.GOOGLE) {
             findPreference(KEY_FORM_UPDATE_MODE).setEnabled(false);
             findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
             findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
-        } else if (formUpdateMode.equals(MATCH_EXACTLY.getValue(getActivity()))) {
-            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
-            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
-        } else if (formUpdateMode.equals(PREVIOUSLY_DOWNLOADED_ONLY.getValue(getActivity()))) {
-            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(true);
-            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
         } else {
-            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
-            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
+            switch (FormUpdateMode.parse(getActivity(), formUpdateMode)) {
+                case MANUAL:
+                    findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+                    findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
+                    break;
+                case PREVIOUSLY_DOWNLOADED_ONLY:
+                    findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(true);
+                    findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
+                    break;
+                case MATCH_EXACTLY:
+                    findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+                    findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
+                    break;
+            }
         }
     }
 

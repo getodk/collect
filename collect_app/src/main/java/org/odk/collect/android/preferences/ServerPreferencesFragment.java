@@ -127,8 +127,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     removeDisabledPrefs();
                 }
 
-                ProtocolPreferenceMapper protocolPreferenceMapper = new ProtocolPreferenceMapper(getActivity());
-                switch (protocolPreferenceMapper.getProtocol((String) newValue)) {
+                switch (Protocol.parse(getActivity(), (String) newValue)) {
                     case GOOGLE:
                         preferencesProvider.getGeneralSharedPreferences().edit()
                                 .putString(KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(getActivity()))
@@ -140,9 +139,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         });
 
         String value = protocolPref.getValue();
-        ProtocolPreferenceMapper protocolPreferenceMapper = new ProtocolPreferenceMapper(getActivity());
-
-        switch (protocolPreferenceMapper.getProtocol(value)) {
+        switch (Protocol.parse(getActivity(), value)) {
             case ODK:
                 addAggregatePreferences();
                 break;
