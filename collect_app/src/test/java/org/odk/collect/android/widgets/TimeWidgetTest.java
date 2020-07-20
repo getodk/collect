@@ -51,7 +51,7 @@ public class TimeWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptHasAnswer_returnsNull() {
+    public void getAnswer_whenPromptHasAnswer_returnsTime() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(dateTime.toDate())));
         assertEquals(widget.getAnswer().getDisplayText(), new TimeData(dateTime.toDate()).getDisplayText());
     }
@@ -64,9 +64,7 @@ public class TimeWidgetTest {
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectDate() {
-        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new TimeData(dateTime.toDate()));
-        TimeWidget widget = createWidget(prompt);
-
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(dateTime.toDate())));
         assertEquals(widget.binding.widgetAnswerText.getText(), "12:00");
     }
 

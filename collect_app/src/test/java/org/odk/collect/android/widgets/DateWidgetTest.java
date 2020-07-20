@@ -53,7 +53,7 @@ public class DateWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptHasAnswer_returnsNull() {
+    public void getAnswer_whenPromptHasAnswer_returnsDate() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate())));
         assertEquals(widget.getAnswer().getDisplayText(), new DateData(date.toDate()).getDisplayText());
     }
