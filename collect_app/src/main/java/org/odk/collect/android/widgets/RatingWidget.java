@@ -33,8 +33,8 @@ import org.odk.collect.android.utilities.UiUtils;
 @SuppressLint("ViewConstructor")
 public class RatingWidget extends QuestionWidget {
 
-    public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
-    public static final int STANDARD_WIDTH_OF_STAR = 48;
+    private static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
+    private static final int STANDARD_WIDTH_OF_STAR = 48;
 
     RatingWidgetAnswerBinding binding;
 
@@ -47,14 +47,8 @@ public class RatingWidget extends QuestionWidget {
         binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
-        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
-        int numberOfStars = rangeQuestion.getRangeEnd().intValue();
-
-        int maxNumberOfStars = (int) ((ScreenUtils.getScreenWidth() - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET)
-                / UiUtils.convertDpToPixel(STANDARD_WIDTH_OF_STAR, getContext()));
-
-        binding.ratingBar1.setStepSize(1.0F);
-        binding.ratingBar2.setStepSize(1.0F);
+        int numberOfStars = getTotalStars((RangeQuestion) prompt.getQuestion());
+        int maxNumberOfStars = calculateMaximumStarsInOneLine();
 
         if (maxNumberOfStars < numberOfStars) {
             binding.ratingBar1.setNumStars(maxNumberOfStars);
@@ -92,19 +86,29 @@ public class RatingWidget extends QuestionWidget {
     }
 
     @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        binding.ratingBar1.setOnLongClickListener(l);
-        binding.ratingBar2.setOnLongClickListener(l);
+    public void setOnLongClickListener(OnLongClickListener listener) {
+        binding.ratingBar1.setOnLongClickListener(listener);
+        binding.ratingBar2.setOnLongClickListener(listener);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.ratingBar1.getRating() == 0.0F ? null :
-                new IntegerData((int) (binding.ratingBar1.getRating() + binding.ratingBar2.getRating()));
+        return binding.ratingBar1.getRating() == 0.0F
+                ? null
+                : new IntegerData((int) (binding.ratingBar1.getRating() + binding.ratingBar2.getRating()));
     }
 
     @Override
     public void clearAnswer() {
         binding.ratingBar1.setRating(0.0F);
+    }
+
+    private int calculateMaximumStarsInOneLine() {
+        return (int) ((ScreenUtils.getScreenWidth() - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET)
+                / UiUtils.convertDpToPixel(STANDARD_WIDTH_OF_STAR, getContext()));
+    }
+
+    private int getTotalStars(RangeQuestion rangeQuestion) {
+        return rangeQuestion.getRangeEnd().intValue();
     }
 }
