@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
+import org.odk.collect.android.application.initialization.PreferenceMigrator;
 import org.odk.collect.android.logic.PropertyManager;
 
 import java.util.Iterator;
@@ -55,7 +55,7 @@ public class SettingsImporter {
             // Ignored
         }
 
-        preferenceMigrator.migrate();
+        preferenceMigrator.migrate(generalSharedPrefs, adminSharedPrefs);
 
         clearUnknownKeys(generalSharedPrefs, generalDefaults);
         clearUnknownKeys(adminSharedPrefs, adminDefaults);

@@ -16,8 +16,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.application.initialization.CollectPreferenceMigrator;
-import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
+import org.odk.collect.android.application.initialization.MetaPreferenceMigrator;
+import org.odk.collect.android.application.initialization.PreferenceMigrator;
 import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.backgroundwork.SchedulerBackgroundWorkManager;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -339,7 +339,7 @@ public class AppDependencyModule {
 
     @Provides
     public PreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
-        return new CollectPreferenceMigrator(preferencesProvider.getGeneralSharedPreferences(), preferencesProvider.getAdminSharedPreferences(), preferencesProvider.getMetaSharedPreferences());
+        return new MetaPreferenceMigrator(preferencesProvider.getMetaSharedPreferences());
     }
 
     @Provides

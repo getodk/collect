@@ -17,7 +17,6 @@ import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
@@ -104,7 +103,7 @@ public class ApplicationInitializer {
     }
 
     private void performMigrations() {
-        preferenceMigrator.migrate();
+        preferenceMigrator.migrate(generalSharedPreferences.getSharedPreferences(), adminSharedPreferences.getSharedPreferences());
     }
 
     private void initializeMapFrameworks() {

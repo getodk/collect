@@ -17,7 +17,7 @@ import static org.odk.collect.android.application.initialization.migration.Share
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(RobolectricTestRunner.class)
-public class CollectPreferenceMigratorTest {
+public class MetaPreferenceMigratorTest {
 
     private SharedPreferences generalPrefs;
     private SharedPreferences adminPrefs;
@@ -79,7 +79,7 @@ public class CollectPreferenceMigratorTest {
     @Test
     public void shouldMigrateOsmMapSettings() {
         initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
-        new CollectPreferenceMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
+        runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "osm");
 
         initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
@@ -196,6 +196,6 @@ public class CollectPreferenceMigratorTest {
     }
 
     private void runMigrations() {
-        new CollectPreferenceMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
+        new MetaPreferenceMigrator(metaPrefs).migrate(generalPrefs, adminPrefs);
     }
 }

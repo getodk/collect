@@ -8,7 +8,6 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.application.initialization.migration.KeyRenamer;
 import org.odk.collect.android.application.initialization.migration.KeyTranslator;
 import org.odk.collect.android.application.initialization.migration.Migration;
-import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 
 import java.util.List;
 
@@ -32,26 +31,22 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 /**
  * Migrates old preference keys and values to new ones.
  */
-public class CollectPreferenceMigrator implements PreferenceMigrator {
+public class MetaPreferenceMigrator implements PreferenceMigrator {
 
-    private final SharedPreferences generalSharedPrefs;
-    private final SharedPreferences adminSharedPrefs;
     private final SharedPreferences metaSharedPrefs;
 
-    public CollectPreferenceMigrator(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, SharedPreferences metaSharedPrefs) {
-        this.generalSharedPrefs = generalSharedPrefs;
-        this.adminSharedPrefs = adminSharedPrefs;
+    public MetaPreferenceMigrator(SharedPreferences metaSharedPrefs) {
         this.metaSharedPrefs = metaSharedPrefs;
     }
 
     @Override
-    public void migrate() {
+    public void migrate(SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) {
         for (Migration migration : getGeneralMigrations()) {
-            migration.apply(generalSharedPrefs);
+            migration.apply(generalSharedPreferences);
         }
 
         for (Migration migration : getAdminMigrations()) {
-            migration.apply(adminSharedPrefs);
+            migration.apply(adminSharedPreferences);
         }
 
         for (Migration migration : getMetaMigrations()) {
