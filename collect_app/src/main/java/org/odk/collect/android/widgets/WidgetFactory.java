@@ -165,7 +165,7 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
-                if (appearance.startsWith(WidgetAppearanceUtils.MINIMAL)) {
+                if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SelectMultiMinimalWidget(context, questionDetails);
                 } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, false);
