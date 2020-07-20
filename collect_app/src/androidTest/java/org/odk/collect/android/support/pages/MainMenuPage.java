@@ -1,5 +1,10 @@
 package org.odk.collect.android.support.pages;
 
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
 
@@ -12,6 +17,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -194,6 +201,22 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.match_exactly)
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
+
+    public MainMenuPage setGoogleDriveAccount(String account) {
+        Intent data = new Intent();
+        data.putExtra(AccountManager.KEY_ACCOUNT_NAME, account);
+        Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
+        intending(toPackage("com.google.android.gms")).respondWith(activityResult);
+
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickServerSettings()
+                .clickOnServerType()
+                .clickOnString(R.string.server_platform_google_sheets)
+                .clickOnString(R.string.selected_google_account_text)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }

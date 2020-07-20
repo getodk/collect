@@ -27,7 +27,7 @@ public class TestRuleChain {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_PHONE_STATE
                 ))
-                .around(new ResetStateRule(testDependencies))
+                .around(new ResetStateRule(useScopedStorage, testDependencies))
                 .around(new IdlingResourceRule(testDependencies.idlingResources));
     }
 }

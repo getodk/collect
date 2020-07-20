@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -37,6 +38,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MO
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
@@ -73,13 +75,20 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
 
-        updateDisabledPrefs(generalSharedPreferences.getSharedPreferences().getString(KEY_FORM_UPDATE_MODE, null));
+        setupFormUpdateMode();
+    }
 
-        Preference matchExactly = findPreference(KEY_FORM_UPDATE_MODE);
-        matchExactly.setOnPreferenceChangeListener((preference, newValue) -> {
+    private void setupFormUpdateMode() {
+        SharedPreferences sharedPreferences = generalSharedPreferences.getSharedPreferences();
+        updateDisabledPrefs(sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null), sharedPreferences.getString(KEY_PROTOCOL, null));
+
+        Preference formUpdateMode = findPreference(KEY_FORM_UPDATE_MODE);
+        formUpdateMode.setSummary(((ListPreference) formUpdateMode).getEntry());
+
+        formUpdateMode.setOnPreferenceChangeListener((preference, newValue) -> {
             backgroundWorkManager.cancelWork();
 
-            String period = generalSharedPreferences.getSharedPreferences().getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
+            String period = sharedPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
 
             if (newValue.equals(MATCH_EXACTLY.getValue(getActivity()))) {
                 backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds(period));
@@ -87,13 +96,18 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 backgroundWorkManager.scheduleAutoUpdate(getPeriodInMilliseconds(period));
             }
 
-            updateDisabledPrefs((String) newValue);
+            updateDisabledPrefs((String) newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
+            preference.setSummary(((ListPreference) preference).getEntry());
             return true;
         });
     }
 
-    private void updateDisabledPrefs(String formUpdateMode) {
-        if (formUpdateMode.equals(MATCH_EXACTLY.getValue(getActivity()))) {
+    private void updateDisabledPrefs(String formUpdateMode, String protocol) {
+        if (protocol.equals(getString(R.string.protocol_google_sheets))) {
+            findPreference(KEY_FORM_UPDATE_MODE).setEnabled(false);
+            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
+        } else if (formUpdateMode.equals(MATCH_EXACTLY.getValue(getActivity()))) {
             findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
             findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
         } else if (formUpdateMode.equals(PREVIOUSLY_DOWNLOADED_ONLY.getValue(getActivity()))) {

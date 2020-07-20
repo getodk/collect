@@ -1,13 +1,17 @@
 package org.odk.collect.android.feature.settings;
 
+import android.Manifest;
+
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.TestDependencies;
@@ -29,16 +33,17 @@ public class FormManagementSettingsTest {
     private final TestDependencies testDependencies = new TestDependencies();
     private final NotificationDrawerRule notificationDrawer = new NotificationDrawerRule();
 
-    public CollectTestRule rule = new CollectTestRule();
+    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
+            .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
             .around(notificationDrawer)
             .around(rule);
 
     @Test
     public void whenManualUpdatesEnabled_disablesPrefs() {
-        rule.mainMenu()
+        new MainMenuPage(rule).assertOnPage()
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()
@@ -50,7 +55,7 @@ public class FormManagementSettingsTest {
 
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_disablesPrefs() {
-        rule.mainMenu()
+        new MainMenuPage(rule).assertOnPage()
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()
@@ -62,7 +67,7 @@ public class FormManagementSettingsTest {
 
     @Test
     public void whenMatchExactlyEnabled_disablesPrefs() {
-        rule.mainMenu()
+        new MainMenuPage(rule).assertOnPage()
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()
@@ -77,7 +82,7 @@ public class FormManagementSettingsTest {
         List<TestScheduler.DeferredTask> deferredTasks = testDependencies.scheduler.getDeferredTasks();
         assertThat(deferredTasks, is(empty()));
 
-        FormManagementPage page = rule.mainMenu()
+        FormManagementPage page = new MainMenuPage(rule).assertOnPage()
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()
@@ -102,7 +107,7 @@ public class FormManagementSettingsTest {
         List<TestScheduler.DeferredTask> deferredTasks = testDependencies.scheduler.getDeferredTasks();
         assertThat(deferredTasks, is(empty()));
 
-        FormManagementPage page = rule.mainMenu()
+        FormManagementPage page = new MainMenuPage(rule).assertOnPage()
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()
@@ -124,7 +129,7 @@ public class FormManagementSettingsTest {
 
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_checkingAutoDownload_downloadsUpdatedForms() throws Exception {
-        FormManagementPage page = rule.mainMenu()
+        FormManagementPage page = new MainMenuPage(rule).assertOnPage()
                 .setServer(testDependencies.server.getURL())
                 .clickOnMenu()
                 .clickGeneralSettings()
@@ -144,5 +149,19 @@ public class FormManagementSettingsTest {
 
         notificationDrawer.open()
                 .assertAndDismissNotification("ODK Collect", "ODK auto-download results", "Success");
+    }
+
+    @Test
+    public void whenGoogleDriveUsingAsServer_disablesPrefsAndOnlyAllowsManualUpdates() {
+        new MainMenuPage(rule).assertOnPage()
+                .enablePreviouslyDownloadedOnlyUpdates() // Enabled a different mode before setting up Google
+                .setGoogleDriveAccount("steph@curry.basket")
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .assertDisabled(R.string.form_update_mode_title)
+                .assertDisabled(R.string.form_update_frequency_title)
+                .assertDisabled(R.string.automatic_download)
+                .assertText(R.string.manually);
     }
 }
