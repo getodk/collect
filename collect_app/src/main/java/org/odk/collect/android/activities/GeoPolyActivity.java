@@ -458,7 +458,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         // Visibility state
         playButton.setVisibility(inputActive ? View.GONE : View.VISIBLE);
         pauseButton.setVisibility(inputActive ? View.VISIBLE : View.GONE);
-        recordButton.setVisibility(inputActive && recordingEnabled ? View.VISIBLE : View.GONE);
+        recordButton.setVisibility(inputActive && recordingEnabled && !recordingAutomatic ? View.VISIBLE : View.GONE);
 
         // Enabled state
         zoomButton.setEnabled(location != null);
