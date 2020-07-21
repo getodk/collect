@@ -28,6 +28,12 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
 
         refreshItem.setVisible(blankFormsListViewModel.isSyncingAvailable());
         refreshItem.setEnabled(!blankFormsListViewModel.isSyncing().getValue());
+
+        if (blankFormsListViewModel.isOutOfSync().getValue()) {
+            refreshItem.setIcon(R.drawable.ic_baseline_refresh_error_24);
+        } else {
+            refreshItem.setIcon(R.drawable.ic_baseline_refresh_24);
+        }
     }
 
     @Override

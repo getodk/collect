@@ -40,6 +40,10 @@ public class BlankFormsListViewModel extends ViewModel {
         return syncRepository.isSyncing();
     }
 
+    public LiveData<Boolean> isOutOfSync() {
+        return syncRepository.isOutOfSync();
+    }
+
     public void syncWithServer() {
         if (!syncRepository.startSync()) {
             return;
@@ -48,14 +52,13 @@ public class BlankFormsListViewModel extends ViewModel {
         scheduler.immediate(() -> {
             try {
                 serverFormsSynchronizer.synchronize();
+                syncRepository.finishSync(true);
             } catch (FormApiException ignored) {
-                // Ignored
+                syncRepository.finishSync(false);
             }
 
             return null;
-        }, ignored -> {
-            syncRepository.finishSync();
-        });
+        }, ignored -> { });
     }
 
     private boolean isMatchExactlyEnabled() {

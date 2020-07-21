@@ -14,8 +14,6 @@ import org.odk.collect.async.WorkerAdapter;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 public class SyncFormsTaskSpec implements TaskSpec {
 
     @Inject
@@ -36,10 +34,9 @@ public class SyncFormsTaskSpec implements TaskSpec {
 
             try {
                 serverFormsSynchronizer.synchronize();
-            } catch (FormApiException formAPIError) {
-                Timber.w(formAPIError);
-            } finally {
-                syncStatusRepository.finishSync();
+                syncStatusRepository.finishSync(true);
+            } catch (FormApiException ignored) {
+                syncStatusRepository.finishSync(false);
             }
         };
     }
