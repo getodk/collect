@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FillBlankFormPage;
@@ -23,9 +24,11 @@ public class MatchExactlyTest {
 
     final CollectTestRule rule = new CollectTestRule();
     final TestDependencies testDependencies = new TestDependencies();
+    final NotificationDrawerRule notificationDrawerRule = new NotificationDrawerRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
+            .around(notificationDrawerRule)
             .around(new CopyFormRule("one-question.xml"))
             .around(new CopyFormRule("one-question-repeat.xml"))
             .around(rule);
@@ -71,6 +74,28 @@ public class MatchExactlyTest {
                 .clickFillBlankForm()
                 .assertText("One Question Updated")
                 .assertTextDoesNotExist("Two Question");
+    }
+
+    @Test
+    public void whenMatchExactlyEnabled_andThereIsAnErrorDuringUpdate_clickingErrorNotification_goesToFillBlankForm() throws Exception {
+        String url = testDependencies.server.getURL();
+
+        rule.mainMenu()
+                .setServer(url)
+                .enableMatchExactly();
+
+        testDependencies.server.alwaysReturnError();
+        testDependencies.scheduler.runDeferredTasks();
+
+        notificationDrawerRule
+                .open()
+                .clickNotification(
+                        "ODK Collect",
+                        "Sync error",
+                        "Updating forms failed. Please try again.",
+                        "Fill Blank Form",
+                        new FillBlankFormPage(rule)
+                );
     }
 
     @Test
