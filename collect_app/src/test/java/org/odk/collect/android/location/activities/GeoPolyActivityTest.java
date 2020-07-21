@@ -66,14 +66,14 @@ public class GeoPolyActivityTest extends BaseGeoActivityTest {
 
     @Test public void recordButton_should_beHiddenForAutomaticMode() {
         GeoPolyActivity activity = controller.create().start().resume().visible().get();
-        activity.updateRecordingMode(null, R.id.automatic_mode);
+        activity.updateRecordingMode(R.id.automatic_mode);
         activity.startInput();
         assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.GONE));
     }
 
     @Test public void recordButton_should_beVisibleForManualMode() {
         GeoPolyActivity activity = controller.create().start().resume().visible().get();
-        activity.updateRecordingMode(null, R.id.manual_mode);
+        activity.updateRecordingMode(R.id.manual_mode);
         activity.startInput();
         assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.VISIBLE));
     }

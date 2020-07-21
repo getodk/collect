@@ -134,7 +134,7 @@ public class SettingsDialogFragmentTest {
         accuracyThreshold.setSelection(2);
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
 
-        verify(dialogFragment.callback).updateRecordingMode(radioGroup, sampleId);
+        verify(dialogFragment.callback).updateRecordingMode(sampleId);
         verify(dialogFragment.callback).setIntervalIndex(2);
         verify(dialogFragment.callback).setAccuracyThresholdIndex(2);
     }
