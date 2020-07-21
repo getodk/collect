@@ -10,8 +10,6 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import org.odk.collect.android.formmanagement.FormUpdateMode;
-import org.odk.collect.android.formmanagement.previouslydownloaded.AutoUpdateTaskSpec;
-import org.odk.collect.android.formmanagement.matchexactly.SyncFormsTaskSpec;
 import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.async.Scheduler;
 

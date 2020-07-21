@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.formmanagement.previouslydownloaded;
+package org.odk.collect.android.backgroundwork;
 
 import android.content.Context;
 
@@ -23,6 +23,7 @@ import androidx.work.WorkerParameters;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;

@@ -1,10 +1,12 @@
-package org.odk.collect.android.formmanagement.matchexactly;
+package org.odk.collect.android.backgroundwork;
 
 import android.content.Context;
 
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.async.TaskSpec;
