@@ -107,6 +107,16 @@ public class GeoPointWidgetTest {
     }
 
     @Test
+    public void clickingAnswerTextViewForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        widget.setOnLongClickListener(listener);
+        widget.binding.geoAnswerText.performLongClick();
+
+        verify(listener).onLongClick(widget.binding.geoAnswerText);
+    }
+
+    @Test
     public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(""));

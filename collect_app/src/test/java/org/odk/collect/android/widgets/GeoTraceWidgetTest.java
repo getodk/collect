@@ -55,7 +55,7 @@ public class GeoTraceWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowTheGeoButton() {
         GeoTraceWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.startGeoButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.simpleButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
@@ -91,40 +91,50 @@ public class GeoTraceWidgetTest {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
-        widget.startGeoButton.performLongClick();
+        widget.binding.simpleButton.performLongClick();
 
-        verify(listener).onLongClick(widget.startGeoButton);
+        verify(listener).onLongClick(widget.binding.simpleButton);
+    }
+
+    @Test
+    public void clickingAnswerTextViewForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        widget.setOnLongClickListener(listener);
+        widget.binding.geoAnswerText.performLongClick();
+
+        verify(listener).onLongClick(widget.binding.geoAnswerText);
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.answerDisplay.getText().toString(), equalTo(""));
+        assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(""));
     }
 
     @Test
     public void whenPromptHasAnswer_textViewDisplaysAnswer() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(widget.answerDisplay.getText().toString(), equalTo(answer));
+        assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(answer));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_StartGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.get_trace)));
+        assertThat(widget.binding.simpleButton.getText(), equalTo(widget.getContext().getString(R.string.get_trace)));
     }
 
     @Test
     public void whenPromptHasAnswer_ViewOrChangeGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.geotrace_view_change_location)));
+        assertThat(widget.binding.simpleButton.getText(), equalTo(widget.getContext().getString(R.string.geotrace_view_change_location)));
     }
 
     @Test
     public void whenPermissionIsNotGranted_buttonShouldNotLaunchAnyIntent() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
         stubLocationPermissions(widget, false);
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
         assertNull(startedIntent);
@@ -136,7 +146,7 @@ public class GeoTraceWidgetTest {
         stubLocationPermissions(widget, true);
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
 
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
         assertNull(startedIntent);
@@ -148,7 +158,7 @@ public class GeoTraceWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoTraceWidget widget = createWidget(prompt);
         stubLocationPermissions(widget, true);
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
 
         verify(waitingForDataRegistry).waitForData(prompt.getIndex());
     }
@@ -159,7 +169,7 @@ public class GeoTraceWidgetTest {
         stubLocationPermissions(widget, true);
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(true);
 
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
 
@@ -173,7 +183,7 @@ public class GeoTraceWidgetTest {
         stubLocationPermissions(widget, true);
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(true);
 
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();
 

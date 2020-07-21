@@ -44,13 +44,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
         this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
-    public void startGeoActivity() {
-        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
-            .putExtra(GeoPolyActivity.ANSWER_KEY, binding.geoAnswerText.getText().toString())
-            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
-        ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
-    }
-
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
@@ -126,6 +119,13 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
             public void denied() {
             }
         });
+    }
+
+    private void startGeoActivity() {
+        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
+                .putExtra(GeoPolyActivity.ANSWER_KEY, binding.geoAnswerText.getText().toString())
+                .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
+        ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
