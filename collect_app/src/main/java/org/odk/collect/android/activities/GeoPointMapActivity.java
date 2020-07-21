@@ -379,7 +379,9 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     private void placeMarker(MapPoint point) {
         map.clearFeatures();
         featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER);
-        clearButton.setEnabled(true);
+        if (!intentReadOnly) {
+            clearButton.setEnabled(true);
+        }
         captureLocation = true;
         setClear = false;
     }
