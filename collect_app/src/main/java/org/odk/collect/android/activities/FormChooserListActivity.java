@@ -97,11 +97,9 @@ public class FormChooserListActivity extends FormListActivity implements
             } else {
                 findViewById(R.id.progressBar).setVisibility(View.GONE);
             }
-
-            invalidateOptionsMenu();
         });
 
-        menuDelegate = new BlankFormListMenuDelegate(blankFormsListViewModel);
+        menuDelegate = new BlankFormListMenuDelegate(this, blankFormsListViewModel);
 
         new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
