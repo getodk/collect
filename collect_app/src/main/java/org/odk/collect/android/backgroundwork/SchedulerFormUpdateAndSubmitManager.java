@@ -3,6 +3,12 @@ package org.odk.collect.android.backgroundwork;
 import android.app.Application;
 import android.content.SharedPreferences;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.formmanagement.previouslydownloaded.AutoUpdateTaskSpec;
 import org.odk.collect.android.formmanagement.matchexactly.SyncFormsTaskSpec;
@@ -13,11 +19,7 @@ import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeri
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
-/**
- * Abstraction that sits on top of {@link Scheduler}. Implementation of {@link FormUpdateManager} which
- * can be used to interact with background work without having to care about underlying framework and details.
- */
-public class SchedulerFormUpdateManager implements FormUpdateManager {
+public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, FormSubmitManager {
 
     private static final String MATCH_EXACTLY_SYNC_TAG = "match_exactly";
     public static final String AUTO_UPDATE_TAG = "serverPollingJob";
@@ -26,10 +28,14 @@ public class SchedulerFormUpdateManager implements FormUpdateManager {
     private final SharedPreferences sharedPreferences;
     private final Application application;
 
-    public SchedulerFormUpdateManager(Scheduler scheduler, SharedPreferences sharedPreferences, Application application) {
+    @Deprecated // Should use Scheduler instance instead
+    private final WorkManager workManager;
+
+    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, SharedPreferences sharedPreferences, Application application, WorkManager workManager) {
         this.scheduler = scheduler;
         this.sharedPreferences = sharedPreferences;
         this.application = application;
+        this.workManager = workManager;
     }
 
     @Override
@@ -65,8 +71,22 @@ public class SchedulerFormUpdateManager implements FormUpdateManager {
     }
 
     @Override
-    public boolean isFormUploaderRunning() {
+    public boolean isSubmitRunning() {
         return isRunning(AutoSendWorker.TAG);
+    }
+
+    @Override
+    public void scheduleSubmit() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest autoSendWork =
+                new OneTimeWorkRequest.Builder(AutoSendWorker.class)
+                        .addTag(AutoSendWorker.TAG)
+                        .setConstraints(constraints)
+                        .build();
+        workManager.beginUniqueWork(AutoSendWorker.TAG,
+                ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
     }
 
     @Override

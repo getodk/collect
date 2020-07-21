@@ -4,6 +4,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -32,6 +33,7 @@ public class StorageMigratorTest {
     private final GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
     private final ReferenceManager referenceManager = mock(ReferenceManager.class);
     private final FormUpdateManager formUpdateManager = mock(FormUpdateManager.class);
+    private final FormSubmitManager formSubmitManager = mock(FormSubmitManager.class);
     private final Analytics analytics = mock(Analytics.class);
 
     @Before
@@ -43,7 +45,7 @@ public class StorageMigratorTest {
         doNothing().when(storageEraser).deleteOdkDirFromUnscopedStorage();
         doReturn("/sdcard/odk/layers/countries/countries-raster.mbtiles").when(generalSharedPreferences).get(KEY_REFERENCE_LAYER);
 
-        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences, referenceManager, formUpdateManager, analytics));
+        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences, referenceManager, formUpdateManager, formSubmitManager, analytics));
 
         doNothing().when(storageMigrator).reopenDatabases();
     }
@@ -188,10 +190,10 @@ public class StorageMigratorTest {
     }
 
     private void whenFormUploaderIsNotRunning() {
-        when(formUpdateManager.isFormUploaderRunning()).thenReturn(false);
+        when(formSubmitManager.isSubmitRunning()).thenReturn(false);
     }
 
     private void whenFormUploaderIsRunning() {
-        when(formUpdateManager.isFormUploaderRunning()).thenReturn(true);
+        when(formSubmitManager.isSubmitRunning()).thenReturn(true);
     }
 }

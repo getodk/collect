@@ -4,7 +4,5 @@ public interface FormUpdateManager {
 
     void scheduleUpdates();
 
-    boolean isFormUploaderRunning();
-
     boolean isUpdateRunning();
 }

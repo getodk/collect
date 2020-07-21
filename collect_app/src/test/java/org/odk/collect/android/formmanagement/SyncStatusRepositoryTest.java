@@ -1,6 +1,7 @@
 package org.odk.collect.android.formmanagement;
 
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

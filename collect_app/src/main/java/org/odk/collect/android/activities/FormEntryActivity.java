@@ -80,6 +80,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -321,7 +322,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PropertyManager propertyManager;
 
     @Inject
-    WorkManager workManager;
+    FormSubmitManager formSubmitManager;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -2484,16 +2485,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * TODO: if the user changes auto-send settings, should an auto-send job immediately be enqueued?
      */
     private void requestAutoSend() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-        OneTimeWorkRequest autoSendWork =
-                new OneTimeWorkRequest.Builder(AutoSendWorker.class)
-                        .addTag(AutoSendWorker.TAG)
-                        .setConstraints(constraints)
-                        .build();
-        workManager.beginUniqueWork(AutoSendWorker.TAG,
-                ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
+        formSubmitManager.scheduleSubmit();
     }
 
     /**
