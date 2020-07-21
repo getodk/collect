@@ -47,6 +47,8 @@ import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.android.notifications.NotificationManagerNotifier;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
@@ -419,5 +421,10 @@ public class AppDependencyModule {
     @Provides
     public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
         return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formRepository, formDownloader);
+    }
+
+    @Provides
+    public Notifier providesNotifier(Context context) {
+        return new NotificationManagerNotifier(context);
     }
 }

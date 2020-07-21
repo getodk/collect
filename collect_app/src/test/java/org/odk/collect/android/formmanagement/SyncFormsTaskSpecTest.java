@@ -1,5 +1,7 @@
 package org.odk.collect.android.formmanagement;
 
+import android.content.Context;
+
 import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
@@ -11,6 +13,7 @@ import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
@@ -27,9 +30,11 @@ public class SyncFormsTaskSpecTest {
 
     private ServerFormsSynchronizer serverFormsSynchronizer;
     private SyncStatusRepository syncStatusRepository;
+    private Notifier notifier;
 
     @Before
     public void setup() {
+        notifier = mock(Notifier.class);
         serverFormsSynchronizer = mock(ServerFormsSynchronizer.class);
         syncStatusRepository = mock(SyncStatusRepository.class);
         when(syncStatusRepository.startSync()).thenReturn(true);
@@ -44,6 +49,11 @@ public class SyncFormsTaskSpecTest {
             @Override
             public SyncStatusRepository providesServerFormSyncRepository() {
                 return syncStatusRepository;
+            }
+
+            @Override
+            public Notifier providesNotifier(Context context) {
+                return notifier;
             }
         });
     }
@@ -62,8 +72,9 @@ public class SyncFormsTaskSpecTest {
     }
 
     @Test
-    public void whenSynchronizingFails_setsRepositoryToNotSyncing() throws Exception {
-        doThrow(new FormApiException(FormApiException.Type.AUTH_REQUIRED, "")).when(serverFormsSynchronizer).synchronize();
+    public void whenSynchronizingFails_setsRepositoryToNotSyncingAndNotifiesWithError() throws Exception {
+        FormApiException exception = new FormApiException(FormApiException.Type.AUTH_REQUIRED, "");
+        doThrow(exception).when(serverFormsSynchronizer).synchronize();
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
@@ -73,6 +84,7 @@ public class SyncFormsTaskSpecTest {
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
         inOrder.verify(syncStatusRepository).finishSync(false);
+        verify(notifier).onSyncFailure(exception);
     }
 
     @Test

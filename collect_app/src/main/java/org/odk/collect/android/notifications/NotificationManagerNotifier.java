@@ -9,6 +9,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.openrosa.api.FormApiException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,13 +18,15 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
-import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
 import static org.odk.collect.android.utilities.NotificationUtils.showNotification;
 
 public class NotificationManagerNotifier implements Notifier {
 
     private final Context context;
     private final NotificationManager notificationManager;
+
+    private static final int FORM_UPDATE_NOTIFICATION_ID = 0;
+    private static final int FORM_SYNC_NOTIFICATION_ID = 1;
 
     public NotificationManagerNotifier(Context context) {
         this.context = context;
@@ -62,6 +65,18 @@ public class NotificationManagerNotifier implements Notifier {
                         R.string.failures),
                 contentIntent,
                 FORM_UPDATE_NOTIFICATION_ID
+        );
+    }
+
+    @Override
+    public void onSyncFailure(FormApiException exception) {
+        showNotification(
+                context,
+                notificationManager,
+                R.string.error,
+                "Oh no!",
+                null,
+                FORM_SYNC_NOTIFICATION_ID
         );
     }
 

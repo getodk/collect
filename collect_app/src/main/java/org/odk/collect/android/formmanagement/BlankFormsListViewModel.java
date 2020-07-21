@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
@@ -23,13 +24,15 @@ public class BlankFormsListViewModel extends ViewModel {
     private final SyncStatusRepository syncRepository;
     private final ServerFormsSynchronizer serverFormsSynchronizer;
     private final PreferencesProvider preferencesProvider;
+    private final Notifier notifier;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
         this.serverFormsSynchronizer = serverFormsSynchronizer;
         this.preferencesProvider = preferencesProvider;
+        this.notifier = notifier;
     }
 
     public boolean isSyncingAvailable() {
@@ -53,8 +56,9 @@ public class BlankFormsListViewModel extends ViewModel {
             try {
                 serverFormsSynchronizer.synchronize();
                 syncRepository.finishSync(true);
-            } catch (FormApiException ignored) {
+            } catch (FormApiException e) {
                 syncRepository.finishSync(false);
+                notifier.onSyncFailure(e);
             }
 
             return null;
@@ -73,20 +77,22 @@ public class BlankFormsListViewModel extends ViewModel {
         private final SyncStatusRepository syncRepository;
         private final ServerFormsSynchronizer serverFormsSynchronizer;
         private final PreferencesProvider preferencesProvider;
+        private final Notifier notifier;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
             this.serverFormsSynchronizer = serverFormsSynchronizer;
             this.preferencesProvider = preferencesProvider;
+            this.notifier = notifier;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider, notifier);
         }
     }
 }

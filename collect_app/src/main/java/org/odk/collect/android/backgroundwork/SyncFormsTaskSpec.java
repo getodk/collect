@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -22,6 +23,9 @@ public class SyncFormsTaskSpec implements TaskSpec {
     @Inject
     SyncStatusRepository syncStatusRepository;
 
+    @Inject
+    Notifier notifier;
+
     @NotNull
     @Override
     public Runnable getTask(@NotNull Context context) {
@@ -35,8 +39,9 @@ public class SyncFormsTaskSpec implements TaskSpec {
             try {
                 serverFormsSynchronizer.synchronize();
                 syncStatusRepository.finishSync(true);
-            } catch (FormApiException ignored) {
+            } catch (FormApiException e) {
                 syncStatusRepository.finishSync(false);
+                notifier.onSyncFailure(e);
             }
         };
     }

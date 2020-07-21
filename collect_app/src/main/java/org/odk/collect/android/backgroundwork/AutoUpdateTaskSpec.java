@@ -28,6 +28,7 @@ import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
@@ -58,11 +59,13 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     @Inject
     FormRepository formRepository;
 
+    @Inject
+    Notifier notifier;
+
     @NotNull
     @Override
     public Runnable getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
-        NotificationManagerNotifier notifier = new NotificationManagerNotifier(context);
 
         return () -> {
             if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
