@@ -91,7 +91,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
 
     public static class Adapter extends WorkerAdapter {
 
-        Adapter(@NotNull Context context, @NotNull WorkerParameters workerParams) {
+        public Adapter(@NotNull Context context, @NotNull WorkerParameters workerParams) {
             super(new AutoUpdateTaskSpec(), context, workerParams);
         }
     }
