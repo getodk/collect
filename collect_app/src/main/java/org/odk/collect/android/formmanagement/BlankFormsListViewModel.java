@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.matchexactly.SyncException;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
@@ -56,7 +56,7 @@ public class BlankFormsListViewModel extends ViewModel {
             try {
                 serverFormsSynchronizer.synchronize();
                 syncRepository.finishSync(true);
-            } catch (FormApiException e) {
+            } catch (SyncException e) {
                 syncRepository.finishSync(false);
                 notifier.onSyncFailure(e);
             }

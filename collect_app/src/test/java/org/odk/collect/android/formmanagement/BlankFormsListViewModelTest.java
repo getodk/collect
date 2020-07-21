@@ -9,9 +9,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.matchexactly.SyncException;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.async.Scheduler;
@@ -89,7 +89,7 @@ public class BlankFormsListViewModelTest {
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, mock(PreferencesProvider.class), notifier);
 
-        FormApiException exception = new FormApiException(FormApiException.Type.AUTH_REQUIRED, "");
+        SyncException exception = new SyncException();
         doThrow(exception).when(synchronizer).synchronize();
         viewModel.syncWithServer();
         fakeScheduler.runBackground();

@@ -8,13 +8,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.matchexactly.SyncException;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
@@ -73,7 +73,7 @@ public class SyncFormsTaskSpecTest {
 
     @Test
     public void whenSynchronizingFails_setsRepositoryToNotSyncingAndNotifiesWithError() throws Exception {
-        FormApiException exception = new FormApiException(FormApiException.Type.AUTH_REQUIRED, "");
+        SyncException exception = new SyncException();
         doThrow(exception).when(serverFormsSynchronizer).synchronize();
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 

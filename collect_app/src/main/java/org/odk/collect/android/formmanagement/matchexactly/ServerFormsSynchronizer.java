@@ -30,20 +30,24 @@ public class ServerFormsSynchronizer {
         this.formDownloader = formDownloader;
     }
 
-    public void synchronize() throws FormApiException {
-        List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
-        List<Form> formsOnDevice = formRepository.getAll();
+    public void synchronize() throws SyncException {
+        try {
+            List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
+            List<Form> formsOnDevice = formRepository.getAll();
 
-        formsOnDevice.stream().forEach(form -> {
-            if (formList.stream().noneMatch(f -> form.getJrFormId().equals(f.getFormId()))) {
-                formRepository.delete(form.getId());
-            }
-        });
+            formsOnDevice.stream().forEach(form -> {
+                if (formList.stream().noneMatch(f -> form.getJrFormId().equals(f.getFormId()))) {
+                    formRepository.delete(form.getId());
+                }
+            });
 
-        for (ServerFormDetails form : formList) {
-            if (form.isNotOnDevice() || form.isUpdated()) {
-                formDownloader.downloadForm(form);
+            for (ServerFormDetails form : formList) {
+                if (form.isNotOnDevice() || form.isUpdated()) {
+                    formDownloader.downloadForm(form);
+                }
             }
+        } catch (FormApiException ignored) {
+            throw new SyncException();
         }
     }
 }
