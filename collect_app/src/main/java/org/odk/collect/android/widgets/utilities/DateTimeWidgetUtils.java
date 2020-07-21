@@ -65,7 +65,8 @@ public class DateTimeWidgetUtils {
                 .withMillisOfSecond(0);
     }
 
-    public static void showDatePickerDialog(FormEntryActivity activity, FormEntryPrompt prompt, DatePickerDetails datePickerDetails, LocalDateTime date) {
+    public static void showDatePickerDialog(FormEntryActivity activity, FormEntryPrompt prompt, DatePickerDetails datePickerDetails,
+                                            LocalDateTime date) {
         switch (datePickerDetails.getDatePickerType()) {
             case ETHIOPIAN:
                 CustomDatePickerDialog dialog = EthiopianDatePickerDialog.newInstance(prompt.getIndex(), date, datePickerDetails);
