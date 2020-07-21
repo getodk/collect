@@ -1,6 +1,6 @@
 package org.odk.collect.android.formmanagement;
 
-import android.content.SharedPreferences;
+import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -18,12 +18,14 @@ import javax.inject.Inject;
 
 public class BlankFormsListViewModel extends ViewModel {
 
+    private final Application application;
     private final Scheduler scheduler;
     private final SyncStatusRepository syncRepository;
     private final ServerFormsSynchronizer serverFormsSynchronizer;
     private final PreferencesProvider preferencesProvider;
 
-    public BlankFormsListViewModel(Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
+        this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
         this.serverFormsSynchronizer = serverFormsSynchronizer;
@@ -55,19 +57,21 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     private boolean isMatchExactlyEnabled() {
-        SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
-        return "match_exactly".equals(generalSharedPreferences.getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
+        FormUpdateMode formUpdateMode = FormUpdateMode.parse(application, preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
+        return formUpdateMode == FormUpdateMode.MATCH_EXACTLY;
     }
 
     public static class Factory implements ViewModelProvider.Factory {
 
+        private final Application application;
         private final Scheduler scheduler;
         private final SyncStatusRepository syncRepository;
         private final ServerFormsSynchronizer serverFormsSynchronizer;
         private final PreferencesProvider preferencesProvider;
 
         @Inject
-        public Factory(Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider) {
+            this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
             this.serverFormsSynchronizer = serverFormsSynchronizer;
@@ -77,7 +81,7 @@ public class BlankFormsListViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider);
         }
     }
 }
