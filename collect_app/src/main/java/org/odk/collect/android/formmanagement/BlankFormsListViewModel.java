@@ -53,7 +53,9 @@ public class BlankFormsListViewModel extends ViewModel {
             }
 
             return null;
-        }, ignored -> syncRepository.finishSync());
+        }, ignored -> {
+            syncRepository.finishSync();
+        });
     }
 
     private boolean isMatchExactlyEnabled() {
