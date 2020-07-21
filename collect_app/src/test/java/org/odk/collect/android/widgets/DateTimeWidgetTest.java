@@ -5,7 +5,6 @@ import android.view.View;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,6 @@ public class DateTimeWidgetTest {
     private View.OnLongClickListener listener;
 
     private LocalDateTime date;
-    private DateTime dateTime;
     private LocalDateTime localDateTime;
 
     @Before
@@ -43,7 +41,6 @@ public class DateTimeWidgetTest {
         listener = mock(View.OnLongClickListener.class);
 
         date = new LocalDateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
-        dateTime = new DateTime().withTime(12, 0, 0, 0);
 
         localDateTime = new LocalDateTime()
                 .withYear(2010)

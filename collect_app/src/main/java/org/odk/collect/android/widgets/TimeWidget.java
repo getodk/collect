@@ -78,6 +78,7 @@ public class TimeWidget extends QuestionWidget {
     public void clearAnswer() {
         nullAnswer = true;
         binding.widgetAnswerText.setText(R.string.no_time_selected);
+        setTimeToCurrent();
         widgetValueChanged();
     }
 
@@ -123,11 +124,6 @@ public class TimeWidget extends QuestionWidget {
     }
 
     private void onButtonClick() {
-        if (nullAnswer) {
-            setTimeToCurrent();
-        } else {
-            updateTime(hourOfDay, minuteOfHour, true);
-        }
         DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour);
     }
 }

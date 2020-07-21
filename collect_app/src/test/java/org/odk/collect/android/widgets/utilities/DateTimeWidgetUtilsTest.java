@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
@@ -18,7 +19,6 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -53,36 +53,21 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsFixedDatePickerDialog_withLightThemeForSpinnerMode() {
-        when(datePickerDetails.isCalendarMode()).thenReturn(false);
-
+    public void showDatePickerDialog_showsFixedDatePickerDialog_whenDatePickerTypeIsGregorian() {
         DateTimeWidgetUtils.showDatePickerDialog(activity, prompt, datePickerDetails, date);
-        FixedDatePickerDialog dialog = (FixedDatePickerDialog) activity.getSupportFragmentManager().findFragmentByTag(FixedDatePickerDialog.class.getName());
+        FixedDatePickerDialog dialog = (FixedDatePickerDialog) activity.getSupportFragmentManager()
+                .findFragmentByTag(FixedDatePickerDialog.class.getName());
 
         assertNotNull(dialog);
-        assertEquals(dialog.getTheme(), 0);
     }
 
     @Test
-    public void showDatePickerDialog_showsFixedDatePickerDialog_withLightThemeForLightMode() {
-        when(datePickerDetails.isCalendarMode()).thenReturn(true);
-
-        DateTimeWidgetUtils.showDatePickerDialog(activity, prompt, datePickerDetails, date);
-        FixedDatePickerDialog dialog = (FixedDatePickerDialog) activity.getSupportFragmentManager().findFragmentByTag(FixedDatePickerDialog.class.getName());
-
-        assertNotNull(dialog);
-        assertEquals(dialog.getTheme(), 0);
-    }
-
-    @Test
-    public void showDatePickerDialog_showsFixedDatePickerDialog_withDarkThemeForDarkMode() {
-        when(datePickerDetails.isCalendarMode()).thenReturn(true);
-
-        DateTimeWidgetUtils.showDatePickerDialog(activity, prompt, datePickerDetails, date);
-        FixedDatePickerDialog dialog = (FixedDatePickerDialog) activity.getSupportFragmentManager().findFragmentByTag(FixedDatePickerDialog.class.getName());
+    public void createTimePickerDialog_showsCustomTimePickerDialog() {
+        DateTimeWidgetUtils.createTimePickerDialog(activity, 12, 10);
+        CustomTimePickerDialog dialog = (CustomTimePickerDialog) activity.getSupportFragmentManager()
+                .findFragmentByTag(CustomTimePickerDialog.class.getName());
 
         assertNotNull(dialog);
-        assertEquals(dialog.getTheme(), 1);
     }
 
     @Test

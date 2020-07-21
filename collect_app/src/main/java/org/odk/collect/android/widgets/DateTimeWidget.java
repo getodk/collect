@@ -85,7 +85,6 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
-            date = DateTimeWidgetUtils.getCurrentDate();
         } else {
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             isDateNull = false;
@@ -93,6 +92,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
             Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
             DateTime dateTime = new DateTime(date);
+            isTimeNull = false;
             updateTime(dateTime, true);
         }
 
@@ -130,6 +130,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
         isTimeNull = true;
         binding.timeAnswerText.setText(R.string.no_time_selected);
+        setTimeToCurrent();
         widgetValueChanged();
     }
 
@@ -163,11 +164,6 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void onButtonClick(int buttonId) {
-        if (isTimeNull) {
-            setTimeToCurrent();
-        } else {
-            updateTime(hourOfDay, minuteOfHour, true);
-        }
         DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour);
     }
 

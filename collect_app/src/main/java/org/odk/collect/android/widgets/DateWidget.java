@@ -71,7 +71,6 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
-            date = DateTimeWidgetUtils.getCurrentDate();
         } else {
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             isNullAnswer = false;
