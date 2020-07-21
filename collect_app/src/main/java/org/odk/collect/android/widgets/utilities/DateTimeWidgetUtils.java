@@ -56,15 +56,6 @@ public class DateTimeWidgetUtils {
         timeAnswerText.setText(getTimeData(hourOfDay, minuteOfHour, nullAnswer).getDisplayText());
     }
 
-    public static LocalDateTime getCurrentDate() {
-        return LocalDateTime
-                .now()
-                .withHourOfDay(0)
-                .withMinuteOfHour(0)
-                .withSecondOfMinute(0)
-                .withMillisOfSecond(0);
-    }
-
     public static void showDatePickerDialog(FormEntryActivity activity, FormEntryPrompt prompt, DatePickerDetails datePickerDetails,
                                             LocalDateTime date) {
         switch (datePickerDetails.getDatePickerType()) {

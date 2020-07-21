@@ -31,7 +31,6 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
 
-
 @SuppressLint("ViewConstructor")
 public class TimeWidget extends QuestionWidget {
     WidgetAnswerBinding binding;
@@ -68,7 +67,7 @@ public class TimeWidget extends QuestionWidget {
             Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
 
             DateTime dateTime = new DateTime(date);
-            updateTime(dateTime, true);
+            updateTime(dateTime);
         }
 
         return answerView;
@@ -78,7 +77,6 @@ public class TimeWidget extends QuestionWidget {
     public void clearAnswer() {
         nullAnswer = true;
         binding.widgetAnswerText.setText(R.string.no_time_selected);
-        setTimeToCurrent();
         widgetValueChanged();
     }
 
@@ -103,24 +101,14 @@ public class TimeWidget extends QuestionWidget {
     public void onTimeSet(int hourOfDay, int minute) {
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minute;
+        nullAnswer = false;
+        DateTimeWidgetUtils.setTimeLabel(binding.widgetAnswerText, hourOfDay, minuteOfHour, false);
+    }
+
+    private void updateTime(DateTime dateTime) {
+        hourOfDay = dateTime.getHourOfDay();
+        minuteOfHour = dateTime.getMinuteOfHour();
         DateTimeWidgetUtils.setTimeLabel(binding.widgetAnswerText, hourOfDay, minuteOfHour, nullAnswer);
-    }
-
-    private void setTimeToCurrent() {
-        updateTime(DateTime.now(), false);
-    }
-
-    private void updateTime(DateTime dateTime, boolean shouldUpdateLabel) {
-        updateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), shouldUpdateLabel);
-    }
-
-    private void updateTime(int hourOfDay, int minuteOfHour, boolean shouldUpdateLabel) {
-        this.hourOfDay = hourOfDay;
-        this.minuteOfHour = minuteOfHour;
-
-        if (shouldUpdateLabel) {
-            DateTimeWidgetUtils.setTimeLabel(binding.widgetAnswerText, hourOfDay, minuteOfHour, nullAnswer);
-        }
     }
 
     private void onButtonClick() {

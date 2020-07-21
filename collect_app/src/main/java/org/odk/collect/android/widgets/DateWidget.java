@@ -97,7 +97,6 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     public void clearAnswer() {
         isNullAnswer = true;
         binding.widgetAnswerText.setText(R.string.no_date_selected);
-        date = DateTimeWidgetUtils.getCurrentDate();
         widgetValueChanged();
     }
 

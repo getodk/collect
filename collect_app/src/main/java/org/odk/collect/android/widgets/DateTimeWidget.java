@@ -107,7 +107,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             if (isTimeNull) {
                 setTimeToCurrent();
             } else if (isDateNull) {
-                date = DateTimeWidgetUtils.getCurrentDate();
+                setDateToCurrent();
             }
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(date.getYear())
@@ -126,7 +126,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     public void clearAnswer() {
         isDateNull = true;
         binding.dateAnswerText.setText(R.string.no_date_selected);
-        date = DateTimeWidgetUtils.getCurrentDate();
+        setDateToCurrent();
 
         isTimeNull = true;
         binding.timeAnswerText.setText(R.string.no_time_selected);
@@ -176,7 +176,16 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minute;
         isTimeNull = false;
-        DateTimeWidgetUtils.setTimeLabel(binding.timeAnswerText, hourOfDay, minuteOfHour, isTimeNull);
+        DateTimeWidgetUtils.setTimeLabel(binding.timeAnswerText, hourOfDay, minuteOfHour, false);
+    }
+
+    private void setDateToCurrent() {
+        date = LocalDateTime
+                .now()
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
     }
 
     private void setTimeToCurrent() {

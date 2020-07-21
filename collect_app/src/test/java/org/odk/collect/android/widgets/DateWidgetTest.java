@@ -96,7 +96,7 @@ public class DateWidgetTest {
     }
 
     @Test
-    public void clearAnswer_callValueChangeListener() {
+    public void clearAnswer_callsValueChangeListener() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate())));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();

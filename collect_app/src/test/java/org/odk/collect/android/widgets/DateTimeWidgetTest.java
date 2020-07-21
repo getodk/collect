@@ -53,7 +53,7 @@ public class DateTimeWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_doesNotShowButton() {
+    public void usingReadOnlyOption_doesNotShowButtons() {
         DateTimeWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
 
         assertEquals(widget.binding.dateButton.getVisibility(), View.GONE);
@@ -72,7 +72,7 @@ public class DateTimeWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoDateSelected() {
+    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsCorrectText() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
 
         assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
@@ -80,7 +80,7 @@ public class DateTimeWidgetTest {
     }
 
     @Test
-    public void whenPromptHasAnswer_answerTextViewShowsCorrectDate() {
+    public void whenPromptHasAnswer_answerTextViewShowsCorrectDateAndTime() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDate()));
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
         DateTimeWidget widget = createWidget(prompt);
@@ -88,6 +88,26 @@ public class DateTimeWidgetTest {
         assertEquals(widget.binding.dateAnswerText.getText(),
                 DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
         assertEquals(widget.binding.timeAnswerText.getText(), "12:00");
+    }
+
+    @Test
+    public void setBinaryData_setsCorrectDateInDateAnswerTextView() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
+        DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+
+        DateTimeWidget widget = createWidget(prompt);
+        widget.setBinaryData(date);
+
+        assertEquals(widget.binding.dateAnswerText.getText(),
+                DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
+    }
+
+    @Test
+    public void onTimeSet_timeAnswerTextViewShowsCorrectTime() {
+        DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        widget.onTimeSet(12, 10);
+
+        assertEquals(widget.binding.timeAnswerText.getText(), "12:10");
     }
 
     @Test

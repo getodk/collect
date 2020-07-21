@@ -36,7 +36,7 @@ public class TimeWidgetTest {
         questionDef = mock(QuestionDef.class);
         listener = mock(View.OnLongClickListener.class);
 
-        dateTime = new DateTime().withTime(12, 0, 0, 0);
+        dateTime = new DateTime().withTime(12, 10, 0, 0);
     }
 
     @Test
@@ -57,15 +57,23 @@ public class TimeWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoDateSelected() {
+    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoTimeSelected() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
-    public void whenPromptHasAnswer_answerTextViewShowsCorrectDate() {
+    public void whenPromptHasAnswer_answerTextViewShowsCorrectTime() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(dateTime.toDate())));
-        assertEquals(widget.binding.widgetAnswerText.getText(), "12:00");
+        assertEquals(widget.binding.widgetAnswerText.getText(), "12:10");
+    }
+
+    @Test
+    public void onTimeSet_answerTextViewShowsCorrectTime() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        widget.onTimeSet(12, 10);
+
+        assertEquals(widget.binding.widgetAnswerText.getText(), "12:10");
     }
 
     @Test
@@ -78,7 +86,7 @@ public class TimeWidgetTest {
     }
 
     @Test
-    public void clearAnswer_callValueChangeListener() {
+    public void clearAnswer_callsValueChangeListener() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(dateTime.toDate())));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
