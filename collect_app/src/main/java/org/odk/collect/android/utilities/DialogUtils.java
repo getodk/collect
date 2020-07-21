@@ -17,7 +17,6 @@
 package org.odk.collect.android.utilities;
 
 import android.app.Activity;
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,18 +27,15 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formentry.audit.AuditEvent;
-import org.odk.collect.android.javarosawrapper.FormController;
 
 import timber.log.Timber;
 
-import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 /**
@@ -88,45 +84,6 @@ public final class DialogUtils {
         } catch (Exception e) {
             Timber.e(e);
         }
-    }
-
-    /**
-     * Shows a confirm/cancel dialog for deleting the current repeat group.
-     */
-    public static void showDeleteRepeatConfirmDialog(Context context, Runnable onDeleted, Runnable onCanceled) {
-        FormController formController = Collect.getInstance().getFormController();
-        String name = formController.getLastRepeatedGroupName();
-        int repeatcount = formController.getLastRepeatedGroupRepeatCount();
-        if (repeatcount != -1) {
-            name += " (" + (repeatcount + 1) + ")";
-        }
-        androidx.appcompat.app.AlertDialog alertDialog = new androidx.appcompat.app.AlertDialog.Builder(context).create();
-        alertDialog.setTitle(context.getString(R.string.delete_repeat_ask));
-        alertDialog.setMessage(context.getString(R.string.delete_repeat_confirm, name));
-        DialogInterface.OnClickListener quitListener = (dialog, i) -> {
-            switch (i) {
-                case BUTTON_POSITIVE: // yes
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
-                    formController.deleteRepeat();
-
-                    if (onDeleted != null) {
-                        onDeleted.run();
-                    }
-
-                    break;
-
-                case BUTTON_NEGATIVE: // no
-                    if (onCanceled != null) {
-                        onCanceled.run();
-                    }
-
-                    break;
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.discard_group), quitListener);
-        alertDialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.delete_repeat_no), quitListener);
-        alertDialog.show();
     }
 
     /**

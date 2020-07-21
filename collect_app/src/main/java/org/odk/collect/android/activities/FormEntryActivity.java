@@ -102,6 +102,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationMa
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
+import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
@@ -203,9 +204,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         CustomDatePickerDialog.CustomDatePickerDialogListener, RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
-        AudioControllerView.SwipableParent,
-        FormIndexAnimationHandler.Listener,
-        QuitFormDialogFragment.Listener {
+        AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
+        QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -1140,7 +1140,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == DELETE_REPEAT) {
-            createDeleteRepeatConfirmDialog();
+            DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
         } else {
             ODKView odkView = getCurrentViewIfODKView();
             if (odkView != null) {
@@ -1154,6 +1154,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void deleteGroup() {
+        FormController formController = getFormController();
+        if (formController != null && !formController.indexIsInFieldList()) {
+            showNextView();
+        } else {
+            refreshCurrentView();
+        }
     }
 
     /**
@@ -1439,7 +1449,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         state = null;
         try {
             FormController formController = getFormController();
-
             if (saveBeforeNextView(formController)) {
                 return;
             }
@@ -1798,20 +1807,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         beenSwiped = false;
         alertDialog.show();
-    }
-
-    /**
-     * Creates a confirm/cancel dialog for deleting repeats.
-     */
-    private void createDeleteRepeatConfirmDialog() {
-        DialogUtils.showDeleteRepeatConfirmDialog(this, () -> {
-            FormController formController = getFormController();
-            if (formController != null && !formController.indexIsInFieldList()) {
-                showNextView();
-            } else {
-                refreshCurrentView();
-            }
-        }, this::refreshCurrentView);
     }
 
     /**
