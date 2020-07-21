@@ -22,6 +22,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -32,10 +34,22 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ApplicationResetter {
 
     private List<Integer> failedResetActions;
-    private final StoragePathProvider storagePathProvider = new StoragePathProvider();
+
+    @Inject
+    StoragePathProvider storagePathProvider;
+
+    @Inject
+    PropertyManager propertyManager;
+
+    public ApplicationResetter() {
+        // This should probably just take arguments in the constructor rather than use Dagger
+        DaggerUtils.getComponent(Collect.getInstance()).inject(this);
+    }
 
     public List<Integer> reset(Context context, List<Integer> resetActions) {
         failedResetActions = new ArrayList<>();
@@ -91,7 +105,7 @@ public class ApplicationResetter {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
 
-        Collect.getInstance().initializeJavaRosa();
+        propertyManager.reload();
     }
 
     private void resetInstances() {

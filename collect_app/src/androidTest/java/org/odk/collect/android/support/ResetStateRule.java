@@ -65,9 +65,8 @@ public class ResetStateRule implements TestRule {
             clearDisk(context);
             setTestState();
 
-            // Any dependencies (PropertyManager for instance) will already have been
-            // passed to JavaRosa so make sure everything is reset
-            ((Collect) context.getApplicationContext()).initializeJavaRosa();
+            // Reinitialize any application state with new deps/state
+            ((Collect) context.getApplicationContext()).getComponent().applicationInitializer().initialize();
 
             base.evaluate();
         }

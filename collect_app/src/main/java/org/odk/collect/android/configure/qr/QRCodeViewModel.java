@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -81,7 +81,7 @@ class QRCodeViewModel extends ViewModel {
                     qrCodeBitmap.setValue(qrCode.second);
 
                     boolean serverPasswordSet = !generalSharedPreferences.getString(KEY_PASSWORD, "").isEmpty();
-                    boolean adminPasswordSet = adminSharedPreferences.contains(KEY_ADMIN_PW);
+                    boolean adminPasswordSet = !adminSharedPreferences.getString(KEY_ADMIN_PW, "").isEmpty();
 
                     if (serverPasswordSet || adminPasswordSet) {
                         if (serverPasswordSet && includedKeys.contains(KEY_PASSWORD) && adminPasswordSet && includedKeys.contains(KEY_ADMIN_PW)) {

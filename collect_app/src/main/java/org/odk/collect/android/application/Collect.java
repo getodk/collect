@@ -30,7 +30,6 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -42,10 +41,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
-import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 public class Collect extends Application {
@@ -122,12 +118,10 @@ public class Collect extends Application {
         singleton = this;
 
         setupDagger();
-        applicationInitializer.initializePreferences();
-        applicationInitializer.initializeFrameworks();
-        applicationInitializer.initializeLocale();
+        applicationInitializer.initialize();
+        
         fixGoogleBug154855417();
 
-        initializeJavaRosa();
         setupStrictMode();
     }
 
@@ -168,17 +162,6 @@ public class Collect extends Application {
         if (!isUsingSysLanguage) {
             new LocaleHelper().updateLocale(this);
         }
-    }
-
-    public void initializeJavaRosa() {
-        PropertyManager mgr = new PropertyManager(this);
-
-        // Use the server username by default if the metadata username is not defined
-        if (mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
-            mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
-        }
-
-        FormController.initializeJavaRosa(mgr);
     }
 
     public AppDependencyComponent getComponent() {

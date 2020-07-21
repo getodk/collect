@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
 import com.google.zxing.WriterException;
 

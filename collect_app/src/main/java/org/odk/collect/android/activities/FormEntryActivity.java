@@ -87,12 +87,12 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.formentry.FormLoadingDialogFragment;
-import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
+import org.odk.collect.android.formentry.FormLoadingDialogFragment;
+import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -119,6 +119,7 @@ import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -315,6 +316,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     StoragePathProvider storagePathProvider;
+
+    @Inject
+    PropertyManager propertyManager;
 
     @Inject
     WorkManager workManager;
@@ -2283,7 +2287,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
-                        Collect.getInstance().initializeJavaRosa();
+                        propertyManager.reload();
                         loadForm();
                     }
 

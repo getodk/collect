@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.odk.collect.android.preferences.AdminAndGeneralKeys.ag;
 
@@ -111,7 +113,8 @@ public final class AdminKeys {
             KEY_MOVING_BACKWARDS,
             ALLOW_OTHER_WAYS_OF_EDITING_FORM,
             KEY_MAPS,
-            KEY_QR_CODE_SCANNER
+            KEY_QR_CODE_SCANNER,
+            KEY_ADMIN_PW
     );
 
     static Collection<String> serverKeys = Collections.singletonList(
@@ -144,6 +147,20 @@ public final class AdminKeys {
             KEY_NAVIGATION,
             KEY_SHOW_SPLASH_SCREEN
     );
+
+    public static Map<String, Object> getDefaults() {
+        Map<String, Object> defaults = new HashMap<>();
+
+        for (String key : allKeys()) {
+            if (key.equals(KEY_ADMIN_PW)) {
+                defaults.put(key, "");
+            } else {
+                defaults.put(key, true);
+            }
+        }
+
+        return defaults;
+    }
 
     private static Collection<String> allKeys() {
         Collection<String> keys = new ArrayList<>();

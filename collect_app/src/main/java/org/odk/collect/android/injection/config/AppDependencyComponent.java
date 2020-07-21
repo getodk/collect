@@ -18,10 +18,16 @@ import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
+import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
+import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
+import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.formmanagement.SyncFormsTaskSpec;
+import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
@@ -36,17 +42,17 @@ import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
-import org.odk.collect.android.preferences.qr.ShowQRCodeFragment;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.upload.AutoSendWorker;
+import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.widgets.ExStringWidget;
@@ -175,8 +181,16 @@ public interface AppDependencyComponent {
 
     void inject(QuitFormDialogFragment quitFormDialogFragment);
 
+    void inject(BarCodeScannerFragment barCodeScannerFragment);
+
+    void inject(QRCodeScannerFragment qrCodeScannerFragment);
+
+    void inject(PreferencesActivity preferencesActivity);
+
+    void inject(ApplicationResetter applicationResetter);
+
     void inject(FormChooserListActivity formChooserListActivity);
-  
+
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
@@ -190,4 +204,8 @@ public interface AppDependencyComponent {
     AdminSharedPreferences adminSharedPreferences();
 
     PreferencesProvider preferencesProvider();
+
+    ApplicationInitializer applicationInitializer();
+
+    SettingsImporter settingsImporter();
 }

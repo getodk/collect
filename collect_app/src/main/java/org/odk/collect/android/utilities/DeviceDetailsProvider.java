@@ -6,14 +6,14 @@ public interface DeviceDetailsProvider {
 
     @Deprecated
     @Nullable
-    String getDeviceId();
+    String getDeviceId() throws SecurityException;
 
     @Nullable
-    String getLine1Number();
+    String getLine1Number() throws SecurityException;
 
     @Nullable
-    String getSubscriberId();
+    String getSubscriberId() throws SecurityException;
 
     @Nullable
-    String getSimSerialNumber();
+    String getSimSerialNumber() throws SecurityException;
 }

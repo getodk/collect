@@ -40,19 +40,19 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.configure.LegacySettingsFileReader;
+import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -65,17 +65,11 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.material.MaterialBanner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -138,6 +132,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
+
+    @Inject
+    SettingsImporter settingsImporter;
 
     private MainMenuViewModel viewModel;
 
@@ -271,33 +271,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             return;
         }
 
-        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
-        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
-        // Give JSON file preference
-        if (j.exists()) {
-            boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                j.delete();
-                recreate();
-
-                // Delete settings file to prevent overwrite of settings from JSON file on next startup
-                if (f.exists()) {
-                    f.delete();
-                }
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        } else if (f.exists()) {
-            boolean success = loadSharedPreferencesFromFile(f);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                f.delete();
-                recreate();
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        }
+        importSettingsFromLegacyFiles();
     }
 
     @Override
@@ -500,39 +474,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
     }
 
-    private boolean loadSharedPreferencesFromFile(File src) {
-        // this should probably be in a thread if it ever gets big
-        boolean res = false;
-        ObjectInputStream input = null;
-        try {
-            input = new ObjectInputStream(new FileInputStream(src));
-
-            // first object is preferences
-            Map<String, Object> entries = (Map<String, Object>) input.readObject();
-
-            AutoSendPreferenceMigrator.migrate(entries);
-            PreferenceSaver.saveGeneralPrefs(generalSharedPreferences, entries);
-
-            // second object is admin options
-            Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
-            PreferenceSaver.saveAdminPrefs(AdminSharedPreferences.getInstance(), adminEntries);
-
-            Collect.getInstance().initializeJavaRosa();
-            res = true;
-        } catch (IOException | ClassNotFoundException e) {
-            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
-        }
-        return res;
-    }
-
     @Override
     public void onCorrectAdminPassword(Action action) {
         switch (action) {
@@ -638,5 +579,22 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             storageMigrationBanner.setVisibility(View.GONE);
             storageMigrationRepository.clearResult();
         });
+    }
+
+    private void importSettingsFromLegacyFiles() {
+        try {
+            String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
+
+            if (settings != null) {
+                if (settingsImporter.fromJSON(settings)) {
+                    ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                    recreate();
+                } else {
+                    ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+                }
+            }
+        } catch (LegacySettingsFileReader.CorruptSettingsFileException e) {
+            ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+        }
     }
 }

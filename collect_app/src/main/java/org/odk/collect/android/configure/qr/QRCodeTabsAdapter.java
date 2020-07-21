@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.qr;
+package org.odk.collect.android.configure.qr;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

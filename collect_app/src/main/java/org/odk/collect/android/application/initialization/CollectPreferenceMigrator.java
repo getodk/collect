@@ -5,8 +5,14 @@ import android.content.SharedPreferences;
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import org.odk.collect.android.application.initialization.migration.KeyRenamer;
+import org.odk.collect.android.application.initialization.migration.KeyTranslator;
 import org.odk.collect.android.application.initialization.migration.Migration;
+import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.removeKey;
@@ -26,32 +32,35 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 /**
  * Migrates old preference keys and values to new ones.
  */
-class PrefMigrator {
+public class CollectPreferenceMigrator implements PreferenceMigrator {
 
-    private final SharedPreferences generalSharedPreferences;
-    private final SharedPreferences adminSharedPreferences;
-    private final SharedPreferences metaSharedPreferences;
+    private final SharedPreferences generalSharedPrefs;
+    private final SharedPreferences adminSharedPrefs;
+    private final SharedPreferences metaSharedPrefs;
 
-    PrefMigrator(SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences, SharedPreferences metaSharedPreferences) {
-        this.generalSharedPreferences = generalSharedPreferences;
-        this.adminSharedPreferences = adminSharedPreferences;
-        this.metaSharedPreferences = metaSharedPreferences;
+    public CollectPreferenceMigrator(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, SharedPreferences metaSharedPrefs) {
+        this.generalSharedPrefs = generalSharedPrefs;
+        this.adminSharedPrefs = adminSharedPrefs;
+        this.metaSharedPrefs = metaSharedPrefs;
     }
 
-    void migrate() {
-        migrate(generalSharedPreferences, getGeneralMigrations());
-        migrate(metaSharedPreferences, getMetaMigrations());
-        migrate(adminSharedPreferences, getAdminMigrations());
-    }
+    @Override
+    public void migrate() {
+        for (Migration migration : getGeneralMigrations()) {
+            migration.apply(generalSharedPrefs);
+        }
 
-    private static void migrate(SharedPreferences prefs, Migration... migrations) {
-        for (Migration migration : migrations) {
-            migration.apply(prefs);
+        for (Migration migration : getAdminMigrations()) {
+            migration.apply(adminSharedPrefs);
+        }
+
+        for (Migration migration : getMetaMigrations()) {
+            migration.apply(metaSharedPrefs);
         }
     }
 
-    private Migration[] getGeneralMigrations() {
-        return new Migration[]{
+    private List<Migration> getGeneralMigrations() {
+        return asList(
                 translateKey("map_sdk_behavior").toKey(KEY_BASEMAP_SOURCE)
                         .fromValue("google_maps").toValue("google")
                         .fromValue("mapbox_maps").toValue("mapbox"),
@@ -91,36 +100,42 @@ class PrefMigrator {
                         .withValues("osmdroid", "openmap_stamen_terrain")
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_STAMEN)
 
-                        .withValues("osmdroid", "openmap_carto_positron")
+                        .withValues("osmdroid", "openmap_cartodb_positron")
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "positron")
-                        .withValues("osmdroid", "openmap_carto_darkmatter")
+                        .withValues("osmdroid", "openmap_cartodb_darkmatter")
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "dark_matter"),
 
                 translateValue("other_protocol").toValue("odk_default").forKey("protocol"),
 
                 removeKey("firstRun"),
                 removeKey("lastVersion"),
-                moveKey("scoped_storage_used").toPreferences(metaSharedPreferences),
+                moveKey("scoped_storage_used").toPreferences(metaSharedPrefs),
                 removeKey("metadata_migrated"),
-                moveKey("mapbox_initialized").toPreferences(metaSharedPreferences)
-        };
+                moveKey("mapbox_initialized").toPreferences(metaSharedPrefs),
+
+                combineKeys("autosend_wifi", "autosend_network")
+                        .withValues(false, false).toPairs("autosend", "off")
+                        .withValues(false, true).toPairs("autosend", "cellular_only")
+                        .withValues(true, false).toPairs("autosend", "wifi_only")
+                        .withValues(true, true).toPairs("autosend", "wifi_and_cellular")
+        );
     }
 
-    private Migration[] getMetaMigrations() {
-        return new Migration[]{
+    public List<KeyRenamer> getMetaMigrations() {
+        return asList(
                 renameKey("firstRun").toKey("first_run"),
                 renameKey("lastVersion").toKey("last_version")
-        };
+        );
     }
 
-    private Migration[] getAdminMigrations() {
-        return new Migration[]{
+    public List<KeyTranslator> getAdminMigrations() {
+        return asList(
                 // When either the map SDK or the basemap selection were previously
                 // hidden, we want to hide the entire Maps preference screen.
                 translateKey("show_map_sdk").toKey("maps")
                         .fromValue(false).toValue(false),
                 translateKey("show_map_basemap").toKey("maps")
                         .fromValue(false).toValue(false)
-        };
+        );
     }
 }

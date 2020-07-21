@@ -16,7 +16,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.application.initialization.CollectPreferenceMigrator;
+import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
+import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
+import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
+import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
+import org.odk.collect.android.configure.qr.QRCodeDecoder;
+import org.odk.collect.android.configure.qr.QRCodeGenerator;
+import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -25,14 +34,15 @@ import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.SyncStatusRepository;
 import org.odk.collect.android.formmanagement.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.SyncStatusRepository;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.jobs.CollectJobCreator;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
@@ -44,12 +54,11 @@ import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.preferences.qr.CachingQRCodeGenerator;
-import org.odk.collect.android.preferences.qr.QRCodeGenerator;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
@@ -67,12 +76,14 @@ import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -212,7 +223,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    PreferencesProvider providesPreferencesProvider(Context context) {
+    public PreferencesProvider providesPreferencesProvider(Context context) {
         return new PreferencesProvider(context);
     }
 
@@ -328,8 +339,43 @@ public class AppDependencyModule {
 
     @Singleton
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, PreferencesProvider preferencesProvider, UserAgentProvider userAgentProvider) {
-        return new ApplicationInitializer(application, collectJobCreator, preferencesProvider.getMetaSharedPreferences(), userAgentProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+        return new ApplicationInitializer(application, collectJobCreator, userAgentProvider, preferenceMigrator, propertyManager);
+    }
+
+    @Provides
+    public PreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
+        return new CollectPreferenceMigrator(preferencesProvider.getGeneralSharedPreferences(), preferencesProvider.getAdminSharedPreferences(), preferencesProvider.getMetaSharedPreferences());
+    }
+
+    @Provides
+    @Singleton
+    public PropertyManager providesPropertyManager(Application application, RxEventBus eventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
+        return new PropertyManager(application, eventBus, permissionUtils, deviceDetailsProvider);
+    }
+
+    @Provides
+    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+        HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
+        Map<String, Object> adminDefaults = AdminKeys.getDefaults();
+        return new SettingsImporter(
+                preferencesProvider.getGeneralSharedPreferences(),
+                preferencesProvider.getAdminSharedPreferences(),
+                preferenceMigrator,
+                new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
+                generalDefaults,
+                adminDefaults,
+                propertyManager);
+    }
+
+    @Provides
+    public BarcodeViewDecoder providesBarcodeViewDecoder() {
+        return new BarcodeViewDecoder();
+    }
+
+    @Provides
+    public QRCodeDecoder providesQRCodeDecoder() {
+        return new QRCodeUtils();
     }
 
     @Provides
