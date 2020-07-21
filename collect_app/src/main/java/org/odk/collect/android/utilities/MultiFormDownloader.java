@@ -28,9 +28,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -50,8 +51,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
@@ -63,23 +62,14 @@ public class MultiFormDownloader implements FormDownloader {
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-    @Inject
-    FormsDao formsDao;
+    private final FormsDao formsDao;
+    private final OpenRosaHttpInterface openRosaHttpInterface;
+    private final WebCredentialsUtils webCredentialsUtils;
 
-    @Inject
-    OpenRosaXmlFetcher openRosaXMLFetcher;
-
-    public MultiFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXMLFetcher) {
+    public MultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
         this.formsDao = formsDao;
-        this.openRosaXMLFetcher = openRosaXMLFetcher;
-    }
-
-    /**
-     * Use {@link #MultiFormDownloader(FormsDao, OpenRosaXmlFetcher)} instead
-     */
-    @Deprecated
-    public MultiFormDownloader() {
-        Collect.getInstance().getComponent().inject(this);
+        this.openRosaHttpInterface = openRosaHttpInterface;
+        this.webCredentialsUtils = webCredentialsUtils;
     }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
@@ -414,6 +404,8 @@ public class MultiFormDownloader implements FormDownloader {
      */
     private void downloadFile(File file, String downloadUrl, FormDownloaderListener stateListener)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
+        OpenRosaXmlFetcher openRosaXmlFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
+
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));
 
@@ -434,7 +426,7 @@ public class MultiFormDownloader implements FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = openRosaXMLFetcher.getFile(downloadUrl, null);
+                    is = openRosaXmlFetcher.getFile(downloadUrl, null);
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
@@ -552,6 +544,8 @@ public class MultiFormDownloader implements FormDownloader {
     String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                          ServerFormDetails fd, int count,
                                          int total, FormDownloaderListener stateListener) throws Exception {
+        OpenRosaXmlFetcher openRosaXmlFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
+
         if (fd.getManifestUrl() == null) {
             return null;
         }
@@ -563,7 +557,7 @@ public class MultiFormDownloader implements FormDownloader {
 
         List<MediaFile> files = new ArrayList<>();
 
-        DocumentFetchResult result = openRosaXMLFetcher.getXML(fd.getManifestUrl());
+        DocumentFetchResult result = openRosaXmlFetcher.getXML(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;

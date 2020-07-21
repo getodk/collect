@@ -3,17 +3,21 @@ package org.odk.collect.android.openrosa.api;
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.FormApiException.Type;
 import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.net.HttpURLConnection;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.AUTH_REQUIRED;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.FETCH_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.PARSE_ERROR;
+import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNKNOWN_HOST;
 
 public class OpenRosaFormListApi implements FormListApi {
 
@@ -27,8 +31,8 @@ public class OpenRosaFormListApi implements FormListApi {
     private final String serverURL;
     private final String formListPath;
 
-    public OpenRosaFormListApi(OpenRosaXmlFetcher openRosaXMLFetcher, String serverURL, String formListPath) {
-        this.openRosaXMLFetcher = openRosaXMLFetcher;
+    public OpenRosaFormListApi(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+        this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
         this.serverURL = serverURL;
         this.formListPath = formListPath;
     }
@@ -36,7 +40,12 @@ public class OpenRosaFormListApi implements FormListApi {
     @Override
     public List<FormListItem> fetchFormList() throws FormApiException {
         String downloadListUrl = getURL();
-        DocumentFetchResult result = openRosaXMLFetcher.getXML(downloadListUrl);
+        DocumentFetchResult result = null;
+        try {
+            result = openRosaXMLFetcher.getXML(downloadListUrl);
+        } catch (UnknownHostException e) {
+            throw new FormApiException(UNKNOWN_HOST);
+        }
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
@@ -215,7 +224,13 @@ public class OpenRosaFormListApi implements FormListApi {
             return null;
         }
 
-        DocumentFetchResult result = openRosaXMLFetcher.getXML(manifestURL);
+        DocumentFetchResult result = null;
+
+        try {
+            result = openRosaXMLFetcher.getXML(manifestURL);
+        } catch (UnknownHostException e) {
+            throw new FormApiException(UNKNOWN_HOST);
+        }
 
         if (result.errorMessage != null) {
             throw new FormApiException(FETCH_ERROR, result.errorMessage);

@@ -35,7 +35,12 @@ import java.util.HashMap;
 public class DownloadFormsTask extends
         AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> implements FormDownloaderListener {
 
+    private final MultiFormDownloader multiFormDownloader;
     private DownloadFormsTaskListener stateListener;
+
+    public DownloadFormsTask(MultiFormDownloader multiFormDownloader) {
+        this.multiFormDownloader = multiFormDownloader;
+    }
 
     @Override
     public void progressUpdate(String currentFile, String progress, String total) {
@@ -49,7 +54,6 @@ public class DownloadFormsTask extends
 
     @Override
     protected HashMap<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
-        MultiFormDownloader multiFormDownloader = new MultiFormDownloader();
         return multiFormDownloader.downloadForms(values[0], this);
     }
 

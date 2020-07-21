@@ -41,7 +41,6 @@ import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
@@ -76,9 +75,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 
     private EditTextPreference passwordPreference;
-
-    @Inject
-    OpenRosaXmlFetcher openRosaXMLFetcher;
 
     @Inject
     GoogleAccountsManager accountsManager;

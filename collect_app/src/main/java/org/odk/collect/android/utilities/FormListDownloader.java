@@ -8,13 +8,13 @@ import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -35,17 +35,17 @@ public class FormListDownloader {
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
 
     private final WebCredentialsUtils webCredentialsUtils;
-    private final OpenRosaXmlFetcher openRosaXMLFetcher;
+    private final OpenRosaHttpInterface openRosaHttpInterface;
     private final Application application;
     private final FormRepository formRepository;
     private final MediaFileRepository mediaFileRepository;
 
     public FormListDownloader(
             Application application,
-            OpenRosaXmlFetcher openRosaXMLFetcher,
+            OpenRosaHttpInterface openRosaHttpInterface,
             WebCredentialsUtils webCredentialsUtils) {
         this.application = application;
-        this.openRosaXMLFetcher = openRosaXMLFetcher;
+        this.openRosaHttpInterface = openRosaHttpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
 
         formRepository = new DatabaseFormRepository();
@@ -80,7 +80,7 @@ public class FormListDownloader {
             }
         }
 
-        OpenRosaFormListApi formAPI = new OpenRosaFormListApi(openRosaXMLFetcher, downloadListUrl, downloadPath);
+        OpenRosaFormListApi formAPI = new OpenRosaFormListApi(downloadListUrl, downloadPath, openRosaHttpInterface, webCredentialsUtils);
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, ServerFormDetails> formList = new HashMap<>();

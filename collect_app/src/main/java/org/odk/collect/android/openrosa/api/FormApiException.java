@@ -3,6 +3,7 @@ package org.odk.collect.android.openrosa.api;
 public class FormApiException extends Exception {
 
     public enum Type {
+        UNKNOWN_HOST,
         AUTH_REQUIRED,
         FETCH_ERROR,
         PARSE_ERROR,
@@ -13,6 +14,11 @@ public class FormApiException extends Exception {
 
     public FormApiException(Type type, String message) {
         super(message);
+        this.type = type;
+    }
+
+    public FormApiException(Type type) {
+        super();
         this.type = type;
     }
 

@@ -54,6 +54,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -140,6 +141,9 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Inject
     StorageInitializer storageInitializer;
+
+    @Inject
+    MultiFormDownloader multiFormDownloader;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -425,7 +429,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             // show dialog box
             DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-            downloadFormsTask = new DownloadFormsTask();
+            downloadFormsTask = new DownloadFormsTask(multiFormDownloader);
             downloadFormsTask.setDownloaderListener(this);
 
             if (viewModel.getUrl() != null) {
