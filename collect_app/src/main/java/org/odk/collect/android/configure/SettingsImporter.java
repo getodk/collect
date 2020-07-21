@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.application.initialization.PreferenceMigrator;
-import org.odk.collect.android.logic.PropertyManager;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -23,16 +22,16 @@ public class SettingsImporter {
     private final SettingsValidator settingsValidator;
     private final Map<String, Object> generalDefaults;
     private final Map<String, Object> adminDefaults;
-    private final PropertyManager propertyManager;
+    private final Runnable settingsChangedHandler;
 
-    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, PropertyManager propertyManager) {
+    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, Runnable settingsChangedHandler) {
         this.generalSharedPrefs = generalSharedPrefs;
         this.adminSharedPrefs = adminSharedPrefs;
         this.preferenceMigrator = preferenceMigrator;
         this.settingsValidator = settingsValidator;
         this.generalDefaults = generalDefaults;
         this.adminDefaults = adminDefaults;
-        this.propertyManager = propertyManager;
+        this.settingsChangedHandler = settingsChangedHandler;
     }
 
     public boolean fromJSON(@NonNull String json) {
@@ -63,10 +62,12 @@ public class SettingsImporter {
         loadDefaults(generalSharedPrefs, generalDefaults);
         loadDefaults(adminSharedPrefs, adminDefaults);
 
-        propertyManager.reload();
+        settingsChangedHandler.run();
 
         return true;
     }
+
+
 
     private void importToPrefs(JSONObject object, SharedPreferences sharedPreferences) throws JSONException {
         Iterator<String> generalKeys = object.keys();

@@ -22,15 +22,12 @@ import android.preference.Preference;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.formmanagement.FormUpdateMode;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
-import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
-import static org.odk.collect.android.formmanagement.FormUpdateMode.MATCH_EXACTLY;
-import static org.odk.collect.android.formmanagement.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
@@ -42,16 +39,16 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class FormManagementPreferences extends BasePreferenceFragment {
+public class FormManagementPreferences extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Inject
     Analytics analytics;
 
     @Inject
-    GeneralSharedPreferences generalSharedPreferences;
+    PreferencesProvider preferencesProvider;
 
     @Inject
-    BackgroundWorkManager backgroundWorkManager;
+    FormUpdateManager formUpdateManager;
 
     public static FormManagementPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -80,32 +77,12 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     }
 
     private void setupFormUpdateMode() {
-        SharedPreferences sharedPreferences = generalSharedPreferences.getSharedPreferences();
+        SharedPreferences sharedPreferences = preferencesProvider.getGeneralSharedPreferences();
         updateDisabledPrefs(sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null), sharedPreferences.getString(KEY_PROTOCOL, null));
 
         Preference formUpdateMode = findPreference(KEY_FORM_UPDATE_MODE);
         formUpdateMode.setSummary(((ListPreference) formUpdateMode).getEntry());
-
-        formUpdateMode.setOnPreferenceChangeListener((preference, newValue) -> {
-            backgroundWorkManager.cancelWork();
-
-            String period = sharedPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
-
-            switch (FormUpdateMode.parse(getActivity(), (String) newValue)) {
-                case MANUAL:
-                    break;
-                case PREVIOUSLY_DOWNLOADED_ONLY:
-                    backgroundWorkManager.scheduleAutoUpdate(getPeriodInMilliseconds(period));
-                    break;
-                case MATCH_EXACTLY:
-                    backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds(period));
-                    break;
-            }
-
-            updateDisabledPrefs((String) newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
-            preference.setSummary(((ListPreference) preference).getEntry());
-            return true;
-        });
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     private void updateDisabledPrefs(String formUpdateMode, String protocol) {
@@ -143,13 +120,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
-
-                    String formUpdateMode = generalSharedPreferences.getSharedPreferences().getString(KEY_FORM_UPDATE_MODE, null);
-                    if (formUpdateMode.equals(MATCH_EXACTLY.getValue(getActivity()))) {
-                        backgroundWorkManager.scheduleMatchExactlySync(getPeriodInMilliseconds((String) newValue));
-                    } else if (formUpdateMode.equals(PREVIOUSLY_DOWNLOADED_ONLY.getValue(getActivity()))) {
-                        backgroundWorkManager.scheduleAutoUpdate(getPeriodInMilliseconds((String) newValue));
-                    }
                 }
                 return true;
             });
@@ -198,4 +168,22 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         });
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
+            formUpdateManager.scheduleUpdates();
+
+            String newValue = sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null);
+            updateDisabledPrefs(newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
+
+            Preference preference = findPreference(KEY_FORM_UPDATE_MODE);
+            preference.setSummary(((ListPreference) preference).getEntry());
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        preferencesProvider.getGeneralSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
 }
