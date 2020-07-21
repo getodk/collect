@@ -14,8 +14,9 @@
 
 package org.odk.collect.android.preferences;
 
-import android.preference.PreferenceFragment;
 import android.widget.Toast;
+
+import androidx.preference.PreferenceFragmentCompat;
 
 import org.odk.collect.android.R;
 
@@ -25,9 +26,9 @@ import org.odk.collect.android.R;
  **/
 class AggregatePreferencesAdder {
 
-    private final PreferenceFragment fragment;
+    private final PreferenceFragmentCompat fragment;
 
-    AggregatePreferencesAdder(PreferenceFragment fragment) {
+    AggregatePreferencesAdder(PreferenceFragmentCompat fragment) {
         this.fragment = fragment;
     }
 

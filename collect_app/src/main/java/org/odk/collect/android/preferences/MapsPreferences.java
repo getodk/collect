@@ -17,9 +17,11 @@ package org.odk.collect.android.preferences;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapConfigurator;
@@ -63,7 +65,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         // attached, then instantiate it and attach it.
         MapsPreferences prefs = newInstance(false);
         prefs.autoShowReferenceLayerDialog = true;  // makes dialog open immediately
-        activity.getFragmentManager()
+        ((AppCompatActivity) activity).getSupportFragmentManager()
             .beginTransaction()
             .add(prefs, null)
             .commit();

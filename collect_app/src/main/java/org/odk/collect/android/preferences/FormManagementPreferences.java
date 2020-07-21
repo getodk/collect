@@ -15,8 +15,9 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
+
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;

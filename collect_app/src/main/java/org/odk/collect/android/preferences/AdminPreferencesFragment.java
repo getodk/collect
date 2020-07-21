@@ -14,13 +14,13 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
@@ -115,7 +115,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             }
 
             if (fragment != null) {
-                getActivity().getFragmentManager().beginTransaction()
+                getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.preferences_fragment_container, fragment)
                         .addToBackStack(null)
                         .commit();

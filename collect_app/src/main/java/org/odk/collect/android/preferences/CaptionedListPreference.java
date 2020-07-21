@@ -3,7 +3,6 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
-import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.ListPreference;
+import androidx.preference.PreferenceViewHolder;
 
 import org.odk.collect.android.R;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** A ListPreference where each item has a caption and the entire dialog also has a caption. */
-public class CaptionedListPreference extends ListPreference {
+public class CaptionedListPreference extends ListPreference implements DialogInterface.OnClickListener {
     private final Context context;
     private CharSequence[] captions;
     private String dialogCaption;
@@ -35,6 +36,7 @@ public class CaptionedListPreference extends ListPreference {
         super(context, attrs);
         this.context = context;
         setDialogLayoutResource(R.layout.captioned_list_dialog);
+        setPositiveButtonText(null);
     }
 
     /** Sets the values, labels, and captions for the items in the dialog. */
@@ -64,26 +66,46 @@ public class CaptionedListPreference extends ListPreference {
     }
 
     @Override
+    public void onClick(DialogInterface dialog, int which) {
+        super.onClick();
+        if (which == DialogInterface.BUTTON_POSITIVE) {
+
+        }else if(which == DialogInterface.BUTTON_NEGATIVE){
+           dialog.dismiss();
+        }
+    }
+/*
+    @Override
     protected void onPrepareDialogBuilder(android.app.AlertDialog.Builder builder) {
         // Selecting an item will close the dialog, so we don't need the "OK" button.
         builder.setPositiveButton(null, null);
     }
+*/
 
     /** Called just after the dialog's main view has been created. */
-    @Override protected void onBindDialogView(View view) {
+    /*@Override protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
         listView = view.findViewById(R.id.list);
         captionView = view.findViewById(R.id.dialog_caption);
         updateContent();
-    }
+    }*/
 
     @Override
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        listView = (ViewGroup) holder.findViewById(R.id.list);
+        captionView = (TextView) holder.findViewById(R.id.dialog_caption);
+
+        updateContent();
+    }
+
+    /*@Override
     public void onActivityDestroy() {
         super.onActivityDestroy();
         if (getDialog() != null) {
             getDialog().dismiss();
         }
-    }
+    }*/
 
     /** Updates the contents of the dialog to show the items passed in by setItems etc. */
     public void updateContent() {
@@ -123,8 +145,9 @@ public class CaptionedListPreference extends ListPreference {
     /** When an item is clicked, record which item and then dismiss the dialog. */
     protected void onItemClicked(int index) {
         clickedIndex = index;
-        onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
-        getDialog().dismiss();
+//        onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
+//        getDialog().dismiss();
+
     }
 
     /** Saves the selected value to the preferences when the dialog is closed. */
@@ -140,7 +163,7 @@ public class CaptionedListPreference extends ListPreference {
 
     /** Opens the dialog programmatically, rather than by a click from the user. */
     public void showDialog() {
-        showDialog(null);
+//        showDialog(null);
     }
 
     public static class Item {

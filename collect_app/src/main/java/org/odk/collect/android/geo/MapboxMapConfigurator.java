@@ -3,7 +3,8 @@ package org.odk.collect.android.geo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
+
+import androidx.preference.Preference;
 
 import com.google.common.collect.ImmutableSet;
 import com.mapbox.mapboxsdk.maps.Style;

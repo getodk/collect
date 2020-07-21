@@ -15,7 +15,8 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
+
+import androidx.preference.CheckBoxPreference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;

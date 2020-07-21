@@ -18,11 +18,9 @@ package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -32,7 +30,11 @@ import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -137,11 +139,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        DaggerUtils.getComponent(activity).inject(this);
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
 
-        ((PreferencesActivity) activity).setOnBackPressedListener(this);
+        ((PreferencesActivity) context).setOnBackPressedListener(this);
     }
 
     public void addAggregatePreferences() {
@@ -156,32 +158,32 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         urlDropdownSetup();
 
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
-        serverUrlPreference.getEditText().setOnTouchListener(this);
+//        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+//        serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
-        serverUrlPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
+//        serverUrlPreference.getEditText().setFilters(
+//                new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
 
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
-        usernamePreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
+//        usernamePreference.getEditText().setFilters(
+//                new InputFilter[]{new ControlCharacterFilter()});
 
         passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
-        passwordPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
+//        passwordPreference.getEditText().setFilters(
+//                new InputFilter[]{new ControlCharacterFilter()});
         serverUrlPreference.setOnPreferenceClickListener(preference -> {
-            serverUrlPreference.getEditText().requestFocus();
+//            serverUrlPreference.getEditText().requestFocus();
             return true;
         });
         usernamePreference.setOnPreferenceClickListener(preference -> {
-            usernamePreference.getEditText().requestFocus();
+//            usernamePreference.getEditText().requestFocus();
             return true;
         });
         passwordPreference.setOnPreferenceClickListener(preference -> {
-            passwordPreference.getEditText().requestFocus();
+//            passwordPreference.getEditText().requestFocus();
             return true;
         });
 
@@ -209,14 +211,14 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     + getString(R.string.google_sheets_url_hint));
         }
 
-        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
-                new ControlCharacterFilter(), new WhitespaceFilter()
-        });
+//        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
+//                new ControlCharacterFilter(), new WhitespaceFilter()
+//        });
 
-        googleSheetsUrlPreference.setOnPreferenceClickListener(preference -> {
-            googleSheetsUrlPreference.getEditText().requestFocus();
-            return true;
-        });
+//        googleSheetsUrlPreference.setOnPreferenceClickListener(preference -> {
+//            googleSheetsUrlPreference.getEditText().requestFocus();
+//            return true;
+//        });
 
         initAccountPreferences();
     }
@@ -254,10 +256,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private void urlDropdownSetup() {
         listPopupWindow = new ListPopupWindow(getActivity());
         setupUrlDropdownAdapter();
-        listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
+//        listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
         listPopupWindow.setModal(true);
         listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            serverUrlPreference.getEditText().setText(ChangingServerUrlUtils.getUrlList().get(position));
+//            serverUrlPreference.getEditText().setText(ChangingServerUrlUtils.getUrlList().get(position));
             listPopupWindow.dismiss();
         });
     }
