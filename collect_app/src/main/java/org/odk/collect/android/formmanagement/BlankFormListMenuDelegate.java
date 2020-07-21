@@ -19,12 +19,12 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
     public BlankFormListMenuDelegate(FragmentActivity activity, BlankFormsListViewModel blankFormsListViewModel) {
         this.blankFormsListViewModel = blankFormsListViewModel;
 
-        blankFormsListViewModel.isSyncing().observe(activity, (syncing) -> {
+        blankFormsListViewModel.isSyncing().observe(activity, syncing -> {
             this.syncing = syncing;
             activity.invalidateOptionsMenu();
         });
 
-        blankFormsListViewModel.isOutOfSync().observe(activity, (outOfSync) -> {
+        blankFormsListViewModel.isOutOfSync().observe(activity, outOfSync -> {
             this.outOfSync = outOfSync;
             activity.invalidateOptionsMenu();
         });
