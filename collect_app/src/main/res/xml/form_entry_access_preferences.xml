@@ -9,6 +9,8 @@
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory android:title="@string/form_entry"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
         app:iconSpaceReserved="false" >
         <CheckBoxPreference
             android:key="access_settings"

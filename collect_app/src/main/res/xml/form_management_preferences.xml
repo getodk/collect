@@ -5,6 +5,8 @@
 
     <PreferenceCategory
         android:title="@string/form_update_category"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
         app:iconSpaceReserved="false">
         <ListPreference
             android:dialogTitle="@string/periodic_form_updates_check_title"
@@ -28,6 +30,8 @@
     <PreferenceCategory
         android:key="form_submission"
         android:title="@string/form_submission_category"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
         app:iconSpaceReserved="false">
         <ListPreference
             android:dialogTitle="@string/autosend_selector_title"
@@ -46,6 +50,8 @@
     <PreferenceCategory
         android:key="form_filling"
         android:title="@string/form_filling_category"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
         app:iconSpaceReserved="false" >
         <CheckBoxPreference
             android:key="default_completed"
@@ -85,6 +91,8 @@
     <PreferenceCategory
         android:key="form_import"
         android:title="@string/form_import_category"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="instance_sync"

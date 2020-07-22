@@ -14,15 +14,22 @@
 
 package org.odk.collect.android.preferences;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceGroupAdapter;
+import androidx.preference.PreferenceScreen;
+import androidx.preference.PreferenceViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapConfigurator;
@@ -55,6 +62,23 @@ public class MapsPreferences extends BasePreferenceFragment {
         MapsPreferences prefs = new MapsPreferences();
         prefs.setArguments(bundle);
         return prefs;
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
+        return new PreferenceGroupAdapter(preferenceScreen) {
+            @Override
+            public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
+                super.onBindViewHolder(holder, position);
+                View iconFrame = holder.itemView.findViewById(R.id.icon_frame);
+                if (iconFrame != null) {
+                    iconFrame.setVisibility(View.GONE);
+                }
+                holder.setDividerAllowedAbove(false);
+                holder.setDividerAllowedBelow(false);
+            }
+        };
     }
 
     @Override
