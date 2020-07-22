@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
-import org.odk.collect.android.openrosa.api.FormApiException.Type;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -16,7 +15,6 @@ import java.util.List;
 
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.AUTH_REQUIRED;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.FETCH_ERROR;
-import static org.odk.collect.android.openrosa.api.FormApiException.Type.PARSE_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNKNOWN_HOST;
 
 public class OpenRosaFormListApi implements FormListApi {
@@ -63,12 +61,12 @@ public class OpenRosaFormListApi implements FormListApi {
             Element xformsElement = result.doc.getRootElement();
             if (!xformsElement.getName().equals("xforms")) {
                 String error = "root element is not <xforms> : " + xformsElement.getName();
-                throw new FormApiException(PARSE_ERROR, error);
+                throw new FormApiException(FETCH_ERROR, error);
             }
             String namespace = xformsElement.getNamespace();
             if (!isXformsListNamespacedElement(xformsElement)) {
                 String error = "root element namespace is incorrect:" + namespace;
-                throw new FormApiException(PARSE_ERROR, error);
+                throw new FormApiException(FETCH_ERROR, error);
             }
 
             int elements = xformsElement.getChildCount();
@@ -167,7 +165,7 @@ public class OpenRosaFormListApi implements FormListApi {
                             "Forms list entry " + Integer.toString(i)
                                     + " has missing or empty tags: formID, name, or downloadUrl";
                     formList.clear();
-                    throw new FormApiException(PARSE_ERROR, error);
+                    throw new FormApiException(FETCH_ERROR, error);
                 }
 
                 formList.add(new FormListItem(downloadUrl, formId, version, hash, formName, manifestUrl));
@@ -206,7 +204,7 @@ public class OpenRosaFormListApi implements FormListApi {
                                 "Forms list entry " + Integer.toString(i)
                                         + " is missing form name or url attribute";
                         formList.clear();
-                        throw new FormApiException(Type.LEGACY_PARSE_ERROR, error);
+                        throw new FormApiException(FETCH_ERROR, error);
                     }
 
                     formList.add(new FormListItem(downloadUrl, formId, null, null, formName, null));
@@ -237,7 +235,7 @@ public class OpenRosaFormListApi implements FormListApi {
         }
 
         if (!result.isOpenRosaResponse) {
-            throw new FormApiException(PARSE_ERROR, "Manifest reply does not report an OpenRosa version — bad server?");
+            throw new FormApiException(FETCH_ERROR, "Manifest reply does not report an OpenRosa version — bad server?");
         }
 
         // Attempt OpenRosa 1.0 parsing
@@ -245,13 +243,13 @@ public class OpenRosaFormListApi implements FormListApi {
 
         if (!manifestElement.getName().equals("manifest")) {
             String error = String.format("Root element is not &lt;manifest\\&gt; — was %s", manifestElement.getName());
-            throw new FormApiException(PARSE_ERROR, error);
+            throw new FormApiException(FETCH_ERROR, error);
         }
 
         if (!isXformsManifestNamespacedElement(manifestElement)) {
             String namespace = manifestElement.getNamespace();
             String error = String.format("Root element Namespace is incorrect: %s", namespace);
-            throw new FormApiException(PARSE_ERROR, error);
+            throw new FormApiException(FETCH_ERROR, error);
         }
 
         int elements = manifestElement.getChildCount();
@@ -308,7 +306,7 @@ public class OpenRosaFormListApi implements FormListApi {
 
                 if (filename == null || downloadUrl == null || hash == null) {
                     String error = String.format("Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl", i);
-                    throw new FormApiException(PARSE_ERROR, error);
+                    throw new FormApiException(FETCH_ERROR, error);
                 }
 
                 files.add(new MediaFile(filename, hash, downloadUrl));

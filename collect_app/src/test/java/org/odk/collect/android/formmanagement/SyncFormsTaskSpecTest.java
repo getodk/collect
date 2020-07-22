@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
-import org.odk.collect.android.formmanagement.matchexactly.SyncException;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;

@@ -9,8 +9,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormChooserListActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.matchexactly.SyncException;
+import org.odk.collect.android.openrosa.api.FormApiException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,15 +71,15 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onSyncFailure(SyncException exception) {
+    public void onSyncFailure(FormApiException exception) {
         Intent intent = new Intent(context, FormChooserListActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         showNotification(
                 context,
                 notificationManager,
-                R.string.sync_failure,
-                new SyncExceptionMapper().getMessage(exception),
+                R.string.form_update_error,
+                context.getString(new FormApiExceptionMapper().getMessage(exception)),
                 contentIntent,
                 FORM_SYNC_NOTIFICATION_ID
         );

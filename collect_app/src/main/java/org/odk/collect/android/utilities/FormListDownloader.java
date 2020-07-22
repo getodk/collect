@@ -98,12 +98,6 @@ public class FormListDownloader {
                 case AUTH_REQUIRED:
                     formList.put(DL_AUTH_REQUIRED, new ServerFormDetails(formApiException.getMessage()));
                     break;
-                case PARSE_ERROR:
-                    formList.put(DL_ERROR_MSG, new ServerFormDetails(application.getString(R.string.parse_openrosa_formlist_failed, formApiException.getMessage())));
-                    break;
-                case LEGACY_PARSE_ERROR:
-                    formList.put(DL_ERROR_MSG, new ServerFormDetails(application.getString(R.string.parse_legacy_formlist_failed, formApiException.getMessage())));
-                    break;
                 default:
                     formList.put(DL_ERROR_MSG, new ServerFormDetails(formApiException.getMessage()));
             }

@@ -91,8 +91,8 @@ public class MatchExactlyTest {
                 .open()
                 .clickNotification(
                         "ODK Collect",
-                        "Sync error",
-                        "Updating forms failed. Please try again.",
+                        "Form update failed",
+                        "If you keep having this problem, report it to the person who asked you to collect data.",
                         "Fill Blank Form",
                         new FillBlankFormPage(rule)
                 );

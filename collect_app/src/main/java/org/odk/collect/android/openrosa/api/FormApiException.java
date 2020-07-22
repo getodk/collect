@@ -5,9 +5,7 @@ public class FormApiException extends Exception {
     public enum Type {
         UNKNOWN_HOST,
         AUTH_REQUIRED,
-        FETCH_ERROR,
-        PARSE_ERROR,
-        LEGACY_PARSE_ERROR
+        FETCH_ERROR
     }
 
     private final Type type;
