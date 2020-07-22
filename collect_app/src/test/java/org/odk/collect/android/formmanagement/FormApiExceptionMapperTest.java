@@ -1,6 +1,13 @@
 package org.odk.collect.android.formmanagement;
 
+import android.content.Context;
+
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.openrosa.api.FormApiException;
 
@@ -9,17 +16,27 @@ import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.FETCH_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNKNOWN_HOST;
 
+@RunWith(AndroidJUnit4.class)
 public class FormApiExceptionMapperTest {
+
+    private Context context;
+    private FormApiExceptionMapper mapper;
+
+    @Before
+    public void setup() {
+        context = ApplicationProvider.getApplicationContext();
+        mapper = new FormApiExceptionMapper(context);
+    }
 
     @Test
     public void fetchErrorType_returnsGenericMessage() {
-        FormApiExceptionMapper mapper = new FormApiExceptionMapper();
-        assertThat(mapper.getMessage(new FormApiException(FETCH_ERROR)), is(R.string.generic_network_error));
+        String expectedString = context.getString(R.string.generic_network_error);
+        assertThat(mapper.getMessage(new FormApiException(FETCH_ERROR)), is(expectedString));
     }
 
     @Test
     public void unknownHostType_returnsUnknownHostMessage() {
-        FormApiExceptionMapper mapper = new FormApiExceptionMapper();
-        assertThat(mapper.getMessage(new FormApiException(UNKNOWN_HOST)), is(R.string.unknown_host_error));
+        String expectedString = context.getString(R.string.unknown_host_error);
+        assertThat(mapper.getMessage(new FormApiException(UNKNOWN_HOST)), is(expectedString));
     }
 }

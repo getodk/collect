@@ -10,11 +10,6 @@ public class FormApiException extends Exception {
 
     private final Type type;
 
-    public FormApiException(Type type, String message) {
-        super(message);
-        this.type = type;
-    }
-
     public FormApiException(Type type) {
         super();
         this.type = type;
@@ -25,10 +20,14 @@ public class FormApiException extends Exception {
     }
 
     @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
+
+    @Override
     public String toString() {
         return "FormAPIError{" +
                 "type=" + type +
-                "message=" + getMessage() +
                 '}';
     }
 }

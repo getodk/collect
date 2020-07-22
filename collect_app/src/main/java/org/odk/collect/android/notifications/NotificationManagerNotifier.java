@@ -79,7 +79,7 @@ public class NotificationManagerNotifier implements Notifier {
                 context,
                 notificationManager,
                 R.string.form_update_error,
-                context.getString(new FormApiExceptionMapper().getMessage(exception)),
+                new FormApiExceptionMapper(context).getMessage(exception),
                 contentIntent,
                 FORM_SYNC_NOTIFICATION_ID
         );

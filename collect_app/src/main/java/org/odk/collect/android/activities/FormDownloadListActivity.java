@@ -575,7 +575,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             switch (exception.getType()) {
                 case FETCH_ERROR:
                 case UNKNOWN_HOST:
-                    String dialogMessage = getString(new FormApiExceptionMapper().getMessage(exception));
+                    String dialogMessage = new FormApiExceptionMapper(this).getMessage(exception);
                     String dialogTitle = getString(R.string.load_remote_form_error);
 
                     if (viewModel.isDownloadOnlyMode()) {
