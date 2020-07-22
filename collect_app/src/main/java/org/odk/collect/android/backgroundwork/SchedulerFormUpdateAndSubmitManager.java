@@ -38,7 +38,8 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
     @Override
     public void scheduleUpdates() {
-        cancelWork();
+        scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
+        scheduler.cancelDeferred(AUTO_UPDATE_TAG);
 
         String newValue = sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null);
         String period = sharedPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
@@ -61,11 +62,6 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
     private void scheduleAutoUpdate(long repeatPeriod) {
         scheduler.networkDeferred(AUTO_UPDATE_TAG, new AutoUpdateTaskSpec(), repeatPeriod);
-    }
-
-    private void cancelWork() {
-        scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
-        scheduler.cancelDeferred(AUTO_UPDATE_TAG);
     }
 
     @Override
