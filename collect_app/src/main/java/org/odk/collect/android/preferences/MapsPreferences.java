@@ -17,18 +17,12 @@ package org.odk.collect.android.preferences;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceGroupAdapter;
-import androidx.preference.PreferenceScreen;
-import androidx.preference.PreferenceViewHolder;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapConfigurator;
@@ -61,21 +55,6 @@ public class MapsPreferences extends BasePreferenceFragment {
         MapsPreferences prefs = new MapsPreferences();
         prefs.setArguments(bundle);
         return prefs;
-    }
-
-    @Override
-    protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
-        final PreferenceGroupAdapter preferenceGroupAdapter = new PreferenceGroupAdapter(preferenceScreen) {
-            @Override
-            public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                View iconFrame = holder.itemView.findViewById(R.id.icon_frame);
-                if (iconFrame != null) {
-                    iconFrame.setVisibility(View.GONE);
-                }
-            }
-        };
-        return preferenceGroupAdapter;
     }
 
     @Override
@@ -144,6 +123,7 @@ public class MapsPreferences extends BasePreferenceFragment {
             context, KEY_BASEMAP_SOURCE, getString(R.string.basemap_source),
             MapProvider.getLabelIds(), MapProvider.getIds()
         );
+        basemapSourcePref.setIconSpaceReserved(false);
         onBasemapSourceChanged(MapProvider.getConfigurator());
         basemapSourcePref.setOnPreferenceChangeListener((pref, value) -> {
             MapConfigurator cftor = MapProvider.getConfigurator(value.toString());
@@ -165,6 +145,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         baseCategory.addPreference(basemapSourcePref);
 
         for (Preference pref : cftor.createPrefs(context)) {
+            pref.setIconSpaceReserved(false);
             baseCategory.addPreference(pref);
         }
 
