@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokončené.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Dotazník nejde načíst.</string>
-  <string name="parse_legacy_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní s Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní se standartem OpenRosa 1.0: %s</string>
   <string name="password">Heslo</string>
   <string name="play_video">Přehrát video</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>

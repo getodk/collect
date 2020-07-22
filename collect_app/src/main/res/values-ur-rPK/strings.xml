@@ -70,8 +70,7 @@
   <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے؟؟ْ۔ محفوظ شدہ فارم (ز) کو بھیجنےسے پہلےمکمل کریں</string>
   <string name="ok">ٹھیک ہے</string>
   <string name="parse_error">معافی، فارم کا تجزیہ نہیں ہو سکا</string>
-  <string name="parse_legacy_formlist_failed">سرور نے     ‎Aggregate 0.9.x: %1$s‏ کے ساتھ موافق دستیاب فارموں کی دستاویز مہیا نہیں کی ہے</string>
-  <string name="password">شناختی لفظ (Password)</string>
+    <string name="password">شناختی لفظ (Password)</string>
   <string name="play_video">وڈیو لگا دیں</string>
   <string name="please_wait">براہ مہربانی۔ چند منٹ انتظار کرلیں</string>
   <string name="please_wait_long">براہ مہربانی انتظار کریں۔ اسکو چند منٹ لگ سکتے ہیں</string>

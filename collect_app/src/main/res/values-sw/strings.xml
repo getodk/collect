@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">Hakuna kitu cha kuonyesha.\n\n Jaribu kukamilisha fomu kabla ya kuzituma</string>
   <string name="ok">Sawa</string>
   <string name="parse_error">Pole, haiwezi kuchanganua fomu.</string>
-  <string name="parse_legacy_formlist_failed">Seva haijatoa taarifa ya fomu-zinazopatikana na kuendana na Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Seva haijatoa taarifa ya fomu-zinazopatikana na kuendana na OpenRosa version 1.0 standard: %s </string>
   <string name="password">Nenosiri</string>
   <string name="play_video">Cheza video</string>
   <string name="please_wait">Tafadhali subiri kidogo.</string>

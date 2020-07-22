@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile tallennetun lomakkeen viimeistelyä ennen lähettämistä.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Pahoittelen, lomake ei ole tulkittavissa.</string>
-  <string name="parse_legacy_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva Aggregate 0.9.x:n kanssa. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva OpenRosa versio 1.0 standardin kanssa: %s</string>
   <string name="password">Salasana</string>
   <string name="play_video">Näytä video</string>
   <string name="please_wait">Odota hetki.</string>

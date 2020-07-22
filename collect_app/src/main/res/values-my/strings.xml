@@ -76,8 +76,6 @@
   <string name="no_items_display">ပံုစံအားေဖာ္ျပျခင္းမျပဳနိုင္ပါ</string>
   <string name="ok">OK</string>
   <string name="parse_error">ပံုစံကို မခြဲျခားႏိုင္ပါ</string>
-  <string name="parse_legacy_formlist_failed">ဆာဗာမွ အသံုးျပဳေသာ ေဆာ့၀ဲ ႏွင့္ ကိုက္ညီေသာ ပံုစံအားလံုးကို မလုပ္ေဆာင္ႏိုင္ပါ ၊ %s</string>
-  <string name="parse_openrosa_formlist_failed">Tဆာဗာမွ အသံုးျပဳေသာ ေဆာ့၀ဲ ႏွင့္ ကိုက္ညီေသာ ပံုစံအားလံုးကို မလုပ္ေဆာင္ႏိုင္ပါ ၊ %s</string>
   <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
   <string name="play_video">ဗြီဒီယိုဖြင့္ရန္</string>
   <string name="please_wait">ေခတၱေစာင့္ပါ</string>

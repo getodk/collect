@@ -84,8 +84,6 @@
   <string name="no_items_display_instances">Нічого доступного для відображення.\n\nСпробуйте перед надсиланням позначити збережені анкети як завершені.</string>
   <string name="ok">Добре</string>
   <string name="parse_error">Вибачте, неможливо розібрати анкету.</string>
-  <string name="parse_legacy_formlist_failed">На сервері відсутні анкети сумісні з Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">На сервері відсутні анкети сумісні з стандартом OpenRosa версії 1.0: %s</string>
   <string name="password">Пароль</string>
   <string name="play_video">Відтворити відео</string>
   <string name="please_wait">Будь ласка, зачекайте.</string>

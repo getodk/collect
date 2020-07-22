@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">表示可能なものはありません。\n\nフォームを送信する前に保存されたフォームを確定してください。</string>
   <string name="ok">OK</string>
   <string name="parse_error">申し訳ありません、フォームを解析できません。</string>
-  <string name="parse_legacy_formlist_failed">サーバが Aggregate 0.9.x と互換性のある利用可能なフォームの文書を提供していません : %s</string>
-  <string name="parse_openrosa_formlist_failed">サーバが OpenRosa バージョン 1.0 規格と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="password">パスワード</string>
   <string name="play_video">ビデオを再生</string>
   <string name="please_wait">しばらくお待ちください。</string>

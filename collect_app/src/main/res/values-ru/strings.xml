@@ -86,8 +86,6 @@
   <string name="no_items_display_instances">Пусто\n\nФинализируйте сохранённые опросы для выгрузки</string>
   <string name="ok">OK</string>
   <string name="parse_error">Не удалось прочесть структуру бланка</string>
-  <string name="parse_legacy_formlist_failed">Сервер не предоставил список доступных опросников в формате совместимом с Aggregate v0.9.x.: %s</string>
-  <string name="parse_openrosa_formlist_failed">Сервер не предоставил список доступных опросников в формате совместимом со стандартом OpenRosa v1.0: %s</string>
   <string name="password">Пароль</string>
   <string name="play_video">Проиграть видео</string>
   <string name="please_wait">Подождите несколько секунд.</string>

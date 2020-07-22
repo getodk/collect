@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">Nichts zum Anzeigen vorhanden.\n\nVersuchen Sie ein gespeichertes Formular abzuschließen, um es zu versenden.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Formularverarbeitung nicht möglich.</string>
-  <string name="parse_legacy_formlist_failed">Der Server hat kein Vorhandene-Formulare Dokument geliefert, welches mit Aggregate 0.9.x. kompatibel ist : %s</string>
-  <string name="parse_openrosa_formlist_failed">Der Server hat kein Vorhandene-Formulare-Dokument geliefert, welches mit dem OpenRosa-Version-1.0-Standard kompatibel ist: %s</string>
   <string name="password">Passwort</string>
   <string name="play_video">Video abspielen</string>
   <string name="please_wait">Bitte haben Sie einen Moment Geduld.</string>

@@ -79,8 +79,6 @@
   <string name="no_items_display_instances">Asgjë nuk mund të shfaqet.\n\nProvoni të ruani një formular përpara se të ngarkoni.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Formulari nuk mund të dekodohet.</string>
-  <string name="parse_legacy_formlist_failed">Nuk gjenden formularë të përputhshëm me Aggregate 0.9.x. në server: 1%s</string>
-  <string name="parse_openrosa_formlist_failed">Nuk gjenden formularë të përputhshëm me Open Rosa versioni 1.0 standard në server: 1%s</string>
   <string name="password">Fjalëkalimi</string>
   <string name="play_video">Shih videon</string>
   <string name="please_wait">Lutemi, prisni pak sekonda.</string>

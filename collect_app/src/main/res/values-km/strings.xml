@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​ដែល​​បាន​​រក្សា​​ទុក​​មុន​​នឹង​​ផ្ញើ​​ចេញ</string>
   <string name="ok">យល់ព្រម</string>
   <string name="parse_error">សុំទោស, សំណុំ​បែប​បទ​មិន​អាច​បែកចែកបាន</string>
-  <string name="parse_legacy_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយនឹង​ស្តង់​ដា OpenRosa ជំនាន់ 1.0: %s</string>
   <string name="password">ពាក្យសម្ងាត់</string>
   <string name="play_video">ចាក់វីដេអូ</string>
   <string name="please_wait">សូមរង់ចាំមួយភ្លែត</string>

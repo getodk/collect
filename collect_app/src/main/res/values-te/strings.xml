@@ -84,8 +84,6 @@
   <string name="no_items_display_instances">చూడటానికి ఏ ఫారంలు లేవు.\n\n పంపే ముందు సేవ్ చేసిన ఫారంలను ఫైనల్ చేయడానికి ప్రయత్నించండి.</string>
   <string name="ok">OK</string>
   <string name="parse_error">క్షమించండి, ఫారంను అన్వయించలేకపోయాము.</string>
-  <string name="parse_legacy_formlist_failed">మొత్తం 0.9.x కు అనుకూలమైన అందుబాటులో ఉన్న ఫారం పత్రాన్ని సర్వర్ అందించలేదు. :%s</string>
-  <string name="parse_openrosa_formlist_failed">ఓపెన్‌రోసా వెర్షన్ 1.0 ప్రమాణానికి అనుకూలంగా అందుబాటులో ఉన్న ఫారం పత్రాన్ని సర్వర్ అందించలేదు:%s</string>
   <string name="password">పాస్ వర్డ్ </string>
   <string name="play_video">వీడియో ప్లే చెయ్యి</string>
   <string name="please_wait">దయచేసి కొన్ని క్షణాలు వేచి ఉండండి.</string>

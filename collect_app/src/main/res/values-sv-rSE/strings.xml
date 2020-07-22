@@ -86,8 +86,6 @@
   <string name="no_items_display_instances">Inget tillgängligt för visning.\n\nProva att avsluta sparade formulär innan dessa skickas.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Tyvärr, ej möjligt att tolka formulär.</string>
-  <string name="parse_legacy_formlist_failed">Servern tillhandahåller inte ett dokument över tillgängliga formulär som är kompatibelt med Aggregate 0.9.x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Servern tillhandahåller inte ett dokument över tillgängliga formulär som är kompatibelt med OpenRosa version 1.0 standarden: %s</string>
   <string name="password">Lösenord</string>
   <string name="play_video">Spela upp film</string>
   <string name="please_wait">Var vänlig och vänta ett tag.</string>

@@ -70,8 +70,6 @@
   <string name="no_items_display_instances">Akukho okutholakalayo ukuboniswa.\n\nzama ukuphothula ugcine ifomu ngaphambi kokulithumela.</string>
   <string name="ok">Kulungile</string>
   <string name="parse_error">Uxolo, akukwazi ukuncozulula ifomu.</string>
-  <string name="parse_legacy_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa Aggregate 0.9.x.:%s</string>
-  <string name="parse_openrosa_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa OpenRosa version 1.0 standard: %s</string>
   <string name="password">Inombolomfihlo</string>
   <string name="play_video">Dlala Umbukiso</string>
   <string name="please_wait">Sicela ulinde imizuzu emibalwa.</string>

@@ -71,8 +71,6 @@
   <string name="no_items_display_instances">Ingen elementer å vise.\n\nEventuelle lagrede skjemaer må fullføres før du kan sende dem. </string>
   <string name="ok">OK</string>
   <string name="parse_error">Beklager, klarte ikke å analysere skjema.</string>
-  <string name="parse_legacy_formlist_failed">Formatet er ikke kompatibel med Aggregate 09.x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Formatet er ikke kompitabel med OpenRosa 1.0 standard: %s</string>
   <string name="password">Passord</string>
   <string name="play_video">Spill video</string>
   <string name="please_wait">Vennligst vent.</string>

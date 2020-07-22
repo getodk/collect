@@ -70,8 +70,6 @@
   <string name="no_items_display_instances">ไม่มีข้อมูลให้แสดง \n\n ลองยืนยันข้อมูลที่บันทึกไว้ก่อนส่ง</string>
   <string name="ok">ตกลง</string>
   <string name="parse_error">ขออภัย ไม่สามารถเปิดแบบสำรวจได้</string>
-  <string name="parse_legacy_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ OpenRosa version 1.0 standard: %s</string>
   <string name="password">รหัสผ่าน</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="please_wait">โปรดรอสักครู่</string>

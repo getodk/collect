@@ -100,8 +100,6 @@
     <string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing saved forms before sending.</string>
     <string name="ok">OK</string>
     <string name="parse_error">Sorry, unable to parse form.</string>
-    <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
-    <string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
     <string name="password">Password</string>
     <string name="play_video">Play Video</string>
     <string name="please_wait">Please wait a few moments.</string>

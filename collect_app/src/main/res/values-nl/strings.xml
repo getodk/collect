@@ -83,8 +83,6 @@
   <string name="no_items_display_instances">Leeg\n\nEen formulier moet als voltooid zijn gemarkeerd voordat u het kunt verzenden.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Formulier inlezen mislukt.</string>
-  <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
   <string name="password">Wachtwoord</string>
   <string name="play_video">Bekijk video</string>
   <string name="please_wait">Een moment geduld alstublieft.</string>

@@ -83,8 +83,6 @@
   <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے محفوظ شدہ فارم کو بھیجنےسے پہلےمکمل کریں</string>
   <string name="ok">ٹھیک ہے</string>
   <string name="parse_error">معافی، فارم پارس نہیں ہو سکا</string>
-  <string name="parse_legacy_formlist_failed">سرور نے ‎Aggregate 0.9.x ‏ کے ساتھ موافق دستیاب فارموں کی دستاویز مہیا نہیں کی ہے: %s</string>
-  <string name="parse_openrosa_formlist_failed">سرور نے ایک فارم ڈاکومینٹ فراہم نہیں کیا ہے جو OpenRosa ورژن 1.0 معیاری کے ساتھ مطابقت رکھتا ہے:%s</string>
   <string name="password">پاس ورڈ</string>
   <string name="play_video">وڈیو لگا دیں</string>
   <string name="please_wait">براہ مہربانی چند منٹ انتظار کرلیں</string>

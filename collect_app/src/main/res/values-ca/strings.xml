@@ -74,8 +74,6 @@
   <string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva finalitzant formularis desats abans d\'enviar.</string>
   <string name="ok">D\'acord</string>
   <string name="parse_error">Ho sentim, incapaç d\'interpretar el formulari.</string>
-  <string name="parse_legacy_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb OpenRosa versio 1.0 standard: %s</string>
   <string name="password">Clau d\'accés</string>
   <string name="play_video">Reprodueix Vídeo</string>
   <string name="please_wait">Un moment si us plau.</string>

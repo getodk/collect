@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">No hay nada que mostrar.\n\nPruebe finalizar los formularios antes de mandarlos.</string>
   <string name="ok">De acuerdo</string>
   <string name="parse_error">No se pudo interpretar el formulario.</string>
-  <string name="parse_legacy_formlist_failed">El servidor no ha servido un formulario compatible con Aggregate 0.9.x  : %s</string>
-  <string name="parse_openrosa_formlist_failed">El servidor no ha dado un formulario compatible con el estandar de OpenRosa version 1.0: %s</string>
   <string name="password">Contraseña</string>
   <string name="play_video">Reproducir el Video</string>
   <string name="please_wait">Por favor, espere un momento.</string>

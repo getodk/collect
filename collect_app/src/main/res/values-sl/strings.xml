@@ -83,8 +83,6 @@
   <string name="no_items_display_instances">Ničesar ni za prikaz.\n\nPoskusi zaključiti shranjene obrazce pred pošiljanjem.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Napaka, ne morem opredeliti obrazca.</string>
-  <string name="parse_legacy_formlist_failed">Strežnik nima na voljo obrazci-na-voljo dokumenta kompatibilnega z Aggregate 0.9x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Strežnik nima na voljo obrazci-na-voljo dokumenta kompatibilnega z OpenRosa verzija 1.0 standard: %s</string>
   <string name="password">Geslo</string>
   <string name="play_video">Predvajaj video</string>
   <string name="please_wait">Malo počakaj, prosim.</string>

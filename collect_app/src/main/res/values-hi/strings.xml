@@ -79,8 +79,6 @@
   <string name="no_items_display_instances">प्रदर्शित करने के लिए कुछ भी उपलब्ध नहीं.\n\nभेजने से पहले संरक्षित फॉर्म को अंतिम रूप देने का प्रयास हो रहा.</string>
   <string name="ok">ओके</string>
   <string name="parse_error">क्षमा करें, फॉर्म पार्स करने में असमर्थ</string>
-  <string name="parse_legacy_formlist_failed">सर्वर ने उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं किया जो Aggregate 0.9.x. से संगतता रखता हो: %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्वर ने उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं किया जो OpenRosa version 1.0 मानकों से संगतता रखता हो: %s</string>
   <string name="password">पासवर्ड</string>
   <string name="play_video">वीडियो चलाएं</string>
   <string name="please_wait">कृपया कुछ क्षण प्रतीक्षा करें</string>

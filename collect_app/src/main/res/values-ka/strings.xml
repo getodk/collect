@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">საჩვენებლად ხელმისაწვდომი არაფერია.\n\nცადეთ ფორმების დასრულება მათ გაგზავნამდე</string>
   <string name="ok">OK</string>
   <string name="parse_error">უკაცრავად, ფორმის დამუშავება შეუძლებელია.</string>
-  <string name="parse_legacy_formlist_failed">შეუძლებელია სერვერიდან Aggregate 0.9.x. : %s-ის თანხვედრი ფორმის მოპოვება</string>
-  <string name="parse_openrosa_formlist_failed">სერვერზე არ მოიპოვება ფორმა, რომელიც OpenRosa version 1.0 სტანდარტის თანხვედრია: %s</string>
   <string name="password">პაროლი</string>
   <string name="play_video">ვიდეოჩანაწერის ჩვენება</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>

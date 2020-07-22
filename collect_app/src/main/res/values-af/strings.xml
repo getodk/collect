@@ -71,8 +71,6 @@
   <string name="no_items_display_instances">Niks beskikbaar om te vertoon nie.\n\nProbeer om gestoorde vorms te finaliseer voordat u stuur.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Jammer, kon nie vorm verwerk nie.</string>
-  <string name="parse_legacy_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met Aggregate 0.9.x nie. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met die OpenRosa weergawe 1.0 standaard nie: %s</string>
   <string name="password">Wagwoord</string>
   <string name="play_video">Speel Video</string>
   <string name="please_wait">Wag asseblief \'n paar sekondes.</string>

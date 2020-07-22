@@ -73,8 +73,6 @@
   <string name="no_items_display_instances">Puudub sisu mida näidata.\n\nEnnem ära saatmist märgi salvestatud vormid lõpetatuks.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Kahjuks ei ole vormi töötlemine võimalik.</string>
-  <string name="parse_legacy_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: OpenRosa version 1.0 standard: %s</string>
   <string name="password">Salasõna</string>
   <string name="play_video">Mängi videot</string>
   <string name="please_wait">Palun oodake.</string>

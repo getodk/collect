@@ -84,8 +84,6 @@
   <string name="no_items_display_instances">Ništa nije dostupno za prikaz. Pokušaj završiti sačuvane formulare prije slanja.</string>
   <string name="ok">Ok.</string>
   <string name="parse_error">Nisam u stanju da analiziram formular!</string>
-  <string name="parse_legacy_formlist_failed">Na serveru se ne nalazi dostupan formular kompatibilan sa Aggregate 0.9x verzijom: %s</string>
-  <string name="parse_openrosa_formlist_failed">Na serveru se ne nalazi dostupan formular kompatibilan sa OpenRosa 1.0 standard verzijom: %s </string>
   <string name="password">Lozinka</string>
   <string name="play_video">Pusti video</string>
   <string name="please_wait">Molim sačekajte par trenutaka</string>

@@ -69,8 +69,6 @@
   <string name="no_items_display_instances">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ. \n\nລອງເຮັດເຄື່ອງໜາຍແບບຟອມວ່າສຳເລັດແລ້ວກ່ອນສົ່ງ</string>
   <string name="ok">ຕົກລົງ</string>
   <string name="parse_error">ບໍ່ສາມາດເປີດແບບຟອມໄດ້</string>
-  <string name="parse_legacy_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ OpenRosa version 1.0 standard: %s</string>
   <string name="password">ລະຫັດຜ່ານ</string>
   <string name="play_video">ເປີດວີດີໂອ</string>
   <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>

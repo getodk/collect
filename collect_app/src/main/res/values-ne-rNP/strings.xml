@@ -82,8 +82,6 @@
   <string name="no_items_display_instances">देखाउनको लागि केहि उपलब्ध छैन | \n\n संचित फारमलाई पठाउनु अघि अन्तिम रुप दिन प्रयास गर्नुहोला |</string>
   <string name="ok">ठीक</string>
   <string name="parse_error">माफ गर्नुहोला, फारमको शब्द-सम्मती गर्न सकिएन |</string>
-  <string name="parse_legacy_formlist_failed">सर्भरले एग्रिगेट संस्करण 0.9.x संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्भरले ओपनरोजा संस्करण 1.0 संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
   <string name="password">पासवर्ड </string>
   <string name="play_video">भिडियो हेर्नुहोस्</string>
   <string name="please_wait">कृपया केही समय पर्खनुहोस् </string>

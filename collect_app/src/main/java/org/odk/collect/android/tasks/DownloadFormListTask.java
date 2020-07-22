@@ -16,13 +16,15 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
-import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 
-import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.listeners.FormListDownloaderListener;
+import org.odk.collect.android.openrosa.api.FormApiException;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Background task for downloading forms from urls or a formlist from a url. We overload this task
@@ -32,29 +34,44 @@ import java.util.HashMap;
  *
  * @author carlhartung
  */
-public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String, ServerFormDetails>> {
+public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<ServerFormDetails>, FormApiException>> {
 
-    private final FormListDownloader formListDownloader;
+    private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
     private FormListDownloaderListener stateListener;
-    private String url;
-    private String username;
-    private String password;
 
-    public DownloadFormListTask(FormListDownloader formListDownloader) {
-        this.formListDownloader = formListDownloader;
+    public DownloadFormListTask(ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
+        this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
     }
 
     @Override
-    protected HashMap<String, ServerFormDetails> doInBackground(Void... values) {
-        return formListDownloader.downloadFormList(url, username, password);
+    protected Pair<List<ServerFormDetails>, FormApiException> doInBackground(Void... values) {
+        List<ServerFormDetails> formList = null;
+        FormApiException exception = null;
+
+        try {
+            formList = serverFormsDetailsFetcher.fetchFormDetails();
+        } catch (FormApiException e) {
+            exception = e;
+        }
+
+        return new Pair<>(formList, exception);
     }
 
     @Override
-    protected void onPostExecute(HashMap<String, ServerFormDetails> value) {
+    protected void onPostExecute(Pair<List<ServerFormDetails>, FormApiException> result) {
         synchronized (this) {
             if (stateListener != null) {
-                stateListener.formListDownloadingComplete(value);
+                if (result.first != null) {
+                    HashMap<String, ServerFormDetails> detailsHashMap = new HashMap<>();
+                    for (ServerFormDetails details : result.first) {
+                        detailsHashMap.put(details.getFormId(), details);
+                    }
+
+                    stateListener.formListDownloadingComplete(detailsHashMap, result.second);
+                } else {
+                    stateListener.formListDownloadingComplete(null, result.second);
+                }
             }
         }
     }
@@ -64,11 +81,4 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             stateListener = sl;
         }
     }
-
-    public void setAlternateCredentials(@Nullable String url, @Nullable String username, @Nullable String password) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-    }
-
 }

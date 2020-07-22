@@ -71,8 +71,6 @@
   <string name="no_items_display_instances">প্রদর্শন করার মত কিছু পাওয়া যায়নি।\n\nTry ফরম পাঠানের পূর্বে চূড়ান্ত ফরম নিশ্চিত করে নিন।</string>
   <string name="ok">ঠিক আছে</string>
   <string name="parse_error">দুঃখিত, ফরম উদ্ধার করা সম্ভব হয়নি।</string>
-  <string name="parse_legacy_formlist_failed">সার্ভার থেকে Aggregate 0.9.x. : %s এর একযোগে ব্যবহারযোগ্য কোন ফরম পাওয়া যায় নি।</string>
-  <string name="parse_openrosa_formlist_failed">সার্ভার থেকে OpenRosa version 1.0 standard: %s এর একযোগে ব্যবহারযোগ্য কোন ফরম পাওয়া যায় নি।</string>
   <string name="password">পাসওয়ার্ড</string>
   <string name="play_video">ভিডিও চালান</string>
   <string name="please_wait">দয়া করে কিছু সময় অপেক্ষা করুন।</string>

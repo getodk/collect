@@ -64,8 +64,6 @@
   <string name="no_items_display">Nėra ką rodyti</string>
   <string name="ok">Gerai</string>
   <string name="parse_error">Deja, nepavyko apdoroti formos.</string>
-  <string name="parse_legacy_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su OpenRosa 1.0 standartu : %s</string>
   <string name="password">Slaptažodis</string>
   <string name="play_video">Groti video</string>
   <string name="please_wait">Prašome šiek tiek palaukti.</string>

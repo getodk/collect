@@ -87,8 +87,6 @@
   <string name="no_items_display_instances">Il n\'y a rien à afficher.\n\nFinalisez vos formulaires enregistrés avant de les envoyer.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Désolé. Impossible d\'analyser le formulaire.</string>
-  <string name="parse_legacy_formlist_failed">Le serveur n\'a pas répondu avec un document de formulaires compatible avec Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Le serveur n\'a pas répondu avec un document de formulaires compatible avec OpenRosa 1.0 : %s</string>
   <string name="password">Mot de passe</string>
   <string name="play_video">Jouer la vidéo</string>
   <string name="please_wait">Veuillez patienter.</string>

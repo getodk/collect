@@ -75,8 +75,6 @@
   <string name="no_items_display_forms">无可显示内容。\n\n 请尝试获取并填写一个空白表格</string>
   <string name="ok">好</string>
   <string name="parse_error">无法读取表格.</string>
-  <string name="parse_legacy_formlist_failed">服务器没有提供与 Aggregate 0.9.x.兼容的表格 : %s</string>
-  <string name="parse_openrosa_formlist_failed">服务器没有提供与OpenRosa version 1.0标准兼容的表格: %s</string>
   <string name="password">密码</string>
   <string name="play_video">播放视频</string>
   <string name="please_wait">请稍候.</string>

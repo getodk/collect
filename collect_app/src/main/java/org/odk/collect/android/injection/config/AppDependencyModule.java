@@ -71,7 +71,6 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
-import org.odk.collect.android.utilities.FormListDownloader;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -148,18 +147,6 @@ public class AppDependencyModule {
     @Provides
     WebCredentialsUtils provideWebCredentials() {
         return new WebCredentialsUtils();
-    }
-
-    @Provides
-    FormListDownloader formListDownloader(
-            Application application,
-            OpenRosaHttpInterface openRosaHttpInterface,
-            WebCredentialsUtils webCredentialsUtils) {
-        return new FormListDownloader(
-                application,
-                openRosaHttpInterface,
-                webCredentialsUtils
-        );
     }
 
     @Provides
