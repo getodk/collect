@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Přejít na začátek</string>
   <string name="jump_to_end">Přejít na konec</string>
   <string name="jump_to_previous">Přejít nahoru</string>
-  <string name="list_failed_with_error">Výpis dotazníku selhal. %s.</string>
-  <string name="loading_form">Načítám dotazník</string>
+    <string name="loading_form">Načítám dotazník</string>
   <string name="load_remote_form_error">Chyba při načítání seznamu dotazníků</string>
   <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="manage_files">Smazat uložený dotazník</string>

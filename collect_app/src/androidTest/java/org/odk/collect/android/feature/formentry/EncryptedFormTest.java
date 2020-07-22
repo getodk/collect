@@ -56,7 +56,7 @@ public class EncryptedFormTest {
                 .clickEditSavedForm()
                 .checkInstanceState("encrypted", InstanceProviderAPI.STATUS_COMPLETE)
                 .clickOnFormWithDialog("encrypted")
-                .assertMessage(R.string.cannot_edit_completed_form);
+                .assertText(R.string.cannot_edit_completed_form);
     }
 
     @Test

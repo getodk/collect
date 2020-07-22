@@ -60,8 +60,7 @@
   <string name="jump_to_beginning">Liigu algusesse</string>
   <string name="jump_to_end">Liigu lõppu</string>
   <string name="jump_to_previous">Liigu üles</string>
-  <string name="list_failed_with_error">Vormide kuvamine ebaõnnestus. %s</string>
-  <string name="loading_form">Vormide laadimine</string>
+    <string name="loading_form">Vormide laadimine</string>
   <string name="load_remote_form_error">Vormide nimekirja laadimisel esines viga</string>
   <string name="location_accuracy">Täpsusasteks on %1$s m</string>
   <string name="manage_files">Kustuta salvestatud vorm</string>

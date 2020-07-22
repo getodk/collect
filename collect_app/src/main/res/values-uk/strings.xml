@@ -71,8 +71,7 @@
   <string name="jump_to_beginning">Перейти на початок</string>
   <string name="jump_to_end">Перейти в кінець</string>
   <string name="jump_to_previous">Перейти назад</string>
-  <string name="list_failed_with_error">Складання списку не вдалося. %s.</string>
-  <string name="loading_form">Завантаження анкети</string>
+    <string name="loading_form">Завантаження анкети</string>
   <string name="load_remote_form_error">Помилка отримання списку анкет</string>
     <string name="location_accuracy">Точність %1$s м</string>
   <string name="manage_files">Видалити збережену анкету</string>

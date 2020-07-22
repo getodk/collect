@@ -70,8 +70,7 @@
   <string name="jump_to_beginning">Pojdi na začetek</string>
   <string name="jump_to_end">Pojdi na konec</string>
   <string name="jump_to_previous">Pojdi gor</string>
-  <string name="list_failed_with_error">Kreiranje seznama obrazcev ni uspelo. %s.</string>
-  <string name="loading_form">Nalagam obrazec</string>
+    <string name="loading_form">Nalagam obrazec</string>
   <string name="load_remote_form_error">Napaka pri pridobivanju seznama obrazcev</string>
     <string name="location_accuracy">Natančnost je %1$s m</string>
   <string name="manage_files">Briši shranjen obrazec</string>

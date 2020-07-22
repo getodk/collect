@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -34,5 +35,17 @@ public class GetBlankFormsTest {
                 .fillPassword("Green")
                 .clickOK(new GetBlankFormPage(rule))
                 .assertText("One Question");
+    }
+
+    @Test
+    public void whenThereIsAnErrorFetchingFormList_showsError() {
+        testDependencies.server.alwaysReturnError();
+
+        rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+                .clickGetBlankFormWithError()
+                .assertText(R.string.load_remote_form_error)
+                .assertText(R.string.generic_network_error)
+                .clickOK(new GetBlankFormPage(rule));
     }
 }

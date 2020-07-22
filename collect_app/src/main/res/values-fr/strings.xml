@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Aller au début</string>
   <string name="jump_to_end">Aller à la fin</string>
   <string name="jump_to_previous">Monter</string>
-  <string name="list_failed_with_error">La liste a echouée. %s.</string>
-  <string name="loading_form">Chargement du formulaire…</string>
+    <string name="loading_form">Chargement du formulaire…</string>
   <string name="load_remote_form_error">Erreur de récupération de la liste</string>
     <string name="location_accuracy">La précision est de %1$s mètres.</string>
   <string name="manage_files">Supprimer formulaire sauvegardé</string>

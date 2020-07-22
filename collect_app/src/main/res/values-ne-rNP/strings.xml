@@ -69,8 +69,7 @@
   <string name="jump_to_beginning">सुरुमा जानुहोस् </string>
   <string name="jump_to_end">अन्त्यमा जानुहोस् </string>
   <string name="jump_to_previous">माथिल्लोमा जानुहोस् </string>
-  <string name="list_failed_with_error">फारमको सूची निकाल्न सकिएन | %s</string>
-  <string name="loading_form">फारम लोड हुदैछ |</string>
+    <string name="loading_form">फारम लोड हुदैछ |</string>
   <string name="load_remote_form_error">फारम सूची प्राप्त गर्न असफल</string>
     <string name="location_accuracy">सटिकता %1$s m छ |</string>
   <string name="manage_files">संचित फारम डिलिट गर्न</string>

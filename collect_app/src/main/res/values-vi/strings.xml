@@ -59,8 +59,7 @@
   <string name="jump_to_beginning">Về đầu tiên</string>
   <string name="jump_to_end">Đến cuối cùng</string>
   <string name="jump_to_previous">Về trước</string>
-  <string name="list_failed_with_error">Lỗi hiển thị biểu mẫu. %s.</string>
-  <string name="loading_form">Tải biểu mẫu</string>
+    <string name="loading_form">Tải biểu mẫu</string>
   <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
     <string name="location_accuracy">Độ chính xác là %1$s m</string>
   <string name="manage_files">Xoá biểu mẫu cũ</string>

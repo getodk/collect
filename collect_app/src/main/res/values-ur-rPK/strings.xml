@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">شروع پر چلیں</string>
   <string name="jump_to_end">آخر پر چلیں</string>
   <string name="jump_to_previous">اوپر چلیں</string>
-  <string name="list_failed_with_error">فارم ‎%s‏ کی لیسٹینگ فیل ہوگئ۔</string>
-  <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
+    <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
   <string name="load_remote_form_error">فارم کی لیسٹینگ میں غلطی ہے</string>
     <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
   <string name="manage_files">محفوظ شدہ فارم کو مٹا دیں۔</string>

@@ -57,8 +57,7 @@
   <string name="jump_to_beginning">ໄປຫາໜ້າທຳອິດຕົ້ນ</string>
   <string name="jump_to_end">ໄປຫາໜ້າສຸດທ້າຍ</string>
   <string name="jump_to_previous">ເລື່ອນຂື້ນ</string>
-  <string name="list_failed_with_error">ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້ %s.</string>
-  <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
+    <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
   <string name="load_remote_form_error">ມີ​ຄວາມຜິດພາດ ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້</string>
     <string name="location_accuracy">ຄ່າຄວາມຖືກຕ້ອງ​ແມ່ນ %1$s m</string>
   <string name="manage_files">ລຶບແບບຟອມທີ່ບັນທຶກໄວ້</string>

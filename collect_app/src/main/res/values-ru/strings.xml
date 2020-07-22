@@ -73,8 +73,7 @@
   <string name="jump_to_beginning">В начало</string>
   <string name="jump_to_end">В конец</string>
   <string name="jump_to_previous">Назад</string>
-  <string name="list_failed_with_error">Не удалось вывести список бланков опросников: %s шт.</string>
-  <string name="loading_form">Загрузка бланка опросника…</string>
+    <string name="loading_form">Загрузка бланка опросника…</string>
   <string name="load_remote_form_error">Не удалось получить список бланков</string>
     <string name="location_accuracy">Точность %1$s м.</string>
   <string name="manage_files">Удаление опросов / бланков</string>

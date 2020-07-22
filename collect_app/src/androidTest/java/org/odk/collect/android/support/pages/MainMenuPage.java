@@ -225,5 +225,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
         return new ServerAuthDialog(rule).assertOnPage();
     }
+
+    public OkDialog clickGetBlankFormWithError() {
+        onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
+        return new OkDialog(rule).assertOnPage();
+    }
 }
 

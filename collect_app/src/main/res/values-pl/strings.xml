@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Idź Do Początku</string>
   <string name="jump_to_end">Idź Na Koniec</string>
   <string name="jump_to_previous">Idź Do Góry</string>
-  <string name="list_failed_with_error">Tworzenie listy formularzy nie powiodło się. %s</string>
-  <string name="loading_form">Wczytywanie Formularza</string>
+    <string name="loading_form">Wczytywanie Formularza</string>
   <string name="load_remote_form_error">Błąd Pobierania Listy Formularzy</string>
     <string name="location_accuracy">Dokładność rzędu %1$s m</string>
   <string name="manage_files">Skasuj Zapisany Formularz</string>

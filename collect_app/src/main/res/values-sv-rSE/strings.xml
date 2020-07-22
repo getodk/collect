@@ -73,8 +73,7 @@
   <string name="jump_to_beginning">Gå till början</string>
   <string name="jump_to_end">Gå till slutet</string>
   <string name="jump_to_previous">Flytta upp</string>
-  <string name="list_failed_with_error">Listning av formulär misslyckades. %s.</string>
-  <string name="loading_form">Laddar formulär.</string>
+    <string name="loading_form">Laddar formulär.</string>
   <string name="load_remote_form_error">Ett fel inträffade vid listning av formulär</string>
     <string name="location_accuracy">Noggrannheten är %1$s m</string>
   <string name="manage_files">Radera sparat formulär</string>

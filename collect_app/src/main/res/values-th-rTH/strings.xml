@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">ไปที่จุดเริ่มต้น</string>
   <string name="jump_to_end">ไปที่จุดสิ้นสุด</string>
   <string name="jump_to_previous">เลื่อนขึ้น</string>
-  <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
-  <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
+    <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
   <string name="load_remote_form_error">มีข้อผิดพลาด ไม่สามารถแสดงรายการแบบสำรวจได้</string>
     <string name="location_accuracy">ความแม่นยำ %1$s เมตร</string>
   <string name="manage_files">ลบแบบสำรวจที่บันทึกไว้</string>

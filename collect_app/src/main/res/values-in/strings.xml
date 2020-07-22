@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Awal</string>
   <string name="jump_to_end">Akhir</string>
   <string name="jump_to_previous">Atas</string>
-  <string name="list_failed_with_error">Pendataan formulir gagal. %s.</string>
-  <string name="loading_form">Sedang memuat formulir</string>
+    <string name="loading_form">Sedang memuat formulir</string>
   <string name="load_remote_form_error">Terjadi kesalahan saat mengambil daftar fromulir</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="manage_files">Hapus formulir</string>

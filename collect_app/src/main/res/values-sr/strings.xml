@@ -71,8 +71,7 @@
   <string name="jump_to_beginning">Idi na početak</string>
   <string name="jump_to_end">Idi na kraj</string>
   <string name="jump_to_previous">Idi gore</string>
-  <string name="list_failed_with_error">Prikazivanje dostupnih formulara nije uspjelo. %s.</string>
-  <string name="loading_form">Učitavanje formulara</string>
+    <string name="loading_form">Učitavanje formulara</string>
   <string name="load_remote_form_error">Greška u pristupu formularima na serveru</string>
     <string name="location_accuracy">Preciznost %1$s m</string>
   <string name="manage_files">Obriši sačuvani formular</string>

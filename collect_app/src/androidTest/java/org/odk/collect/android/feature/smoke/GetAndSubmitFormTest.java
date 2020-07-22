@@ -49,7 +49,7 @@ public class GetAndSubmitFormTest {
                 .setServer(server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()
-                .assertMessage("One Question (Version:: 1 ID: one-question) - Success")
+                .assertText("One Question (Version:: 1 ID: one-question) - Success")
                 .clickOK(new MainMenuPage(rule))
 
                 .startBlankForm("One Question")

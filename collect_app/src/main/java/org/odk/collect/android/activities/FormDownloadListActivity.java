@@ -546,9 +546,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             createAuthDialog();
         } else if (result.containsKey(DL_ERROR_MSG)) {
             // Download failed
-            String dialogMessage =
-                    getString(R.string.list_failed_with_error,
-                            result.get(DL_ERROR_MSG).getErrorStr());
+            String dialogMessage = getString(R.string.generic_network_error);
             String dialogTitle = getString(R.string.load_remote_form_error);
 
             if (viewModel.isDownloadOnlyMode()) {

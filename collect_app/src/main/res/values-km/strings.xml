@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">ទៅកន្លែងចាប់ផ្តើម</string>
   <string name="jump_to_end">ទៅកន្លែងបញ្ចប់</string>
   <string name="jump_to_previous">ទៅឡើង</string>
-  <string name="list_failed_with_error">ការធ្វើបញ្ជីសំណុំបែបបទបរាជ័យ %s ។</string>
-  <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
+    <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
   <string name="load_remote_form_error">បញ្ហានៃការទាញបញ្ជីសំណុំបែបបទ</string>
     <string name="location_accuracy">ភាព​ត្រឹមត្រូវគឺ %1$s ម៉ែត្រ</string>
   <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>

@@ -57,8 +57,7 @@
   <string name="jump_to_beginning">ወደ መጀመሪያ ይሂዱ</string>
   <string name="jump_to_end">ወደ መጨረሻ ይሂዱ</string>
   <string name="jump_to_previous">ወደ ላይ ውጣ</string>
-  <string name="list_failed_with_error">የቅፅ ዝርዝሩ አልተሳካም፡፡ 1 %s</string>
-  <string name="loading_form">ቅጽ በመጫን ላይ</string>
+    <string name="loading_form">ቅጽ በመጫን ላይ</string>
   <string name="load_remote_form_error">የቅጽ ዝርዝር ማግኘት ላይ ስህተት ተከስቷል</string>
   <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
   <string name="mark_finished">ቅጹን እንደተጠናቀቀ ምልክት አድርግ</string>

@@ -56,8 +56,7 @@
   <string name="jump_to_beginning">Enda Mwanzo</string>
   <string name="jump_to_end">Enda Mwisho</string>
   <string name="jump_to_previous">Enda Juu</string>
-  <string name="list_failed_with_error">Uanishaji wa fomu haukufaulu. %s.</string>
-  <string name="loading_form">Fomu inawekwa</string>
+    <string name="loading_form">Fomu inawekwa</string>
   <string name="load_remote_form_error">Tatizo katika kuchukua fomu!</string>
     <string name="location_accuracy">Usahihi ni %1$s m</string>
   <string name="manage_files">Ondoa fomu iliyo hifadhiwa</string>

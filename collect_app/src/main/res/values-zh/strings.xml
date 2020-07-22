@@ -64,8 +64,7 @@
   <string name="jump_to_beginning">开始</string>
   <string name="jump_to_end">结束</string>
   <string name="jump_to_previous">返回</string>
-  <string name="list_failed_with_error">列出表格失败. %s.</string>
-  <string name="loading_form">正在加载表格</string>
+    <string name="loading_form">正在加载表格</string>
   <string name="load_remote_form_error">获取表格列表错误</string>
     <string name="location_accuracy">精度为  %1$s m</string>
   <string name="manage_files">删除已保存表格</string>

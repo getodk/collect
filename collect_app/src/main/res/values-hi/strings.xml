@@ -66,8 +66,7 @@
   <string name="jump_to_beginning">शुरु पर जाएं</string>
   <string name="jump_to_end">अंत पर जाएं</string>
   <string name="jump_to_previous">ऊपर जाएं</string>
-  <string name="list_failed_with_error">फॉर्म  सूचीकरण असफल%s </string>
-  <string name="loading_form">फॉर्म लोड हो रहा है </string>
+    <string name="loading_form">फॉर्म लोड हो रहा है </string>
   <string name="load_remote_form_error">सूची से फॉर्म प्राप्ति में गलती </string>
     <string name="location_accuracy">शुद्धता %1$s मीटर है</string>
   <string name="manage_files">संरक्षित फॉर्म मिटायें</string>

@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">Yana ekuqaleni</string>
   <string name="jump_to_end">Yana ekugcineni</string>
   <string name="jump_to_previous">Iya phezulu</string>
-  <string name="list_failed_with_error">Ukukleliswa kwamafomu akuphumelelanga. %s.</string>
-  <string name="loading_form">Kufakwa ifomu</string>
+    <string name="loading_form">Kufakwa ifomu</string>
   <string name="load_remote_form_error">Iphutha ekutholeni uhlu lwamafomu</string>
     <string name="location_accuracy">Ukucophelela %1s% m</string>
   <string name="manage_files">Susa ifomu elongiwe</string>

@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Zum Start</string>
   <string name="jump_to_end">Zum Ende</string>
   <string name="jump_to_previous">Zurück</string>
-  <string name="list_failed_with_error">Formularauflistung gescheitert. %s.</string>
-  <string name="loading_form">Formular wird geladen</string>
+    <string name="loading_form">Formular wird geladen</string>
   <string name="load_remote_form_error">Fehler bei der Formularauflistung</string>
   <string name="location_accuracy">Genauigkeit beträgt %1$s m</string>
   <string name="manage_files">Formulare löschen</string>

@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">最初に移動</string>
   <string name="jump_to_end">最後に移動</string>
   <string name="jump_to_previous">上に移動</string>
-  <string name="list_failed_with_error">フォームが一覧できませんでした。 %s。</string>
-  <string name="loading_form">フォームのロード中</string>
+    <string name="loading_form">フォームのロード中</string>
   <string name="load_remote_form_error">フォーム一覧の取得中にエラー</string>
     <string name="location_accuracy">精度は %1$s mです</string>
   <string name="manage_files">保存されたフォームを削除</string>

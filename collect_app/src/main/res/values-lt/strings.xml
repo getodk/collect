@@ -54,8 +54,7 @@
   <string name="jump_to_beginning">Eiti į pradžią</string>
   <string name="jump_to_end">Eiti į pabaigą</string>
   <string name="jump_to_previous">Eiti į viršų</string>
-  <string name="list_failed_with_error">Nepavyko gauti formų sąrašo. %s.</string>
-  <string name="loading_form">Įkeliama forma</string>
+    <string name="loading_form">Įkeliama forma</string>
   <string name="load_remote_form_error">Klaida nuskaitant formų sąrašą</string>
     <string name="location_accuracy">Tikslumas yra %1$s m</string>
   <string name="manage_files">Ištrinti užpildytą formą</string>

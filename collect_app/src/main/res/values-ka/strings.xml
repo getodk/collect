@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">დასაწყისში გადასვლა</string>
   <string name="jump_to_end">ბოლოში გადასვლა</string>
   <string name="jump_to_previous">ზევით ასვლა</string>
-  <string name="list_failed_with_error">ფორმების ჩამონათვალის ჩვენება ვერ მოხერხდა. %s.</string>
-  <string name="loading_form">ფორმის ჩატვირთვა</string>
+    <string name="loading_form">ფორმის ჩატვირთვა</string>
   <string name="load_remote_form_error">შეცდომა ფორმების ჩამონათვლის ჩვენებისას</string>
     <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>

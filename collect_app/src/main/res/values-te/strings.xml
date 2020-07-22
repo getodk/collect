@@ -71,8 +71,7 @@
   <string name="jump_to_beginning">మొదటికి వెళ్లు </string>
   <string name="jump_to_end">చివరికి వెళ్లు </string>
   <string name="jump_to_previous">పైకి వెళ్లు </string>
-  <string name="list_failed_with_error">ఫారం జాబితా విఫలమైంది.%s</string>
-  <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
+    <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
   <string name="load_remote_form_error">ఫారం జాబితాను పొందడంలో లోపం జరిగింది </string>
     <string name="location_accuracy">ఖచ్చితత్వం %1$sm</string>
   <string name="manage_files">సేవ్ చేసిన ఫారంలను తొలగించండి </string>

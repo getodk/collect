@@ -70,8 +70,7 @@
   <string name="jump_to_beginning">سٹارٹ پر جائیں</string>
   <string name="jump_to_end">اختتام پر جائیں</string>
   <string name="jump_to_previous">اوپر جائیں</string>
-  <string name="list_failed_with_error">فارم ‎‏ کی لیسٹینگ فیل ہوگئ۔ %s</string>
-  <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
+    <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
   <string name="load_remote_form_error">فارم لسٹ حاصل کرنے میں خرابی</string>
     <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
   <string name="manage_files">محفوظ شدہ فارم کو ڈیلیٹ کردیں۔</string>

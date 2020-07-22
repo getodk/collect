@@ -59,8 +59,7 @@
   <string name="jump_to_beginning">Mergeți la început</string>
   <string name="jump_to_end">Mergeți la sfârșit</string>
   <string name="jump_to_previous">Mergeți sus</string>
-  <string name="list_failed_with_error">Afișarea formularului a eșuat. %s.</string>
-  <string name="loading_form">Încărcare formular</string>
+    <string name="loading_form">Încărcare formular</string>
   <string name="load_remote_form_error">Eroare la preluarea listei de formulare</string>
     <string name="location_accuracy">Precizie de %1$s m</string>
   <string name="manage_files">Ștergeți formular salvat</string>

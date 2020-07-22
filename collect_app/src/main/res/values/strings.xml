@@ -86,9 +86,8 @@
     <string name="jump_to_beginning">Go To Start</string>
     <string name="jump_to_end">Go To End</string>
     <string name="jump_to_previous">Go Up</string>
-    <string name="list_failed_with_error">Form listing failed. %s.</string>
     <string name="loading_form">Loading Form</string>
-    <string name="load_remote_form_error">Error Getting Form List</string>
+    <string name="load_remote_form_error">Form list download failed</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
     <string name="location_provider">Location provider: %s</string>
     <string name="manage_files">Delete Saved Form</string>
@@ -711,4 +710,5 @@
     <string name="previously_downloaded_only">Previously downloaded forms only</string>
     <string name="form_update_frequency_title">Automatic update frequency</string>
     <string name="sync_failure">Sync error</string>
+    <string name="generic_network_error">If you keep having this problem, report it to the person who asked you to collect data.</string>
 </resources>

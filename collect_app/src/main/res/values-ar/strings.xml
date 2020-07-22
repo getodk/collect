@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">الذهاب إلى البداية</string>
   <string name="jump_to_end">الذهاب إلى النهاية</string>
   <string name="jump_to_previous">الذهاب صعودًا</string>
-  <string name="list_failed_with_error">فشلت لائحة عرض النماذج. %s</string>
-  <string name="loading_form">تحميل الاستمارة</string>
+    <string name="loading_form">تحميل الاستمارة</string>
   <string name="load_remote_form_error">خطأ في جلب لائحة النماذج.</string>
   <string name="location_accuracy">الدقة هي is %1$s متر</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>

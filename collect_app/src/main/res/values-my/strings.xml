@@ -66,8 +66,7 @@
   <string name="jump_to_beginning">ျပန္လည္စတင္ရန္</string>
   <string name="jump_to_end">အဆံုးသတ္ရန္</string>
   <string name="jump_to_previous">အေပၚသို႔တက္ရန္</string>
-  <string name="list_failed_with_error">ပံုစံစာရင္းသြင္းမွုမေအာင္ျမင္ပါ %s.</string>
-  <string name="loading_form">ပံုစံရယူေနပါသည္</string>
+    <string name="loading_form">ပံုစံရယူေနပါသည္</string>
   <string name="load_remote_form_error">ပံုစံစာရင္းရယူမွု မွားယြင္းေနပါသည္</string>
     <string name="location_accuracy">တိက်မွန္ကန္မွု %1$s m</string>
   <string name="manage_files">သိမ္းထားေသာပံုစံအားဖ်က္ရန္</string>

@@ -59,8 +59,7 @@
   <string name="jump_to_beginning">Gaan na Begin</string>
   <string name="jump_to_end">Gaan na Einde</string>
   <string name="jump_to_previous">Gaan op</string>
-  <string name="list_failed_with_error">Opstel van vormlys het misluk. %s.</string>
-  <string name="loading_form">Besig om vorm te laai</string>
+    <string name="loading_form">Besig om vorm te laai</string>
   <string name="load_remote_form_error">Fout tydens haal van vormlys</string>
   <string name="location_accuracy">Akkuraatheid is %1$s m</string>
   <string name="manage_files">Verwyder Gestoorde Vorm</string>

@@ -61,8 +61,7 @@
   <string name="jump_to_beginning">Anar a l\'inici</string>
   <string name="jump_to_end">Anar al final</string>
   <string name="jump_to_previous">Ves enrera</string>
-  <string name="list_failed_with_error">Error al llistar formularis. %s.</string>
-  <string name="loading_form">Carregant formulari</string>
+    <string name="loading_form">Carregant formulari</string>
   <string name="load_remote_form_error">Error al demanar la llista de formularis</string>
   <string name="location_accuracy">Precisió de %1$s m</string>
   <string name="manage_files">Eliminar formulari desat</string>
