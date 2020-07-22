@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.preferences;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -64,10 +63,9 @@ public class MapsPreferences extends BasePreferenceFragment {
         return prefs;
     }
 
-    @SuppressLint("RestrictedApi")
     @Override
     protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
-        return new PreferenceGroupAdapter(preferenceScreen) {
+        final PreferenceGroupAdapter preferenceGroupAdapter = new PreferenceGroupAdapter(preferenceScreen) {
             @Override
             public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
@@ -75,10 +73,9 @@ public class MapsPreferences extends BasePreferenceFragment {
                 if (iconFrame != null) {
                     iconFrame.setVisibility(View.GONE);
                 }
-                holder.setDividerAllowedAbove(false);
-                holder.setDividerAllowedBelow(false);
             }
         };
+        return preferenceGroupAdapter;
     }
 
     @Override
