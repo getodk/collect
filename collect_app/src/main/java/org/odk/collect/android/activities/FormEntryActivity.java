@@ -1851,7 +1851,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         // finalized specifies that it should always be auto-sent.
                         String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
                         if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
-                            requestAutoSend();
+                            formSubmitManager.scheduleSubmit();
                         }
                     }
 
@@ -2471,16 +2471,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showNextView();
         }
-    }
-
-    /**
-     * Requests that unsent finalized forms be auto-sent. If no network connection is available,
-     * the work will be performed when a connection becomes available.
-     * <p>
-     * TODO: if the user changes auto-send settings, should an auto-send job immediately be enqueued?
-     */
-    private void requestAutoSend() {
-        formSubmitManager.scheduleSubmit();
     }
 
     /**
