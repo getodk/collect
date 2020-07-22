@@ -29,13 +29,13 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
         return this;
     }
 
-    public FormEntryPage clickPlus(String repeatName) {
-        onView(withId(R.id.menu_add_repeat)).perform(click());
+    public FormEntryPage clickGoToStart() {
+        onView(withId(R.id.jumpBeginningButton)).perform(click());
         return new FormEntryPage(formName, rule).assertOnPage();
     }
 
-    public FormEntryPage clickGoToStart() {
-        onView(withId(R.id.jumpBeginningButton)).perform(click());
+    public FormEntryPage addGroup() {
+        onView(withId(R.id.menu_add_repeat)).perform(click());
         return new FormEntryPage(formName, rule).assertOnPage();
     }
 

@@ -122,7 +122,7 @@ public class AddRepeatTest {
                 .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
                 .clickGoToArrow()
                 .clickGoUpIcon()
-                .clickPlus("Person")
+                .addGroup()
                 .assertText("Person > 3");
     }
 }
