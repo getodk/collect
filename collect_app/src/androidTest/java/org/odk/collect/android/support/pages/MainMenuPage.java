@@ -156,7 +156,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public GetBlankFormPage clickGetBlankForm() {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
-        return new GetBlankFormPage(rule);
+        return new GetBlankFormPage(rule).assertOnPage();
     }
 
     public SendFinalizedFormPage clickSendFinalizedForm(int formCount) {
@@ -219,6 +219,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickOnString(R.string.selected_google_account_text)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
+    }
+
+    public ServerAuthDialog clickGetBlankFormWithAuthenticationError() {
+        onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
+        return new ServerAuthDialog(rule).assertOnPage();
     }
 }
 

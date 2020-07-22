@@ -559,7 +559,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         } else {
             // Everything worked. Clear the list and add the results.
             viewModel.setFormDetailsByFormId(result);
-
             viewModel.clearFormList();
 
             ArrayList<String> ids = new ArrayList<>(viewModel.getFormDetailsByFormId().keySet());
@@ -593,6 +592,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                     }
                 }
             }
+
             filteredFormList.addAll(viewModel.getFormList());
             updateAdapter();
             selectSupersededForms();
@@ -601,32 +601,35 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             toggleButtonLabel(toggleButton, listView);
 
             if (viewModel.isDownloadOnlyMode()) {
-                //1. First check if all form IDS could be found on the server - Register forms that could not be found
-
-                for (String formId: viewModel.getFormIdsToDownload()) {
-                    viewModel.putFormResult(formId, false);
-                }
-
-                ArrayList<ServerFormDetails> filesToDownload  = new ArrayList<>();
-
-                for (ServerFormDetails serverFormDetails : viewModel.getFormDetailsByFormId().values()) {
-                    String formId = serverFormDetails.getFormId();
-
-                    if (viewModel.getFormResults().containsKey(formId)) {
-                        filesToDownload.add(serverFormDetails);
-                    }
-                }
-
-                //2. Select forms and start downloading
-                if (!filesToDownload.isEmpty()) {
-                    startFormsDownload(filesToDownload);
-                } else {
-                    // None of the forms was found
-                    setReturnResult(false, "Forms not found on server", viewModel.getFormResults());
-                    finish();
-                }
-
+                performDownloadModeDownload();
             }
+        }
+    }
+
+    private void performDownloadModeDownload() {
+        //1. First check if all form IDS could be found on the server - Register forms that could not be found
+
+        for (String formId: viewModel.getFormIdsToDownload()) {
+            viewModel.putFormResult(formId, false);
+        }
+
+        ArrayList<ServerFormDetails> filesToDownload  = new ArrayList<>();
+
+        for (ServerFormDetails serverFormDetails : viewModel.getFormDetailsByFormId().values()) {
+            String formId = serverFormDetails.getFormId();
+
+            if (viewModel.getFormResults().containsKey(formId)) {
+                filesToDownload.add(serverFormDetails);
+            }
+        }
+
+        //2. Select forms and start downloading
+        if (!filesToDownload.isEmpty()) {
+            startFormsDownload(filesToDownload);
+        } else {
+            // None of the forms was found
+            setReturnResult(false, "Forms not found on server", viewModel.getFormResults());
+            finish();
         }
     }
 
