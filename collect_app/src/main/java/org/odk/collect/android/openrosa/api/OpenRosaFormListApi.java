@@ -42,7 +42,7 @@ public class OpenRosaFormListApi implements FormListApi {
         try {
             result = openRosaXMLFetcher.getXML(downloadListUrl);
         } catch (UnknownHostException e) {
-            throw new FormApiException(UNKNOWN_HOST);
+            throw new FormApiException(UNKNOWN_HOST, serverURL);
         }
 
         // If we can't get the document, return the error, cancel the task
@@ -60,12 +60,9 @@ public class OpenRosaFormListApi implements FormListApi {
             // Attempt OpenRosa 1.0 parsing
             Element xformsElement = result.doc.getRootElement();
             if (!xformsElement.getName().equals("xforms")) {
-                String error = "root element is not <xforms> : " + xformsElement.getName();
                 throw new FormApiException(FETCH_ERROR);
             }
-            String namespace = xformsElement.getNamespace();
             if (!isXformsListNamespacedElement(xformsElement)) {
-                String error = "root element namespace is incorrect:" + namespace;
                 throw new FormApiException(FETCH_ERROR);
             }
 
@@ -161,9 +158,6 @@ public class OpenRosaFormListApi implements FormListApi {
                 }
 
                 if (formId == null || downloadUrl == null || formName == null) {
-                    String error =
-                            "Forms list entry " + Integer.toString(i)
-                                    + " has missing or empty tags: formID, name, or downloadUrl";
                     formList.clear();
                     throw new FormApiException(FETCH_ERROR);
                 }
@@ -200,9 +194,6 @@ public class OpenRosaFormListApi implements FormListApi {
                         downloadUrl = null;
                     }
                     if (formName == null) {
-                        String error =
-                                "Forms list entry " + Integer.toString(i)
-                                        + " is missing form name or url attribute";
                         formList.clear();
                         throw new FormApiException(FETCH_ERROR);
                     }
@@ -227,7 +218,7 @@ public class OpenRosaFormListApi implements FormListApi {
         try {
             result = openRosaXMLFetcher.getXML(manifestURL);
         } catch (UnknownHostException e) {
-            throw new FormApiException(UNKNOWN_HOST);
+            throw new FormApiException(UNKNOWN_HOST, serverURL);
         }
 
         if (result.errorMessage != null) {
@@ -242,13 +233,10 @@ public class OpenRosaFormListApi implements FormListApi {
         Element manifestElement = result.doc.getRootElement();
 
         if (!manifestElement.getName().equals("manifest")) {
-            String error = String.format("Root element is not &lt;manifest\\&gt; — was %s", manifestElement.getName());
             throw new FormApiException(FETCH_ERROR);
         }
 
         if (!isXformsManifestNamespacedElement(manifestElement)) {
-            String namespace = manifestElement.getNamespace();
-            String error = String.format("Root element Namespace is incorrect: %s", namespace);
             throw new FormApiException(FETCH_ERROR);
         }
 
@@ -305,7 +293,6 @@ public class OpenRosaFormListApi implements FormListApi {
                 }
 
                 if (filename == null || downloadUrl == null || hash == null) {
-                    String error = String.format("Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl", i);
                     throw new FormApiException(FETCH_ERROR);
                 }
 

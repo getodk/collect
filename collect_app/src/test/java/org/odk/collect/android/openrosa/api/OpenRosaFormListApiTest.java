@@ -35,6 +35,7 @@ public class OpenRosaFormListApiTest {
             fail("No exception thrown!");
         } catch (FormApiException e) {
             assertThat(e.getType(), is(UNKNOWN_HOST));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 
@@ -51,6 +52,7 @@ public class OpenRosaFormListApiTest {
             fail("No exception thrown!");
         } catch (FormApiException e) {
             assertThat(e.getType(), is(UNKNOWN_HOST));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 

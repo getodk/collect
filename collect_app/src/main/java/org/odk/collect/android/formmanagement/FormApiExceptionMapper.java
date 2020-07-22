@@ -15,7 +15,7 @@ public class FormApiExceptionMapper {
 
     public String getMessage(FormApiException exception) {
         if (exception.getType() == FormApiException.Type.UNKNOWN_HOST) {
-            return context.getString(R.string.unknown_host_error);
+            return context.getString(R.string.unknown_host_error, exception.getServerUrl());
         }
 
         return context.getString(R.string.generic_network_error);

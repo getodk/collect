@@ -36,7 +36,7 @@ public class FormApiExceptionMapperTest {
 
     @Test
     public void unknownHostType_returnsUnknownHostMessage() {
-        String expectedString = context.getString(R.string.unknown_host_error);
-        assertThat(mapper.getMessage(new FormApiException(UNKNOWN_HOST)), is(expectedString));
+        String expectedString = context.getString(R.string.unknown_host_error, "http://unknown.com");
+        assertThat(mapper.getMessage(new FormApiException(UNKNOWN_HOST, "http://unknown.com")), is(expectedString));
     }
 }

@@ -9,19 +9,24 @@ public class FormApiException extends Exception {
     }
 
     private final Type type;
+    private final String serverUrl;
 
     public FormApiException(Type type) {
-        super();
         this.type = type;
+        this.serverUrl = null;
+    }
+
+    public FormApiException(Type type, String serverUrl) {
+        this.type = type;
+        this.serverUrl = serverUrl;
     }
 
     public Type getType() {
         return type;
     }
 
-    @Override
-    public String getMessage() {
-        return super.getMessage();
+    public String getServerUrl() {
+        return serverUrl;
     }
 
     @Override

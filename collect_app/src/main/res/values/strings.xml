@@ -709,5 +709,5 @@
     <string name="form_update_frequency_title">Automatic update frequency</string>
     <string name="form_update_error">Form update failed</string>
     <string name="generic_network_error">If you keep having this problem, report it to the person who asked you to collect data.</string>
-    <string name="unknown_host_error">Collect can\'t reach the server. Did you enter the URL correctly?</string>
+    <string name="unknown_host_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
 </resources>
