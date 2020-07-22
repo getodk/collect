@@ -40,6 +40,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
+import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -574,7 +575,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             switch (exception.getType()) {
                 case FETCH_ERROR:
                 case UNKNOWN_HOST:
-                    String dialogMessage = getString(R.string.generic_network_error);
+                    String dialogMessage = getString(new FormApiExceptionMapper().getMessage(exception));
                     String dialogTitle = getString(R.string.load_remote_form_error);
 
                     if (viewModel.isDownloadOnlyMode()) {

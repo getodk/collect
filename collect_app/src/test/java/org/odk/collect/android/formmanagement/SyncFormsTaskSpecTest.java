@@ -14,6 +14,7 @@ import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
+import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
@@ -72,7 +73,7 @@ public class SyncFormsTaskSpecTest {
 
     @Test
     public void whenSynchronizingFails_setsRepositoryToNotSyncingAndNotifiesWithError() throws Exception {
-        SyncException exception = new SyncException();
+        FormApiException exception = new FormApiException(FormApiException.Type.FETCH_ERROR);
         doThrow(exception).when(serverFormsSynchronizer).synchronize();
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
