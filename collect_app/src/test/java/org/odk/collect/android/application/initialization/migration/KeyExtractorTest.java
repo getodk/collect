@@ -26,6 +26,22 @@ public class KeyExtractorTest {
     }
 
     @Test
+    public void createsNewKeyBasedOnExistingKeysValue() {
+        initPrefs(prefs,
+                "oldKey", "blah"
+        );
+
+        extractNewKey("newKey").fromKey("oldKey")
+                .fromValue("blah").toValue("newBlah")
+                .apply(prefs);
+
+        assertPrefs(prefs,
+                "oldKey", "blah",
+                "newKey", "newBlah"
+        );
+    }
+
+    @Test
     public void whenNewKeyExists_doesNothing() {
         initPrefs(prefs,
                 "oldKey", "oldBlah",
