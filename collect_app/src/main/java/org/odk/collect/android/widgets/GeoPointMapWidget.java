@@ -162,7 +162,11 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (readOnly) {
-            binding.simpleButton.setText(R.string.geopoint_view_read_only);
+            if (dataAvailable) {
+                binding.simpleButton.setText(R.string.geopoint_view_read_only);
+            } else {
+                binding.simpleButton.setVisibility(GONE);
+            }
         } else {
             binding.simpleButton.setText(
                     dataAvailable ? R.string.view_change_location : R.string.get_point);

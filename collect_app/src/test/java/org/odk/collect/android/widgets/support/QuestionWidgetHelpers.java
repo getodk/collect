@@ -38,6 +38,13 @@ public class QuestionWidgetHelpers {
                 .build();
     }
 
+    public static FormEntryPrompt promptWithReadOnlyAndAnswer(IAnswerData answer) {
+        return new MockFormEntryPromptBuilder()
+                .withReadOnly(true)
+                .withAnswer(answer)
+                .build();
+    }
+
     public static FormEntryPrompt promptWithAppearance(String appearance) {
         return new MockFormEntryPromptBuilder()
                 .withAppearance(appearance)

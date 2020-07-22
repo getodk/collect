@@ -23,6 +23,8 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.Random;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -42,6 +44,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mock
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearance;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -134,9 +137,17 @@ public class GeoPointMapWidgetTest {
     }
 
     @Test
-    public void whenPromptIsReadOnly_buttonShowsCorrectText() {
+    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_buttonIsNotDisplayed() {
         GeoPointMapWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.binding.simpleButton.getText().toString(), equalTo(widget.getContext().getString(R.string.geopoint_view_read_only)));
+        assertThat(widget.binding.simpleButton.getVisibility(), equalTo(GONE));
+    }
+
+    @Test
+    public void whenPromptIsReadOnlyAndHasAnswer_buttonShowsCorrectText() {
+        GeoPointMapWidget widget = createWidget(promptWithReadOnlyAndAnswer(answer));
+
+        assertThat(widget.binding.simpleButton.getVisibility(), equalTo(VISIBLE));
+        assertThat(widget.binding.simpleButton.getText(), equalTo(widget.getContext().getString(R.string.geopoint_view_read_only)));
     }
 
     @Test
