@@ -144,6 +144,7 @@
   <string name="choose_video">ვიდეოს არჩევა</string>
   <string name="choose_image">სურათის არჩევა</string>
   <string name="selected">არჩეული: </string>
+  <string name="select_answer">აირჩიე პასუხი</string>
   <string name="save_form_as">მიანიჭეთ სახელი ფორმას:</string>
   <string name="save_as_error">სახელი არ უნდა იყოს ცარიელი!</string>
   <string name="edit_prompt">გამოპასუხების რედაქტირება</string>

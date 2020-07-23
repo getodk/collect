@@ -118,6 +118,7 @@
   <string name="choose_video">ເລືອກວີດີໂອ</string>
   <string name="choose_image">ເລືອກຮູບພາບ</string>
   <string name="selected">ໄດ້ເລືອກແລ້ວ:</string>
+  <string name="select_answer">ເລືອກຄຳຕອບ</string>
   <string name="save_form_as">ໃສ່ຊື່ແບບຟອມນີ້</string>
   <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
   <string name="edit_prompt">ແກ້ໄຂຈຸດທີ່ເລືອກ</string>

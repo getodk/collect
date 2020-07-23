@@ -145,6 +145,7 @@
   <string name="choose_video">Valitse video</string>
   <string name="choose_image">Valitse kuva</string>
   <string name="selected">Valittu:</string>
+  <string name="select_answer">Valitse vastaus</string>
   <string name="save_form_as">Nimeä tämä lomake</string>
   <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
   <string name="edit_prompt">Vastauksen muokkaus</string>

@@ -121,6 +121,7 @@
   <string name="choose_video">Kies Video</string>
   <string name="choose_image">Kies Prentjie</string>
   <string name="selected">Gekies:</string>
+  <string name="select_answer">Kies Antwoord</string>
   <string name="save_form_as">Gee hierdie vorm \'n naam</string>
   <string name="save_as_error">Gestoorde naam mag nie leeg wees nie!</string>
   <string name="edit_prompt">Wysig Vraag</string>

@@ -145,6 +145,7 @@
   <string name="choose_video">Wybierz Wideo</string>
   <string name="choose_image">Wybierz Obraz</string>
   <string name="selected">Wybrany:</string>
+  <string name="select_answer">Wybierz Odpowiedź</string>
   <string name="save_form_as">Nazwij ten formularz</string>
   <string name="save_as_error">Zapisana nazwa nie może być pusta!</string>
   <string name="edit_prompt">Edytuj Pytanie</string>

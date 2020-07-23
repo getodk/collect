@@ -124,6 +124,7 @@
   <string name="choose_video">Vali video</string>
   <string name="choose_image">Vali pilt</string>
   <string name="selected">Valitud:</string>
+  <string name="select_answer">Vali vastus</string>
   <string name="save_form_as">Vormi nimi</string>
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
   <string name="edit_prompt">Muuda küsimust</string>

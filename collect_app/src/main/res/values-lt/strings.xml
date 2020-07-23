@@ -113,6 +113,7 @@
   <string name="choose_video">Pasirinkite video</string>
   <string name="choose_image">Pasirinkite paveikslėlį</string>
   <string name="selected">Parinkta:</string>
+  <string name="select_answer">Pažymėkite atsakymą</string>
   <string name="save_form_as">Pavadinkite šią formą:</string>
   <string name="save_as_error">Pavadinimas negali būti tuščias!</string>
   <string name="edit_prompt">Keisti atsakymą</string>

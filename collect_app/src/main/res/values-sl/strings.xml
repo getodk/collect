@@ -139,6 +139,7 @@
   <string name="choose_video">Izberi video</string>
   <string name="choose_image">Izberi sliko</string>
   <string name="selected">Izbrano:</string>
+  <string name="select_answer">Izberi odgovor</string>
   <string name="save_form_as">Poimenuj obrazec</string>
   <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
   <string name="edit_prompt">Uredi</string>

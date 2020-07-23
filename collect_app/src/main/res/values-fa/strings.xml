@@ -115,6 +115,7 @@
   <string name="choose_video">انتخاب ویدیو</string>
   <string name="choose_image">انتخاب تصویر</string>
   <string name="selected">انتخاب شد:</string>
+  <string name="select_answer">انتخاب پاسخ</string>
   <string name="save_form_as">نام گذاری این فورم</string>
   <string name="save_as_error">نام ذخیره شده نباید خالی باشد!</string>
   <string name="edit_prompt">ویرایش عاجل</string>

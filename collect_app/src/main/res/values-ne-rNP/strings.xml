@@ -139,6 +139,7 @@
   <string name="choose_video">भिडियो छान्नुहोस् </string>
   <string name="choose_image">तस्विर छान्नुहोस् </string>
   <string name="selected">छानिएका:</string>
+  <string name="select_answer">उत्तर छान्नुहोस्</string>
   <string name="save_form_as">फारमलाई नाम दिनुहोस्</string>
   <string name="save_as_error">संचित गर्दा नाम खाली छोड्न मिल्दैन !</string>
   <string name="edit_prompt">सम्पादन गर्न प्रेरित गर्नुहोस् </string>

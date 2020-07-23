@@ -145,6 +145,7 @@
   <string name="choose_video">Pilih Video</string>
   <string name="choose_image">Pilih Gambar</string>
   <string name="selected">Terpilih:</string>
+  <string name="select_answer">Pilih Jawaban</string>
   <string name="save_form_as">Namai formulir ini: </string>
   <string name="save_as_error">Nama tidak boleh kosong.</string>
   <string name="edit_prompt">Ubah Risalah</string>

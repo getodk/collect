@@ -142,6 +142,7 @@
   <string name="choose_video">Izaberi video</string>
   <string name="choose_image">Izaberi sliku</string>
   <string name="selected">Odabrano:</string>
+  <string name="select_answer">Odaberi odgovor</string>
   <string name="save_form_as">Nazovi ovaj formular</string>
   <string name="save_as_error">Sačuvano ime ne može biti prazno!</string>
   <string name="edit_prompt">Uredi Prompt</string>

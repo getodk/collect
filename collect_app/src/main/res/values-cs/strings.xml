@@ -145,6 +145,7 @@
   <string name="choose_video">Vyberte video</string>
   <string name="choose_image">Vyberte obrázek</string>
   <string name="selected">Vybráno:</string>
+  <string name="select_answer">Zvolte odpověď</string>
   <string name="save_form_as">Pojmenujte tento dotazník</string>
   <string name="save_as_error">Uložené jméno nesmí být prázdné!</string>
   <string name="edit_prompt">Editovat otázku</string>

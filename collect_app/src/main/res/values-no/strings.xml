@@ -120,6 +120,7 @@
   <string name="choose_video">Velg video</string>
   <string name="choose_image">Velg bilde</string>
   <string name="selected">Valgt: </string>
+  <string name="select_answer">Velg svar</string>
   <string name="save_form_as">Lagre som:</string>
   <string name="save_as_error">Navnet kan ikke være blank!</string>
   <string name="edit_prompt">Rediger prompt</string>

@@ -142,6 +142,7 @@
   <string name="choose_video">Выберите видео</string>
   <string name="choose_image">Выберите изображение</string>
   <string name="selected">Выбрано:</string>
+  <string name="select_answer">Выбрать ответ</string>
   <string name="save_form_as">Сохранить данный опрос под названием:</string>
   <string name="save_as_error">Название не может быть пустым!</string>
   <string name="edit_prompt">Изменить вопрос</string>
