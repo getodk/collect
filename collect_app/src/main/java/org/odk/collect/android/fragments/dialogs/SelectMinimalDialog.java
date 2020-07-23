@@ -12,13 +12,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.databinding.SelectMinimalDialogLayoutBinding;
 import org.odk.collect.android.fragments.viewmodels.SelectMinimalViewModel;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 import java.util.List;
@@ -27,7 +25,8 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     private SelectMinimalDialogLayoutBinding binding;
 
     private AbstractSelectListAdapter selectListAdapter;
-    private FormEntryPrompt formEntryPrompt;
+    private boolean isFlex;
+    private boolean isAutocomplete;
 
     private SelectMinimalViewModel viewModel;
     private SearchView searchView;
@@ -40,9 +39,10 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     public SelectMinimalDialog() {
     }
 
-    public SelectMinimalDialog(AbstractSelectListAdapter selectListAdapter, FormEntryPrompt formEntryPrompt) {
+    public SelectMinimalDialog(AbstractSelectListAdapter selectListAdapter, boolean isFlex, boolean isAutoComplete) {
         this.selectListAdapter = selectListAdapter;
-        this.formEntryPrompt = formEntryPrompt;
+        this.isFlex = isFlex;
+        this.isAutocomplete = isAutoComplete;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
         if (context instanceof SelectMinimalDialogListener) {
             listener = (SelectMinimalDialogListener) context;
         }
-        viewModel = new ViewModelProvider(this, new SelectMinimalViewModel.Factory(selectListAdapter, formEntryPrompt)).get(SelectMinimalViewModel.class);
+        viewModel = new ViewModelProvider(this, new SelectMinimalViewModel.Factory(selectListAdapter, isFlex, isAutocomplete)).get(SelectMinimalViewModel.class);
         if (viewModel.getSelectListAdapter() == null) {
             dismiss();
         }
@@ -99,7 +99,7 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     private void initToolbar() {
         getToolbar().setNavigationIcon(R.drawable.ic_arrow_back);
 
-        if (WidgetAppearanceUtils.isAutocomplete(viewModel.getFormEntryPrompt())) {
+        if (viewModel.isAutoComplete()) {
             addSearchBar();
         }
     }
@@ -127,6 +127,6 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     }
 
     private void initRecyclerView() {
-        binding.choicesRecyclerView.initRecyclerView(viewModel.getSelectListAdapter(), WidgetAppearanceUtils.isFlexAppearance(viewModel.getFormEntryPrompt()));
+        binding.choicesRecyclerView.initRecyclerView(viewModel.getSelectListAdapter(), viewModel.isFlex());
     }
 }

@@ -16,6 +16,7 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -41,8 +42,8 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryW
                 if (formController != null) {
                     formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
                 }
-                SelectMinimalDialog dialog = new SelectMinimalDialog(recyclerViewAdapter, getFormEntryPrompt());
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "SelectMinimalDialog");
+                SelectMinimalDialog dialog = new SelectMinimalDialog(recyclerViewAdapter, WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
+                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
             });
         }
         return binding.getRoot();
