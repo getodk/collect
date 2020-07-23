@@ -324,7 +324,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
             if (viewModel.isDownloadOnlyMode()) {
                 // Handle external app download case with different server
-                throw new UnsupportedOperationException();
+                downloadFormListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
+                downloadFormListTask.setAlternateCredentials(webCredentialsUtils, viewModel.getUrl(), viewModel.getUsername(), viewModel.getPassword());
+                downloadFormListTask.setDownloaderListener(this);
+                downloadFormListTask.execute();
             } else {
                 downloadFormListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
                 downloadFormListTask.setDownloaderListener(this);

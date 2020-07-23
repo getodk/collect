@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.tasks;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import androidx.core.util.Pair;
@@ -22,6 +23,7 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +41,10 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
     private FormListDownloaderListener stateListener;
+    private WebCredentialsUtils webCredentialsUtils;
+    private String url;
+    private String username;
+    private String password;
 
     public DownloadFormListTask(ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
@@ -46,6 +52,10 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
 
     @Override
     protected Pair<List<ServerFormDetails>, FormApiException> doInBackground(Void... values) {
+        if (webCredentialsUtils != null) {
+            setTemporaryCredentials();
+        }
+
         List<ServerFormDetails> formList = null;
         FormApiException exception = null;
 
@@ -53,6 +63,10 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
             formList = serverFormsDetailsFetcher.fetchFormDetails();
         } catch (FormApiException e) {
             exception = e;
+        } finally {
+            if (webCredentialsUtils != null) {
+                clearTemporaryCredentials();
+            }
         }
 
         return new Pair<>(formList, exception);
@@ -79,6 +93,37 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     public void setDownloaderListener(FormListDownloaderListener sl) {
         synchronized (this) {
             stateListener = sl;
+        }
+    }
+
+    public void setAlternateCredentials(WebCredentialsUtils webCredentialsUtils, String url, String username, String password) {
+        this.webCredentialsUtils = webCredentialsUtils;
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
+
+    private void setTemporaryCredentials() {
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                if (username != null && password != null) {
+                    webCredentialsUtils.saveCredentials(url, username, password);
+                } else {
+                    webCredentialsUtils.clearCredentials(url);
+                }
+            }
+        }
+    }
+
+    private void clearTemporaryCredentials() {
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                webCredentialsUtils.clearCredentials(url);
+            }
         }
     }
 }
