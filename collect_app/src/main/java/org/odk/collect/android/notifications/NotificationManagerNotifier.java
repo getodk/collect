@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormChooserListActivity;
+import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
@@ -72,7 +72,12 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onSyncFailure(FormApiException exception) {
-        Intent intent = new Intent(context, FormChooserListActivity.class);
+        Intent intent = new Intent(context, FillBlankFormActivity.class);
+
+        if (exception.getType() == FormApiException.Type.AUTH_REQUIRED) {
+            intent.putExtra(FillBlankFormActivity.EXTRA_AUTH_REQUIRED, true);
+        }
+
         PendingIntent contentIntent = PendingIntent.getActivity(context, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         showNotification(

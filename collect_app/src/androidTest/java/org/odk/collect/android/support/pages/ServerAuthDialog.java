@@ -6,7 +6,7 @@ import org.odk.collect.android.R;
 
 public class ServerAuthDialog extends Page<ServerAuthDialog> {
 
-    ServerAuthDialog(ActivityTestRule rule) {
+    public ServerAuthDialog(ActivityTestRule rule) {
         super(rule);
     }
 
