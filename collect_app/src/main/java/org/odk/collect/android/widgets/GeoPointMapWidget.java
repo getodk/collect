@@ -44,7 +44,6 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final double accuracyThreshold;
 
-    private boolean readOnly;
     private boolean draggable = true;
     private String stringAnswer;
 
@@ -67,19 +66,16 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        View answerView = binding.getRoot();
 
-        readOnly = prompt.isReadOnly();
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.simpleButton.setOnClickListener(v -> {
-            Bundle bundle = GeoWidgetUtils.getGeoPointBundle(stringAnswer, accuracyThreshold, readOnly, draggable);
+            Bundle bundle = GeoWidgetUtils.getGeoPointBundle(stringAnswer, accuracyThreshold, prompt.isReadOnly(), draggable);
             GeoWidgetUtils.onButtonClick(context, prompt, getPermissionUtils(), null,
                     waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         });
 
-        return answerView;
+        return binding.getRoot();
     }
 
     @Override
@@ -131,7 +127,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (readOnly) {
+        if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
                 binding.simpleButton.setText(R.string.geopoint_view_read_only);
             } else {

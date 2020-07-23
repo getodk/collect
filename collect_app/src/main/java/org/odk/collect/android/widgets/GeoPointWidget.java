@@ -41,7 +41,6 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final double accuracyThreshold;
 
-    private boolean readOnly;
     private String stringAnswer;
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry) {
@@ -58,12 +57,8 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        View answerView = binding.getRoot();
 
-        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-        readOnly = prompt.isReadOnly();
-        if (readOnly) {
+        if (prompt.isReadOnly()) {
             binding.simpleButton.setVisibility(GONE);
         } else {
             binding.simpleButton.setText(getDefaultButtonLabel());
@@ -75,7 +70,9 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
                         waitingForDataRegistry, GeoPointActivity.class, bundle, LOCATION_CAPTURE);
             });
         }
-        return answerView;
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        return binding.getRoot();
     }
 
     @Override
@@ -118,7 +115,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (!readOnly) {
+        if (!getFormEntryPrompt().isReadOnly()) {
             binding.simpleButton.setText(
                     dataAvailable ? R.string.change_location : R.string.get_point);
         }

@@ -56,9 +56,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        View answerView = binding.getRoot();
-
-        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.isReadOnly()) {
             binding.simpleButton.setVisibility(GONE);
@@ -73,6 +70,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver
                         waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
             });
         }
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         String answerText = prompt.getAnswerText();
         boolean dataAvailable = false;
@@ -84,7 +82,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver
 
         updateButtonLabelsAndVisibility(dataAvailable);
 
-        return answerView;
+        return binding.getRoot();
     }
 
     @Override
