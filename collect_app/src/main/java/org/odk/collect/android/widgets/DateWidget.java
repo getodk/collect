@@ -46,7 +46,8 @@ import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -66,7 +67,7 @@ import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.D
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDateSetListener, BinaryWidget {
+public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDateSetListener, BinaryDataReceiver, ButtonClickListener {
     Button dateButton;
     TextView dateTextView;
 

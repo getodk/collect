@@ -27,6 +27,7 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import timber.log.Timber;
 
@@ -40,8 +41,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 public class ExDecimalWidget extends ExStringWidget {
 
-    public ExDecimalWidget(Context context, QuestionDetails questionDetails) {
-        super(context, questionDetails);
+    public ExDecimalWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+        super(context, questionDetails, waitingForDataRegistry);
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 

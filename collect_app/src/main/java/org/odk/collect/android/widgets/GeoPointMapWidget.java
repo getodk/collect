@@ -26,7 +26,7 @@ import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPointActivity;
+import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -36,28 +36,32 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
 
 @SuppressLint("ViewConstructor")
-public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver {
+public class GeoPointMapWidget extends QuestionWidget implements BinaryDataReceiver {
+    public static final String LOCATION = "gp";
+    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
+    public static final String READ_ONLY = "readOnly";
+    public static final String DRAGGABLE_ONLY = "draggable";
+    public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final double accuracyThreshold;
 
     GeoWidgetAnswerBinding binding;
 
     private boolean readOnly;
+    private boolean draggable = true;
+    private double accuracyThreshold;
     private String stringAnswer;
 
-    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry) {
+    public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
+                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-
-        // Determine the accuracy threshold to use.
-        String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
-        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
+        determineMapProperties(questionDef);
 
         stringAnswer = getFormEntryPrompt().getAnswerText();
         boolean dataAvailable = false;
@@ -73,17 +77,12 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
+        readOnly = prompt.isReadOnly();
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        readOnly = prompt.isReadOnly();
-        if (readOnly) {
-            binding.simpleButton.setVisibility(GONE);
-        } else {
-            binding.simpleButton.setText(getDefaultButtonLabel());
-            binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.simpleButton.setOnClickListener(v -> onButtonClick());
 
-            binding.simpleButton.setOnClickListener(v -> onButtonClick());
-        }
         return answerView;
     }
 
@@ -130,6 +129,19 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
         widgetValueChanged();
     }
 
+    private void determineMapProperties(QuestionDef questionDef) {
+        // Determine the accuracy threshold to use.
+        String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
+        accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
+
+        // Determine whether the point should be draggable.
+        if (hasAppearance(getFormEntryPrompt(), PLACEMENT_MAP)) {
+            draggable = true;
+        } else if (hasAppearance(getFormEntryPrompt(), MAPS)) {
+            draggable = false;
+        }
+    }
+
     private String getAnswerToDisplay(String answer) {
         try {
             if (answer != null && !answer.isEmpty()) {
@@ -149,9 +161,15 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (!readOnly) {
+        if (readOnly) {
+            if (dataAvailable) {
+                binding.simpleButton.setText(R.string.geopoint_view_read_only);
+            } else {
+                binding.simpleButton.setVisibility(GONE);
+            }
+        } else {
             binding.simpleButton.setText(
-                    dataAvailable ? R.string.change_location : R.string.get_point);
+                    dataAvailable ? R.string.view_change_location : R.string.get_point);
         }
     }
 
@@ -173,17 +191,15 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
 
     private void startGeoActivity() {
         Context context = getContext();
-        Intent intent = new Intent(context, GeoPointActivity.class);
+        Intent intent = new Intent(context, GeoPointMapActivity.class);
 
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             intent.putExtra(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
         }
+        intent.putExtra(READ_ONLY, readOnly);
+        intent.putExtra(DRAGGABLE_ONLY, draggable);
         intent.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
         ((Activity) context).startActivityForResult(intent, RequestCodes.LOCATION_CAPTURE);
-    }
-
-    private String getDefaultButtonLabel() {
-        return getContext().getString(R.string.get_location);
     }
 }

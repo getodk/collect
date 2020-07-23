@@ -38,7 +38,9 @@ import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -49,14 +51,16 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Carl Hartung (chartung@nafundi.com)
  */
 @SuppressLint("ViewConstructor")
-public class BearingWidget extends QuestionWidget implements BinaryWidget {
+public class BearingWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
     final Button getBearingButton;
     private final boolean isSensorAvailable;
     final EditText answer;
     private final Drawable textBackground;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public BearingWidget(Context context, QuestionDetails questionDetails) {
+    public BearingWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         isSensorAvailable = checkForRequiredSensors();
 
@@ -177,7 +181,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     public void onButtonClick(int buttonId) {
         if (isSensorAvailable) {
             Intent i = new Intent(getContext(), BearingActivity.class);
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     RequestCodes.BEARING_CAPTURE);
         } else {

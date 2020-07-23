@@ -49,8 +49,11 @@ import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
 import java.util.Locale;
@@ -70,12 +73,14 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class VideoWidget extends QuestionWidget implements FileWidget {
+public class VideoWidget extends QuestionWidget implements FileWidget, ButtonClickListener, BinaryDataReceiver {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
     @NonNull
     private MediaUtil mediaUtil;
+
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
     @NonNull
     private FileUtil fileUtil;
@@ -87,15 +92,16 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
     private boolean selfie;
 
-    public VideoWidget(Context context, QuestionDetails prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil());
+    public VideoWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry);
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
@@ -305,7 +311,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             analytics.logEvent(REQUEST_VIDEO_NOT_HIGH_RES, getQuestionDetails().getFormAnalyticsID(), "");
         }
         try {
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     RequestCodes.VIDEO_CAPTURE);
         } catch (ActivityNotFoundException e) {
@@ -314,7 +320,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                     getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.capture_video)), Toast.LENGTH_SHORT)
                     .show();
-            cancelWaitingForData();
+            waitingForDataRegistry.cancelWaitingForData();
         }
     }
 
@@ -325,7 +331,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // new Intent(Intent.ACTION_PICK,
         // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
         try {
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     RequestCodes.VIDEO_CHOOSER);
         } catch (ActivityNotFoundException e) {
@@ -335,7 +341,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                             getContext().getString(R.string.choose_video)), Toast.LENGTH_SHORT)
                     .show();
 
-            cancelWaitingForData();
+            waitingForDataRegistry.cancelWaitingForData();
         }
     }
 

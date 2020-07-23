@@ -2,29 +2,65 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.GeoWidget;
-
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget {
+    private final WaitingForDataRegistry waitingForDataRegistry;
     public Button startGeoButton;
     public TextView answerDisplay;
     protected boolean readOnly;
 
-    public BaseGeoWidget(Context context, QuestionDetails questionDetails) {
+    public BaseGeoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
-        answerDisplay = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
-        startGeoButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getDefaultButtonLabel(), getAnswerFontSize(), this);
-        readOnly = questionDetails.getPrompt().isReadOnly();
-        setUpLayout(context, questionDetails.getPrompt().getAnswerText());
+        this.waitingForDataRegistry = waitingForDataRegistry;
+        readOnly = getFormEntryPrompt().isReadOnly();
+    }
+
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.geo_widget_answer, null);
+
+        answerDisplay = answerView.findViewById(R.id.geo_answer_text);
+        answerDisplay.setTextColor(new ThemeUtils(context).getColorOnSurface());
+        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        startGeoButton = answerView.findViewById(R.id.simple_button);
+        if (prompt.isReadOnly()) {
+            startGeoButton.setVisibility(GONE);
+        } else {
+            startGeoButton.setText(getDefaultButtonLabel());
+            startGeoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+            startGeoButton.setOnClickListener(v -> {
+                if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
+                    this.onButtonClick(R.id.simple_button);
+                }
+            });
+        }
+        String answerText = prompt.getAnswerText();
+        boolean dataAvailable = false;
+
+        if (answerText != null && !answerText.isEmpty()) {
+            dataAvailable = true;
+            setBinaryData(answerText);
+        }
+
+        updateButtonLabelsAndVisibility(dataAvailable);
+        return answerView;
     }
 
     @Override
@@ -59,7 +95,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
         getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                waitForData();
+                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
                 startGeoActivity();
             }
 
@@ -67,21 +103,5 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
             public void denied() {
             }
         });
-    }
-
-    protected void setUpLayout(Context context, String answerText) {
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(startGeoButton);
-        answerLayout.addView(answerDisplay);
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
-
-        boolean dataAvailable = false;
-        if (answerText != null && !answerText.isEmpty()) {
-            dataAvailable = true;
-            setBinaryData(answerText);
-        }
-
-        updateButtonLabelsAndVisibility(dataAvailable);
     }
 }

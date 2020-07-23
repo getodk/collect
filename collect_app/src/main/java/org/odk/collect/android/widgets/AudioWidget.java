@@ -42,8 +42,11 @@ import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
 import java.util.Locale;
@@ -62,7 +65,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 
 @SuppressLint("ViewConstructor")
-public class AudioWidget extends QuestionWidget implements FileWidget {
+public class AudioWidget extends QuestionWidget implements FileWidget, ButtonClickListener, BinaryDataReceiver {
 
     @NonNull
     private FileUtil fileUtil;
@@ -71,21 +74,23 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     private MediaUtil mediaUtil;
 
     AudioControllerView audioController;
+    private final WaitingForDataRegistry waitingForDataRegistry;
     Button captureButton;
     Button chooseButton;
 
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context));
+    public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context), waitingForDataRegistry);
     }
 
-    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController) {
+    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
         this.audioController = audioController;
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         captureButton = createSimpleButton(getContext(), R.id.capture_audio, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_audio), getAnswerFontSize(), this);
 
@@ -259,7 +264,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                         .toString());
         try {
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     RequestCodes.AUDIO_CAPTURE);
         } catch (ActivityNotFoundException e) {
@@ -268,7 +273,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                     getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT)
                     .show();
-            cancelWaitingForData();
+            waitingForDataRegistry.cancelWaitingForData();
         }
     }
 
@@ -276,7 +281,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("audio/*");
         try {
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     RequestCodes.AUDIO_CHOOSER);
         } catch (ActivityNotFoundException e) {
@@ -284,7 +289,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
+            waitingForDataRegistry.cancelWaitingForData();
         }
     }
 

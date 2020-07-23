@@ -19,6 +19,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import java.io.File;
 
@@ -50,7 +51,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @NonNull
     @Override
     public AudioWidget createWidget() {
-        return new AudioWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), fileUtil, mediaUtil, audioController);
+        return new AudioWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), fileUtil, mediaUtil, audioController, new FakeWaitingForDataRegistry());
     }
 
     @NonNull

@@ -11,7 +11,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
-import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -94,10 +93,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         if (prev != null && !formEntryActivity.get().isInstanceStateSaved()) {
             ((DialogFragment) prev).dismiss();
         }
-
-        ODKView odkView = formEntryActivity.get().getCurrentViewIfODKView();
-        if (odkView != null) {
-            odkView.setBinaryData(result);
-        }
+        formEntryActivity.get().setBinaryWidgetData(result);
     }
 }
