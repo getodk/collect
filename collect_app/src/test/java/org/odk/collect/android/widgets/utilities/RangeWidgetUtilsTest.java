@@ -44,7 +44,7 @@ public class RangeWidgetUtilsTest {
     public void setup() {
         ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
 
-        slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext());
+        slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext(), null);
         sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
