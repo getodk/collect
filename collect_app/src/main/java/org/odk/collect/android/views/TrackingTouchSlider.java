@@ -10,7 +10,7 @@ import com.google.android.material.slider.Slider;
 
 import org.jetbrains.annotations.NotNull;
 
-public class TrackingTouchSlider extends Slider implements  Slider.OnSliderTouchListener {
+public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchListener {
 
     private boolean trackingTouch;
 
@@ -20,6 +20,7 @@ public class TrackingTouchSlider extends Slider implements  Slider.OnSliderTouch
 
     public TrackingTouchSlider(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.addOnSliderTouchListener(this);
     }
 
     public boolean isTrackingTouch() {
