@@ -14,13 +14,9 @@ public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchL
 
     private boolean trackingTouch;
 
-    public TrackingTouchSlider(@NonNull Context context) {
-        super(context);
-    }
-
     public TrackingTouchSlider(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.addOnSliderTouchListener(this);
+        addOnSliderTouchListener(this);
     }
 
     public boolean isTrackingTouch() {
