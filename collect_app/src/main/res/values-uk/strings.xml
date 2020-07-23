@@ -150,6 +150,7 @@
   <string name="choose_video">Оберіть відео</string>
   <string name="choose_image">Оберіть зображення</string>
   <string name="selected">Обрано:</string>
+  <string name="select_answer">Обрати відповідь</string>
   <string name="save_form_as">Назвіть анкету</string>
   <string name="save_as_error">Ім’я не може бути порожнім!</string>
   <string name="edit_prompt">Редагувати запит</string>

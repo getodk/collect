@@ -133,6 +133,7 @@
   <string name="choose_video">ဗြီဒီယို ေရြးခ်ယ္ရန္</string>
   <string name="choose_image">ပံုေရြးခ်ယ္ရန္</string>
   <string name="selected">ေရြးခ်ယ္ၿပီး:</string>
+  <string name="select_answer">အေျဖေရြးခ်ယ္ရန္</string>
   <string name="save_form_as">ပံုစံအမည္ေပးရန္:</string>
   <string name="save_as_error">အမည္ေနရာတြင္ ကြပ္လပ္ထား၍ မရပါ</string>
   <string name="edit_prompt">ခ်က္ျခင္းျပင္ဆင္ရန္</string>

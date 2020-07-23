@@ -136,6 +136,7 @@
   <string name="choose_video">व्हिडिओ निवडा</string>
   <string name="choose_image">प्रतिमा निवडा</string>
   <string name="selected">निवडलेले:</string>
+  <string name="select_answer">उत्तर निवडा</string>
   <string name="save_form_as">या फॉर्मला नाव द्या</string>
   <string name="save_as_error">जतन केलेले नाव रिक्त असू शकत नाही!</string>
   <string name="edit_prompt">सूचना संपादित करा</string>

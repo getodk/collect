@@ -141,6 +141,7 @@
   <string name="choose_video">वीडियो चुनें</string>
   <string name="choose_image">इमेज चुनें</string>
   <string name="selected">चयनित: </string>
+  <string name="select_answer">जवाब चुनें</string>
   <string name="save_form_as">इस फॉर्म को नाम दें</string>
   <string name="save_as_error">संरक्षित नाम रिक्त नहीं होना चाहिए!</string>
   <string name="edit_prompt">Prompt को संशोधित करें</string>

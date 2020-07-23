@@ -153,6 +153,7 @@
   <string name="choose_video">إختر فيديو</string>
   <string name="choose_image">إختر صورة</string>
   <string name="selected">مختارة:</string>
+  <string name="select_answer">إختر إجابة</string>
   <string name="save_form_as">سمّي هذه الاستمارة</string>
   <string name="save_as_error">اسم الحفظ لا يمكن أن يكون فارغ!</string>
   <string name="edit_prompt">تعديل التوجيه</string>

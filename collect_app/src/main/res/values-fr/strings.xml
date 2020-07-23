@@ -153,6 +153,7 @@
   <string name="choose_video">Choisir une Vidéo</string>
   <string name="choose_image">Choisir une Image</string>
   <string name="selected">Sélectionné: </string>
+  <string name="select_answer">Sélectionnez la Réponse</string>
   <string name="save_form_as">Nommer le formulaire :</string>
   <string name="save_as_error">Le nom ne peut pas être vide !</string>
   <string name="edit_prompt">Ligne de modification</string>

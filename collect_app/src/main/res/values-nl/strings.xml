@@ -147,6 +147,7 @@
   <string name="choose_video">Selecteer video</string>
   <string name="choose_image">Selecteer afbeelding</string>
   <string name="selected">Gekozen:</string>
+  <string name="select_answer">Kies een antwoord</string>
   <string name="save_form_as">Geef dit formulier een naam:</string>
   <string name="save_as_error">Formuliernaam mag niet leeg zijn!</string>
   <string name="edit_prompt">Edit Prompt</string>

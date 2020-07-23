@@ -141,6 +141,7 @@
   <string name="choose_image">
 Escolher Imagem</string>
   <string name="selected">Selecionado:</string>
+  <string name="select_answer">Selecionar Resposta</string>
   <string name="save_form_as">Nomear este Formulário:</string>
   <string name="save_as_error">Nome salvo não pode ser em vazio!</string>
   <string name="edit_prompt">Editar Prompt</string>

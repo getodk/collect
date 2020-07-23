@@ -136,6 +136,7 @@
   <string name="choose_video">选择视频</string>
   <string name="choose_image">选择图片</string>
   <string name="selected">选定: </string>
+  <string name="select_answer">选择回答</string>
   <string name="save_form_as">重命名表格:</string>
   <string name="save_as_error">保存的名字不能为空!</string>
   <string name="edit_prompt">修改提示</string>

@@ -152,6 +152,7 @@
   <string name="choose_video">Välj film</string>
   <string name="choose_image">Välj bild</string>
   <string name="selected">Valda:</string>
+  <string name="select_answer">Välj svar</string>
   <string name="save_form_as">Namnge detta formulär</string>
   <string name="save_as_error">Sparat namn får inte vara tomt!</string>
   <string name="edit_prompt">Inmatningstext</string>

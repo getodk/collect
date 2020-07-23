@@ -128,6 +128,7 @@
   <string name="choose_video">Alegeți video</string>
   <string name="choose_image">Alegeți imagine</string>
   <string name="selected">Selectat: </string>
+  <string name="select_answer">Selectați răspunsul</string>
   <string name="save_form_as">Denumiți acest formular:</string>
   <string name="save_as_error">Numele salvat nu trebuie să fie gol!</string>
   <string name="edit_prompt">Editare câmp</string>

@@ -153,6 +153,7 @@
   <string name="choose_video">ビデオを選択</string>
   <string name="choose_image">画像を選択</string>
   <string name="selected">選択済: </string>
+  <string name="select_answer">回答を選択してください</string>
   <string name="save_form_as">このフォームの名前</string>
   <string name="save_as_error">保存する名前は空にできません!</string>
   <string name="edit_prompt">プロンプトを編集</string>

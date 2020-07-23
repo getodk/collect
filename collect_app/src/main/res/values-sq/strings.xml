@@ -140,6 +140,7 @@
   <string name="choose_video">Zgjidh video</string>
   <string name="choose_image">Zgjidh imazh</string>
   <string name="selected">Përzgjedhur:</string>
+  <string name="select_answer">Zgjidh përgjigjen</string>
   <string name="save_form_as">Emërto formularin</string>
   <string name="save_as_error">Emri i ruajtur nuk mund të jetë bosh!</string>
   <string name="selected_google_account_text">Llogaria në Google</string>

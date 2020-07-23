@@ -120,6 +120,7 @@
   <string name="choose_video">ভি ডি ও পছন্দ করুন</string>
   <string name="choose_image">ছবি পছন্দ করুন</string>
   <string name="selected">নির্বাচিত</string>
+  <string name="select_answer">উত্তর নির্বাচন করুন।</string>
   <string name="save_form_as">এই ফর্মের নাম</string>
   <string name="save_as_error">সংরক্ষিত নাম খালি রাখা যাবে না।</string>
   <string name="selected_google_account_text">গুগল একাউন্ট</string>

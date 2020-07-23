@@ -133,6 +133,7 @@
   <string name="choose_video">Escollir vídeo</string>
   <string name="choose_image">Escollir imatge</string>
   <string name="selected">Seleccionat:</string>
+  <string name="select_answer">Seleccionar resposta:</string>
   <string name="save_form_as">Anomena aquest formulari:</string>
   <string name="save_as_error">El nom no pot deixar-se en blanc</string>
   <string name="edit_prompt">Editar entrada:</string>

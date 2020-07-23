@@ -114,6 +114,7 @@
   <string name="choose_video">ቪዲዮ ይምረጡ</string>
   <string name="choose_image">ምስል ይምረጡ</string>
   <string name="selected">ተመርጧል:</string>
+  <string name="select_answer">መልሱን ይምረጡ</string>
   <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
   <string name="selected_google_account_text">የ Google መለያ</string>

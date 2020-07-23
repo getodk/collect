@@ -125,6 +125,7 @@
   <string name="choose_video">Chọn Video</string>
   <string name="choose_image">Chọn ảnh</string>
   <string name="selected">Chọn: </string>
+  <string name="select_answer">Chọn câu trả lời</string>
   <string name="save_form_as">Tên biểu mẫu:</string>
   <string name="save_as_error">Tên được lưu không để trống!</string>
   <string name="edit_prompt">Sửa thông tin</string>

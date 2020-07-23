@@ -122,6 +122,7 @@
   <string name="choose_sound">اواز کا انتخاب کریں</string>
   <string name="choose_image">عکس کا انتخاب کریں</string>
   <string name="selected">منتخب شدہ</string>
+  <string name="select_answer">جواب کا انتخاب کریں</string>
   <string name="save_form_as">اس فارم کو نام دیں</string>
   <string name="save_as_error">محفوظ کیا گیا نام خالی نہیں ہونا چاہئے</string>
   <string name="edit_prompt">پرامپٹ کی تدوین کریں</string>

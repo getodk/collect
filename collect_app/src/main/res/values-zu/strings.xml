@@ -126,6 +126,7 @@
   <string name="choose_video">Khetha ummboniso</string>
   <string name="choose_image">Khetha isithombe</string>
   <string name="selected">Okukhethiwe:</string>
+  <string name="select_answer">Khetha impendulo</string>
   <string name="save_form_as">Qamba leli fomu</string>
   <string name="save_as_error">Igama eligciniwe akumele lingabi nalutho</string>
   <string name="edit_prompt">Hlela ngokushesha</string>

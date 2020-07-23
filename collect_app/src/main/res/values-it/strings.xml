@@ -153,6 +153,7 @@
   <string name="choose_video">Seleziona Video</string>
   <string name="choose_image">Seleziona Foto</string>
   <string name="selected">Selezionato:</string>
+  <string name="select_answer">Selezionare Risposta</string>
   <string name="save_form_as">Nome di questo modulo:</string>
   <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
   <string name="edit_prompt">Modifica Prompt</string>
