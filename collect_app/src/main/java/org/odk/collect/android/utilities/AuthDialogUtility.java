@@ -45,6 +45,10 @@ public class AuthDialogUtility {
         Collect.getInstance().getComponent().inject(this);
     }
 
+    /**
+     * @deprecated should use {@link org.odk.collect.android.preferences.ServerAuthDialogFragment} instead
+     */
+    @Deprecated
     public AlertDialog createDialog(final Context context,
                                     final AuthDialogUtilityResultListener resultListener, String url) {
 
