@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.initialization.PreferenceMigrator;
+import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -106,7 +106,7 @@ public class SettingsImporterTest {
 
     @Test // Migrations might add/rename/move keys
     public void migratesPreferences_beforeLoadingDefaults() throws Exception {
-        PreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
+        SettingsPreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
             if (generalPrefs.contains("key1")) {
                 throw new RuntimeException("defaults already loaded!");
             }
@@ -122,7 +122,7 @@ public class SettingsImporterTest {
                 .put("general", new JSONObject()
                         .put("unknown_key", "value"));
 
-        PreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
+        SettingsPreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
             if (!generalPrefs.contains("unknown_key")) {
                 throw new RuntimeException("unknowns already cleared!");
             }

@@ -32,11 +32,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 /**
  * Migrates old preference keys and values to new ones.
  */
-public class MetaPreferenceMigrator implements PreferenceMigrator {
+public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigrator {
 
     private final SharedPreferences metaSharedPrefs;
 
-    public MetaPreferenceMigrator(SharedPreferences metaSharedPrefs) {
+    public CollectSettingsPreferenceMigrator(SharedPreferences metaSharedPrefs) {
         this.metaSharedPrefs = metaSharedPrefs;
     }
 

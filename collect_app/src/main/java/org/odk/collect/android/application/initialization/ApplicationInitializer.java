@@ -34,12 +34,12 @@ public class ApplicationInitializer {
 
     private final Application context;
     private final UserAgentProvider userAgentProvider;
-    private final PreferenceMigrator preferenceMigrator;
+    private final SettingsPreferenceMigrator preferenceMigrator;
     private final PropertyManager propertyManager;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;

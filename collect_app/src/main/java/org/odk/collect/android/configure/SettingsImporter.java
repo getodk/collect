@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.application.initialization.PreferenceMigrator;
+import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -18,13 +18,13 @@ public class SettingsImporter {
 
     private final SharedPreferences generalSharedPrefs;
     private final SharedPreferences adminSharedPrefs;
-    private final PreferenceMigrator preferenceMigrator;
+    private final SettingsPreferenceMigrator preferenceMigrator;
     private final SettingsValidator settingsValidator;
     private final Map<String, Object> generalDefaults;
     private final Map<String, Object> adminDefaults;
     private final Runnable settingsChangedHandler;
 
-    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, PreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, Runnable settingsChangedHandler) {
+    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, Runnable settingsChangedHandler) {
         this.generalSharedPrefs = generalSharedPrefs;
         this.adminSharedPrefs = adminSharedPrefs;
         this.preferenceMigrator = preferenceMigrator;

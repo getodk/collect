@@ -20,7 +20,7 @@ import static org.odk.collect.android.application.initialization.migration.Share
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(RobolectricTestRunner.class)
-public class MetaPreferenceMigratorTest {
+public class CollectSettingsPreferenceMigratorTest {
 
     private SharedPreferences generalPrefs;
     private SharedPreferences adminPrefs;
@@ -254,6 +254,6 @@ public class MetaPreferenceMigratorTest {
     }
 
     private void runMigrations() {
-        new MetaPreferenceMigrator(metaPrefs).migrate(generalPrefs, adminPrefs);
+        new CollectSettingsPreferenceMigrator(metaPrefs).migrate(generalPrefs, adminPrefs);
     }
 }

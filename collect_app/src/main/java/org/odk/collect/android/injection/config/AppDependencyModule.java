@@ -16,8 +16,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.application.initialization.MetaPreferenceMigrator;
-import org.odk.collect.android.application.initialization.PreferenceMigrator;
+import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
+import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
@@ -339,13 +339,13 @@ public class AppDependencyModule {
 
     @Singleton
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
         return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager);
     }
 
     @Provides
-    public PreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
-        return new MetaPreferenceMigrator(preferencesProvider.getMetaSharedPreferences());
+    public SettingsPreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
+        return new CollectSettingsPreferenceMigrator(preferencesProvider.getMetaSharedPreferences());
     }
 
     @Provides
@@ -355,7 +355,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager, FormUpdateManager formUpdateManager) {
+    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, FormUpdateManager formUpdateManager) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
