@@ -36,11 +36,15 @@ public class ServerAuthDialogFragment extends DialogFragment {
         ServerAuthDialogBinding binding = ServerAuthDialogBinding.inflate(requireActivity().getLayoutInflater());
         dialogView = binding.getRoot();
 
+        SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
+        binding.usernameEdit.setText(generalSharedPreferences.getString(GeneralKeys.KEY_USERNAME, ""));
+        binding.passwordEdit.setText(generalSharedPreferences.getString(GeneralKeys.KEY_PASSWORD, ""));
+
+
         return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.server_requires_auth)
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
                     generalSharedPreferences.edit()
                             .putString(GeneralKeys.KEY_USERNAME, binding.usernameEdit.getText().toString())
                             .putString(GeneralKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString())
