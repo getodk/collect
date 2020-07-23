@@ -6,6 +6,7 @@ import android.view.View;
 
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.application.Collect;
@@ -48,7 +49,7 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryW
     @Override
     public void clearAnswer() {
         recyclerViewAdapter.clearAnswer();
-        binding.choicesSearchBox.setText("");
+        binding.choicesSearchBox.setText(R.string.select_answer);
         widgetValueChanged();
     }
 

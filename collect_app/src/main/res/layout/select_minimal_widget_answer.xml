@@ -15,6 +15,7 @@
             android:id="@+id/choices_search_box"
             android:layout_width="match_parent"
             android:layout_height="@dimen/touch_target_size"
+            android:text="@string/select_answer"
             android:focusable="false"
             android:drawableEnd="@drawable/ic_arrow_drop_down"
             android:background="@null"
