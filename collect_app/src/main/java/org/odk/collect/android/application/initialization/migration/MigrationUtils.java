@@ -62,6 +62,10 @@ public class MigrationUtils {
         return prefs -> prefs.edit().remove(key).apply();
     }
 
+    public static KeyExtractor extractNewKey(String oldKey) {
+        return new KeyExtractor(oldKey);
+    }
+
     /** Removes an old key and sets a new key. */
     @SuppressLint("ApplySharedPref")
     static void replace(SharedPreferences prefs, String oldKey, String newKey, Object newValue) {
@@ -73,23 +77,23 @@ public class MigrationUtils {
 
     /** Removes one or more old keys, then adds one or more new key-value pairs. */
     @SuppressLint("ApplySharedPref")
-    static void replace(SharedPreferences prefs, String[] oldKeys, Pair... newPairs) {
+    static void replace(SharedPreferences prefs, String[] oldKeys, KeyValuePair... newKeyValuePairs) {
         SharedPreferences.Editor editor = prefs.edit();
         for (String key : oldKeys) {
             editor.remove(key);
         }
-        for (Pair pair : newPairs) {
-            put(editor, pair.key, pair.value);
+        for (KeyValuePair keyValuePair : newKeyValuePairs) {
+            put(editor, keyValuePair.key, keyValuePair.value);
         }
         editor.commit();
     }
 
     /** Converts an array of alternating keys and values into an array of Pairs. */
-    static Pair[] asPairs(Object... args) {
-        Pair[] pairs = new Pair[args.length / 2];
+    static KeyValuePair[] asPairs(Object... args) {
+        KeyValuePair[] keyValuePairs = new KeyValuePair[args.length / 2];
         for (int i = 0; i * 2 + 1 < args.length; i++) {
-            pairs[i] = new Pair((String) args[i * 2], args[i * 2 + 1]);
+            keyValuePairs[i] = new KeyValuePair((String) args[i * 2], args[i * 2 + 1]);
         }
-        return pairs;
+        return keyValuePairs;
     }
 }

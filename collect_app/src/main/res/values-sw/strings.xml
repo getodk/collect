@@ -570,7 +570,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect haipigi simu lakini inahitaji kufikia taarifa fulani kuhusu kifaa chako kama namba ya simu na ya utambulisho wa kifaa.</string>
   <string name="form_update_category">Tolea jipya la fomu</string>
   <string name="periodic_form_updates_check_title">Ukaguzi wa mara kwa mara wa matolea mapya ya  fomu</string>
-  <string name="never">Kamwe</string>
   <string name="every_fifteen_minutes">Kila dakika kumi na tano</string>
   <string name="every_one_hour">Kila saa</string>
   <string name="every_six_hours">Kila masaa sita</string>

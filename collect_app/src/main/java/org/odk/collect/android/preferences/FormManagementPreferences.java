@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -21,7 +22,8 @@ import android.preference.Preference;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.formmanagement.FormUpdateMode;
 
 import javax.inject.Inject;
 
@@ -30,19 +32,23 @@ import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class FormManagementPreferences extends BasePreferenceFragment {
+public class FormManagementPreferences extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Inject
     Analytics analytics;
 
     @Inject
-    GeneralSharedPreferences generalSharedPreferences;
+    PreferencesProvider preferencesProvider;
+
+    @Inject
+    FormUpdateManager formUpdateManager;
 
     public static FormManagementPreferences newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -61,18 +67,45 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         Collect.getInstance().getComponent().inject(this);
 
         initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
-        initPref(KEY_AUTOMATIC_UPDATE);  
+        initPref(KEY_AUTOMATIC_UPDATE);
         initListPref(KEY_CONSTRAINT_BEHAVIOR);
         initListPref(KEY_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
 
-        boolean matchExactlyEnabled = generalSharedPreferences.getSharedPreferences()
-                .getBoolean(GeneralKeys.KEY_MATCH_EXACTLY, false);
+        setupFormUpdateMode();
+    }
 
-        findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(!matchExactlyEnabled);
-        findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(!matchExactlyEnabled);
-        findPreference(KEY_HIDE_OLD_FORM_VERSIONS).setEnabled(!matchExactlyEnabled);
+    private void setupFormUpdateMode() {
+        SharedPreferences sharedPreferences = preferencesProvider.getGeneralSharedPreferences();
+        updateDisabledPrefs(sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null), sharedPreferences.getString(KEY_PROTOCOL, null));
+
+        Preference formUpdateMode = findPreference(KEY_FORM_UPDATE_MODE);
+        formUpdateMode.setSummary(((ListPreference) formUpdateMode).getEntry());
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    private void updateDisabledPrefs(String formUpdateMode, String protocol) {
+        if (Protocol.parse(getActivity(), protocol) == Protocol.GOOGLE) {
+            findPreference(KEY_FORM_UPDATE_MODE).setEnabled(false);
+            findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+            findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
+        } else {
+            switch (FormUpdateMode.parse(getActivity(), formUpdateMode)) {
+                case MANUAL:
+                    findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+                    findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(false);
+                    break;
+                case PREVIOUSLY_DOWNLOADED_ONLY:
+                    findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(true);
+                    findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
+                    break;
+                case MATCH_EXACTLY:
+                    findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+                    findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).setEnabled(true);
+                    break;
+            }
+        }
     }
 
     private void initListPref(String key) {
@@ -86,17 +119,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 preference.setSummary(entry);
 
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                    ServerPollingJob.schedulePeriodicJob((String) newValue);
-
                     analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
-
-                    if (newValue.equals(getString(R.string.never_value))) {
-                        Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
-                        if (automaticUpdatePreference != null) {
-                            automaticUpdatePreference.setEnabled(false);
-                        }
-                    }
-                    getActivity().recreate();
                 }
                 return true;
             });
@@ -145,4 +168,22 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         });
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
+            formUpdateManager.scheduleUpdates();
+
+            String newValue = sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null);
+            updateDisabledPrefs(newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
+
+            Preference preference = findPreference(KEY_FORM_UPDATE_MODE);
+            preference.setSummary(((ListPreference) preference).getEntry());
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        preferencesProvider.getGeneralSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
 }

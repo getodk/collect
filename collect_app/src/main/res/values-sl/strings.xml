@@ -328,7 +328,6 @@
   <string name="camera_runtime_permission_denied_title">Dovljenje za fotoaparat</string>
   <string name="camera_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do fotoaparata. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
   <string name="record_audio_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do mikrofona. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
-  <string name="never">Nikoli</string>
   <string name="every_fifteen_minutes">Vsakih petnajst minut</string>
   <string name="every_one_hour">Vsako uro</string>
   <string name="every_six_hours">Vsakih šest ur</string>

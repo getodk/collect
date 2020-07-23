@@ -138,7 +138,7 @@ public class AudioButtonIntegrationTest {
 
         button.performClick();
         shadowOf(mediaPlayer).setCurrentPosition(1000);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
 
         activityController.pause();
         activityController.resume();

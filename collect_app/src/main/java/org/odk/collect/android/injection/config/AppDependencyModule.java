@@ -16,10 +16,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.application.initialization.CollectPreferenceMigrator;
-import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
-import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
-import org.odk.collect.android.backgroundwork.JobManagerAndSchedulerBackgroundWorkManager;
+import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
+import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -34,14 +35,13 @@ import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.ServerFormsSynchronizer;
-import org.odk.collect.android.formmanagement.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -216,10 +216,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, BackgroundWorkManager backgroundWorkManager, Analytics analytics) {
+    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics) {
         StorageEraser storageEraser = new StorageEraser(storagePathProvider);
 
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, backgroundWorkManager, analytics);
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, formUpdateManager, formSubmitManager, analytics);
     }
 
     @Provides
@@ -298,13 +298,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CollectJobCreator providesCollectJobCreator() {
-        return new CollectJobCreator();
+    public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, PreferencesProvider preferencesProvider, Application application, WorkManager workManager) {
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesProvider.getGeneralSharedPreferences(), application, workManager);
     }
 
     @Provides
-    public BackgroundWorkManager providesBackgroundWorkManager(Scheduler scheduler) {
-        return new JobManagerAndSchedulerBackgroundWorkManager(scheduler);
+    public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, PreferencesProvider preferencesProvider, Application application, WorkManager workManager) {
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesProvider.getGeneralSharedPreferences(), application, workManager);
     }
 
     @Provides
@@ -339,13 +339,13 @@ public class AppDependencyModule {
 
     @Singleton
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, CollectJobCreator collectJobCreator, UserAgentProvider userAgentProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
-        return new ApplicationInitializer(application, collectJobCreator, userAgentProvider, preferenceMigrator, propertyManager);
+    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager);
     }
 
     @Provides
-    public PreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
-        return new CollectPreferenceMigrator(preferencesProvider.getGeneralSharedPreferences(), preferencesProvider.getAdminSharedPreferences(), preferencesProvider.getMetaSharedPreferences());
+    public SettingsPreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
+        return new CollectSettingsPreferenceMigrator(preferencesProvider.getMetaSharedPreferences());
     }
 
     @Provides
@@ -355,7 +355,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, FormUpdateManager formUpdateManager) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
@@ -365,7 +365,10 @@ public class AppDependencyModule {
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
                 adminDefaults,
-                propertyManager);
+                () -> {
+                    propertyManager.reload();
+                    formUpdateManager.scheduleUpdates();
+                });
     }
 
     @Provides

@@ -8,12 +8,12 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.application.initialization.migration.KeyRenamer;
 import org.odk.collect.android.application.initialization.migration.KeyTranslator;
 import org.odk.collect.android.application.initialization.migration.Migration;
-import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
+import static org.odk.collect.android.application.initialization.migration.MigrationUtils.extractNewKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.removeKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
@@ -32,26 +32,22 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 /**
  * Migrates old preference keys and values to new ones.
  */
-public class CollectPreferenceMigrator implements PreferenceMigrator {
+public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigrator {
 
-    private final SharedPreferences generalSharedPrefs;
-    private final SharedPreferences adminSharedPrefs;
     private final SharedPreferences metaSharedPrefs;
 
-    public CollectPreferenceMigrator(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, SharedPreferences metaSharedPrefs) {
-        this.generalSharedPrefs = generalSharedPrefs;
-        this.adminSharedPrefs = adminSharedPrefs;
+    public CollectSettingsPreferenceMigrator(SharedPreferences metaSharedPrefs) {
         this.metaSharedPrefs = metaSharedPrefs;
     }
 
     @Override
-    public void migrate() {
+    public void migrate(SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) {
         for (Migration migration : getGeneralMigrations()) {
-            migration.apply(generalSharedPrefs);
+            migration.apply(generalSharedPreferences);
         }
 
         for (Migration migration : getAdminMigrations()) {
-            migration.apply(adminSharedPrefs);
+            migration.apply(adminSharedPreferences);
         }
 
         for (Migration migration : getMetaMigrations()) {
@@ -117,7 +113,19 @@ public class CollectPreferenceMigrator implements PreferenceMigrator {
                         .withValues(false, false).toPairs("autosend", "off")
                         .withValues(false, true).toPairs("autosend", "cellular_only")
                         .withValues(true, false).toPairs("autosend", "wifi_only")
-                        .withValues(true, true).toPairs("autosend", "wifi_and_cellular")
+                        .withValues(true, true).toPairs("autosend", "wifi_and_cellular"),
+
+                extractNewKey("form_update_mode").fromKey("protocol")
+                        .fromValue("google_sheets").toValue("manual"),
+
+                extractNewKey("form_update_mode").fromKey("periodic_form_updates_check")
+                        .fromValue("never").toValue("manual")
+                        .fromValue("every_fifteen_minutes").toValue("previously_downloaded")
+                        .fromValue("every_one_hour").toValue("previously_downloaded")
+                        .fromValue("every_six_hours").toValue("previously_downloaded")
+                        .fromValue("every_24_hours").toValue("previously_downloaded"),
+
+                translateValue("never").toValue("every_fifteen_minutes").forKey("periodic_form_updates_check")
         );
     }
 

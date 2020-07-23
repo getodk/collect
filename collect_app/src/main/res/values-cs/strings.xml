@@ -608,7 +608,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect neprovádí volání, ale potřebuje přístup k určitým vlastnostem vašeho zařízení, jako je například telefonní číslo a device ID.</string>
   <string name="form_update_category">Aktualizace formuláře</string>
   <string name="periodic_form_updates_check_title">Pravidelná kontrola aktualizací dotazníků</string>
-  <string name="never">Nikdy</string>
   <string name="every_fifteen_minutes">Každých patnáct minut</string>
   <string name="every_one_hour">Každou hodinu</string>
   <string name="every_six_hours">Každých šest hodin</string>

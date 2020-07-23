@@ -2,13 +2,13 @@ package org.odk.collect.android.formmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.support.InMemFormRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -79,37 +79,6 @@ public class ServerFormsSynchronizerTest {
 
         synchronizer.synchronize();
         assertThat(formDownloader.getDownloadedForms(), is(empty()));
-    }
-
-    private static class InMemFormRepository implements FormRepository {
-
-        private final List<Form> forms = new ArrayList<>();
-
-        @Override
-        public void save(Form form) {
-            forms.add(form);
-        }
-
-        @Override
-        public boolean contains(String jrFormID) {
-            return forms.stream().anyMatch(form -> form.getJrFormId().equals(jrFormID));
-        }
-
-        @Override
-        public List<Form> getAll() {
-            return new ArrayList<>(forms); // Avoid anything  mutating the list externally
-        }
-
-        @Nullable
-        @Override
-        public Form getByMd5Hash(String hash) {
-            return forms.stream().filter(form -> form.getMD5Hash().equals(hash)).findFirst().orElse(null);
-        }
-
-        @Override
-        public void delete(Long id) {
-            forms.removeIf(form -> form.getId().equals(id));
-        }
     }
 
     private static class RecordingFormDownloader implements FormDownloader {

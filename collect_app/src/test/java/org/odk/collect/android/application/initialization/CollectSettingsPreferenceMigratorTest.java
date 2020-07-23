@@ -11,13 +11,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.List;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static java.util.Arrays.asList;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefsEmpty;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(RobolectricTestRunner.class)
-public class CollectPreferenceMigratorTest {
+public class CollectSettingsPreferenceMigratorTest {
 
     private SharedPreferences generalPrefs;
     private SharedPreferences adminPrefs;
@@ -79,7 +82,7 @@ public class CollectPreferenceMigratorTest {
     @Test
     public void shouldMigrateOsmMapSettings() {
         initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
-        new CollectPreferenceMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
+        runMigrations();
         assertPrefs(generalPrefs, "basemap_source", "osm");
 
         initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
@@ -195,7 +198,62 @@ public class CollectPreferenceMigratorTest {
         );
     }
 
+    @Test
+    public void migratesFormUpdateModeSettings() {
+        initPrefs(generalPrefs,
+                "periodic_form_updates_check", "never"
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "form_update_mode", "manual",
+                "periodic_form_updates_check", "every_fifteen_minutes"
+        );
+
+        List<String> periods = asList("every_fifteen_minutes", "every_one_hour", "every_six_hours", "every_24_hours");
+        for (String period : periods) {
+            initPrefs(generalPrefs,
+                    "periodic_form_updates_check", period
+            );
+            runMigrations();
+            assertPrefs(generalPrefs,
+                    "periodic_form_updates_check", period,
+                    "form_update_mode", "previously_downloaded"
+            );
+        }
+
+        initPrefs(generalPrefs,
+                "protocol", "google_sheets"
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "form_update_mode", "manual"
+        );
+
+        initPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "periodic_form_updates_check", "every_24_hours"
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "form_update_mode", "manual",
+                "periodic_form_updates_check", "every_24_hours"
+        );
+
+        initPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "periodic_form_updates_check", "never"
+        );
+        runMigrations();
+        assertPrefs(generalPrefs,
+                "protocol", "google_sheets",
+                "form_update_mode", "manual",
+                "periodic_form_updates_check", "every_fifteen_minutes"
+        );
+    }
+
     private void runMigrations() {
-        new CollectPreferenceMigrator(generalPrefs, adminPrefs, metaPrefs).migrate();
+        new CollectSettingsPreferenceMigrator(metaPrefs).migrate(generalPrefs, adminPrefs);
     }
 }

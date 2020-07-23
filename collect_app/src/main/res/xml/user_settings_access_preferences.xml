@@ -31,6 +31,9 @@
             android:key="maps"
             android:title="@string/maps" />
         <CheckBoxPreference
+            android:key="form_update_mode"
+            android:title="@string/form_update_mode_title" />
+        <CheckBoxPreference
             android:key="periodic_form_updates_check"
             android:title="@string/periodic_form_updates_check_title" />
         <CheckBoxPreference

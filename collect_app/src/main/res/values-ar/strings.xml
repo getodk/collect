@@ -611,7 +611,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">لا يقوم ODK Collect بإجراء مكالمات ولكنه يحتاج إلى الوصول إلى بعض الخصائص المتعلقة بجهازك مثل رقم الهاتف ومعرف الجهاز.</string>
   <string name="form_update_category">تحديث الاستمارة</string>
   <string name="periodic_form_updates_check_title">تحقق من وجود تحديثات الاستمارة بشكل دوري</string>
-  <string name="never">إطلاقا</string>
   <string name="every_fifteen_minutes">كل 15 دقيقة</string>
   <string name="every_one_hour">كل ساعة</string>
   <string name="every_six_hours">كل 6 ساعات</string>

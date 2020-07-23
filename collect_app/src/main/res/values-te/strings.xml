@@ -592,7 +592,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ఎటువంటి కాల్స్ చేయదు. కాని దీనికి మీ పరికరం గురించిన ఫోన్ నంబర్, పరికరం ID వంటి కొంత సమాచారాన్ని సేకరించవలసి ఉంటుంది.</string>
   <string name="form_update_category">ఫారం నవీకరణ</string>
   <string name="periodic_form_updates_check_title">ఫారంలో జరిగిన మార్పులను ఎంత సమయంలో చూడాలి</string>
-  <string name="never">ఎప్పుడూ వీల్లేదు</string>
   <string name="every_fifteen_minutes">ప్రతి పదిహేను నిమిషాలకు</string>
   <string name="every_one_hour">ప్రతి గంట</string>
   <string name="every_six_hours">ప్రతి ఆరు గంటలకు</string>

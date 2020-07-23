@@ -56,11 +56,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.work.Constraints;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -80,6 +75,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -321,7 +317,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PropertyManager propertyManager;
 
     @Inject
-    WorkManager workManager;
+    FormSubmitManager formSubmitManager;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1855,7 +1851,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         // finalized specifies that it should always be auto-sent.
                         String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
                         if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
-                            requestAutoSend();
+                            formSubmitManager.scheduleSubmit();
                         }
                     }
 
@@ -2475,25 +2471,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showNextView();
         }
-    }
-
-    /**
-     * Requests that unsent finalized forms be auto-sent. If no network connection is available,
-     * the work will be performed when a connection becomes available.
-     * <p>
-     * TODO: if the user changes auto-send settings, should an auto-send job immediately be enqueued?
-     */
-    private void requestAutoSend() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-        OneTimeWorkRequest autoSendWork =
-                new OneTimeWorkRequest.Builder(AutoSendWorker.class)
-                        .addTag(AutoSendWorker.TAG)
-                        .setConstraints(constraints)
-                        .build();
-        workManager.beginUniqueWork(AutoSendWorker.TAG,
-                ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
     }
 
     /**

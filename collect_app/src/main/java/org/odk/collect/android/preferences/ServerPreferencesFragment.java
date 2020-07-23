@@ -35,6 +35,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -61,6 +62,7 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.SET_CUSTOM_ENDPO
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
@@ -76,10 +78,15 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     @Inject
     OpenRosaXmlFetcher openRosaXMLFetcher;
+
     @Inject
     GoogleAccountsManager accountsManager;
+
     @Inject
     Analytics analytics;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
 
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
@@ -119,14 +126,20 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     initProtocolPrefs();
                     removeDisabledPrefs();
                 }
+
+                switch (Protocol.parse(getActivity(), (String) newValue)) {
+                    case GOOGLE:
+                        preferencesProvider.getGeneralSharedPreferences().edit()
+                                .putString(KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(getActivity()))
+                                .apply();
+                        break;
+                }
             }
             return true;
         });
 
         String value = protocolPref.getValue();
-        ProtocolPreferenceMapper protocolPreferenceMapper = new ProtocolPreferenceMapper(getActivity());
-
-        switch (protocolPreferenceMapper.getProtocol(value)) {
+        switch (Protocol.parse(getActivity(), value)) {
             case ODK:
                 addAggregatePreferences();
                 break;

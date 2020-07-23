@@ -609,7 +609,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <string name="form_update_category">Lomakepäivitys</string>
   <string name="periodic_form_updates_check_title">Ajastettu lomakepäivitysten tarkistus</string>
-  <string name="never">Ei koskaan</string>
   <string name="every_fifteen_minutes">Vartin välein</string>
   <string name="every_one_hour">Tunnin välein</string>
   <string name="every_six_hours">Kuuden tunnin välein</string>

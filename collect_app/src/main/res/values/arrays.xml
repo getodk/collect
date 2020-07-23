@@ -156,18 +156,28 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/persian_month_11</item>
         <item>@string/persian_month_12</item>
     </string-array>
+
     <string-array name="periodic_form_updates_check_entry_values">
-        <item>@string/never_value</item>
         <item>@string/every_fifteen_minutes_value</item>
         <item>@string/every_one_hour_value</item>
         <item>@string/every_six_hours_value</item>
         <item>@string/every_24_hours_value</item>
     </string-array>
     <string-array name="periodic_form_updates_check_entries">
-        <item>@string/never</item>
         <item>@string/every_fifteen_minutes</item>
         <item>@string/every_one_hour</item>
         <item>@string/every_six_hours</item>
         <item>@string/every_24_hours</item>
+    </string-array>
+
+    <string-array name="form_update_mode_entries">
+        <item>@string/manually</item>
+        <item>@string/previously_downloaded_only</item>
+        <item>@string/match_exactly</item>
+    </string-array>
+    <string-array name="form_update_mode_values">
+        <item>@string/form_update_mode_manual</item>
+        <item>@string/form_update_mode_previously_downloaded</item>
+        <item>@string/form_update_mode_match_exactly</item>
     </string-array>
 </resources>

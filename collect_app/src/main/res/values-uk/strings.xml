@@ -573,7 +573,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect не робить телефонних дзвінків але потребує доступу до певних властивостей вашого пристрою як то номер телефну та ID пристрою</string>
   <string name="form_update_category">Оновлення анкети</string>
   <string name="periodic_form_updates_check_title">Періодична перерівка оновлень анкет</string>
-  <string name="never">Ніколи</string>
   <string name="every_fifteen_minutes">Кожних п\'ятнадцять хвилин</string>
   <string name="every_one_hour">Щогодини</string>
   <string name="every_six_hours">Кожні шість годин</string>

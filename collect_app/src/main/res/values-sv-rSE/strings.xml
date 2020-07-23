@@ -551,7 +551,6 @@ Dela ODK Collect med dem.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Behörigheter för att läsa telefonstatus</string>
   <string name="form_update_category">Uppdatera formulär</string>
   <string name="periodic_form_updates_check_title">Periodisk kontroll av uppdaterade formulär</string>
-  <string name="never">Aldrig</string>
   <string name="every_fifteen_minutes">Varje femtonde minut</string>
   <string name="every_one_hour">Varje timme</string>
   <string name="every_six_hours">Varje sjätte timme</string>

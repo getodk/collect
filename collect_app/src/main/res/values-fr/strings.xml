@@ -609,7 +609,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ne passe pas d\'appels, mais il doit accéder à certaines propriétés de votre périphérique, telles que le numéro de téléphone et l\'ID de périphérique.</string>
   <string name="form_update_category">Mise à jour d\'un fomulaire</string>
   <string name="periodic_form_updates_check_title">Vérification périodique des mises à jour des formulaires</string>
-  <string name="never">Jamais</string>
   <string name="every_fifteen_minutes">Toutes les quinze minutes</string>
   <string name="every_one_hour">Toutes les heures</string>
   <string name="every_six_hours">Toutes les six heures</string>

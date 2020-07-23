@@ -44,7 +44,7 @@ public class ServerSettingsTest {
             .around(rule);
 
     @Test
-    public void settingODKServer_usesServerForFetchingAndSubmittingForms() {
+    public void whenUsingODKServer_canAddCredentialsForServer() {
         server.setCredentials("Joe", "netsky");
         server.addForm("One Question", "one-question", "one-question.xml");
 
@@ -70,21 +70,12 @@ public class ServerSettingsTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("One Question (Version:: 1 ID: one-question) - Success")
-                .clickOK(new MainMenuPage(rule))
-
-                .startBlankForm("One Question")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
-
-                .clickSendFinalizedForm(1)
-                .clickOnForm("One Question")
-                .clickSendSelected()
-                .assertText("One Question - Success");
+                .clickOK(new MainMenuPage(rule));
     }
 
     /**
-     * This test could definitely be extended to cover form download/submit (like the ODK server
-     * type test with the creation of a stub
+     * This test could definitely be extended to cover form download/submit with the creation
+     * of a stub
      * {@link org.odk.collect.android.utilities.gdrive.DriveHelper} and
      * {@link org.odk.collect.android.utilities.gdrive.GoogleAccountsManager}
      */

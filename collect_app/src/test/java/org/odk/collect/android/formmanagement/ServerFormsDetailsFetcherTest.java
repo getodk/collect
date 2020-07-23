@@ -9,16 +9,14 @@ import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
+import org.odk.collect.android.support.InMemFormRepository;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -142,50 +140,5 @@ public class ServerFormsDetailsFetcherTest {
         BufferedWriter bw = new BufferedWriter(new FileWriter(mediaFile));
         bw.write(blah);
         bw.close();
-    }
-
-    private static class InMemFormRepository implements FormRepository {
-
-        private final List<Form> forms = new ArrayList<>();
-
-        @Override
-        public void save(Form form) {
-            forms.add(form);
-        }
-
-        @Override
-        public boolean contains(String jrFormID) {
-            return forms.stream().anyMatch(form -> form.getJrFormId().equals(jrFormID));
-        }
-
-        @Override
-        public List<Form> getAll() {
-            return new ArrayList<>(forms); // Avoid anything  mutating the list externally
-        }
-
-        @Nullable
-        @Override
-        public Form getByMd5Hash(String hash) {
-            return forms.stream().filter(form -> form.getMD5Hash().equals(hash)).findFirst().orElse(null);
-        }
-
-        @Override
-        public void delete(Long id) {
-            forms.removeIf(form -> form.getId().equals(id));
-        }
-    }
-
-    private static class RecordingFormDownloader implements FormDownloader {
-
-        private final List<String> formsDownloaded = new ArrayList<>();
-
-        @Override
-        public void downloadForm(ServerFormDetails form) {
-            formsDownloaded.add(form.getFormId());
-        }
-
-        public List<String> getDownloadedForms() {
-            return formsDownloaded;
-        }
     }
 }

@@ -15,7 +15,7 @@ public class KeyCombiner implements Migration {
     String[] oldKeys;
     Object[] tempOldValueArray;
     List<Object[]> oldValueArrays = new ArrayList<>();
-    List<Pair[]> newPairArrays = new ArrayList<>();
+    List<KeyValuePair[]> newKeyValuePairArrays = new ArrayList<>();
 
     KeyCombiner(String... oldKeys) {
         this.oldKeys = oldKeys;
@@ -28,7 +28,7 @@ public class KeyCombiner implements Migration {
 
     public KeyCombiner toPairs(Object... keysAndValues) {
         oldValueArrays.add(tempOldValueArray);
-        newPairArrays.add(asPairs(keysAndValues));
+        newKeyValuePairArrays.add(asPairs(keysAndValues));
         return this;
     }
 
@@ -40,7 +40,7 @@ public class KeyCombiner implements Migration {
         }
         for (int i = 0; i < oldValueArrays.size(); i++) {
             if (Arrays.equals(oldValues, oldValueArrays.get(i))) {
-                replace(prefs, oldKeys, newPairArrays.get(i));
+                replace(prefs, oldKeys, newKeyValuePairArrays.get(i));
             }
         }
     }

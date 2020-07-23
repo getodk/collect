@@ -1,5 +1,7 @@
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
+
 import androidx.test.core.app.ApplicationProvider;
 
 import org.jetbrains.annotations.NotNull;
@@ -7,40 +9,39 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.ProtocolPreferenceMapper.Protocol;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(RobolectricTestRunner.class)
-public class ProtocolPreferenceMapperTest {
+public class ProtocolTest {
 
-    private ProtocolPreferenceMapper mapper;
+    private Context context;
 
     @Before
     public void setup() {
-        mapper = new ProtocolPreferenceMapper(ApplicationProvider.getApplicationContext());
+        context = ApplicationProvider.getApplicationContext();
     }
 
     @Test
     public void whenPreferenceValueIsNull_returnsODK() {
-        assertThat(mapper.getProtocol(null), is(Protocol.ODK));
+        assertThat(Protocol.parse(context, null), is(Protocol.ODK));
     }
 
     @Test
     public void whenPreferenceValueIsODK_returnsODK() {
-        assertThat(mapper.getProtocol(getString(R.string.protocol_odk_default)), is(Protocol.ODK));
+        assertThat(Protocol.parse(context, getString(R.string.protocol_odk_default)), is(Protocol.ODK));
     }
 
     @Test
     public void whenPreferenceValueIsGoogle_returnsGoogle() {
-        assertThat(mapper.getProtocol(getString(R.string.protocol_google_sheets)), is(Protocol.GOOGLE));
+        assertThat(Protocol.parse(context, getString(R.string.protocol_google_sheets)), is(Protocol.GOOGLE));
     }
 
     @Test
     public void whenPreferenceValueIsUnrecognized_returnsODK() {
-        assertThat(mapper.getProtocol("bogus"), is(Protocol.ODK));
+        assertThat(Protocol.parse(context, "bogus"), is(Protocol.ODK));
     }
 
 

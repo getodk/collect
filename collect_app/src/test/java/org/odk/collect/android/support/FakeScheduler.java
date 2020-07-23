@@ -15,29 +15,29 @@ public class FakeScheduler implements Scheduler {
     private Boolean cancelled = false;
 
     @Override
-    public <T> void runInBackground(Supplier<T> task, Consumer<T> callback) {
-        backgroundTask = () -> callback.accept(task.get());
+    public <T> void immediate(Supplier<T> foreground, Consumer<T> background) {
+        backgroundTask = () -> background.accept(foreground.get());
     }
 
     @Override
-    public void scheduleInBackgroundWhenNetworkAvailable(@NotNull String tag, @NotNull TaskSpec taskSpec, long repeatPeriod) {
+    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec taskSpec, long repeatPeriod) {
 
     }
 
     @Override
-    public Cancellable schedule(Runnable task, long repeatPeriod) {
-        this.foregroundTask = task;
+    public Cancellable repeat(Runnable foreground, long repeatPeriod) {
+        this.foregroundTask = foreground;
         return () -> {
             cancelled = true;
             return true;
         };
     }
 
-    public void runTask() {
+    public void runForeground() {
         foregroundTask.run();
     }
 
-    public void runBackgroundTask() {
+    public void runBackground() {
         if (backgroundTask == null) {
             return;
         }
@@ -55,7 +55,7 @@ public class FakeScheduler implements Scheduler {
     }
 
     @Override
-    public void cancelInBackground(@NotNull String tag) {
+    public void cancelDeferred(@NotNull String tag) {
 
     }
 }

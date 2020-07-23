@@ -6,7 +6,8 @@ import android.database.Cursor;
 import org.apache.commons.io.FileUtils;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -39,14 +40,15 @@ public class StorageMigrator {
     private final ReferenceManager referenceManager;
 
     private final StorageMigrationRepository storageMigrationRepository;
-    private final BackgroundWorkManager backgroundWorkManager;
+    private final FormUpdateManager formUpdateManager;
+    private final FormSubmitManager formSubmitManager;
 
     private final Analytics analytics;
 
     public StorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider,
                            StorageEraser storageEraser, StorageMigrationRepository storageMigrationRepository,
                            GeneralSharedPreferences generalSharedPreferences, ReferenceManager referenceManager,
-                           BackgroundWorkManager workManager, Analytics analytics) {
+                           FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics) {
 
         this.storagePathProvider = storagePathProvider;
         this.storageStateProvider = storageStateProvider;
@@ -54,7 +56,8 @@ public class StorageMigrator {
         this.storageMigrationRepository = storageMigrationRepository;
         this.generalSharedPreferences = generalSharedPreferences;
         this.referenceManager = referenceManager;
-        this.backgroundWorkManager = workManager;
+        this.formUpdateManager = formUpdateManager;
+        this.formSubmitManager = formSubmitManager;
         this.analytics = analytics;
     }
 
@@ -104,11 +107,11 @@ public class StorageMigrator {
     }
 
     private boolean isFormUploaderRunning() {
-        return backgroundWorkManager.isFormUploaderRunning();
+        return formSubmitManager.isSubmitRunning();
     }
 
     private boolean isFormDownloaderRunning() {
-        return backgroundWorkManager.isFormDownloaderRunning();
+        return formUpdateManager.isUpdateRunning();
     }
 
     boolean moveAppDataToScopedStorage() {
