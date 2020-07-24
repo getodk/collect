@@ -16,9 +16,7 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.logic.DatePickerDetails;
 
 import java.util.Arrays;
 
@@ -33,13 +31,6 @@ public class BikramSambatDatePickerDialog extends CustomDatePickerDialog {
     private static final int MAX_SUPPORTED_YEAR = 2090; //2033 in Gregorian calendar
 
     private final String[] monthsArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
-
-    public static BikramSambatDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
-        BikramSambatDatePickerDialog dialog = new BikramSambatDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
-
-        return dialog;
-    }
 
     @Override
     public void onResume() {

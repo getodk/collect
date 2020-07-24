@@ -37,7 +37,6 @@ public class TimeWidget extends QuestionWidget {
 
     private int hourOfDay;
     private int minuteOfHour;
-    private boolean nullAnswer;
 
     public TimeWidget(Context context, final QuestionDetails prompt) {
         this(context, prompt, false);
@@ -59,10 +58,10 @@ public class TimeWidget extends QuestionWidget {
             binding.widgetButton.setOnClickListener(v -> onButtonClick());
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.widgetAnswerText.setText(R.string.no_time_selected);
 
-        if (getFormEntryPrompt().getAnswerValue() == null) {
-            nullAnswer = true;
+        if (prompt.getAnswerValue() == null) {
+            setTimeToCurrent();
+            binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
             Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
 
@@ -75,14 +74,14 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        nullAnswer = true;
+        setTimeToCurrent();
         binding.widgetAnswerText.setText(R.string.no_time_selected);
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return !nullAnswer
+        return !binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
                 ? DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour)
                 : null;
     }
@@ -103,11 +102,16 @@ public class TimeWidget extends QuestionWidget {
     public void onTimeSet(int hourOfDay, int minute) {
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minute;
-        nullAnswer = false;
         binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
     }
 
     private void onButtonClick() {
         DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour);
+    }
+
+    private void setTimeToCurrent() {
+        DateTime currentDateTime = DateTime.now();
+        hourOfDay = currentDateTime.getHourOfDay();
+        minuteOfHour = currentDateTime.getMinuteOfHour();
     }
 }

@@ -61,13 +61,13 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
             binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.widgetButton.setText(getContext().getString(R.string.select_date));
             binding.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
-                    (FormEntryActivity) getContext(), getFormEntryPrompt(), datePickerDetails, selectedDate));
+                    (FormEntryActivity) getContext(), prompt.getIndex(), datePickerDetails, selectedDate));
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.widgetAnswerText.setText(R.string.no_date_selected);
 
-        if (getFormEntryPrompt().getAnswerValue() == null) {
-            selectedDate = null;
+        if (prompt.getAnswerValue() == null) {
+            selectedDate = DateTimeWidgetUtils.getCurrentDate();
+            binding.widgetAnswerText.setText(R.string.no_date_selected);
         } else {
             selectedDate = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
@@ -92,14 +92,16 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void clearAnswer() {
-        selectedDate = null;
+        selectedDate = DateTimeWidgetUtils.getCurrentDate();
         binding.widgetAnswerText.setText(R.string.no_date_selected);
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return selectedDate == null ? null : new DateData(selectedDate.toDate());
+        return !binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected))
+                ? new DateData(selectedDate.toDate())
+                : null;
     }
 
     @Override
@@ -108,7 +110,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
             selectedDate = (LocalDateTime) answer;
 
             binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                    (Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
+                    selectedDate.toDate(), datePickerDetails, false, getContext()));
         }
     }
 }

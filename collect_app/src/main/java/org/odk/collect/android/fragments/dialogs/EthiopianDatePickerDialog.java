@@ -16,11 +16,9 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
 import java.util.Arrays;
@@ -34,13 +32,6 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     private static final int MAX_SUPPORTED_YEAR = 2093; //2100 in Gregorian calendar
 
     private String[] monthsArray;
-
-    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
-        EthiopianDatePickerDialog dialog = new EthiopianDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
-
-        return dialog;
-    }
 
     @Override
     public void onResume() {

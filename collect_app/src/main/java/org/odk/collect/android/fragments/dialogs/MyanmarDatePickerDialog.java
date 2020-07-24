@@ -16,9 +16,7 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
 
 import java.util.List;
@@ -29,13 +27,6 @@ import mmcalendar.MyanmarDateKernel;
 public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     private static final int MIN_SUPPORTED_YEAR = 1261; //1900 in Gregorian calendar
     private static final int MAX_SUPPORTED_YEAR = 1462; //2100 in Gregorian calendar
-
-    public static MyanmarDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
-        MyanmarDatePickerDialog dialog = new MyanmarDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
-
-        return dialog;
-    }
 
     @Override
     public void onResume() {

@@ -21,12 +21,6 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
-import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.CURRENT_TIME;
-import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.TIME_PICKER_THEME;
-import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.CURRENT_DATE;
-import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_DETAILS;
-import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_THEME;
-
 public class DateTimeWidgetUtils {
 
     private DateTimeWidgetUtils() {
@@ -40,50 +34,52 @@ public class DateTimeWidgetUtils {
         return new TimeData(localDateTime.toDate());
     }
 
+    public static LocalDateTime getCurrentDate() {
+        return LocalDateTime
+                .now()
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
+    }
+
     public static void showDatePickerDialog(FormEntryActivity activity, FormIndex formIndex, DatePickerDetails datePickerDetails,
                                             LocalDateTime date) {
-        switch (datePickerDetails.getDatePickerType()) {
+        ThemeUtils themeUtils = new ThemeUtils(activity);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(CustomDatePickerDialog.DATE_PICKER_THEME, getTheme(themeUtils, datePickerDetails));
+        bundle.putSerializable(CustomDatePickerDialog.DATE, date);
+        bundle.putSerializable(CustomDatePickerDialog.DATE_PICKER_DETAILS, datePickerDetails);
+        bundle.putSerializable(CustomDatePickerDialog.FORM_INDEX, formIndex);
+
+        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, activity.getSupportFragmentManager());
+    }
+
+    private static Class getClass(DatePickerDetails.DatePickerType datePickerType) {
+        switch (datePickerType) {
             case ETHIOPIAN:
-                CustomDatePickerDialog dialog = EthiopianDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
-                break;
+                return EthiopianDatePickerDialog.class;
             case COPTIC:
-                dialog = CopticDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
-                break;
+                return CopticDatePickerDialog.class;
             case ISLAMIC:
-                dialog = IslamicDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
-                break;
+                return IslamicDatePickerDialog.class;
             case BIKRAM_SAMBAT:
-                dialog = BikramSambatDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
-                break;
+                return BikramSambatDatePickerDialog.class;
             case MYANMAR:
-                dialog = MyanmarDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
-                break;
+                return MyanmarDatePickerDialog.class;
             case PERSIAN:
-                dialog = PersianDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
-                break;
+                return PersianDatePickerDialog.class;
             default:
-                ThemeUtils themeUtils = new ThemeUtils(activity);
-
-                Bundle bundle = new Bundle();
-                bundle.putInt(DATE_PICKER_THEME, getTheme(themeUtils, datePickerDetails));
-                bundle.putSerializable(CURRENT_DATE, date);
-                bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
-
-                DialogUtils.showIfNotShowing(FixedDatePickerDialog.class, bundle, activity.getSupportFragmentManager());
+                return FixedDatePickerDialog.class;
         }
     }
 
     public static void createTimePickerDialog(FormEntryActivity activity, int hourOfDay, int minuteOfHour) {
         ThemeUtils themeUtils = new ThemeUtils(activity);
         Bundle bundle = new Bundle();
-        bundle.putInt(TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());
-        bundle.putSerializable(CURRENT_TIME, new DateTime().withTime(hourOfDay, minuteOfHour, 0, 0));
+        bundle.putInt(CustomTimePickerDialog.TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());
+        bundle.putSerializable(CustomTimePickerDialog.CURRENT_TIME, new DateTime().withTime(hourOfDay, minuteOfHour, 0, 0));
 
         DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, activity.getSupportFragmentManager());
     }
