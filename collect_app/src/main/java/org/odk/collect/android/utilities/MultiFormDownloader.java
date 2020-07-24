@@ -31,7 +31,6 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -63,13 +62,11 @@ public class MultiFormDownloader implements FormDownloader {
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
     private final FormsDao formsDao;
-    private final OpenRosaHttpInterface openRosaHttpInterface;
-    private final WebCredentialsUtils webCredentialsUtils;
+    private final OpenRosaXmlFetcher openRosaXmlFetcher;
 
-    public MultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public MultiFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXmlFetcher) {
         this.formsDao = formsDao;
-        this.openRosaHttpInterface = openRosaHttpInterface;
-        this.webCredentialsUtils = webCredentialsUtils;
+        this.openRosaXmlFetcher = openRosaXmlFetcher;
     }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
@@ -404,7 +401,6 @@ public class MultiFormDownloader implements FormDownloader {
      */
     private void downloadFile(File file, String downloadUrl, FormDownloaderListener stateListener)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
-        OpenRosaXmlFetcher openRosaXmlFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
 
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));
@@ -544,8 +540,6 @@ public class MultiFormDownloader implements FormDownloader {
     String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                          ServerFormDetails fd, int count,
                                          int total, FormDownloaderListener stateListener) throws Exception {
-        OpenRosaXmlFetcher openRosaXmlFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
-
         if (fd.getManifestUrl() == null) {
             return null;
         }
