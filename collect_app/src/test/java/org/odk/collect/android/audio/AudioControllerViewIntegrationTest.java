@@ -91,19 +91,19 @@ public class AudioControllerViewIntegrationTest {
         assertThat(innerText(currentDuration), equalTo("00:00"));
 
         shadowOf(mediaPlayer).setCurrentPosition(1005);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("00:01"));
 
         shadowOf(mediaPlayer).setCurrentPosition(12404);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("00:12"));
 
         shadowOf(mediaPlayer).setCurrentPosition(322450);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("05:22"));
 
         view.findViewById(R.id.playBtn).performClick(); // Make sure duration remains when paused
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("05:22"));
     }
 
@@ -116,15 +116,15 @@ public class AudioControllerViewIntegrationTest {
         assertThat(seekBar.getProgress(), equalTo(0));
 
         shadowOf(mediaPlayer).setCurrentPosition(1005);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(seekBar.getProgress(), equalTo(1005));
 
         shadowOf(mediaPlayer).setCurrentPosition(322450);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(seekBar.getProgress(), equalTo(322450));
 
         view.findViewById(R.id.playBtn).performClick(); // Make sure duration remains when paused
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(seekBar.getProgress(), equalTo(322450));
     }
 
@@ -134,24 +134,24 @@ public class AudioControllerViewIntegrationTest {
         view.findViewById(R.id.playBtn).performClick();
 
         view.findViewById(R.id.fastForwardBtn).performClick();
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.isPlaying(), equalTo(true));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(5000));
 
         view.findViewById(R.id.fastForwardBtn).performClick();
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(10000));
 
         view.findViewById(R.id.fastRewindBtn).performClick();
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(5000));
 
         view.findViewById(R.id.fastForwardBtn).performClick();
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(10000));
 
         view.findViewById(R.id.fastForwardBtn).performClick();
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.isPlaying(), equalTo(false));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(14000));
     }
@@ -165,19 +165,19 @@ public class AudioControllerViewIntegrationTest {
         final View currentDuration = view.findViewById(R.id.currentDuration);
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.isPlaying(), equalTo(false)); // Check seeking pauses playback
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 7000, true);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("00:07"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 8000, true);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("00:08"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.isPlaying(), equalTo(true));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
     }
@@ -200,7 +200,7 @@ public class AudioControllerViewIntegrationTest {
         assertThat(mediaPlayer.isPlaying(), equalTo(false));
 
         view.findViewById(R.id.playBtn).performClick();
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.isPlaying(), equalTo(true));
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
     }
@@ -217,20 +217,20 @@ public class AudioControllerViewIntegrationTest {
         shadowOf(seekBar).getOnSeekBarChangeListener().onStartTrackingTouch(seekBar);
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 7000, true);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("00:07"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onProgressChanged(seekBar, 8000, true);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(currentDuration), equalTo("00:08"));
 
         shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(shadowOf(mediaPlayer).getState(), equalTo(ShadowMediaPlayer.State.PAUSED));
 
         view.findViewById(R.id.playBtn).performClick();
 
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(8000));
     }
 
@@ -254,7 +254,7 @@ public class AudioControllerViewIntegrationTest {
 
         shadowOf(mediaPlayer).setCurrentPosition(1005);
 
-        fakeScheduler.runTask();
+        fakeScheduler.runForeground();
         assertThat(innerText(view1.findViewById(R.id.currentDuration)), equalTo("00:01"));
         assertThat(innerText(view2.findViewById(R.id.currentDuration)), equalTo("00:00"));
     }

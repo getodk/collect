@@ -13,6 +13,7 @@ import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class GeoShapeWidgetTest extends BaseGeoWidgetTest<GeoShapeWidget, String
     @NonNull
     @Override
     public GeoShapeWidget createWidget() {
-        return new GeoShapeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new GeoShapeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
     }
 
     @Override

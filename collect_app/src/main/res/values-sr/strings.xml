@@ -570,7 +570,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može da obavlja pozive ali mu je potreban pristup nekim djelovima uređaja poput broja telefona ili identifikacionog broja uređaja.</string>
   <string name="form_update_category">Ažuriranje formulara</string>
   <string name="periodic_form_updates_check_title">Periodična provjera ažuriranja formulara</string>
-  <string name="never">Nikad</string>
   <string name="every_fifteen_minutes">Svakih 15 minuta</string>
   <string name="every_one_hour">Svakog sata</string>
   <string name="every_six_hours">Svakih 6 sati</string>

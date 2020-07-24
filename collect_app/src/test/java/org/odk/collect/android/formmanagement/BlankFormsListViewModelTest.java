@@ -1,10 +1,14 @@
 package org.odk.collect.android.formmanagement;
 
+import android.app.Application;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.async.Scheduler;
@@ -25,7 +29,7 @@ public class BlankFormsListViewModelTest {
     public void isSyncing_whenRepositoryStartSync_isTrue() {
         SyncStatusRepository syncRepository = new SyncStatusRepository();
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class));
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class));
         LiveData<Boolean> syncing = viewModel.isSyncing();
 
         syncRepository.startSync();
@@ -37,7 +41,7 @@ public class BlankFormsListViewModelTest {
         SyncStatusRepository syncRepository = new SyncStatusRepository();
         FakeScheduler fakeScheduler = new FakeScheduler();
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class));
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class));
 
         LiveData<Boolean> syncing = syncRepository.isSyncing();
         viewModel.syncWithServer();
@@ -49,12 +53,12 @@ public class BlankFormsListViewModelTest {
         SyncStatusRepository syncRepository = new SyncStatusRepository();
         FakeScheduler fakeScheduler = new FakeScheduler();
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class));
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class));
 
         LiveData<Boolean> syncing = syncRepository.isSyncing();
         viewModel.syncWithServer();
 
-        fakeScheduler.runBackgroundTask();
+        fakeScheduler.runBackground();
         assertThat(syncing.getValue(), is(false));
     }
 
@@ -64,12 +68,12 @@ public class BlankFormsListViewModelTest {
         ServerFormsSynchronizer serverFormsSynchronizer = mock(ServerFormsSynchronizer.class);
         FakeScheduler fakeScheduler = new FakeScheduler();
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(fakeScheduler, syncRepository, serverFormsSynchronizer, mock(PreferencesProvider.class));
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, serverFormsSynchronizer, mock(PreferencesProvider.class));
 
         when(syncRepository.startSync()).thenReturn(false);
         viewModel.syncWithServer();
 
-        fakeScheduler.runBackgroundTask();
+        fakeScheduler.runBackground();
         verify(serverFormsSynchronizer, never()).synchronize();
         verify(syncRepository, never()).finishSync();
     }

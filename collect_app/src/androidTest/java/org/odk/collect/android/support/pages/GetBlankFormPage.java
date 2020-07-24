@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class GetBlankFormPage extends Page<GetBlankFormPage> {
 
-    GetBlankFormPage(ActivityTestRule rule) {
+    public GetBlankFormPage(ActivityTestRule rule) {
         super(rule);
     }
 

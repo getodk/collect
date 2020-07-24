@@ -40,7 +40,7 @@ public class QRCodeViewModelTest {
         QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, preferences, preferences, fakeScheduler);
 
         viewModel.setIncludedKeys(asList("foo", "bar"));
-        fakeScheduler.runBackgroundTask();
+        fakeScheduler.runBackground();
 
         verify(qrCodeGenerator).generateQRCode(asList("foo", "bar"));
     }
@@ -59,7 +59,7 @@ public class QRCodeViewModelTest {
                 .apply();
 
         QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, preferences, preferences, fakeScheduler);
-        fakeScheduler.runBackgroundTask();
+        fakeScheduler.runBackground();
 
         assertThat(viewModel.getWarning().getValue(), is(R.string.qrcode_with_both_passwords));
     }

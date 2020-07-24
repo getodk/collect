@@ -39,7 +39,9 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.util.Map;
 
@@ -92,10 +94,11 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * </pre>
  */
 @SuppressLint("ViewConstructor")
-public class ExStringWidget extends StringWidget implements BinaryWidget {
+public class ExStringWidget extends StringWidget implements BinaryDataReceiver, ButtonClickListener {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
     protected static final String DATA_NAME = "value";
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
     private boolean hasExApp = true;
     public Button launchIntentButton;
@@ -103,8 +106,9 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
     @Inject
     public ActivityAvailability activityAvailability;
 
-    public ExStringWidget(Context context, QuestionDetails questionDetails) {
+    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails, true);
+        this.waitingForDataRegistry = waitingForDataRegistry;
         getComponent(context).inject(this);
     }
 
@@ -213,7 +217,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
                 ExternalAppsUtils.populateParameters(i, exParams,
                         getFormEntryPrompt().getIndex().getReference());
 
-                waitForData();
+                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
                 // ACTION_SENDTO used for sending text messages or emails doesn't require any results
                 if (ACTION_SENDTO.equals(i.getAction())) {
                     getContext().startActivity(i);
@@ -257,7 +261,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);
-        cancelWaitingForData();
+        waitingForDataRegistry.cancelWaitingForData();
 
         Toast.makeText(getContext(),
                 toastText, Toast.LENGTH_SHORT)

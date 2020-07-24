@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement;
+package org.odk.collect.android.formmanagement.matchexactly;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

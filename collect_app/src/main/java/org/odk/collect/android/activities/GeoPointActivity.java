@@ -38,7 +38,7 @@ import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.GeoPointWidget;
+import org.odk.collect.android.widgets.GeoPointMapWidget;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -95,11 +95,11 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         Intent intent = getIntent();
 
-        targetAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
+        targetAccuracy = GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
-            if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
-                targetAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
-                        GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
+            if (intent.hasExtra(GeoPointMapWidget.ACCURACY_THRESHOLD)) {
+                targetAccuracy = intent.getDoubleExtra(GeoPointMapWidget.ACCURACY_THRESHOLD,
+                        GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY);
             }
         }
 

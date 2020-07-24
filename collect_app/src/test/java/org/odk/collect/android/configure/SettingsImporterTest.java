@@ -9,8 +9,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.initialization.migration.PreferenceMigrator;
-import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,12 +41,9 @@ public class SettingsImporterTest {
         put("key1", 5);
     }};
 
-    private Context context;
-    private PropertyManager propertyManager;
-
     @Before
     public void setup() {
-        context = getApplicationContext();
+        Context context = getApplicationContext();
 
         generalPrefs = context.getSharedPreferences("test1", Context.MODE_PRIVATE);
         adminPrefs = context.getSharedPreferences("test2", Context.MODE_PRIVATE);
@@ -55,9 +51,7 @@ public class SettingsImporterTest {
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        propertyManager = mock(PropertyManager.class);
-
-        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, propertyManager);
+        importer = new SettingsImporter(generalPrefs, adminPrefs, (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, () -> {});
     }
 
     @Test
@@ -112,13 +106,13 @@ public class SettingsImporterTest {
 
     @Test // Migrations might add/rename/move keys
     public void migratesPreferences_beforeLoadingDefaults() throws Exception {
-        PreferenceMigrator migrator = () -> {
+        SettingsPreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
             if (generalPrefs.contains("key1")) {
                 throw new RuntimeException("defaults already loaded!");
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, propertyManager);
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> {});
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
@@ -128,29 +122,24 @@ public class SettingsImporterTest {
                 .put("general", new JSONObject()
                         .put("unknown_key", "value"));
 
-        PreferenceMigrator migrator = () -> {
+        SettingsPreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
             if (!generalPrefs.contains("unknown_key")) {
                 throw new RuntimeException("unknowns already cleared!");
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, propertyManager);
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, () -> {});
         assertThat(importer.fromJSON(json.toString()), is(true));
     }
 
     @Test
-    public void afterSettingsImportedAndMigrated_initializesJavaRosa() throws Exception {
+    public void afterSettingsImportedAndMigrated_runsSettingsChangeHandler() throws Exception {
         final String[] key1ValueWhenCalled = {null};
-        propertyManager = new PropertyManager(context) {
-
-            @Override
-            public PropertyManager reload() {
-                key1ValueWhenCalled[0] = generalPrefs.getString("key1", null);
-                return this;
-            }
+        Runnable handler = () -> {
+            key1ValueWhenCalled[0] = generalPrefs.getString("key1", null);
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, () -> {}, settingsValidator, generalDefaults, adminDefaults, propertyManager);
+        importer = new SettingsImporter(generalPrefs, adminPrefs, (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, handler);
         assertThat(importer.fromJSON(emptySettings()), is(true));
         assertThat(key1ValueWhenCalled[0], is("default"));
     }

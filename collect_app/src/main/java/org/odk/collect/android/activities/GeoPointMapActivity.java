@@ -33,7 +33,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.GeoPointWidget;
+import org.odk.collect.android.widgets.GeoPointMapWidget;
 
 import java.text.DecimalFormat;
 
@@ -218,20 +218,20 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
-            intentDraggable = intent.getBooleanExtra(GeoPointWidget.DRAGGABLE_ONLY, false);
+            intentDraggable = intent.getBooleanExtra(GeoPointMapWidget.DRAGGABLE_ONLY, false);
             if (!intentDraggable) {
                 // Not Draggable, set text for Map else leave as placement-map text
                 locationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
             }
 
-            intentReadOnly = intent.getBooleanExtra(GeoPointWidget.READ_ONLY, false);
+            intentReadOnly = intent.getBooleanExtra(GeoPointMapWidget.READ_ONLY, false);
             if (intentReadOnly) {
                 captureLocation = true;
                 clearButton.setEnabled(false);
             }
 
-            if (intent.hasExtra(GeoPointWidget.LOCATION)) {
-                double[] point = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
+            if (intent.hasExtra(GeoPointMapWidget.LOCATION)) {
+                double[] point = intent.getDoubleArrayExtra(GeoPointMapWidget.LOCATION);
 
                 // If the point is initially set from the intent, the "place marker"
                 // button, dragging, and long-pressing are all initially disabled.
@@ -379,7 +379,9 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     private void placeMarker(MapPoint point) {
         map.clearFeatures();
         featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER);
-        clearButton.setEnabled(true);
+        if (!intentReadOnly) {
+            clearButton.setEnabled(true);
+        }
         captureLocation = true;
         setClear = false;
     }

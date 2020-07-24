@@ -609,7 +609,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect macht keine Telefonanrufe aber benötigt Zugriff auf bestimmte Eigenschaften Ihres Geräts, wie die Telefonnummer und Geräte-ID.</string>
   <string name="form_update_category">Formular-Update</string>
   <string name="periodic_form_updates_check_title">Periodischer Formular-Update-Check</string>
-  <string name="never">Nie</string>
   <string name="every_fifteen_minutes">Alle 15 Minuten</string>
   <string name="every_one_hour">Jede Stunde</string>
   <string name="every_six_hours">Alle 6 Stunden</string>

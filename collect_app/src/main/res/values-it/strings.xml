@@ -570,7 +570,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect non effettua chiamate ma necessita di accedere ad alcune propietà del tuo dispositivo quali ad esempio il numero telefonico e l\'Identificativo del dispositivo.</string>
   <string name="form_update_category">Aggiornamento Modulo</string>
   <string name="periodic_form_updates_check_title">Controllo periodico di aggiornamento questionari</string>
-  <string name="never">Mai</string>
   <string name="every_fifteen_minutes">Ogni 15 minuti</string>
   <string name="every_one_hour">Ogni ora</string>
   <string name="every_six_hours">Ogni 6 ore</string>

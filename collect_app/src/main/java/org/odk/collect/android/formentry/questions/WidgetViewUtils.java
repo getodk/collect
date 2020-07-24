@@ -20,7 +20,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.interfaces.ButtonWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import static android.view.View.GONE;
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
@@ -73,7 +73,7 @@ public class WidgetViewUtils {
         return imageView;
     }
 
-    public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, int answerFontSize, QuestionWidget listener) {
+    public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, int answerFontSize, ButtonClickListener listener) {
         final MaterialButton button = (MaterialButton) LayoutInflater
                 .from(context)
                 .inflate(R.layout.widget_answer_button, null, false);
@@ -92,7 +92,7 @@ public class WidgetViewUtils {
 
             button.setOnClickListener(v -> {
                 if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
-                    ((ButtonWidget) listener).onButtonClick(withId);
+                    listener.onButtonClick(withId);
                 }
             });
         }
@@ -100,11 +100,11 @@ public class WidgetViewUtils {
         return button;
     }
 
-    public static Button createSimpleButton(Context context, @IdRes int id, boolean readOnly, int answerFontSize, QuestionWidget listener) {
+    public static Button createSimpleButton(Context context, @IdRes int id, boolean readOnly, int answerFontSize, ButtonClickListener listener) {
         return createSimpleButton(context, id, readOnly, null, answerFontSize, listener);
     }
 
-    public static Button createSimpleButton(Context context, boolean readOnly, String text, int answerFontSize, QuestionWidget listener) {
+    public static Button createSimpleButton(Context context, boolean readOnly, String text, int answerFontSize, ButtonClickListener listener) {
         return createSimpleButton(context, R.id.simple_button, readOnly, text, answerFontSize, listener);
     }
 }

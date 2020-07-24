@@ -35,7 +35,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.ButtonWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import java.math.BigDecimal;
 
@@ -45,7 +45,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
 @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
-public abstract class RangeWidget extends QuestionWidget implements ButtonWidget, SeekBar.OnSeekBarChangeListener {
+public abstract class RangeWidget extends QuestionWidget implements ButtonClickListener, SeekBar.OnSeekBarChangeListener {
 
     private static final String VERTICAL_APPEARANCE = "vertical";
     private static final String NO_TICKS_APPEARANCE = "no-ticks";

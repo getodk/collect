@@ -4,7 +4,8 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.backgroundwork.BackgroundWorkManager;
+import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
@@ -31,7 +32,8 @@ public class StorageMigratorTest {
     private final StorageMigrationRepository storageMigrationRepository = mock(StorageMigrationRepository.class);
     private final GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
     private final ReferenceManager referenceManager = mock(ReferenceManager.class);
-    private final BackgroundWorkManager backgroundWorkManager = mock(BackgroundWorkManager.class);
+    private final FormUpdateManager formUpdateManager = mock(FormUpdateManager.class);
+    private final FormSubmitManager formSubmitManager = mock(FormSubmitManager.class);
     private final Analytics analytics = mock(Analytics.class);
 
     @Before
@@ -43,7 +45,7 @@ public class StorageMigratorTest {
         doNothing().when(storageEraser).deleteOdkDirFromUnscopedStorage();
         doReturn("/sdcard/odk/layers/countries/countries-raster.mbtiles").when(generalSharedPreferences).get(KEY_REFERENCE_LAYER);
 
-        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences, referenceManager, backgroundWorkManager, analytics));
+        storageMigrator = spy(new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, generalSharedPreferences, referenceManager, formUpdateManager, formSubmitManager, analytics));
 
         doNothing().when(storageMigrator).reopenDatabases();
     }
@@ -180,18 +182,18 @@ public class StorageMigratorTest {
     }
 
     private void whenFormDownloaderIsNotRunning() {
-        when(backgroundWorkManager.isFormDownloaderRunning()).thenReturn(false);
+        when(formUpdateManager.isUpdateRunning()).thenReturn(false);
     }
 
     private void whenFormDownloaderIsRunning() {
-        when(backgroundWorkManager.isFormDownloaderRunning()).thenReturn(true);
+        when(formUpdateManager.isUpdateRunning()).thenReturn(true);
     }
 
     private void whenFormUploaderIsNotRunning() {
-        when(backgroundWorkManager.isFormUploaderRunning()).thenReturn(false);
+        when(formSubmitManager.isSubmitRunning()).thenReturn(false);
     }
 
     private void whenFormUploaderIsRunning() {
-        when(backgroundWorkManager.isFormUploaderRunning()).thenReturn(true);
+        when(formSubmitManager.isSubmitRunning()).thenReturn(true);
     }
 }

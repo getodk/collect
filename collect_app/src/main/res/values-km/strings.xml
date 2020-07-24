@@ -532,7 +532,6 @@
   <string name="storage_runtime_permission_denied_desc">បើគ្មានការអនុញ្ញាតទាំងនេះ Collect មិនអាចចូលប្រើទម្រង់របស់អ្នក ឬរក្សាទុកចម្លើយ​បើក​កម្មវិធី​ឡើង​វិញ​នៅ​ពេល​អ្នក​រួចរាល់​ដើម្បី​ផ្តល់​សិទ្ធិ​ទាំងនេះ។</string>
   <string name="form_update_category">ទម្រង់សម្រាប់ធ្វើបច្ចុប្បន្នភាព</string>
   <string name="periodic_form_updates_check_title">រយះពេល​ក្នុង​ការ​ពិនិត្យ​រក​ទម្រង់​ដែល​ធ្វើ​បច្ចុប្បន្នភាព</string>
-  <string name="never">មិនដែល</string>
   <string name="every_fifteen_minutes">រៀងរាល់ ១៥នាទី</string>
   <string name="every_one_hour">រៀងរាល់ម៉ោង</string>
   <string name="every_six_hours">រៀងរាល់ ៦ ម៉ោង</string>

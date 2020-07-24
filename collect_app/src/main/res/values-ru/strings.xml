@@ -534,7 +534,6 @@
   <string name="get_accounts_runtime_permission_denied_desc">Без данного разрешения Collect не сможет получить доступ к учётным записям. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="form_update_category">ОБНОВЛЕНИЕ БЛАНКОВ</string>
   <string name="periodic_form_updates_check_title">Периодичность проверки обновлений</string>
-  <string name="never">Никогда</string>
   <string name="every_fifteen_minutes">Каждые ¼ часа</string>
   <string name="every_one_hour">Каждый 1 час</string>
   <string name="every_six_hours">Каждые 6 часов</string>

@@ -23,6 +23,7 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -34,8 +35,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class GeoShapeWidget extends BaseGeoWidget {
 
-    public GeoShapeWidget(Context context, QuestionDetails questionDetails) {
-        super(context, questionDetails);
+    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+        super(context, questionDetails, waitingForDataRegistry);
     }
 
     public void startGeoActivity() {

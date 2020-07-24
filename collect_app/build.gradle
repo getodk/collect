@@ -229,7 +229,6 @@ dependencies {
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
-    implementation "com.evernote:android-job:1.4.2"
     implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.opencsv:opencsv:2.4"

@@ -605,7 +605,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect nie wykonuje połączeń, ale wymaga dostępu do niektórych właściwości twojego urządzenia, w tym do numeru telefonu i numeru ID</string>
   <string name="form_update_category">Aktualizacja formularza</string>
   <string name="periodic_form_updates_check_title">Cykliczne sprawdzenie możliwych aktualizacji</string>
-  <string name="never">Nigdy</string>
   <string name="every_fifteen_minutes">Co piętnaście minut</string>
   <string name="every_one_hour">Co godzinę</string>
   <string name="every_six_hours">Co sześć godzin</string>

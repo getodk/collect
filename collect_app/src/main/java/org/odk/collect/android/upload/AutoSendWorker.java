@@ -15,6 +15,7 @@
 package org.odk.collect.android.upload;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -289,11 +290,9 @@ public class AutoSendWorker extends Worker {
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationUtils.showNotification(
-                pendingNotify,
-                AUTO_SEND_RESULT_NOTIFICATION_ID,
-                R.string.odk_auto_note,
-                anyFailure ? Collect.getInstance().getString(R.string.failures)
-                        : Collect.getInstance().getString(R.string.success));
+                Collect.getInstance(), (NotificationManager) Collect.getInstance().getSystemService(Context.NOTIFICATION_SERVICE), R.string.odk_auto_note, anyFailure ? Collect.getInstance().getString(R.string.failures)
+                        : Collect.getInstance().getString(R.string.success), pendingNotify, AUTO_SEND_RESULT_NOTIFICATION_ID
+        );
 
     }
 }

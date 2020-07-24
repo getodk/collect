@@ -632,7 +632,6 @@
     <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect does not make calls but it needs to access certain properties about your device such as the phone number and device ID.</string>
     <string name="form_update_category">Form update</string>
     <string name="periodic_form_updates_check_title">Periodic form updates check</string>
-    <string name="never">Never</string>
     <string name="every_fifteen_minutes">Every fifteen minutes</string>
     <string name="every_one_hour">Every hour</string>
     <string name="every_six_hours">Every six hours</string>
@@ -707,4 +706,8 @@
     <string name="legacy_custom_server_paths_summary">Will be removed in a future version. Please use /formList and /submission on your server.</string>
     <string name="experimental">Experimental</string>
     <string name="match_exactly">Exactly match server</string>
+    <string name="manually">Manually</string>
+    <string name="form_update_mode_title">Blank form update mode</string>
+    <string name="previously_downloaded_only">Previously downloaded forms only</string>
+    <string name="form_update_frequency_title">Automatic update frequency</string>
 </resources>

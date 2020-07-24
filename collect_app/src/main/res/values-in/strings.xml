@@ -606,7 +606,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect tidak akan melakukan panggilan telepon, tetapi ODK Collect memerlukan akses ke beberapa informasi mengenai perangkat Anda, seperti nomor telepon dan ID perangkat.</string>
   <string name="form_update_category">Pembaruan formulir</string>
   <string name="periodic_form_updates_check_title">Pemeriksaan pembaruan formulir berkala</string>
-  <string name="never">Jangan pernah</string>
   <string name="every_fifteen_minutes">Tiap 15 menit</string>
   <string name="every_one_hour">Tiap 1 jam</string>
   <string name="every_six_hours">Tiap 6 jam</string>

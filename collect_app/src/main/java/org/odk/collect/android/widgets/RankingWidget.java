@@ -32,7 +32,8 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import java.util.List;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
-public class RankingWidget extends ItemsWidget implements BinaryWidget {
+public class RankingWidget extends ItemsWidget implements BinaryDataReceiver, ButtonClickListener {
 
     private List<SelectChoice> savedItems;
     Button showRankingDialogButton;

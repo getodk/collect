@@ -11,8 +11,8 @@ import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.TaskSpec;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -24,7 +24,7 @@ public class TestScheduler implements Scheduler {
     private int tasks;
     private Runnable finishedCallback;
 
-    private final Map<String, TaskSpec> taggedWork = new HashMap<>();
+    private final List<DeferredTask> deferredTasks = new ArrayList<>();
 
     public TestScheduler() {
         WorkManager workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext());
@@ -32,33 +32,34 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public Cancellable schedule(@NotNull Runnable task, long repeatPeriod) {
+    public Cancellable repeat(@NotNull Runnable foreground, long repeatPeriod) {
         increment();
 
-        return wrappedScheduler.schedule(() -> {
-            task.run();
+        return wrappedScheduler.repeat(() -> {
+            foreground.run();
             decrement();
         }, repeatPeriod);
     }
 
     @Override
-    public <T> void runInBackground(@NotNull Supplier<T> task, @NotNull Consumer<T> callback) {
+    public <T> void immediate(@NotNull Supplier<T> foreground, @NotNull Consumer<T> background) {
         increment();
 
-        wrappedScheduler.runInBackground(task, t -> {
-            callback.accept(t);
+        wrappedScheduler.immediate(foreground, t -> {
+            background.accept(t);
             decrement();
         });
     }
 
     @Override
-    public void scheduleInBackgroundWhenNetworkAvailable(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
-        taggedWork.put(tag, spec);
+    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
+        cancelDeferred(tag);
+        deferredTasks.add(new DeferredTask(tag, spec, repeatPeriod));
     }
 
     @Override
-    public void cancelInBackground(@NotNull String tag) {
-        taggedWork.remove(tag);
+    public void cancelDeferred(@NotNull String tag) {
+        deferredTasks.removeIf(t -> t.getTag().equals(tag));
     }
 
     @Override
@@ -66,11 +67,11 @@ public class TestScheduler implements Scheduler {
         return wrappedScheduler.isRunning(tag);
     }
 
-    public void runTaggedWork() {
+    public void runDeferredTasks() {
         Context applicationContext = ApplicationProvider.getApplicationContext();
 
-        for (TaskSpec taskSpec : taggedWork.values()) {
-            taskSpec.getTask(applicationContext).run();
+        for (DeferredTask deferredTask : deferredTasks) {
+            deferredTask.getSpec().getTask(applicationContext).run();
         }
     }
 
@@ -97,6 +98,35 @@ public class TestScheduler implements Scheduler {
     public int getTaskCount() {
         synchronized (lock) {
             return tasks;
+        }
+    }
+
+    public List<DeferredTask> getDeferredTasks() {
+        return deferredTasks;
+    }
+
+    public static class DeferredTask {
+
+        private final String tag;
+        private final TaskSpec spec;
+        private final long repeatPeriod;
+
+        public DeferredTask(String tag, TaskSpec spec, long repeatPeriod) {
+            this.tag = tag;
+            this.spec = spec;
+            this.repeatPeriod = repeatPeriod;
+        }
+
+        public String getTag() {
+            return tag;
+        }
+
+        public TaskSpec getSpec() {
+            return spec;
+        }
+
+        public long getRepeatPeriod() {
+            return repeatPeriod;
         }
     }
 }

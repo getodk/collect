@@ -37,6 +37,7 @@ public final class AdminKeys {
 
     static final String KEY_MAPS                                = "maps";
 
+    private static final String KEY_FORM_UPDATE_MODE            = "form_update_mode";
     private static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     private static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
     private static final String KEY_HIDE_OLD_FORM_VERSIONS      = "hide_old_form_versions";
@@ -69,7 +70,6 @@ public final class AdminKeys {
      * preference is false.
      */
     static AdminAndGeneralKeys[] adminToGeneral = {
-
             ag(KEY_CHANGE_SERVER,              GeneralKeys.KEY_PROTOCOL),
             ag(KEY_CHANGE_FORM_METADATA,       GeneralKeys.KEY_FORM_METADATA),
 
@@ -93,7 +93,8 @@ public final class AdminKeys {
             ag(KEY_NAVIGATION,                 GeneralKeys.KEY_NAVIGATION),
             ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
 
-            ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS)
+            ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS),
+            ag(KEY_FORM_UPDATE_MODE,           GeneralKeys.KEY_FORM_UPDATE_MODE)
     };
 
     /** Admin keys other than those in adminToGeneral above */

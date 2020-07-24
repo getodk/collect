@@ -50,9 +50,7 @@ import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -66,7 +64,6 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.material.MaterialBanner;
 
 import java.lang.ref.WeakReference;
@@ -128,17 +125,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     AdminPasswordProvider adminPasswordProvider;
 
     @Inject
-    VersionInformation versionInformation;
-
-    @Inject
-    GeneralSharedPreferences generalSharedPreferences;
-
-    @Inject
-    PreferencesProvider preferencesProvider;
-
-    @Inject
     SettingsImporter settingsImporter;
 
+    @Inject
+    MainMenuViewModel.Factory viewModelFactory;
     private MainMenuViewModel viewModel;
 
     @Override
@@ -147,7 +137,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         Collect.getInstance().getComponent().inject(this);
         setContentView(R.layout.main_menu);
         ButterKnife.bind(this);
-        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory(versionInformation)).get(MainMenuViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainMenuViewModel.class);
 
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);

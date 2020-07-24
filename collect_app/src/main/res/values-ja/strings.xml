@@ -606,7 +606,6 @@
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect は電話はかけませんが、電話番号やデバイス ID など、デバイスに関する特定のプロパティにアクセスする必要があります。</string>
   <string name="form_update_category">フォームの更新</string>
   <string name="periodic_form_updates_check_title">定期的なフォームの更新チェック</string>
-  <string name="never">しない</string>
   <string name="every_fifteen_minutes">15 分ごと</string>
   <string name="every_one_hour">1 時間ごと</string>
   <string name="every_six_hours">6 時間ごと</string>

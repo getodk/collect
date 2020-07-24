@@ -4,18 +4,18 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 
 /**
- * Runs tasks in the foreground and background
+ * Run and schedule tasks in the foreground (UI thread) and background. Based on terminology
+ * used in Android's Background Processing documentation: https://developer.android.com/guide/background
  */
 interface Scheduler {
 
     /**
-     * Run a task and then repeat in the foreground
+     * Run a task in the background (off the UI thread). Cancelled if application closed.
      *
-     * @param task   the task to be run
-     * @param repeatPeriod the period between each run of the task
-     * @return object that allows task to be cancelled
+     * @param background the task to be run
+     * @param foreground run on the foreground once the task is complete
      */
-    fun schedule(task: Runnable, repeatPeriod: Long): Cancellable
+    fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>)
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
@@ -26,20 +26,24 @@ interface Scheduler {
      * @param spec defines the task to be run
      * @param repeatPeriod the period between each run of the task
      */
-    fun scheduleInBackgroundWhenNetworkAvailable(tag: String, spec: TaskSpec, repeatPeriod: Long)
+    fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long)
 
     /**
-     * Run a task in the background (off the UI thread)
-     *
-     * @param task     the task to be run
-     * @param callback run on the foreground once the task is complete
+     * Cancel deferred task scheduled with tag
      */
-    fun <T> runInBackground(task: Supplier<T>, callback: Consumer<T>)
+    fun cancelDeferred(tag: String)
 
     /**
-     * Returns true if a task scheduled with a tag is currently running
+     * Returns true if a deferred task scheduled with tag is currently running
      */
     fun isRunning(tag: String): Boolean
 
-    fun cancelInBackground(tag: String)
+    /**
+     * Run a task and then repeat in the foreground
+     *
+     * @param foreground the task to be run
+     * @param repeatPeriod the period between each run of the task
+     * @return object that allows task to be cancelled
+     */
+    fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable
 }
