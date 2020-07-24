@@ -290,9 +290,8 @@ public class AutoSendWorker extends Worker {
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationUtils.showNotification(
-                Collect.getInstance(), (NotificationManager) Collect.getInstance().getSystemService(Context.NOTIFICATION_SERVICE), R.string.odk_auto_note, anyFailure ? Collect.getInstance().getString(R.string.failures)
+                Collect.getInstance(), (NotificationManager) Collect.getInstance().getSystemService(Context.NOTIFICATION_SERVICE), Collect.getInstance().getString(R.string.odk_auto_note), anyFailure ? Collect.getInstance().getString(R.string.failures)
                         : Collect.getInstance().getString(R.string.success), pendingNotify, AUTO_SEND_RESULT_NOTIFICATION_ID
         );
-
     }
 }

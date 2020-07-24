@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FillBlankFormActivity;
@@ -12,8 +14,10 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.utilities.LocaleHelper;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -41,10 +45,11 @@ public class NotificationManagerNotifier implements Notifier {
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
         PendingIntent contentIntent = PendingIntent.getActivity(context, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Resources localizedResources = getLocalizedResources(context);
         showNotification(
                 context,
                 notificationManager,
-                R.string.form_updates_available,
+                localizedResources.getString(R.string.form_updates_available),
                 null,
                 contentIntent,
                 FORM_UPDATE_NOTIFICATION_ID
@@ -58,11 +63,12 @@ public class NotificationManagerNotifier implements Notifier {
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
         PendingIntent contentIntent = PendingIntent.getActivity(context, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Resources localizedResources = getLocalizedResources(context);
         showNotification(
                 context,
                 notificationManager,
-                R.string.odk_auto_download_notification_title,
-                context.getString(allFormsDownloadedSuccessfully(context, result) ?
+                localizedResources.getString(R.string.odk_auto_download_notification_title),
+                localizedResources.getString(allFormsDownloadedSuccessfully(context, result) ?
                         R.string.success :
                         R.string.failures),
                 contentIntent,
@@ -80,11 +86,12 @@ public class NotificationManagerNotifier implements Notifier {
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Resources localizedResources = getLocalizedResources(context);
         showNotification(
                 context,
                 notificationManager,
-                R.string.form_update_error,
-                new FormApiExceptionMapper(context).getMessage(exception),
+                localizedResources.getString(R.string.form_update_error),
+                new FormApiExceptionMapper(localizedResources).getMessage(exception),
                 contentIntent,
                 FORM_SYNC_NOTIFICATION_ID
         );
@@ -97,5 +104,14 @@ public class NotificationManagerNotifier implements Notifier {
             }
         }
         return true;
+    }
+
+    // The application context will give us the system's locale
+    private Resources getLocalizedResources(Context context) {
+        Configuration conf = context.getResources().getConfiguration();
+        conf = new Configuration(conf);
+        conf.setLocale(new Locale(LocaleHelper.getLocaleCode(context)));
+        Context localizedContext = context.createConfigurationContext(conf);
+        return localizedContext.getResources();
     }
 }
