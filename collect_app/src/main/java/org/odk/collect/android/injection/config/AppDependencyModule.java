@@ -34,6 +34,7 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
@@ -157,7 +158,7 @@ public class AppDependencyModule {
 
     @Provides
     FormDownloader providesFormDownloader(MultiFormDownloader multiFormDownloader) {
-        return multiFormDownloader;
+        return new ServerFormDownloader(multiFormDownloader);
     }
 
     @Provides

@@ -56,7 +56,8 @@ import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 
-public class MultiFormDownloader implements FormDownloader {
+@Deprecated
+public class MultiFormDownloader {
 
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
@@ -64,6 +65,7 @@ public class MultiFormDownloader implements FormDownloader {
     private final FormsDao formsDao;
     private final OpenRosaXmlFetcher openRosaXmlFetcher;
 
+    @Deprecated
     public MultiFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXmlFetcher) {
         this.formsDao = formsDao;
         this.openRosaXmlFetcher = openRosaXmlFetcher;
@@ -90,11 +92,7 @@ public class MultiFormDownloader implements FormDownloader {
         }
     }
 
-    @Override
-    public void downloadForm(ServerFormDetails form) {
-        downloadForms(Collections.singletonList(form), null);
-    }
-
+    @Deprecated
     public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) {
         int total = toDownload.size();
         int count = 1;
@@ -104,8 +102,7 @@ public class MultiFormDownloader implements FormDownloader {
         for (ServerFormDetails fd : toDownload) {
             try {
                 String message = processOneForm(total, count++, fd, stateListener);
-                result.put(fd, message.isEmpty() ?
-                        Collect.getInstance().getString(R.string.success) : message);
+                result.put(fd, message.isEmpty() ? Collect.getInstance().getString(R.string.success) : message);
             } catch (TaskCancelledException cd) {
                 break;
             }
