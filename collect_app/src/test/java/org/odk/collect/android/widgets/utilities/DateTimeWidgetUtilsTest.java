@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog;
@@ -73,7 +72,7 @@ public class DateTimeWidgetUtilsTest {
 
         DateTimeWidgetUtils.showDatePickerDialog(activity, formIndex, datePickerDetails, date);
         EthiopianDatePickerDialog dialog = (EthiopianDatePickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(CustomDatePickerDialog.class.getName());
+                .findFragmentByTag(EthiopianDatePickerDialog.class.getName());
 
         assertNotNull(dialog);
     }
@@ -84,7 +83,7 @@ public class DateTimeWidgetUtilsTest {
 
         DateTimeWidgetUtils.showDatePickerDialog(activity, formIndex, datePickerDetails, date);
         CopticDatePickerDialog dialog = (CopticDatePickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(CustomDatePickerDialog.class.getName());
+                .findFragmentByTag(CopticDatePickerDialog.class.getName());
 
         assertNotNull(dialog);
     }
@@ -95,7 +94,7 @@ public class DateTimeWidgetUtilsTest {
 
         DateTimeWidgetUtils.showDatePickerDialog(activity, formIndex, datePickerDetails, date);
         IslamicDatePickerDialog dialog = (IslamicDatePickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(CustomDatePickerDialog.class.getName());
+                .findFragmentByTag(IslamicDatePickerDialog.class.getName());
 
         assertNotNull(dialog);
     }
@@ -106,7 +105,7 @@ public class DateTimeWidgetUtilsTest {
 
         DateTimeWidgetUtils.showDatePickerDialog(activity, formIndex, datePickerDetails, date);
         BikramSambatDatePickerDialog dialog = (BikramSambatDatePickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(CustomDatePickerDialog.class.getName());
+                .findFragmentByTag(BikramSambatDatePickerDialog.class.getName());
 
         assertNotNull(dialog);
     }
@@ -117,7 +116,7 @@ public class DateTimeWidgetUtilsTest {
 
         DateTimeWidgetUtils.showDatePickerDialog(activity, formIndex, datePickerDetails, date);
         MyanmarDatePickerDialog dialog = (MyanmarDatePickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(CustomDatePickerDialog.class.getName());
+                .findFragmentByTag(MyanmarDatePickerDialog.class.getName());
 
         assertNotNull(dialog);
     }
@@ -128,7 +127,7 @@ public class DateTimeWidgetUtilsTest {
 
         DateTimeWidgetUtils.showDatePickerDialog(activity, formIndex, datePickerDetails, date);
         PersianDatePickerDialog dialog = (PersianDatePickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(CustomDatePickerDialog.class.getName());
+                .findFragmentByTag(PersianDatePickerDialog.class.getName());
 
         assertNotNull(dialog);
     }
