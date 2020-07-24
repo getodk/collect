@@ -34,8 +34,6 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
-import java.util.Date;
-
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
  * exist.
@@ -44,9 +42,9 @@ import java.util.Date;
 public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver {
     DateTimeWidgetAnswerBinding binding;
 
-    private LocalDateTime date;
+    private LocalDateTime selectedDate;
     private DatePickerDetails datePickerDetails;
-    private DateTime time;
+    private DateTime selectedTime;
 
     public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -68,22 +66,22 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             binding.timeWidget.widgetButton.setText(getContext().getString(R.string.select_time));
 
             binding.dateWidget.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
-                    (FormEntryActivity) context, prompt.getIndex(), datePickerDetails, date));
+                    (FormEntryActivity) context, prompt.getIndex(), datePickerDetails, selectedDate));
             binding.timeWidget.widgetButton.setOnClickListener(v ->
-                    DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), time));
+                    DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), selectedTime));
         }
         binding.dateWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.timeWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (getFormEntryPrompt().getAnswerValue() == null) {
-            clearAnswerWithoutValueChangeListener();
+            resetAnswerFields();
         } else {
-            date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
+            selectedDate = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                    date.toDate(), datePickerDetails, false, context));
+                    selectedDate.toDate(), datePickerDetails, false, context));
 
-            time = new DateTime((Date) getFormEntryPrompt().getAnswerValue().getValue());
-            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(time).getDisplayText());
+            selectedTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
+            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
         }
 
         return binding.getRoot();
@@ -96,18 +94,18 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         } else {
             LocalDateTime ldt;
             if (isTimeNull()) {
-                ldt = DateTimeUtils.getLocalDateTime(date.getYear(),
-                        date.getMonthOfYear(), date.getDayOfMonth(), 0, 0);
-                time = DateTime.now();
+                ldt = DateTimeUtils.getLocalDateTime(selectedDate.getYear(),
+                        selectedDate.getMonthOfYear(), selectedDate.getDayOfMonth(), 0, 0);
+                selectedTime = DateTime.now();
             } else if (isDateNull()) {
                 ldt = new LocalDateTime()
-                        .withHourOfDay(time.getHourOfDay())
-                        .withMinuteOfHour(time.getMinuteOfHour());
+                        .withHourOfDay(selectedTime.getHourOfDay())
+                        .withMinuteOfHour(selectedTime.getMinuteOfHour());
 
-                date = DateTimeWidgetUtils.getCurrentDate();
+                selectedDate = DateTimeWidgetUtils.getCurrentDate();
             } else {
-                ldt = DateTimeUtils.getLocalDateTime(date.getYear(), date.getMonthOfYear(),
-                        date.getDayOfMonth(), time.getHourOfDay(), time.getMinuteOfHour());
+                ldt = DateTimeUtils.getLocalDateTime(selectedDate.getYear(), selectedDate.getMonthOfYear(),
+                        selectedDate.getDayOfMonth(), selectedTime.getHourOfDay(), selectedTime.getMinuteOfHour());
             }
             return new DateTimeData(ldt.toDate());
         }
@@ -115,7 +113,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void clearAnswer() {
-        clearAnswerWithoutValueChangeListener();
+        resetAnswerFields();
         widgetValueChanged();
     }
 
@@ -141,22 +139,22 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
-            date = (LocalDateTime) answer;
+            selectedDate = (LocalDateTime) answer;
             binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                    date.toDate(), datePickerDetails, false, getContext()));
+                    selectedDate.toDate(), datePickerDetails, false, getContext()));
 
         } else if (answer instanceof DateTime) {
-            time = (DateTime) answer;
-            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(time).getDisplayText());
+            selectedTime = (DateTime) answer;
+            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
         }
     }
 
-    private void clearAnswerWithoutValueChangeListener() {
+    private void resetAnswerFields() {
         binding.dateWidget.widgetAnswerText.setText(R.string.no_date_selected);
-        date = DateTimeWidgetUtils.getCurrentDate();
+        selectedDate = DateTimeWidgetUtils.getCurrentDate();
 
         binding.timeWidget.widgetAnswerText.setText(R.string.no_time_selected);
-        time = DateTime.now();
+        selectedTime = DateTime.now();
     }
 
     private boolean isNullValue() {

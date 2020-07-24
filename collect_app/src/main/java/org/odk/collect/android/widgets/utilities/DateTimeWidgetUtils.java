@@ -24,7 +24,7 @@ public class DateTimeWidgetUtils {
     public static final String FORM_INDEX = "formIndex";
     public static final String DATE = "date";
     public static final String DATE_PICKER_DETAILS = "datePickerDetails";
-    public static final String DATE_PICKER_THEME = "DATE_PICKER_THEME";
+    public static final String DATE_PICKER_THEME = "datePickerTheme";
 
     private DateTimeWidgetUtils() {
     }

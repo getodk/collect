@@ -64,7 +64,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
             selectedTime = DateTime.now();
             binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
-            selectedTime = new DateTime((Date) getFormEntryPrompt().getAnswerValue().getValue());
+            selectedTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
             binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
         }
 
