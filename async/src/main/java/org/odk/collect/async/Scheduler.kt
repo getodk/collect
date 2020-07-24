@@ -20,6 +20,13 @@ interface Scheduler {
      */
     fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>)
 
+    /**
+     * Schedule a task to run in the background even if the app isn't running. The task
+     * will only be run when the network is available.
+     *
+     * @param tag used to identify this task in future
+     * @param spec defines the task to be run
+     */
     fun networkDeferred(tag: String, spec: TaskSpec)
 
     /**
