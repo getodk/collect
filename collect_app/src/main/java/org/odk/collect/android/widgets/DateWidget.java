@@ -50,13 +50,6 @@ import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.CU
 import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_DETAILS;
 import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.THEME;
 
-/**
- * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
- * exist.
- *
- * @author Carl Hartung (carlhartung@gmail.com)
- * @author Yaw Anokwa (yanokwa@gmail.com)
- */
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     WidgetAnswerBinding binding;
@@ -200,18 +193,6 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
                 DialogUtils.showIfNotShowing(FixedDatePickerDialog.class, bundle, ((FormEntryActivity) getContext()).getSupportFragmentManager());
         }
-    }
-
-    public void onDateSet(int year, int month, int dayOfMonth) {
-        date = new LocalDateTime()
-                .withYear(year)
-                .withMonthOfYear(month + 1)
-                .withDayOfMonth(dayOfMonth)
-                .withHourOfDay(0)
-                .withMinuteOfHour(0)
-                .withSecondOfMinute(0)
-                .withMillisOfSecond(0);
-        setDateLabel();
     }
 
     private int getTheme() {

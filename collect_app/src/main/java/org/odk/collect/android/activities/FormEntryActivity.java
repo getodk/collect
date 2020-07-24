@@ -713,7 +713,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (currentView != null) {
             for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
                 if (qw instanceof DateWidget) {
-                    ((DateWidget) qw).onDateSet(year, month, dayOfMonth);
+                    LocalDateTime date = new LocalDateTime()
+                            .withYear(year)
+                            .withMonthOfYear(month + 1)
+                            .withDayOfMonth(dayOfMonth)
+                            .withHourOfDay(0)
+                            .withMinuteOfHour(0)
+                            .withSecondOfMinute(0)
+                            .withMillisOfSecond(0);
+                    ((DateWidget) qw).setBinaryData(date);
                     widgetValueChanged(qw);
                     return;
                 }

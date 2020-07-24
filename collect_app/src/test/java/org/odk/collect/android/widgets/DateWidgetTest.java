@@ -44,7 +44,7 @@ public class DateWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowButton() {
         DateWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
-        assertEquals(widget.dateButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.widgetButton.getVisibility(), View.GONE);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class DateWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoDateSelected() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.dateTextView.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
     }
 
     @Test
@@ -70,18 +70,20 @@ public class DateWidgetTest {
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
         DateWidget widget = createWidget(prompt);
 
-        assertEquals(widget.dateTextView.getText(), DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
+        assertEquals(widget.binding.widgetAnswerText.getText(),
+                DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
     }
 
     @Test
-    public void onDateSet_setsCorrectDateInAnswerTextView() {
+    public void setBinaryData_setsCorrectDateInAnswerTextView() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         DateWidget widget = createWidget(prompt);
-        widget.onDateSet(date.getYear(), date.getMonthOfYear()-1, date.getDayOfMonth());
+        widget.setBinaryData(date);
 
-        assertEquals(widget.dateTextView.getText(), DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
+        assertEquals(widget.binding.widgetAnswerText.getText(),
+                DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
     }
 
     @Test
@@ -90,7 +92,7 @@ public class DateWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertEquals(widget.dateTextView.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
     }
 
     @Test
@@ -105,18 +107,18 @@ public class DateWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(listener);
-        widget.dateButton.performLongClick();
+        widget.binding.widgetButton.performLongClick();
 
-        verify(listener).onLongClick(widget.dateButton);
+        verify(listener).onLongClick(widget.binding.widgetButton);
     }
 
     @Test
     public void clickingAnswerTextViewForLong_callsLongClickListener() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(listener);
-        widget.dateTextView.performLongClick();
+        widget.binding.widgetAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.dateTextView);
+        verify(listener).onLongClick(widget.binding.widgetAnswerText);
     }
 
     private DateWidget createWidget(FormEntryPrompt prompt) {

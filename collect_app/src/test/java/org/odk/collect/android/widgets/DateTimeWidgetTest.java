@@ -62,7 +62,7 @@ public class DateTimeWidgetTest extends GeneralDateTimeWidgetTest<DateTimeWidget
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().dateWidget.dateButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().dateWidget.binding.widgetButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().timeWidget.timeButton.getVisibility(), is(View.GONE));
     }
 }
