@@ -132,11 +132,6 @@
   <string name="submission_url">Luogo di consegna</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>
-  <string name="access_error">Errore durante l\'accesso %s: </string>
-  <string name="manifest_server_error">La risposta del \'Manifest\' non si riferisce a una versione OpenRosa — server sbagliato?</string>
-  <string name="root_element_error">Elemento principale non è &amp;lt;manifest\&gt; — era %s</string>
-  <string name="root_namespace_error">Il \'Namespace\' dell\'Elemento Root del documento XML non è corretto: %s</string>
-  <string name="manifest_tag_error">Il \'Manifest\' %s del documento XML manca di una o più \'tag\': filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Caricamento file multimediali: %2$s di %3$s</string>
   <string name="fetching_manifest">%s. Ottenendo \'Manifest\' da XML</string>
   <string name="success">Successo</string>

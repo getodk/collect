@@ -130,11 +130,6 @@
   <string name="submission_url">సబ్మిషన్ లింక్ </string>
   <string name="font_size">అక్షరాల సైజు </string>
   <string name="change_font_size">అక్షరాల సైజు  </string>
-  <string name="access_error">%s ని యాక్సెస్ చేస్తున్నప్పుడు లోపం:</string>
-  <string name="manifest_server_error">మానిఫెస్ట్ రిప్లై ఓపెన్ రోసా వెర్షన్ ను రిపోర్ట్ చెయ్యదు-  సర్వర్ తప్పు అయ్యుండొచ్చు?</string>
-  <string name="root_element_error">రూట్ ఎలిమెంట్ కాదు&amp;lt ; మానిఫెస్ట్ \&amp;gt; -- %s ఉంది</string>
-  <string name="root_namespace_error">రూట్ ఎలిమెంట్ నేమ్‌స్పేస్ తప్పు:%s</string>
-  <string name="manifest_tag_error">మానిఫెస్ట్ ఎంట్రీ%sలో ఒకటి లేదా అంతకంటే ఎక్కువ ట్యాగ్‌లు లేవు: ఫైల్ పేరు, హాష్ లేదా డౌన్‌లోడ్ URL</string>
   <string name="form_download_progress">%1$s. మీడియా ఫైళ్ళను పొందుతున్నాము:  %3$s లో %2$s</string>
   <string name="fetching_manifest"> %s. మానిఫెస్ట్ పొందడం</string>
   <string name="success">సక్సెస్ </string>

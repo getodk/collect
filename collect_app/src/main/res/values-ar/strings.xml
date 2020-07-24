@@ -133,11 +133,6 @@
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="access_error">خطأ اثناء الوصول %s:</string>
-  <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
-  <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>
-  <string name="root_namespace_error">اسم العنصرالأساسي غير صحيح:%s</string>
-  <string name="manifest_tag_error">ادخال المانيفست %s يفتقد واحد او أكثر من العلامات: اسم الملف، # أو رابط التحميل</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
   <string name="fetching_manifest">%s. الحصول على القائمة </string>
   <string name="success">نجاح</string>

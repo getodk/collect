@@ -133,11 +133,6 @@
   <string name="submission_url">Submissionspfad</string>
   <string name="font_size">Schriftgröße</string>
   <string name="change_font_size">Schriftgröße</string>
-  <string name="access_error">Fehler beim Zugriff auf %s: </string>
-  <string name="manifest_server_error">Manifestantwort meldet keine OpenRosa Version — Serverfehler?</string>
-  <string name="root_element_error">Root element ist nicht &lt;manifest\&gt; — war %s</string>
-  <string name="root_namespace_error">Root element Namespace ist falsch: %s</string>
-  <string name="manifest_tag_error">Bei Manifest-Eintrag %s fehlt ein oder mehrere Tag(s): filename, hash, oder downloadUrl</string>
   <string name="form_download_progress">%1$s. Media-Dateien werden geladen: %2$s von %3$s</string>
   <string name="fetching_manifest">%s. Manifest wird geladen </string>
   <string name="success">Erfolg</string>

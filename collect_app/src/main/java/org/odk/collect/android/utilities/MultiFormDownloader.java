@@ -16,23 +16,21 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
-import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.forms.DatabaseFormRepository;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.MediaFile;
+import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -44,8 +42,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,13 +58,15 @@ public class MultiFormDownloader {
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-    private final FormsDao formsDao;
     private final OpenRosaXmlFetcher openRosaXmlFetcher;
+    private final OpenRosaFormListApi openRosaFormListApi;
+    private final DatabaseFormRepository formRepository;
 
     @Deprecated
-    public MultiFormDownloader(FormsDao formsDao, OpenRosaXmlFetcher openRosaXmlFetcher) {
-        this.formsDao = formsDao;
+    public MultiFormDownloader(OpenRosaXmlFetcher openRosaXmlFetcher) {
+        this.formRepository = new DatabaseFormRepository();
         this.openRosaXmlFetcher = openRosaXmlFetcher;
+        openRosaFormListApi = new OpenRosaFormListApi(openRosaXmlFetcher);
     }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
@@ -254,7 +252,7 @@ public class MultiFormDownloader {
         } else {
             String md5Hash = FileUtils.getMd5Hash(fileResult.file);
             if (md5Hash != null) {
-                formsDao.deleteFormsFromMd5Hash(md5Hash);
+                formRepository.deleteFormsByMd5Hash(md5Hash);
             }
             FileUtils.deleteAndReport(fileResult.getFile());
         }
@@ -298,39 +296,35 @@ public class MultiFormDownloader {
 
         FileUtils.checkMediaPath(new File(mediaPath));
 
-        try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath())) {
-            if (cursor == null) {
-                return null;
-            }
 
-            isNew = cursor.getCount() <= 0;
+        Form form = formRepository.getByPath(formFile.getAbsolutePath());
+        isNew = form == null;
 
-            if (isNew) {
-                uri = saveNewForm(formInfo, formFile, mediaPath);
-            } else {
-                cursor.moveToFirst();
-                uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                        cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
-                mediaPath = new StoragePathProvider().getAbsoluteFormFilePath(cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
-            }
+        if (isNew) {
+            uri = saveNewForm(formInfo, formFile, mediaPath);
+        } else {
+            uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, form.getId().toString());
+            mediaPath = new StoragePathProvider().getAbsoluteFormFilePath(form.getFormMediaPath());
         }
 
         return new UriResult(uri, mediaPath, isNew);
     }
 
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
-        final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH,          new StoragePathProvider().getFormDbPath(formFile.getAbsolutePath()));
-        v.put(FormsColumns.FORM_MEDIA_PATH,         new StoragePathProvider().getFormDbPath(mediaPath));
-        v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
-        v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
-        v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
-        v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
-        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-        v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsColumns.AUTO_SEND,               formInfo.get(FileUtils.AUTO_SEND));
-        v.put(FormsColumns.GEOMETRY_XPATH,          formInfo.get(FileUtils.GEOMETRY_XPATH));
-        return formsDao.saveForm(v);
+        Form form = new Form.Builder()
+                .formFilePath(formFile.getAbsolutePath())
+                .formMediaPath(mediaPath)
+                .displayName(formInfo.get(FileUtils.TITLE))
+                .jrVersion(formInfo.get(FileUtils.VERSION))
+                .jrFormId(formInfo.get(FileUtils.FORMID))
+                .submissionUri(formInfo.get(FileUtils.SUBMISSIONURI))
+                .base64RSAPublicKey(formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY))
+                .autoDelete(formInfo.get(FileUtils.AUTO_DELETE))
+                .autoSend(formInfo.get(FileUtils.AUTO_SEND))
+                .geometryXpath(formInfo.get(FileUtils.GEOMETRY_XPATH))
+                .build();
+
+        return formRepository.save(form);
     }
 
     /**
@@ -358,29 +352,19 @@ public class MultiFormDownloader {
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
-        Cursor c = null;
-        try {
-            c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
-            if (c.getCount() > 0) {
-                // Should be at most, 1
-                c.moveToFirst();
+        Form form = formRepository.getByMd5Hash(FileUtils.getMd5Hash(f));
+        if (form != null) {
+            isNew = false;
 
-                isNew = false;
+            // delete the file we just downloaded, because it's a duplicate
+            Timber.w("A duplicate file has been found, we need to remove the downloaded file "
+                    + "and return the other one.");
+            FileUtils.deleteAndReport(f);
 
-                // delete the file we just downloaded, because it's a duplicate
-                Timber.w("A duplicate file has been found, we need to remove the downloaded file "
-                        + "and return the other one.");
-                FileUtils.deleteAndReport(f);
-
-                // set the file returned to the file we already had
-                String existingPath = storagePathProvider.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                f = new File(existingPath);
-                Timber.w("Will use %s", existingPath);
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
+            // set the file returned to the file we already had
+            String existingPath = storagePathProvider.getAbsoluteFormFilePath(form.getFormFilePath());
+            f = new File(existingPath);
+            Timber.w("Will use %s", existingPath);
         }
 
         return new FileResult(f, isNew);
@@ -414,21 +398,21 @@ public class MultiFormDownloader {
             }
             Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
 
-                // write connection to file
-                InputStream is = null;
-                OutputStream os = null;
+            // write connection to file
+            InputStream is = null;
+            OutputStream os = null;
 
-                try {
-                    is = openRosaXmlFetcher.getFile(downloadUrl, null);
-                    os = new FileOutputStream(tempFile);
+            try {
+                is = openRosaXmlFetcher.getFile(downloadUrl, null);
+                os = new FileOutputStream(tempFile);
 
-                    byte[] buf = new byte[4096];
-                    int len;
-                    while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCanceled())) {
-                        os.write(buf, 0, len);
-                    }
-                    os.flush();
-                    success = true;
+                byte[] buf = new byte[4096];
+                int len;
+                while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCanceled())) {
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+                success = true;
 
             } catch (Exception e) {
                 Timber.e(e.toString());
@@ -441,30 +425,30 @@ public class MultiFormDownloader {
                     throw e;
                 }
             } finally {
-                    if (os != null) {
-                        try {
-                            os.close();
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-                    }
-                    if (is != null) {
-                        try {
-                            // ensure stream is consumed...
-                            final long count = 1024L;
-                            while (is.skip(count) == count) {
-                                // skipping to the end of the http entity
-                            }
-                        } catch (Exception e) {
-                            // no-op
-                        }
-                        try {
-                            is.close();
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (Exception e) {
+                        Timber.e(e);
                     }
                 }
+                if (is != null) {
+                    try {
+                        // ensure stream is consumed...
+                        final long count = 1024L;
+                        while (is.skip(count) == count) {
+                            // skipping to the end of the http entity
+                        }
+                    } catch (Exception e) {
+                        // no-op
+                    }
+                    try {
+                        is.close();
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
+            }
 
             if (stateListener != null && stateListener.isTaskCanceled()) {
                 FileUtils.deleteAndReport(tempFile);
@@ -546,97 +530,7 @@ public class MultiFormDownloader {
                     String.valueOf(count), String.valueOf(total));
         }
 
-        List<MediaFile> files = new ArrayList<>();
-
-        DocumentFetchResult result = openRosaXmlFetcher.getXML(fd.getManifestUrl());
-
-        if (result.errorMessage != null) {
-            return result.errorMessage;
-        }
-
-        String errMessage = Collect.getInstance().getString(R.string.access_error, fd.getManifestUrl());
-
-        if (!result.isOpenRosaResponse) {
-            errMessage += Collect.getInstance().getString(R.string.manifest_server_error);
-            Timber.e(errMessage);
-            return errMessage;
-        }
-
-        // Attempt OpenRosa 1.0 parsing
-        Element manifestElement = result.doc.getRootElement();
-        if (!manifestElement.getName().equals("manifest")) {
-            errMessage +=
-                    Collect.getInstance().getString(R.string.root_element_error,
-                            manifestElement.getName());
-            Timber.e(errMessage);
-            return errMessage;
-        }
-        String namespace = manifestElement.getNamespace();
-        if (!isXformsManifestNamespacedElement(manifestElement)) {
-            errMessage += Collect.getInstance().getString(R.string.root_namespace_error, namespace);
-            Timber.e(errMessage);
-            return errMessage;
-        }
-        int elements = manifestElement.getChildCount();
-        for (int i = 0; i < elements; ++i) {
-            if (manifestElement.getType(i) != Element.ELEMENT) {
-                // e.g., whitespace (text)
-                continue;
-            }
-            Element mediaFileElement = manifestElement.getElement(i);
-            if (!isXformsManifestNamespacedElement(mediaFileElement)) {
-                // someone else's extension?
-                continue;
-            }
-            String name = mediaFileElement.getName();
-            if (name.equalsIgnoreCase("mediaFile")) {
-                String filename = null;
-                String hash = null;
-                String downloadUrl = null;
-                // don't process descriptionUrl
-                int childCount = mediaFileElement.getChildCount();
-                for (int j = 0; j < childCount; ++j) {
-                    if (mediaFileElement.getType(j) != Element.ELEMENT) {
-                        // e.g., whitespace (text)
-                        continue;
-                    }
-                    Element child = mediaFileElement.getElement(j);
-                    if (!isXformsManifestNamespacedElement(child)) {
-                        // someone else's extension?
-                        continue;
-                    }
-                    String tag = child.getName();
-                    switch (tag) {
-                        case "filename":
-                            filename = XFormParser.getXMLText(child, true);
-                            if (filename != null && filename.length() == 0) {
-                                filename = null;
-                            }
-                            break;
-                        case "hash":
-                            hash = XFormParser.getXMLText(child, true);
-                            if (hash != null && hash.length() == 0) {
-                                hash = null;
-                            }
-                            break;
-                        case "downloadUrl":
-                            downloadUrl = XFormParser.getXMLText(child, true);
-                            if (downloadUrl != null && downloadUrl.length() == 0) {
-                                downloadUrl = null;
-                            }
-                            break;
-                    }
-                }
-                if (filename == null || downloadUrl == null || hash == null) {
-                    errMessage +=
-                            Collect.getInstance().getString(R.string.manifest_tag_error,
-                                    Integer.toString(i));
-                    Timber.e(errMessage);
-                    return errMessage;
-                }
-                files.add(new MediaFile(filename, hash, downloadUrl));
-            }
-        }
+        List<MediaFile> files = openRosaFormListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
 
         // OK we now have the full set of files to download...
         Timber.i("Downloading %d media files.", files.size());

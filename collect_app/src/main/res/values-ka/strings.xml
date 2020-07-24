@@ -133,11 +133,6 @@
   <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
   <string name="font_size">ტექსტის ზომა</string>
   <string name="change_font_size">ტექსტის ზომა</string>
-  <string name="access_error">შეცდომა %s-თან დაკავშირებისას </string>
-  <string name="manifest_server_error">მანიფესტის პასუხში არ იგულისხმება OpenRosa — ვერსია; bad server?</string>
-  <string name="root_element_error">ძირის ელემენტეი არ არის &lt;manifest\&gt; — იყო %s</string>
-  <string name="root_namespace_error">ძირის ელემენტის სახელთა სივრცე არასწორია: %s</string>
-  <string name="manifest_tag_error">მანიფესტის ჩანაწერში %s არ არსებობს ერთი ან მეტი ჭდე: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. მედია-ფაილების მიღება: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
   <string name="success">წარმატება</string>

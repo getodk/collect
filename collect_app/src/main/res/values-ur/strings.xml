@@ -127,11 +127,6 @@
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
   <string name="change_font_size">ٹیکسٹ فونٹ سائز</string>
-  <string name="access_error">%sکو رسائی حاصل کرتے وقت خرابی آرہی یے</string>
-  <string name="manifest_server_error">دکھایا گیا جواب ‎OpenRosa‏ ورژن رپورٹ نہیں کرتا ۔ خراب سرور؟</string>
-  <string name="root_element_error">روٹ ایلیمنٹ &lt;manifest\&gt; نہیں ہے، ـــــ %s تھا</string>
-  <string name="root_namespace_error">روٹ الیمینٹ نام اسپیس غلط ہے:%s </string>
-  <string name="manifest_tag_error">دکھائے گئےاندراج  ‎%s‏  میں ایک یا ذیادہ ٹیگز غائب ہیں:فائل کا نام، ہیش، یا ڈاون لوڈ یو آرایل</string>
   <string name="form_download_progress"> ‎‏ %1$s۔میڈیا فائل حاصل کی جا رہی ہے :‎‏  %2$s آف%3$s</string>
   <string name="fetching_manifest">%s۔ مینیفیسٹ کو حاصل کیا جا رہا ہے۔</string>
   <string name="success">کامیابی</string>

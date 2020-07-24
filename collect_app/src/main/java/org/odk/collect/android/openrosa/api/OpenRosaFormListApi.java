@@ -35,8 +35,23 @@ public class OpenRosaFormListApi implements FormListApi {
         this.formListPath = formListPath;
     }
 
+    /**
+     * @deprecated this is only to provide a way to use this implementation for fetching manifests
+     * and forms when downloading a form in older code.
+     */
+    @Deprecated
+    public OpenRosaFormListApi(OpenRosaXmlFetcher openRosaXmlFetcher) {
+        this.openRosaXMLFetcher = openRosaXmlFetcher;
+        serverURL = null;
+        formListPath = null;
+    }
+
     @Override
     public List<FormListItem> fetchFormList() throws FormApiException {
+        if (serverURL == null) {
+            throw new UnsupportedOperationException("Using deprecated constructor!");
+        }
+
         String downloadListUrl = getURL();
         DocumentFetchResult result = null;
         try {

@@ -115,11 +115,6 @@
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
-  <string name="access_error">%s avamisel esines viga</string>
-  <string name="manifest_server_error">Serveri vastuses puudub OpenRosa versioon</string>
-  <string name="root_element_error">Ei leia juurelementi &lt;manifest\&gt; — oli %s</string>
-  <string name="root_namespace_error">Juurelemendi nimeruum on vale: %s</string>
-  <string name="manifest_tag_error">Manifest kirjest %s puudub kas: failnimi, räsi või downloadUrl</string>
   <string name="form_download_progress">%1$s. Laeb faile: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Laen manifest faili</string>
   <string name="success">Õnnestus</string>

@@ -123,11 +123,6 @@
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">अक्षर फॉन्ट आकार</string>
   <string name="change_font_size">अक्षर फॉन्ट आकार</string>
-  <string name="access_error">%s:प्राप्ति के समय गलती</string>
-  <string name="manifest_server_error">मैन्फेस्ट उत्तर किसी OpenRosa version को रिपोर्ट नहीं करता - खराब सर्वर?</string>
-  <string name="root_element_error">रूट एलिमेंट &amp; नहीं है यह;\&amp;gt को दिखाता है; — जोकि %sथा</string>
-  <string name="root_namespace_error">रूट एलिमेंट नेमस्पेस गलत है: %s</string>
-  <string name="manifest_tag_error">मेन्फेस्ट एंट्री %sमें एक या अधिक टैग लापता हैं: फ़ाइल नाम, हैश, या डाउनलोडUrl</string>
   <string name="form_download_progress">%1$s. %3$sकी %2$sमीडिया फाइलें मिल रही हैं: </string>
   <string name="fetching_manifest">%s. मेनीफेस्ट मिल रहा है </string>
   <string name="success">सफल</string>

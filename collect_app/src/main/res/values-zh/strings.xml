@@ -119,11 +119,6 @@
   <string name="submission_url">提交路径</string>
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
-  <string name="access_error">读取 %s 中发生错误:</string>
-  <string name="manifest_server_error">Manifest回复中不包括OpenRosa版本 — 服务器错误?</string>
-  <string name="root_element_error">根元素不是 &lt;manifest\&gt; — 而是 %s</string>
-  <string name="root_namespace_error">根元素命名空间错误: %s</string>
-  <string name="manifest_tag_error">Manifest条目 %s 缺少一个或多个标签: 文件名, 哈希值, 或者下载Url</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
   <string name="fetching_manifest">%s. 加载Manifest</string>
   <string name="success">成功</string>

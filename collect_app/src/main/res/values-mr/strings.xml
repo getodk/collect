@@ -118,11 +118,6 @@
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">मजकूर फॉन्ट आकार</string>
   <string name="change_font_size">मजकूर फॉन्ट आकार</string>
-  <string name="access_error">%s: ऍक्सेस करताना त्रुटी:</string>
-  <string name="manifest_server_error">मॅनिफेस्ट रिझल्ट एक ओपेनरोसा आवृत्तीची तक्रार करत नाही - खराब सर्व्हर?</string>
-  <string name="root_element_error">मूळ घटक &amp; lt; मॅनिफेस्ट &amp; gt; नाही. %sआहे  </string>
-  <string name="root_namespace_error">रूट घटक नावस्थान चुकीची आहे: %s</string>
-  <string name="manifest_tag_error">मॅनिफेस्ट प्रविष्टि  1%s मध्ये एक किंवा अधिक टॅग गहाळ आहेत: फाइलनाव, हैश किंवा डाउनलोड युरएल.</string>
   <string name="form_download_progress">%1$s मीडिया फायली मिळवत आहे: %2$s पैकी %3$s</string>
   <string name="fetching_manifest">%s. मॅनिफेस्ट मिळवत आहे</string>
   <string name="success">यश</string>

@@ -133,11 +133,6 @@
   <string name="submission_url">Cesta pro odeslání</string>
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
-  <string name="access_error">Chyba při přístupu k %s:</string>
-  <string name="manifest_server_error">Odpověď manifestu nehlásí verzi OpenRosa - špatný server?</string>
-  <string name="root_element_error">Kořenový prvek není &lt;manifest\&gt; — místo toho předán %s</string>
-  <string name="root_namespace_error">Jmenný prostor kořenového prvku není správný: %s</string>
-  <string name="manifest_tag_error">Na vstupu manifestu %s chybí jeden nebo více tagů: filename, hash nebo downloadUrl</string>
   <string name="form_download_progress">%1$s. Stahuji mediální soubory: %2$s z %3$s</string>
   <string name="fetching_manifest">%s. Stahuji manifest </string>
   <string name="success">Úspěch</string>

@@ -128,11 +128,6 @@
   <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
-  <string name="access_error">%s मा प्रवेश गर्न खोज्दा गल्ति भयो:</string>
-  <string name="manifest_server_error">म्यनिफेष्ट को प्रतिक्रियाले कुनै पनि ओपनरोजा संस्करण को जनाउ दिदैन - सर्भर बिग्रियो कि ?</string>
-  <string name="root_element_error"> जड तत्वमा &lt;म्यनिफेष्ट\&gt; छैन — %s थियो </string>
-  <string name="root_namespace_error">जड तत्व Namespace गल्ति छ: %s </string>
-  <string name="manifest_tag_error">म्यनिफेष्ट दाखिला %s बाट एउटा वा सो भन्दा बढी ट्यागहरु हराइरहेका छन्: filename, hash, वा downloadURL</string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
   <string name="fetching_manifest">%s म्यनिफेष्ट प्राप्त गरिदै छ </string>
   <string name="success">सफल</string>

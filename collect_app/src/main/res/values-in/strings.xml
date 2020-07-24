@@ -133,11 +133,6 @@
   <string name="submission_url">Tautan pengiriman</string>
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>
-  <string name="access_error">Terjadi kesalahan ketika mengakses %s: </string>
-  <string name="manifest_server_error">Versi OpenRosa tidak terdeteksi — terjadi kesalahan pada server?</string>
-  <string name="root_element_error">Penamaan elemen root bukan &amp;lt;manifest\&gt; — tapi %s</string>
-  <string name="root_namespace_error">Penamaan elemen root tidak sesuai: %s</string>
-  <string name="manifest_tag_error">Manifest %s yang masuk kehilangan satu atau lebih tag: nama berkas, hash, atau tautan unduh</string>
   <string name="form_download_progress">%1$s. Sedang mengunduh berkas media: %2$s dari %3$s</string>
   <string name="fetching_manifest">%s. Sedang mengunduh manifest </string>
   <string name="success">Berhasil</string>

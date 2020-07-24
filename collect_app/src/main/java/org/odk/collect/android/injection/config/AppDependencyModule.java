@@ -153,7 +153,7 @@ public class AppDependencyModule {
 
     @Provides
     MultiFormDownloader providesMultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
-        return new MultiFormDownloader(formsDao, new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils));
+        return new MultiFormDownloader(new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils));
     }
 
     @Provides

@@ -133,11 +133,6 @@
   <string name="submission_url">Ścieżka zgłoszeń</string>
   <string name="font_size">Wielkość czcionki</string>
   <string name="change_font_size">Wielkość czcionki</string>
-  <string name="access_error">Błąd przy próbie dostępu %s:</string>
-  <string name="manifest_server_error">Odpowiedź w manifeście nie raportuje wersji OpenRosa — niewłaściwy serwer?</string>
-  <string name="root_element_error">Główny element nie jest &lt;manifest\&gt; — był %s</string>
-  <string name="root_namespace_error">Przestrzeń nazw głównego elementu jest niewłaściwa: %s</string>
-  <string name="manifest_tag_error">Wpis %s w manifeście ma brakujący jeden lub więcej znaczników: nazwa pliku, hash lub URL pobrania</string>
   <string name="form_download_progress">%1$s. Pobieram pliki medialne: %2$s z %3$s</string>
   <string name="fetching_manifest">%s. Pobieram manifest </string>
   <string name="success">Sukces</string>

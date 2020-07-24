@@ -133,11 +133,6 @@
   <string name="submission_url">Chemin de soumission</string>
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>
-  <string name="access_error">Erreur lors de l\'accès à %s: </string>
-  <string name="manifest_server_error">Réponse Manifest ne fourni pas une version OpenRosa — Serveur défaillant?</string>
-  <string name="root_element_error">L\'élément à la racine n\'est pas &amp;lt;manifest\&gt; — c\'était %s</string>
-  <string name="root_namespace_error"> L\'élément Root de Namespace est incorrect: %s</string>
-  <string name="manifest_tag_error">Il manque une ou plusieurs au Manifest %s: nom de fichier, hash, ou URL de téléchargement</string>
   <string name="form_download_progress">%1$s. Obtention de fichiers multimédia : %2$s de %3$s</string>
   <string name="fetching_manifest">%s. Recherche du Manifest …</string>
   <string name="success">Succès</string>

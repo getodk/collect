@@ -132,11 +132,6 @@
   <string name="submission_url">Sökväg till skickade formulär</string>
   <string name="font_size">Textstorlek</string>
   <string name="change_font_size">Textstorlek</string>
-  <string name="access_error">Fel vid inläsning av %s:</string>
-  <string name="manifest_server_error">Manifestets svar rapporterar inte en OpenRosa-version - felaktig server?</string>
-  <string name="root_element_error">Rotelementet är inte &lt;manifest\&gt; - var tidigare %s</string>
-  <string name="root_namespace_error">Rotelementets Namespace är felaktigt: %s</string>
-  <string name="manifest_tag_error">Manifestets post %s saknar en eller flera taggar: filnamn, hash eller nedladdnings-URL</string>
   <string name="form_download_progress">%1$s. Hämtar mediafil: %2$s av %3$s</string>
   <string name="fetching_manifest">%s. Hämtar manifest </string>
   <string name="success">Lyckades</string>

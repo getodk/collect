@@ -1,5 +1,7 @@
 package org.odk.collect.android.support;
 
+import android.net.Uri;
+
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
@@ -14,8 +16,9 @@ public class InMemFormRepository implements FormRepository {
     private final List<Form> forms = new ArrayList<>();
 
     @Override
-    public void save(Form form) {
+    public Uri save(Form form) {
         forms.add(form);
+        return null;
     }
 
     @Override
@@ -49,6 +52,12 @@ public class InMemFormRepository implements FormRepository {
         }).findFirst().orElse(null);
     }
 
+    @Nullable
+    @Override
+    public Form getByPath(String path) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public void delete(Long id) {
         forms.removeIf(form -> form.getId().equals(id));
@@ -65,5 +74,10 @@ public class InMemFormRepository implements FormRepository {
                     .build());
         }
 
+    }
+
+    @Override
+    public void deleteFormsByMd5Hash(String md5Hash) {
+        throw new UnsupportedOperationException();
     }
 }

@@ -116,11 +116,6 @@
   <string name="submission_url">Carpeta de presentacions</string>
   <string name="font_size">Mida del text</string>
   <string name="change_font_size">Mida del text</string>
-  <string name="access_error">Error mentre accedeix %s: </string>
-  <string name="manifest_server_error">No s\'identifica una versió d\'OpenRosa — servidor incorrecte?</string>
-  <string name="root_element_error">L\'element principal no és &amp;lt;manifest\&gt; — era %s</string>
-  <string name="root_namespace_error">Element principal \'Namespace\' és incorrecte: %s</string>
-  <string name="manifest_tag_error">A l\'entrada de manifest %s hi falten una o mes clausules: nom d\'arxiu, identificador, o Url de descàrrega</string>
   <string name="form_download_progress">%1$s. Obtenint arxius multimèdia: %2$s de %3$s</string>
   <string name="fetching_manifest">%s. Obtenint manifest</string>
   <string name="success">Correcte</string>

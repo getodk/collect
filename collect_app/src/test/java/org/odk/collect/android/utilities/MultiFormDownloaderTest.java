@@ -8,7 +8,6 @@ import org.kxml2.kdom.Document;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.robolectric.RobolectricTestRunner;
@@ -76,7 +75,7 @@ public class MultiFormDownloaderTest {
         out.write(basicNoMedia);
         out.close();
 
-        MultiFormDownloader downloader = spy(new MultiFormDownloader(new FormsDao(), openRosaXMLFetcher));
+        MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails serverFormDetails = new ServerFormDetails("No media", "https://testserver/no-media.xml",
                 null, "basic", "2019121201",
                 "hash", null, false, false);
@@ -134,7 +133,7 @@ public class MultiFormDownloaderTest {
         out.write(basicMedia);
         out.close();
 
-        MultiFormDownloader downloader = spy(new MultiFormDownloader(new FormsDao(), openRosaXMLFetcher));
+        MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails serverFormDetails = new ServerFormDetails("Media", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "media", "2019121201",
                 "hash", "manifestHash", false, false);
@@ -192,7 +191,7 @@ public class MultiFormDownloaderTest {
         when(openRosaXMLFetcher.getFile("https://testserver/external-data.xml",
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
-        MultiFormDownloader downloader = spy(new MultiFormDownloader(new FormsDao(), openRosaXMLFetcher));
+        MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails test1 = new ServerFormDetails("basic-external-xml-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-xml-instance", "20200101",
                 "hash", "manifestHash", false, false);
@@ -243,7 +242,7 @@ public class MultiFormDownloaderTest {
         when(openRosaXMLFetcher.getFile("https://testserver/external-data.csv",
                 null)).thenReturn(buildCsvExternalInstanceFetchResult());
 
-        MultiFormDownloader downloader = spy(new MultiFormDownloader(new FormsDao(), openRosaXMLFetcher));
+        MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails test1 = new ServerFormDetails("basic-external-csv-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-csv-instance", "20200101",
                 "hash", "manifestHash", false, false);
@@ -291,7 +290,7 @@ public class MultiFormDownloaderTest {
         out.write(basicLastSaved);
         out.close();
 
-        MultiFormDownloader downloader = spy(new MultiFormDownloader(new FormsDao(), openRosaXMLFetcher));
+        MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails test1 = new ServerFormDetails("Last Saved", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "basic-last-saved", "20200101",
                 "hash", "manifestHash", false, false);
@@ -357,7 +356,7 @@ public class MultiFormDownloaderTest {
         when(openRosaXMLFetcher.getFile("https://testserver/last-saved.xml",
                 null)).thenReturn(buildXmlExternalInstanceFetchResult());
 
-        MultiFormDownloader downloader = spy(new MultiFormDownloader(new FormsDao(), openRosaXMLFetcher));
+        MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails serverFormDetails = new ServerFormDetails("last-saved-attached", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "last-saved-attached", "20200101",
                 "hash", "manifestHash", false, false);

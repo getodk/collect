@@ -132,11 +132,6 @@
   <string name="submission_url">ផ្លូវដាក់ចូល</string>
   <string name="font_size">ទំហំពុម្ភអក្សរ</string>
   <string name="change_font_size">ទំហំពុម្ភអក្សរ</string>
-  <string name="access_error">មានបញ្ហាខណៈពេលដំណើរការ %s:</string>
-  <string name="manifest_server_error">ការឆ្លើយ​តប​ Manifest មិនបាន​រាយការណ៍​ពីជំនាន់ OpenRosa - ម៉ាស៊ីន​មេ​មិន​ត្រឹម​ត្រូវ?</string>
-  <string name="root_element_error">ធាតុឬសគឺ​មិន &lt;manifest\&gt; - %s</string>
-  <string name="root_namespace_error">ធាតុ​ឬស Namespace មិនត្រឹមត្រូវ: %s</string>
-  <string name="manifest_tag_error">ការចូល Manifest %s គឺបាត់បង់ស្លាក​មួយ​ ឬ​ច្រើន: ឈ្មោះឯកសារ, គន្លឹះ​សញ្ញា ឬ អាសយដ្ឋានទាញយក</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
   <string name="success">ជោគជ័យ</string>
