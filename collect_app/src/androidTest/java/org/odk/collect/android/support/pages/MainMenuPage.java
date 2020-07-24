@@ -205,6 +205,16 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage(rule));
     }
 
+    public MainMenuPage enableAutoSend() {
+        return clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .clickOnString(R.string.autosend)
+                .clickOnString(R.string.wifi_cellular_autosend)
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule));
+    }
+
     public MainMenuPage setGoogleDriveAccount(String account) {
         Intent data = new Intent();
         data.putExtra(AccountManager.KEY_ACCOUNT_NAME, account);
@@ -229,6 +239,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public OkDialog clickGetBlankFormWithError() {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
         return new OkDialog(rule).assertOnPage();
+    }
+
+    public ViewSentFormPage clickViewSentForm(int formCount) {
+        onView(withText(getTranslatedString(R.string.view_sent_forms_button, formCount))).perform(click());
+        return new ViewSentFormPage(rule).assertOnPage();
     }
 }
 
