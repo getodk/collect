@@ -15,34 +15,32 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.TimePicker;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.utilities.DialogUtils;
+
 import java.util.Date;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.CURRENT_TIME;
 import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.TIME_PICKER_THEME;
 
 @SuppressLint("ViewConstructor")
-public class TimeWidget extends QuestionWidget implements ButtonClickListener {
-    Button timeButton;
-    final TextView timeTextView;
+public class TimeWidget extends QuestionWidget {
+    WidgetAnswerBinding binding;
 
     private int hourOfDay;
     private int minuteOfHour;
@@ -55,8 +53,21 @@ public class TimeWidget extends QuestionWidget implements ButtonClickListener {
 
     public TimeWidget(Context context, QuestionDetails prompt, boolean isPartOfDateTimeWidget) {
         super(context, prompt, !isPartOfDateTimeWidget);
-        createTimeButton();
-        timeTextView = createAnswerTextView(getContext(), getAnswerFontSize());
+    }
+
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        View answerView = binding.getRoot();
+
+        if (prompt.isReadOnly()) {
+            binding.widgetButton.setVisibility(GONE);
+        } else {
+            binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.widgetButton.setText(getContext().getString(R.string.select_time));
+            binding.widgetButton.setOnClickListener(v -> onButtonClick());
+        }
+        binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
@@ -66,7 +77,8 @@ public class TimeWidget extends QuestionWidget implements ButtonClickListener {
             DateTime dateTime = new DateTime(date);
             updateTime(dateTime, true);
         }
-        addViews();
+
+        return answerView;
     }
 
     @Override
@@ -77,7 +89,7 @@ public class TimeWidget extends QuestionWidget implements ButtonClickListener {
 
     void clearAnswerWithoutValueChangeEvent() {
         nullAnswer = true;
-        timeTextView.setText(R.string.no_time_selected);
+        binding.widgetAnswerText.setText(R.string.no_time_selected);
     }
 
     @Override
@@ -93,32 +105,20 @@ public class TimeWidget extends QuestionWidget implements ButtonClickListener {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        timeButton.setOnLongClickListener(l);
-        timeTextView.setOnLongClickListener(l);
+        binding.widgetButton.setOnLongClickListener(l);
+        binding.widgetAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        timeButton.cancelLongPress();
-        timeTextView.cancelLongPress();
-    }
-
-    private void createTimeButton() {
-        timeButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_time), getAnswerFontSize(), this);
-    }
-
-    private void addViews() {
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(timeButton);
-        linearLayout.addView(timeTextView);
-        addAnswerView(linearLayout, WidgetViewUtils.getStandardMargin(getContext()));
+        binding.widgetButton.cancelLongPress();
+        binding.widgetAnswerText.cancelLongPress();
     }
 
     public void setTimeLabel() {
         nullAnswer = false;
-        timeTextView.setText(getAnswer().getDisplayText());
+        binding.widgetAnswerText.setText(getAnswer().getDisplayText());
     }
 
     private void createTimePickerDialog() {
@@ -165,8 +165,7 @@ public class TimeWidget extends QuestionWidget implements ButtonClickListener {
         setTimeLabel();
     }
 
-    @Override
-    public void onButtonClick(int buttonId) {
+    private void onButtonClick() {
         if (nullAnswer) {
             setTimeToCurrent();
         } else {

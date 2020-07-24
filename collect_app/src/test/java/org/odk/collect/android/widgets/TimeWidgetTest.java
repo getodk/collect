@@ -42,7 +42,7 @@ public class TimeWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowButton() {
         TimeWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
-        assertEquals(widget.timeButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.widgetButton.getVisibility(), View.GONE);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class TimeWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoDateSelected() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.timeTextView.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TimeWidgetTest {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new TimeData(dateTime.toDate()));
         TimeWidget widget = createWidget(prompt);
 
-        assertEquals(widget.timeTextView.getText(), "12:00");
+        assertEquals(widget.binding.widgetAnswerText.getText(), "12:00");
     }
 
     @Test
@@ -76,7 +76,7 @@ public class TimeWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertEquals(widget.timeTextView.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
@@ -92,18 +92,18 @@ public class TimeWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(listener);
-        widget.timeButton.performLongClick();
+        widget.binding.widgetButton.performLongClick();
 
-        verify(listener).onLongClick(widget.timeButton);
+        verify(listener).onLongClick(widget.binding.widgetButton);
     }
 
     @Test
     public void clickingAnswerTextViewForLong_callsLongClickListener() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(listener);
-        widget.timeTextView.performLongClick();
+        widget.binding.widgetAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.timeTextView);
+        verify(listener).onLongClick(widget.binding.widgetAnswerText);
     }
 
     private TimeWidget createWidget(FormEntryPrompt prompt) {
