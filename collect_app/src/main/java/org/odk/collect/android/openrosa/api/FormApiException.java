@@ -31,7 +31,7 @@ public class FormApiException extends Exception {
 
     @Override
     public String toString() {
-        return "FormAPIError{" +
+        return "FormAPIException{" +
                 "type=" + type +
                 '}';
     }

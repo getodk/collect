@@ -1,6 +1,6 @@
 package org.odk.collect.android.formmanagement;
 
-import android.content.Context;
+import android.app.Application;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -54,7 +54,7 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public Notifier providesNotifier(Context context) {
+            public Notifier providesNotifier(Application application) {
                 return notifier;
             }
         });
