@@ -12,9 +12,8 @@
  * the License.
  */
 
-package org.odk.collect.android.upload;
+package org.odk.collect.android.backgroundwork;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,9 +25,9 @@ import android.net.Uri;
 import android.os.Environment;
 
 import androidx.annotation.NonNull;
-import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.analytics.Analytics;
@@ -44,16 +43,23 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.upload.InstanceServerUploader;
+import org.odk.collect.android.upload.InstanceUploader;
+import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.async.TaskSpec;
+import org.odk.collect.async.WorkerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -64,9 +70,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
-public class AutoSendWorker extends Worker {
-
-    public static final String TAG = "AutoSendWorker";
+public class AutoSendTaskSpec implements TaskSpec {
 
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
@@ -78,10 +82,6 @@ public class AutoSendWorker extends Worker {
 
     @Inject
     Analytics analytics;
-
-    public AutoSendWorker(@NonNull Context c, @NonNull WorkerParameters parameters) {
-        super(c, parameters);
-    }
 
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
@@ -95,100 +95,107 @@ public class AutoSendWorker extends Worker {
      * If the network type doesn't match the auto-send settings, retry next time a connection is
      * available.
      */
-    @NonNull
+    @NotNull
     @Override
-    @SuppressLint("WrongThread")
-    public Result doWork() {
-        Collect.getInstance().getComponent().inject(this);
+    public Supplier<Boolean> getTask(@NotNull Context context) {
+        return () -> {
+            Collect.getInstance().getComponent().inject(this);
 
-        if (storageMigrationRepository.isMigrationBeingPerformed()) {
-            return Result.failure();
-        }
-
-        NetworkInfo currentNetworkInfo = connectivityProvider.getNetworkInfo();
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
-                || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
-            if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo)) {
-                return Result.retry();
+            if (storageMigrationRepository.isMigrationBeingPerformed()) {
+                return true;
             }
 
-            return Result.failure();
-        }
-
-        List<Instance> toUpload = getInstancesToAutoSend(GeneralSharedPreferences.isAutoSendEnabled());
-
-        if (toUpload.isEmpty()) {
-            return Result.success();
-        }
-
-        GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-        String protocol = (String) settings.get(GeneralKeys.KEY_PROTOCOL);
-
-        InstanceUploader uploader;
-        Map<String, String> resultMessagesByInstanceId = new HashMap<>();
-        String deviceId = null;
-        boolean anyFailure = false;
-
-        if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
-            if (PermissionUtils.isGetAccountsPermissionGranted(getApplicationContext())) {
-                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                String googleUsername = accountsManager.getLastSelectedAccountIfValid();
-                if (googleUsername.isEmpty()) {
-                    showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
-                    return Result.failure();
+            NetworkInfo currentNetworkInfo = connectivityProvider.getNetworkInfo();
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
+                    || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
+                if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo)) {
+                    return false;
                 }
-                accountsManager.selectAccount(googleUsername);
-                uploader = new InstanceGoogleSheetsUploader(accountsManager);
+
+                return true;
+            }
+
+            List<Instance> toUpload = getInstancesToAutoSend(GeneralSharedPreferences.isAutoSendEnabled());
+
+            if (toUpload.isEmpty()) {
+                return true;
+            }
+
+            GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
+            String protocol = (String) settings.get(GeneralKeys.KEY_PROTOCOL);
+
+            InstanceUploader uploader;
+            Map<String, String> resultMessagesByInstanceId = new HashMap<>();
+            String deviceId = null;
+            boolean anyFailure = false;
+
+            if (protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets))) {
+                if (PermissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
+                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+                    String googleUsername = accountsManager.getLastSelectedAccountIfValid();
+                    if (googleUsername.isEmpty()) {
+                        showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
+                        return true;
+                    }
+                    accountsManager.selectAccount(googleUsername);
+                    uploader = new InstanceGoogleSheetsUploader(accountsManager);
+                } else {
+                    showUploadStatusNotification(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
+                    return true;
+                }
             } else {
-                showUploadStatusNotification(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
-                return Result.failure();
+                OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
+                uploader = new InstanceServerUploader(httpInterface,
+                        new WebCredentialsUtils(), new HashMap<>());
+                deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
+                        .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
             }
-        } else {
-            OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
-            uploader = new InstanceServerUploader(httpInterface,
-                    new WebCredentialsUtils(), new HashMap<>());
-            deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                    .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
-        }
 
-        for (Instance instance : toUpload) {
-            try {
-                String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null);
-                if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))
-                        && !InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
+            for (Instance instance : toUpload) {
+                try {
+                    String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null);
+                    if (protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets))
+                            && !InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
+                        anyFailure = true;
+                        resultMessagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
+                        continue;
+                    }
+                    String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
+                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                            customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
+
+                    // If the submission was successful, delete the instance if either the app-level
+                    // delete preference is set or the form definition requests auto-deletion.
+                    // TODO: this could take some time so might be better to do in a separate process,
+                    // perhaps another worker. It also feels like this could fail and if so should be
+                    // communicated to the user. Maybe successful delete should also be communicated?
+                    if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
+                            (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
+                        Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
+                        Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
+                    }
+
+                    String action = protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets)) ?
+                            "HTTP-Sheets auto" : "HTTP auto";
+                    String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
+                    analytics.logEvent(SUBMISSION, action, label);
+                } catch (UploadException e) {
+                    Timber.d(e);
                     anyFailure = true;
-                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
-                    continue;
+                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                            e.getDisplayMessage());
                 }
-                String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
-                        customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
-
-                // If the submission was successful, delete the instance if either the app-level
-                // delete preference is set or the form definition requests auto-deletion.
-                // TODO: this could take some time so might be better to do in a separate process,
-                // perhaps another worker. It also feels like this could fail and if so should be
-                // communicated to the user. Maybe successful delete should also be communicated?
-                if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
-                        (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
-                    Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
-                    Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
-                }
-
-                String action = protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
-                        "HTTP-Sheets auto" : "HTTP auto";
-                String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
-                analytics.logEvent(SUBMISSION, action, label);
-            } catch (UploadException e) {
-                Timber.d(e);
-                anyFailure = true;
-                resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
-                        e.getDisplayMessage());
             }
-        }
 
-        showUploadStatusNotification(anyFailure, InstanceUploaderUtils.getUploadResultMessage(getApplicationContext(), resultMessagesByInstanceId));
-        return Result.success();
+            showUploadStatusNotification(anyFailure, InstanceUploaderUtils.getUploadResultMessage(Collect.getInstance(), resultMessagesByInstanceId));
+            return true;
+        };
+    }
+
+    @NotNull
+    @Override
+    public Class<? extends WorkerAdapter> getWorkManagerAdapter() {
+        return Adapter.class;
     }
 
     /**
@@ -293,5 +300,12 @@ public class AutoSendWorker extends Worker {
                 Collect.getInstance(), (NotificationManager) Collect.getInstance().getSystemService(Context.NOTIFICATION_SERVICE), Collect.getInstance().getString(R.string.odk_auto_note), anyFailure ? Collect.getInstance().getString(R.string.failures)
                         : Collect.getInstance().getString(R.string.success), pendingNotify, AUTO_SEND_RESULT_NOTIFICATION_ID
         );
+    }
+
+    public static class Adapter extends WorkerAdapter {
+
+        public Adapter(@NotNull Context context, @NotNull WorkerParameters workerParams) {
+            super(new AutoSendTaskSpec(), context, workerParams);
+        }
     }
 }

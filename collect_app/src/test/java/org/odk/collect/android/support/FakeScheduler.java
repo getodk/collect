@@ -20,6 +20,11 @@ public class FakeScheduler implements Scheduler {
     }
 
     @Override
+    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec) {
+
+    }
+
+    @Override
     public void networkDeferred(@NotNull String tag, @NotNull TaskSpec taskSpec, long repeatPeriod) {
 
     }

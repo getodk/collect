@@ -13,6 +13,8 @@ import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
+import java.util.function.Supplier;
+
 import javax.inject.Inject;
 
 public class SyncFormsTaskSpec implements TaskSpec {
@@ -28,12 +30,12 @@ public class SyncFormsTaskSpec implements TaskSpec {
 
     @NotNull
     @Override
-    public Runnable getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
             if (!syncStatusRepository.startSync()) {
-                return;
+                return true;
             }
 
             try {
@@ -43,6 +45,8 @@ public class SyncFormsTaskSpec implements TaskSpec {
                 syncStatusRepository.finishSync(false);
                 notifier.onSyncFailure(e);
             }
+
+            return true;
         };
     }
 

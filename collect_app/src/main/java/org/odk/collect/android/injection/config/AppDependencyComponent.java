@@ -19,6 +19,7 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -52,7 +53,6 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
-import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.MultiFormDownloader;
@@ -156,7 +156,7 @@ public interface AppDependencyComponent {
 
     void inject(StorageMigrationService storageMigrationService);
 
-    void inject(AutoSendWorker autoSendWorker);
+    void inject(AutoSendTaskSpec autoSendTaskSpec);
 
     void inject(StorageMigrationDialog storageMigrationDialog);
 

@@ -45,7 +45,6 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.InstanceSyncTask;
-import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -207,8 +206,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.TAG);
-
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData("AutoSendWorker");
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
                 for (WorkInfo status : workStatuses) {

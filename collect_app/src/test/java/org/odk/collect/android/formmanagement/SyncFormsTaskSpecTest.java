@@ -18,6 +18,8 @@ import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.function.Supplier;
+
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -63,8 +65,8 @@ public class SyncFormsTaskSpecTest {
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
-        task.run();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
 
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
@@ -78,8 +80,8 @@ public class SyncFormsTaskSpecTest {
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
-        task.run();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
 
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
@@ -92,8 +94,8 @@ public class SyncFormsTaskSpecTest {
         when(syncStatusRepository.startSync()).thenReturn(false);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
-        task.run();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
 
         verify(serverFormsSynchronizer, never()).synchronize();
         verify(syncStatusRepository, never()).finishSync(true);

@@ -36,6 +36,7 @@ import org.odk.collect.async.WorkerAdapter;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -63,12 +64,12 @@ public class AutoUpdateTaskSpec implements TaskSpec {
 
     @NotNull
     @Override
-    public Runnable getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
             if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
-                return;
+                return true;
             }
 
             ServerFormsUpdateChecker checker = new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formRepository);
@@ -82,6 +83,8 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                     notifier.onUpdatesAvailable();
                 }
             }
+
+            return true;
         };
     }
 
