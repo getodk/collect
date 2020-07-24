@@ -207,7 +207,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
         QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
-        SelectMinimalDialog.SelectMinimalDialogListener{
+        SelectMinimalDialog.SelectMinimalDialogListener {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;

@@ -17,12 +17,12 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.List;
 
-public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryWidget, MultiChoiceWidget {
+public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryDataReceiver, MultiChoiceWidget {
     SelectMinimalWidgetAnswerBinding binding;
     protected AbstractSelectListAdapter recyclerViewAdapter;
 
@@ -60,11 +60,6 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryW
     public void setBinaryData(Object answer) {
         recyclerViewAdapter.updateSelectedItems((List<Selection>) answer);
         updateAnswer();
-    }
-
-    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    @Override
-    public void onButtonClick(int buttonId) {
     }
 
     @Override
