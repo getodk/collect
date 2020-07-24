@@ -55,7 +55,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public MapsSettingsPage clickMaps() {
-        onData(PreferenceMatchers.withKey("maps")).perform(click());
+        clickOnString(R.string.maps);
         return new MapsSettingsPage(rule).assertOnPage();
     }
 
