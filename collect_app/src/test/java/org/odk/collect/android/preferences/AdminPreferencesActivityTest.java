@@ -1,20 +1,23 @@
 package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
+
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.LooperMode;
 
 import timber.log.Timber;
 
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 /**
  * Tests for Admin Preferences
@@ -30,12 +33,13 @@ public class AdminPreferencesActivityTest {
         AdminPreferencesActivity activity = Robolectric.setupActivity(AdminPreferencesActivity.class);
 
         adminPreferencesFragment = (AdminPreferencesFragment) activity
-                .getFragmentManager().findFragmentByTag(AdminPreferencesActivity.TAG);
+                .getSupportFragmentManager().findFragmentByTag(AdminPreferencesActivity.TAG);
 
         sharedPreferences = adminPreferencesFragment.getActivity()
                 .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
     }
 
+    @LooperMode(PAUSED)
     @Test
     public void shouldUpdateAdminSharedPreferences() throws NullPointerException {
         for (String adminKey : AdminKeys.ALL_KEYS) {

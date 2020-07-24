@@ -4,7 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
+
+import androidx.preference.Preference;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.common.collect.ImmutableSet;

@@ -16,8 +16,9 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Fragment;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
@@ -50,7 +51,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
         if (savedInstanceState == null) {
             boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
             Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
-            getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.preferences_fragment_container, fragment, TAG)
                     .commit();

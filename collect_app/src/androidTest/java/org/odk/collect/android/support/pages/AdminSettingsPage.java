@@ -1,15 +1,13 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 
-import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
 public class AdminSettingsPage extends Page<AdminSettingsPage> {
@@ -25,49 +23,46 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage openUserSettings() {
-        onData(PreferenceMatchers.withKey("user_settings")).perform(click());
+        clickOnString(R.string.user_settings);
         return this;
     }
 
     public AdminSettingsPage uncheckAllUserSettings() {
-        onData(PreferenceMatchers.withKey("change_server")).perform(click());
-        onData(PreferenceMatchers.withKey("change_app_theme")).perform(click());
-        onData(PreferenceMatchers.withKey("change_app_language")).perform(click());
-        onData(PreferenceMatchers.withKey("change_font_size")).perform(click());
-        onData(PreferenceMatchers.withKey("change_navigation")).perform(click());
-        onData(PreferenceMatchers.withKey("show_splash_screen")).perform(click());
-        onData(PreferenceMatchers.withKey("maps")).perform(click());
-        onData(PreferenceMatchers.withKey("high_resolution")).perform(ViewActions.scrollTo());
-        onData(PreferenceMatchers.withKey("periodic_form_updates_check")).perform(click());
-        onData(PreferenceMatchers.withKey("automatic_update")).perform(click());
-        onData(PreferenceMatchers.withKey("hide_old_form_versions")).perform(click());
-        onData(PreferenceMatchers.withKey("change_autosend")).perform(click());
-        onData(PreferenceMatchers.withKey("delete_after_send")).perform(click());
-        onData(PreferenceMatchers.withKey("default_to_finalized")).perform(click());
-        onData(PreferenceMatchers.withKey("change_constraint_behavior")).perform(click());
-        onData(PreferenceMatchers.withKey("analytics")).perform(ViewActions.scrollTo());
-        onData(PreferenceMatchers.withKey("high_resolution")).perform(click());
-        onData(PreferenceMatchers.withKey("image_size")).perform(click());
-        onData(PreferenceMatchers.withKey("guidance_hint")).perform(click());
-        onData(PreferenceMatchers.withKey("instance_form_sync")).perform(click());
-        onData(PreferenceMatchers.withKey("change_form_metadata")).perform(click());
-        onData(PreferenceMatchers.withKey("analytics")).perform(click());
+        clickOnString(R.string.server);
+        clickOnString(R.string.app_theme);
+        clickOnString(R.string.language);
+        clickOnString(R.string.font_size);
+        clickOnString(R.string.navigation);
+        clickOnString(R.string.show_splash_title);
+        clickOnString(R.string.maps);
+        clickOnString(R.string.periodic_form_updates_check_title);
+        clickOnString(R.string.automatic_download);
+        scrollToViewAndClickText(getTranslatedString(R.string.hide_old_form_versions_setting_title));
+        scrollToViewAndClickText(getTranslatedString(R.string.autosend));
+        scrollToViewAndClickText(getTranslatedString(R.string.delete_after_send));
+        scrollToViewAndClickText(getTranslatedString(R.string.default_completed));
+        scrollToViewAndClickText(getTranslatedString(R.string.constraint_behavior_title));
+        scrollToViewAndClickText(getTranslatedString(R.string.high_resolution_title));
+        scrollToViewAndClickText(getTranslatedString(R.string.image_size_title));
+        scrollToViewAndClickText(getTranslatedString(R.string.guidance_hint_title));
+        scrollToViewAndClickText(getTranslatedString(R.string.instance_sync));
+        scrollToViewAndClickText(getTranslatedString(R.string.form_metadata));
+        scrollToViewAndClickText(getTranslatedString(R.string.analytics));
         return this;
     }
 
     public GeneralSettingsPage clickGeneralSettings() {
-        onData(PreferenceMatchers.withKey("odk_preferences")).perform(click());
+        scrollToViewAndClickText(getTranslatedString(R.string.general_preferences));
         return new GeneralSettingsPage(rule).assertOnPage();
     }
 
-    public AdminSettingsPage uncheckUserSettings(String setting) {
-        onData(PreferenceMatchers.withKey(setting)).perform(ViewActions.scrollTo());
-        onData(PreferenceMatchers.withKey(setting)).perform(click());
+    public AdminSettingsPage uncheckUserSettings(int id) {
+        scrollToViewAndClickText(getTranslatedString(id));
         return this;
     }
 
     public AdminSettingsPage clickFormEntrySettings() {
-        onData(PreferenceMatchers.withKey("form_entry")).perform(click());
+        scrollToViewAndClickText(getTranslatedString(R.string.form_entry_setting));
         return this;
     }
 
@@ -77,12 +72,12 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage checkIfSaveFormOptionIsDisabled() {
-        onData(PreferenceMatchers.withKey("save_mid")).check(matches(not(isEnabled())));
+        onView(withText(getTranslatedString(R.string.save_all_answers))).check(matches(not(isEnabled())));
         return this;
     }
 
     public AdminSettingsPage clickOnResetApplication() {
-        onData(PreferenceMatchers.withKey("reset_settings")).perform(click());
+        clickOnString(R.string.reset_settings_dialog);
         return this;
     }
 

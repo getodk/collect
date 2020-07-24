@@ -65,13 +65,13 @@ public class UserSettingsTest {
     }
 
     @Test
-    public void showGuidance_shouldBehidden() {
+    public void showGuidance_shouldBeHidden() {
         //TestCase5
         new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickAdminSettings()
                 .openUserSettings()
-                .uncheckUserSettings("guidance_hint")
+                .uncheckUserSettings(R.string.guidance_hint_title)
                 .pressBack(new AdminSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .clickOnMenu()

@@ -1,25 +1,30 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
         android:dialogTitle="@string/change_server_url"
         android:inputType="textNoSuggestions"
         android:key="server_url"
-        android:title="@string/server_url" />
+        android:title="@string/server_url"
+        app:iconSpaceReserved="false" />
     <EditTextPreference
         android:dialogTitle="@string/change_username"
         android:inputType="textNoSuggestions"
         android:key="username"
-        android:title="@string/username" />
+        android:title="@string/username"
+        app:iconSpaceReserved="false" />
     <EditTextPreference
         android:dialogTitle="@string/change_password"
         android:inputType="textPassword"
         android:key="password"
-        android:title="@string/password" />
+        android:title="@string/password"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="custom_server_paths"
         android:persistent="false"
         android:summary="@string/legacy_custom_server_paths_summary"
-        android:title="@string/custom_server_paths" />
+        android:title="@string/custom_server_paths"
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

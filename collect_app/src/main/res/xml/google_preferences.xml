@@ -1,14 +1,17 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
         android:key="selected_google_account"
-        android:title="@string/selected_google_account_text" />
+        android:title="@string/selected_google_account_text"
+        app:iconSpaceReserved="false" />
 
     <EditTextPreference
         android:dialogTitle="@string/google_sheets_url"
         android:inputType="textNoSuggestions"
         android:key="google_sheets_url"
         android:summary="@string/google_sheets_url_hint"
-        android:title="@string/google_sheets_url" />
+        android:title="@string/google_sheets_url"
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

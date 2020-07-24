@@ -85,7 +85,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
         setTitle(R.string.admin_preferences);
         if (savedInstanceState == null) {
-            getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.preferences_fragment_container, new AdminPreferencesFragment(), TAG)
                     .commit();
@@ -94,7 +94,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
     @Override
     public void preventOtherWaysOfEditingForm() {
-        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getFragmentManager().findFragmentByTag(TAG);
+        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getSupportFragmentManager().findFragmentByTag(TAG);
         fragment.preventOtherWaysOfEditingForm();
     }
 

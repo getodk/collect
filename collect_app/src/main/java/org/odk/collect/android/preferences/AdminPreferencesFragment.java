@@ -14,13 +14,13 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
@@ -49,11 +49,12 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
+
         getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
-        addPreferencesFromResource(R.xml.admin_preferences);
+        setPreferencesFromResource(R.xml.admin_preferences, rootKey);
 
         findPreference("odk_preferences").setOnPreferenceClickListener(this);
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
@@ -62,6 +63,21 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
         findPreference("save_legacy_settings").setOnPreferenceClickListener(this);
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        ResetDialogPreference resetDialogPreference = null;
+        if (preference instanceof ResetDialogPreference) {
+            resetDialogPreference = (ResetDialogPreference) preference;
+        }
+        if (resetDialogPreference != null) {
+            ResetDialogPreferenceFragmentCompat dialogFragment = ResetDialogPreferenceFragmentCompat.newInstance(preference.getKey());
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(getParentFragmentManager(), null);
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
     }
 
     @Override
@@ -115,7 +131,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             }
 
             if (fragment != null) {
-                getActivity().getFragmentManager().beginTransaction()
+                getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.preferences_fragment_container, fragment)
                         .addToBackStack(null)
                         .commit();

@@ -17,9 +17,12 @@ package org.odk.collect.android.preferences;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapConfigurator;
@@ -54,6 +57,20 @@ public class MapsPreferences extends BasePreferenceFragment {
         return prefs;
     }
 
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        DialogFragment dialogFragment = null;
+        if (preference instanceof CaptionedListPreference) {
+            dialogFragment = ReferenceLayerPreferenceDialog.newInstance(preference.getKey());
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
+        if (dialogFragment != null) {
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(getParentFragmentManager(), null);
+        }
+    }
+
     /** Pops up the preference dialog that lets the user choose a reference layer. */
     public static void showReferenceLayerDialog(Activity activity) {
         // Unfortunately, the Preference class is designed so that it is impossible
@@ -63,7 +80,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         // attached, then instantiate it and attach it.
         MapsPreferences prefs = newInstance(false);
         prefs.autoShowReferenceLayerDialog = true;  // makes dialog open immediately
-        activity.getFragmentManager()
+        ((AppCompatActivity) activity).getSupportFragmentManager()
             .beginTransaction()
             .add(prefs, null)
             .commit();
@@ -78,7 +95,8 @@ public class MapsPreferences extends BasePreferenceFragment {
         initReferenceLayerPref();
         if (autoShowReferenceLayerDialog) {
             populateReferenceLayerPref();
-            referenceLayerPref.showDialog();
+            /** Opens the dialog programmatically, rather than by a click from the user. */
+            onDisplayPreferenceDialog(getPreferenceManager().findPreference("reference_layer"));
         }
     }
 
@@ -105,6 +123,7 @@ public class MapsPreferences extends BasePreferenceFragment {
             context, KEY_BASEMAP_SOURCE, getString(R.string.basemap_source),
             MapProvider.getLabelIds(), MapProvider.getIds()
         );
+        basemapSourcePref.setIconSpaceReserved(false);
         onBasemapSourceChanged(MapProvider.getConfigurator());
         basemapSourcePref.setOnPreferenceChangeListener((pref, value) -> {
             MapConfigurator cftor = MapProvider.getConfigurator(value.toString());
@@ -126,6 +145,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         baseCategory.addPreference(basemapSourcePref);
 
         for (Preference pref : cftor.createPrefs(context)) {
+            pref.setIconSpaceReserved(false);
             baseCategory.addPreference(pref);
         }
 

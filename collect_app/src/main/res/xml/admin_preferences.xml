@@ -1,51 +1,65 @@
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/admin_preferences">
 
     <Preference
         android:key="odk_preferences"
         android:summary="@string/admin_access_settings"
-        android:title="@string/general_preferences">
+        android:title="@string/general_preferences"
+        app:iconSpaceReserved="false">
     </Preference>
 
     <Preference
         android:key="admin_password"
-        android:title="@string/admin_password" />
+        android:title="@string/admin_password"
+        app:iconSpaceReserved="false" />
 
-    <PreferenceCategory android:title="@string/app_configuration">
+    <PreferenceCategory android:title="@string/app_configuration"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false">
         <org.odk.collect.android.preferences.ResetDialogPreference
             android:dialogTitle="@string/reset_settings_dialog_title"
             android:key="reset_settings"
             android:negativeButtonText="@string/cancel"
             android:positiveButtonText="@string/reset_settings_button_reset"
-            android:title="@string/reset_settings_dialog" />
+            android:title="@string/reset_settings_dialog"
+            app:iconSpaceReserved="false" />
 
         <PreferenceScreen
             android:key="import_settings"
-            android:title="@string/configure_via_qr_code" />
+            android:title="@string/configure_via_qr_code"
+            app:iconSpaceReserved="false" />
 
         <PreferenceScreen
             android:key="save_legacy_settings"
             android:title="@string/save_legacy_settings"
-            android:summary="@string/save_legacy_settings_warning"/>
+            android:summary="@string/save_legacy_settings_warning"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/user_access_control">
+    <PreferenceCategory android:title="@string/user_access_control"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false">
 
         <PreferenceScreen
             android:key="main_menu"
             android:summary="@string/main_menu_settings_summary"
-            android:title="@string/main_menu_settings" />
+            android:title="@string/main_menu_settings"
+            app:iconSpaceReserved="false" />
 
         <PreferenceScreen
             android:key="user_settings"
             android:summary="@string/user_setting_summary"
-            android:title="@string/user_settings" />
+            android:title="@string/user_settings"
+            app:iconSpaceReserved="false" />
 
         <PreferenceScreen
             android:key="form_entry"
             android:summary="@string/form_entry_settings_summary"
-            android:title="@string/form_entry_setting" />
+            android:title="@string/form_entry_setting"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 </PreferenceScreen>

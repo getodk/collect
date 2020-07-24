@@ -17,8 +17,10 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceScreen;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -60,14 +62,14 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
-            BasePreferenceFragment basePreferenceFragment = null;
+            PreferenceFragmentCompat basePreferenceFragment = null;
             boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
             switch (preference.getKey()) {
                 case "protocol":
                     basePreferenceFragment = ServerPreferencesFragment.newInstance(adminMode);
                     break;
                 case "user_interface":
-                    AndroidXPreferencesActivity.start(getActivity(), UserInterfacePreferencesFragment.class);
+                    basePreferenceFragment =  new UserInterfacePreferencesFragment();
                     break;
                 case "maps":
                     basePreferenceFragment = MapsPreferences.newInstance(adminMode);
@@ -79,11 +81,11 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
                     basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
                     break;
                 case "experimental":
-                    AndroidXPreferencesActivity.start(getActivity(), ExperimentalPreferencesFragment.class);
+                    basePreferenceFragment = new ExperimentalPreferencesFragment();
                     break;
             }
             if (basePreferenceFragment != null) {
-                getActivity().getFragmentManager()
+                getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.preferences_fragment_container, basePreferenceFragment)
                         .addToBackStack(null)

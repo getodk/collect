@@ -17,12 +17,9 @@
 package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -32,7 +29,12 @@ import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formmanagement.FormUpdateMode;
@@ -72,9 +74,8 @@ import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
-    protected EditTextPreference serverUrlPreference;
-    protected EditTextPreference usernamePreference;
-    protected EditTextPreference passwordPreference;
+
+    private EditTextPreference passwordPreference;
 
     @Inject
     OpenRosaXmlFetcher openRosaXMLFetcher;
@@ -106,8 +107,14 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.server_preferences);
-
         initProtocolPrefs();
+    }
+
+    @Override
+    public void onDestroyView() {
+        // to avoid leaking listPopupWindow
+        listPopupWindow = null;
+        super.onDestroyView();
     }
 
     private void initProtocolPrefs() {
@@ -150,62 +157,74 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        DaggerUtils.getComponent(activity).inject(this);
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
 
-        ((PreferencesActivity) activity).setOnBackPressedListener(this);
+        ((PreferencesActivity) context).setOnBackPressedListener(this);
     }
 
     public void addAggregatePreferences() {
         if (!new AggregatePreferencesAdder(this).add()) {
             return;
         }
-
-        serverUrlPreference = (EditTextPreference) findPreference(
-                GeneralKeys.KEY_SERVER_URL);
-        usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
+        EditTextPreference serverUrlPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
+        EditTextPreference usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
         passwordPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
 
-        urlDropdownSetup();
-
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
-        serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
-        serverUrlPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
+
+        serverUrlPreference.setOnBindEditTextListener(editText -> {
+            urlDropdownSetup(editText);
+            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
+            editText.setOnTouchListener(this);
+        });
 
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
-        usernamePreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
+
+        usernamePreference.setOnBindEditTextListener(editText -> {
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
+        });
 
         passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
-        passwordPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
-        serverUrlPreference.setOnPreferenceClickListener(preference -> {
-            serverUrlPreference.getEditText().requestFocus();
-            return true;
-        });
-        usernamePreference.setOnPreferenceClickListener(preference -> {
-            usernamePreference.getEditText().requestFocus();
-            return true;
-        });
-        passwordPreference.setOnPreferenceClickListener(preference -> {
-            passwordPreference.getEditText().requestFocus();
-            return true;
+
+        passwordPreference.setOnBindEditTextListener(editText -> {
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
         });
 
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
-                AndroidXPreferencesActivity.start(getActivity(), CustomServerPathsFragment.class);
+                Fragment fragment = new CustomServerPathsFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.preferences_fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             } else {
                 return false;
             }
         });
+    }
+
+    private void urlDropdownSetup(EditText editText) {
+        listPopupWindow = new ListPopupWindow(getActivity());
+        setupUrlDropdownAdapter(listPopupWindow);
+        listPopupWindow.setAnchorView(editText);
+        listPopupWindow.setModal(true);
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            editText.setText(ChangingServerUrlUtils.getUrlList().get(position));
+            listPopupWindow.dismiss();
+        });
+    }
+
+    public void setupUrlDropdownAdapter(ListPopupWindow listPopupWindow) {
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
+        listPopupWindow.setAdapter(adapter);
     }
 
     public void addGooglePreferences() {
@@ -214,6 +233,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 GeneralKeys.KEY_GOOGLE_SHEETS_URL);
+        googleSheetsUrlPreference.setOnBindEditTextListener(editText -> editText.setFilters(new InputFilter[] {new ControlCharacterFilter(), new WhitespaceFilter() }));
         googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
         String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
@@ -221,16 +241,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
                     + getString(R.string.google_sheets_url_hint));
         }
-
-        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
-                new ControlCharacterFilter(), new WhitespaceFilter()
-        });
-
-        googleSheetsUrlPreference.setOnPreferenceClickListener(preference -> {
-            googleSheetsUrlPreference.getEditText().requestFocus();
-            return true;
-        });
-
         initAccountPreferences();
     }
 
@@ -264,22 +274,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         });
     }
 
-    private void urlDropdownSetup() {
-        listPopupWindow = new ListPopupWindow(getActivity());
-        setupUrlDropdownAdapter();
-        listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
-        listPopupWindow.setModal(true);
-        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            serverUrlPreference.getEditText().setText(ChangingServerUrlUtils.getUrlList().get(position));
-            listPopupWindow.dismiss();
-        });
-    }
-
-    private void setupUrlDropdownAdapter() {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
-        listPopupWindow.setAdapter(adapter);
-    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         final int DRAWABLE_RIGHT = 2;
@@ -311,7 +305,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                         preference.setSummary(newValue.toString());
                         ChangingServerUrlUtils.addUrlToList(url);
-                        setupUrlDropdownAdapter();
+                        setupUrlDropdownAdapter(listPopupWindow);
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;

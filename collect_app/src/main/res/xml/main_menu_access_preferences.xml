@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/main_menu_settings">
 
-    <PreferenceCategory android:title="@string/found_in_main">
+    <PreferenceCategory android:title="@string/found_in_main"
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="edit_saved"
-            android:title="@string/review_data" />
+            android:title="@string/review_data"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="send_finalized"
-            android:title="@string/send_data" />
+            android:title="@string/send_data"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="view_sent"
-            android:title="@string/view_sent_forms" />
+            android:title="@string/view_sent_forms"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="get_blank"
-            android:title="@string/get_forms" />
+            android:title="@string/get_forms"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="delete_saved"
-            android:title="@string/manage_files" />
+            android:title="@string/manage_files"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="qr_code_scanner"
-            android:title="@string/qr_code" />
+            android:title="@string/qr_code"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
