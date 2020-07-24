@@ -131,11 +131,11 @@ public class DaylightSavingTest {
         DateWidget dateWidget = mock(DateWidget.class);
         dateWidget.setBinaryData(new LocalDateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day));
         TimeWidget timeWidget = mock(TimeWidget.class);
-        timeWidget.onTimeSet(null, hour, minute);
+        timeWidget.onTimeSet(hour, minute);
 
         DateTimeWidget dateTimeWidget = new DateTimeWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), new QuestionDetails(formEntryPromptStub, "formAnalyticsID"));
         dateTimeWidget.setBinaryData(new LocalDateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day));
-        timeWidget.onTimeSet(null, hour, minute);
+        timeWidget.onTimeSet(hour, minute);
 
         return dateTimeWidget;
     }

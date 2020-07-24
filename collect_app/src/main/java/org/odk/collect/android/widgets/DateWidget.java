@@ -25,12 +25,15 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+
+import java.util.Date;
 
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
@@ -61,7 +64,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
             binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.widgetButton.setText(getContext().getString(R.string.select_date));
             binding.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
-                    getContext(), getFormEntryPrompt(), datePickerDetails, date));
+                    (FormEntryActivity) getContext(), getFormEntryPrompt(), datePickerDetails, date));
         }
 
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
@@ -71,8 +74,8 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
             date = DateTimeWidgetUtils.getCurrentDate();
         } else {
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
-            DateTimeWidgetUtils.setDateLabel(getContext(), binding.widgetAnswerText, getAnswer(), datePickerDetails);
             isNullAnswer = false;
+            DateTimeWidgetUtils.setDateLabel(getContext(), binding.widgetAnswerText, (Date) getAnswer().getValue(), datePickerDetails);
         }
 
         return answerView;
@@ -108,8 +111,8 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
             date = (LocalDateTime) answer;
-            DateTimeWidgetUtils.setDateLabel(getContext(), binding.widgetAnswerText, getAnswer(), datePickerDetails);
             isNullAnswer = false;
+            DateTimeWidgetUtils.setDateLabel(getContext(), binding.widgetAnswerText, (Date) getAnswer().getValue(), datePickerDetails);
         }
     }
 }

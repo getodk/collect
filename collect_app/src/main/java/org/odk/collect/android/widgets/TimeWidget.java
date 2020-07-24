@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
@@ -127,6 +128,6 @@ public class TimeWidget extends QuestionWidget {
         } else {
             updateTime(hourOfDay, minuteOfHour, true);
         }
-        DateTimeWidgetUtils.createTimePickerDialog(getContext(), hourOfDay, minuteOfHour);
+        DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour);
     }
 }
