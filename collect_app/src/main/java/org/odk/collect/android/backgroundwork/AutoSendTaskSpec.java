@@ -14,10 +14,7 @@
 
 package org.odk.collect.android.backgroundwork;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -29,7 +26,6 @@ import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -38,6 +34,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -48,7 +45,6 @@ import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -67,12 +63,9 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class AutoSendTaskSpec implements TaskSpec {
-
-    private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
@@ -82,6 +75,9 @@ public class AutoSendTaskSpec implements TaskSpec {
 
     @Inject
     Analytics analytics;
+
+    @Inject
+    Notifier notifier;
 
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
@@ -134,13 +130,13 @@ public class AutoSendTaskSpec implements TaskSpec {
                     GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                     String googleUsername = accountsManager.getLastSelectedAccountIfValid();
                     if (googleUsername.isEmpty()) {
-                        showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
+                        notifier.onSubmission(true, Collect.getInstance().getString(R.string.google_set_account));
                         return true;
                     }
                     accountsManager.selectAccount(googleUsername);
                     uploader = new InstanceGoogleSheetsUploader(accountsManager);
                 } else {
-                    showUploadStatusNotification(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
+                    notifier.onSubmission(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
                     return true;
                 }
             } else {
@@ -161,8 +157,7 @@ public class AutoSendTaskSpec implements TaskSpec {
                         continue;
                     }
                     String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
-                            customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
+                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(), customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
 
                     // If the submission was successful, delete the instance if either the app-level
                     // delete preference is set or the form definition requests auto-deletion.
@@ -187,7 +182,7 @@ public class AutoSendTaskSpec implements TaskSpec {
                 }
             }
 
-            showUploadStatusNotification(anyFailure, InstanceUploaderUtils.getUploadResultMessage(Collect.getInstance(), resultMessagesByInstanceId));
+            notifier.onSubmission(anyFailure, InstanceUploaderUtils.getUploadResultMessage(Collect.getInstance(), resultMessagesByInstanceId));
             return true;
         };
     }
@@ -285,21 +280,6 @@ public class AutoSendTaskSpec implements TaskSpec {
             }
         }
         return false;
-    }
-
-    private void showUploadStatusNotification(boolean anyFailure, String message) {
-        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
-
-        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), FORMS_UPLOADED_NOTIFICATION,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationUtils.showNotification(
-                Collect.getInstance(), (NotificationManager) Collect.getInstance().getSystemService(Context.NOTIFICATION_SERVICE), Collect.getInstance().getString(R.string.odk_auto_note), anyFailure ? Collect.getInstance().getString(R.string.failures)
-                        : Collect.getInstance().getString(R.string.success), pendingNotify, AUTO_SEND_RESULT_NOTIFICATION_ID
-        );
     }
 
     public static class Adapter extends WorkerAdapter {

@@ -405,7 +405,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Context context) {
-        return new NotificationManagerNotifier(context);
+    public Notifier providesNotifier(Application application) {
+        return new NotificationManagerNotifier(application);
     }
 }

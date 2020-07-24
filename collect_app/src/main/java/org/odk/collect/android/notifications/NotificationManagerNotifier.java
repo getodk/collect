@@ -1,5 +1,6 @@
 package org.odk.collect.android.notifications;
 
+import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,6 +16,7 @@ import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -23,31 +25,33 @@ import java.util.Map;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.NotificationUtils.showNotification;
 
 public class NotificationManagerNotifier implements Notifier {
 
-    private final Context context;
+    private final Application application;
     private final NotificationManager notificationManager;
 
     private static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     private static final int FORM_SYNC_NOTIFICATION_ID = 1;
+    private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
-    public NotificationManagerNotifier(Context context) {
-        this.context = context;
-        notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+    public NotificationManagerNotifier(Application application) {
+        this.application = application;
+        notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Override
     public void onUpdatesAvailable() {
-        Intent intent = new Intent(context, FormDownloadListActivity.class);
+        Intent intent = new Intent(application, FormDownloadListActivity.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Resources localizedResources = getLocalizedResources(context);
+        Resources localizedResources = getLocalizedResources(application);
         showNotification(
-                context,
+                application,
                 notificationManager,
                 localizedResources.getString(R.string.form_updates_available),
                 null,
@@ -58,17 +62,18 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onUpdatesDownloaded(HashMap<ServerFormDetails, String> result) {
-        Intent intent = new Intent(context, NotificationActivity.class);
-        intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, context.getString(R.string.download_forms_result));
-        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
-        PendingIntent contentIntent = PendingIntent.getActivity(context, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Resources localizedResources = getLocalizedResources(application);
 
-        Resources localizedResources = getLocalizedResources(context);
+        Intent intent = new Intent(application, NotificationActivity.class);
+        intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, localizedResources.getString(R.string.download_forms_result));
+        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
+        PendingIntent contentIntent = PendingIntent.getActivity(application, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         showNotification(
-                context,
+                application,
                 notificationManager,
                 localizedResources.getString(R.string.odk_auto_download_notification_title),
-                localizedResources.getString(allFormsDownloadedSuccessfully(context, result) ?
+                localizedResources.getString(allFormsDownloadedSuccessfully(application, result) ?
                         R.string.success :
                         R.string.failures),
                 contentIntent,
@@ -78,22 +83,40 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onSyncFailure(FormApiException exception) {
-        Intent intent = new Intent(context, FillBlankFormActivity.class);
+        Intent intent = new Intent(application, FillBlankFormActivity.class);
 
         if (exception.getType() == FormApiException.Type.AUTH_REQUIRED) {
             intent.putExtra(FillBlankFormActivity.EXTRA_AUTH_REQUIRED, true);
         }
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Resources localizedResources = getLocalizedResources(context);
+        Resources localizedResources = getLocalizedResources(application);
         showNotification(
-                context,
+                application,
                 notificationManager,
                 localizedResources.getString(R.string.form_update_error),
                 new FormApiExceptionMapper(localizedResources).getMessage(exception),
                 contentIntent,
                 FORM_SYNC_NOTIFICATION_ID
+        );
+    }
+
+    @Override
+    public void onSubmission(boolean failure, String message) {
+        Resources localizedResources = getLocalizedResources(application);
+
+        Intent notifyIntent = new Intent(application, NotificationActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, localizedResources.getString(R.string.upload_results));
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
+
+        PendingIntent pendingNotify = PendingIntent.getActivity(application, FORMS_UPLOADED_NOTIFICATION,
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationUtils.showNotification(
+                application, (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE), localizedResources.getString(R.string.odk_auto_note), failure ? localizedResources.getString(R.string.failures)
+                        : localizedResources.getString(R.string.success), pendingNotify, AUTO_SEND_RESULT_NOTIFICATION_ID
         );
     }
 
