@@ -44,7 +44,6 @@ public class CustomTimePickerDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         DateTime date = (DateTime) getArguments().getSerializable(CURRENT_TIME);
-        setRetainInstance(true);
 
         TimePickerDialog dialog = new TimePickerDialog(requireContext(), getArguments().getInt(TIME_PICKER_THEME),
                 listener, date.getHourOfDay(), date.getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));

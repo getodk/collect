@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.utilities.DateTimeUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -69,9 +70,9 @@ public class TimeWidgetTest {
     }
 
     @Test
-    public void onTimeSet_answerTextViewShowsCorrectTime() {
+    public void setBinaryData_answerTextViewShowsCorrectTime() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        widget.onTimeSet(12, 10);
+        widget.setBinaryData(DateTimeUtils.getDateTime(12, 10));
 
         assertEquals(widget.binding.widgetAnswerText.getText(), "12:10");
     }

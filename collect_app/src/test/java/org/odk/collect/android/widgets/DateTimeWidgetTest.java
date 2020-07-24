@@ -103,9 +103,9 @@ public class DateTimeWidgetTest {
     }
 
     @Test
-    public void onTimeSet_timeAnswerTextViewShowsCorrectTime() {
+    public void setBinaryData_timeAnswerTextViewShowsCorrectTime() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        widget.onTimeSet(12, 10);
+        widget.setBinaryData(DateTimeUtils.getDateTime(12, 10));
 
         assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), "12:10");
     }
