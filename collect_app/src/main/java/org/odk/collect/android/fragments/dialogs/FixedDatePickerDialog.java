@@ -52,7 +52,7 @@ public class FixedDatePickerDialog extends DialogFragment {
         int theme = getArguments().getInt(CustomDatePickerDialog.DATE_PICKER_THEME);
 
         DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, listener,
-                date.toDate().getYear(), date.toDate().getMonth(), date.toDate().getDay());
+                date.getYear(), date.getMonthOfYear()-1, date.getDayOfMonth());
 
         if (themeUtils.isHoloDialogTheme(theme)) {
             dialog.setTitle(requireContext().getString(R.string.select_date));
