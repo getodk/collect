@@ -8,6 +8,7 @@ import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -316,6 +317,24 @@ public class OpenRosaFormListApi implements FormListApi {
         }
 
         return new ManifestFile(result.getHash(), files);
+    }
+
+    @Override
+    public InputStream fetchForm(String formURL) throws FormApiException {
+        return fetchFile(formURL);
+    }
+
+    @Override
+    public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
+        return fetchFile(mediaFileURL);
+    }
+
+    private InputStream fetchFile(String formURL) throws FormApiException {
+        try {
+            return openRosaXMLFetcher.getFile(formURL, null);
+        } catch (Exception e) {
+            throw new FormApiException(FETCH_ERROR);
+        }
     }
 
     @NotNull

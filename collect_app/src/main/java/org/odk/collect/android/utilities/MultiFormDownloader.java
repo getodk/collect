@@ -26,9 +26,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -58,15 +60,13 @@ public class MultiFormDownloader {
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-    private final OpenRosaXmlFetcher openRosaXmlFetcher;
-    private final OpenRosaFormListApi openRosaFormListApi;
-    private final DatabaseFormRepository formRepository;
+    private final FormListApi formListApi;
+    private final FormRepository formRepository;
 
     @Deprecated
     public MultiFormDownloader(OpenRosaXmlFetcher openRosaXmlFetcher) {
         this.formRepository = new DatabaseFormRepository();
-        this.openRosaXmlFetcher = openRosaXmlFetcher;
-        openRosaFormListApi = new OpenRosaFormListApi(openRosaXmlFetcher);
+        formListApi = new OpenRosaFormListApi(openRosaXmlFetcher);
     }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
@@ -346,7 +346,8 @@ public class MultiFormDownloader {
             i++;
         }
 
-        downloadFile(f, url, stateListener);
+        InputStream file = formListApi.fetchForm(url);
+        writeFile(f, stateListener, file);
 
         boolean isNew = true;
 
@@ -371,16 +372,14 @@ public class MultiFormDownloader {
     }
 
     /**
-     * Common routine to download a document from the downloadUrl and save the contents in the file
+     * Common routine to take a downloaded document save the contents in the file
      * 'file'. Shared by media file download and form file download.
      * <p>
      * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
      * is okay, so that garbage is not left over on cancel.
      *
-     * @param file        the final file
-     * @param downloadUrl the url to get the contents from.
      */
-    private void downloadFile(File file, String downloadUrl, FormDownloaderListener stateListener)
+    private void writeFile(File file, FormDownloaderListener stateListener, InputStream inputStream)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
 
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
@@ -396,14 +395,13 @@ public class MultiFormDownloader {
             if (stateListener != null && stateListener.isTaskCanceled()) {
                 throw new TaskCancelledException(tempFile);
             }
-            Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
 
             // write connection to file
             InputStream is = null;
             OutputStream os = null;
 
             try {
-                is = openRosaXmlFetcher.getFile(downloadUrl, null);
+                is = inputStream;
                 os = new FileOutputStream(tempFile);
 
                 byte[] buf = new byte[4096];
@@ -530,7 +528,7 @@ public class MultiFormDownloader {
                     String.valueOf(count), String.valueOf(total));
         }
 
-        List<MediaFile> files = openRosaFormListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
+        List<MediaFile> files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
 
         // OK we now have the full set of files to download...
         Timber.i("Downloading %d media files.", files.size());
@@ -557,7 +555,8 @@ public class MultiFormDownloader {
                 File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
 
                 if (!finalMediaFile.exists()) {
-                    downloadFile(tempMediaFile, toDownload.getDownloadUrl(), stateListener);
+                    InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
+                    writeFile(tempMediaFile, stateListener, mediaFile);
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
                     String downloadFileHash = getMd5Hash(toDownload.getHash());
@@ -566,7 +565,8 @@ public class MultiFormDownloader {
                         // if the hashes match, it's the same file
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
-                        downloadFile(tempMediaFile, toDownload.getDownloadUrl(), stateListener);
+                        InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
+                        writeFile(tempMediaFile, stateListener, mediaFile);
                     } else {
                         // exists, and the hash is the same
                         // no need to download it again
