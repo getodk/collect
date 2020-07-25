@@ -46,20 +46,24 @@ public class RatingWidgetTest {
 
     @Test
     public void ratingWidgetShowsCorrectViewForLessNumberOfStars() {
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(4));
         RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
 
-        assertThat(widget.binding.ratingBar1.getNumStars(), equalTo(5));
+        assertThat(widget.binding.ratingBar1.getNumStars(), equalTo(4));
+        assertThat(widget.binding.ratingBar1.getMax(), equalTo(4));
         assertThat(widget.binding.ratingBar2.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
     public void ratingWidgetShowsCorrectViewForMoreNumberOfStars() {
-        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(8));
         RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
 
         assertThat(widget.binding.ratingBar1.getNumStars(), equalTo(5));
+        assertThat(widget.binding.ratingBar1.getMax(), equalTo(5));
         assertThat(widget.binding.ratingBar2.getVisibility(), equalTo(View.VISIBLE));
-        assertThat(widget.binding.ratingBar2.getNumStars(), equalTo(5));
+        assertThat(widget.binding.ratingBar2.getNumStars(), equalTo(3));
+        assertThat(widget.binding.ratingBar2.getMax(), equalTo(3));
     }
 
     @Test

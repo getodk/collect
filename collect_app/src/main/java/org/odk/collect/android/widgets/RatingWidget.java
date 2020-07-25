@@ -52,11 +52,14 @@ public class RatingWidget extends QuestionWidget {
 
         if (maxNumberOfStars < numberOfStars) {
             binding.ratingBar1.setNumStars(maxNumberOfStars);
+            binding.ratingBar1.setMax(maxNumberOfStars);
             binding.ratingBar2.setNumStars(Math.min(numberOfStars - maxNumberOfStars, maxNumberOfStars));
+            binding.ratingBar2.setMax(Math.min(numberOfStars - maxNumberOfStars, maxNumberOfStars));
 
             binding.ratingBar2.setVisibility(View.VISIBLE);
         } else {
             binding.ratingBar1.setNumStars(numberOfStars);
+            binding.ratingBar1.setMax(numberOfStars);
         }
 
         binding.ratingBar1.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
@@ -70,6 +73,7 @@ public class RatingWidget extends QuestionWidget {
             binding.ratingBar2.setRating(rating);
             widgetValueChanged();
         });
+
 
         binding.ratingBar1.setEnabled(!prompt.isReadOnly());
         binding.ratingBar2.setEnabled(!prompt.isReadOnly());
