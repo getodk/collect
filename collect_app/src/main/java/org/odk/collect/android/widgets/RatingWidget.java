@@ -39,10 +39,9 @@ public class RatingWidget extends QuestionWidget {
     final GridLayout gridLayout;
     Integer answer;
 
-    public RatingWidget(Context context, QuestionDetails questionDetails) {
+    public RatingWidget(Context context, QuestionDetails questionDetails, RangeQuestion rangeQuestion) {
         super(context, questionDetails);
 
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
         int numberOfStars = rangeQuestion.getRangeEnd().intValue();
         int columns = calculateColumns();
         int rows = (int) Math.ceil((double) numberOfStars / columns);
