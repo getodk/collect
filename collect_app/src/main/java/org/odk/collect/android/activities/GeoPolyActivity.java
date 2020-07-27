@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
@@ -355,7 +354,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     }
 
     @Override
-    public void updateRecordingMode(RadioGroup group, int id) {
+    public void updateRecordingMode(int id) {
         recordingEnabled = id != R.id.placement_mode;
         recordingAutomatic = id == R.id.automatic_mode;
     }
@@ -458,7 +457,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         // Visibility state
         playButton.setVisibility(inputActive ? View.GONE : View.VISIBLE);
         pauseButton.setVisibility(inputActive ? View.VISIBLE : View.GONE);
-        recordButton.setVisibility(inputActive && recordingEnabled ? View.VISIBLE : View.GONE);
+        recordButton.setVisibility(inputActive && recordingEnabled && !recordingAutomatic ? View.VISIBLE : View.GONE);
 
         // Enabled state
         zoomButton.setEnabled(location != null);

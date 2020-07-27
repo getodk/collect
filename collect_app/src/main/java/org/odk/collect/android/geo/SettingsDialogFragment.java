@@ -148,7 +148,7 @@ public class SettingsDialogFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        callback.updateRecordingMode(radioGroup, radioGroup.getCheckedRadioButtonId());
+        callback.updateRecordingMode(radioGroup.getCheckedRadioButtonId());
         callback.setIntervalIndex(intervalIndex);
         callback.setAccuracyThresholdIndex(accuracyThresholdIndex);
     }
@@ -156,7 +156,7 @@ public class SettingsDialogFragment extends DialogFragment {
     public interface SettingsDialogCallback {
 
         void startInput();
-        void updateRecordingMode(RadioGroup group, int checkedId);
+        void updateRecordingMode(int checkedId);
 
         int getCheckedId();
         int getIntervalIndex();

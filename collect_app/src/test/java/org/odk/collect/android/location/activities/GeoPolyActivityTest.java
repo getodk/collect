@@ -14,18 +14,23 @@
 
 package org.odk.collect.android.location.activities;
 
+import android.view.View;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.geo.MapPoint;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -57,5 +62,19 @@ public class GeoPolyActivityTest extends BaseGeoActivityTest {
         // Stopping the activity should stop the location client.
         controller.stop();
         assertFalse(fakeLocationClient.isRunning());
+    }
+
+    @Test public void recordButton_should_beHiddenForAutomaticMode() {
+        GeoPolyActivity activity = controller.create().start().resume().visible().get();
+        activity.updateRecordingMode(R.id.automatic_mode);
+        activity.startInput();
+        assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.GONE));
+    }
+
+    @Test public void recordButton_should_beVisibleForManualMode() {
+        GeoPolyActivity activity = controller.create().start().resume().visible().get();
+        activity.updateRecordingMode(R.id.manual_mode);
+        activity.startInput();
+        assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.VISIBLE));
     }
 }
