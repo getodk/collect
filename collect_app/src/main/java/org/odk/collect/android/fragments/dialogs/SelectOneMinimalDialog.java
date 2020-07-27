@@ -30,11 +30,7 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog {
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((SelectOneListAdapter) viewModel.getSelectListAdapter()).setOnItemClickListener(() -> {
-            viewModel.getSelectListAdapter().getFilter().filter("");
-            listener.updateSelectedItems(viewModel.getSelectListAdapter().getSelectedItems());
-            dismiss();
-        });
+        ((SelectOneListAdapter) viewModel.getSelectListAdapter()).setOnItemClickListener(this::closeDialogAndSaveAnswers);
     }
 
     @Override
