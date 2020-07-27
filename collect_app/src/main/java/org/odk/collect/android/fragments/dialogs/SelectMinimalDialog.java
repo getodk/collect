@@ -96,7 +96,7 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
     protected abstract AbstractSelectListAdapter getAdapter();
 
     private void initToolbar() {
-        getToolbar().setNavigationIcon(R.drawable.ic_arrow_back);
+        getToolbar().setNavigationIcon(R.drawable.ic_baseline_check);
 
         if (viewModel.isAutoComplete()) {
             addSearchBar();
