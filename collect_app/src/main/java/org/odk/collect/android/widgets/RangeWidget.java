@@ -47,7 +47,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
 @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
-public abstract class RangeWidget extends QuestionWidget implements ButtonClickListener, Slider.OnChangeListener {
+public abstract class RangeWidget extends QuestionWidget implements ButtonClickListener, Slider.OnChangeListener, Slider.OnSliderTouchListener {
 
     private static final String VERTICAL_APPEARANCE = "vertical";
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
@@ -65,12 +65,12 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
     public
     TextView currentValue;
 
+    private int progress;
     public Slider slider;
     private LinearLayout view;
 
-    private int progress;
-
     private boolean isPickerAppearance;
+    private boolean suppressFlingGesture;
 
     public Button pickerButton;
     public TextView answerTextView;
@@ -100,6 +100,11 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
             pickerButton.setOnLongClickListener(l);
             answerTextView.setOnLongClickListener(l);
         }
+    }
+
+    @Override
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return suppressFlingGesture;
     }
 
     @Override
@@ -286,6 +291,16 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
 
     public Slider getSlider() {
         return slider;
+    }
+
+    @Override
+    public void onStopTrackingTouch(Slider slider) {
+        suppressFlingGesture = false;
+    }
+
+    @Override
+    public void onStartTrackingTouch(Slider slider) {
+        suppressFlingGesture = true;
     }
 
     @Override
