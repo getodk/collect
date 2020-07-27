@@ -69,14 +69,18 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
     void updateAnswer() {
         List<Selection> selectedItems = getAdapter().getSelectedItems();
         if (selectedItems != null) {
-            StringBuilder builder = new StringBuilder();
-            for (Selection selectedItem : selectedItems) {
-                builder.append(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), selectedItem));
-                if (selectedItems.size() - 1 > selectedItems.indexOf(selectedItem)) {
-                    builder.append(", ");
+            if (selectedItems.isEmpty()) {
+                binding.choicesSearchBox.setText(R.string.select_answer);
+            } else {
+                StringBuilder builder = new StringBuilder();
+                for (Selection selectedItem : selectedItems) {
+                    builder.append(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), selectedItem));
+                    if (selectedItems.size() - 1 > selectedItems.indexOf(selectedItem)) {
+                        builder.append(", ");
+                    }
                 }
+                binding.choicesSearchBox.setText(builder.toString());
             }
-            binding.choicesSearchBox.setText(builder.toString());
         }
     }
 }
