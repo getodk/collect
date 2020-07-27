@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.support;
 
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -20,7 +21,7 @@ public class QuestionWidgetHelpers {
         return RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
     }
 
-    public static WidgetValueChangedListener mockValueChangedListener(QuestionWidget widget) {
+    public static <T extends QuestionWidget> WidgetValueChangedListener mockValueChangedListener(T widget) {
         WidgetValueChangedListener valueChangedListener = mock(WidgetValueChangedListener.class);
         widget.setValueChangedListener(valueChangedListener);
         return valueChangedListener;
@@ -45,9 +46,23 @@ public class QuestionWidgetHelpers {
                 .build();
     }
 
+    public static FormEntryPrompt promptWithRangeQuestionAndAnswer(QuestionDef questionDef, IAnswerData answer) {
+        return new MockFormEntryPromptBuilder()
+                .withQuestion(questionDef)
+                .withAnswer(answer)
+                .build();
+    }
+
     public static FormEntryPrompt promptWithAppearance(String appearance) {
         return new MockFormEntryPromptBuilder()
                 .withAppearance(appearance)
+                .build();
+    }
+
+    public static FormEntryPrompt promptWithReadOnlyAndRangeQuestion(QuestionDef questionDef) {
+        return new MockFormEntryPromptBuilder()
+                .withReadOnly(true)
+                .withQuestion(questionDef)
                 .build();
     }
 }
