@@ -7,20 +7,21 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_extra_small"
         android:background="@drawable/select_minimal_box">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/choices_search_box"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/touch_target_size"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/margin_extra_small"
+            android:paddingHorizontal="@dimen/margin_small"
             android:text="@string/select_answer"
             android:focusable="false"
             android:drawableEnd="@drawable/ic_arrow_drop_down"
             android:background="@null"
-            android:cursorVisible="false">
+            android:cursorVisible="false"
+            android:inputType="textMultiLine|textNoSuggestions">
         </com.google.android.material.textfield.TextInputEditText>
     </FrameLayout>
-
 </FrameLayout>
