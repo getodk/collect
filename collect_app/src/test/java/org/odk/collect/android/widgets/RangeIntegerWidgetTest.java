@@ -53,16 +53,13 @@ public class RangeIntegerWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_sliderIsSetOnStartingIndex() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-
-        assertThat(widget.seekBar.getSplitTrack(), equalTo(false));
-        assertThat(widget.seekBar.getThumb().mutate().getAlpha(), equalTo(0));
-        assertThat(widget.seekBar.getProgress(), equalTo(0));
+        assertThat(widget.slider.getValue(), equalTo(0.0F));
     }
 
     @Test
     public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.seekBar.getProgress(), equalTo(3));
+        assertThat(widget.slider.getValue(), equalTo(3.0F));
     }
 
     @Test
@@ -71,7 +68,7 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         String toastText = ShadowToast.getTextOfLatestToast();
 
-        assertThat(widget.seekBar.isEnabled(), equalTo(false));
+        assertThat(widget.slider.isEnabled(), equalTo(false));
         assertThat(toastText, equalTo(widget.getContext().getString(R.string.invalid_range_widget)));
     }
 
@@ -81,20 +78,24 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         String toastText = ShadowToast.getTextOfLatestToast();
 
-        assertThat(widget.seekBar.isEnabled(), equalTo(false));
+        assertThat(widget.slider.isEnabled(), equalTo(false));
         assertThat(toastText, equalTo(widget.getContext().getString(R.string.invalid_range_widget)));
     }
 
     @Test
     public void sliderShouldShowCorrectAppearance() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        assertThat(widget.seekBar.getMax(), equalTo(9));
+
+        assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
+        assertThat(widget.slider.getValueTo(), equalTo(10.0F));
+        assertThat(widget.slider.getStepSize(), equalTo(1.0F));
     }
 
     @Test
     public void changingSliderValue_shouldUpdateAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
-        widget.seekBar.setProgress(4);
+        widget.slider.setValue(4.0F);
+
         assertThat(widget.getAnswer().getValue(), equalTo(5));
     }
 
@@ -102,7 +103,7 @@ public class RangeIntegerWidgetTest {
     public void changingSliderValue_callsValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.seekBar.setProgress(4);
+        widget.slider.setValue(4.0F);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }

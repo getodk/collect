@@ -16,17 +16,19 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.google.android.material.slider.Slider;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.odk.collect.android.R;
@@ -45,7 +47,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
 @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
-public abstract class RangeWidget extends QuestionWidget implements ButtonClickListener, SeekBar.OnSeekBarChangeListener {
+public abstract class RangeWidget extends QuestionWidget implements ButtonClickListener, Slider.OnChangeListener {
 
     private static final String VERTICAL_APPEARANCE = "vertical";
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
@@ -64,11 +66,10 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
     TextView currentValue;
 
     private int progress;
-    public SeekBar seekBar;
+    public Slider slider;
     private LinearLayout view;
 
     private boolean isPickerAppearance;
-    private boolean suppressFlingGesture;
 
     public Button pickerButton;
     public TextView answerTextView;
@@ -80,7 +81,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
         setUpAppearance();
 
         if (questionDetails.getPrompt().isReadOnly() && !isPickerAppearance) {
-            seekBar.setEnabled(false);
+            slider.setEnabled(false);
         }
 
         addAnswerView(view, WidgetViewUtils.getStandardMargin(context));
@@ -98,11 +99,6 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
             pickerButton.setOnLongClickListener(l);
             answerTextView.setOnLongClickListener(l);
         }
-    }
-
-    @Override
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return suppressFlingGesture;
     }
 
     @Override
@@ -148,10 +144,8 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
             answerTextView.setText(R.string.no_value_selected);
             pickerButton.setText(R.string.select_value);
         } else {
-            seekBar.setProgress(progress);
+            slider.setValue(progress);
             actualValue = null;
-            seekBar.setSplitTrack(false);
-            seekBar.getThumb().mutate().setAlpha(0);
             setUpActualValueLabel();
         }
     }
@@ -164,35 +158,30 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
         rangeStep = rangeQuestion.getRangeStep().abs();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setUpSeekBar() {
-        seekBar.setMax(elementCount);
-        seekBar.setProgress(progress);
-        seekBar.setOnSeekBarChangeListener(this);
-        if (isRTL()) {
-            float rotate = seekBar.getRotation();
-            seekBar.setRotation(360 - rotate);
-        }
+        slider.setValueFrom(rangeStart.floatValue());
+        slider.setValueTo(rangeEnd.floatValue());
+        slider.setStepSize(rangeStep.intValue());
+        slider.setValue(progress);
+        slider.addOnChangeListener(this);
 
-        seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                seekBar.getThumb().mutate().setAlpha(255);
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        if (actualValue == null) {
-                            actualValue = rangeStart;
-                            setUpActualValueLabel();
-                        }
-                        break;
-                }
-                v.onTouchEvent(event);
-                return true;
+        slider.setOnTouchListener((v, event) -> {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    v.getParent().requestDisallowInterceptTouchEvent(false);
+                    if (actualValue == null) {
+                        actualValue = rangeStart;
+                        setUpActualValueLabel();
+                    }
+                    break;
             }
+            v.onTouchEvent(event);
+            return true;
         });
     }
 
@@ -201,7 +190,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
         if (isPickerAppearance) {
             pickerButton.setEnabled(false);
         } else {
-            seekBar.setEnabled(false);
+            slider.setEnabled(false);
         }
     }
 
@@ -249,7 +238,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
 
     private void loadAppearance(@LayoutRes int layoutId, @IdRes int seekBarId) {
         view = (LinearLayout) getLayoutInflater().inflate(layoutId, this, false);
-        seekBar = view.findViewById(seekBarId);
+        slider = view.findViewById(seekBarId);
 
         @IdRes int hiddenSeekBarId;
         if (seekBarId == R.id.seek_bar) {
@@ -310,26 +299,16 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonClickL
 
     protected abstract void setUpDisplayedValuesForNumberPicker();
 
-    public SeekBar getSeekBar() {
-        return seekBar;
+    public Slider getSlider() {
+        return slider;
     }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        suppressFlingGesture = false;
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        suppressFlingGesture = true;
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
         if (rangeStart.compareTo(rangeEnd) == -1) {
-            actualValue = rangeStart.add(new BigDecimal(progress).multiply(rangeStep));
+            actualValue = rangeStart.add(BigDecimal.valueOf(value).multiply(rangeStep));
         } else {
-            actualValue = rangeStart.subtract(new BigDecimal(progress).multiply(rangeStep));
+            actualValue = rangeStart.subtract(BigDecimal.valueOf(value).multiply(rangeStep));
         }
 
         setUpActualValueLabel();

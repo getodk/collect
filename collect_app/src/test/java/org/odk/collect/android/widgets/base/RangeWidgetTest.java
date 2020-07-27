@@ -48,7 +48,7 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         assertNull(widget.getAnswer());
 
         int progress = Math.abs(random.nextInt()) % widget.getElementCount();
-        widget.onProgressChanged(widget.getSeekBar(), progress, true);
+        widget.onValueChange(widget.getSlider(), progress, true);
 
         BigDecimal actualValue;
         if (rangeStart.compareTo(rangeEnd) == -1) {
@@ -80,7 +80,7 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         // No appearance
         when(rangeQuestion.getAppearanceAttr()).thenReturn(null);
 
-        assertThat(getSpyWidget().seekBar.getVisibility(), is(View.VISIBLE));
-        assertThat(getSpyWidget().seekBar.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().slider.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().slider.isEnabled(), is(Boolean.FALSE));
     }
 }
