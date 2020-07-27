@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 
 public class RangePickerIntegerWidget extends QuestionWidget  {
     WidgetAnswerBinding binding;
+    String[] displayedValuesForNumberPicker;
 
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
@@ -38,7 +39,7 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
         binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         setUpWidgetParameters();
-        String[] displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
+        displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
                 rangeStart, rangeStep, rangeEnd, true);
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
@@ -70,7 +71,6 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
 
     private void setUpWidgetParameters() {
         RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs();

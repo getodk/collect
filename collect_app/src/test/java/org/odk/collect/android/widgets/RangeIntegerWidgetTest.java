@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -42,13 +44,13 @@ public class RangeIntegerWidgetTest {
 
     @Test
     public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
-        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer(), nullValue());
+        assertNull(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.getAnswer().getValue(), equalTo(4));
+        assertEquals(widget.getAnswer().getValue(), 4);
     }
 
     @Test

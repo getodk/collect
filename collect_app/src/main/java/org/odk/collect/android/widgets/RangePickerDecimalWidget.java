@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 
 public class RangePickerDecimalWidget extends QuestionWidget {
     WidgetAnswerBinding binding;
+    String[] displayedValuesForNumberPicker;
 
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
@@ -38,8 +39,8 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         setUpWidgetParameters();
-        String[] displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
-                rangeStart, rangeStep, rangeEnd, true);
+        displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
+                rangeStart, rangeStep, rangeEnd, false);
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
         progress = RangeWidgetUtils.getRangePickerProgressFromPrompt(prompt);
@@ -70,7 +71,6 @@ public class RangePickerDecimalWidget extends QuestionWidget {
 
     private void setUpWidgetParameters() {
         RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
-
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : new BigDecimal("0.5");
