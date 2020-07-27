@@ -22,8 +22,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithRangeQuestionAndAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndRangeQuestion;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
@@ -42,32 +42,32 @@ public class RangeIntegerWidgetTest {
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
-        assertThat(createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion)).getAnswer(), nullValue());
+        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer(), nullValue());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         assertThat(widget.getAnswer().getValue(), equalTo(4));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_sliderIsSetOnStartingIndex() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertThat(widget.slider.getValue(), equalTo(1.0F));
         assertThat(widget.currentValue.getText(), equalTo(""));
     }
 
     @Test
     public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         assertThat(widget.slider.getValue(), equalTo(4.0F));
         assertThat(widget.currentValue.getText(), equalTo("4"));
     }
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("4")));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
@@ -77,7 +77,7 @@ public class RangeIntegerWidgetTest {
 
     @Test
     public void clearAnswer_callsValueChangeListener() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
         widget.clearAnswer();
@@ -86,7 +86,7 @@ public class RangeIntegerWidgetTest {
 
     @Test
     public void changingSliderValue_updatesAnswer() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.setValue(4.0F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(4));
@@ -95,7 +95,7 @@ public class RangeIntegerWidgetTest {
 
     @Test
     public void changingSliderValue_callsValueChangeListener() {
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.slider.setValue(4.0F);
 
@@ -106,7 +106,7 @@ public class RangeIntegerWidgetTest {
     public void clickingSliderForLong_doesNotCallLongClickListener() {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
 
-        RangeIntegerWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
         widget.slider.performLongClick();
 
