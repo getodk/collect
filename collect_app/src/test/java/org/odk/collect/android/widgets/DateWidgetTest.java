@@ -75,7 +75,7 @@ public class DateWidgetTest {
     }
 
     @Test
-    public void setBinaryData_setsCorrectDateInAnswerTextView() {
+    public void setData_setsCorrectDateInAnswerTextView() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 

@@ -70,7 +70,7 @@ public class TimeWidgetTest {
     }
 
     @Test
-    public void setBinaryData_answerTextViewShowsCorrectTime() {
+    public void setData_answerTextViewShowsCorrectTime() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setData(DateTimeUtils.getDateTime(12, 10));
 

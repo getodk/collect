@@ -91,7 +91,7 @@ public class DateTimeWidgetTest {
     }
 
     @Test
-    public void setBinaryData_setsCorrectDateInDateAnswerTextView() {
+    public void setData_setsCorrectDateInDateAnswerTextView() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
@@ -103,7 +103,7 @@ public class DateTimeWidgetTest {
     }
 
     @Test
-    public void setBinaryData_timeAnswerTextViewShowsCorrectTime() {
+    public void setData_setsCorrectTimeInTimeAnswerTextView() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setData(DateTimeUtils.getDateTime(12, 10));
 
