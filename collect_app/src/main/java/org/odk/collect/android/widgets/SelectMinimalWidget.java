@@ -7,16 +7,13 @@ import android.view.View;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.SelectMinimalWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -24,7 +21,6 @@ import java.util.List;
 
 public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryDataReceiver, MultiChoiceWidget {
     SelectMinimalWidgetAnswerBinding binding;
-    protected AbstractSelectListAdapter recyclerViewAdapter;
 
     public SelectMinimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -42,8 +38,7 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
                 if (formController != null) {
                     formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
                 }
-                SelectMinimalDialog dialog = new SelectMinimalDialog(recyclerViewAdapter, WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
+                showDialog();
             });
         }
         return binding.getRoot();
@@ -51,24 +46,28 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
 
     @Override
     public void clearAnswer() {
-        recyclerViewAdapter.clearAnswer();
+        getAdapter().clearAnswer();
         binding.choicesSearchBox.setText(R.string.select_answer);
         widgetValueChanged();
     }
 
     @Override
     public void setBinaryData(Object answer) {
-        recyclerViewAdapter.updateSelectedItems((List<Selection>) answer);
+        getAdapter().updateSelectedItems((List<Selection>) answer);
         updateAnswer();
     }
 
     @Override
     public int getChoiceCount() {
-        return recyclerViewAdapter.getItemCount();
+        return getAdapter().getItemCount();
     }
 
+    protected abstract AbstractSelectListAdapter getAdapter();
+
+    protected abstract void showDialog();
+
     void updateAnswer() {
-        List<Selection> selectedItems = recyclerViewAdapter.getSelectedItems();
+        List<Selection> selectedItems = getAdapter().getSelectedItems();
         if (selectedItems != null) {
             StringBuilder builder = new StringBuilder();
             for (Selection selectedItem : selectedItems) {
