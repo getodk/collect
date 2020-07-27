@@ -18,8 +18,10 @@ import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.backgroundwork.ReentrantLockChangeLock;
 import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
@@ -38,6 +40,7 @@ import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
 import org.odk.collect.android.forms.DatabaseFormRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormRepository;
@@ -152,7 +155,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    MultiFormDownloader providesMultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public MultiFormDownloader providesMultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new MultiFormDownloader(new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils));
     }
 
@@ -201,10 +204,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics) {
+    public StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics, ChangeLock changeLock) {
         StorageEraser storageEraser = new StorageEraser(storagePathProvider);
 
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, formUpdateManager, formSubmitManager, analytics);
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, analytics);
     }
 
     @Provides
@@ -409,5 +412,16 @@ public class AppDependencyModule {
     @Provides
     public Notifier providesNotifier(Application application) {
         return new NotificationManagerNotifier(application);
+    }
+
+    @Provides
+    @Singleton
+    public ChangeLock providesChangeLock() {
+        return new ReentrantLockChangeLock();
+    }
+
+    @Provides
+    public ServerFormsUpdateChecker providesServerFormUpdatesChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository) {
+        return new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formRepository);
     }
 }

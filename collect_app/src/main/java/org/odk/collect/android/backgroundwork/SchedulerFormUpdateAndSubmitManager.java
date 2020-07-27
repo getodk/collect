@@ -55,21 +55,7 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
     }
 
     @Override
-    public boolean isSubmitRunning() {
-        return isRunning(AUTO_SEND_TAG);
-    }
-
-    @Override
     public void scheduleSubmit() {
         scheduler.networkDeferred(AUTO_SEND_TAG, new AutoSendTaskSpec());
-    }
-
-    @Override
-    public boolean isUpdateRunning() {
-        return isRunning(MATCH_EXACTLY_SYNC_TAG) || isRunning(AUTO_UPDATE_TAG);
-    }
-
-    private boolean isRunning(String tag) {
-        return scheduler.isRunning(tag);
     }
 }

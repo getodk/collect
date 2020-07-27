@@ -15,29 +15,6 @@ public class SyncStatusRepositoryTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Test
-    public void startSync_returnsTrue() {
-        SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
-        assertThat(syncStatusRepository.startSync(), is(true));
-    }
-
-    @Test
-    public void startSync_whenSyncAlreadyStarted_returnsFalse() {
-        SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
-        syncStatusRepository.startSync();
-
-        assertThat(syncStatusRepository.startSync(), is(false));
-    }
-
-    @Test
-    public void startSync_whenSyncFinished_returnsTrue() {
-        SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
-        syncStatusRepository.startSync();
-        syncStatusRepository.finishSync(true);
-
-        assertThat(syncStatusRepository.startSync(), is(true));
-    }
-
-    @Test
     public void isOutOfSync_isFalseAtFirst() {
         SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
         assertThat(syncStatusRepository.isOutOfSync().getValue(), is(false));

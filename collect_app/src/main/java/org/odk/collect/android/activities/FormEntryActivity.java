@@ -75,8 +75,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.instancemanagement.InstanceSubmitter;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -149,8 +149,8 @@ import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1882,7 +1882,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         // Request auto-send if app-wide auto-send is enabled or the form that was just
                         // finalized specifies that it should always be auto-sent.
                         String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-                        if (AutoSendTaskSpec.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
+                        if (InstanceSubmitter.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
                             formSubmitManager.scheduleSubmit();
                         }
                     }
