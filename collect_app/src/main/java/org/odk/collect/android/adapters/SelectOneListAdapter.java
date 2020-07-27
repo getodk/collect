@@ -71,7 +71,9 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         if (widget != null) {
             ((SelectOneWidget) widget).onClick();
         }
-        listener.onItemClicked();
+        if (listener != null) {
+            listener.onItemClicked();
+        }
     }
 
     @Override
