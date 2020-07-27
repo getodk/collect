@@ -46,6 +46,11 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private final int playColor;
     private RadioButton selectedRadioButton;
     private View selectedItem;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClicked();
+    }
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, SelectOneWidget widget, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
@@ -66,6 +71,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
         if (widget != null) {
             ((SelectOneWidget) widget).onClick();
         }
+        listener.onItemClicked();
     }
 
     @Override
@@ -80,6 +86,10 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             selectedRadioButton = (RadioButton) buttonView;
             selectedValue = items.get((int) selectedRadioButton.getTag()).getValue();
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {

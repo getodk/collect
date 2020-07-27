@@ -21,16 +21,15 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 import java.util.List;
 
-public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
+public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     private SelectMinimalDialogLayoutBinding binding;
 
-    private AbstractSelectListAdapter selectListAdapter;
     private boolean isFlex;
     private boolean isAutocomplete;
 
-    private SelectMinimalViewModel viewModel;
+    protected SelectMinimalViewModel viewModel;
     private SearchView searchView;
-    private SelectMinimalDialogListener listener;
+    protected SelectMinimalDialogListener listener;
 
     public interface SelectMinimalDialogListener {
         void updateSelectedItems(List<Selection> items);
@@ -39,8 +38,7 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     public SelectMinimalDialog() {
     }
 
-    public SelectMinimalDialog(AbstractSelectListAdapter selectListAdapter, boolean isFlex, boolean isAutoComplete) {
-        this.selectListAdapter = selectListAdapter;
+    public SelectMinimalDialog(boolean isFlex, boolean isAutoComplete) {
         this.isFlex = isFlex;
         this.isAutocomplete = isAutoComplete;
     }
@@ -51,7 +49,7 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
         if (context instanceof SelectMinimalDialogListener) {
             listener = (SelectMinimalDialogListener) context;
         }
-        viewModel = new ViewModelProvider(this, new SelectMinimalViewModel.Factory(selectListAdapter, isFlex, isAutocomplete)).get(SelectMinimalViewModel.class);
+        viewModel = new ViewModelProvider(this, new SelectMinimalViewModel.Factory(getAdapter(), isFlex, isAutocomplete)).get(SelectMinimalViewModel.class);
         if (viewModel.getSelectListAdapter() == null) {
             dismiss();
         }
@@ -95,6 +93,8 @@ public class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     protected Toolbar getToolbar() {
         return getView().findViewById(R.id.toolbar);
     }
+
+    protected abstract AbstractSelectListAdapter getAdapter();
 
     private void initToolbar() {
         getToolbar().setNavigationIcon(R.drawable.ic_arrow_back);
