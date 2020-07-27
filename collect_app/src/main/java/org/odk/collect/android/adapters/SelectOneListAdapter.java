@@ -151,7 +151,9 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
 
     @Override
     public List<Selection> getSelectedItems() {
-        return getSelectedItem() == null ? null : Collections.singletonList(getSelectedItem());
+        return getSelectedItem() == null
+                ? null
+                : Collections.singletonList(getSelectedItem());
     }
 
     @Override
