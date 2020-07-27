@@ -145,7 +145,7 @@ public class RangeWidgetUtilsTest {
     @Test
     public void whenRangeQuestionHasZeroRangeStep_invalidWidgetToastIsShown() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        assertThat(RangeWidgetUtils.checkWidgetValid(rangeQuestion), equalTo(false));
+        assertThat(RangeWidgetUtils.isWidgetValid(rangeQuestion), equalTo(false));
 
         String toastText = ShadowToast.getTextOfLatestToast();
         assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
@@ -154,7 +154,7 @@ public class RangeWidgetUtilsTest {
     @Test
     public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShown() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        assertThat(RangeWidgetUtils.checkWidgetValid(rangeQuestion), equalTo(false));
+        assertThat(RangeWidgetUtils.isWidgetValid(rangeQuestion), equalTo(false));
 
         String toastText = ShadowToast.getTextOfLatestToast();
         assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
@@ -163,14 +163,14 @@ public class RangeWidgetUtilsTest {
     @Test
     public void whenRangeQuestionHasZeroRangeStep_sliderIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        RangeWidgetUtils.isWidgetValid(rangeQuestion, slider);
+        RangeWidgetUtils.isRangeSliderWidgetValid(rangeQuestion, slider);
         assertFalse(slider.isEnabled());
     }
 
     @Test
     public void whenPromptHasInvalidWidgetParameters_sliderIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        RangeWidgetUtils.isWidgetValid(rangeQuestion, slider);
+        RangeWidgetUtils.isRangeSliderWidgetValid(rangeQuestion, slider);
         assertFalse(slider.isEnabled());
     }
 

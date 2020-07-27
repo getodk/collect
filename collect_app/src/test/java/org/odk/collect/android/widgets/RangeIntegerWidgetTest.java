@@ -35,7 +35,6 @@ public class RangeIntegerWidgetTest {
     @Before
     public void setup() {
         rangeQuestion = mock(RangeQuestion.class);
-
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);

@@ -107,11 +107,14 @@ public class RangeWidgetUtils {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setUpSlider(FormEntryPrompt prompt, RangeQuestion rangeQuestion, TrackingTouchSlider slider,
-                                   BigDecimal actualValue, boolean isIntegerType) {
+    public static BigDecimal setUpSlider(FormEntryPrompt prompt, RangeQuestion rangeQuestion, TrackingTouchSlider slider, boolean isIntegerType) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : BigDecimal.valueOf(0.5);
+
+        if (!isRangeSliderWidgetValid(rangeQuestion, slider)) {
+            return null;
+        }
 
         if (rangeEnd.compareTo(rangeStart) > -1) {
             slider.setValueFrom(rangeStart.floatValue());
@@ -129,7 +132,6 @@ public class RangeWidgetUtils {
             }
         }
 
-        slider.setValue(actualValue == null ? slider.getValueFrom() : actualValue.floatValue());
         slider.setOnTouchListener((v, event) -> {
             int action = event.getAction();
             switch (action) {
@@ -143,20 +145,25 @@ public class RangeWidgetUtils {
             v.onTouchEvent(event);
             return true;
         });
+
+        BigDecimal actualValue = null;
+        if (prompt.getAnswerValue() != null) {
+            actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
+        }
+        slider.setValue(actualValue == null ? slider.getValueFrom() : actualValue.floatValue());
+
+        return actualValue;
     }
 
-    public static BigDecimal setUpRangePickerWidget(Context context, WidgetAnswerBinding binding, FormEntryPrompt prompt) {
-        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
-        BigDecimal actualValue = null;
-
-        if (RangeWidgetUtils.isRangePickerWidgetValid(rangeQuestion, binding.widgetButton)) {
+    public static void setUpRangePickerWidget(Context context, WidgetAnswerBinding binding, FormEntryPrompt prompt) {
+        if (RangeWidgetUtils.isRangePickerWidgetValid((RangeQuestion) prompt.getQuestion(), binding.widgetButton)) {
             if (prompt.getAnswerValue() != null) {
-                actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
-
+                BigDecimal actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
                 binding.widgetAnswerText.setText(String.valueOf(actualValue));
                 binding.widgetButton.setText(context.getString(R.string.edit_value));
             } else {
-                setUpNullValueForRangePicker(binding);
+                binding.widgetAnswerText.setText(R.string.no_value_selected);
+                binding.widgetButton.setText(R.string.select_value);
                 binding.widgetButton.setText(context.getString(R.string.select_value));
             }
         }
@@ -164,14 +171,20 @@ public class RangeWidgetUtils {
         if (prompt.isReadOnly()) {
             binding.widgetButton.setEnabled(false);
         }
-
-        return actualValue;
     }
 
-    public static BigDecimal setUpNullValue(TrackingTouchSlider slider, TextView currentValue) {
-        slider.setValue(slider.getValueFrom());
-        currentValue.setText("");
-        return null;
+    public static int getRangePickerProgressFromPrompt(FormEntryPrompt prompt) {
+        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
+        BigDecimal actualValue = null;
+        if (prompt.getAnswerValue() != null) {
+            actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
+        }
+        int progress = 0;
+        if (actualValue != null) {
+            progress = actualValue.subtract(rangeQuestion.getRangeStart()).abs().divide(
+                    rangeQuestion.getRangeStep() == null ? BigDecimal.ONE : rangeQuestion.getRangeStep().abs()).intValue();
+        }
+        return progress;
     }
 
     public static BigDecimal setUpSliderValue(FormEntryPrompt prompt, Slider slider, RangeQuestion rangeQuestion, float value) {
@@ -189,13 +202,7 @@ public class RangeWidgetUtils {
         return BigDecimal.valueOf(value);
     }
 
-    public static BigDecimal setUpNullValueForRangePicker(WidgetAnswerBinding binding) {
-        binding.widgetAnswerText.setText(R.string.no_value_selected);
-        binding.widgetButton.setText(R.string.select_value);
-        return null;
-    }
-
-    public static String[] setUpDisplayedValuesForNumberPicker(BigDecimal rangeStart, BigDecimal rangeStep, BigDecimal rangeEnd, Boolean isIntegerDataType) {
+    public static String[] getDisplayedValuesForNumberPicker(BigDecimal rangeStart, BigDecimal rangeStep, BigDecimal rangeEnd, Boolean isIntegerDataType) {
         int index = 0;
         int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
         String[] displayedValuesForNumberPicker = new String[elementCount + 1];
@@ -234,14 +241,12 @@ public class RangeWidgetUtils {
     }
 
     public static int getNumberPickerProgress(WidgetAnswerBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
-                                              BigDecimal rangeEnd, int value) {
-
-        int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
-
+                                               BigDecimal rangeEnd, int value) {
         BigDecimal actualValue;
+        int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
         BigDecimal multiply = new BigDecimal(elementCount - value).multiply(rangeStep);
 
-        if (rangeStart.compareTo(rangeEnd) == -1) {
+        if (rangeStart.compareTo(rangeEnd) < 0) {
             actualValue = rangeStart.add(multiply);
         } else {
             actualValue = rangeStart.subtract(multiply);
@@ -252,14 +257,14 @@ public class RangeWidgetUtils {
         return actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
     }
 
-    public static boolean isWidgetValid(RangeQuestion rangeQuestion, TrackingTouchSlider slider) {
-        if (!checkWidgetValid(rangeQuestion)) {
+    public static boolean isRangeSliderWidgetValid(RangeQuestion rangeQuestion, TrackingTouchSlider slider) {
+        if (!isWidgetValid(rangeQuestion)) {
             slider.setEnabled(false);
         }
-        return checkWidgetValid(rangeQuestion);
+        return isWidgetValid(rangeQuestion);
     }
 
-    static boolean checkWidgetValid(RangeQuestion rangeQuestion) {
+    static boolean isWidgetValid(RangeQuestion rangeQuestion) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -274,9 +279,9 @@ public class RangeWidgetUtils {
     }
 
     private static boolean isRangePickerWidgetValid(RangeQuestion rangeQuestion, Button widgetButton) {
-        if (!checkWidgetValid(rangeQuestion)) {
+        if (!isWidgetValid(rangeQuestion)) {
             widgetButton.setEnabled(false);
         }
-        return checkWidgetValid(rangeQuestion);
+        return isWidgetValid(rangeQuestion);
     }
 }

@@ -38,9 +38,6 @@ import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
 public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener {
-    private RangeQuestion rangeQuestion;
-    private BigDecimal actualValue;
-
     TrackingTouchSlider slider;
     TextView currentValue;
 
@@ -50,27 +47,25 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
+        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
         RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
 
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();
 
-        if (RangeWidgetUtils.isWidgetValid(rangeQuestion, slider)) {
-            if (getFormEntryPrompt().getAnswerValue() != null) {
-                actualValue = new BigDecimal(getFormEntryPrompt().getAnswerValue().getValue().toString());
-            } else {
-                actualValue = RangeWidgetUtils.setUpNullValue(slider, currentValue);
-            }
-            setUpActualValueLabel();
-            setUpSlider(prompt);
+        BigDecimal actualValue = RangeWidgetUtils.setUpSlider(prompt, rangeQuestion, slider, true);
+        setUpActualValueLabel(actualValue);
+
+        if (slider.isEnabled()) {
+            slider.addOnChangeListener(this);
         }
         return layoutElements.getAnswerView();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return actualValue == null ? null : new IntegerData(actualValue.intValue());
+        String stringAnswer = currentValue.getText().toString();
+        return stringAnswer.isEmpty() ? null : new IntegerData(Integer.parseInt(stringAnswer));
     }
 
     @Override
@@ -84,24 +79,21 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     public void clearAnswer() {
-        actualValue = RangeWidgetUtils.setUpNullValue(slider, currentValue);
+        slider.setValue(slider.getValueFrom());
+        currentValue.setText("");
         widgetValueChanged();
-    }
-
-    private void setUpActualValueLabel() {
-        String value = actualValue != null ? String.valueOf(actualValue.intValue()) : "";
-        currentValue.setText(value);
-    }
-
-    private void setUpSlider(FormEntryPrompt prompt) {
-        RangeWidgetUtils.setUpSlider(prompt, rangeQuestion, slider, actualValue, true);
-        slider.addOnChangeListener(this);
     }
 
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-        actualValue = RangeWidgetUtils.setUpSliderValue(getFormEntryPrompt(), slider, rangeQuestion, value);
-        setUpActualValueLabel();
+        BigDecimal actualValue = RangeWidgetUtils.setUpSliderValue(getFormEntryPrompt(), slider,
+                (RangeQuestion) getFormEntryPrompt().getQuestion(), value);
+        setUpActualValueLabel(actualValue);
         widgetValueChanged();
+    }
+
+    private void setUpActualValueLabel(BigDecimal actualValue) {
+        String value = actualValue != null ? String.valueOf(actualValue.intValue()) : "";
+        currentValue.setText(value);
     }
 }
