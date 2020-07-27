@@ -84,7 +84,6 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
     @Override
     protected void onBackPressed() {
         viewModel.getSelectListAdapter().getFilter().filter("");
-        listener.updateSelectedItems(viewModel.getSelectListAdapter().getSelectedItems());
         dismiss();
     }
 
