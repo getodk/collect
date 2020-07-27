@@ -214,14 +214,14 @@ public class WidgetFactory {
                 } else {
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:
-                            if (prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
+                            if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
                                 questionWidget = new RangePickerIntegerWidget(context, questionDetails);
                             } else {
                                 questionWidget = new RangeIntegerWidget(context, questionDetails);
                             }
                             break;
                         case Constants.DATATYPE_DECIMAL:
-                            if (prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
+                            if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
                                 questionWidget = new RangePickerDecimalWidget(context, questionDetails);
                             } else {
                                 questionWidget = new RangeDecimalWidget(context, questionDetails);
