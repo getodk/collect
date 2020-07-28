@@ -1,5 +1,7 @@
 package org.odk.collect.android.fragments.dialogs;
 
+import android.content.Context;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.ReferenceManager;
@@ -19,9 +21,9 @@ public class SelectMultiMinimalDialog extends SelectMinimalDialog {
     public SelectMultiMinimalDialog(List<SelectChoice> items, List<Selection> selectedItems,
                                     FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager,
                                     int answerFontSize, AudioHelper audioHelper, int playColor,
-                                    boolean isFlex, boolean isAutoComplete) {
+                                    Context context, boolean isFlex, boolean isAutoComplete) {
         super(isFlex, isAutoComplete);
-        this.adapter = new SelectMultipleListAdapter(items, selectedItems, null, formEntryPrompt, referenceManager, answerFontSize, audioHelper, playColor, getContext());
+        this.adapter = new SelectMultipleListAdapter(items, selectedItems, null, formEntryPrompt, referenceManager, answerFontSize, audioHelper, playColor, context);
     }
 
     @Override

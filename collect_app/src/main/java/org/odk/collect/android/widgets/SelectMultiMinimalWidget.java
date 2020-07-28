@@ -31,7 +31,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
 
     @Override
     protected void showDialog() {
-        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(items, getSavedSelectedItems(), getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
+        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(items, getSavedSelectedItems(), getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
         dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
     }
 

@@ -30,7 +30,7 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
 
     @Override
     protected void showDialog() {
-        SelectOneMinimalDialog dialog = new SelectOneMinimalDialog(items, getSavedSelectedValue(), getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
+        SelectOneMinimalDialog dialog = new SelectOneMinimalDialog(items, getSavedSelectedValue(), getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
         dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
     }
 
