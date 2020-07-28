@@ -188,9 +188,4 @@ public class LabelWidget extends ItemsWidget {
     public IAnswerData getAnswer() {
         return null;
     }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-    }
-
 }
