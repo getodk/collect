@@ -42,7 +42,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
     private final int playColor;
-    protected final SelectItemClickListener listener;
+    protected SelectItemClickListener listener;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, int playColor, Context context) {
@@ -57,6 +57,10 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         return new ViewHolder(noButtonsMode
                 ? new FrameLayout(parent.getContext())
                 : new AudioVideoImageTextLabel(parent.getContext()));
+    }
+
+    public void setSelectItemClickListener(SelectItemClickListener listener) {
+        this.listener = listener;
     }
 
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
