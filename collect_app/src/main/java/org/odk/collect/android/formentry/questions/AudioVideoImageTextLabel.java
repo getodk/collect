@@ -45,6 +45,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
+import org.odk.collect.android.listeners.ItemClickListener;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -92,6 +93,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private CharSequence questionText;
     private String bigImageURI;
     private ReferenceManager referenceManager;
+    private ItemClickListener listener;
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
@@ -110,11 +112,12 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     public void setTextView(TextView questionText) {
         this.questionText = questionText.getText();
 
-        this.labelTextView = questionText;
-        this.labelTextView.setId(View.generateViewId());
+        labelTextView = questionText;
+        labelTextView.setId(View.generateViewId());
+        labelTextView.setOnClickListener(v -> listener.onItemClicked());
 
         textContainer.removeAllViews();
-        textContainer.addView(this.labelTextView);
+        textContainer.addView(labelTextView);
     }
 
     public void setText(String questionText, boolean isRequiredQuestion, float fontSize) {
@@ -249,6 +252,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             CheckBox checkbox = (CheckBox) labelTextView;
             checkbox.setChecked(!checkbox.isChecked());
         }
+        listener.onItemClicked();
     }
 
     private void setupBigImage(String imageURI) {
@@ -324,5 +328,9 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         } catch (ClassCastException e) {
             throw new RuntimeException(getContext().toString() + " must implement " + ScreenContext.class.getName());
         }
+    }
+
+    public void setItemClickListener(ItemClickListener listener) {
+        this.listener = listener;
     }
 }

@@ -23,7 +23,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -44,14 +43,13 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.listeners.ItemClickListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.BaseSelectListWidget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -76,19 +74,12 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     List<SelectChoice> items;
     List<SelectChoice> filteredItems;
     boolean noButtonsMode;
+    protected ItemClickListener listener;
 
-    /**
-     * This creates a circular dependency between this class and {@link org.odk.collect.android.widgets.BaseSelectListWidget}. Dependencies
-     * for this class should be passed in at the constructor or setter level. Method calls back to
-     * {@link org.odk.collect.android.widgets.BaseSelectListWidget} can be replaced with listeners.
-     */
-    @Deprecated
-    BaseSelectListWidget widget;
-
-    AbstractSelectListAdapter(List<SelectChoice> items, BaseSelectListWidget widget, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
+    AbstractSelectListAdapter(List<SelectChoice> items, ItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
         this.context = context;
         this.items = items;
-        this.widget = widget;
+        this.listener = listener;
         this.prompt = formEntryPrompt;
         this.referenceManager = referenceManager;
         this.answerFontSize = answerFontSize;
@@ -149,7 +140,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
-        button.setOnLongClickListener(getODKViewParent(widget));
     }
 
     View setUpNoButtonsView(int index) {
@@ -221,20 +211,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             }
         }
         return false;
-    }
-
-    private ODKView getODKViewParent(ViewParent view) {
-        if (view == null) {
-            return null;
-        }
-
-        ViewParent parent = view.getParent();
-
-        if (parent != null) {
-            return getODKViewParent(parent);
-        } else {
-            return null;
-        }
     }
 
     abstract void onItemClick(Selection selection, View view);
