@@ -31,7 +31,7 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
             binding.choicesSearchBox.setOnClickListener(v -> {
                 FormController formController = Collect.getInstance().getFormController();
                 if (formController != null) {
-                    formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
+                    formController.setIndexWaitingForData(prompt.getIndex());
                 }
                 showDialog();
             });
