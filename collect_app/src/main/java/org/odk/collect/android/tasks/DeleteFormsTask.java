@@ -15,11 +15,12 @@
 package org.odk.collect.android.tasks;
 
 import android.content.ContentResolver;
-import android.net.Uri;
 import android.os.AsyncTask;
 
+import org.odk.collect.android.formmanagement.FormDeleter;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import timber.log.Timber;
 
@@ -36,6 +37,8 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     private int successCount;
     private int toDeleteCount;
+    private FormsRepository formsRepository;
+    private InstancesRepository instancesRepository;
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -52,9 +55,9 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
                 break;
             }
             try {
-                Uri deleteForm = Uri.withAppendedPath(FormsColumns.CONTENT_URI, param.toString());
-                int wasDeleted = cr.delete(deleteForm, null, null);
-                deleted += wasDeleted;
+                new FormDeleter(formsRepository, instancesRepository).delete(param);
+
+                deleted++;
 
                 successCount++;
                 publishProgress(successCount, toDeleteCount);
@@ -106,5 +109,10 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     public int getToDeleteCount() {
         return toDeleteCount;
+    }
+
+    public void setRepositories(FormsRepository formsRepository, InstancesRepository instancesRepository) {
+        this.formsRepository = formsRepository;
+        this.instancesRepository = instancesRepository;
     }
 }

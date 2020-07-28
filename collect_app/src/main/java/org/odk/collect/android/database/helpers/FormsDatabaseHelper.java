@@ -34,6 +34,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT;
@@ -55,19 +56,19 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
 
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
             LAST_DETECTED_FORM_VERSION_HASH};
 
-    private static final String[] COLUMN_NAMES_V8 = {_ID, DISPLAY_NAME, DESCRIPTION,
-        JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
-        SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-        LAST_DETECTED_FORM_VERSION_HASH, GEOMETRY_XPATH};
+    private static final String[] COLUMN_NAMES_V9 = {_ID, DISPLAY_NAME, DESCRIPTION,
+            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+            LAST_DETECTED_FORM_VERSION_HASH, DELETED};
 
-    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V8;
+    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V9;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -85,7 +86,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV8(db);
+        createFormsTableV9(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -109,6 +110,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 case 7:
                     upgradeToVersion8(db);
                     break;
+                case 8:
+                    upgradeToVersion9(db);
                 default:
                     Timber.i("Unknown version %s", oldVersion);
             }
@@ -125,7 +128,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
             SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-            createFormsTableV8(db);
+            createFormsTableV9(db);
 
             Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;
@@ -281,6 +284,10 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
     }
 
+    private void upgradeToVersion9(SQLiteDatabase db) {
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, DELETED, "boolean default(0)");
+    }
+
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
@@ -322,7 +329,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
-    private void createFormsTableV8(SQLiteDatabase db) {
+    private void createFormsTableV9(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -340,7 +347,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
                 + LAST_DETECTED_FORM_VERSION_HASH + " text, "
-                + GEOMETRY_XPATH + " text);");
+                + GEOMETRY_XPATH + " text, "
+                + DELETED + " boolean default(0));");
     }
 
     public static void databaseMigrationStarted() {

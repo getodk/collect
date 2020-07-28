@@ -31,6 +31,7 @@ import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.FormManagerList;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
@@ -195,6 +196,8 @@ public interface AppDependencyComponent {
     void inject(AutoUpdateTaskSpec autoUpdateTaskSpec);
 
     void inject(ServerAuthDialogFragment serverAuthDialogFragment);
+
+    void inject(FormManagerList formManagerList);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

@@ -41,11 +41,13 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
-import org.odk.collect.android.forms.DatabaseFormRepository;
+import org.odk.collect.android.forms.DatabaseFormsRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -370,8 +372,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormRepository providesFormRepository() {
-        return new DatabaseFormRepository();
+    public FormsRepository providesFormRepository() {
+        return new DatabaseFormsRepository();
     }
 
     @Provides
@@ -400,13 +402,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, DiskFormsSynchronizer diskFormsSynchronizer) {
-        return new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, DiskFormsSynchronizer diskFormsSynchronizer) {
+        return new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
     }
 
     @Provides
-    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
-        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formRepository, formDownloader);
+    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, FormDownloader formDownloader) {
+        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepository, formDownloader);
     }
 
     @Provides
@@ -421,7 +423,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsUpdateChecker providesServerFormUpdatesChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository) {
-        return new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formRepository);
+    public ServerFormsUpdateChecker providesServerFormUpdatesChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository) {
+        return new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formsRepository);
+    }
+
+    @Provides
+    public InstancesRepository providesInstancesRepository() {
+        return new DatabaseInstancesRepository();
     }
 }

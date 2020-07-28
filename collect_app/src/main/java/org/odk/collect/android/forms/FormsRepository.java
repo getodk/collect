@@ -6,13 +6,16 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public interface FormRepository {
+public interface FormsRepository {
 
     Uri save(Form form);
 
     boolean contains(String jrFormId);
 
     List<Form> getAll();
+
+    @Nullable
+    Form get(Long id);
 
     @Nullable
     Form getByMd5Hash(String hash);
@@ -24,6 +27,8 @@ public interface FormRepository {
     Form getByPath(String path);
 
     void delete(Long id);
+
+    void softDelete(Long id);
 
     void setLastDetectedUpdated(String jrFormId, String formHash, String manifestHash);
 

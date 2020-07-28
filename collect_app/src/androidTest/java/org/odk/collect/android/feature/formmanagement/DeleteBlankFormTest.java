@@ -33,4 +33,28 @@ public class DeleteBlankFormTest {
                 .clickFillBlankForm()
                 .assertTextDoesNotExist("One Question");
     }
+
+    @Test
+    public void deletingAForm_whenThereFillForms_allowsEditing() {
+        rule.mainMenu()
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "22")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickDeleteSavedForm()
+                .clickBlankForms()
+                .clickForm("One Question")
+                .clickDeleteSelected(1)
+                .clickDeleteForms()
+                .assertTextDoesNotExist("One Question")
+                .pressBack(new MainMenuPage(rule))
+
+                .clickEditSavedForm()
+                .clickOnForm("One Question")
+                .clickOnQuestion("what is your age")
+                .answerQuestion("what is your age", "30")
+                .swipeToEndScreen()
+                .clickSaveAndExit();
+    }
 }

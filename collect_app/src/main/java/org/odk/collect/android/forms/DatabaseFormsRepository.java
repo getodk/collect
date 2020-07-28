@@ -14,11 +14,13 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.dao.FormsDao.getFormsFromCursor;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 
-public class DatabaseFormRepository implements FormRepository {
+public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public boolean contains(String jrFormId) {
@@ -31,6 +33,14 @@ public class DatabaseFormRepository implements FormRepository {
     public List<Form> getAll() {
         try (Cursor cursor = new FormsDao().getFormsCursor()) {
             return new FormsDao().getFormsFromCursor(cursor);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Form get(Long id) {
+        try (Cursor cursor = new FormsDao().getFormsCursor(_ID + "=?", new String[]{id.toString()})) {
+            return getFormOrNull(cursor);
         }
     }
 
@@ -80,6 +90,13 @@ public class DatabaseFormRepository implements FormRepository {
     @Override
     public void delete(Long id) {
         new FormsDao().deleteFormsFromIDs(new String[]{id.toString()});
+    }
+
+    @Override
+    public void softDelete(Long id) {
+        ContentValues values = new ContentValues();
+        values.put(DELETED, 1);
+        new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
     }
 
     @Override

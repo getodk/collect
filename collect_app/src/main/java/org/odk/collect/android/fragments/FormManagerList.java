@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,7 +28,10 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -35,6 +39,8 @@ import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -51,8 +57,16 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     private BackgroundTasks backgroundTasks; // handled across orientation changes
     private AlertDialog alertDialog;
 
-    public static FormManagerList newInstance() {
-        return new FormManagerList();
+    @Inject
+    FormsRepository formsRepository;
+
+    @Inject
+    InstancesRepository instancesRepository;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -188,6 +202,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             backgroundTasks.deleteFormsTask
                     .setContentResolver(getActivity().getContentResolver());
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
+            backgroundTasks.deleteFormsTask.setRepositories(formsRepository, instancesRepository);
             backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
         } else {
             ToastUtils.showLongToast(R.string.file_delete_in_progress);

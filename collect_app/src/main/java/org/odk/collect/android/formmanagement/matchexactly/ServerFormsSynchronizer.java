@@ -6,7 +6,7 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.FormListApi;
@@ -15,29 +15,29 @@ import java.util.List;
 
 public class ServerFormsSynchronizer {
 
-    private final FormRepository formRepository;
+    private final FormsRepository formsRepository;
     private final FormDownloader formDownloader;
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
-    public ServerFormsSynchronizer(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer) {
-        this.formRepository = formRepository;
+    public ServerFormsSynchronizer(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, FormDownloader formDownloader, DiskFormsSynchronizer diskFormsSynchronizer) {
+        this.formsRepository = formsRepository;
         this.formDownloader = formDownloader;
-        this.serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+        this.serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
     }
 
-    public ServerFormsSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
+    public ServerFormsSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, FormDownloader formDownloader) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
-        this.formRepository = formRepository;
+        this.formsRepository = formsRepository;
         this.formDownloader = formDownloader;
     }
 
     public void synchronize() throws FormApiException {
         List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
-        List<Form> formsOnDevice = formRepository.getAll();
+        List<Form> formsOnDevice = formsRepository.getAll();
 
         formsOnDevice.stream().forEach(form -> {
             if (formList.stream().noneMatch(f -> form.getJrFormId().equals(f.getFormId()))) {
-                formRepository.delete(form.getId());
+                formsRepository.delete(form.getId());
             }
         });
 

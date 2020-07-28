@@ -14,7 +14,7 @@ import java.util.List;
 public interface InstancesRepository {
     Instance getBy(long databaseId);
 
-    List<Instance> getAllBy(String formId);
+    List<Instance> getAllByJrFormId(String formId);
 
     /**
      * Get the Instance corresponding to the given path or null if no unique Instance matches.

@@ -32,7 +32,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllBy(String formId) {
+    public List<Instance> getAllByJrFormId(String formId) {
         Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ?",
         new String[] {formId});
         return dao.getInstancesFromCursor(c);

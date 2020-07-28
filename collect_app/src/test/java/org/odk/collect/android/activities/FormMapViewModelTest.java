@@ -9,7 +9,7 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.instances.TestInstancesRepository;
+import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class FormMapViewModelTest {
     private InstancesRepository testInstancesRepository;
 
     @Before public void setUp() {
-        testInstancesRepository = new TestInstancesRepository(Arrays.asList(testInstances));
+        testInstancesRepository = new InMemInstancesRepository(Arrays.asList(testInstances));
     }
 
     @Test public void getFormTitle_returnsFormTitle() {
@@ -125,7 +125,7 @@ public class FormMapViewModelTest {
                 .canEditWhenComplete(true)
                 .status(InstanceProviderAPI.STATUS_COMPLETE).build();
 
-        ((TestInstancesRepository) testInstancesRepository).addInstance(newInstance);
+        ((InMemInstancesRepository) testInstancesRepository).addInstance(newInstance);
 
         instances = viewModel.getMappableFormInstances();
         assertThat(viewModel.getTotalInstanceCount(), is(8));
@@ -141,9 +141,9 @@ public class FormMapViewModelTest {
         assertThat(mappableInstances.size(), is(6));
 
         assertThat(mappableInstances.get(5).getClickAction(), is(FormMapViewModel.ClickAction.NOT_VIEWABLE_TOAST));
-        ((TestInstancesRepository) testInstancesRepository).removeInstanceById(6L);
+        ((InMemInstancesRepository) testInstancesRepository).removeInstanceById(6L);
 
-        ((TestInstancesRepository) testInstancesRepository).addInstance(new Instance.Builder().databaseId(6L)
+        ((InMemInstancesRepository) testInstancesRepository).addInstance(new Instance.Builder().databaseId(6L)
                 .jrFormId("formId1")
                 .jrVersion("2019103101")
                 .geometryType("")

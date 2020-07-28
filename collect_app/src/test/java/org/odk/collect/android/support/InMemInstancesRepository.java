@@ -1,12 +1,15 @@
-package org.odk.collect.android.instances;
+package org.odk.collect.android.support;
+
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TestInstancesRepository implements InstancesRepository {
+public final class InMemInstancesRepository implements InstancesRepository {
     List<Instance> instances;
 
-    public TestInstancesRepository(List<Instance> instances) {
+    public InMemInstancesRepository(List<Instance> instances) {
         this.instances = new ArrayList<>(instances);
     }
 
@@ -22,7 +25,7 @@ public final class TestInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllBy(String formId) {
+    public List<Instance> getAllByJrFormId(String formId) {
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {

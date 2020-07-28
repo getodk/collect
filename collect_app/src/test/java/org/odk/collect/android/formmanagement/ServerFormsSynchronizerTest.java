@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.openrosa.api.FormApiException;
-import org.odk.collect.android.support.InMemFormRepository;
+import org.odk.collect.android.support.InMemFormsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +26,16 @@ public class ServerFormsSynchronizerTest {
 
     private ServerFormsSynchronizer synchronizer;
     private RecordingFormDownloader formDownloader;
-    private FormRepository formRepository;
+    private FormsRepository formsRepository;
     private ServerFormsDetailsFetcher serverFormDetailsFetcher;
 
     @Before
     public void setup() {
-        formRepository = new InMemFormRepository();
+        formsRepository = new InMemFormsRepository();
         formDownloader = new RecordingFormDownloader();
         serverFormDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
 
-        synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formRepository, formDownloader);
+        synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, formDownloader);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void deletesFormsNotInList() throws Exception {
-        formRepository.save(new Form.Builder()
+        formsRepository.save(new Form.Builder()
                 .id(3L)
                 .jrFormId("form-3")
                 .md5Hash("form-3-hash")
@@ -71,7 +71,7 @@ public class ServerFormsSynchronizerTest {
         ));
 
         synchronizer.synchronize();
-        assertThat(formRepository.contains("form-3"), is(false));
+        assertThat(formsRepository.contains("form-3"), is(false));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class ServerFormsSynchronizerTest {
         FormDownloader formDownloader = mock(FormDownloader.class);
         doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0));
 
-        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formRepository, formDownloader);
+        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, formDownloader);
 
         try {
             synchronizer.synchronize();

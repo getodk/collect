@@ -23,7 +23,7 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.instances.TestInstancesRepository;
+import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
@@ -77,8 +77,8 @@ public class FormMapActivityTest {
         activityController = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         activity = (FormMapActivity) activityController.get();
 
-        TestInstancesRepository testInstancesRepository = new TestInstancesRepository(Arrays.asList(testInstances));
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
+        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(Arrays.asList(testInstances));
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         activityController.setup();
@@ -99,8 +99,8 @@ public class FormMapActivityTest {
         ActivityController controller = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         FormMapActivity activity = (FormMapActivity) controller.get();
 
-        TestInstancesRepository testInstancesRepository = new TestInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
+        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         controller.setup();
@@ -115,8 +115,8 @@ public class FormMapActivityTest {
         ActivityController controller = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         FormMapActivity activity = (FormMapActivity) controller.get();
 
-        TestInstancesRepository testInstancesRepository = new TestInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
+        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         controller.setup();
