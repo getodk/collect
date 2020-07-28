@@ -7,10 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class InMemInstancesRepository implements InstancesRepository {
+
     List<Instance> instances;
 
     public InMemInstancesRepository(List<Instance> instances) {
         this.instances = new ArrayList<>(instances);
+    }
+
+    public InMemInstancesRepository() {
+        this.instances = new ArrayList<>();
     }
 
     @Override
