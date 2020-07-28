@@ -1,5 +1,6 @@
 package org.odk.collect.android.fragments.dialogs;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,9 +23,9 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog {
     public SelectOneMinimalDialog(List<SelectChoice> items, String selectedItem,
                                   FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager,
                                   int answerFontSize, AudioHelper audioHelper, int playColor,
-                                  boolean isFlex, boolean isAutoComplete) {
+                                  Context context, boolean isFlex, boolean isAutoComplete) {
         super(isFlex, isAutoComplete);
-        this.adapter = new SelectOneListAdapter(items, selectedItem, null, formEntryPrompt, referenceManager, answerFontSize, audioHelper, playColor, getContext());
+        this.adapter = new SelectOneListAdapter(items, selectedItem, null, formEntryPrompt, referenceManager, answerFontSize, audioHelper, playColor, context);
     }
 
     @Override
