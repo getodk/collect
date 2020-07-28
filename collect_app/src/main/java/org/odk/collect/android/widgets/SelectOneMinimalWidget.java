@@ -10,6 +10,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.fragments.dialogs.SelectOneMinimalDialog;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
@@ -19,12 +20,18 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
 
 public class SelectOneMinimalWidget extends SelectMinimalWidget {
     private Selection selectedItem;
+    private final boolean autoAdvance;
+    private AdvanceToNextListener autoAdvanceListener;
 
-    public SelectOneMinimalWidget(Context context, QuestionDetails prompt) {
+    public SelectOneMinimalWidget(Context context, QuestionDetails prompt, boolean autoAdvance) {
         super(context, prompt);
         selectedItem = getQuestionDetails().getPrompt().getAnswerValue() == null
                 ? null
                 : ((Selection) getQuestionDetails().getPrompt().getAnswerValue().getValue());
+        this.autoAdvance = autoAdvance;
+        if (context instanceof AdvanceToNextListener) {
+            autoAdvanceListener = (AdvanceToNextListener) context;
+        }
         updateAnswer();
     }
 
@@ -53,6 +60,10 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
             selectedItem = ((List<Selection>) answer).get(0);
             updateAnswer();
             widgetValueChanged();
+
+            if (autoAdvance && autoAdvanceListener != null) {
+                autoAdvanceListener.advance();
+            }
         }
     }
 
