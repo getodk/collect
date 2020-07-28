@@ -8,11 +8,11 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.listeners.ItemClickListener;
+import org.odk.collect.android.listeners.SelectOneItemClickListener;
 
 import java.util.List;
 
-public class SelectOneMinimalDialog extends SelectMinimalDialog implements ItemClickListener {
+public class SelectOneMinimalDialog extends SelectMinimalDialog implements SelectOneItemClickListener {
     private SelectOneListAdapter adapter;
 
     public SelectOneMinimalDialog() {
@@ -21,10 +21,10 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements ItemC
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectOneMinimalDialog(List<SelectChoice> items, String selectedItem,
                                   FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager,
-                                  int answerFontSize, AudioHelper audioHelper, int playColor,
+                                  AudioHelper audioHelper, int playColor,
                                   Context context, boolean isFlex, boolean isAutoComplete) {
         super(isFlex, isAutoComplete);
-        adapter = new SelectOneListAdapter(items, selectedItem, this, formEntryPrompt, referenceManager, answerFontSize, audioHelper, playColor, context);
+        adapter = new SelectOneListAdapter(items, selectedItem, this, formEntryPrompt, referenceManager, audioHelper, playColor, context);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements ItemC
     }
 
     @Override
-    public void onStateChanged() {
-
+    public void onClearNextLevelsOfCascadingSelect() {
+        // do nothing
     }
 }

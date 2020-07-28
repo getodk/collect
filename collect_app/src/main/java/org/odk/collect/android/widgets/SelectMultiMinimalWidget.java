@@ -26,12 +26,12 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
         selectedItems = getFormEntryPrompt().getAnswerValue() == null
                 ? new ArrayList<>() :
                 (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
-        updateAnswer();
+        updateAnswerLabel();
     }
 
     @Override
     protected void showDialog() {
-        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(items, getSavedSelectedItems(), getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
+        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(items, getSavedSelectedItems(), getFormEntryPrompt(), getReferenceManager(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
         dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
     }
 
@@ -51,7 +51,8 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
     @Override
     public void setBinaryData(Object answer) {
         selectedItems = (List<Selection>) answer;
-        updateAnswer();
+        updateAnswerLabel();
+        widgetValueChanged();
     }
 
     @Override
@@ -63,7 +64,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
         }
     }
 
-    private void updateAnswer() {
+    private void updateAnswerLabel() {
         if (selectedItems.isEmpty()) {
             binding.choicesSearchBox.setText(R.string.select_answer);
         } else {

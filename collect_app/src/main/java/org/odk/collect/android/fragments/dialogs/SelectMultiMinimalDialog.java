@@ -9,11 +9,11 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.listeners.ItemClickListener;
+import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.List;
 
-public class SelectMultiMinimalDialog extends SelectMinimalDialog implements ItemClickListener {
+public class SelectMultiMinimalDialog extends SelectMinimalDialog implements SelectItemClickListener {
     private SelectMultipleListAdapter adapter;
 
     public SelectMultiMinimalDialog() {
@@ -22,10 +22,10 @@ public class SelectMultiMinimalDialog extends SelectMinimalDialog implements Ite
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectMultiMinimalDialog(List<SelectChoice> items, List<Selection> selectedItems,
                                     FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager,
-                                    int answerFontSize, AudioHelper audioHelper, int playColor,
+                                    AudioHelper audioHelper, int playColor,
                                     Context context, boolean isFlex, boolean isAutoComplete) {
         super(isFlex, isAutoComplete);
-        adapter = new SelectMultipleListAdapter(items, selectedItems, this, formEntryPrompt, referenceManager, answerFontSize, audioHelper, playColor, context);
+        adapter = new SelectMultipleListAdapter(items, selectedItems, this, formEntryPrompt, referenceManager, audioHelper, playColor, context);
     }
 
     @Override
@@ -35,11 +35,6 @@ public class SelectMultiMinimalDialog extends SelectMinimalDialog implements Ite
 
     @Override
     public void onItemClicked() {
-        // do nothing
-    }
-
-    @Override
-    public void onStateChanged() {
         // do nothing
     }
 }

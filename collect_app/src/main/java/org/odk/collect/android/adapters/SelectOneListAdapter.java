@@ -34,7 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.listeners.ItemClickListener;
+import org.odk.collect.android.listeners.SelectOneItemClickListener;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,12 +44,14 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     private final int playColor;
     private RadioButton selectedRadioButton;
     private View selectedItem;
+    private final SelectOneItemClickListener listener;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, ItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, listener, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, SelectOneItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, formEntryPrompt, referenceManager, audioHelper, context);
         this.selectedValue = selectedValue;
         this.playColor = playColor;
+        this.listener = listener;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
         if (isChecked) {
             if (selectedRadioButton != null && buttonView != selectedRadioButton) {
                 selectedRadioButton.setChecked(false);
-                listener.onStateChanged();
+                listener.onClearNextLevelsOfCascadingSelect();
             }
             selectedRadioButton = (RadioButton) buttonView;
             selectedValue = items.get((int) selectedRadioButton.getTag()).getValue();
@@ -141,7 +143,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
             selectedItem.setBackground(null);
             selectedItem = null;
         }
-        listener.onStateChanged();
+        listener.onClearNextLevelsOfCascadingSelect();
     }
 
     public Selection getSelectedItem() {

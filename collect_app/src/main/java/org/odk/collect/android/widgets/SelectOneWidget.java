@@ -31,7 +31,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.listeners.ItemClickListener;
+import org.odk.collect.android.listeners.SelectOneItemClickListener;
 
 import timber.log.Timber;
 
@@ -44,7 +44,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneWidget extends BaseSelectListWidget implements ItemClickListener {
+public class SelectOneWidget extends BaseSelectListWidget implements SelectOneItemClickListener {
 
     @Nullable
     private AdvanceToNextListener listener;
@@ -61,7 +61,7 @@ public class SelectOneWidget extends BaseSelectListWidget implements ItemClickLi
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        recyclerViewAdapter = new SelectOneListAdapter(items, getSelectedValue(), this, getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
+        recyclerViewAdapter = new SelectOneListAdapter(items, getSelectedValue(), this, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
         return recyclerViewAdapter;
     }
 
@@ -97,16 +97,12 @@ public class SelectOneWidget extends BaseSelectListWidget implements ItemClickLi
         widgetValueChanged();
     }
 
-    @Override
-    public void onStateChanged() {
-        clearNextLevelsOfCascadingSelect();
-    }
-
     /**
      * It's needed only for external choices. Everything works well and
      * out of the box when we use internal choices instead
      */
-    private void clearNextLevelsOfCascadingSelect() {
+    @Override
+    public void onClearNextLevelsOfCascadingSelect() {
         FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;

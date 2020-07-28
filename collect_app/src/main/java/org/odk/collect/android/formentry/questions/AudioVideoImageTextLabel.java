@@ -45,7 +45,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
-import org.odk.collect.android.listeners.ItemClickListener;
+import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -93,7 +93,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private CharSequence questionText;
     private String bigImageURI;
     private ReferenceManager referenceManager;
-    private ItemClickListener listener;
+    private SelectItemClickListener listener;
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
@@ -330,7 +330,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
     }
 
-    public void setItemClickListener(ItemClickListener listener) {
+    public void setItemClickListener(SelectItemClickListener listener) {
         this.listener = listener;
     }
 }

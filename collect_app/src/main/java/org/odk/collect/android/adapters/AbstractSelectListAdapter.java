@@ -44,7 +44,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.listeners.ItemClickListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -69,20 +68,16 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     private final ReferenceManager referenceManager;
     private final int numColumns;
     private final Context context;
-    private final int answerFontSize;
     private final AudioHelper audioHelper;
-    List<SelectChoice> items;
-    List<SelectChoice> filteredItems;
-    boolean noButtonsMode;
-    protected ItemClickListener listener;
+    protected List<SelectChoice> items;
+    protected List<SelectChoice> filteredItems;
+    protected boolean noButtonsMode;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, ItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, Context context) {
+    AbstractSelectListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, Context context) {
         this.context = context;
         this.items = items;
-        this.listener = listener;
         this.prompt = formEntryPrompt;
         this.referenceManager = referenceManager;
-        this.answerFontSize = answerFontSize;
         this.audioHelper = audioHelper;
         filteredItems = items;
         this.numColumns = WidgetAppearanceUtils.getNumberOfColumns(prompt, context);
@@ -181,7 +176,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         if (errorMsg != null) {
             TextView missingImage = new TextView(context);
-            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
 
             String choiceText = FormEntryPromptUtils.getItemText(prompt, selectChoice.selection()).toString();
