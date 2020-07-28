@@ -3,7 +3,6 @@ package org.odk.collect.android.formmanagement;
 import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 
@@ -18,24 +17,6 @@ public class FormDeleterTest {
     private final InMemFormsRepository formsRepository = new InMemFormsRepository();
     private final InMemInstancesRepository instancesRepository = new InMemInstancesRepository();
     private final FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
-
-    @Test
-    public void whenFormHasSubmittedInstances_deletesForm() {
-        formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("version")
-                .build());
-
-        instancesRepository.addInstance(new Instance.Builder()
-                .jrFormId("1")
-                .jrVersion("version")
-                .status(InstanceProviderAPI.STATUS_SUBMITTED)
-                .build());
-
-        formDeleter.delete(1L);
-        assertThat(formsRepository.getAll().isEmpty(), is(true));
-    }
 
     @Test
     public void whenOtherVersionOfFormHasInstances_deletesForm() {
@@ -58,7 +39,6 @@ public class FormDeleterTest {
         instancesRepository.addInstance(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("old")
-                .status(InstanceProviderAPI.STATUS_COMPLETE)
                 .build());
 
         formDeleter.delete(2L);
@@ -84,7 +64,6 @@ public class FormDeleterTest {
         instancesRepository.addInstance(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("version")
-                .status(InstanceProviderAPI.STATUS_COMPLETE)
                 .build());
 
         formDeleter.delete(2L);
@@ -104,7 +83,6 @@ public class FormDeleterTest {
         instancesRepository.addInstance(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion(null)
-                .status(InstanceProviderAPI.STATUS_COMPLETE)
                 .build());
 
         formDeleter.delete(1L);
