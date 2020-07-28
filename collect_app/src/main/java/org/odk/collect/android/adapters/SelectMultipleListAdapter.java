@@ -34,7 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.listeners.ItemClickListener;
+import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.List;
 
@@ -42,12 +42,14 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
     private final int playColor;
+    protected final SelectItemClickListener listener;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, ItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, listener, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, formEntryPrompt, referenceManager, audioHelper, context);
         this.selectedItems = selectedItems;
         this.playColor = playColor;
+        this.listener = listener;
     }
 
     @Override

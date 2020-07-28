@@ -23,7 +23,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.ItemClickListener;
+import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +37,14 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends BaseSelectListWidget implements ItemClickListener {
+public class SelectMultiWidget extends BaseSelectListWidget implements SelectItemClickListener {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        recyclerViewAdapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getFormEntryPrompt(), getReferenceManager(), getAnswerFontSize(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
+        recyclerViewAdapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
         return recyclerViewAdapter;
     }
 
@@ -74,10 +74,5 @@ public class SelectMultiWidget extends BaseSelectListWidget implements ItemClick
     @Override
     public void onItemClicked() {
         widgetValueChanged();
-    }
-
-    @Override
-    public void onStateChanged() {
-        // do nothing
     }
 }

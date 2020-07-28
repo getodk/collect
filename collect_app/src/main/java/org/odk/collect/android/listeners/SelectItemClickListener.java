@@ -1,7 +1,5 @@
 package org.odk.collect.android.listeners;
 
-public interface ItemClickListener {
+public interface SelectItemClickListener {
     void onItemClicked();
-
-    void onStateChanged();
 }
