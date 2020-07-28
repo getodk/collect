@@ -34,27 +34,20 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.widgets.SelectOneWidget;
+import org.odk.collect.android.listeners.ItemClickListener;
 
 import java.util.Collections;
 import java.util.List;
 
-public class SelectOneListAdapter extends AbstractSelectListAdapter
-        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-
+public class SelectOneListAdapter extends AbstractSelectListAdapter implements CompoundButton.OnCheckedChangeListener {
     private String selectedValue;
     private final int playColor;
     private RadioButton selectedRadioButton;
     private View selectedItem;
-    private OnItemClickListener listener;
-
-    public interface OnItemClickListener {
-        void onItemClicked();
-    }
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, SelectOneWidget widget, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, widget, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, ItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, listener, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedValue = selectedValue;
         this.playColor = playColor;
     }
@@ -67,31 +60,15 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     }
 
     @Override
-    public void onClick(View v) {
-        if (widget != null) {
-            ((SelectOneWidget) widget).onClick();
-        }
-        if (listener != null) {
-            listener.onItemClicked();
-        }
-    }
-
-    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             if (selectedRadioButton != null && buttonView != selectedRadioButton) {
                 selectedRadioButton.setChecked(false);
-                if (widget != null) {
-                    ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
-                }
+                listener.onStateChanged();
             }
             selectedRadioButton = (RadioButton) buttonView;
             selectedValue = items.get((int) selectedRadioButton.getTag()).getValue();
         }
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
@@ -102,6 +79,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             } else {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
+                audioVideoImageTextLabel.setItemClickListener(listener);
                 adjustAudioVideoImageTextLabelParams();
             }
         }
@@ -123,7 +101,6 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     RadioButton createButton(final int index, ViewGroup parent) {
         RadioButton radioButton = (RadioButton) LayoutInflater.from(parent.getContext()).inflate(R.layout.select_one_item, null);
         setUpButton(radioButton, index);
-        radioButton.setOnClickListener(this);
         radioButton.setOnCheckedChangeListener(this);
 
         String value = filteredItems.get(index).getValue();
@@ -144,12 +121,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             selectedItem = view;
             selectedValue = selection.getValue();
         }
-        if (widget != null) {
-            ((SelectOneWidget) widget).onClick();
-        }
-        if (listener != null) {
-            listener.onItemClicked();
-        }
+        listener.onItemClicked();
     }
 
     @Override
@@ -169,9 +141,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
             selectedItem.setBackground(null);
             selectedItem = null;
         }
-        if (widget != null) {
-            ((SelectOneWidget) widget).clearNextLevelsOfCascadingSelect();
-        }
+        listener.onStateChanged();
     }
 
     public Selection getSelectedItem() {

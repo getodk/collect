@@ -31,6 +31,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.ItemClickListener;
 
 import timber.log.Timber;
 
@@ -43,7 +44,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneWidget extends BaseSelectListWidget {
+public class SelectOneWidget extends BaseSelectListWidget implements ItemClickListener {
 
     @Nullable
     private AdvanceToNextListener listener;
@@ -78,11 +79,34 @@ public class SelectOneWidget extends BaseSelectListWidget {
                 : ((Selection) getQuestionDetails().getPrompt().getAnswerValue().getValue()).getValue();
     }
 
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        RadioButton button = new RadioButton(getContext());
+        button.setTag(choiceIndex);
+        button.setChecked(isSelected);
+
+        ((SelectOneListAdapter) recyclerViewAdapter).onCheckedChanged(button, isSelected);
+    }
+
+    @Override
+    public void onItemClicked() {
+        if (autoAdvance && listener != null) {
+            listener.advance();
+        }
+
+        widgetValueChanged();
+    }
+
+    @Override
+    public void onStateChanged() {
+        clearNextLevelsOfCascadingSelect();
+    }
+
     /**
      * It's needed only for external choices. Everything works well and
      * out of the box when we use internal choices instead
      */
-    public void clearNextLevelsOfCascadingSelect() {
+    private void clearNextLevelsOfCascadingSelect() {
         FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;
@@ -102,22 +126,5 @@ public class SelectOneWidget extends BaseSelectListWidget {
                 Timber.d(e);
             }
         }
-    }
-
-    public void onClick() {
-        if (autoAdvance && listener != null) {
-            listener.advance();
-        }
-
-        widgetValueChanged();
-    }
-
-    @Override
-    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
-        RadioButton button = new RadioButton(getContext());
-        button.setTag(choiceIndex);
-        button.setChecked(isSelected);
-
-        ((SelectOneListAdapter) recyclerViewAdapter).onCheckedChanged(button, isSelected);
     }
 }

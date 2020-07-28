@@ -23,6 +23,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.listeners.ItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends BaseSelectListWidget {
+public class SelectMultiWidget extends BaseSelectListWidget implements ItemClickListener {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
@@ -68,5 +69,15 @@ public class SelectMultiWidget extends BaseSelectListWidget {
         return getFormEntryPrompt().getAnswerValue() == null
                 ? new ArrayList<>() :
                 (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+    }
+
+    @Override
+    public void onItemClicked() {
+        widgetValueChanged();
+    }
+
+    @Override
+    public void onStateChanged() {
+        // do nothing
     }
 }

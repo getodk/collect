@@ -34,18 +34,18 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.widgets.SelectMultiWidget;
+import org.odk.collect.android.listeners.ItemClickListener;
 
 import java.util.List;
 
 public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
-    private List<Selection> selectedItems;
+    private final List<Selection> selectedItems;
     private final int playColor;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectMultiWidget widget, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, widget, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, ItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, int answerFontSize, AudioHelper audioHelper, int playColor, Context context) {
+        super(items, listener, formEntryPrompt, referenceManager, answerFontSize, audioHelper, context);
         this.selectedItems = selectedItems;
         this.playColor = playColor;
     }
@@ -65,6 +65,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             } else {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
+                audioVideoImageTextLabel.setItemClickListener(listener);
                 adjustAudioVideoImageTextLabelParams();
             }
         }
@@ -95,9 +96,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             } else {
                 removeItem(filteredItems.get(index).selection());
             }
-            if (widget != null) {
-                widget.widgetValueChanged();
-            }
+            listener.onItemClicked();
         });
 
         return checkBox;
