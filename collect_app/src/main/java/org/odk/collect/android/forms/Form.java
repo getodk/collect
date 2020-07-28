@@ -277,6 +277,10 @@ public final class Form {
         return lastDetectedFormVersionHash;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     @Override
     public boolean equals(Object other) {
         return other == this || other instanceof Form && this.md5Hash.equals(((Form) other).md5Hash);

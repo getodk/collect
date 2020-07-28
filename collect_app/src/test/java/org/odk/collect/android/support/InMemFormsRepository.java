@@ -71,7 +71,7 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public void softDelete(Long id) {
-        Form form = forms.stream().filter(f -> f.getJrFormId().equals(id)).findFirst().orElse(null);
+        Form form = forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
 
         if (form != null) {
             forms.remove(form);
