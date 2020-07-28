@@ -160,13 +160,6 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     }
 
     @Override
-    public void updateSelectedItems(List<Selection> selectedItems) {
-        if (selectedItems != null && !selectedItems.isEmpty()) {
-            selectedValue = selectedItems.get(0).getValue();
-        }
-    }
-
-    @Override
     public void clearAnswer() {
         if (selectedRadioButton != null) {
             selectedRadioButton.setChecked(false);

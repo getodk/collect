@@ -153,9 +153,4 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     public List<Selection> getSelectedItems() {
         return selectedItems;
     }
-
-    @Override
-    public void updateSelectedItems(List<Selection> selectedItems) {
-        this.selectedItems = selectedItems;
-    }
 }
