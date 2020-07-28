@@ -24,7 +24,7 @@ public class FormDeleter {
         Form form = formsRepository.get(id);
         List<Instance> instances = instancesRepository.getAllByJrFormId(form.getJrFormId());
         Stream<Instance> instancesForVersion = instances.stream().filter(instance -> Objects.equals(instance.getJrVersion(), form.getJrVersion()));
-        
+
         if (instancesForVersion.anyMatch(instance -> !instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED))) {
             formsRepository.softDelete(form.getId());
         } else {

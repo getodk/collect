@@ -1,12 +1,13 @@
 package org.odk.collect.android.formmanagement;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.support.InMemFormsRepository;
+import org.odk.collect.android.support.InMemInstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +25,11 @@ import static org.mockito.Mockito.when;
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormsSynchronizerTest {
 
-    private ServerFormsSynchronizer synchronizer;
-    private RecordingFormDownloader formDownloader;
-    private FormsRepository formsRepository;
-    private ServerFormsDetailsFetcher serverFormDetailsFetcher;
-
-    @Before
-    public void setup() {
-        formsRepository = new InMemFormsRepository();
-        formDownloader = new RecordingFormDownloader();
-        serverFormDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
-
-        synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, formDownloader);
-    }
+    private final FormsRepository formsRepository = new InMemFormsRepository();
+    private final InstancesRepository instancesRepository = new InMemInstancesRepository();
+    private final RecordingFormDownloader formDownloader = new RecordingFormDownloader();
+    private final ServerFormsDetailsFetcher serverFormDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
+    private final ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
 
     @Test
     public void downloadsNewForms() throws Exception {
@@ -108,7 +101,7 @@ public class ServerFormsSynchronizerTest {
         FormDownloader formDownloader = mock(FormDownloader.class);
         doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0));
 
-        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, formDownloader);
+        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
 
         try {
             synchronizer.synchronize();
