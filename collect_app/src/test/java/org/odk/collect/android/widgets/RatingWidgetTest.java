@@ -72,9 +72,16 @@ public class RatingWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
+    public void getAnswer_whenPromptHasAnswer_returnsAnswer_forRatingBarInSingleLine() {
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        assertThat(widget.getAnswer().getValue(), equalTo(3));
+    }
+
+    @Test
+    public void getAnswer_whenPromptHasAnswer_returnsAnswer_forRatingBarInMultipleLines() {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
         RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("7")));
+
         assertThat(widget.getAnswer().getValue(), equalTo(7));
     }
 
@@ -134,11 +141,22 @@ public class RatingWidgetTest {
     }
 
     @Test
-    public void changingRating_updatesAnswer() {
+    public void changingRating_updatesAnswer_forRatingBarInSingleLine() {
         RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
         widget.binding.ratingBar1.setRating(4.0F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(4));
+    }
+
+    @Test
+    public void changingRating_updatesAnswer_forRatingBarInMultipleLines() {
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("7")));
+        widget.binding.ratingBar1.setRating(4.0F);
+
+        assertThat(widget.getAnswer().getValue(), equalTo(4));
+        assertThat(widget.binding.ratingBar1.getRating(), equalTo(4.0F));
+        assertThat(widget.binding.ratingBar2.getRating(), equalTo(0.0F));
     }
 
     @Test
