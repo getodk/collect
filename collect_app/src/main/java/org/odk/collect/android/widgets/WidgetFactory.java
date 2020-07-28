@@ -142,23 +142,24 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_SELECT_ONE:
+                boolean isQuick = appearance.contains(WidgetAppearanceUtils.QUICK);
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
                 if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
-                    questionWidget = new SelectOneMinimalWidget(context, questionDetails);
+                    questionWidget = new SelectOneMinimalWidget(context, questionDetails, isQuick);
                 } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
                     questionWidget = new LikertWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
-                    questionWidget = new ListWidget(context, questionDetails, false, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new ListWidget(context, questionDetails, false, isQuick);
                 } else if (appearance.contains(WidgetAppearanceUtils.LIST)) {
-                    questionWidget = new ListWidget(context, questionDetails, true, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new ListWidget(context, questionDetails, true, isQuick);
                 } else if (appearance.equals(WidgetAppearanceUtils.LABEL)) {
                     questionWidget = new LabelWidget(context, questionDetails);
                 } else if (appearance.contains(WidgetAppearanceUtils.IMAGE_MAP)) {
-                    questionWidget = new SelectOneImageMapWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new SelectOneImageMapWidget(context, questionDetails, isQuick);
                 } else {
-                    questionWidget = new SelectOneWidget(context, questionDetails, appearance.contains(WidgetAppearanceUtils.QUICK));
+                    questionWidget = new SelectOneWidget(context, questionDetails, isQuick);
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
