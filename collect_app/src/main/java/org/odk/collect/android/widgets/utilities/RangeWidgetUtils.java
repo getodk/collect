@@ -166,7 +166,8 @@ public class RangeWidgetUtils {
         return progress;
     }
 
-    public static BigDecimal setUpSliderValue(FormEntryPrompt prompt, Slider slider, RangeQuestion rangeQuestion, float value) {
+    public static BigDecimal getActualValue(FormEntryPrompt prompt, Slider slider, float value) {
+        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
