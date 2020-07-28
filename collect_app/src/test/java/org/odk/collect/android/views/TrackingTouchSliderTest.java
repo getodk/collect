@@ -8,7 +8,7 @@ import androidx.test.core.view.MotionEventBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
+import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
 import static android.view.MotionEvent.ACTION_DOWN;
@@ -23,8 +23,7 @@ public class TrackingTouchSliderTest {
 
     @Before
     public void setUp() {
-        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
-
+        RobolectricHelpers.createThemedContext();
         LinearLayout linearLayout = new LinearLayout(ApplicationProvider.getApplicationContext());
         slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext(), null);
 
