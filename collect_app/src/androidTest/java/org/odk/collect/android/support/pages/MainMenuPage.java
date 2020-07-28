@@ -245,5 +245,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withText(getTranslatedString(R.string.view_sent_forms_button, formCount))).perform(click());
         return new ViewSentFormPage(rule).assertOnPage();
     }
+
+    public DeleteSavedFormPage clickDeleteSavedForm() {
+        onView(withText(getTranslatedString(R.string.manage_files))).perform(click());
+        return new DeleteSavedFormPage(rule).assertOnPage();
+    }
 }
 

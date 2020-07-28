@@ -102,7 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
-                        tools:text="@string/manage_files" />
+                        tools:text="@string/w" />
 
                     <TextView
                         android:id="@+id/version_sha"
