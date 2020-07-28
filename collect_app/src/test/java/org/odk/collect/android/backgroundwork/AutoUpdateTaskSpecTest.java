@@ -44,7 +44,7 @@ public class AutoUpdateTaskSpecTest {
 
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public ChangeLock providesChangeLock() {
+            public ChangeLock providesFormsChangeLock() {
                 return changeLock;
             }
 

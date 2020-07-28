@@ -9,6 +9,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.ChangeLock;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class StorageMigrationService extends IntentService {
 
@@ -18,7 +19,12 @@ public class StorageMigrationService extends IntentService {
     StorageMigrator storageMigrator;
 
     @Inject
-    ChangeLock changeLock;
+    @Named("FORMS")
+    ChangeLock formsLock;
+
+    @Inject
+    @Named("INSTANCES")
+    ChangeLock instancesLock;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
@@ -30,13 +36,17 @@ public class StorageMigrationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        changeLock.withLock(acquiredLock -> {
-            if (acquiredLock) {
-                storageMigrator.performStorageMigration();
-            } else {
-                storageMigrationRepository.setResult(StorageMigrationResult.CHANGES_IN_PROGRESS);
-                storageMigrationRepository.markMigrationEnd();
-            }
+        instancesLock.withLock(acquiredInstancesLock -> {
+            formsLock.withLock(acquiredFormsLock -> {
+                if (acquiredInstancesLock && acquiredFormsLock) {
+                    storageMigrator.performStorageMigration();
+                } else {
+                    storageMigrationRepository.setResult(StorageMigrationResult.CHANGES_IN_PROGRESS);
+                    storageMigrationRepository.markMigrationEnd();
+                }
+
+                return null;
+            });
 
             return null;
         });

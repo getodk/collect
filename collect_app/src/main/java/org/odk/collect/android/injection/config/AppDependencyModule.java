@@ -92,6 +92,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -206,7 +207,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics, ChangeLock changeLock) {
+    public StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics, @Named("FORMS") ChangeLock changeLock) {
         StorageEraser storageEraser = new StorageEraser(storagePathProvider);
 
         return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, analytics);
@@ -417,8 +418,16 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Named("FORMS")
     @Singleton
-    public ChangeLock providesChangeLock() {
+    public ChangeLock providesFormsChangeLock() {
+        return new ReentrantLockChangeLock();
+    }
+
+    @Provides
+    @Named("INSTANCES")
+    @Singleton
+    public ChangeLock providesInstancesChangeLock() {
         return new ReentrantLockChangeLock();
     }
 

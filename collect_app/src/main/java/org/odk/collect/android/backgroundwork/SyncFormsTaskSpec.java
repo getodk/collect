@@ -17,6 +17,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class SyncFormsTaskSpec implements TaskSpec {
 
@@ -30,6 +31,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
     Notifier notifier;
 
     @Inject
+    @Named("FORMS")
     ChangeLock changeLock;
 
     @NotNull

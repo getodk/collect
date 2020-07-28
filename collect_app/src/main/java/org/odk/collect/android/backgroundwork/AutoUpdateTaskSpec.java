@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 
@@ -57,6 +58,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     PreferencesProvider preferencesProvider;
 
     @Inject
+    @Named("FORMS")
     ChangeLock changeLock;
 
     @NotNull

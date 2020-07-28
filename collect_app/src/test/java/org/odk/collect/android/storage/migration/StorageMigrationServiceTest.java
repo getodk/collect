@@ -26,14 +26,20 @@ public class StorageMigrationServiceTest {
 
     private final StorageMigrator storageMigrator = mock(StorageMigrator.class);
     private final StorageMigrationRepository storageMigrationRepository = mock(StorageMigrationRepository.class);
-    private final BooleanChangeLock changeLock = new BooleanChangeLock();
+    private final BooleanChangeLock formsChangeLock = new BooleanChangeLock();
+    private final BooleanChangeLock instancesChangeLock = new BooleanChangeLock();
 
     @Before
     public void setup() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public ChangeLock providesChangeLock() {
-                return changeLock;
+            public ChangeLock providesFormsChangeLock() {
+                return formsChangeLock;
+            }
+
+            @Override
+            public ChangeLock providesInstancesChangeLock() {
+                return instancesChangeLock;
             }
 
             @Override
@@ -49,8 +55,20 @@ public class StorageMigrationServiceTest {
     }
 
     @Test
-    public void whenChangeLockLocked_doesNotMigrate_andSetsResultInRepository() {
-        changeLock.lock();
+    public void whenFormsChangeLockLocked_doesNotMigrate_andSetsResultInRepository() {
+        formsChangeLock.lock();
+
+        StorageMigrationService service = Robolectric.setupIntentService(StorageMigrationService.class);
+        service.onHandleIntent(null);
+
+        verifyNoInteractions(storageMigrator);
+        verify(storageMigrationRepository).setResult(StorageMigrationResult.CHANGES_IN_PROGRESS);
+        verify(storageMigrationRepository).markMigrationEnd();
+    }
+
+    @Test
+    public void whenInstancesChangeLockLocked_doesNotMigrate_andSetsResultInRepository() {
+        instancesChangeLock.lock();
 
         StorageMigrationService service = Robolectric.setupIntentService(StorageMigrationService.class);
         service.onHandleIntent(null);

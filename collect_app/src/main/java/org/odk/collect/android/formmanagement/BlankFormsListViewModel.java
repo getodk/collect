@@ -17,6 +17,7 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class BlankFormsListViewModel extends ViewModel {
 
@@ -88,7 +89,7 @@ public class BlankFormsListViewModel extends ViewModel {
         private final ChangeLock changeLock;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, ChangeLock changeLock) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;

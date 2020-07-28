@@ -42,7 +42,7 @@ public class SyncFormsTaskSpecTest {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public ChangeLock providesChangeLock() {
+            public ChangeLock providesFormsChangeLock() {
                 return changeLock;
             }
 

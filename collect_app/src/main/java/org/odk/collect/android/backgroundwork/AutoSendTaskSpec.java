@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class AutoSendTaskSpec implements TaskSpec {
 
@@ -59,6 +60,7 @@ public class AutoSendTaskSpec implements TaskSpec {
     Notifier notifier;
 
     @Inject
+    @Named("INSTANCES")
     ChangeLock changeLock;
 
     /**
