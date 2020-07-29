@@ -10,7 +10,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMultiMinimalDialog;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
         } else {
             StringBuilder builder = new StringBuilder();
             for (Selection selectedItem : selectedItems) {
-                builder.append(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), selectedItem));
+                builder.append(StringUtils.textToHtml(getFormEntryPrompt().getSelectItemText(selectedItem)));
                 if (selectedItems.size() - 1 > selectedItems.indexOf(selectedItem)) {
                     builder.append(", ");
                 }

@@ -11,7 +11,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.fragments.dialogs.SelectOneMinimalDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.util.List;
@@ -78,7 +78,7 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
         if (selectedItem == null) {
             binding.choicesSearchBox.setText(R.string.select_answer);
         } else {
-            binding.choicesSearchBox.setText(FormEntryPromptUtils.getItemText(getFormEntryPrompt(), selectedItem));
+            binding.choicesSearchBox.setText(StringUtils.textToHtml(getFormEntryPrompt().getSelectItemText(selectedItem)));
         }
     }
 
