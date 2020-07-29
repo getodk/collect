@@ -84,11 +84,10 @@ public class NotificationManagerNotifier implements Notifier {
     @Override
     public void onSyncFailure(FormApiException exception) {
         Intent intent = new Intent(application, FillBlankFormActivity.class);
-        intent.putExtra(FillBlankFormActivity.EXTRA_AUTH_REQUIRED, true);
 
-//        if (exception.getType() == FormApiException.Type.AUTH_REQUIRED) {
-//
-//        }
+        if (exception.getType() == FormApiException.Type.AUTH_REQUIRED) {
+            intent.putExtra(FillBlankFormActivity.EXTRA_AUTH_REQUIRED, true);
+        }
 
         PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
