@@ -41,14 +41,12 @@ import java.util.List;
 public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
-    private final int playColor;
     protected SelectItemClickListener listener;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, formEntryPrompt, referenceManager, audioHelper, context);
+        super(items, formEntryPrompt, referenceManager, audioHelper, playColor, context);
         this.selectedItems = selectedItems;
-        this.playColor = playColor;
         this.listener = listener;
     }
 

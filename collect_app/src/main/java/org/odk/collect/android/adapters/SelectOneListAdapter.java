@@ -41,16 +41,14 @@ import java.util.List;
 
 public class SelectOneListAdapter extends AbstractSelectListAdapter implements CompoundButton.OnCheckedChangeListener {
     private String selectedValue;
-    private final int playColor;
     private RadioButton selectedRadioButton;
     private View selectedItem;
     private SelectOneItemClickListener listener;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, SelectOneItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, formEntryPrompt, referenceManager, audioHelper, context);
+        super(items, formEntryPrompt, referenceManager, audioHelper, playColor, context);
         this.selectedValue = selectedValue;
-        this.playColor = playColor;
         this.listener = listener;
     }
 
