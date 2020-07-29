@@ -40,9 +40,9 @@ public class ServerAuthDialogFragment extends DialogFragment {
         binding.usernameEdit.setText(generalSharedPreferences.getString(GeneralKeys.KEY_USERNAME, ""));
         binding.passwordEdit.setText(generalSharedPreferences.getString(GeneralKeys.KEY_PASSWORD, ""));
 
-
         return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.server_requires_auth)
+                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalSharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, "")))
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                     generalSharedPreferences.edit()
