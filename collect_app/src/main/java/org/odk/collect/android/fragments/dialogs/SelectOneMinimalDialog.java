@@ -33,6 +33,7 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements Selec
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // update the listener on dialog recreation (screen rotation for example)
         ((SelectOneListAdapter) viewModel.getSelectListAdapter()).setSelectItemClickListener(this);
     }
 

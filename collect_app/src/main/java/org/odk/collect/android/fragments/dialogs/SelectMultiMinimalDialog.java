@@ -34,6 +34,7 @@ public class SelectMultiMinimalDialog extends SelectMinimalDialog implements Sel
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // update the listener on dialog recreation (screen rotation for example)
         ((SelectMultipleListAdapter) viewModel.getSelectListAdapter()).setSelectItemClickListener(this);
     }
 
