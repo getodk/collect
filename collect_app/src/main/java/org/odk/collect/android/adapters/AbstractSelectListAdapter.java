@@ -74,17 +74,17 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     protected List<SelectChoice> filteredItems;
     protected boolean noButtonsMode;
 
-    AbstractSelectListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, int playColor, Context context) {
+    AbstractSelectListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager,
+                              AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode, Context context) {
         this.context = context;
         this.items = items;
+        this.filteredItems = items;
         this.prompt = formEntryPrompt;
         this.referenceManager = referenceManager;
         this.audioHelper = audioHelper;
-        filteredItems = items;
         this.playColor = playColor;
-        this.numColumns = WidgetAppearanceUtils.getNumberOfColumns(prompt, context);
-        noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(prompt)
-                || WidgetAppearanceUtils.isNoButtonsAppearance(prompt);
+        this.numColumns = numColumns;
+        this.noButtonsMode = noButtonsMode;
     }
 
     @Override
