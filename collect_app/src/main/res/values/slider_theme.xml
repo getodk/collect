@@ -2,9 +2,9 @@
 <resources>
     <style name="SliderTheme" parent="Base.Widget.MaterialComponents.Slider">
         <item name="thumbColor">?colorSecondary</item>
-        <item name="tickColor">?colorOnBackground</item>
-        <item name="haloColor">?sliderTrackColor</item>
-        <item name="trackColorInactive">?sliderTrackColor</item>
+        <item name="tickColor">?colorOnSurface</item>
+        <item name="haloColor">@color/color_on_surface_low_emphasis</item>
+        <item name="trackColorInactive">@color/color_on_surface_low_emphasis</item>
         <item name="trackColorActive">?colorSecondary</item>
         <item name="labelBehavior">gone</item>
     </style>
