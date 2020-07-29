@@ -24,6 +24,7 @@ import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.SelectItemClickListener;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,9 @@ public class SelectMultiWidget extends BaseSelectListWidget implements SelectIte
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        recyclerViewAdapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), getContext());
+        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
+        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
+        recyclerViewAdapter = new SelectMultipleListAdapter(items, getSelectedItems(), this, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, getContext());
         return recyclerViewAdapter;
     }
 

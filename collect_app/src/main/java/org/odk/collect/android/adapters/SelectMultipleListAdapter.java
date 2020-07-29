@@ -44,8 +44,11 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     protected SelectItemClickListener listener;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectItemClickListener listener, FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager, AudioHelper audioHelper, int playColor, Context context) {
-        super(items, formEntryPrompt, referenceManager, audioHelper, playColor, context);
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems,
+                                     SelectItemClickListener listener, FormEntryPrompt formEntryPrompt,
+                                     ReferenceManager referenceManager, AudioHelper audioHelper, int playColor,
+                                     int numColumns, boolean noButtonsMode, Context context) {
+        super(items, formEntryPrompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode, context);
         this.selectedItems = selectedItems;
         this.listener = listener;
     }
