@@ -70,6 +70,7 @@ public class RankingWidget extends ItemsWidget implements BinaryDataReceiver, Bu
     public void clearAnswer() {
         savedItems = null;
         answerTextView.setText(getAnswerText());
+        widgetValueChanged();
     }
 
     @Override
