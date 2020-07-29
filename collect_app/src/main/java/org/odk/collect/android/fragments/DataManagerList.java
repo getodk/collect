@@ -32,6 +32,7 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
@@ -63,6 +64,9 @@ public class DataManagerList extends InstanceListFragment
 
     @Inject
     InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -192,7 +196,7 @@ public class DataManagerList extends InstanceListFragment
             progressDialog.show();
 
             deleteInstancesTask = new DeleteInstancesTask();
-            deleteInstancesTask.setRepositories(instancesRepository);
+            deleteInstancesTask.setRepositories(instancesRepository, formsRepository);
             deleteInstancesTask.setDeleteListener(this);
             deleteInstancesTask.execute(getCheckedIdObjects());
         } else {

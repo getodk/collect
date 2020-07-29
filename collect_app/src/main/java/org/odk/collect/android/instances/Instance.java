@@ -124,7 +124,7 @@ public final class Instance {
             return this;
         }
 
-        public Builder databaseId(Long databaseId) {
+        public Builder id(Long databaseId) {
             this.databaseId = databaseId;
             return this;
         }
@@ -182,7 +182,7 @@ public final class Instance {
         return geometry;
     }
 
-    public Long getDatabaseId() {
+    public Long getId() {
         return databaseId;
     }
 

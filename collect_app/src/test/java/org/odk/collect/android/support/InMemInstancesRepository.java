@@ -5,6 +5,7 @@ import org.odk.collect.android.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class InMemInstancesRepository implements InstancesRepository {
 
@@ -19,9 +20,9 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public Instance getBy(long databaseId) {
+    public Instance get(long databaseId) {
         for (Instance instance : instances) {
-            if (instance.getDatabaseId() == databaseId) {
+            if (instance.getId() == databaseId) {
                 return instance;
             }
         }
@@ -43,6 +44,13 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAllByJrFormIdAndJrVersion(String jrFormId, String jrVersion) {
+        return instances.stream().filter(instance -> {
+            return instance.getJrFormId().equals(jrFormId) && instance.getJrVersion().equals(jrVersion);
+        }).collect(Collectors.toList());
+    }
+
+    @Override
     public Instance getByPath(String instancePath) {
         List<Instance> result = new ArrayList<>();
 
@@ -59,13 +67,18 @@ public final class InMemInstancesRepository implements InstancesRepository {
         }
     }
 
+    @Override
+    public void delete(Long id) {
+        instances.removeIf(instance -> instance.getId().equals(id));
+    }
+
     public void addInstance(Instance instance) {
         instances.add(instance);
     }
 
     public void removeInstanceById(Long databaseId) {
         for (int i = 0; i < instances.size(); i++) {
-            if (instances.get(i).getDatabaseId().equals(databaseId)) {
+            if (instances.get(i).getId().equals(databaseId)) {
                 instances.remove(i);
                 return;
             }

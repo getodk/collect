@@ -28,7 +28,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     private final InstancesDao dao = new InstancesDao();
 
     @Override
-    public Instance getBy(long databaseId) {
+    public Instance get(long databaseId) {
         Cursor c = dao.getInstancesCursorForId(Long.toString(databaseId));
         List<Instance> result = dao.getInstancesFromCursor(c);
         return !result.isEmpty() ? result.get(0) : null;
@@ -36,8 +36,13 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllByJrFormId(String formId) {
-        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ?",
-        new String[] {formId});
+        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ?", new String[] {formId});
+        return dao.getInstancesFromCursor(c);
+    }
+
+    @Override
+    public List<Instance> getAllByJrFormIdAndJrVersion(String jrFormId, String jrVersion) {
+        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ? AND " + InstanceColumns.JR_VERSION + " = ?", new String[] {jrFormId, jrVersion});
         return dao.getInstancesFromCursor(c);
     }
 

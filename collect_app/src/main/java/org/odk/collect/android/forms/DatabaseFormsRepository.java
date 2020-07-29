@@ -18,6 +18,7 @@ import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.dao.FormsDao.getFormsFromCursor;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 
 public class DatabaseFormsRepository implements FormsRepository {
@@ -40,6 +41,14 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Form get(Long id) {
         try (Cursor cursor = new FormsDao().getFormsCursor(_ID + "=?", new String[]{id.toString()})) {
+            return getFormOrNull(cursor);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Form get(String jrFormId, String jrVersion) {
+        try (Cursor cursor = new FormsDao().getFormsCursor(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion})) {
             return getFormOrNull(cursor);
         }
     }

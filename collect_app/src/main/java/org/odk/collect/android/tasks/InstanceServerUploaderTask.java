@@ -78,7 +78,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                outcome.messagesByInstanceId.put(instance.getId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
 
                 analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
@@ -88,7 +88,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 // retry. Items present in the map are considered already attempted and won't be
                 // retried.
             } catch (UploadException e) {
-                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                outcome.messagesByInstanceId.put(instance.getId().toString(),
                         e.getDisplayMessage());
             }
         }

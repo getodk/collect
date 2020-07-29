@@ -206,7 +206,7 @@ public class SaveFormToDisk {
             InstancesRepository instances = new DatabaseInstancesRepository();
             Instance instance = instances.getByPath(instancePath);
             if (instance != null) {
-                uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
+                uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getId().toString());
 
                 String geometryXpath = getGeometryXpathForInstance(uri);
                 ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);

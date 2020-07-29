@@ -16,6 +16,8 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 
@@ -34,6 +36,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
     private int successCount;
     private int toDeleteCount;
     private InstancesRepository instancesRepository;
+    private FormsRepository formsRepository;
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -45,13 +48,14 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
         toDeleteCount = params.length;
 
+        InstanceDeleter instanceDeleter = new InstanceDeleter(instancesRepository, formsRepository);
         // delete files from database and then from file system
         for (Long param : params) {
             if (isCancelled()) {
                 break;
             }
             try {
-                instancesRepository.delete(param);
+                instanceDeleter.delete(param);
                 deleted++;
 
                 successCount++;
@@ -93,8 +97,9 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
         deleteInstancesListener = listener;
     }
 
-    public void setRepositories(InstancesRepository instancesRepository) {
+    public void setRepositories(InstancesRepository instancesRepository, FormsRepository formsRepository) {
         this.instancesRepository = instancesRepository;
+        this.formsRepository = formsRepository;
     }
 
     public int getDeleteCount() {

@@ -22,6 +22,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -80,6 +81,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     @Inject
     InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +202,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
             // register this activity with the new uploader task
             instanceServerUploaderTask.setUploaderListener(this);
-            instanceServerUploaderTask.setRepositories(instancesRepository);
+            instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository);
             instanceServerUploaderTask.execute(instancesToSend);
         }
     }
@@ -374,7 +378,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (url != null) {
             instanceServerUploaderTask.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
         }
-        instanceServerUploaderTask.setRepositories(instancesRepository);
+        instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository);
         instanceServerUploaderTask.execute(instancesToSend);
     }
 

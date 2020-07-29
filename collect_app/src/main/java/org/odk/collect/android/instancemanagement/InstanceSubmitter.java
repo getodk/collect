@@ -87,11 +87,11 @@ public class InstanceSubmitter {
                 if (protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets))
                         && !InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                     anyFailure = true;
-                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
+                    resultMessagesByInstanceId.put(instance.getId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
                     continue;
                 }
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                resultMessagesByInstanceId.put(instance.getDatabaseId().toString(), customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
+                resultMessagesByInstanceId.put(instance.getId().toString(), customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
 
                 // If the submission was successful, delete the instance if either the app-level
                 // delete preference is set or the form definition requests auto-deletion.
@@ -100,7 +100,7 @@ public class InstanceSubmitter {
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
                         (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
-                    Uri deleteForm = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
+                    Uri deleteForm = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instance.getId().toString());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
 
@@ -111,7 +111,7 @@ public class InstanceSubmitter {
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
-                resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                resultMessagesByInstanceId.put(instance.getId().toString(),
                         e.getDisplayMessage());
             }
         }

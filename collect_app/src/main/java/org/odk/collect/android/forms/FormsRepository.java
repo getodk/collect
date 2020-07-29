@@ -18,6 +18,9 @@ public interface FormsRepository {
     Form get(Long id);
 
     @Nullable
+    Form get(String jrFormId, String jrVersion);
+
+    @Nullable
     Form getByMd5Hash(String hash);
 
     @Nullable

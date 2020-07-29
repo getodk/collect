@@ -39,6 +39,14 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
+    public Form get(String jrFormId, String jrVersion) {
+        return forms.stream().filter(f -> {
+            return f.getJrFormId().equals(jrFormId) && f.getJrVersion().equals(jrVersion);
+        }).findFirst().orElse(null);
+    }
+
+    @Nullable
+    @Override
     public Form getByMd5Hash(String hash) {
         return forms.stream().filter(f -> f.getMD5Hash().equals(hash)).findFirst().orElse(null);
     }
