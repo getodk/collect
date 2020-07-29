@@ -14,12 +14,10 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.ContentResolver;
-import android.net.Uri;
 import android.os.AsyncTask;
 
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import timber.log.Timber;
 
@@ -31,17 +29,17 @@ import timber.log.Timber;
  */
 public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
-    private ContentResolver contentResolver;
     private DeleteInstancesListener deleteInstancesListener;
 
     private int successCount;
     private int toDeleteCount;
+    private InstancesRepository instancesRepository;
 
     @Override
     protected Integer doInBackground(Long... params) {
         int deleted = 0;
 
-        if (params == null || contentResolver == null) {
+        if (params == null) {
             return deleted;
         }
 
@@ -53,11 +51,8 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
                 break;
             }
             try {
-                Uri deleteForm =
-                        Uri.withAppendedPath(InstanceColumns.CONTENT_URI, param.toString());
-
-                int wasDeleted = contentResolver.delete(deleteForm, null, null);
-                deleted += wasDeleted;
+                instancesRepository.delete(param);
+                deleted++;
 
                 successCount++;
                 publishProgress(successCount, toDeleteCount);
@@ -81,7 +76,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
-        contentResolver = null;
         if (deleteInstancesListener != null) {
             deleteInstancesListener.deleteComplete(result);
         }
@@ -90,7 +84,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
     @Override
     protected void onCancelled() {
-        contentResolver = null;
         if (deleteInstancesListener != null) {
             deleteInstancesListener.deleteComplete(successCount);
         }
@@ -100,8 +93,8 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
         deleteInstancesListener = listener;
     }
 
-    public void setContentResolver(ContentResolver resolver) {
-        contentResolver = resolver;
+    public void setRepositories(InstancesRepository instancesRepository) {
+        this.instancesRepository = instancesRepository;
     }
 
     public int getDeleteCount() {

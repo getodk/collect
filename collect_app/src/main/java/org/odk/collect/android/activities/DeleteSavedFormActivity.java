@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -25,7 +26,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileManagerTabsAdapter;
 
-public class FileManagerTabs extends CollectAbstractActivity {
+public class DeleteSavedFormActivity extends CollectAbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

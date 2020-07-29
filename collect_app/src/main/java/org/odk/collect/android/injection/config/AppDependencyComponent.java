@@ -12,6 +12,7 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
+import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
@@ -198,6 +199,8 @@ public interface AppDependencyComponent {
     void inject(ServerAuthDialogFragment serverAuthDialogFragment);
 
     void inject(FormManagerList formManagerList);
+
+    void inject(InstanceUploaderActivity instanceUploaderActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

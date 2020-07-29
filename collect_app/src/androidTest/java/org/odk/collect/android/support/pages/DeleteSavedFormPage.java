@@ -3,11 +3,11 @@ package org.odk.collect.android.support.pages;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI;
 
-import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class DeleteSavedFormPage extends Page<DeleteSavedFormPage> {
 
@@ -27,7 +27,7 @@ public class DeleteSavedFormPage extends Page<DeleteSavedFormPage> {
     }
 
     public DeleteSavedFormPage clickForm(String formName) {
-        onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, formName)).perform(click());
+        onView(withText(formName)).perform(scrollTo(), click());
         return this;
     }
 

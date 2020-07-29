@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.ContentResolver;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.formmanagement.FormDeleter;
@@ -32,7 +31,6 @@ import timber.log.Timber;
  */
 public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
-    private ContentResolver cr;
     private DeleteFormsListener dl;
 
     private int successCount;
@@ -44,7 +42,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
     protected Integer doInBackground(Long... params) {
         int deleted = 0;
 
-        if (params == null || cr == null || dl == null) {
+        if (params == null || dl == null) {
             return deleted;
         }
         toDeleteCount = params.length;
@@ -80,7 +78,6 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
-        cr = null;
         if (dl != null) {
             dl.deleteComplete(result);
         }
@@ -89,7 +86,6 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     @Override
     protected void onCancelled() {
-        cr = null;
         if (dl != null) {
             dl.deleteComplete(successCount);
         }
@@ -97,10 +93,6 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     public void setDeleteListener(DeleteFormsListener listener) {
         dl = listener;
-    }
-
-    public void setContentResolver(ContentResolver resolver) {
-        cr = resolver;
     }
 
     public int getDeleteCount() {

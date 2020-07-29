@@ -199,8 +199,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
 
             backgroundTasks.deleteFormsTask = new DeleteFormsTask();
-            backgroundTasks.deleteFormsTask
-                    .setContentResolver(getActivity().getContentResolver());
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
             backgroundTasks.deleteFormsTask.setRepositories(formsRepository, instancesRepository);
             backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());

@@ -21,4 +21,6 @@ public interface InstancesRepository {
      * Get the Instance corresponding to the given path or null if no unique Instance matches.
      */
     Instance getByPath(String instancePath);
+
+    void delete(Long id);
 }

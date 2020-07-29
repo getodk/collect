@@ -1,7 +1,9 @@
 package org.odk.collect.android.instances;
 
 import android.database.Cursor;
+import android.net.Uri;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -22,6 +24,7 @@ import java.util.List;
  * {@link InstancesDao}.
  */
 public final class DatabaseInstancesRepository implements InstancesRepository {
+
     private final InstancesDao dao = new InstancesDao();
 
     @Override
@@ -48,5 +51,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void delete(Long id) {
+        Uri uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
+        Collect.getInstance().getContentResolver().delete(uri, null, null);
     }
 }
