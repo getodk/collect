@@ -16,7 +16,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
@@ -40,7 +39,6 @@ import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION
 import static org.odk.collect.android.widgets.GeoPointMapWidget.DRAGGABLE_ONLY;
 import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
 import static org.odk.collect.android.widgets.GeoPointMapWidget.READ_ONLY;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearance;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
@@ -91,14 +89,6 @@ public class GeoPointMapWidgetTest {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         widget.clearAnswer();
         assertThat(widget.getAnswer(), nullValue());
-    }
-
-    @Test
-    public void clearAnswer_callsValueChangeListeners() {
-        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.clearAnswer();
-        verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test
