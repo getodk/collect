@@ -30,19 +30,6 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
         workManager.beginUniqueWork(tag, ExistingWorkPolicy.KEEP, workRequest).enqueue()
     }
 
-    override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
-        val repeatScope = CoroutineScope(this.foreground)
-
-        repeatScope.launch {
-            while (isActive) {
-                foreground.run()
-                delay(repeatPeriod)
-            }
-        }
-
-        return ScopeCancellable(repeatScope)
-    }
-
     override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long) {
         val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -55,6 +42,19 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
                 .build()
 
         workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+    }
+
+    override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
+        val repeatScope = CoroutineScope(this.foreground)
+
+        repeatScope.launch {
+            while (isActive) {
+                foreground.run()
+                delay(repeatPeriod)
+            }
+        }
+
+        return ScopeCancellable(repeatScope)
     }
 
     override fun cancelDeferred(tag: String) {
