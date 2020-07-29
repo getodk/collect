@@ -582,7 +582,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                     String dialogTitle = getString(R.string.load_remote_form_error);
 
                     if (viewModel.isDownloadOnlyMode()) {
-                        setReturnResult(false, getString(R.string.load_remote_form_error), viewModel.getFormResults());
+                        setReturnResult(false, dialogMessage, viewModel.getFormResults());
                     }
 
                     createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
