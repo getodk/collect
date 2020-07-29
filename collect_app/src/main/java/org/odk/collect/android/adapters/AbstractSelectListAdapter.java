@@ -46,8 +46,8 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.File;
@@ -133,7 +133,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     void setUpButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-        button.setText(FormEntryPromptUtils.getItemText(prompt, filteredItems.get(index).selection()));
+        button.setText(StringUtils.textToHtml(prompt.getSelectItemText(filteredItems.get(index).selection())));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
@@ -180,8 +180,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             TextView missingImage = new TextView(context);
             missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-
-            String choiceText = FormEntryPromptUtils.getItemText(prompt, selectChoice.selection()).toString();
+            String choiceText = StringUtils.textToHtml(prompt.getSelectItemText(selectChoice.selection())).toString();
 
             if (!choiceText.isEmpty()) {
                 missingImage.setText(choiceText);
