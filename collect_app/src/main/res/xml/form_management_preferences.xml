@@ -14,7 +14,8 @@
             android:entries="@array/form_update_mode_entries"
             android:entryValues="@array/form_update_mode_values"
             android:key="form_update_mode"
-            android:title="@string/form_update_mode_title" />
+            android:title="@string/form_update_mode_title"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:dialogTitle="@string/form_update_frequency_title"
