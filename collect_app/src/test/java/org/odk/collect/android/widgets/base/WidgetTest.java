@@ -47,5 +47,8 @@ public abstract class WidgetTest {
     public abstract void callingClearShouldRemoveTheExistingAnswer();
 
     @Test
+    public abstract void callingClearShouldCallValueChangeListeners();
+
+    @Test
     public abstract void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled();
 }
