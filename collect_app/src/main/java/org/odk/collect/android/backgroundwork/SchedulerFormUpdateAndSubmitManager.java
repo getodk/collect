@@ -14,7 +14,7 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
     private static final String MATCH_EXACTLY_SYNC_TAG = "match_exactly";
     private static final String AUTO_UPDATE_TAG = "serverPollingJob";
-    private static final String AUTO_SEND_TAG = "AutoSendWorker";
+    public static final String AUTO_SEND_TAG = "AutoSendWorker";
 
     private final Scheduler scheduler;
     private final SharedPreferences sharedPreferences;
