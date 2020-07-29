@@ -4,11 +4,13 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.data.SelectMultiData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,22 +25,37 @@ public class SelectMultiMinimalWidgetTest extends GeneralSelectMultiWidgetTest<S
         return new SelectMultiMinimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        List<SelectChoice> selectChoices = getSelectChoices();
-        for (SelectChoice selectChoice : selectChoices) {
-            when(formEntryPrompt.getSelectChoiceText(selectChoice))
-                    .thenReturn(selectChoice.getValue());
-        }
-    }
-
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
-
         assertThat(getSpyWidget().binding.choicesSearchBox.getVisibility(), is(View.VISIBLE));
         assertThat(getSpyWidget().binding.choicesSearchBox.isEnabled(), is(Boolean.FALSE));
+    }
+
+    @Test
+    public void whenThereIsNoAnswer_shouldDefaultTextBeDisplayed() {
+        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is("Select Answer"));
+    }
+
+    @Test
+    public void whenThereIsAnswer_shouldSelectedChoicesBeDisplayed() {
+        SelectMultiData answer = getInitialAnswer();
+        Selection selectedChoice = ((List<Selection>) answer.getValue()).get(0);
+        when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
+        when(formEntryPrompt.getSelectItemText(selectedChoice)).thenReturn(selectedChoice.getValue());
+
+        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is(selectedChoice.getValue()));
+    }
+
+    @Test
+    public void whenAnswerChanges_shouldAnswerLabelBeUpdated() {
+        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is("Select Answer"));
+
+        SelectMultiData answer = getInitialAnswer();
+        Selection selectedChoice = ((List<Selection>) answer.getValue()).get(0);
+        when(formEntryPrompt.getSelectItemText(selectedChoice)).thenReturn(selectedChoice.getValue());
+        getSpyWidget().setBinaryData(Collections.singletonList(selectedChoice));
+
+        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is(selectedChoice.getValue()));
     }
 }
