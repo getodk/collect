@@ -43,15 +43,6 @@ public class TriggerWidgetTest {
     }
 
     @Test
-    public void clearAnswer_callsValueChangeListeners() {
-        TriggerWidget widget = createWidget(promptWithAnswer(null));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-
-        widget.clearAnswer();
-        verify(valueChangedListener).widgetValueChanged(widget);
-    }
-
-    @Test
     public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
         TriggerWidget widget = createWidget(promptWithReadOnly());
         assertThat(widget.getCheckBox().getVisibility(), equalTo(View.VISIBLE));
