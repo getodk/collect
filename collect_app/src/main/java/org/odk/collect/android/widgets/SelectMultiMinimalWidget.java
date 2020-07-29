@@ -44,7 +44,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
 
     @Override
     public void clearAnswer() {
-        selectedItems.clear();
+        selectedItems = new ArrayList<>();
         super.clearAnswer();
     }
 
