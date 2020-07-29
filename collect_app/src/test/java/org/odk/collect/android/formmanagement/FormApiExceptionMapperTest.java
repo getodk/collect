@@ -30,7 +30,7 @@ public class FormApiExceptionMapperTest {
 
     @Test
     public void fetchErrorType_returnsGenericMessage() {
-        String expectedString = context.getString(R.string.generic_network_error);
+        String expectedString = context.getString(R.string.report_to_project_lead);
         assertThat(mapper.getMessage(new FormApiException(FETCH_ERROR)), is(expectedString));
     }
 

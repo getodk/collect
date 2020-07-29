@@ -45,7 +45,7 @@ public class GetBlankFormsTest {
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankFormWithError()
                 .assertText(R.string.load_remote_form_error)
-                .assertText(R.string.generic_network_error)
+                .assertText(R.string.report_to_project_lead)
                 .clickOK(new GetBlankFormPage(rule));
     }
 }

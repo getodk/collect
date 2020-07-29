@@ -18,6 +18,6 @@ public class FormApiExceptionMapper {
             return resources.getString(R.string.unknown_host_error, exception.getServerUrl());
         }
 
-        return resources.getString(R.string.generic_network_error);
+        return resources.getString(R.string.report_to_project_lead);
     }
 }
