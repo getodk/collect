@@ -1,18 +1,14 @@
 package org.odk.collect.android.fragments.dialogs;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.listeners.SelectItemClickListener;
+import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 
 import java.util.List;
 
@@ -22,14 +18,9 @@ public class SelectMultiMinimalDialog extends SelectMinimalDialog implements Sel
     public SelectMultiMinimalDialog() {
     }
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectMultiMinimalDialog(List<SelectChoice> items, List<Selection> selectedItems,
-                                    FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager,
-                                    AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode,
-                                    Context context, boolean isFlex, boolean isAutoComplete) {
+    public SelectMultiMinimalDialog(List<Selection> selectedItems, boolean isFlex, boolean isAutoComplete, ChoicesRecyclerViewAdapterProps props) {
         super(isFlex, isAutoComplete);
-        adapter = new SelectMultipleListAdapter(items, selectedItems, this, formEntryPrompt,
-                referenceManager, audioHelper, playColor, numColumns, noButtonsMode, context);
+        adapter = new SelectMultipleListAdapter(selectedItems, this, props);
     }
 
     @Override

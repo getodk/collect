@@ -10,9 +10,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.SelectMinimalWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 
 public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryDataReceiver, MultiChoiceWidget {
     SelectMinimalWidgetAnswerBinding binding;
@@ -48,6 +52,14 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
     @Override
     public int getChoiceCount() {
         return items.size();
+    }
+
+    protected ChoicesRecyclerViewAdapterProps getChoicesRecyclerViewProps() {
+        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
+        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
+
+        return new ChoicesRecyclerViewAdapterProps(getContext(), items, getFormEntryPrompt(), getReferenceManager(),
+                getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
     }
 
     protected abstract void showDialog();

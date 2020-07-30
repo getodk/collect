@@ -16,8 +16,6 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
-
 public class SelectMultiMinimalWidget extends SelectMinimalWidget {
     private List<Selection> selectedItems;
 
@@ -31,9 +29,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
 
     @Override
     protected void showDialog() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
-        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
-        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(items, getSavedSelectedItems(), getFormEntryPrompt(), getReferenceManager(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, getContext(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
+        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(getSavedSelectedItems(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()), getChoicesRecyclerViewProps());
         dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
     }
 

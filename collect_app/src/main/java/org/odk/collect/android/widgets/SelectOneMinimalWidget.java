@@ -16,8 +16,6 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.util.List;
 
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
-
 public class SelectOneMinimalWidget extends SelectMinimalWidget {
     private Selection selectedItem;
     private final boolean autoAdvance;
@@ -37,9 +35,7 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
 
     @Override
     protected void showDialog() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
-        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
-        SelectOneMinimalDialog dialog = new SelectOneMinimalDialog(items, getSavedSelectedValue(), getFormEntryPrompt(), getReferenceManager(), getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, getContext(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()));
+        SelectOneMinimalDialog dialog = new SelectOneMinimalDialog(getSavedSelectedValue(), WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()), WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()), getChoicesRecyclerViewProps());
         dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
     }
 
