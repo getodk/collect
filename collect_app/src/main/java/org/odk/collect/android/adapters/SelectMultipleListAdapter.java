@@ -49,7 +49,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(props.isNoButtonsMode()
                 ? new FrameLayout(parent.getContext())
-                : new AudioVideoImageTextLabel(parent.getContext()));
+                : new AudioVideoImageTextLabel(props.getContext()));
     }
 
     public void setSelectItemClickListener(SelectItemClickListener listener) {
