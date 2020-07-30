@@ -37,6 +37,7 @@ public class FormHierarchyTest {
             .around(new CopyFormRule("formHierarchy1.xml", null))
             .around(new CopyFormRule("formHierarchy2.xml", null))
             .around(new CopyFormRule("formHierarchy3.xml", null))
+            .around(new CopyFormRule("repeat_group_new.xml", null))
             .around(rule);
 
     @Test
@@ -159,5 +160,22 @@ public class FormHierarchyTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
 
         page.assertText("Repeat Group 1_1 > 1");
+    }
+
+    @Test
+    //https://github.com/getodk/collect/issues/3971
+    public void deletingLastGroupAndAddingOneShouldNotBreakHierarchy() {
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("RepeatGroupNew", "People")
+                .clickOnAdd(new FormEntryPage("RepeatGroupNew", rule))
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .clickGoToArrow()
+                .deleteGroup()
+                .addGroup();
     }
 }

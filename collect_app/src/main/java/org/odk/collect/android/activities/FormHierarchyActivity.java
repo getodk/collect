@@ -320,6 +320,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                 && index.getElementMultiplicity() == 0;
     }
 
+    private boolean didDeleteFirstRepeatItem() {
+        return Collect
+                .getInstance()
+                .getFormController()
+                .getFormIndex()
+                .getElementMultiplicity() == 0;
+    }
+
     /**
      * Similar to {@link #goUpLevel}, but makes a less significant step backward.
      * This is only used when the caller knows where to go back to,
@@ -794,7 +802,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             //   and you delete an item from the second repeat, it will send you into the
             //   first repeat instead of going back a level as expected.
             goToPreviousEvent();
+        } else if (didDeleteFirstRepeatItem()) {
+            goUpLevel();
         } else {
+            goToPreviousEvent();
             goUpLevel();
         }
     }
