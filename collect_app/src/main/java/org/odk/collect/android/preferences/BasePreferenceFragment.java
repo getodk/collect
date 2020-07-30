@@ -3,23 +3,27 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.view.View;
 
-import org.odk.collect.android.activities.CollectAbstractActivity;
-
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
+
+import org.odk.collect.android.activities.CollectAbstractActivity;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class BasePreferenceFragment extends PreferenceFragmentCompat {
+public abstract class BasePreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-
+        // This should be overridden in implementation classes instead. Remove this once they all do
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        ((CollectAbstractActivity) getActivity()).initToolbar(getPreferenceScreen().getTitle());
+        FragmentActivity activity = getActivity();
+        if (activity instanceof CollectAbstractActivity) {
+            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
+        }
         removeDisabledPrefs();
 
         super.onViewCreated(view, savedInstanceState);
