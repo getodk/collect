@@ -59,8 +59,7 @@
   <string name="jump_to_beginning">Gaan na Begin</string>
   <string name="jump_to_end">Gaan na Einde</string>
   <string name="jump_to_previous">Gaan op</string>
-  <string name="list_failed_with_error">Opstel van vormlys het misluk. %s.</string>
-  <string name="loading_form">Besig om vorm te laai</string>
+    <string name="loading_form">Besig om vorm te laai</string>
   <string name="load_remote_form_error">Fout tydens haal van vormlys</string>
   <string name="location_accuracy">Akkuraatheid is %1$s m</string>
   <string name="manage_files">Verwyder Gestoorde Vorm</string>
@@ -72,8 +71,6 @@
   <string name="no_items_display_instances">Niks beskikbaar om te vertoon nie.\n\nProbeer om gestoorde vorms te finaliseer voordat u stuur.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Jammer, kon nie vorm verwerk nie.</string>
-  <string name="parse_legacy_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met Aggregate 0.9.x nie. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met die OpenRosa weergawe 1.0 standaard nie: %s</string>
   <string name="password">Wagwoord</string>
   <string name="play_video">Speel Video</string>
   <string name="please_wait">Wag asseblief \'n paar sekondes.</string>
@@ -114,11 +111,6 @@
   <string name="submission_url">Indiening path</string>
   <string name="font_size">Teks font grootte</string>
   <string name="change_font_size">Teks font grootte</string>
-  <string name="access_error">Fout tydens toegang na %s:</string>
-  <string name="manifest_server_error">Manifest antwoord gee nie \'n OpenRosa weergawe nie - slegte server?</string>
-  <string name="root_element_error">Root element is nie &lt;manifest\&gt; nie — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is verkeerd: %s</string>
-  <string name="manifest_tag_error">Manifest inskrywing %s vermis een of meer tags: filename, hash, of downloadUrl</string>
   <string name="form_download_progress">%1$s. Besig om media leërs te haal: %2$s van %3$s</string>
   <string name="fetching_manifest">%s. Besig om manifest te haal</string>
   <string name="success">Sukses</string>

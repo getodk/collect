@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Alkuun</string>
   <string name="jump_to_end">Loppuun</string>
   <string name="jump_to_previous">Ylös</string>
-  <string name="list_failed_with_error">Lomakkeiden luetteleminen epäonnistui. %s.</string>
-  <string name="loading_form">Ladataan lomaketta</string>
+    <string name="loading_form">Ladataan lomaketta</string>
   <string name="load_remote_form_error">Virhe lomakelistaa hakiessa.</string>
   <string name="location_accuracy">Tarkkuus %1$s m</string>
   <string name="manage_files">Poista tallennettu lomake</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile tallennetun lomakkeen viimeistelyä ennen lähettämistä.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Pahoittelen, lomake ei ole tulkittavissa.</string>
-  <string name="parse_legacy_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva Aggregate 0.9.x:n kanssa. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva OpenRosa versio 1.0 standardin kanssa: %s</string>
   <string name="password">Salasana</string>
   <string name="play_video">Näytä video</string>
   <string name="please_wait">Odota hetki.</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
-  <string name="access_error">Virhe käyttäessä %s:</string>
-  <string name="manifest_server_error">Manifestivastaus ei raportoi OpenRosa-versiota - palvelinvika?</string>
-  <string name="root_element_error">Juurielementti ei ole &lt;manifest\&gt; — oli %s</string>
-  <string name="root_namespace_error">Juurielementin nimiavaruus on virheellinen: %s</string>
-  <string name="manifest_tag_error">Manifestin kohdasta %s puuttuu yksi tai useampi tägi: tiedostonimi, tiiviste (hash) tai downloadUrl</string>
   <string name="form_download_progress">%1$s. Haetaan mediatiedostoja: %2$s / %3$s</string>
   <string name="fetching_manifest">%s. Haetaan manifestia</string>
   <string name="success">Onnistui</string>

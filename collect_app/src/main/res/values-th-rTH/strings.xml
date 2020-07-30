@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">ไปที่จุดเริ่มต้น</string>
   <string name="jump_to_end">ไปที่จุดสิ้นสุด</string>
   <string name="jump_to_previous">เลื่อนขึ้น</string>
-  <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
-  <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
+    <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
   <string name="load_remote_form_error">มีข้อผิดพลาด ไม่สามารถแสดงรายการแบบสำรวจได้</string>
     <string name="location_accuracy">ความแม่นยำ %1$s เมตร</string>
   <string name="manage_files">ลบแบบสำรวจที่บันทึกไว้</string>
@@ -71,8 +70,6 @@
   <string name="no_items_display_instances">ไม่มีข้อมูลให้แสดง \n\n ลองยืนยันข้อมูลที่บันทึกไว้ก่อนส่ง</string>
   <string name="ok">ตกลง</string>
   <string name="parse_error">ขออภัย ไม่สามารถเปิดแบบสำรวจได้</string>
-  <string name="parse_legacy_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ OpenRosa version 1.0 standard: %s</string>
   <string name="password">รหัสผ่าน</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="please_wait">โปรดรอสักครู่</string>
@@ -116,11 +113,6 @@
   <string name="submission_url">Submission path</string>
   <string name="font_size">ขนาดตัวอักษร</string>
   <string name="change_font_size">ขนาดอักษร</string>
-  <string name="access_error">มีข้อผิดพลาดขณะเปิด %s:</string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Getting manifest </string>
   <string name="success">สำเร็จ</string>

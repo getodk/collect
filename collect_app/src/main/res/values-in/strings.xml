@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Awal</string>
   <string name="jump_to_end">Akhir</string>
   <string name="jump_to_previous">Atas</string>
-  <string name="list_failed_with_error">Pendataan formulir gagal. %s.</string>
-  <string name="loading_form">Sedang memuat formulir</string>
+    <string name="loading_form">Sedang memuat formulir</string>
   <string name="load_remote_form_error">Terjadi kesalahan saat mengambil daftar fromulir</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="manage_files">Hapus formulir</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">Tidak ada yang dapat ditampilkan.\n\nCoba finalisasi formulir yang tersimpan sebelum mengirim.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Maaf, formulir tidak dapat terbaca.</string>
-  <string name="parse_legacy_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan Aggregate 0.9.x. : %s </string>
-  <string name="parse_openrosa_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan OpenRosa version 1.0 standard: %s</string>
   <string name="password">Kata sandi</string>
   <string name="play_video">Mainkan video</string>
   <string name="please_wait">Mohon tunggu sebentar…</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">Tautan pengiriman</string>
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>
-  <string name="access_error">Terjadi kesalahan ketika mengakses %s: </string>
-  <string name="manifest_server_error">Versi OpenRosa tidak terdeteksi — terjadi kesalahan pada server?</string>
-  <string name="root_element_error">Penamaan elemen root bukan &amp;lt;manifest\&gt; — tapi %s</string>
-  <string name="root_namespace_error">Penamaan elemen root tidak sesuai: %s</string>
-  <string name="manifest_tag_error">Manifest %s yang masuk kehilangan satu atau lebih tag: nama berkas, hash, atau tautan unduh</string>
   <string name="form_download_progress">%1$s. Sedang mengunduh berkas media: %2$s dari %3$s</string>
   <string name="fetching_manifest">%s. Sedang mengunduh manifest </string>
   <string name="success">Berhasil</string>

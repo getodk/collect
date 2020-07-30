@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Přejít na začátek</string>
   <string name="jump_to_end">Přejít na konec</string>
   <string name="jump_to_previous">Přejít nahoru</string>
-  <string name="list_failed_with_error">Výpis dotazníku selhal. %s.</string>
-  <string name="loading_form">Načítám dotazník</string>
+    <string name="loading_form">Načítám dotazník</string>
   <string name="load_remote_form_error">Chyba při načítání seznamu dotazníků</string>
   <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="manage_files">Smazat uložený dotazník</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokončené.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Dotazník nejde načíst.</string>
-  <string name="parse_legacy_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní s Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní se standartem OpenRosa 1.0: %s</string>
   <string name="password">Heslo</string>
   <string name="play_video">Přehrát video</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">Cesta pro odeslání</string>
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
-  <string name="access_error">Chyba při přístupu k %s:</string>
-  <string name="manifest_server_error">Odpověď manifestu nehlásí verzi OpenRosa - špatný server?</string>
-  <string name="root_element_error">Kořenový prvek není &lt;manifest\&gt; — místo toho předán %s</string>
-  <string name="root_namespace_error">Jmenný prostor kořenového prvku není správný: %s</string>
-  <string name="manifest_tag_error">Na vstupu manifestu %s chybí jeden nebo více tagů: filename, hash nebo downloadUrl</string>
   <string name="form_download_progress">%1$s. Stahuji mediální soubory: %2$s z %3$s</string>
   <string name="fetching_manifest">%s. Stahuji manifest </string>
   <string name="success">Úspěch</string>

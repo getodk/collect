@@ -70,8 +70,7 @@
   <string name="jump_to_beginning">Naar begin</string>
   <string name="jump_to_end">Naar einde</string>
   <string name="jump_to_previous">Ga terug</string>
-  <string name="list_failed_with_error">Laden formulieren mislukt. %s.</string>
-  <string name="loading_form">Formulier laden</string>
+    <string name="loading_form">Formulier laden</string>
   <string name="load_remote_form_error">Fout bij laden formulieren</string>
     <string name="location_accuracy">Nauwkeurigheid is %1$s m</string>
   <string name="manage_files">Verwijder formulieren</string>
@@ -84,8 +83,6 @@
   <string name="no_items_display_instances">Leeg\n\nEen formulier moet als voltooid zijn gemarkeerd voordat u het kunt verzenden.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Formulier inlezen mislukt.</string>
-  <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
   <string name="password">Wachtwoord</string>
   <string name="play_video">Bekijk video</string>
   <string name="please_wait">Een moment geduld alstublieft.</string>
@@ -131,11 +128,6 @@
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Tekstgrootte</string>
   <string name="change_font_size">Tekstgrootte</string>
-  <string name="access_error">Error while accessing %s: </string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &amp;lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Getting manifest </string>
   <string name="success">Voltooid</string>

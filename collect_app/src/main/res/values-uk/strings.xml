@@ -71,8 +71,7 @@
   <string name="jump_to_beginning">Перейти на початок</string>
   <string name="jump_to_end">Перейти в кінець</string>
   <string name="jump_to_previous">Перейти назад</string>
-  <string name="list_failed_with_error">Складання списку не вдалося. %s.</string>
-  <string name="loading_form">Завантаження анкети</string>
+    <string name="loading_form">Завантаження анкети</string>
   <string name="load_remote_form_error">Помилка отримання списку анкет</string>
     <string name="location_accuracy">Точність %1$s м</string>
   <string name="manage_files">Видалити збережену анкету</string>
@@ -85,8 +84,6 @@
   <string name="no_items_display_instances">Нічого доступного для відображення.\n\nСпробуйте перед надсиланням позначити збережені анкети як завершені.</string>
   <string name="ok">Добре</string>
   <string name="parse_error">Вибачте, неможливо розібрати анкету.</string>
-  <string name="parse_legacy_formlist_failed">На сервері відсутні анкети сумісні з Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">На сервері відсутні анкети сумісні з стандартом OpenRosa версії 1.0: %s</string>
   <string name="password">Пароль</string>
   <string name="play_video">Відтворити відео</string>
   <string name="please_wait">Будь ласка, зачекайте.</string>
@@ -133,11 +130,6 @@
   <string name="submission_url">Шлях надсилання</string>
   <string name="font_size">Розмір шрифту</string>
   <string name="change_font_size">Розмір шрифту</string>
-  <string name="access_error">Помилка підчас доступу до %s:</string>
-  <string name="manifest_server_error">Маніфест відповідь не повідомляє версію OpenRosa — помилковий серевер?</string>
-  <string name="root_element_error">Кореневий елемент не є &lt;маніфест\&gt; — був %s</string>
-  <string name="root_namespace_error">Кореневий елемент має некоректну назву: %s</string>
-  <string name="manifest_tag_error">В записі маніфесту  %s є один або більше пропущені теги: filename, hash, чи downloadUrl</string>
   <string name="form_download_progress">%1$s. Отримання медіа файлу: %2$s з %3$s</string>
   <string name="fetching_manifest">%s. Отримання маніфесту</string>
   <string name="success">Успішно!</string>

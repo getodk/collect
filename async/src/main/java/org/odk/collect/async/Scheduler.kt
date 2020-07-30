@@ -5,7 +5,10 @@ import java.util.function.Supplier
 
 /**
  * Run and schedule tasks in the foreground (UI thread) and background. Based on terminology
- * used in Android's Background Processing documentation: https://developer.android.com/guide/background
+ * used in Android's Background Processing documentation: https://developer.android.com/guide/background.
+ *
+ * This keeps the details of threading and job frameworks (which are very often in flux) away from
+ * the UI code. An added advantage of this is the ability to use Kotlin's concurrency primitives from Java.
  */
 interface Scheduler {
 
@@ -16,6 +19,15 @@ interface Scheduler {
      * @param foreground run on the foreground once the task is complete
      */
     fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>)
+
+    /**
+     * Schedule a task to run in the background even if the app isn't running. The task
+     * will only be run when the network is available.
+     *
+     * @param tag used to identify this task in future
+     * @param spec defines the task to be run
+     */
+    fun networkDeferred(tag: String, spec: TaskSpec)
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task

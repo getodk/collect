@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Zum Start</string>
   <string name="jump_to_end">Zum Ende</string>
   <string name="jump_to_previous">Zurück</string>
-  <string name="list_failed_with_error">Formularauflistung gescheitert. %s.</string>
-  <string name="loading_form">Formular wird geladen</string>
+    <string name="loading_form">Formular wird geladen</string>
   <string name="load_remote_form_error">Fehler bei der Formularauflistung</string>
   <string name="location_accuracy">Genauigkeit beträgt %1$s m</string>
   <string name="manage_files">Formulare löschen</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">Nichts zum Anzeigen vorhanden.\n\nVersuchen Sie ein gespeichertes Formular abzuschließen, um es zu versenden.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Formularverarbeitung nicht möglich.</string>
-  <string name="parse_legacy_formlist_failed">Der Server hat kein Vorhandene-Formulare Dokument geliefert, welches mit Aggregate 0.9.x. kompatibel ist : %s</string>
-  <string name="parse_openrosa_formlist_failed">Der Server hat kein Vorhandene-Formulare-Dokument geliefert, welches mit dem OpenRosa-Version-1.0-Standard kompatibel ist: %s</string>
   <string name="password">Passwort</string>
   <string name="play_video">Video abspielen</string>
   <string name="please_wait">Bitte haben Sie einen Moment Geduld.</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">Submissionspfad</string>
   <string name="font_size">Schriftgröße</string>
   <string name="change_font_size">Schriftgröße</string>
-  <string name="access_error">Fehler beim Zugriff auf %s: </string>
-  <string name="manifest_server_error">Manifestantwort meldet keine OpenRosa Version — Serverfehler?</string>
-  <string name="root_element_error">Root element ist nicht &lt;manifest\&gt; — war %s</string>
-  <string name="root_namespace_error">Root element Namespace ist falsch: %s</string>
-  <string name="manifest_tag_error">Bei Manifest-Eintrag %s fehlt ein oder mehrere Tag(s): filename, hash, oder downloadUrl</string>
   <string name="form_download_progress">%1$s. Media-Dateien werden geladen: %2$s von %3$s</string>
   <string name="fetching_manifest">%s. Manifest wird geladen </string>
   <string name="success">Erfolg</string>

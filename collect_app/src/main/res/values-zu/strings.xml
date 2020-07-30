@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">Yana ekuqaleni</string>
   <string name="jump_to_end">Yana ekugcineni</string>
   <string name="jump_to_previous">Iya phezulu</string>
-  <string name="list_failed_with_error">Ukukleliswa kwamafomu akuphumelelanga. %s.</string>
-  <string name="loading_form">Kufakwa ifomu</string>
+    <string name="loading_form">Kufakwa ifomu</string>
   <string name="load_remote_form_error">Iphutha ekutholeni uhlu lwamafomu</string>
     <string name="location_accuracy">Ukucophelela %1s% m</string>
   <string name="manage_files">Susa ifomu elongiwe</string>
@@ -71,8 +70,6 @@
   <string name="no_items_display_instances">Akukho okutholakalayo ukuboniswa.\n\nzama ukuphothula ugcine ifomu ngaphambi kokulithumela.</string>
   <string name="ok">Kulungile</string>
   <string name="parse_error">Uxolo, akukwazi ukuncozulula ifomu.</string>
-  <string name="parse_legacy_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa Aggregate 0.9.x.:%s</string>
-  <string name="parse_openrosa_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa OpenRosa version 1.0 standard: %s</string>
   <string name="password">Inombolomfihlo</string>
   <string name="play_video">Dlala Umbukiso</string>
   <string name="please_wait">Sicela ulinde imizuzu emibalwa.</string>
@@ -112,11 +109,6 @@
   <string name="submission_url">Indlela yokuthumela</string>
   <string name="font_size">Usayizi wombhalo (Font)</string>
   <string name="change_font_size">Usayizi wombhalo (Font)</string>
-  <string name="access_error">Iphutha ngenkathi kufinyelelwa %s :</string>
-  <string name="manifest_server_error">Impendulo Manifest akusho ubike version OpenRosa - iseva bad ?</string>
-  <string name="root_element_error">Okuwumsuka akuyona &lt;abonakaliswe\&gt; - Kwaba %s</string>
-  <string name="root_namespace_error">Okuwumsuka wegama akuyilona : %s</string>
-  <string name="manifest_tag_error">Manifest entry %s entulekayo eyodwa noma ngaphezulu tag: lefayela, hashi, noma downloadUrl</string>
   <string name="form_download_progress">%1$s. Ukuthola amafayela emidya: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Ukuthola izinkomba</string>
   <string name="success">Impumelelo</string>

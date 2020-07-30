@@ -71,8 +71,7 @@
   <string name="jump_to_beginning">Idi na početak</string>
   <string name="jump_to_end">Idi na kraj</string>
   <string name="jump_to_previous">Idi gore</string>
-  <string name="list_failed_with_error">Prikazivanje dostupnih formulara nije uspjelo. %s.</string>
-  <string name="loading_form">Učitavanje formulara</string>
+    <string name="loading_form">Učitavanje formulara</string>
   <string name="load_remote_form_error">Greška u pristupu formularima na serveru</string>
     <string name="location_accuracy">Preciznost %1$s m</string>
   <string name="manage_files">Obriši sačuvani formular</string>
@@ -85,8 +84,6 @@
   <string name="no_items_display_instances">Ništa nije dostupno za prikaz. Pokušaj završiti sačuvane formulare prije slanja.</string>
   <string name="ok">Ok.</string>
   <string name="parse_error">Nisam u stanju da analiziram formular!</string>
-  <string name="parse_legacy_formlist_failed">Na serveru se ne nalazi dostupan formular kompatibilan sa Aggregate 0.9x verzijom: %s</string>
-  <string name="parse_openrosa_formlist_failed">Na serveru se ne nalazi dostupan formular kompatibilan sa OpenRosa 1.0 standard verzijom: %s </string>
   <string name="password">Lozinka</string>
   <string name="play_video">Pusti video</string>
   <string name="please_wait">Molim sačekajte par trenutaka</string>
@@ -133,11 +130,6 @@
   <string name="submission_url">Web putanja za slanje formulara</string>
   <string name="font_size">Veličina teksta</string>
   <string name="change_font_size">Veličina teksta</string>
-  <string name="access_error">Greška pri pristupanju %s:</string>
-  <string name="manifest_server_error">Odgovor ne prikazuje OpenRosa verziju - greška na serveru?</string>
-  <string name="root_element_error">Root element nije prikazan - je %s</string>
-  <string name="root_namespace_error">Root element Namespace je netačan: %s</string>
-  <string name="manifest_tag_error">Unosu %s nedostaje jedan ili više elemenata: ime fajla ili putanja za preuzimanje</string>
   <string name="form_download_progress">%1$s. Preuzimam media fajlove: %2$s od %3$s</string>
   <string name="fetching_manifest">%s. Pribavljam manifest.</string>
   <string name="success">Uspjeh</string>

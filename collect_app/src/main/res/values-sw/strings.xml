@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Nenda mwanzo</string>
   <string name="jump_to_end">Nenda mwisho</string>
   <string name="jump_to_previous">Nenda juu</string>
-  <string name="list_failed_with_error">Kuorodheshwa kwa fomu kumeshindikana. %s.</string>
-  <string name="loading_form">Fomu inakuja</string>
+    <string name="loading_form">Fomu inakuja</string>
   <string name="load_remote_form_error">Hitilafu kupata orodha ya fomu</string>
     <string name="location_accuracy">Usahihi ni %1$s m</string>
   <string name="manage_files">Futa fomu zilizohifadhiwa</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">Hakuna kitu cha kuonyesha.\n\n Jaribu kukamilisha fomu kabla ya kuzituma</string>
   <string name="ok">Sawa</string>
   <string name="parse_error">Pole, haiwezi kuchanganua fomu.</string>
-  <string name="parse_legacy_formlist_failed">Seva haijatoa taarifa ya fomu-zinazopatikana na kuendana na Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Seva haijatoa taarifa ya fomu-zinazopatikana na kuendana na OpenRosa version 1.0 standard: %s </string>
   <string name="password">Nenosiri</string>
   <string name="play_video">Cheza video</string>
   <string name="please_wait">Tafadhali subiri kidogo.</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">Njia ya kuwasilisha </string>
   <string name="font_size">Ukubwa wa maandishi</string>
   <string name="change_font_size">Ukubwa wa maandishi</string>
-  <string name="access_error">Hitilafu inapojaribu kufikia %s: </string>
-  <string name="manifest_server_error">Orodha ya seva haiwezi kuripoti toleo la OpenRosa — seva ina tatizo?</string>
-  <string name="root_element_error">Root element sio &lt;manifest\&gt; — ilikuwa %s</string>
-  <string name="root_namespace_error">Root element namespace sio sahihi: %s</string>
-  <string name="manifest_tag_error">Ingizo la orodha ya seva  %s inakosa taarifa moja au mbili: jina la kabrasha, alama ya reli, au URL ya kupakua</string>
   <string name="form_download_progress">%1$s. inapata kabrasha za media: %2$s kati ya %3$s</string>
   <string name="fetching_manifest">%s. Inapata orodha </string>
   <string name="success">Mafanikio</string>

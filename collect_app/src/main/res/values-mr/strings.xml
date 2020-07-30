@@ -61,8 +61,7 @@
   <string name="jump_to_beginning">सुरू करण्यासाठी जा</string>
   <string name="jump_to_end">संम्पतही कडे जा </string>
   <string name="jump_to_previous">वर जा</string>
-  <string name="list_failed_with_error">फॉर्म सूची अयशस्वी.%s.</string>
-  <string name="loading_form">फॉर्म लोड होत आहे</string>
+    <string name="loading_form">फॉर्म लोड होत आहे</string>
   <string name="load_remote_form_error">प्रपत्र यादी प्राप्त करताना त्रुटी</string>
     <string name="location_accuracy">अचूकता %1$s मी आहे</string>
   <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
@@ -75,8 +74,6 @@
   <string name="no_items_display_instances">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही.\n\nपाठविण्यापूर्वी जतन केलेले फॉर्म्स ला अंतिम रूप देण्याचा प्रयत्न करा</string>
   <string name="ok">ठीक आहे</string>
   <string name="parse_error">क्षमस्व, फॉर्म विश्लेषित करण्यास अक्षम</string>
-  <string name="parse_legacy_formlist_failed">सर्व्हरने एकूण 0.9.x. सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेला नाही. : %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्व्हरने ओपेनरोसा आवृत्ती 1.0 मानक सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेले नाही : %s</string>
   <string name="password">संकेतशब्द</string>
   <string name="play_video">व्हिडिओ प्ले करा</string>
   <string name="please_wait">कृपया काही क्षण प्रतीक्षा करा</string>
@@ -121,11 +118,6 @@
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">मजकूर फॉन्ट आकार</string>
   <string name="change_font_size">मजकूर फॉन्ट आकार</string>
-  <string name="access_error">%s: ऍक्सेस करताना त्रुटी:</string>
-  <string name="manifest_server_error">मॅनिफेस्ट रिझल्ट एक ओपेनरोसा आवृत्तीची तक्रार करत नाही - खराब सर्व्हर?</string>
-  <string name="root_element_error">मूळ घटक &amp; lt; मॅनिफेस्ट &amp; gt; नाही. %sआहे  </string>
-  <string name="root_namespace_error">रूट घटक नावस्थान चुकीची आहे: %s</string>
-  <string name="manifest_tag_error">मॅनिफेस्ट प्रविष्टि  1%s मध्ये एक किंवा अधिक टॅग गहाळ आहेत: फाइलनाव, हैश किंवा डाउनलोड युरएल.</string>
   <string name="form_download_progress">%1$s मीडिया फायली मिळवत आहे: %2$s पैकी %3$s</string>
   <string name="fetching_manifest">%s. मॅनिफेस्ट मिळवत आहे</string>
   <string name="success">यश</string>

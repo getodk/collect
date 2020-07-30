@@ -40,10 +40,15 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private final List<FormManifestEntry> forms = new ArrayList<>();
     private String username;
     private String password;
+    private boolean alwaysReturnError;
 
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        if (alwaysReturnError) {
+            return new HttpGetResult(null, new HashMap<>(), "", 500);
+        }
+
         if (!uri.getHost().equals(HOST)) {
             return new HttpGetResult(null, new HashMap<>(), "Trying to connect to incorrect server: " + uri.getHost(), 410);
         } else if (credentialsIncorrect(credentials)) {
@@ -60,6 +65,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        if (alwaysReturnError) {
+            return new HttpHeadResult(500, new CaseInsensitiveEmptyHeaders());
+        }
+
         if (!uri.getHost().equals(HOST)) {
             return new HttpHeadResult(410, new CaseInsensitiveEmptyHeaders());
         } else if (credentialsIncorrect(credentials)) {
@@ -77,6 +86,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws Exception {
+        if (alwaysReturnError) {
+            return new HttpPostResult("", 500, "");
+        }
+
         if (!uri.getHost().equals(HOST)) {
             return new HttpPostResult("Trying to connect to incorrect server: " + uri.getHost(), 410, "");
         } else if (credentialsIncorrect(credentials)) {
@@ -171,6 +184,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
         return assetManager.open("forms/" + xmlPath);
+    }
+
+    public void alwaysReturnError() {
+        alwaysReturnError = true;
     }
 
     private static class FormManifestEntry {

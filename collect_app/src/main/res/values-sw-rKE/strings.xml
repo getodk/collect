@@ -56,8 +56,7 @@
   <string name="jump_to_beginning">Enda Mwanzo</string>
   <string name="jump_to_end">Enda Mwisho</string>
   <string name="jump_to_previous">Enda Juu</string>
-  <string name="list_failed_with_error">Uanishaji wa fomu haukufaulu. %s.</string>
-  <string name="loading_form">Fomu inawekwa</string>
+    <string name="loading_form">Fomu inawekwa</string>
   <string name="load_remote_form_error">Tatizo katika kuchukua fomu!</string>
     <string name="location_accuracy">Usahihi ni %1$s m</string>
   <string name="manage_files">Ondoa fomu iliyo hifadhiwa</string>
@@ -67,8 +66,6 @@
   <string name="no_items_display">Hamna cha kuonyesha!</string>
   <string name="ok">Sawa</string>
   <string name="parse_error">Samahani, haiwezi kuchanganua fomu</string>
-  <string name="parse_legacy_formlist_failed">server haijatoa aina ya fomu sambamba na Aggregate 0.9.x.:%s</string>
-  <string name="parse_openrosa_formlist_failed">server haijatoa aina ya fomu sambamba na OpenRosa toleo la 1.0 ya kawaida: %s</string>
   <string name="password">Thibitisho</string>
   <string name="play_video">Cheza video</string>
   <string name="please_wait">Tafadhali subiri dakika chache.</string>
@@ -109,11 +106,6 @@
   <string name="submission_url">Njia ya kuwasilisha</string>
   <string name="font_size">Ukubwa wa fonti za nakala</string>
   <string name="change_font_size">Ukubwa wa fonti za nakala</string>
-  <string name="access_error">Hitilafu wakati wa kupata %s:</string>
-  <string name="manifest_server_error">Jibu la Manifest halina taarifa ya toleo la OpenRosa - server mbaya?</string>
-  <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa %s</string>
-  <string name="root_namespace_error">Msingi wa kipengele Namespace sio sahihi: %s</string>
-  <string name="manifest_tag_error">Wasilisho la Manifest %s linakosa vitambulisho moja au zaidi: jina la faili, hash, au downloadUrl</string>
   <string name="form_download_progress">%1$s. Kupata faili za vyombo vya habari: %2$s kati ya %3$s</string>
   <string name="fetching_manifest">%s. Inachukua manifest</string>
   <string name="success">Mafanikio</string>

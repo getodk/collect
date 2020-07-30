@@ -3,7 +3,7 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.android.activities.FormChooserListActivity;
+import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
@@ -19,6 +19,9 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
+import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
+import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
@@ -26,8 +29,6 @@ import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
-import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
@@ -45,13 +46,13 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
-import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.MultiFormDownloader;
@@ -155,7 +156,7 @@ public interface AppDependencyComponent {
 
     void inject(StorageMigrationService storageMigrationService);
 
-    void inject(AutoSendWorker autoSendWorker);
+    void inject(AutoSendTaskSpec autoSendTaskSpec);
 
     void inject(StorageMigrationDialog storageMigrationDialog);
 
@@ -183,7 +184,7 @@ public interface AppDependencyComponent {
 
     void inject(ApplicationResetter applicationResetter);
 
-    void inject(FormChooserListActivity formChooserListActivity);
+    void inject(FillBlankFormActivity fillBlankFormActivity);
 
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
@@ -192,6 +193,8 @@ public interface AppDependencyComponent {
     void inject(ExperimentalPreferencesFragment experimentalPreferencesFragment);
 
     void inject(AutoUpdateTaskSpec autoUpdateTaskSpec);
+
+    void inject(ServerAuthDialogFragment serverAuthDialogFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

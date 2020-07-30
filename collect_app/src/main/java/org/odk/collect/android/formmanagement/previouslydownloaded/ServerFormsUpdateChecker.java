@@ -61,8 +61,6 @@ public class ServerFormsUpdateChecker {
                     break;
 
                 case FETCH_ERROR:
-                case PARSE_ERROR:
-                case LEGACY_PARSE_ERROR:
                     throw e;
             }
         }

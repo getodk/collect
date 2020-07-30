@@ -73,8 +73,7 @@
   <string name="jump_to_beginning">Gå till början</string>
   <string name="jump_to_end">Gå till slutet</string>
   <string name="jump_to_previous">Flytta upp</string>
-  <string name="list_failed_with_error">Listning av formulär misslyckades. %s.</string>
-  <string name="loading_form">Laddar formulär.</string>
+    <string name="loading_form">Laddar formulär.</string>
   <string name="load_remote_form_error">Ett fel inträffade vid listning av formulär</string>
     <string name="location_accuracy">Noggrannheten är %1$s m</string>
   <string name="manage_files">Radera sparat formulär</string>
@@ -87,8 +86,6 @@
   <string name="no_items_display_instances">Inget tillgängligt för visning.\n\nProva att avsluta sparade formulär innan dessa skickas.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Tyvärr, ej möjligt att tolka formulär.</string>
-  <string name="parse_legacy_formlist_failed">Servern tillhandahåller inte ett dokument över tillgängliga formulär som är kompatibelt med Aggregate 0.9.x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Servern tillhandahåller inte ett dokument över tillgängliga formulär som är kompatibelt med OpenRosa version 1.0 standarden: %s</string>
   <string name="password">Lösenord</string>
   <string name="play_video">Spela upp film</string>
   <string name="please_wait">Var vänlig och vänta ett tag.</string>
@@ -135,11 +132,6 @@
   <string name="submission_url">Sökväg till skickade formulär</string>
   <string name="font_size">Textstorlek</string>
   <string name="change_font_size">Textstorlek</string>
-  <string name="access_error">Fel vid inläsning av %s:</string>
-  <string name="manifest_server_error">Manifestets svar rapporterar inte en OpenRosa-version - felaktig server?</string>
-  <string name="root_element_error">Rotelementet är inte &lt;manifest\&gt; - var tidigare %s</string>
-  <string name="root_namespace_error">Rotelementets Namespace är felaktigt: %s</string>
-  <string name="manifest_tag_error">Manifestets post %s saknar en eller flera taggar: filnamn, hash eller nedladdnings-URL</string>
   <string name="form_download_progress">%1$s. Hämtar mediafil: %2$s av %3$s</string>
   <string name="fetching_manifest">%s. Hämtar manifest </string>
   <string name="success">Lyckades</string>

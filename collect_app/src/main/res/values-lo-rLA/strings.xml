@@ -57,8 +57,7 @@
   <string name="jump_to_beginning">ໄປຫາໜ້າທຳອິດຕົ້ນ</string>
   <string name="jump_to_end">ໄປຫາໜ້າສຸດທ້າຍ</string>
   <string name="jump_to_previous">ເລື່ອນຂື້ນ</string>
-  <string name="list_failed_with_error">ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້ %s.</string>
-  <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
+    <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
   <string name="load_remote_form_error">ມີ​ຄວາມຜິດພາດ ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້</string>
     <string name="location_accuracy">ຄ່າຄວາມຖືກຕ້ອງ​ແມ່ນ %1$s m</string>
   <string name="manage_files">ລຶບແບບຟອມທີ່ບັນທຶກໄວ້</string>
@@ -70,8 +69,6 @@
   <string name="no_items_display_instances">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ. \n\nລອງເຮັດເຄື່ອງໜາຍແບບຟອມວ່າສຳເລັດແລ້ວກ່ອນສົ່ງ</string>
   <string name="ok">ຕົກລົງ</string>
   <string name="parse_error">ບໍ່ສາມາດເປີດແບບຟອມໄດ້</string>
-  <string name="parse_legacy_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ OpenRosa version 1.0 standard: %s</string>
   <string name="password">ລະຫັດຜ່ານ</string>
   <string name="play_video">ເປີດວີດີໂອ</string>
   <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
@@ -112,11 +109,6 @@
   <string name="submission_url">ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ </string>
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
-  <string name="access_error">ມີ​ຄວາມຜິດພາດໃນຂະນະທີ່ເປີດ %s:</string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Getting manifest</string>
   <string name="success">ສຳເລັດແລ້ວ</string>

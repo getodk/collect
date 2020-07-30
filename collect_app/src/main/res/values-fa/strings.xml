@@ -106,8 +106,7 @@
   <string name="formlist_url">شیوه لیست فورم</string>
   <string name="font_size">اندازه فونت متن</string>
   <string name="change_font_size">اندازه فونت متن</string>
-  <string name="access_error">هنگام دسترسی خطا رخ داد %s:</string>
-  <string name="success">موفقیت </string>
+    <string name="success">موفقیت </string>
   <string name="failures">ناکامی</string>
   <string name="no_forms_uploaded">ببخشید، هیچ فورمی آپلود نشده است</string>
   <string name="upload_results">نتایج آپلود</string>

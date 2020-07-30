@@ -28,7 +28,6 @@ import org.odk.collect.android.R;
 public class NotificationUtils {
 
     public static final String CHANNEL_ID = "collect_notification_channel";
-    public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
 
     private NotificationUtils() {
     }
@@ -47,13 +46,13 @@ public class NotificationUtils {
         }
     }
 
-    public static void showNotification(Context context, NotificationManager manager, int title, String contentText, PendingIntent contentIntent, int notificationId) {
+    public static void showNotification(Context context, NotificationManager manager, String title, String content, PendingIntent contentIntent, int notificationId) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID).setContentIntent(contentIntent);
 
         builder
-                .setContentTitle(context.getString(title))
-                .setContentText(contentText)
+                .setContentTitle(title)
+                .setContentText(content)
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setAutoCancel(true);
 

@@ -3,14 +3,7 @@ package org.odk.collect.android.backgroundwork;
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import androidx.work.Constraints;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-
 import org.odk.collect.android.formmanagement.FormUpdateMode;
-import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.async.Scheduler;
 
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
@@ -20,20 +13,17 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_
 public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, FormSubmitManager {
 
     private static final String MATCH_EXACTLY_SYNC_TAG = "match_exactly";
-    public static final String AUTO_UPDATE_TAG = "serverPollingJob";
+    private static final String AUTO_UPDATE_TAG = "serverPollingJob";
+    public static final String AUTO_SEND_TAG = "AutoSendWorker";
 
     private final Scheduler scheduler;
     private final SharedPreferences sharedPreferences;
     private final Application application;
 
-    @Deprecated // Should use Scheduler instance instead
-    private final WorkManager workManager;
-
-    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, SharedPreferences sharedPreferences, Application application, WorkManager workManager) {
+    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, SharedPreferences sharedPreferences, Application application) {
         this.scheduler = scheduler;
         this.sharedPreferences = sharedPreferences;
         this.application = application;
-        this.workManager = workManager;
     }
 
     @Override
@@ -66,21 +56,12 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
     @Override
     public boolean isSubmitRunning() {
-        return isRunning(AutoSendWorker.TAG);
+        return isRunning(AUTO_SEND_TAG);
     }
 
     @Override
     public void scheduleSubmit() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-        OneTimeWorkRequest autoSendWork =
-                new OneTimeWorkRequest.Builder(AutoSendWorker.class)
-                        .addTag(AutoSendWorker.TAG)
-                        .setConstraints(constraints)
-                        .build();
-        workManager.beginUniqueWork(AutoSendWorker.TAG,
-                ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
+        scheduler.networkDeferred(AUTO_SEND_TAG, new AutoSendTaskSpec());
     }
 
     @Override

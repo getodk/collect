@@ -71,8 +71,7 @@
   <string name="jump_to_beginning">మొదటికి వెళ్లు </string>
   <string name="jump_to_end">చివరికి వెళ్లు </string>
   <string name="jump_to_previous">పైకి వెళ్లు </string>
-  <string name="list_failed_with_error">ఫారం జాబితా విఫలమైంది.%s</string>
-  <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
+    <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
   <string name="load_remote_form_error">ఫారం జాబితాను పొందడంలో లోపం జరిగింది </string>
     <string name="location_accuracy">ఖచ్చితత్వం %1$sm</string>
   <string name="manage_files">సేవ్ చేసిన ఫారంలను తొలగించండి </string>
@@ -85,8 +84,6 @@
   <string name="no_items_display_instances">చూడటానికి ఏ ఫారంలు లేవు.\n\n పంపే ముందు సేవ్ చేసిన ఫారంలను ఫైనల్ చేయడానికి ప్రయత్నించండి.</string>
   <string name="ok">OK</string>
   <string name="parse_error">క్షమించండి, ఫారంను అన్వయించలేకపోయాము.</string>
-  <string name="parse_legacy_formlist_failed">మొత్తం 0.9.x కు అనుకూలమైన అందుబాటులో ఉన్న ఫారం పత్రాన్ని సర్వర్ అందించలేదు. :%s</string>
-  <string name="parse_openrosa_formlist_failed">ఓపెన్‌రోసా వెర్షన్ 1.0 ప్రమాణానికి అనుకూలంగా అందుబాటులో ఉన్న ఫారం పత్రాన్ని సర్వర్ అందించలేదు:%s</string>
   <string name="password">పాస్ వర్డ్ </string>
   <string name="play_video">వీడియో ప్లే చెయ్యి</string>
   <string name="please_wait">దయచేసి కొన్ని క్షణాలు వేచి ఉండండి.</string>
@@ -133,11 +130,6 @@
   <string name="submission_url">సబ్మిషన్ లింక్ </string>
   <string name="font_size">అక్షరాల సైజు </string>
   <string name="change_font_size">అక్షరాల సైజు  </string>
-  <string name="access_error">%s ని యాక్సెస్ చేస్తున్నప్పుడు లోపం:</string>
-  <string name="manifest_server_error">మానిఫెస్ట్ రిప్లై ఓపెన్ రోసా వెర్షన్ ను రిపోర్ట్ చెయ్యదు-  సర్వర్ తప్పు అయ్యుండొచ్చు?</string>
-  <string name="root_element_error">రూట్ ఎలిమెంట్ కాదు&amp;lt ; మానిఫెస్ట్ \&amp;gt; -- %s ఉంది</string>
-  <string name="root_namespace_error">రూట్ ఎలిమెంట్ నేమ్‌స్పేస్ తప్పు:%s</string>
-  <string name="manifest_tag_error">మానిఫెస్ట్ ఎంట్రీ%sలో ఒకటి లేదా అంతకంటే ఎక్కువ ట్యాగ్‌లు లేవు: ఫైల్ పేరు, హాష్ లేదా డౌన్‌లోడ్ URL</string>
   <string name="form_download_progress">%1$s. మీడియా ఫైళ్ళను పొందుతున్నాము:  %3$s లో %2$s</string>
   <string name="fetching_manifest"> %s. మానిఫెస్ట్ పొందడం</string>
   <string name="success">సక్సెస్ </string>

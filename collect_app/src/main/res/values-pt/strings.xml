@@ -64,8 +64,7 @@
   <string name="jump_to_beginning">Ir para o Início</string>
   <string name="jump_to_end">Ir para o Fim</string>
   <string name="jump_to_previous">Subir</string>
-  <string name="list_failed_with_error">Listagem de formulários falhou. %s.</string>
-  <string name="loading_form">Carregando Formulário</string>
+    <string name="loading_form">Carregando Formulário</string>
   <string name="load_remote_form_error">Erro na Listagem de Formulários</string>
     <string name="location_accuracy">Precisão de %1$s m</string>
   <string name="manage_files">Apagar Formulário Salvo</string>
@@ -78,8 +77,6 @@
   <string name="no_items_display_instances">Nada disponível para exibir.\n\nTente finalizar formulários salvos antes de enviar.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Desculpe, não é possível analisar formulário.</string>
-  <string name="parse_legacy_formlist_failed">O servidor não tinha formulários disponíveis compatíveis com Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">O servidor não tinha formulários disponíveis compatíveis com OpenRosa version 1.0 standard: %s</string>
   <string name="password">Senha</string>
   <string name="play_video">Assistir o Vídeo</string>
   <string name="please_wait">Por favor, aguarde um pouco.</string>
@@ -124,11 +121,6 @@
   <string name="submission_url">Caminho para submeter</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
-  <string name="access_error">Erro enquanto acessa %s:</string>
-  <string name="manifest_server_error">Resposta não retorna uma versão OpenRosa — servidor ruim?</string>
-  <string name="root_element_error">Elemento raiz não é &amp;lt;manifest\&gt; — foi %s</string>
-  <string name="root_namespace_error">Root element Namespace - incorreto: %s</string>
-  <string name="manifest_tag_error">Entrada %s está faltando uma ou mais tags: arquivo, hash, ou downloadURL</string>
   <string name="form_download_progress">%1$s. Acessando arquivos de mídia: %2$s de %3$s</string>
   <string name="fetching_manifest">%s. Acessando manifesto</string>
   <string name="success">Sucesso</string>

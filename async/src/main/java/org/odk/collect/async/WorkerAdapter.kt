@@ -7,7 +7,12 @@ import androidx.work.WorkerParameters
 abstract class WorkerAdapter(private val spec: TaskSpec, context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        spec.getTask(applicationContext).run()
-        return Result.success()
+        val completed = spec.getTask(applicationContext).get()
+
+        return if (completed) {
+            Result.success()
+        } else {
+            Result.retry()
+        }
     }
 }

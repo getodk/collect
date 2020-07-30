@@ -40,20 +40,23 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
+import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.FormListDownloader;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -69,9 +72,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.FormListDownloader.DL_AUTH_REQUIRED;
-import static org.odk.collect.android.utilities.FormListDownloader.DL_ERROR_MSG;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -124,7 +124,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     WebCredentialsUtils webCredentialsUtils;
 
     @Inject
-    FormListDownloader formListDownloader;
+    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
     @Inject
     NetworkStateProvider connectivityProvider;
@@ -140,6 +140,9 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Inject
     StorageInitializer storageInitializer;
+
+    @Inject
+    MultiFormDownloader multiFormDownloader;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -273,7 +276,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
 
-        sortingOptions = new int[] {
+        sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc
         };
     }
@@ -319,15 +322,17 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 downloadFormListTask = null;
             }
 
-            downloadFormListTask = new DownloadFormListTask(formListDownloader);
-            downloadFormListTask.setDownloaderListener(this);
-
             if (viewModel.isDownloadOnlyMode()) {
-                // Pass over the nulls -> They have no effect if even one of them is a null
-                downloadFormListTask.setAlternateCredentials(viewModel.getUrl(), viewModel.getUsername(), viewModel.getPassword());
+                // Handle external app download case with different server
+                downloadFormListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
+                downloadFormListTask.setAlternateCredentials(webCredentialsUtils, viewModel.getUrl(), viewModel.getUsername(), viewModel.getPassword());
+                downloadFormListTask.setDownloaderListener(this);
+                downloadFormListTask.execute();
+            } else {
+                downloadFormListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
+                downloadFormListTask.setDownloaderListener(this);
+                downloadFormListTask.execute();
             }
-
-            downloadFormListTask.execute();
         }
     }
 
@@ -425,7 +430,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             // show dialog box
             DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-            downloadFormsTask = new DownloadFormsTask();
+            downloadFormsTask = new DownloadFormsTask(multiFormDownloader);
             downloadFormsTask.setDownloaderListener(this);
 
             if (viewModel.getUrl() != null) {
@@ -516,50 +521,19 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
     }
 
-    /*
-     * Called when the form list has finished downloading. results will either contain a set of
-     * <form_id, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
-     */
-    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> result) {
+    @Override
+    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormApiException exception) {
         DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
 
-        if (result == null) {
-            Timber.e("Formlist Downloading returned null.  That shouldn't happen");
-            // Just displayes "error occured" to the user, but this should never happen.
-            if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, "Formlist Downloading returned null.  That shouldn't happen", null);
-            }
-
-            createAlertDialog(getString(R.string.load_remote_form_error),
-                    getString(R.string.error_occured), EXIT);
-            return;
-        }
-
-        if (result.containsKey(DL_AUTH_REQUIRED)) {
-            // need authorization
-            createAuthDialog();
-        } else if (result.containsKey(DL_ERROR_MSG)) {
-            // Download failed
-            String dialogMessage =
-                    getString(R.string.list_failed_with_error,
-                            result.get(DL_ERROR_MSG).getErrorStr());
-            String dialogTitle = getString(R.string.load_remote_form_error);
-
-            if (viewModel.isDownloadOnlyMode()) {
-                setReturnResult(false, getString(R.string.load_remote_form_error), viewModel.getFormResults());
-            }
-
-            createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
-        } else {
+        if (exception == null) {
             // Everything worked. Clear the list and add the results.
-            viewModel.setFormDetailsByFormId(result);
-
+            viewModel.setFormDetailsByFormId(formList);
             viewModel.clearFormList();
 
             ArrayList<String> ids = new ArrayList<>(viewModel.getFormDetailsByFormId().keySet());
-            for (int i = 0; i < result.size(); i++) {
+            for (int i = 0; i < formList.size(); i++) {
                 String formDetailsKey = ids.get(i);
                 ServerFormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
 
@@ -589,6 +563,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                     }
                 }
             }
+
             filteredFormList.addAll(viewModel.getFormList());
             updateAdapter();
             selectSupersededForms();
@@ -597,32 +572,54 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             toggleButtonLabel(toggleButton, listView);
 
             if (viewModel.isDownloadOnlyMode()) {
-                //1. First check if all form IDS could be found on the server - Register forms that could not be found
-
-                for (String formId: viewModel.getFormIdsToDownload()) {
-                    viewModel.putFormResult(formId, false);
-                }
-
-                ArrayList<ServerFormDetails> filesToDownload  = new ArrayList<>();
-
-                for (ServerFormDetails serverFormDetails : viewModel.getFormDetailsByFormId().values()) {
-                    String formId = serverFormDetails.getFormId();
-
-                    if (viewModel.getFormResults().containsKey(formId)) {
-                        filesToDownload.add(serverFormDetails);
-                    }
-                }
-
-                //2. Select forms and start downloading
-                if (!filesToDownload.isEmpty()) {
-                    startFormsDownload(filesToDownload);
-                } else {
-                    // None of the forms was found
-                    setReturnResult(false, "Forms not found on server", viewModel.getFormResults());
-                    finish();
-                }
-
+                performDownloadModeDownload();
             }
+        } else {
+            switch (exception.getType()) {
+                case FETCH_ERROR:
+                case UNKNOWN_HOST:
+                    String dialogMessage = new FormApiExceptionMapper(getResources()).getMessage(exception);
+                    String dialogTitle = getString(R.string.load_remote_form_error);
+
+                    if (viewModel.isDownloadOnlyMode()) {
+                        setReturnResult(false, dialogMessage, viewModel.getFormResults());
+                    }
+
+                    createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
+                    break;
+
+                case AUTH_REQUIRED:
+                    createAuthDialog();
+                    break;
+            }
+        }
+
+    }
+
+    private void performDownloadModeDownload() {
+        //1. First check if all form IDS could be found on the server - Register forms that could not be found
+
+        for (String formId : viewModel.getFormIdsToDownload()) {
+            viewModel.putFormResult(formId, false);
+        }
+
+        ArrayList<ServerFormDetails> filesToDownload = new ArrayList<>();
+
+        for (ServerFormDetails serverFormDetails : viewModel.getFormDetailsByFormId().values()) {
+            String formId = serverFormDetails.getFormId();
+
+            if (viewModel.getFormResults().containsKey(formId)) {
+                filesToDownload.add(serverFormDetails);
+            }
+        }
+
+        //2. Select forms and start downloading
+        if (!filesToDownload.isEmpty()) {
+            startFormsDownload(filesToDownload);
+        } else {
+            // None of the forms was found
+            setReturnResult(false, "Forms not found on server", viewModel.getFormResults());
+            finish();
         }
     }
 

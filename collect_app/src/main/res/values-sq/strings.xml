@@ -66,8 +66,7 @@
   <string name="jump_to_beginning">Shko në fillim</string>
   <string name="jump_to_end">Shko në fund</string>
   <string name="jump_to_previous">Shko sipër</string>
-  <string name="list_failed_with_error">Listimi i formularit dështoi. 1%s</string>
-  <string name="loading_form">Duke ngarkuar formularin</string>
+    <string name="loading_form">Duke ngarkuar formularin</string>
   <string name="load_remote_form_error">Gabim në ngarkimin e listës së formularëve</string>
     <string name="location_accuracy">Saktësia është %1$s m</string>
   <string name="manage_files">Fshi formularin e ruajtur</string>
@@ -80,8 +79,6 @@
   <string name="no_items_display_instances">Asgjë nuk mund të shfaqet.\n\nProvoni të ruani një formular përpara se të ngarkoni.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Formulari nuk mund të dekodohet.</string>
-  <string name="parse_legacy_formlist_failed">Nuk gjenden formularë të përputhshëm me Aggregate 0.9.x. në server: 1%s</string>
-  <string name="parse_openrosa_formlist_failed">Nuk gjenden formularë të përputhshëm me Open Rosa versioni 1.0 standard në server: 1%s</string>
   <string name="password">Fjalëkalimi</string>
   <string name="play_video">Shih videon</string>
   <string name="please_wait">Lutemi, prisni pak sekonda.</string>
@@ -127,8 +124,6 @@
   <string name="submission_url">Adresa për dërgimin</string>
   <string name="font_size">Madhësia tekstit</string>
   <string name="change_font_size">Madhësia e tekstit</string>
-  <string name="access_error">Gabim në aksesimin e %s:</string>
-  <string name="manifest_server_error">Përgjigja e manifestit nuk raporton një version OpenRosa - server i gabuar?</string>
   <string name="form_download_progress">%1$s. Duke ngarkuar media: %2$s of %3$s</string>
   <string name="fetching_manifest">%s Duke ngarkuar manifestin</string>
   <string name="success">Sukses</string>

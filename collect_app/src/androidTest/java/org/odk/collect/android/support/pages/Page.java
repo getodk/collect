@@ -38,6 +38,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
@@ -192,6 +193,11 @@ abstract class Page<T extends Page<T>> {
 
     public T inputText(String text) {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
+        return (T) this;
+    }
+
+    public T inputText(int hint, String text) {
+        onView(withHint(getTranslatedString(hint))).perform(replaceText(text));
         return (T) this;
     }
 

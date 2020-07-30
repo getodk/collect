@@ -1,19 +1,24 @@
 package org.odk.collect.android.formmanagement;
 
+import android.app.Application;
+
 import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
+
+import java.util.function.Supplier;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
@@ -27,9 +32,11 @@ public class SyncFormsTaskSpecTest {
 
     private ServerFormsSynchronizer serverFormsSynchronizer;
     private SyncStatusRepository syncStatusRepository;
+    private Notifier notifier;
 
     @Before
     public void setup() {
+        notifier = mock(Notifier.class);
         serverFormsSynchronizer = mock(ServerFormsSynchronizer.class);
         syncStatusRepository = mock(SyncStatusRepository.class);
         when(syncStatusRepository.startSync()).thenReturn(true);
@@ -45,6 +52,11 @@ public class SyncFormsTaskSpecTest {
             public SyncStatusRepository providesServerFormSyncRepository() {
                 return syncStatusRepository;
             }
+
+            @Override
+            public Notifier providesNotifier(Application application) {
+                return notifier;
+            }
         });
     }
 
@@ -53,26 +65,28 @@ public class SyncFormsTaskSpecTest {
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
-        task.run();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
 
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(syncStatusRepository).finishSync();
+        inOrder.verify(syncStatusRepository).finishSync(true);
     }
 
     @Test
-    public void whenSynchronizingFails_setsRepositoryToNotSyncing() throws Exception {
-        doThrow(new FormApiException(FormApiException.Type.AUTH_REQUIRED, "")).when(serverFormsSynchronizer).synchronize();
+    public void whenSynchronizingFails_setsRepositoryToNotSyncingAndNotifiesWithError() throws Exception {
+        FormApiException exception = new FormApiException(FormApiException.Type.FETCH_ERROR);
+        doThrow(exception).when(serverFormsSynchronizer).synchronize();
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
-        task.run();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
 
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(syncStatusRepository).finishSync();
+        inOrder.verify(syncStatusRepository).finishSync(false);
+        verify(notifier).onSyncFailure(exception);
     }
 
     @Test
@@ -80,10 +94,10 @@ public class SyncFormsTaskSpecTest {
         when(syncStatusRepository.startSync()).thenReturn(false);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Runnable task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
-        task.run();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
 
         verify(serverFormsSynchronizer, never()).synchronize();
-        verify(syncStatusRepository, never()).finishSync();
+        verify(syncStatusRepository, never()).finishSync(true);
     }
 }

@@ -86,9 +86,8 @@
     <string name="jump_to_beginning">Go To Start</string>
     <string name="jump_to_end">Go To End</string>
     <string name="jump_to_previous">Go Up</string>
-    <string name="list_failed_with_error">Form listing failed. %s.</string>
     <string name="loading_form">Loading Form</string>
-    <string name="load_remote_form_error">Error Getting Form List</string>
+    <string name="load_remote_form_error">Form list download failed</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
     <string name="location_provider">Location provider: %s</string>
     <string name="manage_files">Delete Saved Form</string>
@@ -101,8 +100,6 @@
     <string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing saved forms before sending.</string>
     <string name="ok">OK</string>
     <string name="parse_error">Sorry, unable to parse form.</string>
-    <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
-    <string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
     <string name="password">Password</string>
     <string name="play_video">Play Video</string>
     <string name="please_wait">Please wait a few moments.</string>
@@ -150,11 +147,6 @@
     <string name="submission_url">Submission path</string>
     <string name="font_size">Text font size</string>
     <string name="change_font_size">Text font size</string>
-    <string name="access_error">Error while accessing %s: </string>
-    <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-    <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-    <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-    <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
     <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
     <string name="fetching_manifest">%s. Getting manifest </string>
     <string name="success">Success</string>
@@ -710,4 +702,7 @@
     <string name="form_update_mode_title">Blank form update mode</string>
     <string name="previously_downloaded_only">Previously downloaded forms only</string>
     <string name="form_update_frequency_title">Automatic update frequency</string>
+    <string name="form_update_error">Form update failed</string>
+    <string name="report_to_project_lead">If you keep having this problem, report it to the person who asked you to collect data.</string>
+    <string name="unknown_host_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
 </resources>

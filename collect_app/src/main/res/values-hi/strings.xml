@@ -66,8 +66,7 @@
   <string name="jump_to_beginning">शुरु पर जाएं</string>
   <string name="jump_to_end">अंत पर जाएं</string>
   <string name="jump_to_previous">ऊपर जाएं</string>
-  <string name="list_failed_with_error">फॉर्म  सूचीकरण असफल%s </string>
-  <string name="loading_form">फॉर्म लोड हो रहा है </string>
+    <string name="loading_form">फॉर्म लोड हो रहा है </string>
   <string name="load_remote_form_error">सूची से फॉर्म प्राप्ति में गलती </string>
     <string name="location_accuracy">शुद्धता %1$s मीटर है</string>
   <string name="manage_files">संरक्षित फॉर्म मिटायें</string>
@@ -80,8 +79,6 @@
   <string name="no_items_display_instances">प्रदर्शित करने के लिए कुछ भी उपलब्ध नहीं.\n\nभेजने से पहले संरक्षित फॉर्म को अंतिम रूप देने का प्रयास हो रहा.</string>
   <string name="ok">ओके</string>
   <string name="parse_error">क्षमा करें, फॉर्म पार्स करने में असमर्थ</string>
-  <string name="parse_legacy_formlist_failed">सर्वर ने उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं किया जो Aggregate 0.9.x. से संगतता रखता हो: %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्वर ने उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं किया जो OpenRosa version 1.0 मानकों से संगतता रखता हो: %s</string>
   <string name="password">पासवर्ड</string>
   <string name="play_video">वीडियो चलाएं</string>
   <string name="please_wait">कृपया कुछ क्षण प्रतीक्षा करें</string>
@@ -126,11 +123,6 @@
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">अक्षर फॉन्ट आकार</string>
   <string name="change_font_size">अक्षर फॉन्ट आकार</string>
-  <string name="access_error">%s:प्राप्ति के समय गलती</string>
-  <string name="manifest_server_error">मैन्फेस्ट उत्तर किसी OpenRosa version को रिपोर्ट नहीं करता - खराब सर्वर?</string>
-  <string name="root_element_error">रूट एलिमेंट &amp; नहीं है यह;\&amp;gt को दिखाता है; — जोकि %sथा</string>
-  <string name="root_namespace_error">रूट एलिमेंट नेमस्पेस गलत है: %s</string>
-  <string name="manifest_tag_error">मेन्फेस्ट एंट्री %sमें एक या अधिक टैग लापता हैं: फ़ाइल नाम, हैश, या डाउनलोडUrl</string>
   <string name="form_download_progress">%1$s. %3$sकी %2$sमीडिया फाइलें मिल रही हैं: </string>
   <string name="fetching_manifest">%s. मेनीफेस्ट मिल रहा है </string>
   <string name="success">सफल</string>

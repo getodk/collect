@@ -91,9 +91,6 @@
   <string name="submission_url">Gönderim yolu</string>
   <string name="font_size">Text font büyüklüğü</string>
   <string name="change_font_size">Text font büyüklüğü</string>
-  <string name="access_error">Hata:%s ulaşırken</string>
-  <string name="root_element_error">kök element  &lt;manifest\&gt; — was %s degil</string>
-  <string name="root_namespace_error">Kök elementin alanadi doğru değil: %s</string>
   <string name="form_download_progress">%1$s. Alinan medya dosyasi : %2$s of %3$s</string>
   <string name="success">Başarılı</string>
   <string name="no_forms_uploaded">Herhangi bir form gönderilmedi.</string>

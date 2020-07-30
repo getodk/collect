@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">დასაწყისში გადასვლა</string>
   <string name="jump_to_end">ბოლოში გადასვლა</string>
   <string name="jump_to_previous">ზევით ასვლა</string>
-  <string name="list_failed_with_error">ფორმების ჩამონათვალის ჩვენება ვერ მოხერხდა. %s.</string>
-  <string name="loading_form">ფორმის ჩატვირთვა</string>
+    <string name="loading_form">ფორმის ჩატვირთვა</string>
   <string name="load_remote_form_error">შეცდომა ფორმების ჩამონათვლის ჩვენებისას</string>
     <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">საჩვენებლად ხელმისაწვდომი არაფერია.\n\nცადეთ ფორმების დასრულება მათ გაგზავნამდე</string>
   <string name="ok">OK</string>
   <string name="parse_error">უკაცრავად, ფორმის დამუშავება შეუძლებელია.</string>
-  <string name="parse_legacy_formlist_failed">შეუძლებელია სერვერიდან Aggregate 0.9.x. : %s-ის თანხვედრი ფორმის მოპოვება</string>
-  <string name="parse_openrosa_formlist_failed">სერვერზე არ მოიპოვება ფორმა, რომელიც OpenRosa version 1.0 სტანდარტის თანხვედრია: %s</string>
   <string name="password">პაროლი</string>
   <string name="play_video">ვიდეოჩანაწერის ჩვენება</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
   <string name="font_size">ტექსტის ზომა</string>
   <string name="change_font_size">ტექსტის ზომა</string>
-  <string name="access_error">შეცდომა %s-თან დაკავშირებისას </string>
-  <string name="manifest_server_error">მანიფესტის პასუხში არ იგულისხმება OpenRosa — ვერსია; bad server?</string>
-  <string name="root_element_error">ძირის ელემენტეი არ არის &lt;manifest\&gt; — იყო %s</string>
-  <string name="root_namespace_error">ძირის ელემენტის სახელთა სივრცე არასწორია: %s</string>
-  <string name="manifest_tag_error">მანიფესტის ჩანაწერში %s არ არსებობს ერთი ან მეტი ჭდე: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. მედია-ფაილების მიღება: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
   <string name="success">წარმატება</string>

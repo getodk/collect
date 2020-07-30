@@ -61,8 +61,7 @@
   <string name="jump_to_beginning">Anar a l\'inici</string>
   <string name="jump_to_end">Anar al final</string>
   <string name="jump_to_previous">Ves enrera</string>
-  <string name="list_failed_with_error">Error al llistar formularis. %s.</string>
-  <string name="loading_form">Carregant formulari</string>
+    <string name="loading_form">Carregant formulari</string>
   <string name="load_remote_form_error">Error al demanar la llista de formularis</string>
   <string name="location_accuracy">Precisió de %1$s m</string>
   <string name="manage_files">Eliminar formulari desat</string>
@@ -75,8 +74,6 @@
   <string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva finalitzant formularis desats abans d\'enviar.</string>
   <string name="ok">D\'acord</string>
   <string name="parse_error">Ho sentim, incapaç d\'interpretar el formulari.</string>
-  <string name="parse_legacy_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb OpenRosa versio 1.0 standard: %s</string>
   <string name="password">Clau d\'accés</string>
   <string name="play_video">Reprodueix Vídeo</string>
   <string name="please_wait">Un moment si us plau.</string>
@@ -119,11 +116,6 @@
   <string name="submission_url">Carpeta de presentacions</string>
   <string name="font_size">Mida del text</string>
   <string name="change_font_size">Mida del text</string>
-  <string name="access_error">Error mentre accedeix %s: </string>
-  <string name="manifest_server_error">No s\'identifica una versió d\'OpenRosa — servidor incorrecte?</string>
-  <string name="root_element_error">L\'element principal no és &amp;lt;manifest\&gt; — era %s</string>
-  <string name="root_namespace_error">Element principal \'Namespace\' és incorrecte: %s</string>
-  <string name="manifest_tag_error">A l\'entrada de manifest %s hi falten una o mes clausules: nom d\'arxiu, identificador, o Url de descàrrega</string>
   <string name="form_download_progress">%1$s. Obtenint arxius multimèdia: %2$s de %3$s</string>
   <string name="fetching_manifest">%s. Obtenint manifest</string>
   <string name="success">Correcte</string>

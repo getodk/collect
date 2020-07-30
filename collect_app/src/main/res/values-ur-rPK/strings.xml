@@ -58,8 +58,7 @@
   <string name="jump_to_beginning">شروع پر چلیں</string>
   <string name="jump_to_end">آخر پر چلیں</string>
   <string name="jump_to_previous">اوپر چلیں</string>
-  <string name="list_failed_with_error">فارم ‎%s‏ کی لیسٹینگ فیل ہوگئ۔</string>
-  <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
+    <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
   <string name="load_remote_form_error">فارم کی لیسٹینگ میں غلطی ہے</string>
     <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
   <string name="manage_files">محفوظ شدہ فارم کو مٹا دیں۔</string>
@@ -71,8 +70,7 @@
   <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے؟؟ْ۔ محفوظ شدہ فارم (ز) کو بھیجنےسے پہلےمکمل کریں</string>
   <string name="ok">ٹھیک ہے</string>
   <string name="parse_error">معافی، فارم کا تجزیہ نہیں ہو سکا</string>
-  <string name="parse_legacy_formlist_failed">سرور نے     ‎Aggregate 0.9.x: %1$s‏ کے ساتھ موافق دستیاب فارموں کی دستاویز مہیا نہیں کی ہے</string>
-  <string name="password">شناختی لفظ (Password)</string>
+    <string name="password">شناختی لفظ (Password)</string>
   <string name="play_video">وڈیو لگا دیں</string>
   <string name="please_wait">براہ مہربانی۔ چند منٹ انتظار کرلیں</string>
   <string name="please_wait_long">براہ مہربانی انتظار کریں۔ اسکو چند منٹ لگ سکتے ہیں</string>
@@ -112,9 +110,6 @@
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ہجوں کے فانٹ کا ناپ</string>
   <string name="change_font_size">فانٹ کا سائز</string>
-  <string name="access_error">‎%s‏ تک رسائی غلطی آ رہی ہے</string>
-  <string name="manifest_server_error">دکھایا گیا جواب ‎OpenRosa‏ ورژن کو رپورت نہیں کرتا ۔ خراب سرور</string>
-  <string name="manifest_tag_error">دکھایا گیا ‎%s‏  کے اندراج سے ایک یا ذیادہ  tagsغائب ہیں ۔ فائل کا نام، ہیش، یا ڈاون لوڈ </string>
   <string name="form_download_progress">غلطی: ‎%1$s‏ میڈیا فائل حاصل کیا جا رہا ہے: ‎%3$s‏ کا ‎%2$s‏</string>
   <string name="success">کامیابی</string>
   <string name="no_forms_uploaded">معافی، کوئی فارم اپ لوڈ نہیں کیا گیا</string>

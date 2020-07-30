@@ -2,5 +2,5 @@ package org.odk.collect.android.formmanagement;
 
 public interface FormDownloader {
 
-    void downloadForm(ServerFormDetails form);
+    void downloadForm(ServerFormDetails form) throws FormDownloadException;
 }

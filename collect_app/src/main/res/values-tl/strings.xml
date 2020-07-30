@@ -57,8 +57,7 @@
   <string name="jump_to_beginning">Punta sa Simula</string>
   <string name="jump_to_end">Punta sa Dulo</string>
   <string name="jump_to_previous">Punta Pataas</string>
-  <string name="list_failed_with_error">Nabigong i-lista ang form. %s.</string>
-  <string name="loading_form">Kina-karga ang Form</string>
+    <string name="loading_form">Kina-karga ang Form</string>
   <string name="load_remote_form_error">May Mali sa pag-karga ng Listahan ng Form</string>
     <string name="location_accuracy">Ang kawastuhan ay %1$s m</string>
   <string name="manage_files">Burahin ang Inimpok na Form</string>
@@ -68,8 +67,6 @@
   <string name="no_items_display">Walang maipakita.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
-  <string name="parse_legacy_formlist_failed">Ang server ay walang maibigay na form na kaugma sa Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Ang server ay walang maibigay na dokumentong form na kaugma sa pamantayan ng OpenRosa version 1.0: %s</string>
   <string name="password">Kontrasenyas</string>
   <string name="play_video">I-play ang Bidyo</string>
   <string name="please_wait">Mag-hintay ng ilang sandali.</string>
@@ -108,11 +105,6 @@
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Laki ng Teklado</string>
   <string name="change_font_size">Laki ng Tipo ng Teksto</string>
-  <string name="access_error">May mali habang sa pag-access ng %s: </string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s ay kulang ng isa o higit pang mga tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
   <string name="success">Tagumpay</string>

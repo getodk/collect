@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">最初に移動</string>
   <string name="jump_to_end">最後に移動</string>
   <string name="jump_to_previous">上に移動</string>
-  <string name="list_failed_with_error">フォームが一覧できませんでした。 %s。</string>
-  <string name="loading_form">フォームのロード中</string>
+    <string name="loading_form">フォームのロード中</string>
   <string name="load_remote_form_error">フォーム一覧の取得中にエラー</string>
     <string name="location_accuracy">精度は %1$s mです</string>
   <string name="manage_files">保存されたフォームを削除</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">表示可能なものはありません。\n\nフォームを送信する前に保存されたフォームを確定してください。</string>
   <string name="ok">OK</string>
   <string name="parse_error">申し訳ありません、フォームを解析できません。</string>
-  <string name="parse_legacy_formlist_failed">サーバが Aggregate 0.9.x と互換性のある利用可能なフォームの文書を提供していません : %s</string>
-  <string name="parse_openrosa_formlist_failed">サーバが OpenRosa バージョン 1.0 規格と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="password">パスワード</string>
   <string name="play_video">ビデオを再生</string>
   <string name="please_wait">しばらくお待ちください。</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">送信パス</string>
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>
-  <string name="access_error">%s のアクセス中にエラー:</string>
-  <string name="manifest_server_error">マニフェストの応答が OpenRosa バージョンを報告しません — サーバーが異常?</string>
-  <string name="root_element_error">ルートエレメントが &lt;manifest\&gt; ではありません — %s でした</string>
-  <string name="root_namespace_error">ルートエレメントのネームスペースが正しくありません: %s</string>
-  <string name="manifest_tag_error">マニフェストのエントリー %s で1以上のタグがありません: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s。 メディア ファイルの取得中: %2$s / %3$s</string>
   <string name="fetching_manifest">%s。 マニフェストの取得中 </string>
   <string name="success">成功しました</string>

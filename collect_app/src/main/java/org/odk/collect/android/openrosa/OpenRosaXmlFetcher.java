@@ -16,8 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-
-import javax.inject.Inject;
+import java.net.UnknownHostException;
 
 import timber.log.Timber;
 
@@ -28,7 +27,6 @@ public class OpenRosaXmlFetcher {
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
 
-    @Inject
     public OpenRosaXmlFetcher(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
@@ -40,7 +38,9 @@ public class OpenRosaXmlFetcher {
      * @param urlString - url of the XML document
      * @return DocumentFetchResult - an object that contains the results of the "get" operation
      */
-    public DocumentFetchResult getXML(String urlString) {
+
+    @SuppressWarnings("PMD.AvoidRethrowingException")
+    public DocumentFetchResult getXML(String urlString) throws UnknownHostException {
 
         // parse response
         Document doc;
@@ -65,6 +65,8 @@ public class OpenRosaXmlFetcher {
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
                 doc.parse(parser);
             }
+        } catch (UnknownHostException e) {
+            throw e;
         } catch (Exception e) {
             String error = "Parsing failed with " + e.getMessage() + " while accessing " + urlString;
             Timber.e(error);
@@ -105,5 +107,13 @@ public class OpenRosaXmlFetcher {
         }
 
         return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
+    }
+
+    public OpenRosaHttpInterface getHttpInterface() {
+        return httpInterface;
+    }
+
+    public WebCredentialsUtils getWebCredentialsUtils() {
+        return webCredentialsUtils;
     }
 }

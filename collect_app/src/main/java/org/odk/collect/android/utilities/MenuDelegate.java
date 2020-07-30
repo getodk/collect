@@ -10,6 +10,7 @@ import android.view.MenuItem;
  * from their corresponding Activity lifecycle methods.
  */
 public interface MenuDelegate {
+
     void onCreateOptionsMenu(MenuInflater menuInflater, Menu menu);
 
     void onPrepareOptionsMenu(Menu menu);

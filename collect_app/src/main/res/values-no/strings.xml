@@ -59,8 +59,7 @@
   <string name="jump_to_beginning">Gå til start</string>
   <string name="jump_to_end">Gå til slutten</string>
   <string name="jump_to_previous">Gå opp</string>
-  <string name="list_failed_with_error">Det er oppstått en feil. %s.</string>
-  <string name="loading_form">Henter skjema</string>
+    <string name="loading_form">Henter skjema</string>
   <string name="load_remote_form_error">Det er oppstått en feil</string>
     <string name="location_accuracy">Nøyaktigheten er %1$s m</string>
   <string name="manage_files">Slett lagret skjema</string>
@@ -72,8 +71,6 @@
   <string name="no_items_display_instances">Ingen elementer å vise.\n\nEventuelle lagrede skjemaer må fullføres før du kan sende dem. </string>
   <string name="ok">OK</string>
   <string name="parse_error">Beklager, klarte ikke å analysere skjema.</string>
-  <string name="parse_legacy_formlist_failed">Formatet er ikke kompatibel med Aggregate 09.x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Formatet er ikke kompitabel med OpenRosa 1.0 standard: %s</string>
   <string name="password">Passord</string>
   <string name="play_video">Spill video</string>
   <string name="please_wait">Vennligst vent.</string>
@@ -114,11 +111,6 @@
   <string name="submission_url">Bane for innsending</string>
   <string name="font_size">Fontstørrelse</string>
   <string name="change_font_size">Fontstørrelse</string>
-  <string name="access_error">Det er oppstått en feil ved %s.</string>
-  <string name="manifest_server_error">Feil OpenRosa versjon?</string>
-  <string name="root_element_error">Root element er ikke &amp;lt;manifest\&gt; — var %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Henter mediafiler: %2$s av %3$s</string>
   <string name="fetching_manifest">%s. Henter manifestet</string>
   <string name="success">Suksess</string>

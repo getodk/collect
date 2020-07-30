@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">الذهاب إلى البداية</string>
   <string name="jump_to_end">الذهاب إلى النهاية</string>
   <string name="jump_to_previous">الذهاب صعودًا</string>
-  <string name="list_failed_with_error">فشلت لائحة عرض النماذج. %s</string>
-  <string name="loading_form">تحميل الاستمارة</string>
+    <string name="loading_form">تحميل الاستمارة</string>
   <string name="load_remote_form_error">خطأ في جلب لائحة النماذج.</string>
   <string name="location_accuracy">الدقة هي is %1$s متر</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">لا شيء متاح للعرض./n/n حاول وضع الصيغ النهائية للاستمارات المحفوظة قبل الارسال.</string>
   <string name="ok">حسناً</string>
   <string name="parse_error">عذراً لا يمكن تحليل الاستمارة.</string>
-  <string name="parse_legacy_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع Aggregate الأصدار 0.9: %s</string>
-  <string name="parse_openrosa_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع مقاييس OpenRosa الأصدار الأول: %s</string>
   <string name="password">كلمة المرور</string>
   <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="access_error">خطأ اثناء الوصول %s:</string>
-  <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
-  <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>
-  <string name="root_namespace_error">اسم العنصرالأساسي غير صحيح:%s</string>
-  <string name="manifest_tag_error">ادخال المانيفست %s يفتقد واحد او أكثر من العلامات: اسم الملف، # أو رابط التحميل</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
   <string name="fetching_manifest">%s. الحصول على القائمة </string>
   <string name="success">نجاح</string>

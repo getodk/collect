@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">ទៅកន្លែងចាប់ផ្តើម</string>
   <string name="jump_to_end">ទៅកន្លែងបញ្ចប់</string>
   <string name="jump_to_previous">ទៅឡើង</string>
-  <string name="list_failed_with_error">ការធ្វើបញ្ជីសំណុំបែបបទបរាជ័យ %s ។</string>
-  <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
+    <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
   <string name="load_remote_form_error">បញ្ហានៃការទាញបញ្ជីសំណុំបែបបទ</string>
     <string name="location_accuracy">ភាព​ត្រឹមត្រូវគឺ %1$s ម៉ែត្រ</string>
   <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​ដែល​​បាន​​រក្សា​​ទុក​​មុន​​នឹង​​ផ្ញើ​​ចេញ</string>
   <string name="ok">យល់ព្រម</string>
   <string name="parse_error">សុំទោស, សំណុំ​បែប​បទ​មិន​អាច​បែកចែកបាន</string>
-  <string name="parse_legacy_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយនឹង​ស្តង់​ដា OpenRosa ជំនាន់ 1.0: %s</string>
   <string name="password">ពាក្យសម្ងាត់</string>
   <string name="play_video">ចាក់វីដេអូ</string>
   <string name="please_wait">សូមរង់ចាំមួយភ្លែត</string>
@@ -135,11 +132,6 @@
   <string name="submission_url">ផ្លូវដាក់ចូល</string>
   <string name="font_size">ទំហំពុម្ភអក្សរ</string>
   <string name="change_font_size">ទំហំពុម្ភអក្សរ</string>
-  <string name="access_error">មានបញ្ហាខណៈពេលដំណើរការ %s:</string>
-  <string name="manifest_server_error">ការឆ្លើយ​តប​ Manifest មិនបាន​រាយការណ៍​ពីជំនាន់ OpenRosa - ម៉ាស៊ីន​មេ​មិន​ត្រឹម​ត្រូវ?</string>
-  <string name="root_element_error">ធាតុឬសគឺ​មិន &lt;manifest\&gt; - %s</string>
-  <string name="root_namespace_error">ធាតុ​ឬស Namespace មិនត្រឹមត្រូវ: %s</string>
-  <string name="manifest_tag_error">ការចូល Manifest %s គឺបាត់បង់ស្លាក​មួយ​ ឬ​ច្រើន: ឈ្មោះឯកសារ, គន្លឹះ​សញ្ញា ឬ អាសយដ្ឋានទាញយក</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
   <string name="success">ជោគជ័យ</string>

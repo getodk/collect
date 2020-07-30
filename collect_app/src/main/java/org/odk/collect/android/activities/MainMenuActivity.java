@@ -152,7 +152,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             public void onClick(View v) {
                 if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
-                            FormChooserListActivity.class);
+                            FillBlankFormActivity.class);
                     startActivity(i);
                 }
             }

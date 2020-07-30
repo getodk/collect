@@ -54,8 +54,7 @@
   <string name="jump_to_beginning">Eiti į pradžią</string>
   <string name="jump_to_end">Eiti į pabaigą</string>
   <string name="jump_to_previous">Eiti į viršų</string>
-  <string name="list_failed_with_error">Nepavyko gauti formų sąrašo. %s.</string>
-  <string name="loading_form">Įkeliama forma</string>
+    <string name="loading_form">Įkeliama forma</string>
   <string name="load_remote_form_error">Klaida nuskaitant formų sąrašą</string>
     <string name="location_accuracy">Tikslumas yra %1$s m</string>
   <string name="manage_files">Ištrinti užpildytą formą</string>
@@ -65,8 +64,6 @@
   <string name="no_items_display">Nėra ką rodyti</string>
   <string name="ok">Gerai</string>
   <string name="parse_error">Deja, nepavyko apdoroti formos.</string>
-  <string name="parse_legacy_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su OpenRosa 1.0 standartu : %s</string>
   <string name="password">Slaptažodis</string>
   <string name="play_video">Groti video</string>
   <string name="please_wait">Prašome šiek tiek palaukti.</string>
@@ -107,11 +104,6 @@
   <string name="submission_url">Pateikimo kelias</string>
   <string name="font_size">Teksto šrifto dydis</string>
   <string name="change_font_size">Teksto šrifto dydis</string>
-  <string name="access_error">Klaida bandant pasiekti %s: </string>
-  <string name="manifest_server_error">Manifesto atsakymas nepraneša OpenRosa versijos — blogas serveris?</string>
-  <string name="root_element_error">Šakninis elementas nėra &amp;lt;manifest\&gt; — buvo %s</string>
-  <string name="root_namespace_error">Šakninio elemento vardų erdvė neteisinga: %s</string>
-  <string name="manifest_tag_error">Manifesto įvestyje %s trūksta vienos ar keleto žymų: filename, hash, arba downloadUrl</string>
   <string name="form_download_progress">%1$s. Siunčiami medijos failai: %2$s iš %3$s</string>
   <string name="fetching_manifest">%s. Siunčiamas manifestas</string>
   <string name="success">Sėkmingai</string>

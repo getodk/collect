@@ -37,15 +37,6 @@ public class OkDialog extends Page<OkDialog> {
         return this;
     }
 
-    public OkDialog assertMessage(int messageStringId) {
-        return assertMessage(getTranslatedString(messageStringId));
-    }
-
-    public OkDialog assertMessage(String message) {
-        onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()));
-        return this;
-    }
-
     public <D extends Page<D>> D clickOK(D destination) {
         clickOnId(android.R.id.button1);
         return destination.assertOnPage();

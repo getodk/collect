@@ -64,8 +64,7 @@
   <string name="jump_to_beginning">开始</string>
   <string name="jump_to_end">结束</string>
   <string name="jump_to_previous">返回</string>
-  <string name="list_failed_with_error">列出表格失败. %s.</string>
-  <string name="loading_form">正在加载表格</string>
+    <string name="loading_form">正在加载表格</string>
   <string name="load_remote_form_error">获取表格列表错误</string>
     <string name="location_accuracy">精度为  %1$s m</string>
   <string name="manage_files">删除已保存表格</string>
@@ -76,8 +75,6 @@
   <string name="no_items_display_forms">无可显示内容。\n\n 请尝试获取并填写一个空白表格</string>
   <string name="ok">好</string>
   <string name="parse_error">无法读取表格.</string>
-  <string name="parse_legacy_formlist_failed">服务器没有提供与 Aggregate 0.9.x.兼容的表格 : %s</string>
-  <string name="parse_openrosa_formlist_failed">服务器没有提供与OpenRosa version 1.0标准兼容的表格: %s</string>
   <string name="password">密码</string>
   <string name="play_video">播放视频</string>
   <string name="please_wait">请稍候.</string>
@@ -122,11 +119,6 @@
   <string name="submission_url">提交路径</string>
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
-  <string name="access_error">读取 %s 中发生错误:</string>
-  <string name="manifest_server_error">Manifest回复中不包括OpenRosa版本 — 服务器错误?</string>
-  <string name="root_element_error">根元素不是 &lt;manifest\&gt; — 而是 %s</string>
-  <string name="root_namespace_error">根元素命名空间错误: %s</string>
-  <string name="manifest_tag_error">Manifest条目 %s 缺少一个或多个标签: 文件名, 哈希值, 或者下载Url</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
   <string name="fetching_manifest">%s. 加载Manifest</string>
   <string name="success">成功</string>

@@ -70,8 +70,7 @@
   <string name="jump_to_beginning">سٹارٹ پر جائیں</string>
   <string name="jump_to_end">اختتام پر جائیں</string>
   <string name="jump_to_previous">اوپر جائیں</string>
-  <string name="list_failed_with_error">فارم ‎‏ کی لیسٹینگ فیل ہوگئ۔ %s</string>
-  <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
+    <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
   <string name="load_remote_form_error">فارم لسٹ حاصل کرنے میں خرابی</string>
     <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
   <string name="manage_files">محفوظ شدہ فارم کو ڈیلیٹ کردیں۔</string>
@@ -84,8 +83,6 @@
   <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے محفوظ شدہ فارم کو بھیجنےسے پہلےمکمل کریں</string>
   <string name="ok">ٹھیک ہے</string>
   <string name="parse_error">معافی، فارم پارس نہیں ہو سکا</string>
-  <string name="parse_legacy_formlist_failed">سرور نے ‎Aggregate 0.9.x ‏ کے ساتھ موافق دستیاب فارموں کی دستاویز مہیا نہیں کی ہے: %s</string>
-  <string name="parse_openrosa_formlist_failed">سرور نے ایک فارم ڈاکومینٹ فراہم نہیں کیا ہے جو OpenRosa ورژن 1.0 معیاری کے ساتھ مطابقت رکھتا ہے:%s</string>
   <string name="password">پاس ورڈ</string>
   <string name="play_video">وڈیو لگا دیں</string>
   <string name="please_wait">براہ مہربانی چند منٹ انتظار کرلیں</string>
@@ -130,11 +127,6 @@
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
   <string name="change_font_size">ٹیکسٹ فونٹ سائز</string>
-  <string name="access_error">%sکو رسائی حاصل کرتے وقت خرابی آرہی یے</string>
-  <string name="manifest_server_error">دکھایا گیا جواب ‎OpenRosa‏ ورژن رپورٹ نہیں کرتا ۔ خراب سرور؟</string>
-  <string name="root_element_error">روٹ ایلیمنٹ &lt;manifest\&gt; نہیں ہے، ـــــ %s تھا</string>
-  <string name="root_namespace_error">روٹ الیمینٹ نام اسپیس غلط ہے:%s </string>
-  <string name="manifest_tag_error">دکھائے گئےاندراج  ‎%s‏  میں ایک یا ذیادہ ٹیگز غائب ہیں:فائل کا نام، ہیش، یا ڈاون لوڈ یو آرایل</string>
   <string name="form_download_progress"> ‎‏ %1$s۔میڈیا فائل حاصل کی جا رہی ہے :‎‏  %2$s آف%3$s</string>
   <string name="fetching_manifest">%s۔ مینیفیسٹ کو حاصل کیا جا رہا ہے۔</string>
   <string name="success">کامیابی</string>

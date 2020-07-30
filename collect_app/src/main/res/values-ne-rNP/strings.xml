@@ -69,8 +69,7 @@
   <string name="jump_to_beginning">सुरुमा जानुहोस् </string>
   <string name="jump_to_end">अन्त्यमा जानुहोस् </string>
   <string name="jump_to_previous">माथिल्लोमा जानुहोस् </string>
-  <string name="list_failed_with_error">फारमको सूची निकाल्न सकिएन | %s</string>
-  <string name="loading_form">फारम लोड हुदैछ |</string>
+    <string name="loading_form">फारम लोड हुदैछ |</string>
   <string name="load_remote_form_error">फारम सूची प्राप्त गर्न असफल</string>
     <string name="location_accuracy">सटिकता %1$s m छ |</string>
   <string name="manage_files">संचित फारम डिलिट गर्न</string>
@@ -83,8 +82,6 @@
   <string name="no_items_display_instances">देखाउनको लागि केहि उपलब्ध छैन | \n\n संचित फारमलाई पठाउनु अघि अन्तिम रुप दिन प्रयास गर्नुहोला |</string>
   <string name="ok">ठीक</string>
   <string name="parse_error">माफ गर्नुहोला, फारमको शब्द-सम्मती गर्न सकिएन |</string>
-  <string name="parse_legacy_formlist_failed">सर्भरले एग्रिगेट संस्करण 0.9.x संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्भरले ओपनरोजा संस्करण 1.0 संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
   <string name="password">पासवर्ड </string>
   <string name="play_video">भिडियो हेर्नुहोस्</string>
   <string name="please_wait">कृपया केही समय पर्खनुहोस् </string>
@@ -131,11 +128,6 @@
   <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
-  <string name="access_error">%s मा प्रवेश गर्न खोज्दा गल्ति भयो:</string>
-  <string name="manifest_server_error">म्यनिफेष्ट को प्रतिक्रियाले कुनै पनि ओपनरोजा संस्करण को जनाउ दिदैन - सर्भर बिग्रियो कि ?</string>
-  <string name="root_element_error"> जड तत्वमा &lt;म्यनिफेष्ट\&gt; छैन — %s थियो </string>
-  <string name="root_namespace_error">जड तत्व Namespace गल्ति छ: %s </string>
-  <string name="manifest_tag_error">म्यनिफेष्ट दाखिला %s बाट एउटा वा सो भन्दा बढी ट्यागहरु हराइरहेका छन्: filename, hash, वा downloadURL</string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
   <string name="fetching_manifest">%s म्यनिफेष्ट प्राप्त गरिदै छ </string>
   <string name="success">सफल</string>

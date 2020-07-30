@@ -74,8 +74,7 @@
   <string name="jump_to_beginning">Aller au début</string>
   <string name="jump_to_end">Aller à la fin</string>
   <string name="jump_to_previous">Monter</string>
-  <string name="list_failed_with_error">La liste a echouée. %s.</string>
-  <string name="loading_form">Chargement du formulaire…</string>
+    <string name="loading_form">Chargement du formulaire…</string>
   <string name="load_remote_form_error">Erreur de récupération de la liste</string>
     <string name="location_accuracy">La précision est de %1$s mètres.</string>
   <string name="manage_files">Supprimer formulaire sauvegardé</string>
@@ -88,8 +87,6 @@
   <string name="no_items_display_instances">Il n\'y a rien à afficher.\n\nFinalisez vos formulaires enregistrés avant de les envoyer.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Désolé. Impossible d\'analyser le formulaire.</string>
-  <string name="parse_legacy_formlist_failed">Le serveur n\'a pas répondu avec un document de formulaires compatible avec Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Le serveur n\'a pas répondu avec un document de formulaires compatible avec OpenRosa 1.0 : %s</string>
   <string name="password">Mot de passe</string>
   <string name="play_video">Jouer la vidéo</string>
   <string name="please_wait">Veuillez patienter.</string>
@@ -136,11 +133,6 @@
   <string name="submission_url">Chemin de soumission</string>
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>
-  <string name="access_error">Erreur lors de l\'accès à %s: </string>
-  <string name="manifest_server_error">Réponse Manifest ne fourni pas une version OpenRosa — Serveur défaillant?</string>
-  <string name="root_element_error">L\'élément à la racine n\'est pas &amp;lt;manifest\&gt; — c\'était %s</string>
-  <string name="root_namespace_error"> L\'élément Root de Namespace est incorrect: %s</string>
-  <string name="manifest_tag_error">Il manque une ou plusieurs au Manifest %s: nom de fichier, hash, ou URL de téléchargement</string>
   <string name="form_download_progress">%1$s. Obtention de fichiers multimédia : %2$s de %3$s</string>
   <string name="fetching_manifest">%s. Recherche du Manifest …</string>
   <string name="success">Succès</string>

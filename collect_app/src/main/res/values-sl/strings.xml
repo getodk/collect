@@ -70,8 +70,7 @@
   <string name="jump_to_beginning">Pojdi na začetek</string>
   <string name="jump_to_end">Pojdi na konec</string>
   <string name="jump_to_previous">Pojdi gor</string>
-  <string name="list_failed_with_error">Kreiranje seznama obrazcev ni uspelo. %s.</string>
-  <string name="loading_form">Nalagam obrazec</string>
+    <string name="loading_form">Nalagam obrazec</string>
   <string name="load_remote_form_error">Napaka pri pridobivanju seznama obrazcev</string>
     <string name="location_accuracy">Natančnost je %1$s m</string>
   <string name="manage_files">Briši shranjen obrazec</string>
@@ -84,8 +83,6 @@
   <string name="no_items_display_instances">Ničesar ni za prikaz.\n\nPoskusi zaključiti shranjene obrazce pred pošiljanjem.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Napaka, ne morem opredeliti obrazca.</string>
-  <string name="parse_legacy_formlist_failed">Strežnik nima na voljo obrazci-na-voljo dokumenta kompatibilnega z Aggregate 0.9x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Strežnik nima na voljo obrazci-na-voljo dokumenta kompatibilnega z OpenRosa verzija 1.0 standard: %s</string>
   <string name="password">Geslo</string>
   <string name="play_video">Predvajaj video</string>
   <string name="please_wait">Malo počakaj, prosim.</string>
@@ -130,11 +127,6 @@
   <string name="submission_url">Pot prispevkov</string>
   <string name="font_size">Velikost črk</string>
   <string name="change_font_size">Velikost črk</string>
-  <string name="access_error">Napaka pri dostopu do %s:</string>
-  <string name="manifest_server_error">Manifest ne poroča o OpenRosa verziji - napačen strežnik?</string>
-  <string name="root_element_error">Korenski element ni  &lt;manifest\&gt; — ampak %s</string>
-  <string name="root_namespace_error">Namespace korenskega elementa je napačen %s</string>
-  <string name="manifest_tag_error">Manifest vnos %s ne vsebuje ene ali več sledečih oznak: filename, hash ali donwloadUrl</string>
   <string name="form_download_progress">%1$s. Pridobivam medijske datoteke: %2$s od %3$s</string>
   <string name="fetching_manifest">%s. Pridobivam manifest</string>
   <string name="success">Uspešno</string>

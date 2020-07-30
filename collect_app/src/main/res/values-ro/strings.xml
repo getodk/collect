@@ -59,8 +59,7 @@
   <string name="jump_to_beginning">Mergeți la început</string>
   <string name="jump_to_end">Mergeți la sfârșit</string>
   <string name="jump_to_previous">Mergeți sus</string>
-  <string name="list_failed_with_error">Afișarea formularului a eșuat. %s.</string>
-  <string name="loading_form">Încărcare formular</string>
+    <string name="loading_form">Încărcare formular</string>
   <string name="load_remote_form_error">Eroare la preluarea listei de formulare</string>
     <string name="location_accuracy">Precizie de %1$s m</string>
   <string name="manage_files">Ștergeți formular salvat</string>
@@ -72,8 +71,6 @@
   <string name="no_items_display_instances">Nimic disponibil pentru afișare.\n\nÎncercați să finalizați formularele salvate înaintea trimiterii.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Ne pare rău, nu am putut examina formularul.</string>
-  <string name="parse_legacy_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu OpenRosa versiunea 1.0 standard: %s</string>
   <string name="password">Parola</string>
   <string name="play_video">Redați video</string>
   <string name="please_wait">Vă rugăm să așteptați câteva momente.</string>
@@ -114,11 +111,6 @@
   <string name="submission_url">Calea către transmitere</string>
   <string name="font_size">Mărimea fontului textului</string>
   <string name="change_font_size">Mărimea fontului textului</string>
-  <string name="access_error">Eroare la accesarea %s: </string>
-  <string name="manifest_server_error">Răspunsul Manifest nu raportează o versiune OpenRosa — server greșit?</string>
-  <string name="root_element_error">Root nu este &amp;lt;manifest\&gt; — era %s</string>
-  <string name="root_namespace_error">Namespace pentru Root este incorect: %s</string>
-  <string name="manifest_tag_error">Înregistrării Manifest %s îi lipsește unul sau mai multe tag-uri: filename, hash, sau downloadUrl</string>
   <string name="form_download_progress">%1$s. Preluare fișiere media: %2$s din %3$s</string>
   <string name="fetching_manifest">%s. Preluare manifest </string>
   <string name="success">Succes</string>

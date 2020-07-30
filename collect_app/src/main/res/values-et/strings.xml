@@ -60,8 +60,7 @@
   <string name="jump_to_beginning">Liigu algusesse</string>
   <string name="jump_to_end">Liigu lõppu</string>
   <string name="jump_to_previous">Liigu üles</string>
-  <string name="list_failed_with_error">Vormide kuvamine ebaõnnestus. %s</string>
-  <string name="loading_form">Vormide laadimine</string>
+    <string name="loading_form">Vormide laadimine</string>
   <string name="load_remote_form_error">Vormide nimekirja laadimisel esines viga</string>
   <string name="location_accuracy">Täpsusasteks on %1$s m</string>
   <string name="manage_files">Kustuta salvestatud vorm</string>
@@ -74,8 +73,6 @@
   <string name="no_items_display_instances">Puudub sisu mida näidata.\n\nEnnem ära saatmist märgi salvestatud vormid lõpetatuks.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Kahjuks ei ole vormi töötlemine võimalik.</string>
-  <string name="parse_legacy_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: OpenRosa version 1.0 standard: %s</string>
   <string name="password">Salasõna</string>
   <string name="play_video">Mängi videot</string>
   <string name="please_wait">Palun oodake.</string>
@@ -118,11 +115,6 @@
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
-  <string name="access_error">%s avamisel esines viga</string>
-  <string name="manifest_server_error">Serveri vastuses puudub OpenRosa versioon</string>
-  <string name="root_element_error">Ei leia juurelementi &lt;manifest\&gt; — oli %s</string>
-  <string name="root_namespace_error">Juurelemendi nimeruum on vale: %s</string>
-  <string name="manifest_tag_error">Manifest kirjest %s puudub kas: failnimi, räsi või downloadUrl</string>
   <string name="form_download_progress">%1$s. Laeb faile: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Laen manifest faili</string>
   <string name="success">Õnnestus</string>
