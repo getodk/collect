@@ -24,7 +24,7 @@ and update this document as the code evolves.
 * App stores data in flat files indexed in SQLite
 * Access to data in SQLite is done inconsistently through a mix of provider, helper and DAO objects
 * Raw access to database rows is favored over the use of domain objects
-* Settings for the app use (the now deprecated) Android's Preferences abstraction
+* Settings for the app use Android's Preferences abstraction
 * Material Components styles are used in some places but app still uses AppCompat theme
 * Dagger is used to inject "black box" objects such as Activity and in some other places but isn't set up in a particularly advanced way
 * Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask (and some Rx)
@@ -37,14 +37,12 @@ and update this document as the code evolves.
 * Trying to adopt Material Design's language to make design decisions and conversations easier in the absence of designers and to make the UI more consistent for enumerators ([“Typography rework” discussion](https://forum.getodk.org/t/reworking-collects-typography/20634))
 * Moving non UI testing away from Espresso to cut down on long test startup times
 * Slowly moving responsibilities out of FormEntryActivity
-* Talk of moving to Kotlin but not real plans as of yet ([“Using Kotlin for ODK Android apps” discussion](https://forum.getodk.org/t/using-kotlin-for-odk-android-apps/18367))
+* Some Kotlin being introduced in code pulled into Gradle submodules
 * General effort to increase test coverage and quality while working on anything and pushing more for tests in PR review
 * Trying to remove technical debt flagged with `@Deprecated`
 * Favoring domain objects (instance, form) with related logic where possible to more explicitly link data and logic
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code
-* Refactoring towards an OpenRosa abstraction (`OpenRosaAPIClient`) closer to its [documented API](https://docs.getodk.org/openrosa/) and takes care of all interactions with Aggregate, Central etc (currently some high level work interacts with `OpenRosaHttpInterface` directly)
 * `QuestionWiget` implementations are moving from defining their "answer" view programmatically to [implementing `onCreateAnswerView`](WIDGETS.md)
-* Converting settings screens to using the new AndroidX Preferences framework as we touch them
 * Replacing Rx (and other async work) with LiveData + Scheduler abstraction
 * Moving away from custom `SharedPreferences` abstractions (`GeneralSharedPreferences` and `AdminSharedPreferences`) to just using `SharedPreferences` interface
 * Replacing `..Factory` and `..Provider` objects with the new Java `Supplier` interface as much as possible

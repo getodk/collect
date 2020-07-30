@@ -14,12 +14,6 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 public abstract class BasePreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
-    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        // This should be overridden in implementation classes instead. Remove this once they all do
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
         if (activity instanceof CollectAbstractActivity) {

@@ -14,8 +14,10 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.CheckBoxPreference;
 
@@ -45,10 +47,14 @@ public class IdentityPreferences extends BasePreferenceFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.identity_preferences);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
         Collect.getInstance().getComponent().inject(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.identity_preferences, rootKey);
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {

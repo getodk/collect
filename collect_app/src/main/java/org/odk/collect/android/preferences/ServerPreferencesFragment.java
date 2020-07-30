@@ -99,10 +99,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         return serverPreferencesFragment;
     }
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.server_preferences);
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+
+        ((PreferencesActivity) context).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.server_preferences, rootKey);
         initProtocolPrefs();
     }
 
@@ -150,14 +158,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 addGooglePreferences();
                 break;
         }
-    }
-
-    @Override
-    public void onAttach(@NotNull Context context) {
-        super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
-
-        ((PreferencesActivity) context).setOnBackPressedListener(this);
     }
 
     public void addAggregatePreferences() {
