@@ -16,21 +16,30 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.version.VersionInformation;
 
 import java.util.Collection;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class GeneralPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
+
+    @Inject
+    VersionInformation versionInformation;
 
     public static GeneralPreferencesFragment newInstance(boolean adminMode) {
         Bundle bundle = new Bundle();
@@ -39,6 +48,12 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         GeneralPreferencesFragment generalPreferencesFragment = new GeneralPreferencesFragment();
         generalPreferencesFragment.setArguments(bundle);
         return generalPreferencesFragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -56,6 +71,10 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
         if (!getArguments().getBoolean(INTENT_KEY_ADMIN_MODE)) {
             setPreferencesVisibility();
+        }
+
+        if (versionInformation.isRelease()) {
+            findPreference("experimental").setVisible(false);
         }
     }
 

@@ -44,6 +44,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
+import org.odk.collect.android.preferences.GeneralPreferencesFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -201,6 +202,8 @@ public interface AppDependencyComponent {
     void inject(FormManagerList formManagerList);
 
     void inject(InstanceUploaderActivity instanceUploaderActivity);
+
+    void inject(GeneralPreferencesFragment generalPreferencesFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
