@@ -1,19 +1,13 @@
 package org.odk.collect.android.fragments.dialogs;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import org.javarosa.core.model.SelectChoice;
-import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.listeners.SelectOneItemClickListener;
-
-import java.util.List;
+import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 
 public class SelectOneMinimalDialog extends SelectMinimalDialog implements SelectOneItemClickListener {
     private SelectOneListAdapter adapter;
@@ -21,14 +15,9 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements Selec
     public SelectOneMinimalDialog() {
     }
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneMinimalDialog(List<SelectChoice> items, String selectedItem,
-                                  FormEntryPrompt formEntryPrompt, ReferenceManager referenceManager,
-                                  AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode,
-                                  Context context, boolean isFlex, boolean isAutoComplete) {
+    public SelectOneMinimalDialog(String selectedItem, boolean isFlex, boolean isAutoComplete, ChoicesRecyclerViewAdapterProps props) {
         super(isFlex, isAutoComplete);
-        adapter = new SelectOneListAdapter(items, selectedItem, this, formEntryPrompt,
-                referenceManager, audioHelper, playColor, numColumns, noButtonsMode, context);
+        adapter = new SelectOneListAdapter(selectedItem, this, props);
     }
 
     @Override

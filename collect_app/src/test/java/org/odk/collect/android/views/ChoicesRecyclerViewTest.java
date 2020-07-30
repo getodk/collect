@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
+import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -68,8 +69,8 @@ public class ChoicesRecyclerViewTest {
     }
 
     private SelectOneListAdapter getSelectOneListAdapter(int numOfColumns) {
-        return new SelectOneListAdapter(new ArrayList<>(), null,
-                null, null, null, null,
-                0, numOfColumns, false, null);
+        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(null, new ArrayList<>(), null,
+                null, null, 0, numOfColumns, false);
+        return new SelectOneListAdapter(null, null, props);
     }
 }
