@@ -52,7 +52,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(props.isNoButtonsMode()
                 ? new FrameLayout(parent.getContext())
-                : new AudioVideoImageTextLabel(parent.getContext()));
+                : new AudioVideoImageTextLabel(props.getContext()));
     }
 
     @Override
