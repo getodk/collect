@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:paddingTop="15dp"
-    android:paddingBottom="15dp">
+    android:paddingBottom="15dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <TextView
         android:id="@+id/current_value"
@@ -32,7 +33,9 @@ limitations under the License.
 
     <FrameLayout
         android:layout_width="50dp"
-        android:layout_height="330dp">
+        android:layout_height="330dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <org.odk.collect.android.views.TrackingTouchSlider
             android:id="@+id/slider"
