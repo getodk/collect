@@ -37,6 +37,7 @@ import androidx.preference.Preference;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
@@ -84,6 +85,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     @Inject
     PreferencesProvider preferencesProvider;
+
+    @Inject
+    FormUpdateManager formUpdateManager;
 
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
@@ -143,6 +147,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         preferencesProvider.getGeneralSharedPreferences().edit()
                                 .putString(KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(getActivity()))
                                 .apply();
+
+                        formUpdateManager.scheduleUpdates();
                         break;
                 }
             }
