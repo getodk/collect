@@ -250,7 +250,7 @@ public class FieldListUpdateTest {
         onView(withText("A1")).perform(nestedScrollTo(), click());
         onView(withText("A1B")).perform(nestedScrollTo(), click());
 
-        onView(withText("A")).perform(nestedScrollTo(), longClick());
+        onView(withText("Level1")).perform(nestedScrollTo(), longClick());
         onView(withText(R.string.clear_answer)).perform(click());
         onView(withText(R.string.discard_answer)).perform(click());
 
