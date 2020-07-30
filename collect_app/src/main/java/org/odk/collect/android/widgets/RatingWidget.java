@@ -17,7 +17,9 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
+import android.widget.AbsSeekBar;
 
 import androidx.core.content.ContextCompat;
 
@@ -30,9 +32,12 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.UiUtils;
 
+import java.lang.reflect.Field;
+
+import timber.log.Timber;
+
 @SuppressLint("ViewConstructor")
 public class RatingWidget extends QuestionWidget {
-
     private static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
     private static final int STANDARD_WIDTH_OF_STAR = 48;
 
@@ -73,6 +78,18 @@ public class RatingWidget extends QuestionWidget {
             binding.ratingBar2.setRating(rating);
         });
 
+        // fix for rating bar showing incorrect rating on Android Nougat(7.0/API 24)
+        // See https://stackoverflow.com/questions/44342481
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
+            try {
+                Field field = AbsSeekBar.class.getDeclaredField("mTouchProgressOffset");
+                field.setAccessible(true);
+                field.set(binding.ratingBar1, 0.6f);
+                field.set(binding.ratingBar2, 0.6f);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                Timber.e(e);
+            }
+        }
 
         binding.ratingBar1.setEnabled(!prompt.isReadOnly());
         binding.ratingBar2.setEnabled(!prompt.isReadOnly());

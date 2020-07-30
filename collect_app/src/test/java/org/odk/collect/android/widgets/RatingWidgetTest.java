@@ -40,7 +40,6 @@ public class RatingWidgetTest {
     @Test
     public void usingReadOnly_makesAllClickableElementsDisabled() {
         RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
-
         assertThat(widget.binding.ratingBar1.isEnabled(), equalTo(false));
         assertThat(widget.binding.ratingBar2.isEnabled(), equalTo(false));
     }
@@ -82,7 +81,6 @@ public class RatingWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer_forRatingBarInMultipleLines() {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
         RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("7")));
-
         assertThat(widget.getAnswer().getValue(), equalTo(7));
     }
 
