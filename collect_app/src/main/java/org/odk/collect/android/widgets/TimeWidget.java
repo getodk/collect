@@ -37,11 +37,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     private DateTime selectedTime;
 
     public TimeWidget(Context context, final QuestionDetails prompt) {
-        this(context, prompt, false);
-    }
-
-    public TimeWidget(Context context, QuestionDetails prompt, boolean isPartOfDateTimeWidget) {
-        super(context, prompt, !isPartOfDateTimeWidget);
+        super(context, prompt);
     }
 
     @Override

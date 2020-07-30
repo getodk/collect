@@ -43,11 +43,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     private DatePickerDetails datePickerDetails;
 
     public DateWidget(Context context, QuestionDetails prompt) {
-        this(context, prompt, false);
-    }
-
-    public DateWidget(Context context, QuestionDetails prompt, boolean isPartOfDateTimeWidget) {
-        super(context, prompt, !isPartOfDateTimeWidget);
+        super(context, prompt);
     }
 
     @Override
