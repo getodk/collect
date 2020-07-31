@@ -85,7 +85,7 @@ public class DateTimeWidgetUtils {
         }
     }
 
-    public static void showTimePickerDialog(FormEntryActivity activity, DateTime dateTime) {
+    public static void showTimePickerDialog(FormEntryActivity activity, LocalDateTime dateTime) {
         ThemeUtils themeUtils = new ThemeUtils(activity);
         Bundle bundle = new Bundle();
         bundle.putInt(CustomTimePickerDialog.TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());

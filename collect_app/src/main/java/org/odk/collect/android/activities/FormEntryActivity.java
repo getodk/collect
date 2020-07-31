@@ -2606,7 +2606,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         view.clearFocus();
         if (getCurrentViewIfODKView() != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(DateTimeUtils.getDateTime(hourOfDay, minute));
+            setBinaryWidgetData(DateTimeUtils.getLocalDateTime(0, 1, 1, hourOfDay, minute));
             widgetValueChanged(widgetGettingNewValue);
         }
     }

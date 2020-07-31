@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 
 import java.lang.reflect.Constructor;
@@ -43,7 +44,7 @@ public class CustomTimePickerDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        DateTime date = (DateTime) getArguments().getSerializable(CURRENT_TIME);
+        LocalDateTime date = (LocalDateTime) getArguments().getSerializable(CURRENT_TIME);
 
         TimePickerDialog dialog = new TimePickerDialog(requireContext(), getArguments().getInt(TIME_PICKER_THEME),
                 listener, date.getHourOfDay(), date.getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));

@@ -21,8 +21,11 @@ import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
+
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
@@ -34,7 +37,7 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     WidgetAnswerBinding binding;
 
-    private DateTime selectedTime;
+    private LocalDateTime selectedTime;
 
     public TimeWidget(Context context, final QuestionDetails prompt) {
         super(context, prompt);
@@ -57,11 +60,12 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.getAnswerValue() == null) {
-            selectedTime = DateTime.now();
+            selectedTime = LocalDateTime.now();
             binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
-            selectedTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
-            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
+            DateTime dateTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
+            selectedTime = dateTime.toLocalDateTime();
+            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(dateTime).getDisplayText());
         }
 
         return binding.getRoot();
@@ -69,7 +73,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void clearAnswer() {
-        selectedTime = DateTime.now();
+        selectedTime = LocalDateTime.now();
         binding.widgetAnswerText.setText(R.string.no_time_selected);
         widgetValueChanged();
     }
@@ -78,7 +82,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     public IAnswerData getAnswer() {
         return binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
                 ? null
-                : DateTimeWidgetUtils.getTimeData(selectedTime);
+                : new TimeData(selectedTime.toDateTime().toDate());
     }
 
     @Override
@@ -96,9 +100,9 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void setData(Object answer) {
-        if (answer instanceof DateTime) {
-            selectedTime = (DateTime) answer;
-            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
+        if (answer instanceof LocalDateTime) {
+            selectedTime = (LocalDateTime) answer;
+            binding.widgetAnswerText.setText(new TimeData(selectedTime.toDate()).getDisplayText());
         }
     }
 }
