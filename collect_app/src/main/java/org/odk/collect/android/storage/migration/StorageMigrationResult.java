@@ -16,7 +16,7 @@ public enum StorageMigrationResult {
             case NOT_ENOUGH_SPACE:
                 return errorMessage + context.getString(R.string.storage_migration_not_enough_space);
             case CHANGES_IN_PROGRESS:
-                return errorMessage + context.getString(R.string.storage_migration_form_downloader_is_running);
+                return errorMessage + context.getString(R.string.changes_in_progress);
             case MOVING_FILES_FAILED:
                 return errorMessage + context.getString(R.string.storage_migration_failed);
             default:
