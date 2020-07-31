@@ -35,7 +35,7 @@ public class DeleteBlankFormTest {
     }
 
     @Test
-    public void deletingAForm_whenThereFillForms_allowsEditing() {
+    public void deletingAForm_whenThereFilledForms_allowsEditing() {
         rule.mainMenu()
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "22")

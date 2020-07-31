@@ -22,7 +22,7 @@ public class DeleteFilledFormTest {
             .around(rule);
 
     @Test
-    public void deletingAForm_removesFormFromBlankFormList() {
+    public void deletingAForm_removesFormFromFinalizedForms() {
         rule.mainMenu()
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "30")
