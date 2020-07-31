@@ -18,12 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -32,17 +34,14 @@ import timber.log.Timber;
 
 public class FixedDatePickerDialog extends DialogFragment {
 
-    private DatePickerDialog.OnDateSetListener listener;
     private ThemeUtils themeUtils;
+    private DateTimeViewModel dateTimeViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         themeUtils = new ThemeUtils(context);
-
-        if (context instanceof DatePickerDialog.OnDateSetListener) {
-            listener = (DatePickerDialog.OnDateSetListener) context;
-        }
+        dateTimeViewModel = new ViewModelProvider(requireActivity()).get(DateTimeViewModel.class);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -52,7 +51,7 @@ public class FixedDatePickerDialog extends DialogFragment {
         LocalDateTime date = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
         int theme = getArguments().getInt(DateTimeWidgetUtils.DATE_PICKER_THEME);
 
-        DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, listener,
+        DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, dateTimeViewModel.getOnDateSetListener(),
                 date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
 
         if (themeUtils.isHoloDialogTheme(theme)) {
