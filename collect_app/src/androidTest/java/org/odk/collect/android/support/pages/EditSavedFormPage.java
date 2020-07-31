@@ -67,9 +67,9 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
         return new IdentifyUserPromptPage(formName, rule).assertOnPage();
     }
 
-    public FormEntryPage clickOnForm(String formName) {
+    public FormHierarchyPage clickOnForm(String formName) {
         scrollToAndClickOnForm(formName);
-        return new FormEntryPage(formName, rule);
+        return new FormHierarchyPage(formName, rule);
     }
 
     private void scrollToAndClickOnForm(String formName) {

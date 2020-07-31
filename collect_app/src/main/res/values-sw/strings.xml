@@ -584,8 +584,7 @@
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
   <string name="storage_migration_not_enough_space">Huna nafasi kwenye kifaa chako cha ndani kuhamisha data, Tafadhali ongeza nafasi kiasi na ujaribu tena.</string>
-  <string name="storage_migration_form_uploader_is_running">Fomu ya upakuaji inatumika. Tafadhali jaribu tena</string>
-  <string name="storage_migration_form_downloader_is_running">Fomu inatumika kwenye upakuaji. Tafadhali jaribu tena.</string>
+    <string name="changes_in_progress">Fomu inatumika kwenye upakuaji. Tafadhali jaribu tena.</string>
   <string name="storage_migration_failed">Hamisho la data limesitishwa, Tafadhali jaribu tena</string>
   <string name="storage_migration_dialog_title">Uhamiaji wa uhifadhi</string>
   <string name="storage_migration_progress_msg">Uhamiaji unaendelea. \ Hii inaweza kuchukua sekunde chache…</string>

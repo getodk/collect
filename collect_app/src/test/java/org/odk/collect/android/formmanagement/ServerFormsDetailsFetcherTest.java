@@ -3,13 +3,13 @@ package org.odk.collect.android.formmanagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
-import org.odk.collect.android.support.InMemFormRepository;
+import org.odk.collect.android.support.InMemFormsRepository;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -35,12 +35,12 @@ public class ServerFormsDetailsFetcherTest {
     );
 
     private ServerFormsDetailsFetcher fetcher;
-    private FormRepository formRepository;
+    private FormsRepository formsRepository;
     private MediaFileRepository mediaFileRepository;
 
     @Before
     public void setup() throws Exception {
-        formRepository = new InMemFormRepository();
+        formsRepository = new InMemFormsRepository();
         mediaFileRepository = mock(MediaFileRepository.class);
 
         FormListApi formListAPI = mock(FormListApi.class);
@@ -51,7 +51,7 @@ public class ServerFormsDetailsFetcherTest {
         );
 
         DiskFormsSynchronizer diskFormsSynchronizer = mock(DiskFormsSynchronizer.class);
-        fetcher = new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+        fetcher = new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenAFormExists_andListContainsUpdatedVersion_isUpdated() throws Exception {
-        formRepository.save(new Form.Builder()
+        formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .md5Hash("form-2-hash-old")
@@ -75,7 +75,7 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenAFormExists_andHasNewMediaFileOnServer_isUpdated() throws Exception {
-        formRepository.save(new Form.Builder()
+        formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .jrVersion("server")
@@ -89,7 +89,7 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdated() throws Exception {
-        formRepository.save(new Form.Builder()
+        formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .jrVersion("server")
@@ -106,7 +106,7 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isNotNewOrUpdated() throws Exception {
-        formRepository.save(new Form.Builder()
+        formsRepository.save(new Form.Builder()
                 .id(1L)
                 .jrFormId("form-1")
                 .jrVersion("server")
@@ -120,7 +120,7 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenFormExists_isNotNewOrUpdated() throws Exception {
-        formRepository.save(new Form.Builder()
+        formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .jrVersion("server")

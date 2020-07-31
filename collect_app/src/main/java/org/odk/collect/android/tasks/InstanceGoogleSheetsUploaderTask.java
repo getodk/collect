@@ -55,7 +55,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
             Instance instance = instancesToUpload.get(i);
 
             if (isCancelled()) {
-                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                outcome.messagesByInstanceId.put(instance.getId().toString(),
                         Collect.getInstance().getString(R.string.instance_upload_cancelled));
                 return outcome;
             }
@@ -64,26 +64,26 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
             // Get corresponding blank form and verify there is exactly 1
             FormsDao dao = new FormsDao();
-            Cursor formCursor = dao.getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
+            Cursor formCursor = dao.getFormsCursorSortedByDateDesc(instance.getJrFormId(), instance.getJrVersion());
             List<Form> forms = dao.getFormsFromCursor(formCursor);
 
             if (forms.size() != 1) {
-                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                outcome.messagesByInstanceId.put(instance.getId().toString(),
                         Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
             } else {
                 try {
                     String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);
                     if (InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                         uploader.uploadOneSubmission(instance, destinationUrl);
-                        outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), DEFAULT_SUCCESSFUL_TEXT);
+                        outcome.messagesByInstanceId.put(instance.getId().toString(), DEFAULT_SUCCESSFUL_TEXT);
 
                         analytics.logEvent(SUBMISSION, "HTTP-Sheets", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
                     } else {
-                        outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
+                        outcome.messagesByInstanceId.put(instance.getId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
                     }
                 } catch (UploadException e) {
                     Timber.d(e);
-                    outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                    outcome.messagesByInstanceId.put(instance.getId().toString(),
                             e.getDisplayMessage());
                 }
             }

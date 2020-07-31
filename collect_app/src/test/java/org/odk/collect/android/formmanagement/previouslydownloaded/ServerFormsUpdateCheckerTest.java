@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.support.InMemFormRepository;
+import org.odk.collect.android.support.InMemFormsRepository;
 
 import java.util.List;
 
@@ -20,13 +20,13 @@ import static org.mockito.Mockito.when;
 
 public class ServerFormsUpdateCheckerTest {
 
-    private InMemFormRepository formRepository;
+    private InMemFormsRepository formRepository;
     private ServerFormsDetailsFetcher serverFormDetailsFetcher;
     private ServerFormsUpdateChecker checker;
 
     @Before
     public void setup() {
-        formRepository = new InMemFormRepository();
+        formRepository = new InMemFormsRepository();
         serverFormDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
         checker = new ServerFormsUpdateChecker(serverFormDetailsFetcher, formRepository);
     }

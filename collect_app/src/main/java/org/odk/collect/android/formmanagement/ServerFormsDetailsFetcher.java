@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.formmanagement;
 
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormApiException;
@@ -34,16 +34,16 @@ import timber.log.Timber;
 
 public class ServerFormsDetailsFetcher {
 
-    private final FormRepository formRepository;
+    private final FormsRepository formsRepository;
     private final MediaFileRepository mediaFileRepository;
     private final FormListApi formListAPI;
     private final DiskFormsSynchronizer diskFormsSynchronizer;
 
-    public ServerFormsDetailsFetcher(FormRepository formRepository,
+    public ServerFormsDetailsFetcher(FormsRepository formsRepository,
                                      MediaFileRepository mediaFileRepository,
                                      FormListApi formListAPI,
                                      DiskFormsSynchronizer diskFormsSynchronizer) {
-        this.formRepository = formRepository;
+        this.formsRepository = formsRepository;
         this.mediaFileRepository = mediaFileRepository;
         this.formListAPI = formListAPI;
         this.diskFormsSynchronizer = diskFormsSynchronizer;
@@ -94,7 +94,7 @@ public class ServerFormsDetailsFetcher {
     }
 
     private boolean isThisFormAlreadyDownloaded(String formId) {
-        return formRepository.contains(formId);
+        return formsRepository.contains(formId);
     }
 
     private ManifestFile getManifestFile(FormListApi formListAPI, String manifestUrl) {
@@ -115,7 +115,7 @@ public class ServerFormsDetailsFetcher {
             return false;
         }
 
-        return formRepository.getByMd5Hash(md5Hash) == null;
+        return formsRepository.getByMd5Hash(md5Hash) == null;
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {

@@ -659,8 +659,7 @@
   <string name="migrate">Migrasi</string>
   <string name="error">Kesalahan:</string>
   <string name="storage_migration_not_enough_space">Anda tidak memiliki ruang penyimpanan yang cukup pada penyimpanan internal untuk melakukan migrasi data yang Anda miliki. Mohon kosongkan beberapa ruang penyimpanan dan coba lagi.</string>
-  <string name="storage_migration_form_uploader_is_running">Pengunggahan formulir sedang berlangsung. Mohon coba lagi.</string>
-  <string name="storage_migration_form_downloader_is_running">Pengunduhan formulir sedang berlangsung. Mohon coba lagi.</string>
+    <string name="changes_in_progress">Pengunduhan formulir sedang berlangsung. Mohon coba lagi.</string>
   <string name="storage_migration_failed">Migrasi data tidak berhasil. Mohon coba lagi.</string>
   <string name="storage_migration_dialog_title">Migrasi penyimpanan</string>
   <string name="storage_migration_progress_msg">Migrasi sedang berlangsung.\nProses ini mungkin perlu beberapa detik…</string>

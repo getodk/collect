@@ -20,6 +20,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -244,6 +245,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public ViewSentFormPage clickViewSentForm(int formCount) {
         onView(withText(getTranslatedString(R.string.view_sent_forms_button, formCount))).perform(click());
         return new ViewSentFormPage(rule).assertOnPage();
+    }
+
+    public DeleteSavedFormPage clickDeleteSavedForm() {
+        onView(withText(getTranslatedString(R.string.manage_files))).check(matches(isClickable()));
+        onView(withText(getTranslatedString(R.string.manage_files))).perform(scrollTo(), click());
+        return new DeleteSavedFormPage(rule).assertOnPage();
     }
 }
 

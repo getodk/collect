@@ -686,8 +686,7 @@
     <string name="migrate">Migrate</string>
     <string name="error">Error:</string>
     <string name="storage_migration_not_enough_space">You do not have enough space on your internal storage to migrate your data. Please free up some space and try again.</string>
-    <string name="storage_migration_form_uploader_is_running">Background form uploader is running. Please try again.</string>
-    <string name="storage_migration_form_downloader_is_running">Background form downloader is running. Please try again.</string>
+    <string name="changes_in_progress">Automatic send or blank form download is running. Please try again later.</string>
     <string name="storage_migration_failed">Data migration failed. Please try again.</string>
     <string name="storage_migration_dialog_title">Storage migration</string>
     <string name="storage_migration_progress_msg">Migration in progress.\nThis may take a few seconds…</string>

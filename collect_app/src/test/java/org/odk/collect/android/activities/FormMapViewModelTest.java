@@ -9,7 +9,7 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.instances.TestInstancesRepository;
+import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class FormMapViewModelTest {
     private InstancesRepository testInstancesRepository;
 
     @Before public void setUp() {
-        testInstancesRepository = new TestInstancesRepository(Arrays.asList(testInstances));
+        testInstancesRepository = new InMemInstancesRepository(Arrays.asList(testInstances));
     }
 
     @Test public void getFormTitle_returnsFormTitle() {
@@ -117,7 +117,7 @@ public class FormMapViewModelTest {
         assertThat(viewModel.getTotalInstanceCount(), is(7));
         assertThat(instances.size(), is(6));
 
-        Instance newInstance = new Instance.Builder().databaseId(8L)
+        Instance newInstance = new Instance.Builder().id(8L)
                 .jrFormId("formId1")
                 .jrVersion("2019103101")
                 .geometryType("Point")
@@ -125,7 +125,7 @@ public class FormMapViewModelTest {
                 .canEditWhenComplete(true)
                 .status(InstanceProviderAPI.STATUS_COMPLETE).build();
 
-        ((TestInstancesRepository) testInstancesRepository).addInstance(newInstance);
+        ((InMemInstancesRepository) testInstancesRepository).addInstance(newInstance);
 
         instances = viewModel.getMappableFormInstances();
         assertThat(viewModel.getTotalInstanceCount(), is(8));
@@ -141,9 +141,9 @@ public class FormMapViewModelTest {
         assertThat(mappableInstances.size(), is(6));
 
         assertThat(mappableInstances.get(5).getClickAction(), is(FormMapViewModel.ClickAction.NOT_VIEWABLE_TOAST));
-        ((TestInstancesRepository) testInstancesRepository).removeInstanceById(6L);
+        ((InMemInstancesRepository) testInstancesRepository).removeInstanceById(6L);
 
-        ((TestInstancesRepository) testInstancesRepository).addInstance(new Instance.Builder().databaseId(6L)
+        ((InMemInstancesRepository) testInstancesRepository).addInstance(new Instance.Builder().id(6L)
                 .jrFormId("formId1")
                 .jrVersion("2019103101")
                 .geometryType("")
@@ -172,7 +172,7 @@ public class FormMapViewModelTest {
             .build();
 
     static Instance[] testInstances = {
-            new Instance.Builder().databaseId(0L)
+            new Instance.Builder().id(0L)
                     .displayName("Form1")
                     .lastStatusChangeDate(1487782554846L)
                     .jrFormId("formId1")
@@ -182,7 +182,7 @@ public class FormMapViewModelTest {
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.0]}")
                     .status(InstanceProviderAPI.STATUS_SUBMITTED).build(),
 
-            new Instance.Builder().databaseId(1L)
+            new Instance.Builder().id(1L)
                     .displayName("Form2")
                     .lastStatusChangeDate(1488782558743L)
                     .jrFormId("formId1")
@@ -192,7 +192,7 @@ public class FormMapViewModelTest {
                     .canEditWhenComplete(true)
                     .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
 
-            new Instance.Builder().databaseId(2L)
+            new Instance.Builder().id(2L)
                     .displayName("Form3")
                     .lastStatusChangeDate(1484582553254L)
                     .jrFormId("formId1")
@@ -201,14 +201,14 @@ public class FormMapViewModelTest {
                     .geometry("{\"type\":\"Point\",\"coordinates\":[126.6, 10.1]}")
                     .status(InstanceProviderAPI.STATUS_INCOMPLETE).build(),
 
-            new Instance.Builder().databaseId(3L)
+            new Instance.Builder().id(3L)
                     .displayName("Form4")
                     .lastStatusChangeDate(1488582557456L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
                     .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
 
-            new Instance.Builder().databaseId(4L)
+            new Instance.Builder().id(4L)
                     .displayName("Form5")
                     .lastStatusChangeDate(1483582557438L)
                     .jrFormId("formId1")
@@ -218,7 +218,7 @@ public class FormMapViewModelTest {
                     .canEditWhenComplete(true)
                     .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build(),
 
-            new Instance.Builder().databaseId(5L)
+            new Instance.Builder().id(5L)
                     .displayName("Form6")
                     .lastStatusChangeDate(1482282559618L)
                     .jrFormId("formId1")
@@ -228,7 +228,7 @@ public class FormMapViewModelTest {
                     .canEditWhenComplete(true)
                     .status(InstanceProviderAPI.STATUS_SUBMITTED).build(),
 
-            new Instance.Builder().databaseId(6L)
+            new Instance.Builder().id(6L)
                     .displayName("Form7")
                     .lastStatusChangeDate(1484782559836L)
                     .jrFormId("formId1")
@@ -238,7 +238,7 @@ public class FormMapViewModelTest {
                     .canEditWhenComplete(false)
                     .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build(),
 
-            new Instance.Builder().databaseId(7L)
+            new Instance.Builder().id(7L)
                     .displayName("Form8")
                     .lastStatusChangeDate(1487982552254L)
                     .jrFormId("formId2")
@@ -247,7 +247,7 @@ public class FormMapViewModelTest {
                     .geometry("Crazy stuff")
                     .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
 
-            new Instance.Builder().databaseId(8L)
+            new Instance.Builder().id(8L)
                     .displayName("Form9")
                     .lastStatusChangeDate(1484682557369L)
                     .jrFormId("formId2")

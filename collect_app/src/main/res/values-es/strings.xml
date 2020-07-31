@@ -664,8 +664,7 @@
   <string name="migrate">Iniciar Migración</string>
   <string name="error">Error:</string>
   <string name="storage_migration_not_enough_space">No tiene suficiente espacio en su almacenamiento interno para migrar sus datos. Libere espacio e intente nuevamente.</string>
-  <string name="storage_migration_form_uploader_is_running">Se está ejecutando el cargador de formularios en segundo plano. Inténtalo de nuevo.</string>
-  <string name="storage_migration_form_downloader_is_running">Se está ejecutando el descargador de formularios en segundo plano. Inténtalo de nuevo.</string>
+    <string name="changes_in_progress">Se está ejecutando el descargador de formularios en segundo plano. Inténtalo de nuevo.</string>
   <string name="storage_migration_failed">La migración de datos falló. Inténtalo de nuevo.</string>
   <string name="storage_migration_dialog_title">Migración de almacenamiento</string>
   <string name="storage_migration_progress_msg">Migración en progreso.\nEsto puede tomar algunos segundos.</string>

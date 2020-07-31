@@ -24,9 +24,9 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.forms.DatabaseFormRepository;
+import org.odk.collect.android.forms.DatabaseFormsRepository;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
@@ -61,11 +61,11 @@ public class MultiFormDownloader {
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
     private final FormListApi formListApi;
-    private final FormRepository formRepository;
+    private final FormsRepository formsRepository;
 
     @Deprecated
     public MultiFormDownloader(OpenRosaXmlFetcher openRosaXmlFetcher) {
-        this.formRepository = new DatabaseFormRepository();
+        this.formsRepository = new DatabaseFormsRepository();
         formListApi = new OpenRosaFormListApi(openRosaXmlFetcher);
     }
 
@@ -252,7 +252,7 @@ public class MultiFormDownloader {
         } else {
             String md5Hash = FileUtils.getMd5Hash(fileResult.file);
             if (md5Hash != null) {
-                formRepository.deleteFormsByMd5Hash(md5Hash);
+                formsRepository.deleteFormsByMd5Hash(md5Hash);
             }
             FileUtils.deleteAndReport(fileResult.getFile());
         }
@@ -297,7 +297,7 @@ public class MultiFormDownloader {
         FileUtils.checkMediaPath(new File(mediaPath));
 
 
-        Form form = formRepository.getByPath(formFile.getAbsolutePath());
+        Form form = formsRepository.getByPath(formFile.getAbsolutePath());
         isNew = form == null;
 
         if (isNew) {
@@ -324,7 +324,7 @@ public class MultiFormDownloader {
                 .geometryXpath(formInfo.get(FileUtils.GEOMETRY_XPATH))
                 .build();
 
-        return formRepository.save(form);
+        return formsRepository.save(form);
     }
 
     /**
@@ -353,7 +353,7 @@ public class MultiFormDownloader {
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
-        Form form = formRepository.getByMd5Hash(FileUtils.getMd5Hash(f));
+        Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(f));
         if (form != null) {
             isNew = false;
 

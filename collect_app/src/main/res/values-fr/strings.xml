@@ -662,8 +662,7 @@
   <string name="migrate">Transférer</string>
   <string name="error">Erreur:</string>
   <string name="storage_migration_not_enough_space">Votre mémoire interne n\'a pas assez d\'espace pour transférer vos données. Veuillez libérer de l\'espace et réessayer.</string>
-  <string name="storage_migration_form_uploader_is_running">Envoi de soumissions en tâche de fond en cours. Veuillez réessayer plus tard.</string>
-  <string name="storage_migration_form_downloader_is_running">Téléchargement de formulaires en tâche de fond en cours. Veuillez réessayer plus tard.</string>
+    <string name="changes_in_progress">Téléchargement de formulaires en tâche de fond en cours. Veuillez réessayer plus tard.</string>
   <string name="storage_migration_failed">Le transfert des données a échoué. Veuillez réessayer.</string>
   <string name="storage_migration_dialog_title">Transfert des données</string>
   <string name="storage_migration_progress_msg">Transfert en cours.\nCeci pourrait prendre quelques secondes…</string>

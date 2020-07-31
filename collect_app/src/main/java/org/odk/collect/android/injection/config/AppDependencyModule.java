@@ -18,8 +18,10 @@ import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.backgroundwork.ReentrantLockChangeLock;
 import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
@@ -38,11 +40,14 @@ import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.android.forms.DatabaseFormRepository;
+import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
+import org.odk.collect.android.forms.DatabaseFormsRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -87,6 +92,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -152,7 +158,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    MultiFormDownloader providesMultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public MultiFormDownloader providesMultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new MultiFormDownloader(new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils));
     }
 
@@ -201,10 +207,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics) {
+    public StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics, @Named("FORMS") ChangeLock changeLock) {
         StorageEraser storageEraser = new StorageEraser(storagePathProvider);
 
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, formUpdateManager, formSubmitManager, analytics);
+        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, analytics);
     }
 
     @Provides
@@ -367,8 +373,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormRepository providesFormRepository() {
-        return new DatabaseFormRepository();
+    public FormsRepository providesFormRepository() {
+        return new DatabaseFormsRepository();
     }
 
     @Provides
@@ -397,17 +403,41 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormRepository formRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, DiskFormsSynchronizer diskFormsSynchronizer) {
-        return new ServerFormsDetailsFetcher(formRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, DiskFormsSynchronizer diskFormsSynchronizer) {
+        return new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
     }
 
     @Provides
-    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormRepository formRepository, FormDownloader formDownloader) {
-        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formRepository, formDownloader);
+    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, FormDownloader formDownloader, InstancesRepository instancesRepository) {
+        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepository, instancesRepository, formDownloader);
     }
 
     @Provides
     public Notifier providesNotifier(Application application) {
         return new NotificationManagerNotifier(application);
+    }
+
+    @Provides
+    @Named("FORMS")
+    @Singleton
+    public ChangeLock providesFormsChangeLock() {
+        return new ReentrantLockChangeLock();
+    }
+
+    @Provides
+    @Named("INSTANCES")
+    @Singleton
+    public ChangeLock providesInstancesChangeLock() {
+        return new ReentrantLockChangeLock();
+    }
+
+    @Provides
+    public ServerFormsUpdateChecker providesServerFormUpdatesChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository) {
+        return new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formsRepository);
+    }
+
+    @Provides
+    public InstancesRepository providesInstancesRepository() {
+        return new DatabaseInstancesRepository();
     }
 }

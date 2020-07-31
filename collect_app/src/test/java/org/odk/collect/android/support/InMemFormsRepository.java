@@ -3,7 +3,7 @@ package org.odk.collect.android.support;
 import android.net.Uri;
 
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class InMemFormRepository implements FormRepository {
+public class InMemFormsRepository implements FormsRepository {
 
     private final List<Form> forms = new ArrayList<>();
 
@@ -29,6 +29,20 @@ public class InMemFormRepository implements FormRepository {
     @Override
     public List<Form> getAll() {
         return new ArrayList<>(forms); // Avoid anything  mutating the list externally
+    }
+
+    @Nullable
+    @Override
+    public Form get(Long id) {
+        return forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Nullable
+    @Override
+    public Form get(String jrFormId, String jrVersion) {
+        return forms.stream().filter(f -> {
+            return f.getJrFormId().equals(jrFormId) && f.getJrVersion().equals(jrVersion);
+        }).findFirst().orElse(null);
     }
 
     @Nullable
@@ -61,6 +75,18 @@ public class InMemFormRepository implements FormRepository {
     @Override
     public void delete(Long id) {
         forms.removeIf(form -> form.getId().equals(id));
+    }
+
+    @Override
+    public void softDelete(Long id) {
+        Form form = forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
+
+        if (form != null) {
+            forms.remove(form);
+            forms.add(new Form.Builder(form)
+                    .deleted(true)
+                    .build());
+        }
     }
 
     @Override

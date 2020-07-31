@@ -22,13 +22,10 @@ import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
-import org.odk.collect.android.forms.FormRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.async.TaskSpec;
@@ -39,28 +36,30 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
     @Inject
-    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+    ServerFormsUpdateChecker serverFormsUpdateChecker;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
     @Inject
-    NetworkStateProvider connectivityProvider;
-
-    @Inject
     MultiFormDownloader multiFormDownloader;
 
     @Inject
-    FormRepository formRepository;
+    Notifier notifier;
 
     @Inject
-    Notifier notifier;
+    PreferencesProvider preferencesProvider;
+
+    @Inject
+    @Named("FORMS")
+    ChangeLock changeLock;
 
     @NotNull
     @Override
@@ -68,17 +67,18 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
-            if (!connectivityProvider.isDeviceOnline() || storageMigrationRepository.isMigrationBeingPerformed()) {
-                return true;
-            }
-
-            ServerFormsUpdateChecker checker = new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formRepository);
-            List<ServerFormDetails> newUpdates = checker.check();
+            List<ServerFormDetails> newUpdates = serverFormsUpdateChecker.check();
 
             if (!newUpdates.isEmpty()) {
-                if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
-                    final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(newUpdates, null);
-                    notifier.onUpdatesDownloaded(result);
+                if (preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                    changeLock.withLock(acquiredLock -> {
+                        if (acquiredLock) {
+                            final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(newUpdates, null);
+                            notifier.onUpdatesDownloaded(result);
+                        }
+
+                        return null;
+                    });
                 } else {
                     notifier.onUpdatesAvailable();
                 }

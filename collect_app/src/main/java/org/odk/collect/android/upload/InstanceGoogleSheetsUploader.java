@@ -97,7 +97,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         // Get corresponding blank form and verify there is exactly 1
         FormsDao dao = new FormsDao();
-        Cursor formCursor = dao.getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
+        Cursor formCursor = dao.getFormsCursorSortedByDateDesc(instance.getJrFormId(), instance.getJrVersion());
         List<Form> forms = dao.getFormsFromCursor(formCursor);
 
         try {

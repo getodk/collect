@@ -662,8 +662,7 @@
   <string name="migrate">Siirrä</string>
   <string name="error">Virhe:</string>
   <string name="storage_migration_not_enough_space">Sinulla ei ole riittävästi tilaa sisäisessä muistissa tietojesi siirtämiseen. Ole hyvä ja vapauta tilaa ja yritä uudelleen.</string>
-  <string name="storage_migration_form_uploader_is_running">Lomakkeiden taustalähetys käynnissä. Ole hyvä ja yritä uudelleen.</string>
-  <string name="storage_migration_form_downloader_is_running">Lomakkeiden taustalataus käynnissä. Ole hyvä ja yritä uudelleen.</string>
+    <string name="changes_in_progress">Lomakkeiden taustalataus käynnissä. Ole hyvä ja yritä uudelleen.</string>
   <string name="storage_migration_failed">Tietojen siirto epäonnistui. Ole hyvä ja yritä uudelleen.</string>
   <string name="storage_migration_dialog_title">Tallennuksen siirto</string>
   <string name="storage_migration_progress_msg">Siirto käynnissä.\Tässä voi kulua muutama sekunti…</string>

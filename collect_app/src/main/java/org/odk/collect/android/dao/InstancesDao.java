@@ -334,7 +334,7 @@ public class InstancesDao {
                             .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
                             .geometryType(cursor.getString(geometryTypeColumnIndex))
                             .geometry(cursor.getString(geometryColumnIndex))
-                            .databaseId(cursor.getLong(databaseIdIndex))
+                            .id(cursor.getLong(databaseIdIndex))
                             .build();
 
                     instances.add(instance);

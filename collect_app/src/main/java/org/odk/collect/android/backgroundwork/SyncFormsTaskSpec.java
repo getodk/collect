@@ -13,9 +13,11 @@ import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class SyncFormsTaskSpec implements TaskSpec {
 
@@ -28,23 +30,31 @@ public class SyncFormsTaskSpec implements TaskSpec {
     @Inject
     Notifier notifier;
 
+    @Inject
+    @Named("FORMS")
+    ChangeLock changeLock;
+
     @NotNull
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
-            if (!syncStatusRepository.startSync()) {
-                return true;
-            }
+            changeLock.withLock((Function<Boolean, Void>) acquiredLock -> {
+                if (acquiredLock) {
+                    syncStatusRepository.startSync();
 
-            try {
-                serverFormsSynchronizer.synchronize();
-                syncStatusRepository.finishSync(true);
-            } catch (FormApiException e) {
-                syncStatusRepository.finishSync(false);
-                notifier.onSyncFailure(e);
-            }
+                    try {
+                        serverFormsSynchronizer.synchronize();
+                        syncStatusRepository.finishSync(true);
+                    } catch (FormApiException e) {
+                        syncStatusRepository.finishSync(false);
+                        notifier.onSyncFailure(e);
+                    }
+                }
+
+                return null;
+            });
 
             return true;
         };

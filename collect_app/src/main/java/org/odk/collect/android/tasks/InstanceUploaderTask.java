@@ -21,11 +21,12 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.upload.InstanceServerUploader;
@@ -41,6 +42,8 @@ import timber.log.Timber;
 
 public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
 
+    private InstancesRepository instancesRepository;
+    private FormsRepository formsRepository;
     private InstanceUploaderListener stateListener;
     private Boolean deleteInstanceAfterSubmission;
 
@@ -109,8 +112,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                                     }
                                 }
 
-                                DeleteInstancesTask dit = new DeleteInstancesTask();
-                                dit.setContentResolver(Collect.getInstance().getContentResolver());
+                                DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
                                 dit.execute(toDelete.toArray(new Long[toDelete.size()]));
                             }
                         } catch (SQLException e) {
@@ -139,6 +141,11 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
 
     public void setDeleteInstanceAfterSubmission(Boolean deleteInstanceAfterSubmission) {
         this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission;
+    }
+
+    public void setRepositories(InstancesRepository instancesRepository, FormsRepository formsRepository) {
+        this.instancesRepository = instancesRepository;
+        this.formsRepository = formsRepository;
     }
 
     /**

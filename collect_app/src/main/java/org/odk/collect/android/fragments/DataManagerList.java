@@ -14,29 +14,35 @@
 
 package org.odk.collect.android.fragments;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.loader.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.loader.content.CursorLoader;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -56,8 +62,16 @@ public class DataManagerList extends InstanceListFragment
     private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
 
-    public static DataManagerList newInstance() {
-        return new DataManagerList();
+    @Inject
+    InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Nullable
@@ -68,14 +82,7 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Collect.getInstance().getComponent().inject(this);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View rootView, Bundle savedInstanceState) {
-
         deleteButton.setOnClickListener(this);
         toggleButton.setOnClickListener(this);
 
@@ -188,8 +195,7 @@ public class DataManagerList extends InstanceListFragment
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            deleteInstancesTask = new DeleteInstancesTask();
-            deleteInstancesTask.setContentResolver(getActivity().getContentResolver());
+            deleteInstancesTask = new DeleteInstancesTask(instancesRepository, formsRepository);
             deleteInstancesTask.setDeleteListener(this);
             deleteInstancesTask.execute(getCheckedIdObjects());
         } else {

@@ -661,8 +661,7 @@
   <string name="migrate">Migrovat</string>
   <string name="error">Chyba:</string>
   <string name="storage_migration_not_enough_space">Na interním úložišti nemáte dostatek místa pro migraci dat. Uvolněte místo a zkuste to znovu.</string>
-  <string name="storage_migration_form_uploader_is_running">Je spuštěn nástroj pro nahrávání na pozadí. Prosím zkuste to znovu.</string>
-  <string name="storage_migration_form_downloader_is_running">Je spuštěno stahování formulářů na pozadí. Prosím zkuste to znovu.</string>
+    <string name="changes_in_progress">Je spuštěno stahování formulářů na pozadí. Prosím zkuste to znovu.</string>
   <string name="storage_migration_failed">Migrace dat se nezdařila. Prosím zkuste to znovu.</string>
   <string name="storage_migration_dialog_title">Migrace úložiště</string>
   <string name="storage_migration_progress_msg">Probíhá migrace. 

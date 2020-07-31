@@ -659,8 +659,7 @@
   <string name="migrate">移行</string>
   <string name="error">エラー:</string>
   <string name="storage_migration_not_enough_space">内部ストレージにデータを移行するための十分なスペースがありません。スペースを空けてもう一度お試しください。</string>
-  <string name="storage_migration_form_uploader_is_running">バックグラウンドフォームアップローダーが実行中です。もう一度お試しください。</string>
-  <string name="storage_migration_form_downloader_is_running">バックグラウンドフォームダウンローダーが実行中です。もう一度お試しください。</string>
+    <string name="changes_in_progress">バックグラウンドフォームダウンローダーが実行中です。もう一度お試しください。</string>
   <string name="storage_migration_failed">データの移行に失敗しました。もう一度お試しください。</string>
   <string name="storage_migration_dialog_title">ストレージの移行</string>
   <string name="storage_migration_progress_msg">移行中です。\nこれは数秒かかることがあります…</string>

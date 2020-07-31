@@ -12,6 +12,7 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
+import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
@@ -31,6 +32,7 @@ import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.FormManagerList;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
@@ -42,6 +44,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
+import org.odk.collect.android.preferences.GeneralPreferencesFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -195,6 +198,12 @@ public interface AppDependencyComponent {
     void inject(AutoUpdateTaskSpec autoUpdateTaskSpec);
 
     void inject(ServerAuthDialogFragment serverAuthDialogFragment);
+
+    void inject(FormManagerList formManagerList);
+
+    void inject(InstanceUploaderActivity instanceUploaderActivity);
+
+    void inject(GeneralPreferencesFragment generalPreferencesFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

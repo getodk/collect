@@ -662,8 +662,7 @@
   <string name="migrate">Migrieren</string>
   <string name="error">Fehler:</string>
   <string name="storage_migration_not_enough_space">Sie haben nicht genug Platz auf Ihrem internen Speicher um Ihre Daten zu migrieren. Bitte geben Sie Speicherplatz frei und versuchen  Sie es erneut. </string>
-  <string name="storage_migration_form_uploader_is_running">Hintergrund-Formular-Uploader läuft. Bitte erneut versuchen. </string>
-  <string name="storage_migration_form_downloader_is_running">Hintergrund-Formular-Downloader läuft. Bitte erneut versuchen. </string>
+    <string name="changes_in_progress">Hintergrund-Formular-Downloader läuft. Bitte erneut versuchen. </string>
   <string name="storage_migration_failed">Datenmigration fehlgeschlagen. Bitte erneut versuchen. </string>
   <string name="storage_migration_dialog_title">Speichermigration</string>
   <string name="storage_migration_progress_msg">Migration läuft. \nDas kann einige Sekunden dauern… </string>

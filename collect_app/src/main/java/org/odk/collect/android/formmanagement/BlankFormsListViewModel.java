@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.notifications.Notifier;
@@ -16,6 +17,7 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class BlankFormsListViewModel extends ViewModel {
 
@@ -25,14 +27,16 @@ public class BlankFormsListViewModel extends ViewModel {
     private final ServerFormsSynchronizer serverFormsSynchronizer;
     private final PreferencesProvider preferencesProvider;
     private final Notifier notifier;
+    private final ChangeLock changeLock;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, ChangeLock changeLock) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
         this.serverFormsSynchronizer = serverFormsSynchronizer;
         this.preferencesProvider = preferencesProvider;
         this.notifier = notifier;
+        this.changeLock = changeLock;
     }
 
     public boolean isSyncingAvailable() {
@@ -48,21 +52,25 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     public void syncWithServer() {
-        if (!syncRepository.startSync()) {
-            return;
-        }
+        changeLock.withLock(acquiredLock -> {
+            if (acquiredLock) {
+                syncRepository.startSync();
 
-        scheduler.immediate(() -> {
-            try {
-                serverFormsSynchronizer.synchronize();
-                syncRepository.finishSync(true);
-            } catch (FormApiException e) {
-                syncRepository.finishSync(false);
-                notifier.onSyncFailure(e);
+                scheduler.immediate(() -> {
+                    try {
+                        serverFormsSynchronizer.synchronize();
+                        syncRepository.finishSync(true);
+                    } catch (FormApiException e) {
+                        syncRepository.finishSync(false);
+                        notifier.onSyncFailure(e);
+                    }
+
+                    return null;
+                }, ignored -> { });
             }
 
             return null;
-        }, ignored -> { });
+        });
     }
 
     private boolean isMatchExactlyEnabled() {
@@ -78,21 +86,23 @@ public class BlankFormsListViewModel extends ViewModel {
         private final ServerFormsSynchronizer serverFormsSynchronizer;
         private final PreferencesProvider preferencesProvider;
         private final Notifier notifier;
+        private final ChangeLock changeLock;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
             this.serverFormsSynchronizer = serverFormsSynchronizer;
             this.preferencesProvider = preferencesProvider;
             this.notifier = notifier;
+            this.changeLock = changeLock;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider, notifier);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider, notifier, changeLock);
         }
     }
 }

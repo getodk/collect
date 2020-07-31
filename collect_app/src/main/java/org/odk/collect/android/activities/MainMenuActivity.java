@@ -238,7 +238,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             public void onClick(View v) {
                 if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
-                            FileManagerTabs.class);
+                            DeleteSavedFormActivity.class);
                     startActivity(i);
                 }
             }
