@@ -6,7 +6,6 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
 import java.util.List;
-import java.util.Objects;
 
 public class FormDeleter {
 
@@ -20,13 +19,12 @@ public class FormDeleter {
 
     public void delete(Long id) {
         Form form = formsRepository.get(id);
-        List<Instance> instances = instancesRepository.getAllByJrFormId(form.getJrFormId());
-        long instancesForVersion = instances.stream().filter(instance -> Objects.equals(instance.getJrVersion(), form.getJrVersion())).count();
+        List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersion(form.getJrFormId(), form.getJrVersion());
 
-        if (instancesForVersion > 0) {
-            formsRepository.softDelete(form.getId());
-        } else {
+        if (instancesForVersion.isEmpty()) {
             formsRepository.delete(id);
+        } else {
+            formsRepository.softDelete(form.getId());
         }
     }
 }

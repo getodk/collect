@@ -35,7 +35,7 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
     private int successCount;
     private int toDeleteCount;
-    
+
     private final InstancesRepository instancesRepository;
     private final FormsRepository formsRepository;
 

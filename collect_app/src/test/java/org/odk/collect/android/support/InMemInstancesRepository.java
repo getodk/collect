@@ -5,6 +5,7 @@ import org.odk.collect.android.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class InMemInstancesRepository implements InstancesRepository {
@@ -46,7 +47,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
     @Override
     public List<Instance> getAllByJrFormIdAndJrVersion(String jrFormId, String jrVersion) {
         return instances.stream().filter(instance -> {
-            return instance.getJrFormId().equals(jrFormId) && instance.getJrVersion().equals(jrVersion);
+            return Objects.equals(instance.getJrFormId(), jrFormId) && Objects.equals(instance.getJrVersion(), jrVersion);
         }).collect(Collectors.toList());
     }
 
