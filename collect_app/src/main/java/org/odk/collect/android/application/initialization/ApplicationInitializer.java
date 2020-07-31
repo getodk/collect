@@ -16,11 +16,14 @@ import org.javarosa.core.util.JavaRosaCoreModule;
 import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -36,14 +39,16 @@ public class ApplicationInitializer {
     private final UserAgentProvider userAgentProvider;
     private final SettingsPreferenceMigrator preferenceMigrator;
     private final PropertyManager propertyManager;
+    private final Analytics analytics;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
 
-    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager) {
+    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
+        this.analytics = analytics;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
@@ -55,21 +60,30 @@ public class ApplicationInitializer {
         initializeLocale();
     }
 
-    public void initializePreferences() {
+    private void initializePreferences() {
         performMigrations();
         reloadSharedPreferences();
     }
 
-    public void initializeFrameworks() {
+    private void initializeFrameworks() {
         NotificationUtils.createNotificationChannel(context);
         JodaTimeAndroid.init(context);
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initializeMapFrameworks();
         initializeJavaRosa();
+        initializeAnalytics();
     }
 
-    public void initializeLocale() {
+    private void initializeAnalytics() {
+        String formUpdateMode = generalSharedPreferences
+                .getSharedPreferences()
+                .getString(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(context));
+
+        analytics.setUserProperty("FormUpdateMode", formUpdateMode);
+    }
+
+    private void initializeLocale() {
         Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(context);
     }
