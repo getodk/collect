@@ -17,8 +17,10 @@ import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 
+import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -70,7 +72,7 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     public void syncWithServer() {
-        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual");
+        logManualSync();
 
         changeLock.withLock(acquiredLock -> {
             if (acquiredLock) {
@@ -96,6 +98,12 @@ public class BlankFormsListViewModel extends ViewModel {
 
             return null;
         });
+    }
+
+    private void logManualSync() {
+        String url = preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_SERVER_URL, "");
+        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
+        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
     }
 
     public static class Factory implements ViewModelProvider.Factory {
