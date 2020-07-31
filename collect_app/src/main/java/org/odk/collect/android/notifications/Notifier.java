@@ -11,7 +11,7 @@ public interface Notifier {
 
     void onUpdatesDownloaded(HashMap<ServerFormDetails, String> result);
 
-    void onSyncFailure(FormApiException exception);
+    void onSync(FormApiException exception);
 
     void onSubmission(boolean failure, String message);
 }

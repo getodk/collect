@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement;
+package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
 
@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.odk.collect.android.backgroundwork.ChangeLock;
-import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
+import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormsRepository;
@@ -64,7 +64,7 @@ public class SyncFormsTaskSpecTest {
     }
 
     @Test
-    public void setsRepositoryToSyncing_runsSync_thenSetsRepositoryToNotSyncing() throws Exception {
+    public void setsRepositoryToSyncing_runsSync_thenSetsRepositoryToNotSyncingAndNotifies() throws Exception {
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
@@ -74,6 +74,8 @@ public class SyncFormsTaskSpecTest {
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
         inOrder.verify(syncStatusRepository).finishSync(null);
+
+        verify(notifier).onSync(null);
     }
 
     @Test
@@ -89,7 +91,8 @@ public class SyncFormsTaskSpecTest {
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
         inOrder.verify(syncStatusRepository).finishSync(exception);
-        verify(notifier).onSyncFailure(exception);
+
+        verify(notifier).onSync(exception);
     }
 
     @Test

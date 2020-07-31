@@ -73,9 +73,10 @@ public class BlankFormsListViewModel extends ViewModel {
                     try {
                         serverFormsSynchronizer.synchronize();
                         syncRepository.finishSync(null);
+                        notifier.onSync(null);
                     } catch (FormApiException e) {
                         syncRepository.finishSync(e);
-                        notifier.onSyncFailure(e);
+                        notifier.onSync(e);
                     }
 
                     return null;

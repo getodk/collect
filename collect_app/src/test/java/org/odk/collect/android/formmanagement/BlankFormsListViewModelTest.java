@@ -81,12 +81,14 @@ public class BlankFormsListViewModelTest {
     @Test
     public void syncWithServer_whenTaskFinishes_finishesSyncOnRepository() {
         FakeScheduler fakeScheduler = new FakeScheduler();
+        Notifier notifier = mock(Notifier.class);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), notifier, changeLock);
         viewModel.syncWithServer();
 
         fakeScheduler.runBackground();
         verify(syncRepository).finishSync(null);
+        verify(notifier).onSync(null);
     }
 
     @Test
@@ -103,7 +105,7 @@ public class BlankFormsListViewModelTest {
         fakeScheduler.runBackground();
 
         verify(syncRepository).finishSync(exception);
-        verify(notifier).onSyncFailure(exception);
+        verify(notifier).onSync(exception);
     }
 
     @Test
