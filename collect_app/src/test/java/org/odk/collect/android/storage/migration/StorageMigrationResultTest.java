@@ -25,6 +25,6 @@ public class StorageMigrationResultTest {
                 is("Error: Data migration failed. Please try again."));
 
         assertThat(StorageMigrationResult.CHANGES_IN_PROGRESS.getErrorResultMessage(context),
-                is("Error: Background form downloader is running. Please try again."));
+                is("Error: Automatic send or blank form download is running. Please try again later."));
     }
 }
