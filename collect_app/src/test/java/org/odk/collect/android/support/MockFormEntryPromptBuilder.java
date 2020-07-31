@@ -99,4 +99,11 @@ public class MockFormEntryPromptBuilder {
 
         return this;
     }
+
+    public MockFormEntryPromptBuilder withSelectChoiceText(List<String> texts) {
+        for (int i = 0; i < prompt.getSelectChoices().size(); i++) {
+            when(prompt.getSelectChoiceText(prompt.getSelectChoices().get(i))).thenReturn(texts.get(i));
+        }
+        return this;
+    }
 }
