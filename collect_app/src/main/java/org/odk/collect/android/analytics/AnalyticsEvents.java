@@ -144,4 +144,14 @@ public class AnalyticsEvents {
      * means that we could extend the event to track auto or other syncs in the future.
      */
     public static final String MATCH_EXACTLY_SYNC = "MatchExactlySync";
+
+    /**
+     * Used to measure how the relative frequencies of different outcomes for a Match Exactly sync.
+     * The action should indicate the outcome as any of:
+     * - "Success"
+     * - "UNKNOWN_HOST"
+     * - "AUTH_REQUIRED"
+     * - "FETCH_ERROR"
+     */
+    public static final String MATCH_EXACTLY_SYNC_COMPLETED = "MatchExactlySyncCompleted";
 }

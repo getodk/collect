@@ -95,6 +95,17 @@ public class BlankFormsListViewModelTest {
     }
 
     @Test
+    public void syncWithServer_whenTaskFinishes_logsAnalytics() {
+        FakeScheduler fakeScheduler = new FakeScheduler();
+
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock, analytics);
+        viewModel.syncWithServer();
+
+        fakeScheduler.runBackground();
+        verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
+    }
+
+    @Test
     public void syncWithServer_whenThereIsAnError_finishesSyncOnRepositoryWithFailureAndSendsErrorToNotifier() throws Exception {
         FakeScheduler fakeScheduler = new FakeScheduler();
         ServerFormsSynchronizer synchronizer = mock(ServerFormsSynchronizer.class);
@@ -109,6 +120,22 @@ public class BlankFormsListViewModelTest {
 
         verify(syncRepository).finishSync(exception);
         verify(notifier).onSync(exception);
+    }
+
+    @Test
+    public void syncWithServer_whenThereIsAnError_logsAnalytics() throws Exception {
+        FakeScheduler fakeScheduler = new FakeScheduler();
+        ServerFormsSynchronizer synchronizer = mock(ServerFormsSynchronizer.class);
+        Notifier notifier = mock(Notifier.class);
+
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, mock(PreferencesProvider.class), notifier, changeLock, analytics);
+
+        FormApiException exception = new FormApiException(FormApiException.Type.FETCH_ERROR);
+        doThrow(exception).when(synchronizer).synchronize();
+        viewModel.syncWithServer();
+        fakeScheduler.runBackground();
+
+        verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "FETCH_ERROR");
     }
 
     @Test
