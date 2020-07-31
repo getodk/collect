@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.notifications.Notifier;
@@ -36,6 +38,7 @@ public class BlankFormsListViewModelTest {
 
     private final SyncStatusRepository syncRepository = mock(SyncStatusRepository.class);
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
+    private final Analytics analytics = mock(Analytics.class);
 
     @After
     public void teardown() {
@@ -47,7 +50,7 @@ public class BlankFormsListViewModelTest {
         MutableLiveData<Boolean> liveData = new MutableLiveData<>(true);
         when(syncRepository.isSyncing()).thenReturn(liveData);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock, analytics);
         assertThat(viewModel.isSyncing().getValue(), is(true));
 
         liveData.setValue(false);
@@ -59,7 +62,7 @@ public class BlankFormsListViewModelTest {
         MutableLiveData<FormApiException> liveData = new MutableLiveData<>(new FormApiException(FormApiException.Type.FETCH_ERROR));
         when(syncRepository.getSyncError()).thenReturn(liveData);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock, analytics);
         LiveData<Boolean> outOfSync = liveDataTester.activate(viewModel.isOutOfSync());
 
         assertThat(outOfSync.getValue(), is(true));
@@ -72,7 +75,7 @@ public class BlankFormsListViewModelTest {
     public void syncWithServer_startsSyncOnRepository() {
         FakeScheduler fakeScheduler = new FakeScheduler();
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock, analytics);
 
         viewModel.syncWithServer();
         verify(syncRepository).startSync();
@@ -83,7 +86,7 @@ public class BlankFormsListViewModelTest {
         FakeScheduler fakeScheduler = new FakeScheduler();
         Notifier notifier = mock(Notifier.class);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), notifier, changeLock);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), notifier, changeLock, analytics);
         viewModel.syncWithServer();
 
         fakeScheduler.runBackground();
@@ -97,7 +100,7 @@ public class BlankFormsListViewModelTest {
         ServerFormsSynchronizer synchronizer = mock(ServerFormsSynchronizer.class);
         Notifier notifier = mock(Notifier.class);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, mock(PreferencesProvider.class), notifier, changeLock);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, mock(PreferencesProvider.class), notifier, changeLock, analytics);
 
         FormApiException exception = new FormApiException(FormApiException.Type.FETCH_ERROR);
         doThrow(exception).when(synchronizer).synchronize();
@@ -114,7 +117,7 @@ public class BlankFormsListViewModelTest {
         FakeScheduler fakeScheduler = new FakeScheduler();
         Notifier notifier = mock(Notifier.class);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, serverFormsSynchronizer, mock(PreferencesProvider.class), notifier, changeLock);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, serverFormsSynchronizer, mock(PreferencesProvider.class), notifier, changeLock, analytics);
 
         changeLock.lock();
         viewModel.syncWithServer();
@@ -123,5 +126,12 @@ public class BlankFormsListViewModelTest {
         verifyNoInteractions(serverFormsSynchronizer);
         verifyNoInteractions(syncRepository);
         verifyNoInteractions(notifier);
+    }
+
+    @Test
+    public void syncWithServer_logsAnalytics() {
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), mock(PreferencesProvider.class), mock(Notifier.class), changeLock, analytics);
+        viewModel.syncWithServer();
+        verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual");
     }
 }

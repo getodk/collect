@@ -8,6 +8,8 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
@@ -31,8 +33,9 @@ public class BlankFormsListViewModel extends ViewModel {
     private final PreferencesProvider preferencesProvider;
     private final Notifier notifier;
     private final ChangeLock changeLock;
+    private final Analytics analytics;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, ChangeLock changeLock) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, ChangeLock changeLock, Analytics analytics) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
@@ -40,6 +43,7 @@ public class BlankFormsListViewModel extends ViewModel {
         this.preferencesProvider = preferencesProvider;
         this.notifier = notifier;
         this.changeLock = changeLock;
+        this.analytics = analytics;
     }
 
     public boolean isMatchExactlyEnabled() {
@@ -66,6 +70,8 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     public void syncWithServer() {
+        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual");
+
         changeLock.withLock(acquiredLock -> {
             if (acquiredLock) {
                 syncRepository.startSync();
@@ -97,9 +103,10 @@ public class BlankFormsListViewModel extends ViewModel {
         private final PreferencesProvider preferencesProvider;
         private final Notifier notifier;
         private final ChangeLock changeLock;
+        private final Analytics analytics;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesProvider preferencesProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
@@ -107,12 +114,13 @@ public class BlankFormsListViewModel extends ViewModel {
             this.preferencesProvider = preferencesProvider;
             this.notifier = notifier;
             this.changeLock = changeLock;
+            this.analytics = analytics;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider, notifier, changeLock);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesProvider, notifier, changeLock, analytics);
         }
     }
 }
