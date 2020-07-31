@@ -113,7 +113,7 @@ the specific language governing permissions and limitations under the License.
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InstanceChooserList" />
-        <activity android:name=".activities.FillBlankFormActivity" />
+        <activity android:name=".activities.FillBlankFormActivity" android:launchMode="singleTop"/>
         <activity android:name=".activities.FormDownloadListActivity" />
         <activity
             android:name=".activities.DeleteSavedFormActivity"

@@ -69,8 +69,6 @@ import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivit
 public class FillBlankFormActivity extends FormListActivity implements
         DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String EXTRA_AUTH_REQUIRED = "auth_error";
-
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
     private static final boolean EXIT = true;
 
@@ -107,6 +105,8 @@ public class FillBlankFormActivity extends FormListActivity implements
         blankFormsListViewModel.isAuthenticationRequired().observe(this, authenticationRequired -> {
             if (authenticationRequired) {
                 DialogUtils.showIfNotShowing(ServerAuthDialogFragment.class, getSupportFragmentManager());
+            } else {
+                DialogUtils.dismissDialog(ServerAuthDialogFragment.class, getSupportFragmentManager());
             }
         });
 
