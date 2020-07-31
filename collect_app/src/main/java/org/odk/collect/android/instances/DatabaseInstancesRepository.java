@@ -3,12 +3,18 @@ package org.odk.collect.android.instances;
 import android.database.Cursor;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.List;
+
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
 
 /**
  * Mediates between {@link Instance} objects and the underlying SQLite database that stores them.
@@ -36,14 +42,17 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllByJrFormId(String formId) {
-        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ?", new String[] {formId});
+        Cursor c = dao.getInstancesCursor(JR_FORM_ID + " = ?", new String[] {formId});
         return dao.getInstancesFromCursor(c);
     }
 
     @Override
-    public List<Instance> getAllByJrFormIdAndJrVersion(String jrFormId, String jrVersion) {
-        Cursor c = dao.getInstancesCursor(InstanceColumns.JR_FORM_ID + " = ? AND " + InstanceColumns.JR_VERSION + " = ?", new String[] {jrFormId, jrVersion});
-        return dao.getInstancesFromCursor(c);
+    public List<Instance> getAllByJrFormIdAndJrVersion(@NonNull String jrFormId, @Nullable String jrVersion) {
+        if (jrVersion != null) {
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ?", new String[]{jrFormId, jrVersion}));
+        } else {
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId}));
+        }
     }
 
     @Override
