@@ -262,4 +262,9 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     }
 
     public abstract void clearAnswer();
+
+    // Just for tests
+    public ChoicesRecyclerViewAdapterProps getProps() {
+        return props;
+    }
 }
