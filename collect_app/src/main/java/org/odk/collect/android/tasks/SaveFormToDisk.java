@@ -482,7 +482,7 @@ public class SaveFormToDisk {
             if (instanceCursor.moveToFirst()) {
                 String jrFormId = instanceCursor.getString(0);
                 String version = instanceCursor.getString(1);
-                try (Cursor formCursor = new FormsDao().getFormsCursor(jrFormId, version)) {
+                try (Cursor formCursor = new FormsDao().getFormsCursorSortedByDateDesc(jrFormId, version)) {
                     if (formCursor.moveToFirst()) {
                         return formCursor.getString(formCursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
                     }

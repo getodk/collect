@@ -53,7 +53,7 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
     }
 
-    public Cursor getFormsCursor(String formId, String formVersion) {
+    public Cursor getFormsCursorSortedByDateDesc(String formId, String formVersion) {
         String[] selectionArgs;
         String selection;
 
@@ -117,7 +117,7 @@ public class FormsDao {
     public String getFormTitleForFormIdAndFormVersion(String formId, String formVersion) {
         String formTitle = "";
 
-        Cursor cursor = getFormsCursor(formId, formVersion);
+        Cursor cursor = getFormsCursorSortedByDateDesc(formId, formVersion);
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
@@ -134,7 +134,7 @@ public class FormsDao {
     public boolean isFormEncrypted(String formId, String formVersion) {
         boolean encrypted = false;
 
-        Cursor cursor = getFormsCursor(formId, formVersion);
+        Cursor cursor = getFormsCursorSortedByDateDesc(formId, formVersion);
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
@@ -151,7 +151,7 @@ public class FormsDao {
     public String getFormMediaPath(String formId, String formVersion) {
         String formMediaPath = null;
 
-        Cursor cursor = getFormsCursor(formId, formVersion);
+        Cursor cursor = getFormsCursorSortedByDateDesc(formId, formVersion);
 
         if (cursor != null) {
             try {
