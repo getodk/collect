@@ -46,9 +46,9 @@ public class SyncFormsTaskSpec implements TaskSpec {
 
                     try {
                         serverFormsSynchronizer.synchronize();
-                        syncStatusRepository.finishSync(true);
+                        syncStatusRepository.finishSync(null);
                     } catch (FormApiException e) {
-                        syncStatusRepository.finishSync(false);
+                        syncStatusRepository.finishSync(e);
                         notifier.onSyncFailure(e);
                     }
                 }

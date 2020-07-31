@@ -5,9 +5,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.openrosa.api.FormApiException.Type;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class SyncStatusRepositoryTest {
 
@@ -15,26 +18,27 @@ public class SyncStatusRepositoryTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Test
-    public void isOutOfSync_isFalseAtFirst() {
+    public void getSyncError_isNullAtFirst() {
         SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
-        assertThat(syncStatusRepository.isOutOfSync().getValue(), is(false));
+        assertThat(syncStatusRepository.getSyncError().getValue(), is(nullValue()));
     }
 
     @Test
-    public void isOutOfSync_whenFinishSyncWithFalse_isTrue() {
+    public void getSyncError_whenFinishSyncWithException_isException() {
         SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
         syncStatusRepository.startSync();
-        syncStatusRepository.finishSync(false);
+        FormApiException exception = new FormApiException(Type.FETCH_ERROR);
+        syncStatusRepository.finishSync(exception);
 
-        assertThat(syncStatusRepository.isOutOfSync().getValue(), is(true));
+        assertThat(syncStatusRepository.getSyncError().getValue(), is(exception));
     }
 
     @Test
-    public void isOutOfSync_whenFinishSyncWithTrue_isFalse() {
+    public void getSyncError_whenFinishSyncWithNull_isNull() {
         SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
         syncStatusRepository.startSync();
-        syncStatusRepository.finishSync(true);
+        syncStatusRepository.finishSync(null);
 
-        assertThat(syncStatusRepository.isOutOfSync().getValue(), is(false));
+        assertThat(syncStatusRepository.getSyncError().getValue(), is(nullValue()));
     }
 }

@@ -104,6 +104,12 @@ public class FillBlankFormActivity extends FormListActivity implements
             }
         });
 
+        blankFormsListViewModel.isAuthenticationRequired().observe(this, authenticationRequired -> {
+            if (authenticationRequired) {
+                DialogUtils.showIfNotShowing(ServerAuthDialogFragment.class, getSupportFragmentManager());
+            }
+        });
+
         menuDelegate = new BlankFormListMenuDelegate(this, blankFormsListViewModel);
 
         new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
@@ -167,10 +173,6 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         setupAdapter();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-
-        if (getIntent().getBooleanExtra(EXTRA_AUTH_REQUIRED, false)) {
-            DialogUtils.showIfNotShowing(ServerAuthDialogFragment.class, getSupportFragmentManager());
-        }
     }
 
     @Override

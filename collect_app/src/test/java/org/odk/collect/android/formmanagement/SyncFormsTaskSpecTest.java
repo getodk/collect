@@ -73,7 +73,7 @@ public class SyncFormsTaskSpecTest {
 
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(syncStatusRepository).finishSync(true);
+        inOrder.verify(syncStatusRepository).finishSync(null);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class SyncFormsTaskSpecTest {
 
         inOrder.verify(syncStatusRepository).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(syncStatusRepository).finishSync(false);
+        inOrder.verify(syncStatusRepository).finishSync(exception);
         verify(notifier).onSyncFailure(exception);
     }
 
