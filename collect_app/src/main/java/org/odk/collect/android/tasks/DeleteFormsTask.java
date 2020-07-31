@@ -35,8 +35,14 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     private int successCount;
     private int toDeleteCount;
-    private FormsRepository formsRepository;
-    private InstancesRepository instancesRepository;
+
+    private final FormsRepository formsRepository;
+    private final InstancesRepository instancesRepository;
+
+    public DeleteFormsTask(FormsRepository formsRepository, InstancesRepository instancesRepository) {
+        this.formsRepository = formsRepository;
+        this.instancesRepository = instancesRepository;
+    }
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -101,10 +107,5 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     public int getToDeleteCount() {
         return toDeleteCount;
-    }
-
-    public void setRepositories(FormsRepository formsRepository, InstancesRepository instancesRepository) {
-        this.formsRepository = formsRepository;
-        this.instancesRepository = instancesRepository;
     }
 }

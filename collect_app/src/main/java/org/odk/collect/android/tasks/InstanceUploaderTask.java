@@ -112,8 +112,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                                     }
                                 }
 
-                                DeleteInstancesTask dit = new DeleteInstancesTask();
-                                dit.setRepositories(instancesRepository, formsRepository);
+                                DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
                                 dit.execute(toDelete.toArray(new Long[toDelete.size()]));
                             }
                         } catch (SQLException e) {

@@ -195,8 +195,7 @@ public class DataManagerList extends InstanceListFragment
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            deleteInstancesTask = new DeleteInstancesTask();
-            deleteInstancesTask.setRepositories(instancesRepository, formsRepository);
+            deleteInstancesTask = new DeleteInstancesTask(instancesRepository, formsRepository);
             deleteInstancesTask.setDeleteListener(this);
             deleteInstancesTask.execute(getCheckedIdObjects());
         } else {

@@ -35,8 +35,14 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
     private int successCount;
     private int toDeleteCount;
-    private InstancesRepository instancesRepository;
-    private FormsRepository formsRepository;
+    
+    private final InstancesRepository instancesRepository;
+    private final FormsRepository formsRepository;
+
+    public DeleteInstancesTask(InstancesRepository instancesRepository, FormsRepository formsRepository) {
+        this.instancesRepository = instancesRepository;
+        this.formsRepository = formsRepository;
+    }
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -95,11 +101,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
     public void setDeleteListener(DeleteInstancesListener listener) {
         deleteInstancesListener = listener;
-    }
-
-    public void setRepositories(InstancesRepository instancesRepository, FormsRepository formsRepository) {
-        this.instancesRepository = instancesRepository;
-        this.formsRepository = formsRepository;
     }
 
     public int getDeleteCount() {

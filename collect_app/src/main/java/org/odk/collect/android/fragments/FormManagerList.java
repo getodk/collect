@@ -198,9 +198,8 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
             DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
 
-            backgroundTasks.deleteFormsTask = new DeleteFormsTask();
+            backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepository, instancesRepository);
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
-            backgroundTasks.deleteFormsTask.setRepositories(formsRepository, instancesRepository);
             backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
         } else {
             ToastUtils.showLongToast(R.string.file_delete_in_progress);
