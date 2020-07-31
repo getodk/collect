@@ -33,7 +33,7 @@ public class DateTimeViewModel extends ViewModel {
     }
 
     public void setSelectedDate(int year, int month, int day) {
-        this.selectedDate.postValue(DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(year, month + 1, day)));
+        this.selectedDate.postValue(DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(year, month + 1, day), LocalDateTime.now()));
     }
 
     public void setSelectedTime(int hourOfDay, int minuteOfHour) {

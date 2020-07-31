@@ -52,10 +52,10 @@ public class DateWidgetTest {
         questionDef = mock(QuestionDef.class);
         onLongClickListener = mock(View.OnLongClickListener.class);
         dateTimeWidgetListener = mock(DateTimeWidgetListener.class);
-        dateTimeViewModel = new ViewModelProvider(widgetActivity).get(DateTimeViewModel.class);
 
         fakeLifecycleOwner = new FakeLifecycleOwner();
-        dateAnswer = DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(2010, 5, 12));
+        dateTimeViewModel = new ViewModelProvider(widgetActivity).get(DateTimeViewModel.class);
+        dateAnswer = DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(2010, 5, 12), LocalDateTime.now());
     }
 
     @Test

@@ -41,7 +41,6 @@ import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 public class TimeWidget extends QuestionWidget {
     WidgetAnswerBinding binding;
 
-    private final DateTimeViewModel dateTimeViewModel;
     private final DateTimeWidgetListener listener;
 
     private LocalDateTime selectedTime;
@@ -49,11 +48,11 @@ public class TimeWidget extends QuestionWidget {
     public TimeWidget(Context context, final QuestionDetails prompt, LifecycleOwner lifecycleOwner, DateTimeWidgetListener listener) {
         super(context, prompt);
         this.listener = listener;
-        dateTimeViewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
+        DateTimeViewModel dateTimeViewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
 
         dateTimeViewModel.getSelectedTime().observe(lifecycleOwner, localDateTime -> {
             if (localDateTime != null && listener.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
-                selectedTime = localDateTime;
+                selectedTime = DateTimeWidgetUtils.getSelectedTime(selectedTime, LocalDateTime.now());
                 binding.widgetAnswerText.setText(new TimeData(selectedTime.toDate()).getDisplayText());
                 widgetValueChanged();
             }
@@ -78,11 +77,11 @@ public class TimeWidget extends QuestionWidget {
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.getAnswerValue() == null) {
-            selectedTime = LocalDateTime.now();
+            selectedTime = DateTimeWidgetUtils.getCurrentDateTime();
             binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
             DateTime dateTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
-            selectedTime = dateTime.toLocalDateTime();
+            selectedTime = DateTimeWidgetUtils.getSelectedTime(dateTime.toLocalDateTime(), LocalDateTime.now());
             binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(dateTime).getDisplayText());
         }
 
@@ -91,7 +90,7 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        selectedTime = LocalDateTime.now();
+        selectedTime = DateTimeWidgetUtils.getCurrentDateTime();
         binding.widgetAnswerText.setText(R.string.no_time_selected);
         widgetValueChanged();
     }

@@ -85,7 +85,8 @@ public class DateWidget extends QuestionWidget {
             selectedDate = DateTimeWidgetUtils.getCurrentDateTime();
             binding.widgetAnswerText.setText(R.string.no_date_selected);
         } else {
-            selectedDate = DateTimeWidgetUtils.getSelectedDate(new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue()));
+            selectedDate = DateTimeWidgetUtils.getSelectedDate(new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue()),
+                    LocalDateTime.now());
             binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
                     (Date) getAnswer().getValue(), datePickerDetails, false, context));
         }

@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +18,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 import org.robolectric.RobolectricTestRunner;
 
@@ -51,10 +51,10 @@ public class TimeWidgetTest {
         questionDef = mock(QuestionDef.class);
         onLongClickListener = mock(View.OnLongClickListener.class);
         dateTimeWidgetListener = mock(DateTimeWidgetListener.class);
-        dateTimeViewModel = new ViewModelProvider(widgetActivity).get(DateTimeViewModel.class);
 
         fakeLifecycleOwner = new FakeLifecycleOwner();
-        timeAnswer = new DateTime().withTime(12, 10, 0, 0).toLocalDateTime();
+        dateTimeViewModel = new ViewModelProvider(widgetActivity).get(DateTimeViewModel.class);
+        timeAnswer = DateTimeWidgetUtils.getSelectedTime(new LocalDateTime().withTime(12, 10, 0, 0), LocalDateTime.now());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class TimeWidgetTest {
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectTime() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
-        assertEquals(widget.binding.widgetAnswerText.getText(), "12:10");
+        assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeWidgetUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class TimeWidgetTest {
         dateTimeViewModel.setSelectedTime(12, 10);
 
         dateTimeViewModel.getSelectedDate().observe(fakeLifecycleOwner, localDateTime -> {
-            assertEquals(widget.binding.widgetAnswerText.getText(), "12:10");
+            assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeWidgetUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
         });
     }
 
@@ -133,7 +133,7 @@ public class TimeWidgetTest {
         TimeWidget widget = createWidget(prompt);
         widget.binding.widgetButton.performClick();
 
-        verify(dateTimeWidgetListener).displayTimePickerDialog(widgetActivity, LocalDateTime.now());
+        verify(dateTimeWidgetListener).displayTimePickerDialog(widgetActivity, DateTimeWidgetUtils.getCurrentDateTime());
     }
 
     @Test

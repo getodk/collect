@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.TimeData;
@@ -55,10 +56,16 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
         showTimePickerDialog(context, selectedTime);
     }
 
-    public static LocalDateTime getSelectedDate(LocalDateTime localDateTime) {
+    public static LocalDateTime getSelectedDate(LocalDateTime selectedDate, LocalDateTime currentTime) {
         return new LocalDateTime()
-                .withDate(localDateTime.getYear(), localDateTime.getMonthOfYear(), localDateTime.getDayOfMonth())
-                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
+                .withDate(selectedDate.getYear(), selectedDate.getMonthOfYear(), selectedDate.getDayOfMonth())
+                .withTime(currentTime.getHourOfDay(), currentTime.getMinuteOfHour(), 0, 0);
+    }
+
+    public static LocalDateTime getSelectedTime(LocalDateTime selectedTime, LocalDateTime currentDate) {
+        return new LocalDateTime()
+                .withDate(currentDate.getYear(), currentDate.getMonthOfYear(), currentDate.getDayOfMonth())
+                .withTime(selectedTime.getHourOfDay(), selectedTime.getMinuteOfHour(), 0, 0);
     }
 
     public static LocalDateTime getCurrentDateTime() {
