@@ -14,7 +14,6 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FillBlankFormPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.ServerAuthDialog;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -53,6 +52,44 @@ public class MatchExactlyTest {
     }
 
     @Test
+    public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnError_showsNotification_andClickingNotification_returnsToFillBlankForms() throws Exception {
+        testDependencies.server.alwaysReturnError();
+
+        rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+                .enableMatchExactly()
+                .clickFillBlankForm()
+                .clickRefresh();
+
+        notificationDrawerRule
+                .open()
+                .clickNotification(
+                        "ODK Collect",
+                        "Form update failed",
+                        "If you keep having this problem, report it to the person who asked you to collect data.",
+                        "Fill Blank Form",
+                        new FillBlankFormPage(rule)
+                ).pressBack(new MainMenuPage(rule)); // Check we return to Fill Blank Form, not open a new one
+    }
+
+    @Test
+    public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnAuthenticationError_promptsForCredentials() throws Exception {
+        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.server.setCredentials("Klay", "Thompson");
+
+        rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+                .enableMatchExactly()
+                .clickFillBlankForm()
+                .clickRefreshWithAuthError()
+                .fillUsername("Klay")
+                .fillPassword("Thompson")
+                .clickOK(new FillBlankFormPage(rule))
+                .clickRefresh()
+                .assertText("One Question Updated");
+    }
+
+    @Test
     public void whenMatchExactlyEnabled_getsLatestFormsFromServer_automaticallyAndRepeatedly() throws Exception {
         MainMenuPage page = rule.mainMenu()
                 .setServer(testDependencies.server.getURL())
@@ -75,56 +112,6 @@ public class MatchExactlyTest {
                 .clickFillBlankForm()
                 .assertText("One Question Updated")
                 .assertTextDoesNotExist("Two Question");
-    }
-
-    @Test
-    public void whenMatchExactlyEnabled_andThereIsAnErrorDuringUpdate_clickingErrorNotification_goesToFillBlankForm() throws Exception {
-        String url = testDependencies.server.getURL();
-
-        rule.mainMenu()
-                .setServer(url)
-                .enableMatchExactly();
-
-        testDependencies.server.alwaysReturnError();
-        testDependencies.scheduler.runDeferredTasks();
-
-        notificationDrawerRule
-                .open()
-                .clickNotification(
-                        "ODK Collect",
-                        "Form update failed",
-                        "If you keep having this problem, report it to the person who asked you to collect data.",
-                        "Fill Blank Form",
-                        new FillBlankFormPage(rule)
-                );
-    }
-
-    @Test
-    public void whenMatchExactlyEnabled_andThereIsAnAuthenticationErrorDuringUpdate_clickingErrorNotification_goesToFillBlankForm_andPromptsForCredentials() throws Exception {
-        String url = testDependencies.server.getURL();
-
-        rule.mainMenu()
-                .setServer(url)
-                .enableMatchExactly();
-
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testDependencies.server.setCredentials("Klay", "Thompson");
-        testDependencies.scheduler.runDeferredTasks();
-
-        notificationDrawerRule
-                .open()
-                .clickNotification(
-                        "ODK Collect",
-                        "Form update failed",
-                        "If you keep having this problem, report it to the person who asked you to collect data.",
-                        "Server Requires Authentication",
-                        new ServerAuthDialog(rule)
-                )
-                .fillUsername("Klay")
-                .fillPassword("Thompson")
-                .clickOK(new FillBlankFormPage(rule))
-                .clickRefresh()
-                .assertText("One Question Updated");
     }
 
     @Test

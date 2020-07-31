@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,6 +16,8 @@ import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,7 +51,17 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> isOutOfSync() {
-        return syncRepository.isOutOfSync();
+        return Transformations.map(syncRepository.getSyncError(), Objects::nonNull);
+    }
+
+    public LiveData<Boolean> isAuthenticationRequired() {
+        return Transformations.map(syncRepository.getSyncError(), error -> {
+            if (error != null) {
+                return error.getType() == FormApiException.Type.AUTH_REQUIRED;
+            } else {
+                return false;
+            }
+        });
     }
 
     public void syncWithServer() {
@@ -59,10 +72,11 @@ public class BlankFormsListViewModel extends ViewModel {
                 scheduler.immediate(() -> {
                     try {
                         serverFormsSynchronizer.synchronize();
-                        syncRepository.finishSync(true);
+                        syncRepository.finishSync(null);
+                        notifier.onSync(null);
                     } catch (FormApiException e) {
-                        syncRepository.finishSync(false);
-                        notifier.onSyncFailure(e);
+                        syncRepository.finishSync(e);
+                        notifier.onSync(e);
                     }
 
                     return null;

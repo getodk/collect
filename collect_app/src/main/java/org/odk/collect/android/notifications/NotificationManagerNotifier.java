@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
@@ -82,24 +84,23 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onSyncFailure(FormApiException exception) {
-        Intent intent = new Intent(application, FillBlankFormActivity.class);
+    public void onSync(@Nullable FormApiException exception) {
+        if (exception != null) {
+            Intent intent = new Intent(application, FillBlankFormActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (exception.getType() == FormApiException.Type.AUTH_REQUIRED) {
-            intent.putExtra(FillBlankFormActivity.EXTRA_AUTH_REQUIRED, true);
+            Resources localizedResources = getLocalizedResources(application);
+            showNotification(
+                    application,
+                    notificationManager,
+                    localizedResources.getString(R.string.form_update_error),
+                    new FormApiExceptionMapper(localizedResources).getMessage(exception),
+                    contentIntent,
+                    FORM_SYNC_NOTIFICATION_ID
+            );
+        } else {
+            notificationManager.cancel(FORM_SYNC_NOTIFICATION_ID);
         }
-
-        PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Resources localizedResources = getLocalizedResources(application);
-        showNotification(
-                application,
-                notificationManager,
-                localizedResources.getString(R.string.form_update_error),
-                new FormApiExceptionMapper(localizedResources).getMessage(exception),
-                contentIntent,
-                FORM_SYNC_NOTIFICATION_ID
-        );
     }
 
     @Override
