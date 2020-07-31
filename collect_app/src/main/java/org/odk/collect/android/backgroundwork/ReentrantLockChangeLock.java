@@ -12,7 +12,11 @@ public class ReentrantLockChangeLock implements ChangeLock {
         try {
             return function.apply(lock.tryLock());
         } finally {
-            lock.unlock();
+            try {
+                lock.unlock();
+            } catch (IllegalMonitorStateException ignored) {
+                // Ignored
+            }
         }
     }
 }
