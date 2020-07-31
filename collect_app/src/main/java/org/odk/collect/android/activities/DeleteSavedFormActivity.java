@@ -59,7 +59,7 @@ public class DeleteSavedFormActivity extends CollectAbstractActivity {
         String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
-        viewPager.setAdapter(new DeleteFormsTabsAdapter(this, viewModel.isSyncingAvailable()));
+        viewPager.setAdapter(new DeleteFormsTabsAdapter(this, viewModel.isMatchExactlyEnabled()));
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(tabNames[position])).attach();
     }
 }

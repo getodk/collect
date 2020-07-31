@@ -42,8 +42,9 @@ public class BlankFormsListViewModel extends ViewModel {
         this.changeLock = changeLock;
     }
 
-    public boolean isSyncingAvailable() {
-        return isMatchExactlyEnabled();
+    public boolean isMatchExactlyEnabled() {
+        FormUpdateMode formUpdateMode = FormUpdateMode.parse(application, preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
+        return formUpdateMode == FormUpdateMode.MATCH_EXACTLY;
     }
 
     public LiveData<Boolean> isSyncing() {
@@ -85,11 +86,6 @@ public class BlankFormsListViewModel extends ViewModel {
 
             return null;
         });
-    }
-
-    private boolean isMatchExactlyEnabled() {
-        FormUpdateMode formUpdateMode = FormUpdateMode.parse(application, preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
-        return formUpdateMode == FormUpdateMode.MATCH_EXACTLY;
     }
 
     public static class Factory implements ViewModelProvider.Factory {
