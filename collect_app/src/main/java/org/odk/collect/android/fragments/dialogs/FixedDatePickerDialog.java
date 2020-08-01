@@ -18,6 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.joda.time.LocalDateTime;
@@ -25,7 +28,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
-import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -35,13 +37,13 @@ import timber.log.Timber;
 public class FixedDatePickerDialog extends DialogFragment {
 
     private ThemeUtils themeUtils;
-    private DateTimeViewModel dateTimeViewModel;
+    private FixedDatePickerViewModel viewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         themeUtils = new ThemeUtils(context);
-        dateTimeViewModel = new ViewModelProvider(requireActivity()).get(DateTimeViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(FixedDatePickerViewModel.class);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -51,7 +53,7 @@ public class FixedDatePickerDialog extends DialogFragment {
         LocalDateTime date = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
         int theme = getArguments().getInt(DateTimeWidgetUtils.DATE_PICKER_THEME);
 
-        DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, dateTimeViewModel.getOnDateSetListener(),
+        DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, viewModel.getOnDateSetListener(),
                 date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
 
         if (themeUtils.isHoloDialogTheme(theme)) {
@@ -178,5 +180,26 @@ public class FixedDatePickerDialog extends DialogFragment {
             }
         }
         return null;
+    }
+
+    public static final class FixedDatePickerViewModel extends ViewModel {
+        private final MutableLiveData<LocalDateTime> selectedDate = new MutableLiveData<>();
+
+        private final DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
+            view.clearFocus();
+            setSelectedDate(year, monthOfYear, dayOfMonth);
+        };
+
+        public DatePickerDialog.OnDateSetListener getOnDateSetListener() {
+            return dateSetListener;
+        }
+
+        public LiveData<LocalDateTime> getSelectedDate() {
+            return selectedDate;
+        }
+
+        private void setSelectedDate(int year, int month, int day) {
+            this.selectedDate.postValue(DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(year, month + 1, day), LocalDateTime.now()));
+        }
     }
 }

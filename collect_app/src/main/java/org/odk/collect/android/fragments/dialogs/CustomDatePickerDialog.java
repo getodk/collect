@@ -21,6 +21,9 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.View;
@@ -30,10 +33,13 @@ import android.widget.TextView;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
-import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
+
+import timber.log.Timber;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
@@ -45,12 +51,21 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     private TextView gregorianDateText;
 
-    private DateTimeViewModel dateTimeViewModel;
+    private CustomDatePickerViewModel viewModel;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        dateTimeViewModel = new ViewModelProvider(requireActivity()).get(DateTimeViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CustomDatePickerViewModel.class);
+
+        viewModel.getSelectedDate().observe(((ScreenContext) context).getViewLifecycle(), localDateTime -> {
+            Timber.d("Testing: changes observed ");
+            Timber.d("Testing: local date time :" + localDateTime);
+            if (localDateTime != null) {
+                Timber.d("Testing: context instance of WidgetDataReceiver");
+                ((FormEntryActivity) context).setBinaryWidgetData(localDateTime);
+            }
+        });
     }
 
     @Override
@@ -60,7 +75,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .setView(R.layout.custom_date_picker_dialog)
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
                     LocalDateTime date = getDateAsGregorian(getOriginalDate());
-                    dateTimeViewModel.setSelectedDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
+                    viewModel.setSelectedDate(new LocalDateTime().withDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth()));
                     dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dismiss())
@@ -181,4 +196,18 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     protected abstract void updateDays();
 
     protected abstract LocalDateTime getOriginalDate();
+
+    public static class CustomDatePickerViewModel extends ViewModel {
+        private final MutableLiveData<LocalDateTime> selectedDate = new MutableLiveData<>(null);
+
+        public LiveData<LocalDateTime> getSelectedDate() {
+            return selectedDate;
+        }
+
+        public void setSelectedDate(LocalDateTime selectedDate) {
+            if (selectedDate != null) {
+                this.selectedDate.postValue(DateTimeWidgetUtils.getSelectedDate(selectedDate, LocalDateTime.now()));
+            }
+        }
+    }
 }
