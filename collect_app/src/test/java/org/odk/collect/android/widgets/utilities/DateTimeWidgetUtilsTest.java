@@ -52,16 +52,7 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsFixedDatePickerDialog_whenDatePickerTypeIsGregorian() {
-        dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);
-        FixedDatePickerDialog dialog = (FixedDatePickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(FixedDatePickerDialog.class.getName());
-
-        assertNotNull(dialog);
-    }
-
-    @Test
-    public void createTimePickerDialog_showsCustomTimePickerDialog() {
+    public void displayTimePickerDialog_showsCustomTimePickerDialog() {
         dateTimeWidgetUtils.displayTimePickerDialog(activity, new LocalDateTime().withHourOfDay(12).withMinuteOfHour(10));
         CustomTimePickerDialog dialog = (CustomTimePickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(CustomTimePickerDialog.class.getName());
@@ -70,7 +61,16 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsEthiopianDatePickerDialog_whenDatePickerTypeIsEthiopian() {
+    public void displayDatePickerDialog_showsFixedDatePickerDialog_whenDatePickerTypeIsGregorian() {
+        dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);
+        FixedDatePickerDialog dialog = (FixedDatePickerDialog) activity.getSupportFragmentManager()
+                .findFragmentByTag(FixedDatePickerDialog.class.getName());
+
+        assertNotNull(dialog);
+    }
+
+    @Test
+    public void displayDatePickerDialog_showsEthiopianDatePickerDialog_whenDatePickerTypeIsEthiopian() {
         when(datePickerDetails.getDatePickerType()).thenReturn(ETHIOPIAN);
 
         dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);
@@ -81,7 +81,7 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsCopticDatePickerDialog_whenDatePickerTypeIsCoptic() {
+    public void displayDatePickerDialog_showsCopticDatePickerDialog_whenDatePickerTypeIsCoptic() {
         when(datePickerDetails.getDatePickerType()).thenReturn(COPTIC);
 
         dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);
@@ -92,7 +92,7 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsIslamicDatePickerDialog_whenDatePickerTypeIsIslamic() {
+    public void displayDatePickerDialog_showsIslamicDatePickerDialog_whenDatePickerTypeIsIslamic() {
         when(datePickerDetails.getDatePickerType()).thenReturn(ISLAMIC);
 
         dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);
@@ -103,7 +103,7 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsBikramSambatDatePickerDialog_whenDatePickerTypeIsBikramSambat() {
+    public void displayDatePickerDialog_showsBikramSambatDatePickerDialog_whenDatePickerTypeIsBikramSambat() {
         when(datePickerDetails.getDatePickerType()).thenReturn(BIKRAM_SAMBAT);
 
         dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);
@@ -114,7 +114,7 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsMyanmarDatePickerDialog_whenDatePickerTypeIsMyanmar() {
+    public void displayDatePickerDialog_showsMyanmarDatePickerDialog_whenDatePickerTypeIsMyanmar() {
         when(datePickerDetails.getDatePickerType()).thenReturn(MYANMAR);
 
         dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);
@@ -125,7 +125,7 @@ public class DateTimeWidgetUtilsTest {
     }
 
     @Test
-    public void showDatePickerDialog_showsPersianDatePickerDialog_whenDatePickerTypeIsPersian() {
+    public void displayDatePickerDialog_showsPersianDatePickerDialog_whenDatePickerTypeIsPersian() {
         when(datePickerDetails.getDatePickerType()).thenReturn(PERSIAN);
 
         dateTimeWidgetUtils.displayDatePickerDialog(activity, formIndex, datePickerDetails, date);

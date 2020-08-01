@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.TimeData;
@@ -32,9 +31,6 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
     public static final String DATE = "date";
     public static final String DATE_PICKER_DETAILS = "datePickerDetails";
     public static final String DATE_PICKER_THEME = "datePickerTheme";
-
-    public DateTimeWidgetUtils() {
-    }
 
     @Override
     public void setWidgetWaitingForData(FormIndex formIndex) {
