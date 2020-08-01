@@ -183,12 +183,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     // End scoped storage
     */
 
-    @Inject
-    GeneralSharedPreferences generalSharedPreferences;
-
-    @Inject
-    NetworkStateProvider connectivityProvider;
-
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.app_name));
@@ -236,8 +230,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         // get notification registration token
         Intent intent = new Intent(this, NotificationRegistrationService.class);
         startService(intent);
-
-        initMapBox();
 
         // Start the location service
         mLocationService = new LocationService(this);
@@ -392,23 +384,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         stopService(mLocationServiceIntent);
         super.onDestroy();
 
-    }
-
-    private void initMapBox() {
-        if (!generalSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED, false) && connectivityProvider.isDeviceOnline()) {
-            // This "one weird trick" lets us initialize MapBox at app start when the internet is
-            // most likely to be available. This is annoyingly needed for offline tiles to work.
-            try {
-                MapView mapView = new MapView(this);
-                FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
-                mapboxContainer.addView(mapView);
-                mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> {
-                    generalSharedPreferences.save(KEY_MAPBOX_INITIALIZED, true);
-                }));
-            } catch (Exception | Error ignored) {
-                // This will crash on devices where the arch for MapBox is not included
-            }
-        }
     }
 
     public void processAdminMenu() {
