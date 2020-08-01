@@ -19,6 +19,7 @@ collect_app/collect_app.iml
 collect_app/src/kontrolid
 collect_app/kontrolid/
 collect_app/plan/
+collect_app/src/plan/
 collect_app/src/supply/
 collect_app/supply/
 collect_app/seracis/
