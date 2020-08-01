@@ -23,11 +23,10 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
-import org.odk.collect.android.preferences.qr.ShowQRCodeFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
@@ -43,6 +42,8 @@ import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;          // smap
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
+import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
+import org.odk.collect.android.preferences.qr.ShowQRCodeFragment;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
@@ -198,6 +199,8 @@ public interface AppDependencyComponent {
     void inject(UserInterfacePreferencesFragment userInterfacePreferencesFragment);
 
     void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
+
+    void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
     SmsManager smsManager();
 

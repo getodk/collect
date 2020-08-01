@@ -34,13 +34,13 @@
                 android:visibility="gone"
                 custom:text="blah"
                 custom:secondaryActionColor="true" />
-
-            <FrameLayout
-                android:id="@+id/mapbox_container"
+            
+            <fragment
+                android:name="org.odk.collect.android.fragments.MapBoxInitializationFragment"
+                android:id="@+id/map_box_initialization_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:visibility="invisible">
-            </FrameLayout>
+                android:layout_height="1dp">
+            </fragment>
 
             <LinearLayout
                 android:layout_width="match_parent"

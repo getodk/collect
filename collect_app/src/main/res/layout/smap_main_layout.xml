@@ -38,6 +38,13 @@
             android:layout_height="wrap_content" />
             -->
 
+        <fragment
+            android:name="org.odk.collect.android.fragments.MapBoxInitializationFragment"
+            android:id="@+id/map_box_initialization_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="1dp">
+        </fragment>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"

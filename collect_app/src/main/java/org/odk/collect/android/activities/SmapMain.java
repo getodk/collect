@@ -39,9 +39,12 @@ import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
@@ -57,6 +60,7 @@ import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
@@ -94,12 +98,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_INITIALIZED;
 
 public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
         NFCListener,
@@ -175,6 +183,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     // End scoped storage
     */
 
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    NetworkStateProvider connectivityProvider;
+
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.app_name));
@@ -222,6 +236,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         // get notification registration token
         Intent intent = new Intent(this, NotificationRegistrationService.class);
         startService(intent);
+
+        initMapBox();
 
         // Start the location service
         mLocationService = new LocationService(this);
@@ -376,6 +392,23 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         stopService(mLocationServiceIntent);
         super.onDestroy();
 
+    }
+
+    private void initMapBox() {
+        if (!generalSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED, false) && connectivityProvider.isDeviceOnline()) {
+            // This "one weird trick" lets us initialize MapBox at app start when the internet is
+            // most likely to be available. This is annoyingly needed for offline tiles to work.
+            try {
+                MapView mapView = new MapView(this);
+                FrameLayout mapboxContainer = findViewById(R.id.mapbox_container);
+                mapboxContainer.addView(mapView);
+                mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+                    generalSharedPreferences.save(KEY_MAPBOX_INITIALIZED, true);
+                }));
+            } catch (Exception | Error ignored) {
+                // This will crash on devices where the arch for MapBox is not included
+            }
+        }
     }
 
     public void processAdminMenu() {
