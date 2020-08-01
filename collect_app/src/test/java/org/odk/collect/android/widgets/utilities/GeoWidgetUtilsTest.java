@@ -4,13 +4,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.test.core.app.ApplicationProvider;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +18,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.support.TestScreenContextActivity;
@@ -47,6 +48,7 @@ public class GeoWidgetUtilsTest {
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
     private final Bundle bundle = new Bundle();
 
+    private GeoWidgetAnswerBinding binding;
     private WaitingForDataRegistry waitingForDataRegistry;
     private TestScreenContextActivity testActivity;
     private Context context;
@@ -58,6 +60,7 @@ public class GeoWidgetUtilsTest {
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
         testActivity = widgetTestActivity();
+        binding = GeoWidgetAnswerBinding.inflate(testActivity.getLayoutInflater());
 
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         formIndex = mock(FormIndex.class);
@@ -136,7 +139,7 @@ public class GeoWidgetUtilsTest {
                 waitingForDataRegistry, GeoPointActivity.class, bundle, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
-        Assert.assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointActivity.class));
         assertEquals(startedIntent.getExtras().getString(STRING_ARG), "blah");
     }
 
@@ -146,7 +149,7 @@ public class GeoWidgetUtilsTest {
                 waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
-        Assert.assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointMapActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointMapActivity.class));
         assertEquals(startedIntent.getExtras().getString(STRING_ARG), "blah");
     }
 
@@ -156,7 +159,7 @@ public class GeoWidgetUtilsTest {
                 waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
-        Assert.assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPolyActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPolyActivity.class));
         assertEquals(startedIntent.getExtras().getString(STRING_ARG), "blah");
     }
 
@@ -166,8 +169,36 @@ public class GeoWidgetUtilsTest {
                 waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
-        Assert.assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPolyActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPolyActivity.class));
         assertEquals(startedIntent.getExtras().getString(STRING_ARG), "blah");
+    }
+
+    @Test
+    public void setButtonLabelAndVisibility_doesNotShowButton_whenWidgetIsReadOnlyAndDoesNotHaveAnswer() {
+        geoWidgetUtils.setButtonLabelAndVisibility(binding, true, false,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+        assertEquals(binding.simpleButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsReadOnlyAndHasAnswerData() {
+        geoWidgetUtils.setButtonLabelAndVisibility(binding, true, true,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+        assertEquals(binding.simpleButton.getText(), context.getString(R.string.geopoint_view_read_only));
+    }
+
+    @Test
+    public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsNotReadOnlyAndDoesNotHaveAnswer() {
+        geoWidgetUtils.setButtonLabelAndVisibility(binding, false, false,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+        assertEquals(binding.simpleButton.getText(), context.getString(R.string.get_point));
+    }
+
+    @Test
+    public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsNotReadOnlyAndHasAnswer() {
+        geoWidgetUtils.setButtonLabelAndVisibility(binding, false, true,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+        assertEquals(binding.simpleButton.getText(), context.getString(R.string.view_change_location));
     }
 
     @Test
