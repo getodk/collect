@@ -89,7 +89,7 @@ public abstract class QuestionWidget
     private AtomicBoolean expanded;
     private Bundle state;
     protected final ThemeUtils themeUtils;
-    protected final AudioHelper audioHelper;
+    protected AudioHelper audioHelper;
     private final ViewGroup containerView;
     private final QuestionTextSizeHelper questionTextSizeHelper = new QuestionTextSizeHelper();
 

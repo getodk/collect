@@ -34,6 +34,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -80,13 +81,17 @@ public class AudioWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context), waitingForDataRegistry);
+    public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context), waitingForDataRegistry, audioHelper);
     }
 
-    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController, WaitingForDataRegistry waitingForDataRegistry) {
+    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+                @NonNull AudioControllerView audioController, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper) {
         super(context, questionDetails);
 
+        if (audioHelper != null) {
+            this.audioHelper = audioHelper;
+        }
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
         this.audioController = audioController;
