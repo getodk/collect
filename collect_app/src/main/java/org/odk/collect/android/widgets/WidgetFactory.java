@@ -21,6 +21,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -136,7 +137,7 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(context, questionDetails, waitingForDataRegistry, null);
+                questionWidget = new AudioWidget(context, questionDetails, waitingForDataRegistry, null, MediaManager.INSTANCE);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, waitingForDataRegistry);

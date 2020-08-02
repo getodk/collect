@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import org.odk.collect.android.widgets.interfaces.MediaManagerListener;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ import java.util.Map;
  * remember an original media file answer (no matter how many times this answer is replaced), in order
  * to be able to restore the original answer in case of ignoring changes.
  */
-public enum MediaManager {
+public enum MediaManager implements MediaManagerListener {
     INSTANCE;
 
     Map<String, String> originalFiles = new HashMap<>();

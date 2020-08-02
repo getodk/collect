@@ -40,12 +40,12 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.interfaces.MediaManagerListener;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -76,17 +76,20 @@ public class AudioWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     AudioControllerView audioController;
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final MediaManagerListener mediaManagerListener;
     Button captureButton;
     Button chooseButton;
 
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context), waitingForDataRegistry, audioHelper);
+    public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry,
+                       AudioHelper audioHelper, MediaManagerListener mediaManagerListener) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context),
+                waitingForDataRegistry, audioHelper, mediaManagerListener);
     }
 
-    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
-                @NonNull AudioControllerView audioController, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper) {
+    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,
+                WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, MediaManagerListener mediaManagerListener) {
         super(context, questionDetails);
 
         if (audioHelper != null) {
@@ -96,6 +99,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, ButtonCli
         this.mediaUtil = mediaUtil;
         this.audioController = audioController;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.mediaManagerListener = mediaManagerListener;
 
         captureButton = createSimpleButton(getContext(), R.id.capture_audio, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_audio), getAnswerFontSize(), this);
 
@@ -117,10 +121,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     @Override
     public void deleteFile() {
-        MediaManager
-                .INSTANCE
-                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
+        mediaManagerListener.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
@@ -181,9 +183,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, ButtonCli
             values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
 
-            MediaManager
-                    .INSTANCE
-                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+            mediaManagerListener.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
 
             Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
