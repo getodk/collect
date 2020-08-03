@@ -22,7 +22,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 
 import java.io.ByteArrayInputStream;
-import java.net.URI;
 import java.util.Objects;
 
 import javax.inject.Inject;
