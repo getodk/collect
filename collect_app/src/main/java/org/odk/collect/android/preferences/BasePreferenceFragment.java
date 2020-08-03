@@ -5,8 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import org.odk.collect.android.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.DialogPreference;
+import androidx.preference.Preference;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -27,6 +30,18 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        super.onDisplayPreferenceDialog(preference);
+
+        // If we don't do this there is extra padding on "Cancel" and "OK" on
+        // the preference dialogs. This appears to have something to with the `updateLocale`
+        // calls in `CollectAbstractActivity` and weirdly only happens for English.
+        DialogPreference dialogPreference = (DialogPreference) preference;
+        dialogPreference.setNegativeButtonText(R.string.cancel);
+        dialogPreference.setPositiveButtonText(R.string.ok);
     }
 
     @Override
