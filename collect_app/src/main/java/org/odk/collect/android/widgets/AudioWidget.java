@@ -40,6 +40,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
@@ -82,10 +83,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry,
-                       AudioHelper audioHelper, MediaManagerListener mediaManagerListener) {
+    public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context),
-                waitingForDataRegistry, audioHelper, mediaManagerListener);
+                waitingForDataRegistry, null, MediaManager.INSTANCE);
     }
 
     AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,

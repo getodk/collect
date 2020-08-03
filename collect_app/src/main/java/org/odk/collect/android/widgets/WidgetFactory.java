@@ -137,7 +137,7 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(context, questionDetails, waitingForDataRegistry, null, MediaManager.INSTANCE);
+                questionWidget = new AudioWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, waitingForDataRegistry);

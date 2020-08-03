@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.odk.collect.android.views.MultiClickSafeButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_button"
+    style="@style/Widget.Collect.Button.Custom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_small"
+    android:layout_marginHorizontal="@dimen/margin_standard"
+    android:layout_marginTop="@dimen/margin_extra_small">
+
+</org.odk.collect.android.views.MultiClickSafeButton>
