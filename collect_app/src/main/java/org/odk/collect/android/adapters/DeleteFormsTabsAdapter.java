@@ -5,12 +5,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import org.odk.collect.android.fragments.DataManagerList;
-import org.odk.collect.android.fragments.FormManagerList;
+import org.odk.collect.android.fragments.BlankFormListFragment;
+import org.odk.collect.android.fragments.SavedFormListFragment;
 
-public class FileManagerTabsAdapter extends FragmentStateAdapter {
-    public FileManagerTabsAdapter(FragmentActivity fa) {
+public class DeleteFormsTabsAdapter extends FragmentStateAdapter {
+
+    private final boolean matchExactlyEnabled;
+
+    public DeleteFormsTabsAdapter(FragmentActivity fa, boolean matchExactlyEnabled) {
         super(fa);
+        this.matchExactlyEnabled = matchExactlyEnabled;
     }
 
     @NonNull
@@ -18,9 +22,9 @@ public class FileManagerTabsAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new DataManagerList();
+                return new SavedFormListFragment();
             case 1:
-                return new FormManagerList();
+                return new BlankFormListFragment();
             default:
                 // should never reach here
                 throw new IllegalArgumentException("Fragment position out of bounds");
@@ -29,6 +33,10 @@ public class FileManagerTabsAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 2;
+        if (matchExactlyEnabled) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 }

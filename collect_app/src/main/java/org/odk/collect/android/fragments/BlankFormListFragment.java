@@ -51,7 +51,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormManagerList extends FormListFragment implements DiskSyncListener,
+public class BlankFormListFragment extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
     private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     private BackgroundTasks backgroundTasks; // handled across orientation changes

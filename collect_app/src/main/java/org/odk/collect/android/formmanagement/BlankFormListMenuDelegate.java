@@ -41,7 +41,7 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem refreshItem = menu.findItem(R.id.menu_refresh);
 
-        refreshItem.setVisible(blankFormsListViewModel.isSyncingAvailable());
+        refreshItem.setVisible(blankFormsListViewModel.isMatchExactlyEnabled());
         refreshItem.setEnabled(!syncing);
 
         if (outOfSync) {

@@ -3,6 +3,7 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.activities.DeleteSavedFormActivity;
 import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -31,8 +32,8 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
-import org.odk.collect.android.fragments.DataManagerList;
-import org.odk.collect.android.fragments.FormManagerList;
+import org.odk.collect.android.fragments.BlankFormListFragment;
+import org.odk.collect.android.fragments.SavedFormListFragment;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
@@ -107,7 +108,7 @@ public interface AppDependencyComponent {
 
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
-    void inject(DataManagerList dataManagerList);
+    void inject(SavedFormListFragment savedFormListFragment);
 
     void inject(PropertyManager propertyManager);
 
@@ -199,11 +200,13 @@ public interface AppDependencyComponent {
 
     void inject(ServerAuthDialogFragment serverAuthDialogFragment);
 
-    void inject(FormManagerList formManagerList);
+    void inject(BlankFormListFragment blankFormListFragment);
 
     void inject(InstanceUploaderActivity instanceUploaderActivity);
 
     void inject(GeneralPreferencesFragment generalPreferencesFragment);
+
+    void inject(DeleteSavedFormActivity deleteSavedFormActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

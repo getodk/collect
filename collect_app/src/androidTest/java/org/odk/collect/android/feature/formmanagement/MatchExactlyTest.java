@@ -115,10 +115,12 @@ public class MatchExactlyTest {
     }
 
     @Test
-    public void whenMatchExactlyEnabled_hidesGetBlankForms() {
+    public void whenMatchExactlyEnabled_hidesGetBlankFormsAndDeleteBlankForms() {
         rule.mainMenu()
                 .enableMatchExactly()
-                .assertTextNotDisplayed(R.string.get_forms);
+                .assertTextNotDisplayed(R.string.get_forms)
+                .clickDeleteSavedForm()
+                .assertTextDoesNotExist(R.string.forms);
     }
 
     @Test
