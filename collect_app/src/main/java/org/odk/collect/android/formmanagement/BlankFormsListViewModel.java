@@ -1,6 +1,7 @@
 package org.odk.collect.android.formmanagement;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -21,6 +22,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 
 import java.io.ByteArrayInputStream;
+import java.net.URI;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -101,8 +103,9 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     private void logManualSync() {
-        String url = preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_SERVER_URL, "");
-        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
+        Uri uri = Uri.parse(preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_SERVER_URL, ""));
+        String host = uri.getHost() != null ? uri.getHost() : "";
+        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
     }
 

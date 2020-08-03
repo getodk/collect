@@ -179,10 +179,10 @@ public class BlankFormsListViewModelTest {
 
     @Test
     public void syncWithServer_logsAnalytics() {
-        prefs.edit().putString(GeneralKeys.KEY_SERVER_URL, "https://blah.com").apply();
+        prefs.edit().putString(GeneralKeys.KEY_SERVER_URL, "https://blah.com/formServer").apply();
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), preferencesProvider, mock(Notifier.class), changeLock, analytics);
         viewModel.syncWithServer();
-        verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", "f066024f9e477c5b3d5a26a212673213"); // MD5 of server URL
+        verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", "0053d8f5d460348d99c4cfb06dfa1eae"); // MD5 of blah.com (host)
     }
 }
