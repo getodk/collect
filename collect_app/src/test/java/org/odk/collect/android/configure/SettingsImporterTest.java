@@ -135,7 +135,7 @@ public class SettingsImporterTest {
     @Test
     public void afterSettingsImportedAndMigrated_runsSettingsChangeHandler() throws Exception {
         final String[] key1ValueWhenCalled = {null};
-        Runnable handler = () -> {
+        SettingsChangeHandler handler = () -> {
             key1ValueWhenCalled[0] = generalPrefs.getString("key1", null);
         };
 

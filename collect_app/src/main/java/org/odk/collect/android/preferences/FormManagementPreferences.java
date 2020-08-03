@@ -43,7 +43,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class FormManagementPreferences extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class FormManagementPreferences extends BasePreferenceFragment {
 
     @Inject
     Analytics analytics;
@@ -86,9 +86,9 @@ public class FormManagementPreferences extends BasePreferenceFragment implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-            formUpdateManager.scheduleUpdates();
+        super.onSharedPreferenceChanged(sharedPreferences, key);
 
+        if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
             String newValue = sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null);
             updateDisabledPrefs(newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
 
@@ -97,19 +97,12 @@ public class FormManagementPreferences extends BasePreferenceFragment implements
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        preferencesProvider.getGeneralSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
     private void setupFormUpdateMode() {
         SharedPreferences sharedPreferences = preferencesProvider.getGeneralSharedPreferences();
         updateDisabledPrefs(sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null), sharedPreferences.getString(KEY_PROTOCOL, null));
 
         Preference formUpdateMode = findPreference(KEY_FORM_UPDATE_MODE);
         formUpdateMode.setSummary(((ListPreference) formUpdateMode).getEntry());
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     private void updateDisabledPrefs(String formUpdateMode, String protocol) {

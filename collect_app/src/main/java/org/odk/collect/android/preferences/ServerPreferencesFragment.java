@@ -147,8 +147,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         preferencesProvider.getGeneralSharedPreferences().edit()
                                 .putString(KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(getActivity()))
                                 .apply();
-
-                        formUpdateManager.scheduleUpdates();
                         break;
                 }
             }
