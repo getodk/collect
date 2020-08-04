@@ -29,7 +29,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="?colorOnSurface"
+                    app:tint="?colorOnSurface"
                     app:srcCompat="@drawable/ic_person_black_24dp" />
 
                 <TextView
