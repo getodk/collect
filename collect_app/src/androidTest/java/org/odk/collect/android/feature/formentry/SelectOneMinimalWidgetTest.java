@@ -218,4 +218,16 @@ public class SelectOneMinimalWidgetTest {
                 .openSelectMinimalDialog()
                 .assertItemChecked(0, true);
     }
+
+    @Test
+    public void whenSelectingLongLabel_shouldEntireAnswerBeDisplayed() {
+        new FormEntryPage("select_one_minimal_form", activityTestRule)
+                .clickGoToArrow()
+                .clickOnQuestion("Q6")
+                .openSelectMinimalDialog()
+                .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
+                .assertText("Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget")
+                .clickOnText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
+                .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel");
+    }
 }
