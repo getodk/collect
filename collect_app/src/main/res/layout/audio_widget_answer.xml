@@ -11,9 +11,4 @@
         android:id="@+id/choose_button"
         layout="@layout/widget_button"/>
 
-    <include
-        android:id="@+id/audio_controller"
-        android:visibility="gone"
-        layout="@layout/audio_controller_layout"/>
-
 </LinearLayout>

@@ -81,8 +81,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     private String binaryName;
 
     public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioControllerView(context),
-                waitingForDataRegistry, null, MediaManager.INSTANCE);
+        this(context, prompt, new FileUtil(), new MediaUtil(), null, waitingForDataRegistry, null, MediaManager.INSTANCE);
     }
 
     AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,
@@ -92,9 +91,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         if (audioHelper != null) {
             this.audioHelper = audioHelper;
         }
+        if (audioController != null) {
+            this.audioController = audioController;
+        }
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
-        this.audioController = audioController;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mediaManagerListener = mediaManagerListener;
 
@@ -108,6 +109,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = AudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
+        audioController = new AudioControllerView(context);
+
+        binding.getRoot().addView(audioController);
         if (prompt.isReadOnly()) {
             binding.captureButton.widgetButton.setVisibility(View.GONE);
             binding.chooseButton.widgetButton.setVisibility(View.GONE);
