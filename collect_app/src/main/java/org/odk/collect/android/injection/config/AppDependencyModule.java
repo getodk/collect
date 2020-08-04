@@ -15,6 +15,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
+import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
@@ -348,10 +349,7 @@ public class AppDependencyModule {
 
     @Provides
     public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager) {
-        return () -> {
-            propertyManager.reload();
-            formUpdateManager.scheduleUpdates();
-        };
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager);
     }
 
     @Provides

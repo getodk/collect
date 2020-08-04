@@ -54,7 +54,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        settingsChangeHandler.onSettingsChanged();
+        settingsChangeHandler.onSettingChanged(key);
     }
 
     void removeDisabledPrefs() {
