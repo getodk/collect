@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import org.javarosa.core.model.data.TimeData;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
@@ -30,6 +32,8 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
 public class DateTimeUtilsTest {
+    private final LocalDateTime date = new LocalDateTime().withDate(2010, 5, 12);
+    private final LocalDateTime time = new LocalDateTime().withTime(12, 10, 0, 0);
 
     private DatePickerDetails gregorian;
     private DatePickerDetails gregorianSpinners;
@@ -90,6 +94,35 @@ public class DateTimeUtilsTest {
         persian = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.SPINNERS);
         persianMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         persianYear = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.YEAR);
+    }
+
+    @Test
+    public void getCurrentDateTime_returnsCurrentDateAndTimeData() {
+        LocalDateTime localDateTime = new LocalDateTime()
+                .withDate(DateTime.now().getYear(), DateTime.now().getMonthOfYear(), DateTime.now().getDayOfMonth())
+                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
+        assertEquals(DateTimeUtils.getCurrentDateTime(), localDateTime);
+    }
+
+    @Test
+    public void getSelectedDate_returnsCorrectDateAndTimeData() {
+        LocalDateTime localDateTime = new LocalDateTime()
+                .withDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth())
+                .withTime(time.getHourOfDay(), time.getMinuteOfHour(), 0, 0);
+        assertEquals(DateTimeUtils.getSelectedDate(date, time), localDateTime);
+    }
+
+    @Test
+    public void getSelectedTime_returnsCorrectDateAndTimeData() {
+        LocalDateTime localDateTime = new LocalDateTime()
+                .withDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth())
+                .withTime(time.getHourOfDay(), time.getMinuteOfHour(), 0, 0);
+        assertEquals(DateTimeUtils.getSelectedTime(time, date), localDateTime);
+    }
+
+    @Test
+    public void getTimeData_returnsCorrectTime() {
+        assertEquals(DateTimeUtils.getTimeData(time.toDateTime()).getDisplayText(), new TimeData(time.toDate()).getDisplayText());
     }
 
     @Test

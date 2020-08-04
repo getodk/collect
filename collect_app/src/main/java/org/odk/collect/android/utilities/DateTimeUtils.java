@@ -33,6 +33,12 @@ public class DateTimeUtils {
 
     }
 
+    public static LocalDateTime getCurrentDateTime() {
+        return new LocalDateTime()
+                .withDate(DateTime.now().getYear(), DateTime.now().getMonthOfYear(), DateTime.now().getDayOfMonth())
+                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
+    }
+
     public static LocalDateTime getSelectedDate(LocalDateTime selectedDate, LocalDateTime currentTime) {
         return new LocalDateTime()
                 .withDate(selectedDate.getYear(), selectedDate.getMonthOfYear(), selectedDate.getDayOfMonth())
@@ -45,24 +51,8 @@ public class DateTimeUtils {
                 .withTime(selectedTime.getHourOfDay(), selectedTime.getMinuteOfHour(), 0, 0);
     }
 
-    public static LocalDateTime getCurrentDateTime() {
-        return new LocalDateTime()
-                .withDate(DateTime.now().getYear(), DateTime.now().getMonthOfYear(), DateTime.now().getDayOfMonth())
-                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
-    }
-
     public static TimeData getTimeData(DateTime dateTime) {
-        // use picker time, convert to today's date, store as utc
-        DateTime localDateTime = new DateTime().withTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), 0, 0);
-        return new TimeData(localDateTime.toDate());
-    }
-
-    private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {
-        DateFormat dateFormatter;
-        locale = locale == null ? Locale.getDefault() : locale;
-        String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
-        dateFormatter = new SimpleDateFormat(format, locale);
-        return dateFormatter.format(date);
+        return new TimeData(dateTime.toDate());
     }
 
     public static String getDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
@@ -158,6 +148,14 @@ public class DateTimeUtils {
         }
 
         return String.format(context.getString(R.string.custom_date), customDateText, gregorianDateText);
+    }
+
+    private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {
+        DateFormat dateFormatter;
+        locale = locale == null ? Locale.getDefault() : locale;
+        String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
+        dateFormatter = new SimpleDateFormat(format, locale);
+        return dateFormatter.format(date);
     }
 
     private static String getDateTimeSkeleton(boolean containsTime, DatePickerDetails datePickerDetails) {
