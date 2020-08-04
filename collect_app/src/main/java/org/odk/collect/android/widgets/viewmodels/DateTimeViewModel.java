@@ -22,6 +22,9 @@ public class DateTimeViewModel extends ViewModel {
 
     private final TimePickerDialog.OnTimeSetListener timeSetListener = (view, hourOfDay, minuteOfHour) -> {
         view.clearFocus();
+        hourOfDay = view.getCurrentHour();
+        minuteOfHour = view.getCurrentMinute();
+
         setSelectedTime(hourOfDay, minuteOfHour);
     };
 
