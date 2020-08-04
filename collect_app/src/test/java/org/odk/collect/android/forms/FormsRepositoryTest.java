@@ -1,9 +1,6 @@
 package org.odk.collect.android.forms;
 
 import org.junit.Test;
-import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
@@ -16,19 +13,19 @@ public abstract class FormsRepositoryTest {
 
     public abstract FormsRepository buildSubject();
 
+    public abstract String getFormsPath();
+
+    public abstract Form.Builder getFormBuilder();
+
     @Test
     public void get_whenFormHasNullVersion_returnsForm() {
         FormsRepository formsRepository = buildSubject();
 
-        new StorageInitializer().createOdkDirsOnStorage();
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-
-        File formFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/form.xml");
+        File formFile = new File(getFormsPath() + "/form.xml");
         FileUtils.write(formFile, "blah".getBytes());
+        String mediaPath = new File(getFormsPath() + "/form-media").getAbsolutePath();
 
-        String mediaPath = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/form-media").getAbsolutePath();
-
-        formsRepository.save(new Form.Builder()
+        formsRepository.save(getFormBuilder()
                 .id(1L)
                 .displayName("Test Form")
                 .formFilePath(formFile.getAbsolutePath())
