@@ -134,6 +134,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
 
     @Override
     public void deleteFile() {
+        audioHelper.stop();
         mediaManagerListener.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
@@ -189,7 +190,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         }
 
         if (newAudio.exists()) {
-            // Add the copy to the content provier
+            // Add the copy to the content provider
             ContentValues values = new ContentValues(6);
             values.put(Audio.Media.TITLE, newAudio.getName());
             values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
@@ -198,8 +199,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
 
             mediaManagerListener.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
 
-            Uri audioURI = getContext().getContentResolver().insert(
-                    Audio.Media.EXTERNAL_CONTENT_URI, values);
+            Uri audioURI = getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
 
             if (audioURI != null) {
                 Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());

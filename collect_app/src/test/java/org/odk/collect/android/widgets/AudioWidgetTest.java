@@ -74,7 +74,7 @@ public class AudioWidgetTest {
     private AudioControllerView audioController;
     private FileUtil fileUtil;
     private MediaUtil mediaUtil;
-    private AudioHelper audioHelper;
+    private FakeAudioHelper audioHelper;
     private MediaManagerListener mockedMediaManagerListener;
     private ActivityAvailability activityAvailability;
     private FormIndex formIndex;
@@ -138,16 +138,18 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         Clip clip = getAnswerAudioClip(widget.getInstanceFolder(), widget.getAnswer());
 
-        assertThat(((FakeAudioHelper) widget.audioHelper).getAudioController(), equalTo(audioController));
-        assertThat(((FakeAudioHelper) widget.audioHelper).getClip().getURI(), equalTo(clip.getURI()));
+        assertThat(audioHelper.audioController, equalTo(audioController));
+        assertThat(audioHelper.clip.getURI(), equalTo(clip.getURI()));
         verify(audioController).showPlayer();
     }
 
     @Test
-    public void deleteFile_removesWidgetAnswer() {
+    public void deleteFile_removesWidgetAnswerAndStopsPlayingMedia() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.deleteFile();
+
         assertThat(widget.getAnswer(), nullValue());
+        assertThat(audioHelper.isMediaStopped, equalTo(true));
     }
 
     @Test
@@ -168,6 +170,7 @@ public class AudioWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
+        assertThat(audioHelper.isMediaStopped, equalTo(true));
         verify(audioController).hidePlayer();
     }
 
@@ -220,12 +223,11 @@ public class AudioWidgetTest {
     public void setData_whenFileExists_callsMediaManagerListener() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
         when(prompt.getIndex()).thenReturn(formIndex);
-        when(mockedFile.getAbsolutePath()).thenReturn("newFilePath/newFile.mp3");
 
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        AudioWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mockedMediaManagerListener).replaceRecentFileForQuestion("0, 0", "newFilePath/newFile.mp3");
+        verify(mockedMediaManagerListener).replaceRecentFileForQuestion("questionIndex", "newFilePath");
     }
 
     @Test
@@ -277,8 +279,8 @@ public class AudioWidgetTest {
         widget.setBinaryData(mockedFile);
         Clip clip = getAnswerAudioClip(widget.getInstanceFolder(), widget.getAnswer());
 
-        assertThat(((FakeAudioHelper) widget.audioHelper).getAudioController(), equalTo(audioController));
-        assertThat(((FakeAudioHelper) widget.audioHelper).getClip().getURI(), equalTo(clip.getURI()));
+        assertThat(audioHelper.audioController, equalTo(audioController));
+        assertThat(audioHelper.clip.getURI(), equalTo(clip.getURI()));
         verify(audioController, times(2)).showPlayer();
     }
 
@@ -404,12 +406,14 @@ public class AudioWidgetTest {
     }
 
     public static class FakeAudioHelper extends AudioHelper {
+        public AudioControllerView audioController;
+        public Clip clip;
 
-        private AudioControllerView audioController;
-        private Clip clip;
+        public boolean isMediaStopped;
 
         public FakeAudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, Supplier<MediaPlayer> mediaPlayerFactory) {
             super(activity, lifecycleOwner, scheduler, mediaPlayerFactory);
+            isMediaStopped = false;
         }
 
         @Override
@@ -418,12 +422,9 @@ public class AudioWidgetTest {
             this.clip = clip;
         }
 
-        public AudioControllerView getAudioController() {
-            return audioController;
-        }
-
-        public Clip getClip() {
-            return clip;
+        @Override
+        public void stop() {
+            isMediaStopped = true;
         }
     }
 }
