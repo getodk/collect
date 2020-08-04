@@ -113,7 +113,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         this.questionText = questionText.getText();
 
         labelTextView = questionText;
-        labelTextView.setId(View.generateViewId());
+        labelTextView.setId(R.id.text_label);
         labelTextView.setOnClickListener(v -> listener.onItemClicked());
 
         textContainer.removeAllViews();

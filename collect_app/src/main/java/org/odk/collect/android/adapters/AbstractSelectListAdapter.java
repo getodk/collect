@@ -170,6 +170,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 missingImage.setText(errorMsg);
             }
 
+            missingImage.setId(R.id.text_label);
             view = missingImage;
         }
 
