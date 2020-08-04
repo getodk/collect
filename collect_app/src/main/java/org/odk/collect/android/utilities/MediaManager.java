@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import org.odk.collect.android.widgets.interfaces.MediaManagerListener;
-
 import java.util.HashMap;
 import java.util.Map;
 

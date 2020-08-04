@@ -41,11 +41,11 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
+import org.odk.collect.android.utilities.MediaManagerListener;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
-import org.odk.collect.android.widgets.interfaces.MediaManagerListener;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 

@@ -1,7 +1,8 @@
-package org.odk.collect.android.widgets.interfaces;
+package org.odk.collect.android.utilities;
 
 public interface MediaManagerListener {
     void markOriginalFileOrDelete(String questionIndex, String fileName);
 
     void replaceRecentFileForQuestion(String questionIndex, String fileName);
 }
+
