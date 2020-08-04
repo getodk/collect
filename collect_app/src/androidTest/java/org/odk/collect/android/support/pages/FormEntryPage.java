@@ -258,6 +258,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return waitFor(() -> new AddNewRepeatDialog(repeatName, rule).assertOnPage());
     }
 
+    public FormEntryPage answerNextQuestion(String question, String answer) {
+        swipeToNextQuestion(question);
+        inputText(answer);
+        closeSoftKeyboard();
+        return this;
+    }
+
     public FormEntryPage answerQuestion(String question, String answer) {
         assertText(question);
         inputText(answer);

@@ -544,7 +544,6 @@ public class FileUtils {
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(data);
-            fos.close();
         } catch (IOException e) {
             Timber.e(e);
         }

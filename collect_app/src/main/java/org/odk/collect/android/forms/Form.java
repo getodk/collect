@@ -18,6 +18,8 @@ package org.odk.collect.android.forms;
 
 import org.odk.collect.android.storage.StoragePathProvider;
 
+import javax.annotation.Nullable;
+
 /**
  * A form definition stored on the device.
  *
@@ -221,6 +223,7 @@ public final class Form {
         return jrFormId;
     }
 
+    @Nullable
     public String getJrVersion() {
         return jrVersion;
     }

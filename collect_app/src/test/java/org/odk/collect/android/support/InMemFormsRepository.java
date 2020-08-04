@@ -8,6 +8,7 @@ import org.odk.collect.android.utilities.MultiFormDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -39,9 +40,9 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form get(String jrFormId, String jrVersion) {
+    public Form get(String jrFormId, @Nullable String jrVersion) {
         return forms.stream().filter(f -> {
-            return f.getJrFormId().equals(jrFormId) && f.getJrVersion().equals(jrVersion);
+            return f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion);
         }).findFirst().orElse(null);
     }
 

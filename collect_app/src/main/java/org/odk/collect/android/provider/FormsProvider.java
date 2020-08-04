@@ -241,7 +241,7 @@ public class FormsProvider extends ContentProvider {
                 }
             }
 
-            long rowId = db.insert(FORMS_TABLE_NAME, null, values);
+            long rowId = db.insertOrThrow(FORMS_TABLE_NAME, null, values);
             if (rowId > 0) {
                 Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
                         rowId);
