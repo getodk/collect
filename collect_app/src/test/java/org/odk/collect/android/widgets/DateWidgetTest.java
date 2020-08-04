@@ -16,7 +16,6 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
-import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,7 +46,7 @@ public class DateWidgetTest {
         onLongClickListener = mock(View.OnLongClickListener.class);
         dateTimeWidgetListener = mock(DateTimeWidgetListener.class);
 
-        dateAnswer = DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(2010, 5, 12), LocalDateTime.now());
+        dateAnswer = DateTimeUtils.getSelectedDate(new LocalDateTime().withDate(2010, 5, 12), LocalDateTime.now());
     }
 
     @Test
@@ -105,7 +104,7 @@ public class DateWidgetTest {
         widget.binding.widgetButton.performClick();
 
         verify(dateTimeWidgetListener).displayDatePickerDialog(widgetActivity, prompt.getIndex(),
-                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeWidgetUtils.getCurrentDateTime());
+                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
     }
 
     @Test

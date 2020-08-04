@@ -31,7 +31,6 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
 
@@ -68,10 +67,10 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.getAnswerValue() == null) {
-            selectedDate = DateTimeWidgetUtils.getCurrentDateTime();
+            selectedDate = DateTimeUtils.getCurrentDateTime();
             binding.widgetAnswerText.setText(R.string.no_date_selected);
         } else {
-            selectedDate = DateTimeWidgetUtils.getSelectedDate(new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue()),
+            selectedDate = DateTimeUtils.getSelectedDate(new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue()),
                     LocalDateTime.now());
             binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
                     (Date) getAnswer().getValue(), datePickerDetails, false, context));
@@ -102,7 +101,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void clearAnswer() {
-        selectedDate = DateTimeWidgetUtils.getCurrentDateTime();
+        selectedDate = DateTimeUtils.getCurrentDateTime();
         binding.widgetAnswerText.setText(R.string.no_date_selected);
         widgetValueChanged();
     }
@@ -110,7 +109,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     @Override
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
-            selectedDate = DateTimeWidgetUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now());
+            selectedDate = DateTimeUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now());
             binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
                     selectedDate.toDate(), datePickerDetails, false, getContext()));
         }

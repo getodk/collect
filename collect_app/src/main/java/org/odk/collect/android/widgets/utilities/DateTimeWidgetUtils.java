@@ -7,8 +7,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.TimeData;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
@@ -45,30 +43,6 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
     @Override
     public void displayTimePickerDialog(Context context, LocalDateTime selectedTime) {
         showTimePickerDialog(context, selectedTime);
-    }
-
-    public static LocalDateTime getSelectedDate(LocalDateTime selectedDate, LocalDateTime currentTime) {
-        return new LocalDateTime()
-                .withDate(selectedDate.getYear(), selectedDate.getMonthOfYear(), selectedDate.getDayOfMonth())
-                .withTime(currentTime.getHourOfDay(), currentTime.getMinuteOfHour(), 0, 0);
-    }
-
-    public static LocalDateTime getSelectedTime(LocalDateTime selectedTime, LocalDateTime currentDate) {
-        return new LocalDateTime()
-                .withDate(currentDate.getYear(), currentDate.getMonthOfYear(), currentDate.getDayOfMonth())
-                .withTime(selectedTime.getHourOfDay(), selectedTime.getMinuteOfHour(), 0, 0);
-    }
-
-    public static LocalDateTime getCurrentDateTime() {
-        return new LocalDateTime()
-                .withDate(DateTime.now().getYear(), DateTime.now().getMonthOfYear(), DateTime.now().getDayOfMonth())
-                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
-    }
-
-    public static TimeData getTimeData(DateTime dateTime) {
-        // use picker time, convert to today's date, store as utc
-        DateTime localDateTime = new DateTime().withTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), 0, 0);
-        return new TimeData(localDateTime.toDate());
     }
 
     private static void setWaitingForData(FormIndex formIndex) {

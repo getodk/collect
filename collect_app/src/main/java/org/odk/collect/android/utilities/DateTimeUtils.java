@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 
+import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
@@ -32,23 +33,36 @@ public class DateTimeUtils {
 
     }
 
+    public static LocalDateTime getSelectedDate(LocalDateTime selectedDate, LocalDateTime currentTime) {
+        return new LocalDateTime()
+                .withDate(selectedDate.getYear(), selectedDate.getMonthOfYear(), selectedDate.getDayOfMonth())
+                .withTime(currentTime.getHourOfDay(), currentTime.getMinuteOfHour(), 0, 0);
+    }
+
+    public static LocalDateTime getSelectedTime(LocalDateTime selectedTime, LocalDateTime currentDate) {
+        return new LocalDateTime()
+                .withDate(currentDate.getYear(), currentDate.getMonthOfYear(), currentDate.getDayOfMonth())
+                .withTime(selectedTime.getHourOfDay(), selectedTime.getMinuteOfHour(), 0, 0);
+    }
+
+    public static LocalDateTime getCurrentDateTime() {
+        return new LocalDateTime()
+                .withDate(DateTime.now().getYear(), DateTime.now().getMonthOfYear(), DateTime.now().getDayOfMonth())
+                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
+    }
+
+    public static TimeData getTimeData(DateTime dateTime) {
+        // use picker time, convert to today's date, store as utc
+        DateTime localDateTime = new DateTime().withTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), 0, 0);
+        return new TimeData(localDateTime.toDate());
+    }
+
     private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {
         DateFormat dateFormatter;
         locale = locale == null ? Locale.getDefault() : locale;
         String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
         dateFormatter = new SimpleDateFormat(format, locale);
         return dateFormatter.format(date);
-    }
-
-    public static LocalDateTime getLocalDateTime(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
-        return new LocalDateTime()
-                .withYear(year)
-                .withMonthOfYear(month)
-                .withDayOfMonth(dayOfMonth)
-                .withHourOfDay(hourOfDay)
-                .withMinuteOfHour(minute)
-                .withSecondOfMinute(0)
-                .withMillisOfSecond(0);
     }
 
     public static String getDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {

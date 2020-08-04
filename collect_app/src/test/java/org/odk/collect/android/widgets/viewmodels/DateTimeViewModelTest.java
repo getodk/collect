@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.LiveDataTester;
-import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.utilities.DateTimeUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,14 +49,14 @@ public class DateTimeViewModelTest {
     @Test
     public void setSelectedDate_updatesDateReturnedByViewModel() {
         viewModel.setSelectedDate(2012, 4, 12);
-        assertThat(selectedDate.getValue(), is(DateTimeWidgetUtils.getSelectedDate(
+        assertThat(selectedDate.getValue(), is(DateTimeUtils.getSelectedDate(
                 new LocalDateTime().withDate(2012, 5, 12), LocalDateTime.now())));
     }
 
     @Test
     public void setSelectedDateTime_updatesTimeReturnedByViewModel() {
         viewModel.setSelectedTime(12, 10);
-        assertThat(selectedTime.getValue(), is(DateTimeWidgetUtils.getSelectedTime(
+        assertThat(selectedTime.getValue(), is(DateTimeUtils.getSelectedTime(
                 new LocalDateTime().withTime(12, 10, 0, 0), LocalDateTime.now()).toDateTime()));
     }
 
@@ -66,7 +66,7 @@ public class DateTimeViewModelTest {
         viewModel.getOnDateSetListener().onDateSet(datePicker, 2012, 4, 12);
 
         verify(datePicker).clearFocus();
-        assertThat(selectedDate.getValue(), is(DateTimeWidgetUtils.getSelectedDate(
+        assertThat(selectedDate.getValue(), is(DateTimeUtils.getSelectedDate(
                 new LocalDateTime().withDate(2012, 5, 12), LocalDateTime.now())));
     }
 
@@ -78,7 +78,7 @@ public class DateTimeViewModelTest {
         viewModel.getOnTimeSetListener().onTimeSet(timePicker, 0, 0);
 
         verify(timePicker).clearFocus();
-        assertThat(selectedTime.getValue(), is(DateTimeWidgetUtils.getSelectedTime(
+        assertThat(selectedTime.getValue(), is(DateTimeUtils.getSelectedTime(
                 new LocalDateTime().withTime(12, 10, 0, 0), LocalDateTime.now()).toDateTime()));
     }
 }

@@ -29,9 +29,9 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 @SuppressLint("ViewConstructor")
 public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
@@ -64,12 +64,12 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.getAnswerValue() == null) {
-            selectedTime = DateTimeWidgetUtils.getCurrentDateTime();
+            selectedTime = DateTimeUtils.getCurrentDateTime();
             binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
             DateTime dateTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
-            selectedTime = DateTimeWidgetUtils.getSelectedTime(dateTime.toLocalDateTime(), LocalDateTime.now());
-            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(dateTime).getDisplayText());
+            selectedTime = DateTimeUtils.getSelectedTime(dateTime.toLocalDateTime(), LocalDateTime.now());
+            binding.widgetAnswerText.setText(DateTimeUtils.getTimeData(dateTime).getDisplayText());
         }
 
         return binding.getRoot();
@@ -77,7 +77,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void clearAnswer() {
-        selectedTime = DateTimeWidgetUtils.getCurrentDateTime();
+        selectedTime = DateTimeUtils.getCurrentDateTime();
         binding.widgetAnswerText.setText(R.string.no_time_selected);
         widgetValueChanged();
     }
@@ -105,7 +105,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     @Override
     public void setData(Object answer) {
         if (answer instanceof DateTime) {
-            selectedTime = DateTimeWidgetUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now());
+            selectedTime = DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now());
             binding.widgetAnswerText.setText(new TimeData(selectedTime.toDate()).getDisplayText());
         }
     }

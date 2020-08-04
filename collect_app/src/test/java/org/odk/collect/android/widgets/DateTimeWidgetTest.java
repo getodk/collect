@@ -19,7 +19,6 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
-import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -82,7 +81,7 @@ public class DateTimeWidgetTest {
         widget.binding.timeWidget.widgetAnswerText.setText(widget.getContext().getString(R.string.no_time_selected));
 
         assertEquals(widget.getAnswer().getDisplayText(),
-                new DateTimeData(DateTimeWidgetUtils.getSelectedDate(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
+                new DateTimeData(DateTimeUtils.getSelectedDate(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
     }
 
     @Test
@@ -91,7 +90,7 @@ public class DateTimeWidgetTest {
         widget.binding.dateWidget.widgetAnswerText.setText(widget.getContext().getString(R.string.no_date_selected));
 
         assertEquals(widget.getAnswer().getDisplayText(),
-                new DateTimeData(DateTimeWidgetUtils.getSelectedTime(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
+                new DateTimeData(DateTimeUtils.getSelectedTime(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
     }
 
     @Test
@@ -116,7 +115,7 @@ public class DateTimeWidgetTest {
 
         assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
                 DateTimeUtils.getDateTimeLabel(localDateTime.toDate(), datePickerDetails, false, widget.getContext()));
-        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), DateTimeWidgetUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), DateTimeUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
     }
 
     @Test
@@ -144,7 +143,7 @@ public class DateTimeWidgetTest {
         widget.binding.dateWidget.widgetButton.performClick();
 
         verify(dateTimeWidgetListener).displayDatePickerDialog(widgetActivity, prompt.getIndex(),
-                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeWidgetUtils.getCurrentDateTime());
+                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
     }
 
     @Test
@@ -153,7 +152,7 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(prompt);
         widget.binding.timeWidget.widgetButton.performClick();
 
-        verify(dateTimeWidgetListener).displayTimePickerDialog(widgetActivity, DateTimeWidgetUtils.getCurrentDateTime());
+        verify(dateTimeWidgetListener).displayTimePickerDialog(widgetActivity, DateTimeUtils.getCurrentDateTime());
     }
 
     @Test
@@ -164,7 +163,7 @@ public class DateTimeWidgetTest {
 
         verify(dateTimeWidgetListener).displayDatePickerDialog(widgetActivity, prompt.getIndex(),
                 DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()),
-                DateTimeWidgetUtils.getSelectedDate(localDateTime, new LocalDateTime().withTime(0, 0, 0, 0)));
+                DateTimeUtils.getSelectedDate(localDateTime, new LocalDateTime().withTime(0, 0, 0, 0)));
     }
 
     @Test
@@ -237,14 +236,14 @@ public class DateTimeWidgetTest {
         widget.setData(answer);
 
         assertEquals(widget.getAnswer().getDisplayText(),
-                new DateTimeData(DateTimeWidgetUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now()).toDate()).getDisplayText());
+                new DateTimeData(DateTimeUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now()).toDate()).getDisplayText());
     }
 
     @Test
     public void setTimeData_updatesValueShownInTimeAnswerTextView() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setData(new DateTime().withTime(12, 10, 0, 0));
-        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), DateTimeWidgetUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), DateTimeUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
     }
 
     @Test
@@ -254,7 +253,7 @@ public class DateTimeWidgetTest {
         widget.setData(answer);
 
         assertEquals(widget.getAnswer().getDisplayText(),
-                new DateTimeData(DateTimeWidgetUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now()).toDate()).getDisplayText());
+                new DateTimeData(DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now()).toDate()).getDisplayText());
     }
 
     private DateTimeWidget createWidget(FormEntryPrompt prompt) {

@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.utilities.DateTimeUtils;
 
 public class DateTimeViewModel extends ViewModel {
     private final MutableLiveData<LocalDateTime> selectedDate = new MutableLiveData<>();
@@ -37,7 +37,7 @@ public class DateTimeViewModel extends ViewModel {
     }
 
     public void setSelectedDate(int year, int month, int day) {
-        this.selectedDate.postValue(DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(year, month + 1, day), LocalDateTime.now()));
+        this.selectedDate.postValue(DateTimeUtils.getSelectedDate(new LocalDateTime().withDate(year, month + 1, day), LocalDateTime.now()));
     }
 
     public void setSelectedTime(int hourOfDay, int minuteOfHour) {

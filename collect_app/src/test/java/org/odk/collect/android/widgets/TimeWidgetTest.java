@@ -13,8 +13,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
-import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,7 +44,7 @@ public class TimeWidgetTest {
         onLongClickListener = mock(View.OnLongClickListener.class);
         dateTimeWidgetListener = mock(DateTimeWidgetListener.class);
 
-        timeAnswer = DateTimeWidgetUtils.getSelectedTime(new LocalDateTime().withTime(12, 10, 0, 0), LocalDateTime.now());
+        timeAnswer = DateTimeUtils.getSelectedTime(new LocalDateTime().withTime(12, 10, 0, 0), LocalDateTime.now());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class TimeWidgetTest {
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectTime() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
-        assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeWidgetUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class TimeWidgetTest {
         TimeWidget widget = createWidget(prompt);
         widget.binding.widgetButton.performClick();
 
-        verify(dateTimeWidgetListener).displayTimePickerDialog(widgetActivity, DateTimeWidgetUtils.getCurrentDateTime());
+        verify(dateTimeWidgetListener).displayTimePickerDialog(widgetActivity, DateTimeUtils.getCurrentDateTime());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class TimeWidgetTest {
     public void setData_updatesValueDisplayedInAnswerTextView() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setData(timeAnswer.toDateTime());
-        assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeWidgetUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
     }
 
     private TimeWidget createWidget(FormEntryPrompt prompt) {
