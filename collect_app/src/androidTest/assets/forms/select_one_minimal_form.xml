@@ -104,6 +104,7 @@
                <q3 />
                <q4 />
                <q5 />
+               <q6 />
                <meta>
                   <instanceID />
                </meta>
@@ -114,6 +115,7 @@
          <bind nodeset="/data/q3" type="string" />
          <bind nodeset="/data/q4" type="string" />
          <bind nodeset="/data/q5" type="string" />
+         <bind nodeset="/data/q6" type="string" />
          <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
       </model>
    </h:head>
@@ -191,6 +193,17 @@
          <item>
             <label ref="jr:itext('/data/q5/z:label')" />
             <value>z</value>
+         </item>
+      </select1>
+      <select1 appearance="minimal" ref="/data/q6">
+         <label>Q6</label>
+         <item>
+            <label>Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel</label>
+            <value>a</value>
+         </item>
+         <item>
+            <label>Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget</label>
+            <value>b</value>
          </item>
       </select1>
    </h:body>
