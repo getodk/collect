@@ -106,8 +106,8 @@ public class AudioWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowCaptureAndChooseButtons() {
         AudioWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.binding.captureButton.widgetButton.getVisibility(), equalTo(View.GONE));
-        assertThat(widget.binding.chooseButton.widgetButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.captureButton.getRoot().getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.chooseButton.getRoot().getVisibility(), equalTo(View.GONE));
     }
 
     @Test
@@ -130,7 +130,7 @@ public class AudioWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW);
         AudioWidget widget = createWidget(prompt);
 
-        assertThat(widget.binding.chooseButton.widgetButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.chooseButton.getRoot().getVisibility(), equalTo(View.GONE));
     }
 
     @Test
@@ -297,11 +297,11 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
 
-        widget.binding.captureButton.widgetButton.performLongClick();
-        widget.binding.chooseButton.widgetButton.performLongClick();
+        widget.binding.captureButton.getRoot().performLongClick();
+        widget.binding.chooseButton.getRoot().performLongClick();
 
-        verify(listener).onLongClick(widget.binding.captureButton.widgetButton);
-        verify(listener).onLongClick(widget.binding.chooseButton.widgetButton);
+        verify(listener).onLongClick(widget.binding.captureButton.getRoot());
+        verify(listener).onLongClick(widget.binding.chooseButton.getRoot());
     }
 
     @Test
@@ -309,7 +309,7 @@ public class AudioWidgetTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
         AudioWidget widget = createWidget(promptWithAnswer(null));
 
-        widget.binding.chooseButton.widgetButton.performClick();
+        widget.binding.chooseButton.getRoot().performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
         String toastMessage = ShadowToast.getTextOfLatestToast();
 
@@ -325,7 +325,7 @@ public class AudioWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
-        widget.binding.chooseButton.widgetButton.performClick();
+        widget.binding.chooseButton.getRoot().performClick();
 
         Intent startedActivity = shadowActivity.getNextStartedActivity();
         assertThat(startedActivity.getAction(), equalTo(ACTION_GET_CONTENT));
@@ -345,7 +345,7 @@ public class AudioWidgetTest {
         widget.setPermissionUtils(fakePermissionUtils);
         fakePermissionUtils.setPermissionGranted(true);
 
-        widget.binding.captureButton.widgetButton.performClick();
+        widget.binding.captureButton.getRoot().performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
         String toastMessage = ShadowToast.getTextOfLatestToast();
 
@@ -361,7 +361,7 @@ public class AudioWidgetTest {
         widget.setPermissionUtils(fakePermissionUtils);
         fakePermissionUtils.setPermissionGranted(false);
 
-        widget.binding.captureButton.widgetButton.performClick();
+        widget.binding.captureButton.getRoot().performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
 
         assertThat(startedActivity, nullValue());
@@ -377,7 +377,7 @@ public class AudioWidgetTest {
         widget.setPermissionUtils(fakePermissionUtils);
         fakePermissionUtils.setPermissionGranted(true);
 
-        widget.binding.captureButton.widgetButton.performClick();
+        widget.binding.captureButton.getRoot().performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
 
         assertThat(startedActivity.getAction(), equalTo(MediaStore.Audio.Media.RECORD_SOUND_ACTION));

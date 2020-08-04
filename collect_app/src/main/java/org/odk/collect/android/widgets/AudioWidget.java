@@ -116,17 +116,17 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
 
         binding.getRoot().addView(audioController);
         if (prompt.isReadOnly()) {
-            binding.captureButton.widgetButton.setVisibility(View.GONE);
-            binding.chooseButton.widgetButton.setVisibility(View.GONE);
+            binding.captureButton.getRoot().setVisibility(View.GONE);
+            binding.chooseButton.getRoot().setVisibility(View.GONE);
         } else {
-            binding.captureButton.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.chooseButton.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.captureButton.getRoot().setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.chooseButton.getRoot().setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.captureButton.widgetButton.setText(getContext().getString(R.string.capture_audio));
-            binding.chooseButton.widgetButton.setText(getContext().getString(R.string.choose_sound));
+            binding.captureButton.getRoot().setText(getContext().getString(R.string.capture_audio));
+            binding.chooseButton.getRoot().setText(getContext().getString(R.string.choose_sound));
 
-            binding.captureButton.widgetButton.setOnClickListener(v -> onCaptureAudioButtonClicked());
-            binding.chooseButton.widgetButton.setOnClickListener(v -> chooseSound());
+            binding.captureButton.getRoot().setOnClickListener(v -> onCaptureAudioButtonClicked());
+            binding.chooseButton.getRoot().setOnClickListener(v -> chooseSound());
         }
 
         return binding.getRoot();
@@ -223,7 +223,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     private void hideButtonsIfNeeded() {
         if (getFormEntryPrompt().getAppearanceHint() != null
                 && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
-            binding.chooseButton.widgetButton.setVisibility(View.GONE);
+            binding.chooseButton.getRoot().setVisibility(View.GONE);
         }
     }
 
@@ -242,15 +242,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.captureButton.widgetButton.setOnLongClickListener(l);
-        binding.chooseButton.widgetButton.setOnLongClickListener(l);
+        binding.captureButton.getRoot().setOnLongClickListener(l);
+        binding.chooseButton.getRoot().setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.captureButton.widgetButton.cancelLongPress();
-        binding.chooseButton.widgetButton.cancelLongPress();
+        binding.captureButton.getRoot().cancelLongPress();
+        binding.chooseButton.getRoot().cancelLongPress();
     }
 
     private void onCaptureAudioButtonClicked() {
