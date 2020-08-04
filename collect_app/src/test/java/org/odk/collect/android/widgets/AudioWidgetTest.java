@@ -17,6 +17,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
@@ -26,6 +27,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
@@ -36,6 +38,7 @@ import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.async.Scheduler;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 import java.util.function.Supplier;
@@ -44,6 +47,7 @@ import static android.content.Intent.ACTION_GET_CONTENT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -72,6 +76,7 @@ public class AudioWidgetTest {
     private MediaUtil mediaUtil;
     private AudioHelper audioHelper;
     private MediaManagerListener mockedMediaManagerListener;
+    private ActivityAvailability activityAvailability;
     private FormIndex formIndex;
     private File mockedFile;
 
@@ -84,6 +89,7 @@ public class AudioWidgetTest {
         fileUtil = mock(FileUtil.class);
         mediaUtil = mock(MediaUtil.class);
         mockedMediaManagerListener = mock(MediaManagerListener.class);
+        activityAvailability = mock(ActivityAvailability.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
 
@@ -94,6 +100,7 @@ public class AudioWidgetTest {
         when(mockedFile.getName()).thenReturn("newFile.mp3");
         when(mockedFile.getAbsolutePath()).thenReturn("newFilePath");
         when(formIndex.toString()).thenReturn("questionIndex");
+        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
     }
 
     @Test
@@ -298,8 +305,26 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void clickingChooseButton_startsChooseAudioFileActivity() {
+    public void clickingChooseButton_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
+        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
         AudioWidget widget = createWidget(promptWithAnswer(null));
+
+        widget.binding.chooseButton.widgetButton.performClick();
+        Intent startedActivity = shadowActivity.getNextStartedActivity();
+        String toastMessage = ShadowToast.getTextOfLatestToast();
+
+        assertThat(startedActivity, nullValue());
+        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
+        assertThat(toastMessage, equalTo(widget.getContext().getString(R.string.activity_not_found,
+                widget.getContext().getString(R.string.choose_audio))));
+    }
+
+    @Test
+    public void clickingChooseButton_startsChooseAudioFileActivityAndSetsWidgetWaitingForData() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        AudioWidget widget = createWidget(prompt);
         widget.binding.chooseButton.widgetButton.performClick();
 
         Intent startedActivity = shadowActivity.getNextStartedActivity();
@@ -308,69 +333,66 @@ public class AudioWidgetTest {
 
         ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
         assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CHOOSER));
-    }
-
-    @Test
-    public void clickingChooseButton_setsWidgetWaitingForData() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        AudioWidget widget = createWidget(prompt);
-        widget.binding.chooseButton.widgetButton.performClick();
 
         assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
     }
 
     @Test
-    public void clickingCaptureButton_whenPermissionIsNotGranted_doesNotStartAnyIntent() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
+    public void clickingCaptureButton_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
+        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
 
-        AudioWidget widget = createWidget(prompt);
+        AudioWidget widget = createWidget(promptWithAnswer(null));
+        widget.setPermissionUtils(fakePermissionUtils);
+        fakePermissionUtils.setPermissionGranted(true);
+
+        widget.binding.captureButton.widgetButton.performClick();
+        Intent startedActivity = shadowActivity.getNextStartedActivity();
+        String toastMessage = ShadowToast.getTextOfLatestToast();
+
+        assertThat(startedActivity, nullValue());
+        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
+        assertThat(toastMessage, equalTo(widget.getContext().getString(R.string.activity_not_found,
+                widget.getContext().getString(R.string.capture_audio))));
+    }
+
+    @Test
+    public void clickingCaptureButton_whenPermissionIsNotGranted_doesNotStartAnyIntentAndCancelsWaitingForData() {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
         widget.setPermissionUtils(fakePermissionUtils);
         fakePermissionUtils.setPermissionGranted(false);
-        widget.binding.captureButton.widgetButton.performClick();
 
+        widget.binding.captureButton.widgetButton.performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
+
         assertThat(startedActivity, nullValue());
         assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
     }
 
     @Test
-    public void clickingCaptureButton_whenPermissionIsGranted_startsRecordSoundIntent() {
+    public void clickingCaptureButton_whenPermissionIsGranted_startsRecordSoundIntentAndSetsWidgetWaitingForData() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
         widget.setPermissionUtils(fakePermissionUtils);
         fakePermissionUtils.setPermissionGranted(true);
-        widget.binding.captureButton.widgetButton.performClick();
 
+        widget.binding.captureButton.widgetButton.performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
+
         assertThat(startedActivity.getAction(), equalTo(MediaStore.Audio.Media.RECORD_SOUND_ACTION));
         assertThat(startedActivity.getStringExtra(MediaStore.EXTRA_OUTPUT), equalTo(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                 .toString()));
 
         ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
         assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CAPTURE));
-    }
-
-    @Test
-    public void clickingCaptureButton_whenPermissionIsGranted_setsWidgetWaitingForData() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        AudioWidget widget = createWidget(prompt);
-        widget.setPermissionUtils(fakePermissionUtils);
-        fakePermissionUtils.setPermissionGranted(true);
-        widget.binding.captureButton.widgetButton.performClick();
 
         assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt) {
-        return new AudioWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                fileUtil, mediaUtil, audioController, waitingForDataRegistry, audioHelper, mockedMediaManagerListener);
+        return new AudioWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), fileUtil,
+                mediaUtil, audioController, waitingForDataRegistry, audioHelper, mockedMediaManagerListener, activityAvailability);
     }
 
     private Clip getAnswerAudioClip(String instanceFolderPath, IAnswerData answer) {

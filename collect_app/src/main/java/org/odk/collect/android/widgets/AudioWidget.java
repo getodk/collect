@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +38,7 @@ import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
@@ -77,15 +77,17 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     AudioControllerView audioController;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final MediaManagerListener mediaManagerListener;
+    private final ActivityAvailability activityAvailability;
 
     private String binaryName;
 
     public AudioWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), null, waitingForDataRegistry, null, MediaManager.INSTANCE);
+        this(context, prompt, new FileUtil(), new MediaUtil(), null,
+                waitingForDataRegistry, null, MediaManager.INSTANCE, new ActivityAvailability(context));
     }
 
     AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,
-                WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, MediaManagerListener mediaManagerListener) {
+                WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, MediaManagerListener mediaManagerListener, ActivityAvailability activityAvailability) {
         super(context, questionDetails);
 
         if (audioHelper != null) {
@@ -98,6 +100,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         this.mediaUtil = mediaUtil;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mediaManagerListener = mediaManagerListener;
+        this.activityAvailability = activityAvailability;
 
         hideButtonsIfNeeded();
 
@@ -264,37 +267,29 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     private void captureAudio() {
-        Intent i = new Intent(
-                android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-        i.putExtra(
-                android.provider.MediaStore.EXTRA_OUTPUT,
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                        .toString());
-        try {
+        Intent intent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
+
+        if (activityAvailability.isActivityAvailable(intent)) {
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.AUDIO_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT)
-                    .show();
+            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CAPTURE);
+        } else {
+            Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
+                            getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT).show();
             waitingForDataRegistry.cancelWaitingForData();
         }
     }
 
     private void chooseSound() {
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.setType("audio/*");
-        try {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("audio/*");
+
+        if (activityAvailability.isActivityAvailable(intent)) {
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.AUDIO_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
+            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CHOOSER);
+        } else {
+            Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
             waitingForDataRegistry.cancelWaitingForData();
         }
