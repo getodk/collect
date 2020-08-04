@@ -31,6 +31,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
+
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,8 +101,15 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         }
 
         if(referenceValue.length() > 0) {
-            // Get the url which doubles as the cache key
+
+            // Get the url which doubles as the cache key - url encode it by converting to a URI
             String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
+            try {
+                URL u = new URL(url);
+                URI uri = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getRef());
+                u = uri.toURL();
+                url = u.toString();
+            } catch (Exception e) {}
 
             // Get the cache results if they exist
             String data = app.getRemoteData(url);
