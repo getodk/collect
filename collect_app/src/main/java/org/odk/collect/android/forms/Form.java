@@ -86,14 +86,8 @@ public final class Form {
         private String lastDetectedFormVersionHash;
         private String geometryXpath;
         private boolean deleted;
-        private StoragePathProvider storagePathProvider;
 
         public Builder() {
-            storagePathProvider = new StoragePathProvider();
-        }
-
-        public Builder(StoragePathProvider storagePathProvider) {
-            this.storagePathProvider = storagePathProvider;
         }
 
         public Builder(Form form) {
@@ -143,7 +137,7 @@ public final class Form {
         }
 
         public Builder formFilePath(String formFilePath) {
-            this.formFilePath = storagePathProvider.getFormDbPath(formFilePath);
+            this.formFilePath = formFilePath;
             return this;
         }
 
@@ -168,12 +162,12 @@ public final class Form {
         }
 
         public Builder jrCacheFilePath(String jrCacheFilePath) {
-            this.jrCacheFilePath = storagePathProvider.getCacheDbPath(jrCacheFilePath);
+            this.jrCacheFilePath = jrCacheFilePath;
             return this;
         }
 
         public Builder formMediaPath(String formMediaPath) {
-            this.formMediaPath = storagePathProvider.getFormDbPath(formMediaPath);
+            this.formMediaPath = formMediaPath;
             return this;
         }
 

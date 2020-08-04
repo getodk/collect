@@ -23,17 +23,11 @@ public class DatabaseFormsRepositoryTest extends FormsRepositoryTest {
 
     @Override
     public FormsRepository buildSubject() {
-
         return new DatabaseFormsRepository();
     }
 
     @Override
-    public String getFormsPath() {
+    public String getFormFilesPath() {
         return storagePathProvider.getDirPath(StorageSubdirectory.FORMS);
-    }
-
-    @Override
-    public Form.Builder getFormBuilder() {
-        return new Form.Builder(storagePathProvider);
     }
 }

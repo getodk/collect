@@ -13,19 +13,17 @@ public abstract class FormsRepositoryTest {
 
     public abstract FormsRepository buildSubject();
 
-    public abstract String getFormsPath();
-
-    public abstract Form.Builder getFormBuilder();
+    public abstract String getFormFilesPath();
 
     @Test
     public void get_whenFormHasNullVersion_returnsForm() {
         FormsRepository formsRepository = buildSubject();
 
-        File formFile = new File(getFormsPath() + "/form.xml");
+        File formFile = new File(getFormFilesPath() + "/form.xml");
         FileUtils.write(formFile, "blah".getBytes());
-        String mediaPath = new File(getFormsPath() + "/form-media").getAbsolutePath();
+        String mediaPath = new File(getFormFilesPath() + "/form-media").getAbsolutePath();
 
-        formsRepository.save(getFormBuilder()
+        formsRepository.save(new Form.Builder()
                 .id(1L)
                 .displayName("Test Form")
                 .formFilePath(formFile.getAbsolutePath())
