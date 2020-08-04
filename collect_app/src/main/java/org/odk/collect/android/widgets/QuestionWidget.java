@@ -75,9 +75,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
-public abstract class QuestionWidget
-        extends FrameLayout
-        implements Widget {
+public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private final FormEntryPrompt formEntryPrompt;
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
@@ -108,10 +106,6 @@ public abstract class QuestionWidget
     public Analytics analytics;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
-        this(context, questionDetails, true);
-    }
-
-    public QuestionWidget(Context context, QuestionDetails questionDetails, boolean registerForContextMenu) {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
@@ -144,7 +138,7 @@ public abstract class QuestionWidget
             addAnswerView(answerView);
         }
 
-        if (registerForContextMenu && context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
+        if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context, this);
         }
     }
