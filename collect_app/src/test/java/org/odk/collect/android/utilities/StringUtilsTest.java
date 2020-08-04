@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 public class StringUtilsTest {
 
     @Test
-    public void textToHtml_BouncesEmptyString() {
+    public void textToHtml_nullBecomesEmptyString() {
         CharSequence observed = StringUtils.textToHtml(null);
         assertThat(observed, equalTo(""));
     }
