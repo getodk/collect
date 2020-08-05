@@ -237,7 +237,6 @@ public class FormsDao {
                     int languageColumnIndex = cursor.getColumnIndex(FormsColumns.LANGUAGE);
                     int autoSendColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SEND);
                     int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
-                    int lastDetectedFormVersionHashColumnIndex = cursor.getColumnIndex(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
                     int geometryXpathColumnIndex = cursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH);
 
                     Form form = new Form.Builder()
@@ -256,7 +255,6 @@ public class FormsDao {
                             .language(cursor.getString(languageColumnIndex))
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))
-                            .lastDetectedFormVersionHash(cursor.getString(lastDetectedFormVersionHashColumnIndex))
                             .geometryXpath(cursor.getString(geometryXpathColumnIndex))
                             .build();
 

@@ -24,16 +24,11 @@ public interface FormsRepository {
     Form getByMd5Hash(String hash);
 
     @Nullable
-    Form getByLastDetectedUpdate(String formHash, String manifestHash);
-
-    @Nullable
     Form getByPath(String path);
 
     void delete(Long id);
 
     void softDelete(Long id);
-
-    void setLastDetectedUpdated(String jrFormId, String formHash, String manifestHash);
 
     void deleteFormsByMd5Hash(String md5Hash);
 }

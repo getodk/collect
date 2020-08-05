@@ -63,17 +63,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
     }
 
-
-    @Override
-    public Form getByLastDetectedUpdate(String formHash, String manifestHash) {
-        FormsDao formsDao = new FormsDao();
-        String formVersionHash = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
-
-        try (Cursor cursor = formsDao.getFormsCursor(LAST_DETECTED_FORM_VERSION_HASH + "=?", new String[]{formVersionHash})) {
-            return getFormOrNull(cursor);
-        }
-    }
-
     @Nullable
     @Override
     public Form getByPath(String path) {
@@ -106,15 +95,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         ContentValues values = new ContentValues();
         values.put(DELETED, 1);
         new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
-    }
-
-    @Override
-    public void setLastDetectedUpdated(String jrFormId, String formHash, String manifestHash) {
-        String formVersionHash = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
-
-        ContentValues values = new ContentValues();
-        values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
-        new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[]{jrFormId});
     }
 
     @Override
