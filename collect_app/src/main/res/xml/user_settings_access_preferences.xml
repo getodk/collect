@@ -3,17 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/user_settings">
 
-    <PreferenceCategory android:title="@string/found_in_settings"
+    <PreferenceCategory
+        android:title="@string/found_in_settings"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="change_server"
             android:title="@string/server"
             app:iconSpaceReserved="false" />
         <!--<org.odk.collect.android.preferences.ExtendedCheckboxPreference-->
-            <!--android:key="change_submission_transport"-->
-            <!--android:title="@string/submission_transport_admin_setting"-->
-            <!--android:dependency="change_server"-->
-            <!--/>-->
+        <!--android:key="change_submission_transport"-->
+        <!--android:title="@string/submission_transport_admin_setting"-->
+        <!--android:dependency="change_server"-->
+        <!--/>-->
         <CheckBoxPreference
             android:key="change_app_theme"
             android:title="@string/app_theme"
@@ -40,7 +41,8 @@
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="form_update_mode"
-            android:title="@string/form_update_mode_title" />
+            android:title="@string/form_update_mode_title"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="periodic_form_updates_check"
             android:title="@string/periodic_form_updates_check_title"
