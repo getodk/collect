@@ -6,7 +6,7 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="Widget.Collect.Button.Layout" parent="Widget.Collect.Button.Custom">
+    <style name="Widget.Collect.Button.CustomLayout" parent="Widget.Collect.Button.Custom">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/margin_small</item>

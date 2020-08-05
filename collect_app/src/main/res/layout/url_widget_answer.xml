@@ -6,7 +6,7 @@
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/url_button"
-        style="@style/Widget.Collect.Button.Layout"
+        style="@style/Widget.Collect.Button.CustomLayout"
         android:text="@string/open_url">
     </org.odk.collect.android.views.MultiClickSafeButton>
 
