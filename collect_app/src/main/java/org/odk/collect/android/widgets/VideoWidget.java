@@ -42,6 +42,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CameraUtilsProvider;
+import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
@@ -80,6 +81,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final ActivityAvailability activityAvailability;
+    private final ContentUriFetcher contentUriFetcher;
 
     @NonNull
     private MediaUtil mediaUtil;
@@ -91,11 +93,13 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     private boolean selfie;
 
     public VideoWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry, new CameraUtils(), MediaManager.INSTANCE, new ActivityAvailability(context));
+        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry, new CameraUtils(), MediaManager.INSTANCE,
+                new ActivityAvailability(context), new ContentUriProvider());
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, WaitingForDataRegistry waitingForDataRegistry,
-                       CameraUtilsProvider cameraUtilsProvider, QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+                       WaitingForDataRegistry waitingForDataRegistry, CameraUtilsProvider cameraUtilsProvider,
+                       QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriFetcher contentUriFetcher) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
@@ -103,6 +107,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
+        this.contentUriFetcher = contentUriFetcher;
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) ||
@@ -324,7 +329,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
 
         Uri uri = null;
         try {
-            uri = ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+            uri = contentUriFetcher.getUri(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
             FileUtils.grantFileReadPermissions(intent, uri, getContext());
         } catch (IllegalArgumentException e) {
             Timber.e(e);

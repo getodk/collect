@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
@@ -22,6 +23,7 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.CameraUtilsProvider;
+import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -66,6 +68,7 @@ public class VideoWidgetTest {
     private File mockedFile;
     private FakePermissionUtils permissionUtils;
     private ActivityAvailability activityAvailability;
+    private ContentUriFetcher contentUriFetcher;
 
     @Before
     public void setUp() {
@@ -77,6 +80,7 @@ public class VideoWidgetTest {
         cameraUtilsProvider = mock(CameraUtilsProvider.class);
         questionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
+        contentUriFetcher = mock(ContentUriFetcher.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
 
@@ -442,11 +446,17 @@ public class VideoWidgetTest {
     @Test
     public void clickingPlayVideoButton_launchesCorrectIntent() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        when(contentUriFetcher.getUri(widgetActivity,
+                BuildConfig.APPLICATION_ID + ".provider",
+                new File(widget.getInstanceFolder() + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
         widget.setPermissionUtils(permissionUtils);
+
         widget.binding.playVideo.performClick();
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertThat(startedIntent.getAction(), is(Intent.ACTION_VIEW));
+        assertThat(startedIntent.getFlags(), is(Intent.FLAG_GRANT_READ_URI_PERMISSION));
+        assertThat(startedIntent.getData(), is(Uri.parse("content://blah")));
         assertThat(startedIntent.getType(), is("video/*"));
     }
 
@@ -454,6 +464,7 @@ public class VideoWidgetTest {
     public void clickingPlayVideoButton_doesNotLaunchAnyIntentAndShowsActivityNotFoundToast_whenIntentIsNotAvailable() {
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
         VideoWidget widget = createWidget(promptWithAnswer(null));
+
         widget.setPermissionUtils(permissionUtils);
         widget.binding.playVideo.performClick();
 
@@ -464,6 +475,6 @@ public class VideoWidgetTest {
 
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                fileUtil, mediaUtil, waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability);
+                fileUtil, mediaUtil, waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher);
     }
 }
