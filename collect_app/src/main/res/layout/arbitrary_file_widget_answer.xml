@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/choose_file_button"
+        style="@style/Widget.Collect.Button.CustomLayout"
+        android:text="@string/choose_file" />
+
+    <LinearLayout
+        android:id="@+id/answer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/attachment_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_attachment"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/answer_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="20dp"
+            android:textColor="?colorOnSurface"/>
+
+    </LinearLayout>
+</LinearLayout>
