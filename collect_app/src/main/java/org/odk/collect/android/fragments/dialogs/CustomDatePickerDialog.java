@@ -83,6 +83,12 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        getArguments().putSerializable(DateTimeWidgetUtils.DATE, getDateAsGregorian(getOriginalDate()));
+        super.onDestroyView();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         gregorianDateText = getDialog().findViewById(R.id.date_gregorian);
