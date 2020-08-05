@@ -62,7 +62,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         try {
             Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-            formDatabaseMigrator.onUpgrade(db, oldVersion, newVersion);
+            formDatabaseMigrator.onUpgrade(db, oldVersion);
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;

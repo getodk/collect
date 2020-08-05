@@ -24,7 +24,6 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRC
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LANGUAGE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 
@@ -33,7 +32,7 @@ public class FormDatabaseMigrator {
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            LAST_DETECTED_FORM_VERSION_HASH};
+            "lastDetectedFormVersionHash"};
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -44,7 +43,7 @@ public class FormDatabaseMigrator {
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion) throws SQLException {
         switch (oldVersion) {
             case 1:
                 upgradeToVersion2(db);
@@ -203,7 +202,7 @@ public class FormDatabaseMigrator {
     }
 
     private void upgradeToVersion6(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, "lastDetectedFormVersionHash", "text");
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
@@ -219,7 +218,14 @@ public class FormDatabaseMigrator {
     }
 
     private void upgradeToVersion9(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, DELETED, "boolean default(0)");
+        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
+        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
+        createFormsTableV9(db);
+        SQLiteUtils.copyRows(db, temporaryTable, new String[]{_ID, DISPLAY_NAME, DESCRIPTION,
+                JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+                SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+                GEOMETRY_XPATH}, FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, temporaryTable);
     }
 
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
@@ -240,7 +246,7 @@ public class FormDatabaseMigrator {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
+                + "lastDetectedFormVersionHash" + " text);");
     }
 
     private void createFormsTableV7(SQLiteDatabase db) {
@@ -260,7 +266,7 @@ public class FormDatabaseMigrator {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
+                + "lastDetectedFormVersionHash" + " text);");
     }
 
     private void createFormsTableV9(SQLiteDatabase db) {
@@ -280,7 +286,6 @@ public class FormDatabaseMigrator {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
                 + GEOMETRY_XPATH + " text, "
                 + DELETED + " boolean default(0));");
     }

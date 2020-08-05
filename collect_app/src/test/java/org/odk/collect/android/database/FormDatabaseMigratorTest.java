@@ -26,7 +26,6 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRC
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LANGUAGE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns._ID;
@@ -35,7 +34,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns._ID
 public class FormDatabaseMigratorTest {
 
     @Test
-    public void onUpgrade_fromVersion8_toVersion9() {
+    public void onUpgrade_fromVersion8() {
         assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(9));
 
         SQLiteDatabase database = SQLiteDatabase.create(null);
@@ -44,11 +43,10 @@ public class FormDatabaseMigratorTest {
         ContentValues contentValues = createVersion8Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
-        new FormDatabaseMigrator().onUpgrade(database, 8, 9);
-
+        new FormDatabaseMigrator().onUpgrade(database, 8);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(18));
+            assertThat(cursor.getColumnCount(), is(17));
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToFirst();
@@ -66,7 +64,6 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(contentValues.getAsString(JRCACHE_FILE_PATH)));
             assertThat(cursor.getString(cursor.getColumnIndex(AUTO_SEND)), is(contentValues.getAsString(AUTO_SEND)));
             assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
-            assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_FORM_VERSION_HASH)), is(contentValues.getAsString(LAST_DETECTED_FORM_VERSION_HASH)));
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DESCRIPTION)), is(0));
         }
@@ -89,7 +86,7 @@ public class FormDatabaseMigratorTest {
         contentValues.put(JRCACHE_FILE_PATH, "Jr/Cache/File/Path");
         contentValues.put(AUTO_SEND, "AutoSend");
         contentValues.put(AUTO_DELETE, "AutoDelete");
-        contentValues.put(LAST_DETECTED_FORM_VERSION_HASH, "LastDetectedFormVersionHash");
+        contentValues.put("lastDetectedFormVersionHash", "LastDetectedFormVersionHash");
         contentValues.put(GEOMETRY_XPATH, "GeometryXPath");
         return contentValues;
     }
@@ -111,7 +108,7 @@ public class FormDatabaseMigratorTest {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
+                + "lastDetectedFormVersionHash" + " text, "
                 + GEOMETRY_XPATH + " text);");
     }
 }
