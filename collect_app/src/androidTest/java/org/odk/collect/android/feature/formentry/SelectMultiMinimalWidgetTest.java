@@ -207,4 +207,18 @@ public class SelectMultiMinimalWidgetTest {
                 .closeSelectMinimalDialog()
                 .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel");
     }
+
+    @Test
+    public void bothClickingBackArrowIconAndDeviceBackButton_shouldCloseDialogAndSaveAnswers() {
+        new FormEntryPage("select_multi_minimal_form", activityTestRule)
+                .openSelectMinimalDialog()
+                .clickOnText("BBB")
+                .closeSelectMinimalDialog()
+                .assertText("BBB")
+                .openSelectMinimalDialog()
+                .clickOnText("BBB")
+                .clickOnText("AAA")
+                .pressBack(new FormEntryPage("select_multi_minimal_form", activityTestRule))
+                .assertText("AAA");
+    }
 }
