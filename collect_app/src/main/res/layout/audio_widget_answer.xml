@@ -3,12 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <include
+    <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/capture_button"
-        layout="@layout/widget_button"/>
+        style="@style/Widget.Collect.Button.Layout"
+        android:text="@string/capture_audio">
+    </org.odk.collect.android.views.MultiClickSafeButton>
 
-    <include
+    <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/choose_button"
-        layout="@layout/widget_button"/>
+        style="@style/Widget.Collect.Button.Layout"
+        android:text="@string/choose_sound">
+    </org.odk.collect.android.views.MultiClickSafeButton>
 
 </LinearLayout>
