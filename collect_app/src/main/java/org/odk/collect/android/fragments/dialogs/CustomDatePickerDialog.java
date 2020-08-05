@@ -128,7 +128,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     protected void updateGregorianDateLabel() {
-        String label = DateTimeUtils.getDateTimeLabel(getDateAsGregorian(getOriginalDate()).toDate(),
+        String label = DateTimeWidgetUtils.getDateTimeLabel(getDateAsGregorian(getOriginalDate()).toDate(),
                 (DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS), false, getContext());
         gregorianDateText.setText(label);
     }

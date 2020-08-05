@@ -16,12 +16,10 @@ public class DateTimeViewModel extends ViewModel {
     private final MutableLiveData<DateTime> selectedTime = new MutableLiveData<>();
 
     private final DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
-        view.clearFocus();
         setSelectedDate(year, monthOfYear, dayOfMonth);
     };
 
     private final TimePickerDialog.OnTimeSetListener timeSetListener = (view, hourOfDay, minuteOfHour) -> {
-        view.clearFocus();
         hourOfDay = view.getCurrentHour();
         minuteOfHour = view.getCurrentMinute();
 

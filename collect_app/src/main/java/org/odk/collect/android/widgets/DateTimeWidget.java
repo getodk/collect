@@ -33,6 +33,7 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -55,7 +56,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = DateTimeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         if (prompt.isReadOnly()) {
             binding.dateWidget.widgetButton.setVisibility(GONE);
@@ -87,7 +88,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
             LocalDateTime selectedDate = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             selectedDateTime = DateTimeUtils.getSelectedDate(selectedDate, selectedDateTime);
-            binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
+            binding.dateWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDate.toDate(), datePickerDetails, false, context));
 
             DateTime selectedTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
@@ -141,7 +142,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
             selectedDateTime = DateTimeUtils.getSelectedDate((LocalDateTime) answer, selectedDateTime);
-            binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
+            binding.dateWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDateTime.toDate(), datePickerDetails, false, getContext()));
         }
         if (answer instanceof DateTime) {

@@ -19,6 +19,7 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -110,11 +111,11 @@ public class DateTimeWidgetTest {
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectDateAndTime() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDate()));
-        DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
         DateTimeWidget widget = createWidget(prompt);
 
         assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
-                DateTimeUtils.getDateTimeLabel(localDateTime.toDate(), datePickerDetails, false, widget.getContext()));
+                DateTimeWidgetUtils.getDateTimeLabel(localDateTime.toDate(), datePickerDetails, false, widget.getContext()));
         assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), DateTimeUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
     }
 
@@ -143,7 +144,7 @@ public class DateTimeWidgetTest {
         widget.binding.dateWidget.widgetButton.performClick();
 
         verify(dateTimeWidgetListener).displayDatePickerDialog(widgetActivity, prompt.getIndex(),
-                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
+                DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
     }
 
     @Test
@@ -162,7 +163,7 @@ public class DateTimeWidgetTest {
         widget.binding.dateWidget.widgetButton.performClick();
 
         verify(dateTimeWidgetListener).displayDatePickerDialog(widgetActivity, prompt.getIndex(),
-                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()),
+                DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()),
                 DateTimeUtils.getSelectedDate(localDateTime, new LocalDateTime().withTime(0, 0, 0, 0)));
     }
 
@@ -221,12 +222,12 @@ public class DateTimeWidgetTest {
     @Test
     public void setDateData_updatesValueShownInDateAnswerTextView() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
-        DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
         DateTimeWidget widget = createWidget(prompt);
         widget.setData(new LocalDateTime().withDate(2010, 5, 12));
 
         assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
-                DateTimeUtils.getDateTimeLabel(localDateTime.toDate(), datePickerDetails, false, widget.getContext()));
+                DateTimeWidgetUtils.getDateTimeLabel(localDateTime.toDate(), datePickerDetails, false, widget.getContext()));
     }
 
     @Test

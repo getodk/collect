@@ -31,6 +31,7 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
 
@@ -51,7 +52,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         if (prompt.isReadOnly()) {
             binding.widgetButton.setVisibility(GONE);
@@ -72,7 +73,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
         } else {
             selectedDate = DateTimeUtils.getSelectedDate(new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue()),
                     LocalDateTime.now());
-            binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
+            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     (Date) getAnswer().getValue(), datePickerDetails, false, context));
         }
 
@@ -110,7 +111,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
             selectedDate = DateTimeUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now());
-            binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
+            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDate.toDate(), datePickerDetails, false, getContext()));
         }
     }
