@@ -41,7 +41,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORMS_TABLE_NAME;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {

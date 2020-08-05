@@ -29,12 +29,12 @@ import java.io.File;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_VERSION;
+
 /**
  * This class helps open, create, and upgrade the database file.
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
-
-    public static final int DATABASE_VERSION = 9;
 
     private static final String DATABASE_NAME = "forms.db";
 
@@ -43,7 +43,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private final FormDatabaseMigrator formDatabaseMigrator;
 
     public FormsDatabaseHelper() {
-        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, FORMS_DATABASE_VERSION);
         formDatabaseMigrator = new FormDatabaseMigrator();
     }
 
@@ -97,7 +97,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         boolean isDatabaseHelperOutOfDate = false;
         try {
             SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
+            isDatabaseHelperOutOfDate = FORMS_DATABASE_VERSION != db.getVersion();
             db.close();
         } catch (SQLException e) {
             Timber.i(e);

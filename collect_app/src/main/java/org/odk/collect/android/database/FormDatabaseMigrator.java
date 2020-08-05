@@ -8,6 +8,7 @@ import org.odk.collect.android.utilities.SQLiteUtils;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
@@ -16,7 +17,6 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DEL
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORMS_TABLE_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
@@ -34,13 +34,6 @@ public class FormDatabaseMigrator {
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
             LAST_DETECTED_FORM_VERSION_HASH};
-
-    private static final String[] COLUMN_NAMES_V9 = {_ID, DISPLAY_NAME, DESCRIPTION,
-            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
-            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            LAST_DETECTED_FORM_VERSION_HASH, DELETED};
-
-    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V9;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
