@@ -7,7 +7,6 @@ import android.net.Uri;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,6 @@ import static org.odk.collect.android.dao.FormsDao.getFormsFromCursor;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 
 public class DatabaseFormsRepository implements FormsRepository {
 

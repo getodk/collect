@@ -25,6 +25,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -37,10 +39,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import timber.log.Timber;
 
-import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORMS_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {

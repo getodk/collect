@@ -39,6 +39,8 @@ public final class FormsProviderAPI {
         private FormsColumns() {
         }
 
+        public static final String FORMS_TABLE_NAME = "forms";
+
         /**
          * The content:// style URL for accessing Forms.
          */
