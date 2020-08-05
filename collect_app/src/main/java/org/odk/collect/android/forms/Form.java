@@ -18,6 +18,8 @@ package org.odk.collect.android.forms;
 
 import org.odk.collect.android.storage.StoragePathProvider;
 
+import javax.annotation.Nullable;
+
 /**
  * A form definition stored on the device.
  *
@@ -86,7 +88,6 @@ public final class Form {
         private boolean deleted;
 
         public Builder() {
-
         }
 
         public Builder(Form form) {
@@ -136,7 +137,7 @@ public final class Form {
         }
 
         public Builder formFilePath(String formFilePath) {
-            this.formFilePath = new StoragePathProvider().getFormDbPath(formFilePath);
+            this.formFilePath = formFilePath;
             return this;
         }
 
@@ -161,12 +162,12 @@ public final class Form {
         }
 
         public Builder jrCacheFilePath(String jrCacheFilePath) {
-            this.jrCacheFilePath = new StoragePathProvider().getCacheDbPath(jrCacheFilePath);
+            this.jrCacheFilePath = jrCacheFilePath;
             return this;
         }
 
         public Builder formMediaPath(String formMediaPath) {
-            this.formMediaPath = new StoragePathProvider().getFormDbPath(formMediaPath);
+            this.formMediaPath = formMediaPath;
             return this;
         }
 
@@ -221,6 +222,7 @@ public final class Form {
         return jrFormId;
     }
 
+    @Nullable
     public String getJrVersion() {
         return jrVersion;
     }

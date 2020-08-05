@@ -312,8 +312,8 @@ public class MultiFormDownloader {
 
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
         Form form = new Form.Builder()
-                .formFilePath(formFile.getAbsolutePath())
-                .formMediaPath(mediaPath)
+                .formFilePath(new StoragePathProvider().getFormDbPath(formFile.getAbsolutePath()))
+                .formMediaPath(new StoragePathProvider().getFormDbPath(mediaPath))
                 .displayName(formInfo.get(FileUtils.TITLE))
                 .jrVersion(formInfo.get(FileUtils.VERSION))
                 .jrFormId(formInfo.get(FileUtils.FORMID))

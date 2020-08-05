@@ -40,16 +40,16 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form get(Long id) {
-        try (Cursor cursor = new FormsDao().getFormsCursor(_ID + "=?", new String[]{id.toString()})) {
-            return getFormOrNull(cursor);
-        }
+        return queryForForm(_ID + "=?", new String[]{id.toString()});
     }
 
     @Nullable
     @Override
-    public Form get(String jrFormId, String jrVersion) {
-        try (Cursor cursor = new FormsDao().getFormsCursor(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion})) {
-            return getFormOrNull(cursor);
+    public Form get(String jrFormId, @Nullable String jrVersion) {
+        if (jrVersion != null) {
+            return queryForForm(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
+        } else {
+            return queryForForm(JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
         }
     }
 
@@ -139,6 +139,13 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
 
         formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+    }
+
+    @Nullable
+    private Form queryForForm(String selection, String[] selectionArgs) {
+        try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
+            return getFormOrNull(cursor);
+        }
     }
 
     private Form getFormOrNull(Cursor cursor) {
