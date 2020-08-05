@@ -9,12 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
@@ -35,7 +37,7 @@ public class AutoUpdateTaskSpecTest {
 
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
     private final MultiFormDownloader multiFormDownloader = mock(MultiFormDownloader.class);
-    private final ServerFormsUpdateChecker serverFormsUpdateChecker = mock(ServerFormsUpdateChecker.class);
+    private final ServerFormsDetailsFetcher serverFormsDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
     private SharedPreferences generalPrefs;
 
     @Before
@@ -54,8 +56,8 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public ServerFormsUpdateChecker providesServerFormUpdatesChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository) {
-                return serverFormsUpdateChecker;
+            public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, DiskFormsSynchronizer diskFormsSynchronizer) {
+                return serverFormsDetailsFetcher;
             }
 
             @Override
@@ -71,8 +73,8 @@ public class AutoUpdateTaskSpecTest {
     }
 
     @Test
-    public void whenAutoDownloadEnabled_andChangeLockLocked_doesNotDownload() {
-        when(serverFormsUpdateChecker.check()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", "", "", false, true)));
+    public void whenAutoDownloadEnabled_andChangeLockLocked_doesNotDownload() throws Exception {
+        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", "", "", false, true)));
         generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
         changeLock.lock();
 

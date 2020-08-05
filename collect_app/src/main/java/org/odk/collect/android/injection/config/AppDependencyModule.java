@@ -42,7 +42,6 @@ import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
 import org.odk.collect.android.forms.DatabaseFormsRepository;
 import org.odk.collect.android.forms.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormsRepository;
@@ -434,11 +433,6 @@ public class AppDependencyModule {
     @Singleton
     public ChangeLock providesInstancesChangeLock() {
         return new ReentrantLockChangeLock();
-    }
-
-    @Provides
-    public ServerFormsUpdateChecker providesServerFormUpdatesChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository) {
-        return new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formsRepository);
     }
 
     @Provides
