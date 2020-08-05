@@ -1,5 +1,6 @@
 package org.odk.collect.android.backgroundwork;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -15,6 +16,7 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -29,6 +31,7 @@ import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +41,7 @@ public class AutoUpdateTaskSpecTest {
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
     private final MultiFormDownloader multiFormDownloader = mock(MultiFormDownloader.class);
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
+    private final Notifier notifier = mock(Notifier.class);
     private SharedPreferences generalPrefs;
 
     @Before
@@ -69,7 +73,28 @@ public class AutoUpdateTaskSpecTest {
                     }
                 };
             }
+
+            @Override
+            public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
+                return notifier;
+            }
         });
+    }
+
+    @Test
+    public void whenThereAreUpdatedFormsOnServer_sendsUpdatesToNotifier() throws Exception {
+        ServerFormDetails updatedForm = new ServerFormDetails("", "", "", "", "", "", "", false, true);
+        ServerFormDetails oldForm = new ServerFormDetails("", "", "", "", "", "", "", false, false);
+        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+                updatedForm,
+                oldForm
+        ));
+
+        AutoUpdateTaskSpec taskSpec = new AutoUpdateTaskSpec();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
+
+        verify(notifier).onUpdatesAvailable(asList(updatedForm));
     }
 
     @Test

@@ -16,24 +16,21 @@ package org.odk.collect.android.formmanagement;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 public class ServerFormDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String errorStr;
-    private String formName;
-    private String downloadUrl;
-    private String manifestUrl;
-    private String formID;
-    private String formVersion;
-    private String hash;
-    private String manifestFileHash;
-    private boolean isNotOnDevice;
-    private boolean isUpdated;
-
-    public ServerFormDetails(String error) {
-        errorStr = error;
-    }
+    private final String formName;
+    private final String downloadUrl;
+    private final String manifestUrl;
+    private final String formID;
+    private final String formVersion;
+    private final String hash;
+    private final String manifestFileHash;
+    private final boolean isNotOnDevice;
+    private final boolean isUpdated;
 
     public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
                              String formVersion, String hash, String manifestFileHash,
@@ -47,10 +44,6 @@ public class ServerFormDetails implements Serializable {
         this.manifestFileHash = manifestFileHash;
         this.isNotOnDevice = isNotOnDevice;
         this.isUpdated = isUpdated;
-    }
-
-    public String getErrorStr() {
-        return errorStr;
     }
 
     public String getFormName() {
@@ -77,6 +70,7 @@ public class ServerFormDetails implements Serializable {
         return hash;
     }
 
+    @Nullable
     public String getManifestFileHash() {
         return manifestFileHash;
     }

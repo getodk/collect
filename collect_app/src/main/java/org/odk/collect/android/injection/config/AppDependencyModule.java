@@ -417,8 +417,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application) {
-        return new NotificationManagerNotifier(application);
+    public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
+        return new NotificationManagerNotifier(application, preferencesProvider);
     }
 
     @Provides

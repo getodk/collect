@@ -71,20 +71,20 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         return () -> {
             try {
                 List<ServerFormDetails> serverForms = serverFormsDetailsFetcher.fetchFormDetails();
-                List<ServerFormDetails> newUpdates = serverForms.stream().filter(ServerFormDetails::isUpdated).collect(Collectors.toList());
+                List<ServerFormDetails> updatedForms = serverForms.stream().filter(ServerFormDetails::isUpdated).collect(Collectors.toList());
 
-                if (!newUpdates.isEmpty()) {
+                if (!updatedForms.isEmpty()) {
                     if (preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         changeLock.withLock(acquiredLock -> {
                             if (acquiredLock) {
-                                final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(newUpdates, null);
+                                final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(updatedForms, null);
                                 notifier.onUpdatesDownloaded(result);
                             }
 
                             return null;
                         });
                     } else {
-                        notifier.onUpdatesAvailable();
+                        notifier.onUpdatesAvailable(updatedForms);
                     }
                 }
 
