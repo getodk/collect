@@ -28,7 +28,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
