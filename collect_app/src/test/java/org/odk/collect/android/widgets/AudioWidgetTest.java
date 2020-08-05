@@ -30,11 +30,10 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaManagerListener;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.async.Scheduler;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
@@ -75,7 +74,7 @@ public class AudioWidgetTest {
     private FileUtil fileUtil;
     private MediaUtil mediaUtil;
     private FakeAudioHelper audioHelper;
-    private MediaManagerListener mockedMediaManagerListener;
+    private QuestionMediaManager mockedQuestionMediaManager;
     private ActivityAvailability activityAvailability;
     private FormIndex formIndex;
     private File mockedFile;
@@ -88,7 +87,7 @@ public class AudioWidgetTest {
         audioController = mock(AudioControllerView.class);
         fileUtil = mock(FileUtil.class);
         mediaUtil = mock(MediaUtil.class);
-        mockedMediaManagerListener = mock(MediaManagerListener.class);
+        mockedQuestionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
@@ -160,7 +159,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.deleteFile();
 
-        verify(mockedMediaManagerListener).markOriginalFileOrDelete("questionIndex",
+        verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "blah.mp3");
     }
 
@@ -182,7 +181,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.clearAnswer();
 
-        verify(mockedMediaManagerListener).markOriginalFileOrDelete("questionIndex",
+        verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "blah.mp3");
     }
 
@@ -209,11 +208,10 @@ public class AudioWidgetTest {
         File sourceFile = new File(SOURCE_FILE_PATH);
 
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(SOURCE_FILE_PATH, widget.getInstanceFolder(), fileUtil);
 
         when(mediaUtil.getPathFromUri(widget.getContext(), newFileUri, MediaStore.Audio.Media.DATA)).thenReturn(SOURCE_FILE_PATH);
         when(fileUtil.getFileAtPath(SOURCE_FILE_PATH)).thenReturn(sourceFile);
-        when(fileUtil.getFileAtPath(destinationPath)).thenReturn(mockedFile);
+        when(fileUtil.getFileAtPath("null/null.mp3")).thenReturn(mockedFile);
 
         widget.setBinaryData(newFileUri);
         verify(fileUtil).copyFile(sourceFile, mockedFile);
@@ -227,7 +225,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mockedMediaManagerListener).replaceRecentFileForQuestion("questionIndex", "newFilePath");
+        verify(mockedQuestionMediaManager).replaceRecentFileForQuestion("questionIndex", "newFilePath");
     }
 
     @Test
@@ -238,7 +236,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mockedMediaManagerListener).markOriginalFileOrDelete("questionIndex",
+        verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "blah.mp3");
     }
 
@@ -250,7 +248,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mockedMediaManagerListener, never()).markOriginalFileOrDelete("questionIndex",
+        verify(mockedQuestionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "blah.mp3");
     }
 
@@ -262,7 +260,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mockedMediaManagerListener, never()).markOriginalFileOrDelete("questionIndex",
+        verify(mockedQuestionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "newFile.mp3");
     }
 
@@ -394,7 +392,7 @@ public class AudioWidgetTest {
 
     public AudioWidget createWidget(FormEntryPrompt prompt) {
         return new AudioWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), fileUtil,
-                mediaUtil, audioController, waitingForDataRegistry, audioHelper, mockedMediaManagerListener, activityAvailability);
+                mediaUtil, audioController, waitingForDataRegistry, audioHelper, mockedQuestionMediaManager, activityAvailability);
     }
 
     private Clip getAnswerAudioClip(String instanceFolderPath, IAnswerData answer) {

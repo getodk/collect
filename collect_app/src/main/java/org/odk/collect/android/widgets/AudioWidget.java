@@ -41,7 +41,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
-import org.odk.collect.android.utilities.MediaManagerListener;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
@@ -76,7 +76,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
 
     AudioControllerView audioController;
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final MediaManagerListener mediaManagerListener;
+    private final QuestionMediaManager questionMediaManager;
     private final ActivityAvailability activityAvailability;
 
     private String binaryName;
@@ -87,7 +87,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,
-                WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, MediaManagerListener mediaManagerListener, ActivityAvailability activityAvailability) {
+                WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability) {
         super(context, questionDetails);
 
         if (audioHelper != null) {
@@ -99,7 +99,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.mediaManagerListener = mediaManagerListener;
+        this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
 
         hideButtonsIfNeeded();
@@ -135,7 +135,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     @Override
     public void deleteFile() {
         audioHelper.stop();
-        mediaManagerListener.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
@@ -197,7 +197,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
             values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
 
-            mediaManagerListener.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+            questionMediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
 
             Uri audioURI = getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
 
