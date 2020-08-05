@@ -1,4 +1,4 @@
-package org.odk.collect.android.feature.formmanagement;
+package org.odk.collect.android.feature.instancemanagement;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
