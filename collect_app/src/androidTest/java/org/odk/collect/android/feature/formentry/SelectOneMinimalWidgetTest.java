@@ -230,4 +230,15 @@ public class SelectOneMinimalWidgetTest {
                 .clickOnText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
                 .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel");
     }
+
+    @Test
+    public void bothClickingBackArrowIconAndDeviceBackButton_shouldCloseDialogAndSaveAnswers() {
+        new FormEntryPage("select_one_minimal_form", activityTestRule)
+                .openSelectMinimalDialog()
+                .clickOnText("BBB")
+                .assertText("BBB")
+                .openSelectMinimalDialog()
+                .pressBack(new FormEntryPage("select_one_minimal_form", activityTestRule))
+                .assertText("BBB");
+    }
 }
