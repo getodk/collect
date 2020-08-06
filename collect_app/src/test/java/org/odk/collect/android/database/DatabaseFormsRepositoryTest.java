@@ -1,10 +1,12 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.android.database;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.forms.FormsRepositoryTest;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
