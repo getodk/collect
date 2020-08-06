@@ -41,6 +41,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
 
@@ -105,9 +106,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         } else {
             switch (FormUpdateMode.parse(getActivity(), formUpdateMode)) {
                 case MANUAL:
-                    automaticDownload.setEnabled(false);
-                    automaticDownload.setChecked(false);
-
+                    displayDisabled(automaticDownload, false);
                     updateFrequency.setEnabled(false);
                     break;
                 case PREVIOUSLY_DOWNLOADED_ONLY:
@@ -115,9 +114,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                     updateFrequency.setEnabled(true);
                     break;
                 case MATCH_EXACTLY:
-                    automaticDownload.setEnabled(false);
-                    automaticDownload.setChecked(true);
-
+                    displayDisabled(automaticDownload, true);
                     updateFrequency.setEnabled(true);
                     break;
             }
