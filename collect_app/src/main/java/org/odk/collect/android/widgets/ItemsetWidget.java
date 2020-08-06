@@ -32,7 +32,6 @@ import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -83,7 +82,9 @@ public class ItemsetWidget extends SelectOneWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        Selection selectedItem =  ((SelectOneListAdapter) recyclerViewAdapter).getSelectedItem();
+        Selection selectedItem = recyclerViewAdapter.getSelectedItems().isEmpty()
+                ? null
+                : recyclerViewAdapter.getSelectedItems().get(0);
 
         return selectedItem == null
                 ? null
