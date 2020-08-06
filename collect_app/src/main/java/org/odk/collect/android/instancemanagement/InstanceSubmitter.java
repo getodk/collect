@@ -130,7 +130,7 @@ public class InstanceSubmitter {
 
         List<Instance> toUpload = new ArrayList<>();
         for (Instance instance : allFinalized) {
-            if (formShouldBeAutoSent(instance.getJrFormId(), isAutoSendAppSettingEnabled)) {
+            if (formShouldBeAutoSent(instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
                 toUpload.add(instance);
             }
         }
@@ -147,8 +147,8 @@ public class InstanceSubmitter {
      *
      * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
      */
-    public static boolean formShouldBeAutoSent(String jrFormId, boolean isAutoSendAppSettingEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+    public static boolean formShouldBeAutoSent(String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormIdAndFormVersion(jrFormId, jrFormVersion);
         String formLevelAutoSend = null;
         if (cursor != null && cursor.moveToFirst()) {
             try {
@@ -159,7 +159,6 @@ public class InstanceSubmitter {
             }
         }
 
-        return formLevelAutoSend == null ? isAutoSendAppSettingEnabled
-                : Boolean.valueOf(formLevelAutoSend);
+        return formLevelAutoSend == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(formLevelAutoSend);
     }
 }
