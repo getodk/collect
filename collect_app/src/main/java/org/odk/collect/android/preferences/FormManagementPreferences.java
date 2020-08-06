@@ -81,18 +81,12 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
             String newValue = sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null);
             updateDisabledPrefs(newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
-
-            Preference preference = findPreference(KEY_FORM_UPDATE_MODE);
-            preference.setSummary(((ListPreference) preference).getEntry());
         }
     }
 
     private void setupFormUpdateMode() {
         SharedPreferences sharedPreferences = preferencesProvider.getGeneralSharedPreferences();
         updateDisabledPrefs(sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null), sharedPreferences.getString(KEY_PROTOCOL, null));
-
-        Preference formUpdateMode = findPreference(KEY_FORM_UPDATE_MODE);
-        formUpdateMode.setSummary(((ListPreference) formUpdateMode).getEntry());
     }
 
     private void updateDisabledPrefs(String formUpdateMode, String protocol) {
@@ -111,6 +105,8 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                     break;
                 case PREVIOUSLY_DOWNLOADED_ONLY:
                     automaticDownload.setEnabled(true);
+                    automaticDownload.setChecked(preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false));
+
                     updateFrequency.setEnabled(true);
                     break;
                 case MATCH_EXACTLY:

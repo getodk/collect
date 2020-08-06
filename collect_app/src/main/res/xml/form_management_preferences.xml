@@ -15,13 +15,14 @@
             android:entryValues="@array/form_update_mode_values"
             android:key="form_update_mode"
             android:title="@string/form_update_mode_title"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <ListPreference
+            android:defaultValue="@string/never_value"
             android:dialogTitle="@string/form_update_frequency_title"
             android:entries="@array/periodic_form_updates_check_entries"
             android:entryValues="@array/periodic_form_updates_check_entry_values"
-            android:defaultValue="@string/never_value"
             android:key="periodic_form_updates_check"
             android:title="@string/form_update_frequency_title"
             app:iconSpaceReserved="false" />
@@ -32,8 +33,8 @@
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="hide_old_form_versions"
-            android:title="@string/hide_old_form_versions_setting_title"
             android:summary="@string/hide_old_form_versions_setting_summary"
+            android:title="@string/hide_old_form_versions_setting_title"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
@@ -61,7 +62,7 @@
         android:title="@string/form_filling_category"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false"
-        app:iconSpaceReserved="false" >
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="default_completed"
             android:summary="@string/default_completed_summary"
