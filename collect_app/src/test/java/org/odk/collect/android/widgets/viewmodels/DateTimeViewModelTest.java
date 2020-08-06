@@ -20,6 +20,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -68,12 +69,13 @@ public class DateTimeViewModelTest {
     }
 
     @Test
-    public void updatingTimeInTimeSetListener_updatesTimeReturnedByViewModel() {
+    public void updatingTimeInTimeSetListener_updatesTimeReturnedByViewModel_andClearsFocus() {
         TimePicker timePicker = mock(TimePicker.class);
         when(timePicker.getCurrentHour()).thenReturn(12);
         when(timePicker.getCurrentMinute()).thenReturn(10);
         viewModel.getOnTimeSetListener().onTimeSet(timePicker, 0, 0);
 
+        verify(timePicker).clearFocus();
         assertThat(selectedTime.getValue(), is(DateTimeUtils.getSelectedTime(
                 new LocalDateTime().withTime(12, 10, 0, 0), LocalDateTime.now()).toDateTime()));
     }

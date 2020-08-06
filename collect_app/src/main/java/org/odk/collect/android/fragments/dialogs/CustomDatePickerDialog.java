@@ -75,7 +75,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .setView(R.layout.custom_date_picker_dialog)
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
                     LocalDateTime date = getDateAsGregorian(getOriginalDate());
-                    viewModel.setSelectedDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
+                    viewModel.setSelectedDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                     dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dismiss())
@@ -84,7 +84,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        getArguments().putSerializable(DateTimeWidgetUtils.DATE, getDateAsGregorian(getOriginalDate()));
+        viewModel.setDate(getDateAsGregorian(getOriginalDate()));
         super.onDestroyView();
     }
 
@@ -189,7 +189,11 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     public LocalDateTime getDate() {
-        return (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
+        if (viewModel.getDate() == null) {
+            LocalDateTime date = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
+            viewModel.setDate(date);
+        }
+        return viewModel.getDate();
     }
 
     public LocalDateTime getDateWithSkippedDaylightSavingGapIfExists() {

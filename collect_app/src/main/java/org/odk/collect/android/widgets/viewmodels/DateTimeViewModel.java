@@ -20,11 +20,13 @@ public class DateTimeViewModel extends ViewModel {
     };
 
     private final TimePickerDialog.OnTimeSetListener timeSetListener = (view, hourOfDay, minuteOfHour) -> {
+        view.clearFocus();
         hourOfDay = view.getCurrentHour();
         minuteOfHour = view.getCurrentMinute();
-
         setSelectedTime(hourOfDay, minuteOfHour);
     };
+
+    private LocalDateTime date;
 
     public LiveData<LocalDateTime> getSelectedDate() {
         return selectedDate;
@@ -48,5 +50,13 @@ public class DateTimeViewModel extends ViewModel {
 
     public TimePickerDialog.OnTimeSetListener getOnTimeSetListener() {
         return timeSetListener;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
