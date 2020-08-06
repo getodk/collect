@@ -86,12 +86,12 @@ public class AudioPlayerViewModelTest {
     @Test
     public void playMultipleClips_updatesProgress_forAllClips() {
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
-        assertThat(fakeScheduler.getProgressUpdating(), equalTo(true));
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
 
         viewModel.onCleared();
 
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
-        assertThat(fakeScheduler.getProgressUpdating(), equalTo(true));
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
     }
 
     @Test
@@ -107,17 +107,17 @@ public class AudioPlayerViewModelTest {
 
         verify(mediaPlayer).setDataSource("file://audio1.mp3");
         verify(mediaPlayer, times(1)).start();
-        assertThat(fakeScheduler.getProgressUpdating(), equalTo(true));
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
 
         onCompletionListener.onCompletion(mediaPlayer);
 
         verify(mediaPlayer).setDataSource("file://audio2.mp3");
         verify(mediaPlayer, times(2)).start();
-        assertThat(fakeScheduler.getProgressUpdating(), equalTo(true));
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
 
         onCompletionListener.onCompletion(mediaPlayer);
         verify(mediaPlayer, times(2)).start();
-        assertThat(fakeScheduler.getProgressUpdating(), equalTo(false));
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(false));
     }
 
     @Test
