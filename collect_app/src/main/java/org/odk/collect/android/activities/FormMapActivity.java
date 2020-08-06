@@ -42,7 +42,7 @@ import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;

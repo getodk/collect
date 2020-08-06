@@ -1,4 +1,4 @@
-package org.odk.collect.android.instances;
+package org.odk.collect.android.database;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 

@@ -1,10 +1,12 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.android.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 

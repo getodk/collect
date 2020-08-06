@@ -43,7 +43,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.formentry.saving.FormSaver;
-import org.odk.collect.android.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.javarosawrapper.FormController;
