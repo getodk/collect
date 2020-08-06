@@ -60,8 +60,6 @@ public class FormDatabaseMigrator {
                 upgradeToVersion8(db);
             case 8:
                 upgradeToVersion9(db);
-            default:
-                Timber.i("Unknown version %s", oldVersion);
         }
     }
 
