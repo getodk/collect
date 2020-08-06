@@ -58,7 +58,6 @@ public class FormDatabaseMigrator {
                 upgradeToVersion7(db);
             case 7:
                 upgradeToVersion8(db);
-                break;
             case 8:
                 upgradeToVersion9(db);
             default:
