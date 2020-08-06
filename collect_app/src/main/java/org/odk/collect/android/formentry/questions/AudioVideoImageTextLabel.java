@@ -114,7 +114,11 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
         labelTextView = questionText;
         labelTextView.setId(R.id.text_label);
-        labelTextView.setOnClickListener(v -> listener.onItemClicked());
+        labelTextView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClicked();
+            }
+        });
 
         textContainer.removeAllViews();
         textContainer.addView(labelTextView);
@@ -252,7 +256,9 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             CheckBox checkbox = (CheckBox) labelTextView;
             checkbox.setChecked(!checkbox.isChecked());
         }
-        listener.onItemClicked();
+        if (listener != null) {
+            listener.onItemClicked();
+        }
     }
 
     private void setupBigImage(String imageURI) {

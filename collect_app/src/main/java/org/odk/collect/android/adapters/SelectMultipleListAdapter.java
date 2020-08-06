@@ -52,10 +52,6 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                 : new AudioVideoImageTextLabel(props.getContext()));
     }
 
-    public void setSelectItemClickListener(SelectItemClickListener listener) {
-        this.listener = listener;
-    }
-
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
         ViewHolder(View v) {
             super(v);
@@ -95,7 +91,9 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             } else {
                 removeItem(props.getFilteredItems().get(index).selection());
             }
-            listener.onItemClicked();
+            if (listener != null) {
+                listener.onItemClicked();
+            }
         });
 
         return checkBox;
