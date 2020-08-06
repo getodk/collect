@@ -98,7 +98,7 @@ public class InstanceSubmitter {
                 // TODO: this could take some time so might be better to do in a separate process,
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
-                if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
+                if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(), instance.getJrVersion(),
                         (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
                     Uri deleteForm = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instance.getId().toString());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
