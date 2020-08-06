@@ -54,14 +54,13 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        if (answer != null) {
-            selectedItem = ((List<Selection>) answer).get(0);
-            updateAnswer();
-            widgetValueChanged();
+        List<Selection> answers = (List<Selection>) answer;
+        selectedItem = answers.isEmpty() ? null : answers.get(0);
+        updateAnswer();
+        widgetValueChanged();
 
-            if (autoAdvance && autoAdvanceListener != null) {
-                autoAdvanceListener.advance();
-            }
+        if (autoAdvance && autoAdvanceListener != null) {
+            autoAdvanceListener.advance();
         }
     }
 

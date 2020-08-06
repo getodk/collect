@@ -33,6 +33,7 @@ import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectOneItemClickListener;
 import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -127,7 +128,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     @Override
     public List<Selection> getSelectedItems() {
         return getSelectedItem() == null
-                ? null
+                ? new ArrayList<>()
                 : Collections.singletonList(getSelectedItem());
     }
 
