@@ -7,9 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.utilities.SQLiteUtils;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
@@ -17,6 +22,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
@@ -33,13 +39,20 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns._ID
 @RunWith(AndroidJUnit4.class)
 public class FormDatabaseMigratorTest {
 
+    public static final List<String> CURRENT_VERSION_COLUMNS = asList(_ID, DISPLAY_NAME, DESCRIPTION,
+            JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+            SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+            GEOMETRY_XPATH, DELETED);
+
+    @Before
+    public void setup() {
+        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(9));
+    }
+
     @Test
     public void onUpgrade_fromVersion8() {
-        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(9));
-
         SQLiteDatabase database = SQLiteDatabase.create(null);
         createVersion8Database(database);
-
         ContentValues contentValues = createVersion8Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
@@ -66,6 +79,61 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DESCRIPTION)), is(0));
+        }
+    }
+
+    @Test
+    public void onDowngrade_fromVersionWithExtraColumn() {
+        SQLiteDatabase database = SQLiteDatabase.create(null);
+        FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
+        formDatabaseMigrator.onCreate(database);
+        SQLiteUtils.addColumn(database, FORMS_TABLE_NAME, "new_column", "text");
+        ContentValues contentValues = createVersion8Form();
+        contentValues.put("new_column", "blah");
+        database.insert(FORMS_TABLE_NAME, null, contentValues);
+
+        formDatabaseMigrator.onDowngrade(database);
+
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
+            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getCount(), is(0));
+            assertThat(asList(cursor.getColumnNames()), is(CURRENT_VERSION_COLUMNS));
+        }
+    }
+
+    @Test
+    public void onDowngrade_fromVersionWithMissingColumn() {
+        // Create form table with out JR Cache column
+        SQLiteDatabase database = SQLiteDatabase.create(null);
+        FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null, "
+                + DATE + " integer not null, "
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + "lastDetectedFormVersionHash" + " text, "
+                + GEOMETRY_XPATH + " text);");
+
+        ContentValues contentValues = createVersion8Form();
+        contentValues.remove(JRCACHE_FILE_PATH);
+        database.insert(FORMS_TABLE_NAME, null, contentValues);
+
+        formDatabaseMigrator.onDowngrade(database);
+
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
+            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getCount(), is(0));
+            assertThat(asList(cursor.getColumnNames()), is(CURRENT_VERSION_COLUMNS));
         }
     }
 
@@ -99,7 +167,7 @@ public class FormDatabaseMigratorTest {
                 + JR_FORM_ID + " text not null, "
                 + JR_VERSION + " text, "
                 + MD5_HASH + " text not null, "
-                + DATE + " integer not null, " // milliseconds
+                + DATE + " integer not null, "
                 + FORM_MEDIA_PATH + " text not null, "
                 + FORM_FILE_PATH + " text not null, "
                 + LANGUAGE + " text, "

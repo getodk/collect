@@ -66,7 +66,7 @@ public class FormDatabaseMigrator {
         }
     }
 
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
+    public void onDowngrade(SQLiteDatabase db) throws SQLException {
         SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
         createFormsTableV9(db);
     }
