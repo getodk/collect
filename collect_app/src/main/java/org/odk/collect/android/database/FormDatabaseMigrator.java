@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.android.utilities.SQLiteUtils;
 
-import timber.log.Timber;
-
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
