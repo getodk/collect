@@ -84,14 +84,12 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
     @Test
     public void byDefault_shouldGridLayoutManagerBeUsed() {
-        populateRecyclerView(getWidget());
         assertThat(getWidget().binding.choicesRecyclerView.getLayoutManager().getClass().getName(), is(GridLayoutManager.class.getName()));
     }
 
     @Test
     public void whenColumnsPackAppearanceExist_shouldFlexboxLayoutManagerBeUsed() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-pack");
-        populateRecyclerView(getWidget());
         assertThat(getWidget().binding.choicesRecyclerView.getLayoutManager().getClass().getName(), is(FlexboxLayoutManager.class.getName()));
     }
 
@@ -138,7 +136,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 .build();
 
         SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
 
         assertVisibleItems("AAA", "BBB");
         widget.binding.choicesSearchBox.setText("b");
@@ -163,7 +160,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 .build();
 
         SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
 
         assertVisibleItems("AAA", "BBB");
         widget.binding.choicesSearchBox.setText("b");
