@@ -2559,9 +2559,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return false;
             }
 
-            if ((Math.abs(e1.getX() - e2.getX()) > xpixellimit && Math.abs(e1
-                    .getY() - e2.getY()) < ypixellimit)
-                    || Math.abs(e1.getX() - e2.getX()) > xpixellimit * 2) {
+            float diffX = e1.getX() - e2.getX();
+            float diffY = e1.getY() - e2.getY();
+
+            if (getGestureAngle(diffX, diffY) > 30) {
+                return false;
+            }
+
+            if ((Math.abs(diffX) > xpixellimit && Math.abs(diffY) < ypixellimit) || Math.abs(diffX) > xpixellimit * 2) {
                 beenSwiped = true;
                 if (velocityX > 0) {
                     if (e1.getX() > e2.getX()) {
@@ -2583,6 +2588,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         return false;
+    }
+
+    private double getGestureAngle(float diffX, float diffY) {
+        return Math.toDegrees(Math.atan2(Math.abs(diffY), Math.abs(diffX)));
     }
 
     @Override
