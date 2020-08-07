@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,14 +44,21 @@ public class FormDatabaseMigratorTest {
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
             GEOMETRY_XPATH, DELETED);
 
+    private SQLiteDatabase database;
+
     @Before
     public void setup() {
         assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(9));
+        database = SQLiteDatabase.create(null);
+    }
+
+    @After
+    public void teardown() {
+        database.close();
     }
 
     @Test
     public void onUpgrade_fromVersion8() {
-        SQLiteDatabase database = SQLiteDatabase.create(null);
         createVersion8Database(database);
         ContentValues contentValues = createVersion8Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
@@ -83,7 +91,6 @@ public class FormDatabaseMigratorTest {
 
     @Test
     public void onUpgrade_fromVersion7() {
-        SQLiteDatabase database = SQLiteDatabase.create(null);
         createVersion7Database(database);
         ContentValues contentValues = createVersion7Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
@@ -116,7 +123,6 @@ public class FormDatabaseMigratorTest {
 
     @Test
     public void onDowngrade_fromVersionWithExtraColumn() {
-        SQLiteDatabase database = SQLiteDatabase.create(null);
         FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
         formDatabaseMigrator.onCreate(database);
         SQLiteUtils.addColumn(database, FORMS_TABLE_NAME, "new_column", "text");
@@ -136,7 +142,6 @@ public class FormDatabaseMigratorTest {
     @Test
     public void onDowngrade_fromVersionWithMissingColumn() {
         // Create form table with out JR Cache column
-        SQLiteDatabase database = SQLiteDatabase.create(null);
         FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
         database.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
