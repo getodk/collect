@@ -65,6 +65,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     private ManageForm mf;
     private ManageForm.ManageFormDetails mfd;
+    private FormEntryActivity mFormEntryActivity;
 
     private ActivityAvailability activityAvailability;
 
@@ -82,9 +83,9 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
          */
         boolean validForm = true;
         mf = new ManageForm();
+        mFormEntryActivity = (FormEntryActivity) context;
 
         String formIdent = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "form_identifier");
-        String key_question = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "key_question");
 
         if(formIdent == null) {
             validForm = false;
@@ -237,18 +238,14 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         String instancePath = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
         FormIndex formIndex = Collect.getInstance().getFormController().getFormIndex();
 
-        String title = null;
-        FormEntryActivity fea = Collect.getInstance().getFormEntryActivity();
-        if(fea != null) {
-            title = (String) fea.getTitle();
-        }
+        String title = (String) mFormEntryActivity.getTitle();
         Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex, title));
 
         // 2. Set form details to be launched in collect app
         Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id, mfd.formName));
 
         // 3. Save and exit current form
-        Collect.getInstance().getFormEntryActivity().saveForm(true, false,
+        mFormEntryActivity.saveForm(true, false,
                 null, false, false);
     }
 
