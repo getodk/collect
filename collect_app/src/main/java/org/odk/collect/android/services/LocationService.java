@@ -14,12 +14,13 @@
 
 package org.odk.collect.android.services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,25 +28,19 @@ import android.preference.PreferenceManager;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.TraceUtilities;
-import org.odk.collect.android.loaders.GeofenceEntry;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.receivers.LocationReceiver;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.NotificationUtils;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
 import timber.log.Timber;
 
 import static java.lang.StrictMath.abs;
@@ -55,19 +50,15 @@ import static java.lang.StrictMath.abs;
  */
 
 /*
- * Respond to a notification from the server
+ * Get locations
  */
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks {
 
     Handler mHandler = new Handler();           // Background thread to check for enabling / disabling the location listener
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationClient;
-    private LocationCallback locationCallback;
-    private boolean isRecordingLocation = false;
+    //private LocationCallback locationCallback;
     private Timer mTimer;
-    Location lastLocation = null;
-    LocationManager locationManager;
-    boolean enabledTracking = false;
 
     public LocationService() {
     }
@@ -81,17 +72,32 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         super.onStartCommand(intent, flags, startId);
         Timber.i("======================= Start Location Service");
 
-        if (mTimer == null) {
-            mTimer = new Timer();
-        }
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mTimer.scheduleAtFixedRate(new CheckEnabledTimerTask(), 0, 60000);  // Peiodically check to see if location tracking is disabled
+        createLocationRequest();
+        requestLocationUpdates();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-        startLocationUpdates();
+            Notification.Builder builder = new Notification.Builder(this, NotificationUtils.CHANNEL_ID)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("some text")
+                    .setAutoCancel(true);
+
+            Notification notification = builder.build();
+            startForeground(1, notification);
+
+        } else {
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("some text")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+
+            Notification notification = builder.build();
+
+            startForeground(1, notification);
+        }
 
         return START_STICKY;
     }
@@ -121,32 +127,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationRequest.setFastestInterval(Constants.GPS_INTERVAL / 2);
         locationRequest.setInterval(Constants.GPS_INTERVAL);
 
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                onLocationChanged(locationResult.getLastLocation());
-            }
-        };
-
         try {
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-            isRecordingLocation = true;
+            fusedLocationClient.requestLocationUpdates(locationRequest, getPendingIntent());
+            //fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         } catch (SecurityException e) {
             Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
-            isRecordingLocation = false;
         }
-    }
-
-    /*
-     * Stop recoding locations
-     */
-    private void stopLocationUpdates() {
-        //Timber.i("=================== Location Recording turned off");
-        if(fusedLocationClient != null) {
-            fusedLocationClient.removeLocationUpdates(locationCallback);
-        }
-        isRecordingLocation = false;
     }
 
     @Override
@@ -159,96 +145,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-    public void onLocationChanged(Location location) {
-
-        if(isValidLocation(location) && isAccurateLocation(location)) {
-
-            //Timber.i("+++++++++++++++++++++++++++++ location received");
-            Collect.getInstance().setLocation(location);
-            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));  // update map
-
-            /*
-             * Test for geofence change if the user has moved more than the minimum distance
-             */
-            ArrayList<GeofenceEntry> geofences = Collect.getInstance().getGeofences();
-            if(geofences.size() > 0 && (lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE)) {
-                boolean refresh = false;
-                boolean notify = false;
-                for(GeofenceEntry gfe : geofences) {
-                    double yDistance = abs(location.getLatitude() - gfe.location.getLatitude()) * 111111.1;     // lattitude difference in meters
-                    if(gfe.in) {                                                        // Currently inside
-                        if (location.distanceTo(gfe.location) > gfe.showDist) {         // detailed check only
-                            refresh = true;
-                        }
-                    } else {
-                        if(yDistance < gfe.showDist) {                                      // Currently outside do rough check first
-                            if (location.distanceTo(gfe.location) < gfe.showDist) {
-                                refresh = true;
-                                notify = true;
-                                break;      // No need to check more we have a notify and a refresh
-                            }
-                        }
-                    }
-                }
-                if(refresh) {
-                    Intent intent = new Intent("org.smap.smapTask.refresh");
-                    LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-                    Timber.i("######## send org.smap.smapTask.refresh from location service");  // smap
-                }
-                if(notify) {
-                    NotificationUtils.showNotification(null,
-                            NotificationActivity.NOTIFICATION_ID,
-                            R.string.app_name,
-                            getString(R.string.smap_geofence_tasks), false);
-                }
-
-            }
-
-            /*
-             * Save the location in the database - deprecate better to send location immediately to server if we do this
-             */
-            if (enabledTracking) {
-                if(lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE) {
-                    Timber.i("^^^^^^^^^^^^^^^^^^^^^^^^^^ insert point");
-                    TraceUtilities.insertPoint(location);
-                    lastLocation = location;
-                }
-            }
-        }
-    }
-
-    /*
-     * Check to see if this is a valid location
-     */
-    private boolean isValidLocation(Location location) {
-        boolean valid = true;
-        if(location == null || Math.abs(location.getLatitude()) > 90
-                || Math.abs(location.getLongitude()) > 180) {
-            valid = false;
-        }
-
-        // Return false if the location is 0 0, more likely than not this is a bad location
-        if(Math.abs(location.getLongitude()) == 0.0 && Math.abs(location.getLongitude()) == 0.0) {
-            valid = false;
-        }
-
-        return valid;
-    }
-
-    /*
-     * Check to see if this is a valid location
-     */
-    private boolean isAccurateLocation(Location location) {
-
-        boolean accurate = true;
-        if (!location.hasAccuracy() || location.getAccuracy() >= Constants.GPS_ACCURACY) {
-            Timber.i("Ignore location. Poor accuracy.");
-            accurate = false;
-        }
-        return accurate;
-    }
-
     /*
      * Run a a periodic query to see if the user settings have changes
      */
@@ -261,11 +157,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
                 @Override
                 public void run() {
-                    //Timber.i("=================== Periodic check for user settings ");
+                    Timber.i("=================== Periodic check for user settings ");
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-                    enabledTracking = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
 
-                    // Restart location monitoring - Incase pemission was disabled and then reenabled
+                    // Restart location monitoring - Incase permission was disabled and then reenabled
                     stopLocationUpdates();
                     startLocationUpdates();
                 }
@@ -274,6 +169,36 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
     }
 
+    /*
+     * Methods ot support location broadcast receiver
+     */
+    private void createLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setFastestInterval(Constants.GPS_INTERVAL / 2);
+        locationRequest.setInterval(Constants.GPS_INTERVAL);
+    }
 
+    private void requestLocationUpdates() {
+        try {
+            Timber.i("+++++++ Requesting location updates");
+            fusedLocationClient.requestLocationUpdates(locationRequest, getPendingIntent());
+        } catch (SecurityException e) {
+            Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
+        }
+    }
+
+    private void stopLocationUpdates() {
+        Timber.i("=================== Location Recording turned off");
+        if(fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(getPendingIntent());
+        }
+    }
+
+    private PendingIntent getPendingIntent() {
+        Intent intent = new Intent(this, LocationReceiver.class);
+        intent.setAction(LocationReceiver.ACTION_PROCESS_UPDATES);
+        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 
 }

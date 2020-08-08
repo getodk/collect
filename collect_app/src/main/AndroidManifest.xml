@@ -38,6 +38,8 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- <uses-permission android:name="android.permission.SEND_SMS" /> -->
+    <!-- smap -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- Normal permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -180,7 +182,7 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
 
-        <!-- smap add network receiver -->
+        <!-- smap add network and location receiver -->
         <receiver
             android:name=".receivers.NetworkReceiver"
             android:enabled="true">
@@ -189,6 +191,13 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
             <intent-filter>
                 <action android:name="org.odk.collect.android.FormSaved" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receivers.LocationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="au.com.smap.location_service.action.PROCESS_UPDATES" />
             </intent-filter>
         </receiver>
         <!-- Smap disable analytics -->

@@ -148,7 +148,6 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         boolean isDatabaseHelperOutOfDate = false;
         try {
             SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
-            Timber.i("++++++ Current database version: " + db.getVersion());
             isDatabaseHelperOutOfDate = FormsDatabaseHelper.DATABASE_VERSION != db.getVersion();
             db.close();
         } catch (SQLException e) {

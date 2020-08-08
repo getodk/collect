@@ -99,9 +99,8 @@ public class Collect extends Application {
     private AppDependencyComponent applicationComponent;
 
     private Location location = null;                   // smap
+    private Location savedLocation = null;              // Location saved to trail database
     private ArrayList<GeofenceEntry> geofences = new ArrayList<GeofenceEntry>();    // smap
-    private boolean recordLocation = false;             // smap
-    //private FormInfo formInfo = null;                   // smap
     private boolean tasksDownloading = false;           // smap
     // Keep a reference to form entry activity to allow cancel dialogs to be shown during remote calls
     private FormEntryActivity formEntryActivity = null; // smap
@@ -288,6 +287,13 @@ public class Collect extends Application {
     }
     public Location getLocation() {
         return location;
+    }
+
+    public void setSavedLocation(Location l) {
+        savedLocation = l;
+    }
+    public Location getSavedLocation() {
+        return savedLocation;
     }
 
     public void setGeofences(ArrayList<GeofenceEntry> geofences) {

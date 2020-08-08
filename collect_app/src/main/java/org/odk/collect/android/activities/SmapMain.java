@@ -33,6 +33,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -41,6 +42,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
@@ -53,6 +57,7 @@ import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -77,9 +82,9 @@ import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -144,6 +149,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     private Intent mLocationServiceIntent = null;
     private LocationService mLocationService = null;
+
+    private LocationRequest locationRequest;
+    private FusedLocationProviderClient fusedLocationClient;
 
     /*
      * Start scoped storage
@@ -224,9 +232,25 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         startService(intent);
 
         // Start the location service
-        mLocationService = new LocationService(this);
-        mLocationServiceIntent = new Intent(this, mLocationService.getClass());
-        startService(mLocationServiceIntent);
+
+        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+            @Override public void granted() {
+
+                /*
+                 * Start a foreground service
+                 */
+                mLocationService = new LocationService(Collect.getInstance().getApplicationContext());
+                mLocationServiceIntent = new Intent(Collect.getInstance().getApplicationContext(), mLocationService.getClass());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(mLocationServiceIntent);
+                } else {
+                    startService(mLocationServiceIntent);
+                }
+            }
+
+            @Override public void denied() { }
+        });
+
 
         // Show login status if it was set
         String login_status = getIntent().getStringExtra(LOGIN_STATUS);
@@ -1151,4 +1175,5 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         }
     }
+
 }

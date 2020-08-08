@@ -24,11 +24,14 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.database.TraceProviderAPI.TraceColumns;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.STFileUtils;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TraceUtilities {
 
@@ -58,4 +61,89 @@ public class TraceUtilities {
         return STFileUtils.getSource(serverUrl);
     }
 
+    /*
+     * Get the trail of points
+     */
+    public static long getPoints(List<org.odk.collect.android.loaders.PointEntry> entries, int limit, boolean desc) {
+
+        String [] proj = {
+                org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID,
+                org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LAT,
+                org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LON,
+                org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.TIME,
+        };
+
+        long id = 0;
+        String [] selectArgs = {""};
+        selectArgs[0] = Utilities.getSource();
+        String selectClause = org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.SOURCE + " = ?";
+
+        String sortOrder = org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID + (desc ? " DESC" : " ASC") + " LIMIT " + limit + ";";
+
+        final ContentResolver resolver = Collect.getInstance().getContentResolver();
+        Cursor pointListCursor = resolver.query(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.CONTENT_URI, proj, selectClause, selectArgs, sortOrder);
+
+
+        if(pointListCursor != null) {
+
+            pointListCursor.moveToFirst();
+            while (!pointListCursor.isAfterLast()) {
+
+                org.odk.collect.android.loaders.PointEntry entry = new PointEntry();
+
+                entry.lat = pointListCursor.getDouble(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LAT));
+                entry.lon = pointListCursor.getDouble(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LON));
+                entry.time = pointListCursor.getLong(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.TIME));
+
+                id = pointListCursor.getLong(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID));
+
+                entries.add(entry);
+                pointListCursor.moveToNext();
+            }
+        }
+        if(pointListCursor != null) {
+            pointListCursor.close();
+        }
+
+        return id;
+    }
+
+    /*
+     * Delete the trace points
+     * If lastId is > 0 then only delete points up to and including this id
+     */
+    public static boolean deleteSource(long lastId) {
+
+        Uri dbUri =  org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.CONTENT_URI;
+
+        String [] selectArgsAll = {""};
+        String [] selectArgsLimit = {"", ""};
+        String [] selectArgs;
+
+
+        String selectClauseAll = org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.SOURCE + " = ?";
+        String selectClauseLimit = org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.SOURCE + " = ? and "
+                + org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID + " <= ?";
+        String selectClause = null;
+
+        if(lastId > 0) {
+            selectClause = selectClauseLimit;
+            selectArgs = selectArgsLimit;
+            selectArgs[1] = String.valueOf(lastId);
+        } else {
+            selectClause = selectClauseAll;
+            selectArgs = selectArgsAll;
+        }
+        selectArgs[0] = Utilities.getSource();
+
+        boolean status;
+        try {
+            int count = Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
+            status = true;
+        } catch (Exception e) {
+            status = false;
+        }
+        return status;
+
+    }
 }

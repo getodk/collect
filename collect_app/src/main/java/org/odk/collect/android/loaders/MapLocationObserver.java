@@ -25,8 +25,6 @@ public class MapLocationObserver extends BroadcastReceiver {
 public MapLocationObserver(Context context, SmapTaskMapFragment map) {
     mMap = map;
 
-    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
     LocalBroadcastManager.getInstance(context).registerReceiver(this,
             new IntentFilter("locationChanged"));
   }
@@ -35,8 +33,6 @@ public MapLocationObserver(Context context, SmapTaskMapFragment map) {
   public void onReceive(Context context, Intent intent) {
       Location locn = Collect.getInstance().getLocation();
       LatLng point = new LatLng(locn.getLatitude(), locn.getLongitude());
-      if(sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
-          mMap.updatePath(point);
-      }
+      mMap.updatePath(point);
   }
 }
