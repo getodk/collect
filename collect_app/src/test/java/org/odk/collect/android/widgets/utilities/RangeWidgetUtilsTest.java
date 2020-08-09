@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.utilities;
 
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -26,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.RobolectricHelpers.createThemedContext;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
@@ -42,8 +44,7 @@ public class RangeWidgetUtilsTest {
 
     @Before
     public void setup() {
-        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
-
+        createThemedContext();
         slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext(), null);
         sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
@@ -64,9 +65,9 @@ public class RangeWidgetUtilsTest {
     }
 
     @Test
-    public void usingReadOnlyOption_disablesPickerButton() {
+    public void usingReadOnlyOption_hidesPickerButton() {
         RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
-        assertFalse(binding.widgetButton.isEnabled());
+        assertThat(binding.widgetButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
@@ -111,14 +112,14 @@ public class RangeWidgetUtilsTest {
     }
 
     @Test
-    public void setUpLayoutElements_shouldShowHorizontalCorrectSlider() {
+    public void setUpLayoutElements_forHorizontalSliderWidget_shouldShowCorrectSlider() {
         RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(layoutElements.getSlider().getRotation(), equalTo(0.0F));
     }
 
     @Test
-    public void setUpLayoutElements_shouldShowVerticalCorrectSlider() {
+    public void setUpLayoutElements_forVerticalSliderWidget_shouldShowCorrectSlider() {
         when(rangeQuestion.getAppearanceAttr()).thenReturn(VERTICAL_APPEARANCE);
         RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));

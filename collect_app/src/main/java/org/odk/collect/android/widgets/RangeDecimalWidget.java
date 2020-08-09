@@ -55,13 +55,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();
         defaultThumbRadius = slider.getThumbRadius();
-
-        BigDecimal actualValue = RangeWidgetUtils.setUpSlider(prompt, rangeQuestion, slider, false);
-        if (actualValue == null) {
-            slider.setThumbRadius(0);
-        } else {
-            setUpActualValueLabel(actualValue);
-        }
+        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, rangeQuestion, slider, false));
 
         if (slider.isEnabled()) {
             slider.addOnChangeListener(this);
@@ -99,7 +93,8 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     }
 
     private void setUpActualValueLabel(BigDecimal actualValue) {
+        String value = actualValue == null ? "" : String.valueOf(actualValue.doubleValue());
+        currentValue.setText(value);
         slider.setThumbRadius(defaultThumbRadius);
-        currentValue.setText(String.valueOf(actualValue.doubleValue()));
     }
 }

@@ -88,6 +88,10 @@ public class RangeWidgetUtils {
         if (prompt.isReadOnly()) {
             slider.setEnabled(false);
         }
+        if (prompt.getAnswerValue() == null) {
+            slider.setValue(0);
+        }
+
         return new RangeWidgetLayoutElements(answerView, slider, currentValue);
     }
 
@@ -105,31 +109,38 @@ public class RangeWidgetUtils {
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : BigDecimal.valueOf(0.5);
 
-        if (!isRangeSliderWidgetValid(rangeQuestion, slider)) {
-            return null;
-        }
-
-        if (rangeEnd.compareTo(rangeStart) > -1) {
-            slider.setValueFrom(rangeStart.floatValue());
-            slider.setValueTo(rangeEnd.floatValue());
-        } else {
-            slider.setValueFrom(rangeEnd.floatValue());
-            slider.setValueTo(rangeStart.floatValue());
-        }
-
-        if (prompt.getQuestion().getAppearanceAttr() == null || !prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
-            if (isIntegerType) {
-                slider.setStepSize(rangeStep.intValue());
-            } else {
-                slider.setStepSize(rangeStep.floatValue());
-            }
-        }
-
         BigDecimal actualValue = null;
         if (prompt.getAnswerValue() != null) {
             actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
         }
-        slider.setValue(actualValue == null ? slider.getValueFrom() : actualValue.floatValue());
+
+        if (isRangeSliderWidgetValid(rangeQuestion, slider)) {
+            if (rangeEnd.compareTo(rangeStart) > -1) {
+                slider.setValueFrom(rangeStart.floatValue());
+                slider.setValueTo(rangeEnd.floatValue());
+            } else {
+                slider.setValueFrom(rangeEnd.floatValue());
+                slider.setValueTo(rangeStart.floatValue());
+            }
+
+            if (prompt.getQuestion().getAppearanceAttr() == null || !prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
+                if (isIntegerType) {
+                    slider.setStepSize(rangeStep.intValue());
+                } else {
+                    slider.setStepSize(rangeStep.floatValue());
+                }
+            }
+
+            if (actualValue != null) {
+                if (rangeEnd.compareTo(rangeStart) > -1) {
+                    slider.setValue(actualValue.floatValue());
+                } else {
+                    slider.setValue(rangeStart.add(rangeEnd).subtract(actualValue).floatValue());
+                }
+            } else {
+                slider.setValue(slider.getValueFrom());
+            }
+        }
 
         return actualValue;
     }
@@ -143,12 +154,10 @@ public class RangeWidgetUtils {
             } else {
                 binding.widgetAnswerText.setText(R.string.no_value_selected);
                 binding.widgetButton.setText(R.string.select_value);
-                binding.widgetButton.setText(context.getString(R.string.select_value));
             }
         }
-
         if (prompt.isReadOnly()) {
-            binding.widgetButton.setEnabled(false);
+            binding.widgetButton.setVisibility(View.GONE);
         }
     }
 

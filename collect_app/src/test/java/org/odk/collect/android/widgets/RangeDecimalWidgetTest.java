@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -53,14 +54,32 @@ public class RangeDecimalWidgetTest {
     }
 
     @Test
-    public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
+    public void whenPromptDoesNotHaveAnswer_widgetShouldShowNullAnswer() {
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        assertThat(widget.currentValue.getText(), equalTo(""));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_widgetShouldShowCorrectAnswer() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         assertThat(widget.slider.getValue(), equalTo(2.5F));
         assertThat(widget.currentValue.getText(), equalTo("2.5"));
     }
 
     @Test
-    public void whenSliderIsDiscrete_widgetShowsCorrectSliderValues() {
+    public void whenPromptDoesNotHaveAnswer_sliderThumbShouldNotBeVisible() {
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+        assertThat(widget.slider.getThumbRadius(), not(0));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_sliderThumbShouldBeVisible() {
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+        assertThat(widget.slider.getThumbRadius(), not(0));
+    }
+
+    @Test
+    public void whenSliderIsDiscrete_widgetShowsCorrectSlider() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
 
         assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
@@ -70,7 +89,7 @@ public class RangeDecimalWidgetTest {
     }
 
     @Test
-    public void whenSliderIsContinuous_widgetShowsCorrectSliderValues() {
+    public void whenSliderIsContinuous_widgetShowsCorrectSlider() {
         when(rangeQuestion.getAppearanceAttr()).thenReturn(NO_TICKS_APPEARANCE);
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
 
@@ -84,12 +103,19 @@ public class RangeDecimalWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         widget.clearAnswer();
-        assertThat(widget.getAnswer(), nullValue());
+        assertThat(widget.currentValue.getText(), equalTo(""));
+    }
+
+    @Test
+    public void clearAnswer_hidesSliderThumb() {
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+        widget.clearAnswer();
+        assertThat(widget.slider.getThumbRadius(), equalTo(0));
     }
 
     @Test
     public void clearAnswer_callsValueChangeListener() {
-        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
 
@@ -106,13 +132,19 @@ public class RangeDecimalWidgetTest {
     }
 
     @Test
+    public void changingSliderValue_showsSliderThumb() {
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.setValue(2.5F);
+        assertThat(widget.slider.getThumbRadius(), not(0));
+    }
+
+    @Test
     public void changingSliderValue_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.valueOf(5.5));
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(1.5));
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.setValue(4.0F);
 
-        assertThat(widget.getAnswer().getValue(), equalTo(3.0));
         assertThat(widget.currentValue.getText(), equalTo("3.0"));
     }
 

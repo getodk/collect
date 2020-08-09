@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
@@ -54,17 +54,28 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_sliderIsSetOnStartingIndex() {
+    public void whenPromptDoesNotHaveAnswer_widgetShowsNullAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        assertThat(widget.slider.getValue(), equalTo(1.0F));
         assertThat(widget.currentValue.getText(), equalTo(""));
     }
 
     @Test
-    public void whenPromptHasAnswer_sliderShouldShowCorrectAnswer() {
+    public void whenPromptHasAnswer_widgetShouldShowCorrectAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         assertThat(widget.slider.getValue(), equalTo(4.0F));
         assertThat(widget.currentValue.getText(), equalTo("4"));
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_sliderThumbShouldNotBeVisible() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+        assertThat(widget.slider.getThumbRadius(), not(0));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_sliderThumbShouldBeVisible() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+        assertThat(widget.slider.getThumbRadius(), not(0));
     }
 
     @Test
@@ -92,27 +103,36 @@ public class RangeIntegerWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         widget.clearAnswer();
-
-        assertThat(widget.getAnswer(), nullValue());
         assertThat(widget.currentValue.getText(), equalTo(""));
-        assertThat(widget.slider.getValue(), equalTo(1.0F));
+    }
+
+    @Test
+    public void clearAnswer_hidesSliderThumb() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+        widget.clearAnswer();
+        assertThat(widget.slider.getThumbRadius(), equalTo(0));
     }
 
     @Test
     public void clearAnswer_callsValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-
         widget.clearAnswer();
+
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void changingSliderValue_showsSliderThumb() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.setValue(4.0F);
+        assertThat(widget.slider.getThumbRadius(), not(0));
     }
 
     @Test
     public void changingSliderValue_whenRangeStartIsSmallerThanRangeEnd_updatesAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.setValue(4.0F);
-
-        assertThat(widget.getAnswer().getValue(), equalTo(4));
         assertThat(widget.currentValue.getText(), equalTo("4"));
     }
 
@@ -123,7 +143,6 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.setValue(4.0F);
 
-        assertThat(widget.getAnswer().getValue(), equalTo(7));
         assertThat(widget.currentValue.getText(), equalTo("7"));
     }
 
