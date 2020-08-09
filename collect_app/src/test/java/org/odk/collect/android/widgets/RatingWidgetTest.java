@@ -2,6 +2,8 @@ package org.odk.collect.android.widgets;
 
 import android.view.View;
 
+import androidx.test.core.view.MotionEventBuilder;
+
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -14,9 +16,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.math.BigDecimal;
 
+import static android.view.MotionEvent.ACTION_DOWN;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -103,6 +107,25 @@ public class RatingWidgetTest {
     }
 
     @Test
+    public void whenUserTouchesTopRatingBar_bottomRatingBarShowsZeroRating() {
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("8")));
+        widget.binding.ratingBar1.onTouchEvent(MotionEventBuilder.newBuilder().setAction(ACTION_DOWN).build());
+        widget.binding.ratingBar1.setRating(5.0F);
+
+        assertThat(widget.binding.ratingBar2.getRating(), equalTo(0.0F));
+    }
+
+    @Test
+    public void whenUserTouchesBottomRatingBar_topRatingBarShowsMaximumRating() {
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("8")));
+        widget.binding.ratingBar2.onTouchEvent(MotionEventBuilder.newBuilder().setAction(ACTION_DOWN).build());
+
+        assertThat(widget.binding.ratingBar1.getRating(), equalTo(5.0F));
+    }
+
+    @Test
     public void whenPromptDoesNotHaveAnswer_noStarsAreHighlightedOnRatingBar() {
         RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, null));
         assertThat(widget.binding.ratingBar1.getRating(), equalTo(0.0F));
@@ -135,7 +158,7 @@ public class RatingWidgetTest {
         widget.setValueChangedListener(valueChangedListener);
         widget.clearAnswer();
 
-        verify(valueChangedListener).widgetValueChanged(widget);
+        verify(valueChangedListener, atLeastOnce()).widgetValueChanged(widget);
     }
 
     @Test
@@ -145,7 +168,7 @@ public class RatingWidgetTest {
         widget.setValueChangedListener(valueChangedListener);
         widget.binding.ratingBar1.setRating(4.0F);
 
-        verify(valueChangedListener).widgetValueChanged(widget);
+        verify(valueChangedListener, atLeastOnce()).widgetValueChanged(widget);
     }
 
     @Test
@@ -156,7 +179,7 @@ public class RatingWidgetTest {
         widget.setValueChangedListener(valueChangedListener);
         widget.binding.ratingBar2.setRating(4.0F);
 
-        verify(valueChangedListener).widgetValueChanged(widget);
+        verify(valueChangedListener, atLeastOnce()).widgetValueChanged(widget);
     }
 
     @Test

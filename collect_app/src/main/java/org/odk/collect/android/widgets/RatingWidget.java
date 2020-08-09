@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsSeekBar;
 
@@ -67,32 +68,12 @@ public class RatingWidget extends QuestionWidget {
             binding.ratingBar1.setMax(numberOfStars);
         }
 
-        binding.ratingBar1.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            binding.ratingBar2.setRating(0.0F);
-            binding.ratingBar1.setRating(rating);
-            widgetValueChanged();
-        });
-
-        binding.ratingBar2.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            binding.ratingBar1.setRating(maxNumberOfStars);
-            binding.ratingBar2.setRating(rating);
-        });
-
-        // fix for rating bar showing incorrect rating on Android Nougat(7.0/API 24)
-        // See https://stackoverflow.com/questions/44342481
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
-            try {
-                Field field = AbsSeekBar.class.getDeclaredField("mTouchProgressOffset");
-                field.setAccessible(true);
-                field.set(binding.ratingBar1, 0.6f);
-                field.set(binding.ratingBar2, 0.6f);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                Timber.e(e);
-            }
+        if (prompt.isReadOnly()) {
+            binding.ratingBar1.setEnabled(false);
+            binding.ratingBar2.setEnabled(false);
+        } else {
+            setUpRatingBar(maxNumberOfStars);
         }
-
-        binding.ratingBar1.setEnabled(!prompt.isReadOnly());
-        binding.ratingBar2.setEnabled(!prompt.isReadOnly());
 
         if (prompt.getAnswerText() != null) {
             int rating = Integer.parseInt(prompt.getAnswerText());
@@ -121,6 +102,49 @@ public class RatingWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         binding.ratingBar1.setRating(0.0F);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setUpRatingBar(int maxNumberOfStars) {
+        // to quickly change rating on other rating bar in case onRatingChange listener is not called
+        binding.ratingBar1.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                binding.ratingBar2.setRating(0);
+            }
+            return false;
+        });
+
+        binding.ratingBar2.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                binding.ratingBar1.setRating(maxNumberOfStars);
+            }
+            return false;
+        });
+
+        binding.ratingBar1.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            binding.ratingBar2.setRating(0);
+            binding.ratingBar1.setRating(rating);
+            widgetValueChanged();
+        });
+
+        binding.ratingBar2.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            binding.ratingBar1.setRating(maxNumberOfStars);
+            binding.ratingBar2.setRating(rating);
+            widgetValueChanged();
+        });
+
+        // fix for rating bar showing incorrect rating on Android Nougat(7.0/API 24)
+        // See https://stackoverflow.com/questions/44342481
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
+            try {
+                Field field = AbsSeekBar.class.getDeclaredField("mTouchProgressOffset");
+                field.setAccessible(true);
+                field.set(binding.ratingBar1, 0.6f);
+                field.set(binding.ratingBar2, 0.6f);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                Timber.e(e);
+            }
+        }
     }
 
     private int calculateMaximumStarsInOneLine() {
