@@ -62,7 +62,7 @@ public class DateTimeViewModelTest {
 
     @Test
     public void updatingDateInDateSetListener_updatesDateReturnedByViewModel() {
-        viewModel.getOnDateSetListener().onDateSet(mock(DatePicker.class), 2012, 4, 12);
+        viewModel.dateSetListener.onDateSet(mock(DatePicker.class), 2012, 4, 12);
 
         assertThat(selectedDate.getValue(), is(DateTimeUtils.getSelectedDate(
                 new LocalDateTime().withDate(2012, 5, 12), LocalDateTime.now())));
@@ -73,7 +73,7 @@ public class DateTimeViewModelTest {
         TimePicker timePicker = mock(TimePicker.class);
         when(timePicker.getCurrentHour()).thenReturn(12);
         when(timePicker.getCurrentMinute()).thenReturn(10);
-        viewModel.getOnTimeSetListener().onTimeSet(timePicker, 0, 0);
+        viewModel.timeSetListener.onTimeSet(timePicker, 0, 0);
 
         verify(timePicker).clearFocus();
         assertThat(selectedTime.getValue(), is(DateTimeUtils.getSelectedTime(
