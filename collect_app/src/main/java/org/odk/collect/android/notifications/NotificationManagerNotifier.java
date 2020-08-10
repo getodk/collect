@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
+import androidx.core.app.NotificationCompat;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
@@ -18,8 +20,8 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +38,10 @@ import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLA
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
-import static org.odk.collect.android.utilities.NotificationUtils.showNotification;
 
 public class NotificationManagerNotifier implements Notifier {
 
+    private static final String COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel";
     private final Application application;
     private final NotificationManager notificationManager;
     private final PreferencesProvider preferencesProvider;
@@ -67,14 +69,13 @@ public class NotificationManagerNotifier implements Notifier {
         PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Resources localizedResources = getLocalizedResources(application);
-        showNotification(
-                application,
-                notificationManager,
-                localizedResources.getString(R.string.form_updates_available),
-                null,
-                contentIntent,
-                FORM_UPDATE_NOTIFICATION_ID
-        );
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL).setContentIntent(contentIntent)
+                .setContentTitle(localizedResources.getString(R.string.form_updates_available))
+                .setContentText(null)
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
+                .setAutoCancel(true);
+
+        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, builder.build());
 
         metaPrefs.edit()
                 .putStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId)
@@ -90,16 +91,17 @@ public class NotificationManagerNotifier implements Notifier {
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
         PendingIntent contentIntent = PendingIntent.getActivity(application, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        showNotification(
-                application,
-                notificationManager,
-                localizedResources.getString(R.string.odk_auto_download_notification_title),
-                localizedResources.getString(allFormsDownloadedSuccessfully(application, result) ?
-                        R.string.success :
-                        R.string.failures),
-                contentIntent,
-                FORM_UPDATE_NOTIFICATION_ID
-        );
+        String content = localizedResources.getString(allFormsDownloadedSuccessfully(application, result) ?
+                R.string.success :
+                R.string.failures);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
+                .setContentIntent(contentIntent)
+                .setContentTitle(localizedResources.getString(R.string.odk_auto_download_notification_title))
+                .setContentText(content)
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
+                .setAutoCancel(true);
+
+        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, builder.build());
     }
 
     @Override
@@ -109,14 +111,14 @@ public class NotificationManagerNotifier implements Notifier {
             PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Resources localizedResources = getLocalizedResources(application);
-            showNotification(
-                    application,
-                    notificationManager,
-                    localizedResources.getString(R.string.form_update_error),
-                    new FormApiExceptionMapper(localizedResources).getMessage(exception),
-                    contentIntent,
-                    FORM_SYNC_NOTIFICATION_ID
-            );
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
+                    .setContentIntent(contentIntent)
+                    .setContentTitle(localizedResources.getString(R.string.form_update_error))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(new FormApiExceptionMapper(localizedResources).getMessage(new FormApiException(FormApiException.Type.UNKNOWN_HOST, "blah.com"))))
+                    .setSmallIcon(IconUtils.getNotificationAppIcon())
+                    .setAutoCancel(true);
+            notificationManager.notify(FORM_SYNC_NOTIFICATION_ID, builder.build());
         } else {
             notificationManager.cancel(FORM_SYNC_NOTIFICATION_ID);
         }
@@ -134,10 +136,17 @@ public class NotificationManagerNotifier implements Notifier {
         PendingIntent pendingNotify = PendingIntent.getActivity(application, FORMS_UPLOADED_NOTIFICATION,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationUtils.showNotification(
-                application, (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE), localizedResources.getString(R.string.odk_auto_note), failure ? localizedResources.getString(R.string.failures)
-                        : localizedResources.getString(R.string.success), pendingNotify, AUTO_SEND_RESULT_NOTIFICATION_ID
-        );
+        String content = failure ? localizedResources.getString(R.string.failures)
+                : localizedResources.getString(R.string.success);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
+                .setContentIntent(pendingNotify)
+                .setContentTitle(localizedResources.getString(R.string.odk_auto_note))
+                .setContentText(content)
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
+                .setAutoCancel(true);
+
+        notificationManager.notify(AUTO_SEND_RESULT_NOTIFICATION_ID, builder.build());
     }
 
     private boolean allFormsDownloadedSuccessfully(Context context, HashMap<ServerFormDetails, String> result) {

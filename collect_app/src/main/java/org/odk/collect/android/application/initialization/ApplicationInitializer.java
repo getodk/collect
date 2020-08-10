@@ -1,6 +1,9 @@
 package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -16,6 +19,7 @@ import org.javarosa.core.util.JavaRosaCoreModule;
 import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormUpdateMode;
@@ -26,7 +30,6 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -66,7 +69,17 @@ public class ApplicationInitializer {
     }
 
     private void initializeFrameworks() {
-        NotificationUtils.createNotificationChannel(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(new NotificationChannel(
+                        "collect_notification_channel",
+                                        context.getString(R.string.notification_channel_name),
+                                        NotificationManager.IMPORTANCE_DEFAULT)
+                );
+            }
+        }
         JodaTimeAndroid.init(context);
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
