@@ -54,9 +54,6 @@
 
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
-
-        <!-- No idea why we need this -->
-        <item name="android:tintMode">src_in</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Magenta.Theme" parent="Widget.AppCompat.SearchView">
