@@ -175,7 +175,6 @@
   <string name="parent_form_not_present">No se pudo editar este formulario guardado por que el formulario en blanco que le corresponde no esta o fue borrado.\n\nID de Formulario: %1$s</string>
   <string name="launch_app">Iniciar</string>
   <string name="no_app">Esta aplicación no está. Por favor ingrese el dato manualmente.</string>
-  <string name="select_one">Seleccione una respuesta</string>
   <string name="savepoint_used">¡Cambios no guardados recuperados del punto de recuperación!</string>
   <string name="save_and_close">Guardar y Cerrar</string>
   <string name="sign_button">Adjuntar firma</string>
@@ -376,7 +375,6 @@
   <string name="record_geopoint">Registrando un punto</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="parser_exception">Excepción XPathParser: \"%s\"</string>
-  <string name="selected_answer">Seleccionado: %s</string>
   <string name="version_number">Versión: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visitar el sitio web</string>

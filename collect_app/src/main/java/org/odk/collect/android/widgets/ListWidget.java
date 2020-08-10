@@ -232,6 +232,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
                 return;
             }
         }
+        widgetValueChanged();
     }
 
     @Override

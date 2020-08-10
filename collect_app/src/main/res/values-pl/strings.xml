@@ -174,7 +174,6 @@
   <string name="parent_form_not_present">Nie mogę edytować tego zapisanego formularza ponieważ powiązany czysty formularz jest niedostępny lub został skasowany.\n\nID Formularza: %1$s</string>
   <string name="launch_app">Uruchom</string>
   <string name="no_app">Brakuje żądanej aplikacji. Proszę, wprowadź ręcznie odczytane wartości.</string>
-  <string name="select_one">Wybierz Jedną Odpowiedź</string>
   <string name="savepoint_used">Niezapisane zmiany odzyskane z punktu zapisu!</string>
   <string name="save_and_close">Zapisz i Zamknij</string>
   <string name="sign_button">Pobierz Podpis</string>
@@ -380,7 +379,6 @@
   <string name="record_geopoint">Zapisz punkt</string>
   <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
   <string name="parser_exception">Wyjątek XPathParser: \"%s\"</string>
-  <string name="selected_answer">Wybrany: %s</string>
   <string name="version_number">Wersja: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Odwiedź stronę ODK</string>

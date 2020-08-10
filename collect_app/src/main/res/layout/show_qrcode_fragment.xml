@@ -54,7 +54,7 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:src="@android:drawable/ic_dialog_alert"
-            android:tint="?colorOnError" />
+            app:tint="?colorOnError" />
 
         <TextView
             android:id="@+id/tvPasswordWarning"

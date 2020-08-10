@@ -20,21 +20,22 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.SelectImageMapWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.StringUtils;
-import org.odk.collect.android.views.CustomWebView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -56,13 +57,11 @@ import javax.xml.transform.stream.StreamResult;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
-
 /**
  * A base widget class which is responsible for sharing the code used by image map select widgets like
  * {@link SelectOneImageMapWidget} and {@link SelectMultiImageMapWidget}.
  */
-public abstract class SelectImageMapWidget extends SelectWidget {
+public abstract class SelectImageMapWidget extends ItemsWidget {
     private static final String WEB_VIEW_CONTENT =
             "<!DOCTYPE html> <html>\n" +
                     "    <body>\n" +
@@ -72,9 +71,8 @@ public abstract class SelectImageMapWidget extends SelectWidget {
                     "</html>";
     private final boolean isSingleSelect;
     protected List<Selection> selections = new ArrayList<>();
-    CustomWebView webView;
-    private TextView selectedAreasLabel;
     private String imageMapFilePath;
+    SelectImageMapWidgetAnswerBinding binding;
 
     public SelectImageMapWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -86,8 +84,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         } catch (InvalidReferenceException e) {
             Timber.w(e);
         }
-
-        createLayout(context);
+        setUpWebView();
     }
 
     private static String convertDocumentToString(Document doc) {
@@ -109,48 +106,37 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     @Override
     public void clearAnswer() {
         selections.clear();
-        webView.loadUrl("javascript:clearAreas()");
+        binding.imageMap.loadUrl("javascript:clearAreas()");
         widgetValueChanged();
     }
 
     @Override
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return webView.suppressFlingGesture();
+        return binding.imageMap.suppressFlingGesture();
     }
 
-    private void createLayout(Context context) {
-        webView = new CustomWebView(getContext());
-
-        selectedAreasLabel = createAnswerTextView(getContext(), getAnswerFontSize());
-        answerLayout.addView(webView);
-        answerLayout.addView(selectedAreasLabel);
-
-        // add a space to facilitate scrolling
-        int width = Math.round(getResources().getDisplayMetrics().widthPixels / getResources().getDisplayMetrics().density);
-        int paddingInDp = width / 20; // 5% of the screen
-        final float scale = getResources().getDisplayMetrics().density;
-        int paddingInPx = (int) (paddingInDp * scale + 0.5f);
-        answerLayout.setPadding(0, 0, paddingInPx, 0);
-
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
-        setUpWebView();
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = SelectImageMapWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding.selectedElements.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        return binding.getRoot();
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void setUpWebView() {
         String svgMap = getParsedSVGFile();
         if (svgMap != null) {
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.getSettings().setBuiltInZoomControls(true);
-            webView.getSettings().setDisplayZoomControls(false);
-            webView.addJavascriptInterface(new JavaScriptInterface(), "imageMapInterface");
-            webView.loadDataWithBaseURL(null, String.format(WEB_VIEW_CONTENT, svgMap), "text/html", "UTF-8", null);
-            webView.setInitialScale(1);
-            webView.getSettings().setUseWideViewPort(true);
+            binding.imageMap.getSettings().setJavaScriptEnabled(true);
+            binding.imageMap.getSettings().setBuiltInZoomControls(true);
+            binding.imageMap.getSettings().setDisplayZoomControls(false);
+            binding.imageMap.addJavascriptInterface(new JavaScriptInterface(), "imageMapInterface");
+            binding.imageMap.loadDataWithBaseURL(null, String.format(WEB_VIEW_CONTENT, svgMap), "text/html", "UTF-8", null);
+            binding.imageMap.setInitialScale(1);
+            binding.imageMap.getSettings().setUseWideViewPort(true);
             int height = (int) (getResources().getDisplayMetrics().heightPixels / 1.7); // about 60% of a screen
-            webView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
-            webView.setClickable(!getFormEntryPrompt().isReadOnly());
-            webView.setWebViewClient(new WebViewClient() {
+            binding.imageMap.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+            binding.imageMap.setClickable(!getFormEntryPrompt().isReadOnly());
+            binding.imageMap.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     view.loadUrl("javascript:setSelectMode(" + isSingleSelect + ")");
@@ -275,7 +261,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         }
 
         ((Activity) getContext()).runOnUiThread(() ->
-                selectedAreasLabel.setText(Html.fromHtml(stringBuilder.toString())));
+                binding.selectedElements.setText(Html.fromHtml(stringBuilder.toString())));
     }
 
     protected abstract void highlightSelections(WebView view);

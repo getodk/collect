@@ -147,7 +147,6 @@
   <string name="parent_form_not_present">Nu a putut fi modificat formularul salvat din cauză că formularul gol corespunzător nu este prezent sau a fost șters.\n\nForm ID: %1$s</string>
   <string name="launch_app">Lansare</string>
   <string name="no_app">Aplicația solicitată lipsește. Vă rugăm să introduceți manual textul.</string>
-  <string name="select_one">Selectați un răspuns</string>
   <string name="savepoint_used">Modificările nesalvate au fost restaurate din punctul de salvare!</string>
   <string name="save_and_close">Salvați și închideți</string>
   <string name="sign_button">Colectați semnătura</string>
@@ -254,7 +253,6 @@
   <string name="alert">Alertă</string>
   <string name="install_openmapkit">Vă rugăm instalați OpenMapKit!</string>
   <string name="go_back">Înapoi</string>
-  <string name="selected_answer">Selectat: %s</string>
   <string name="version_number">Versiunea %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Vest %1$s%2$s%3$s</string>

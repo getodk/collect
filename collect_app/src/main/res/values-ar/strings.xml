@@ -174,7 +174,6 @@
   <string name="parent_form_not_present">غير قادر على تعديل هذه الاستمارة المحفوظة لان الاستمارة المقابلة غير موجودة جاليا او قد تم مسحها./n/n اعدادات الاستمارة: %1$s</string>
   <string name="launch_app">تشغيل</string>
   <string name="no_app">التطبيق المطلوب مفقود. يرجى ادخال القراءة يدويا.</string>
-  <string name="select_one">إختر إجابة واحدة</string>
   <string name="savepoint_used">التغييرات غير محفوظة يرجى استعادتها من نقطة الحفظ!</string>
   <string name="save_and_close">الحفظ و الاغلاق</string>
   <string name="sign_button">جمع التوقيع</string>
@@ -386,7 +385,6 @@
   <string name="record_geopoint">سجل نقطة</string>
   <string name="gps_result">خط العرض: %1$s\n خط الطول : %2$s\nالارتفاع : %3$s\nالدقة : %4$s متر</string>
   <string name="parser_exception">استثناء XPathParser: \"%s\"</string>
-  <string name="selected_answer">المحددة: %s</string>
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
   <string name="odk_website">زيارة موقع ODK</string>

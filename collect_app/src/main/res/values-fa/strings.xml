@@ -136,7 +136,6 @@
   <string name="submission_deleted">ارسال حذف شد</string>
   <string name="version">نسخه:</string>
   <string name="launch_app">راه اندازی</string>
-  <string name="select_one">یک پاسخ را انتخاب کنید</string>
   <string name="save_and_close">ذخیره کردن و خروج</string>
   <string name="sign_button">جمع آوری امضا</string>
   <string name="markup_image">نشانه گذاری تصویر</string>
@@ -207,7 +206,6 @@
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="install_openmapkit">لطفاْ OpenMapKit را نصب کنید!</string>
   <string name="go_back">قبلی</string>
-  <string name="selected_answer">انتخاب شده: %s</string>
   <string name="version_number">نسخه: %s</string>
   <string name="id_number">نمبر شناسایی: %s</string>
   <string name="odk_forum">با انجمن ODK یکجا شوید</string>

@@ -174,7 +174,6 @@
   <string name="parent_form_not_present">対応する空のフォームが存在しないか、削除されたため、この保存済のフォームを編集できません。\n\nフォーム ID: %1$s</string>
   <string name="launch_app">起動</string>
   <string name="no_app">要求したアプリケーションがありません。手動で読みを入力してください。</string>
-  <string name="select_one">回答を一つ選択してください</string>
   <string name="savepoint_used">未保存の変更をセーブポイントから回復しました!</string>
   <string name="save_and_close">保存して閉じる</string>
   <string name="sign_button">署名を収集</string>
@@ -371,7 +370,6 @@
   <string name="record_geopoint">位置を記録</string>
   <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
   <string name="parser_exception">XPathParser 例外: \"%s\"</string>
-  <string name="selected_answer">選択済: %s</string>
   <string name="version_number">バージョン: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">ODK ウェブサイトを訪問</string>

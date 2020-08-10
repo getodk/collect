@@ -65,6 +65,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -108,6 +109,7 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
+import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -204,7 +206,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
-        QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
+        QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
+        SelectMinimalDialog.SelectMinimalDialogListener {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -2654,6 +2657,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onRankingChanged(List<SelectChoice> items) {
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView != null) {
+            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
+            setBinaryWidgetData(items);
+            widgetValueChanged(widgetGettingNewValue);
+        }
+    }
+
+    @Override
+    public void updateSelectedItems(List<Selection> items) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();

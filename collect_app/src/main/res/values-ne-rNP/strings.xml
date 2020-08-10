@@ -167,7 +167,6 @@
   <string name="parent_form_not_present">यो संचित फारम सम्पादन गर्न सकिएन किनकि यससंग जोडिएको खाली फारम उपलब्ध छैन वा डिलिट भइसकेको छ | \n\nफारम नं: %1$s</string>
   <string name="launch_app">प्रारम्भ गर्नुहोस् </string>
   <string name="no_app">माग गर्नुभएको एप्लिकेशन छैन | नाप स्वयम् दाखिला गर्नुहोला |</string>
-  <string name="select_one">एक उत्तर छान्नुहोस्</string>
   <string name="savepoint_used">संचित नगरिएका परिवर्तनहरु संचितबिन्दुवाट पुन: निकाल्न सकियो !</string>
   <string name="save_and_close">संचित गरी बन्द गर्नुहोस् </string>
   <string name="sign_button">सहि जम्मा गर्नुहोस् </string>

@@ -142,7 +142,6 @@
   <string name="version">ভার্সন</string>
   <string name="launch_app">launch_app</string>
   <string name="no_app">অনুরোধকৃত  application অনুপস্থিত. অনুগ্রহ করে ম্যানোয়েলি তত্ত্ব নিন।</string>
-  <string name="select_one">দয়াকরে একটি উত্তর নির্বাচন করুন</string>
   <string name="save_and_close">সংরক্ষণ করেন এবং বন্ধ করেন</string>
   <string name="sign_button">সাক্ষর নিন।</string>
   <string name="markup_image">মার্কআপ চিত্র</string>

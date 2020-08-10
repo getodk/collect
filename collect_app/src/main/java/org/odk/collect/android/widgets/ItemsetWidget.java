@@ -24,6 +24,9 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathExpression;
@@ -49,7 +52,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class ItemsetWidget extends AbstractSelectOneWidget {
+public class ItemsetWidget extends SelectOneWidget {
 
     private static final String QUOTATION_MARK = "\"";
 
@@ -75,13 +78,29 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
         this.fileUtil = fileUtil;
 
         items = getItems();
+    }
 
-        createLayout();
+    @Override
+    public IAnswerData getAnswer() {
+        Selection selectedItem = recyclerViewAdapter.getSelectedItems().isEmpty()
+                ? null
+                : recyclerViewAdapter.getSelectedItems().get(0);
+
+        return selectedItem == null
+                ? null
+                : new StringData(selectedItem.getValue());
     }
 
     @Override
     protected void readItems() {
         // Do nothing here. We want to read items from an external csv later.
+    }
+
+    @Override
+    protected String getSelectedValue() {
+        return getQuestionDetails().getPrompt().getAnswerValue() == null
+                ? null
+                : getQuestionDetails().getPrompt().getAnswerValue().getDisplayText();
     }
 
     private List<SelectChoice> getItems() {

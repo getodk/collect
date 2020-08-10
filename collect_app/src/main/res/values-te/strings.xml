@@ -171,7 +171,6 @@
   <string name="parent_form_not_present">సంబంధిత ఖాళీ ఫారం లేనందున లేదా తొలగించబడినందున ఈ సేవ్ చేసిన ఫారంను సవరించడం సాధ్యం కాలేదు. \ N \ n ఫార్మ్ ఐడి:%1$s</string>
   <string name="launch_app">ప్రారంభం</string>
   <string name="no_app">అభ్యర్థించిన అప్లికేషన్ లేదు. దయచేసి రీడింగ్ మాన్యువల్‌గా నమోదు చేయండి.</string>
-  <string name="select_one">ఒక సమాధానం ఎంచుకోండి</string>
   <string name="savepoint_used">సేవ్ చేసినప్పటి  నుండి సేవ్ చేయని మార్పులు రికవర్ అయ్యాయి!</string>
   <string name="save_and_close">సేవ్ చేసి క్లోజ్ చెయ్యండి </string>
   <string name="sign_button">సంతకాన్ని సేకరించండి</string>
@@ -367,7 +366,6 @@
   <string name="record_geopoint">ఒక పాయింట్ రికార్డ్ చేయండి</string>
   <string name="gps_result">అక్షాంశం: %1$s\n రేఖాంశం:%2$s \n ఎత్తు: %3$sm\n ఖచ్చితత్వం: %4$sm</string>
   <string name="parser_exception">XPathParser మినహాయింపు: \"%s\"</string>
-  <string name="selected_answer">ఎంచుకున్నది: %s</string>
   <string name="version_number">వెర్షన్: %s</string>
   <string name="id_number">ID:%s</string>
   <string name="odk_website">ODK వెబ్‌సైట్‌ను సందర్శించండి</string>

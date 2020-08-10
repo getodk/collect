@@ -179,4 +179,9 @@ public class WidgetAppearanceUtils {
                 || appearance.startsWith(WidgetAppearanceUtils.QUICKCOMPACT)
                 || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK));
     }
+
+    public static boolean isAutocomplete(FormEntryPrompt prompt) {
+        String appearance = getSanitizedAppearanceHint(prompt);
+        return appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE);
+    }
 }

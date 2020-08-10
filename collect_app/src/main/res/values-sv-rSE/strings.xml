@@ -173,7 +173,6 @@
   <string name="parent_form_not_present">Det är inte möjligt att redigera detta sparade formulär eftersom motsvarande tomt formulär inte finns eller har tagits bort.\n\nForm ID: %1$s</string>
   <string name="launch_app">Starta</string>
   <string name="no_app">Det begärda programmet saknas. Vänligen mata in värdet manuellt.</string>
-  <string name="select_one">Välj ett svar</string>
   <string name="savepoint_used">Osparade ändringar har återskapats från återställningspunkt!</string>
   <string name="save_and_close">Spara och stäng</string>
   <string name="sign_button">Läs in signatur</string>
@@ -344,7 +343,6 @@ Dela ODK Collect med dem.</string>
   <string name="download_selected">Nedladdning vald</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nNoggrannhet: %4$sm</string>
   <string name="parser_exception">XPathParser undantag: \"%s\"</string>
-  <string name="selected_answer">Vald: %s</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: 1%s</string>
   <string name="odk_website">Besök ODKs hemsida</string>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/margin_standard"
+    android:paddingEnd="@dimen/margin_extra_large">
+
+    <org.odk.collect.android.views.CustomWebView
+        android:id="@+id/image_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small">
+    </org.odk.collect.android.views.CustomWebView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/selected_elements"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small">
+    </com.google.android.material.textview.MaterialTextView>
+</LinearLayout>

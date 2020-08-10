@@ -153,7 +153,6 @@
   <string name="parent_form_not_present">No es pot editar  aquest formulari desat perquè el formulari plantilla no hi és o s\'ha esborrat.\n\nForm ID: %1$s</string>
   <string name="launch_app">Llançament</string>
   <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
-  <string name="select_one">Selecciona una resposta</string>
   <string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
   <string name="save_and_close">Salva i Tanca</string>
   <string name="sign_button">Afegir Signatura</string>
@@ -283,7 +282,6 @@
   <string name="download_selected">Descarrega seleccionat</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <string name="parser_exception">Exceptio XPathParser: \"%s\"</string>
-  <string name="selected_answer">Seleccionat: %s</string>
   <string name="version_number">Versió: %s</string>
   <string name="odk_website">Visita la web d\'ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

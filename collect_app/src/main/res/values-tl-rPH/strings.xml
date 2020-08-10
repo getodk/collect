@@ -133,7 +133,6 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="launch_app">Ilunsad</string>
   <string name="no_app">Ang hiniling na application ay nawawala. Paki-pasok ng mano-mano ang detalye.</string>
-  <string name="select_one">Pumili ng Isang Sagot</string>
   <string name="savepoint_used">Nabawi sa savepoint ang mga pagbabagong hindi na-Impukin!</string>
   <string name="save_and_close">Impukin at Isara</string>
   <string name="sign_button">Kalapin ang Pirma</string>

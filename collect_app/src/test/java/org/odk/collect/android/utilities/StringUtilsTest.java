@@ -1,10 +1,11 @@
 package org.odk.collect.android.utilities;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -12,18 +13,10 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class StringUtilsTest {
 
-    /**
-     * Should return null if provided with null and not throw a NPE.
-     * <p>
-     * This is a silly test but it is here to guarantee this behaviour,
-     * since without it the method causes a crash when processing text for
-     * questions with no plain text label. See getodk/getodk#1247.
-     */
     @Test
-    public void textToHtml_BouncesNullInput() {
-        String input = null;
-        CharSequence observed = StringUtils.textToHtml(input);
-        Assert.assertNull(observed);
+    public void textToHtml_nullBecomesEmptyString() {
+        CharSequence observed = StringUtils.textToHtml(null);
+        assertThat(observed, equalTo(""));
     }
 
     @Test

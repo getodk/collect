@@ -146,7 +146,6 @@
   <string name="parent_form_not_present">ບໍ່ສາມາດແກ້ໄຂແບບຟອມທີ່ບັນທຶກໄວ້ເນື່ອງຈາກວ່າບໍ່ມີແບບຟອມເປົ່າຫວ່າງດັ່ງກ່າວ ຫຼື ຖືກລົບໄປແລ້ວ.\n\nລະຫັດຟອມ: %1$s</string>
   <string name="launch_app">ເລີ້ມຕົ້ນການນຳໃຊ້</string>
   <string name="no_app">ບໍ່ພົບ​ໂປ​ແກມ​ທີ່​ຕ້ອງ​ການ ກະລຸນາປ້ອນຂໍ້ມູນໃໝ່ດ້ວຍຕົນເອງ</string>
-  <string name="select_one">ເລືອກໜຶ່ງຄຳຕອບ</string>
   <string name="savepoint_used">ກູ້ຂໍ້ມູນຄືນຈາກຈຸດທີ່ບັນທຶກໄວ້!</string>
   <string name="save_and_close">ບັນທຶກ ແລະ ປິດການໃຊ້ງານ</string>
   <string name="sign_button">ບັນທຶກລາຍເຊັນ</string>

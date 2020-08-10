@@ -161,7 +161,6 @@
   <string name="parent_form_not_present">इस संरक्षित फॉर्म को संपादित करने में असमर्थ क्योंकि सम्बंधित रिक्त फॉर्म मौजूद नहीं है या हटा दिया गया है। \ N \ n फ़ॉर्म आईडी:%1$s</string>
   <string name="launch_app">जारी करें</string>
   <string name="no_app">अनुरोधित एप्लिकेशन लापता है कृपया रीडिंग स्वयं दर्ज करें।</string>
-  <string name="select_one">एकल उत्तर चयन करें</string>
   <string name="savepoint_used">सहेजे गए परिवर्तन से बचे हुए परिवर्तनों को लिया गया!</string>
   <string name="save_and_close">संरक्षित करें और बंद करें</string>
   <string name="sign_button">हस्ताक्षर  इकट्ठा  करें</string>
@@ -300,7 +299,6 @@
   <string name="download_selected">डाउनलोड चयनित</string>
   <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
-  <string name="selected_answer">चयनित :%s</string>
   <string name="version_number">संस्करण: %s</string>
   <string name="odk_website">ODK वेबसाइट विजिट करें</string>
   <string name="odk_website_summary">ओपन डाटा किट (ODK ) विषम परिस्थितियों में सामाजिक डाटा इकठ्ठा करने में कार्य आता है.</string>

@@ -151,7 +151,6 @@
   <string name="version">လုပ္ေဆာင္မွုအဆင့္:</string>
   <string name="launch_app">စတင္ေဆာင္ရြက္ရန္</string>
   <string name="no_app">လုပ္ေဆာင္မွုလြဲေခ်ာ္ေနပါသည္၊ ေသခ်ာစြာဖတ္ရွု၍ ၿဖည့္သြင္းပါ</string>
-  <string name="select_one">အေျဖတစ္ခုအား ေရြးခ်ယ္ရန္</string>
   <string name="savepoint_used">သိမ္းဆည္းေနရာမွ မသိမ္းဆည္းရေသးသည္မ်ား ျပန္လည္ရယူရန္</string>
   <string name="save_and_close">သိမ္းဆည္း ၿပီးပိတ္ရန္</string>
   <string name="sign_button">အမွန္အသားအား ရွာရန္</string>

@@ -137,7 +137,6 @@
   <string name="deleted_on_date_at_time">\'የተሰረዘዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
   <string name="version">ስሪት:</string>
   <string name="launch_app">አስጀምር</string>
-  <string name="select_one">አንድ መልስ ብቻ ይምረጡ</string>
   <string name="savepoint_used">ያልተቀመጡ ለውጦች በጥንቃቄ ተመልሰዋል!</string>
   <string name="save_and_close">አስቀምጥ እና ዝጋ</string>
   <string name="sign_button">ፊርማ ያሰባስቡ</string>
@@ -209,7 +208,6 @@
   <string name="install_openmapkit">እባክዎ OpenMapKitን ይጫኑ!</string>
   <string name="go_back">ተመለስ</string>
   <string name="download_selected">የተመረጠውን አውርድ</string>
-  <string name="selected_answer">ተመርጧል: 1 %s</string>
   <string name="version_number">ሥሪት: 1 %s</string>
   <string name="odk_website">የODKን ድረ ገፅ ይጎብኙ</string>
   <string name="odk_forum">የODKን መድረክ ይቀላቀሉ</string>

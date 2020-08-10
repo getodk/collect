@@ -117,7 +117,6 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
   <string name="launch_app">Başla</string>
-  <string name="select_one">Bir cevap seçin</string>
   <string name="save_and_close">Sakla ve Kapat</string>
   <string name="admin_preferences">Yönetici Ayarlari</string>
   <string name="admin_access_settings">Yöbetici Ayarlari için Tap</string>

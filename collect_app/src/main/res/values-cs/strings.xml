@@ -174,7 +174,6 @@
   <string name="parent_form_not_present">Tento uložený dotazník nelze editovat, protože jeho předloha chybí nebo byla smazána.\n\n ID dotazníku: %1$s</string>
   <string name="launch_app">Spustit</string>
   <string name="no_app">Požadovaná aplikace chybí. Zadejte prosím údaje ručně.</string>
-  <string name="select_one">Zvolte jednu odpověď</string>
   <string name="savepoint_used">Neuložené změny obnoveny z bodu obnovy!</string>
   <string name="save_and_close">Uložit a zavřít</string>
   <string name="sign_button">Získat podpis</string>
@@ -380,7 +379,6 @@
   <string name="record_geopoint">Zaznamenat bod</string>
   <string name="gps_result">Zeměpisná šířka:%1$s \n Zeměpisná délka: %2$s \n Výška: %3$s m \n Přesnost %4$sm</string>
   <string name="parser_exception">Výjimka XPathParser: \"%s\"</string>
-  <string name="selected_answer">Vybráno: %s</string>
   <string name="version_number">Verze: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Navštivte web ODK</string>

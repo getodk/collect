@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.anyOf;
 
 /**
  * Required for scrolling to items within a {@link NestedScrollView} like those in
- * {@link org.odk.collect.android.widgets.SelectWidget}. Code is copied from {@link ScrollToAction}
+ * {@link org.odk.collect.android.widgets.BaseSelectListWidget}. Code is copied from {@link ScrollToAction}
  * as for some reason that class is final.
  */
 

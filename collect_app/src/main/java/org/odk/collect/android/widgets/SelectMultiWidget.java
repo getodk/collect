@@ -16,20 +16,17 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
-import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
+import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 
 /**
  * SelectMultiWidget handles multiple selection fields using checkboxes.
@@ -38,55 +35,42 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWidget {
-    private final List<Selection> ve;
-    SelectMultipleListAdapter adapter;
-
+public class SelectMultiWidget extends BaseSelectListWidget implements SelectItemClickListener {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        //noinspection unchecked
-        ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
-                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
-        createLayout();
     }
 
     @Override
-    public void clearAnswer() {
-        adapter.clearAnswer();
+    protected AbstractSelectListAdapter setUpAdapter() {
+        recyclerViewAdapter = new SelectMultipleListAdapter(getSelectedItems(), this, getChoicesRecyclerViewProps());
+        return recyclerViewAdapter;
     }
 
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = adapter.getSelectedItems();
-        return vc.isEmpty() ? null : new SelectMultiData(vc);
-    }
-
-    private void createLayout() {
-        adapter = new SelectMultipleListAdapter(items, ve, this, numColumns, this.getFormEntryPrompt(), this.getReferenceManager(), this.getAnswerFontSize(), this.getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), this.getContext());
-
-        if (items != null) {
-            // check if any values have spaces
-            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-
-            RecyclerView recyclerView = setUpRecyclerView();
-            recyclerView.setAdapter(adapter);
-            answerLayout.addView(recyclerView);
-            adjustRecyclerViewSize(adapter, recyclerView);
-            addAnswerView(answerLayout);
-        }
-    }
-
-    @Override
-    public int getChoiceCount() {
-        return adapter.getItemCount();
+        List<Selection> selectedItems = recyclerViewAdapter.getSelectedItems();
+        return selectedItems.isEmpty()
+                ? null
+                : new SelectMultiData(selectedItems);
     }
 
     @Override
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
         if (isSelected) {
-            adapter.addItem(items.get(choiceIndex).selection());
+            ((SelectMultipleListAdapter) recyclerViewAdapter).addItem(items.get(choiceIndex).selection());
         } else {
-            adapter.removeItem(items.get(choiceIndex).selection());
+            ((SelectMultipleListAdapter) recyclerViewAdapter).removeItem(items.get(choiceIndex).selection());
         }
+    }
+
+    private List<Selection> getSelectedItems() {
+        return getFormEntryPrompt().getAnswerValue() == null
+                ? new ArrayList<>() :
+                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+    }
+
+    @Override
+    public void onItemClicked() {
+        widgetValueChanged();
     }
 }
