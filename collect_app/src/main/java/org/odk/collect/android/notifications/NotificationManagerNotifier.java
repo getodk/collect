@@ -1,6 +1,7 @@
 package org.odk.collect.android.notifications;
 
 import android.app.Application;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
@@ -54,6 +56,16 @@ public class NotificationManagerNotifier implements Notifier {
         this.application = application;
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
         this.preferencesProvider = preferencesProvider;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(new NotificationChannel(
+                        COLLECT_NOTIFICATION_CHANNEL,
+                        application.getString(R.string.notification_channel_name),
+                        NotificationManager.IMPORTANCE_DEFAULT)
+                );
+            }
+        }
     }
 
     @Override
@@ -69,7 +81,8 @@ public class NotificationManagerNotifier implements Notifier {
         PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Resources localizedResources = getLocalizedResources(application);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL).setContentIntent(contentIntent)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
+                .setContentIntent(contentIntent)
                 .setContentTitle(localizedResources.getString(R.string.form_updates_available))
                 .setContentText(null)
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
@@ -94,6 +107,7 @@ public class NotificationManagerNotifier implements Notifier {
         String content = localizedResources.getString(allFormsDownloadedSuccessfully(application, result) ?
                 R.string.success :
                 R.string.failures);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                 .setContentIntent(contentIntent)
                 .setContentTitle(localizedResources.getString(R.string.odk_auto_download_notification_title))
@@ -115,9 +129,10 @@ public class NotificationManagerNotifier implements Notifier {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                     .setContentIntent(contentIntent)
                     .setContentTitle(localizedResources.getString(R.string.form_update_error))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(new FormApiExceptionMapper(localizedResources).getMessage(new FormApiException(FormApiException.Type.UNKNOWN_HOST, "blah.com"))))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(new FormApiExceptionMapper(localizedResources).getMessage(exception)))
                     .setSmallIcon(IconUtils.getNotificationAppIcon())
                     .setAutoCancel(true);
+
             notificationManager.notify(FORM_SYNC_NOTIFICATION_ID, builder.build());
         } else {
             notificationManager.cancel(FORM_SYNC_NOTIFICATION_ID);
