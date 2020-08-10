@@ -49,9 +49,6 @@
         <!-- Used to control icon colors. Should use theme value instead -->
         <item name="iconColor">#000000</item>
 
-        <!-- Used for list item dividers. Should use theme value instead -->
-        <item name="dividerColor">#1e000000</item>
-
         <!-- Used as divider in many places. Not sure why. -->
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
 
