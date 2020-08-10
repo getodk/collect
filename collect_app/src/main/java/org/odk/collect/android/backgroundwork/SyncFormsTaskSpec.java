@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -34,6 +36,9 @@ public class SyncFormsTaskSpec implements TaskSpec {
     @Named("FORMS")
     ChangeLock changeLock;
 
+    @Inject
+    Analytics analytics;
+
     @NotNull
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context) {
@@ -48,9 +53,13 @@ public class SyncFormsTaskSpec implements TaskSpec {
                         serverFormsSynchronizer.synchronize();
                         syncStatusRepository.finishSync(null);
                         notifier.onSync(null);
+
+                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
                     } catch (FormApiException e) {
                         syncStatusRepository.finishSync(e);
                         notifier.onSync(e);
+
+                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, e.getType().toString());
                     }
                 }
 
