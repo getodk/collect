@@ -145,7 +145,7 @@ public final class ThemeUtils {
 
     @ColorInt
     public int getIconColor() {
-        return getAttributeValue(R.attr.iconColor);
+        return getAttributeValue(R.attr.colorOnSurface);
     }
 
     @ColorInt
