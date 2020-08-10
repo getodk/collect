@@ -42,6 +42,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.BasePreferenceFragment;
 import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
@@ -199,6 +200,8 @@ public interface AppDependencyComponent {
     void inject(AutoUpdateTaskSpec autoUpdateTaskSpec);
 
     void inject(ServerAuthDialogFragment serverAuthDialogFragment);
+
+    void inject(BasePreferenceFragment basePreferenceFragment);
 
     void inject(BlankFormListFragment blankFormListFragment);
 

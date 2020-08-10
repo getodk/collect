@@ -43,42 +43,6 @@ public class FormManagementSettingsTest {
             .around(rule);
 
     @Test
-    public void whenManualUpdatesEnabled_disablesPrefs() {
-        new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickFormManagement()
-                .clickUpdateForms()
-                .clickOption(R.string.manually)
-                .assertDisabled(R.string.form_update_frequency_title)
-                .assertDisabled(R.string.automatic_download);
-    }
-
-    @Test
-    public void whenPreviouslyDownloadedOnlyEnabled_disablesPrefs() {
-        new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickFormManagement()
-                .clickUpdateForms()
-                .clickOption(R.string.previously_downloaded_only)
-                .assertEnabled(R.string.form_update_frequency_title)
-                .assertEnabled(R.string.automatic_download);
-    }
-
-    @Test
-    public void whenMatchExactlyEnabled_disablesPrefs() {
-        new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickFormManagement()
-                .clickUpdateForms()
-                .clickOption(R.string.match_exactly)
-                .assertEnabled(R.string.form_update_frequency_title)
-                .assertDisabled(R.string.automatic_download);
-    }
-
-    @Test
     public void whenMatchExactlyEnabled_changingAutomaticUpdateFrequency_changesTaskFrequency() {
         List<TestScheduler.DeferredTask> deferredTasks = testDependencies.scheduler.getDeferredTasks();
         assertThat(deferredTasks, is(empty()));
@@ -164,6 +128,8 @@ public class FormManagementSettingsTest {
                 .assertDisabled(R.string.form_update_frequency_title)
                 .assertDisabled(R.string.automatic_download)
                 .assertText(R.string.manually);
+
+        assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(0));
     }
 
     @Test

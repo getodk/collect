@@ -57,10 +57,8 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.general_preferences);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.general_preferences, rootKey);
 
         findPreference("protocol").setOnPreferenceClickListener(this);
         findPreference("user_interface").setOnPreferenceClickListener(this);

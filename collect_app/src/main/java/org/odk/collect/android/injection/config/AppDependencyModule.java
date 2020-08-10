@@ -15,6 +15,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
+import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
@@ -23,6 +24,7 @@ import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.backgroundwork.ReentrantLockChangeLock;
 import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
+import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -346,7 +348,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, FormUpdateManager formUpdateManager) {
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager);
+    }
+
+    @Provides
+    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
@@ -356,10 +363,8 @@ public class AppDependencyModule {
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
                 adminDefaults,
-                () -> {
-                    propertyManager.reload();
-                    formUpdateManager.scheduleUpdates();
-                });
+                settingsChangeHandler
+        );
     }
 
     @Provides

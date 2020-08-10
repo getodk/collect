@@ -37,6 +37,7 @@ import androidx.preference.Preference;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
@@ -85,6 +86,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Inject
     PreferencesProvider preferencesProvider;
 
+    @Inject
+    FormUpdateManager formUpdateManager;
+
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
@@ -99,10 +103,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         return serverPreferencesFragment;
     }
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.server_preferences);
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+
+        ((PreferencesActivity) context).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.server_preferences, rootKey);
         initProtocolPrefs();
     }
 
@@ -150,14 +162,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 addGooglePreferences();
                 break;
         }
-    }
-
-    @Override
-    public void onAttach(@NotNull Context context) {
-        super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
-
-        ((PreferencesActivity) context).setOnBackPressedListener(this);
     }
 
     public void addAggregatePreferences() {

@@ -28,30 +28,24 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
     @Override
     public void scheduleUpdates() {
-        scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
-        scheduler.cancelDeferred(AUTO_UPDATE_TAG);
-
         String newValue = sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null);
         String period = sharedPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
+        long periodInMilliseconds = getPeriodInMilliseconds(period);
 
         switch (FormUpdateMode.parse(application, newValue)) {
             case MANUAL:
+                scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
+                scheduler.cancelDeferred(AUTO_UPDATE_TAG);
                 break;
             case PREVIOUSLY_DOWNLOADED_ONLY:
-                scheduleAutoUpdate(getPeriodInMilliseconds(period));
+                scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
+                scheduler.networkDeferred(AUTO_UPDATE_TAG, new AutoUpdateTaskSpec(), periodInMilliseconds);
                 break;
             case MATCH_EXACTLY:
-                scheduleMatchExactlySync(getPeriodInMilliseconds(period));
+                scheduler.cancelDeferred(AUTO_UPDATE_TAG);
+                scheduler.networkDeferred(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), periodInMilliseconds);
                 break;
         }
-    }
-
-    private void scheduleMatchExactlySync(long repeatPeriod) {
-        scheduler.networkDeferred(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), repeatPeriod);
-    }
-
-    private void scheduleAutoUpdate(long repeatPeriod) {
-        scheduler.networkDeferred(AUTO_UPDATE_TAG, new AutoUpdateTaskSpec(), repeatPeriod);
     }
 
     @Override

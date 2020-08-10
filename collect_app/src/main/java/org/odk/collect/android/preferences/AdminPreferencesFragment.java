@@ -50,8 +50,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        super.onCreatePreferences(savedInstanceState, rootKey);
-
         getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
         setPreferencesFromResource(R.xml.admin_preferences, rootKey);
@@ -146,11 +144,10 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     public static class MainMenuAccessPreferences extends BasePreferenceFragment {
 
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
-            addPreferencesFromResource(R.xml.main_menu_access_preferences);
+            setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
             findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
     }
@@ -158,18 +155,16 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     public static class UserSettingsAccessPreferences extends BasePreferenceFragment {
 
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
-
-            addPreferencesFromResource(R.xml.user_settings_access_preferences);
+            setPreferencesFromResource(R.xml.user_settings_access_preferences, rootKey);
         }
     }
 
     public static class FormEntryAccessPreferences extends BasePreferenceFragment {
+
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
             addPreferencesFromResource(R.xml.form_entry_access_preferences);
