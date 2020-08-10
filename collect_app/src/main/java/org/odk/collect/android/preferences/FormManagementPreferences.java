@@ -94,8 +94,8 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
         if (Protocol.parse(getActivity(), protocol) == Protocol.GOOGLE) {
-            findPreference(KEY_FORM_UPDATE_MODE).setEnabled(false);
-            automaticDownload.setEnabled(false);
+            displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(R.string.manually));
+            displayDisabled(automaticDownload, false);
             updateFrequency.setEnabled(false);
         } else {
             switch (FormUpdateMode.parse(getActivity(), formUpdateMode)) {

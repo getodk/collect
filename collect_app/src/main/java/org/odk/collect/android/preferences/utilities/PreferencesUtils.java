@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences.utilities;
 
 import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 
 public class PreferencesUtils {
 
@@ -13,5 +14,10 @@ public class PreferencesUtils {
         preference.setEnabled(false);
         preference.setChecked(displayValue);
         preference.setPersistent(true);
+    }
+
+    public static void displayDisabled(Preference preference, String displayValue) {
+        preference.setEnabled(false);
+        preference.setSummaryProvider(pref -> displayValue);
     }
 }

@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,6 +27,7 @@ import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -40,6 +42,22 @@ public class FormManagementPreferencesTest {
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
         prefs = getComponent(context).preferencesProvider().getGeneralSharedPreferences();
+    }
+
+    @Test
+    public void whenGoogleDriveUsedAsServer_showsUpdateModeAsManual_andDisablesPrefs() {
+        prefs.edit().putString(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context)).apply();
+        prefs.edit().putString(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context)).apply();
+
+        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        scenario.onFragment(f -> {
+            assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).getSummary(), is(context.getString(R.string.manually)));
+            assertThat(prefs.getString(KEY_FORM_UPDATE_MODE, ""), is(MATCH_EXACTLY.getValue(context)));
+
+            assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).isEnabled(), is(false));
+            assertThat(f.findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).isEnabled(), is(false));
+            assertThat(f.findPreference(KEY_AUTOMATIC_UPDATE).isEnabled(), is(false));
+        });
     }
 
     @Test
@@ -91,6 +109,19 @@ public class FormManagementPreferencesTest {
     @Test
     public void whenManualUpdatesEnabled_andAutomaticDownloadEnabled_showsAutomaticDownloadAsNotChecked() {
         prefs.edit().putString(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context)).apply();
+        prefs.edit().putBoolean(KEY_AUTOMATIC_UPDATE, true).apply();
+
+        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        scenario.onFragment(f -> {
+            CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
+            assertThat(automaticDownload.isChecked(), is(false));
+            assertThat(prefs.getBoolean(KEY_AUTOMATIC_UPDATE, false), is(true));
+        });
+    }
+
+    @Test
+    public void whenGoogleDriveUsedAsServer_andAutomaticDownloadEnabled_showsAutomaticDownloadAsNotChecked() {
+        prefs.edit().putString(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context)).apply();
         prefs.edit().putBoolean(KEY_AUTOMATIC_UPDATE, true).apply();
 
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
