@@ -32,9 +32,9 @@ public class RangeWidgetUtils {
     }
 
     public static class RangeWidgetLayoutElements {
-        View answerView;
-        TrackingTouchSlider slider;
-        TextView currentValue;
+        private final View answerView;
+        private final TrackingTouchSlider slider;
+        private final TextView currentValue;
 
         public RangeWidgetLayoutElements(View answerView, TrackingTouchSlider slider, TextView currentValue) {
             this.answerView = answerView;
@@ -88,9 +88,6 @@ public class RangeWidgetUtils {
         if (prompt.isReadOnly()) {
             slider.setEnabled(false);
         }
-        if (prompt.getAnswerValue() == null) {
-            slider.setValue(0);
-        }
 
         return new RangeWidgetLayoutElements(answerView, slider, currentValue);
     }
@@ -104,7 +101,8 @@ public class RangeWidgetUtils {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static BigDecimal setUpSlider(FormEntryPrompt prompt, RangeQuestion rangeQuestion, TrackingTouchSlider slider, boolean isIntegerType) {
+    public static BigDecimal setUpSlider(FormEntryPrompt prompt, TrackingTouchSlider slider, boolean isIntegerType) {
+        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : BigDecimal.valueOf(0.5);
@@ -139,6 +137,7 @@ public class RangeWidgetUtils {
                 }
             } else {
                 slider.setValue(slider.getValueFrom());
+                slider.setThumbRadius(0);
             }
         }
 
@@ -178,8 +177,12 @@ public class RangeWidgetUtils {
     public static BigDecimal getActualValue(FormEntryPrompt prompt, Slider slider, float value) {
         RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
-        BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
+        BigDecimal rangeStep = rangeQuestion.getRangeStep() == null ? BigDecimal.ONE : rangeQuestion.getRangeStep().abs();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
+
+        if (rangeEnd.compareTo(rangeStart) < 0) {
+            rangeStart = rangeQuestion.getRangeEnd();
+        }
 
         BigDecimal actualValue = BigDecimal.valueOf(value);
         if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
@@ -188,6 +191,8 @@ public class RangeWidgetUtils {
 
             slider.setValue(actualValue.floatValue());
         }
+
+        rangeStart = rangeQuestion.getRangeStart();
         if (rangeEnd.compareTo(rangeStart) < 0) {
             actualValue = rangeEnd.add(rangeStart).subtract(actualValue);
         }

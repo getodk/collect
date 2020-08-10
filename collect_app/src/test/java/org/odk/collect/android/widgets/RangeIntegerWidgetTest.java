@@ -54,6 +54,20 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
+    public void whenPromptDoesNotHaveAnswer_sliderShowsNoAnswerMarked() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        assertThat(widget.slider.getValue(), equalTo(1.0F));
+        assertThat(widget.slider.getThumbRadius(), equalTo(0));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_sliderShowsCorrectAnswer() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+        assertThat(widget.slider.getValue(), equalTo(4.0F));
+        assertThat(widget.slider.getThumbRadius(), not(0));
+    }
+
+    @Test
     public void whenPromptDoesNotHaveAnswer_widgetShowsNullAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertThat(widget.currentValue.getText(), equalTo(""));
@@ -62,20 +76,7 @@ public class RangeIntegerWidgetTest {
     @Test
     public void whenPromptHasAnswer_widgetShouldShowCorrectAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.slider.getValue(), equalTo(4.0F));
         assertThat(widget.currentValue.getText(), equalTo("4"));
-    }
-
-    @Test
-    public void whenPromptDoesNotHaveAnswer_sliderThumbShouldNotBeVisible() {
-        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.slider.getThumbRadius(), not(0));
-    }
-
-    @Test
-    public void whenPromptHasAnswer_sliderThumbShouldBeVisible() {
-        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-        assertThat(widget.slider.getThumbRadius(), not(0));
     }
 
     @Test

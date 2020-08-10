@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.slider.Slider;
 
-import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -41,7 +40,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     TrackingTouchSlider slider;
     TextView currentValue;
 
-    private int defaultThumbRadius;
+    private int visibleThumbRadius;
 
     public RangeDecimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -49,13 +48,12 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
         RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
-
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();
-        defaultThumbRadius = slider.getThumbRadius();
-        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, rangeQuestion, slider, false));
+
+        visibleThumbRadius = slider.getThumbRadius();
+        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, false));
 
         if (slider.isEnabled()) {
             slider.addOnChangeListener(this);
@@ -80,8 +78,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     public void clearAnswer() {
-        slider.setThumbRadius(0);
-        currentValue.setText("");
+        setUpActualValueLabel(null);
         widgetValueChanged();
     }
 
@@ -93,8 +90,13 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     }
 
     private void setUpActualValueLabel(BigDecimal actualValue) {
-        String value = actualValue == null ? "" : String.valueOf(actualValue.doubleValue());
-        currentValue.setText(value);
-        slider.setThumbRadius(defaultThumbRadius);
+        if (actualValue != null) {
+            currentValue.setText(String.valueOf(actualValue.doubleValue()));
+            slider.setThumbRadius(visibleThumbRadius);
+        } else {
+            slider.setValue(slider.getValueFrom());
+            slider.setThumbRadius(0);
+            currentValue.setText("");
+        }
     }
 }
