@@ -64,9 +64,7 @@
   <string name="jump_to_beginning">开始</string>
   <string name="jump_to_end">结束</string>
   <string name="jump_to_previous">返回</string>
-    <string name="loading_form">正在加载表格</string>
-  <string name="load_remote_form_error">获取表格列表错误</string>
-    <string name="location_accuracy">精度为  %1$s m</string>
+  <string name="loading_form">正在加载表格</string>
   <string name="manage_files">删除已保存表格</string>
   <string name="mark_finished">标记表格为完成</string>
   <string name="noselect_error">没有选定表格!</string>
@@ -114,7 +112,7 @@
   <string name="change_splash_path">修改图片</string>
   <string name="keep_changes">保存修改</string>
   <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
-    <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
+  <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
   <string name="formlist_url">表格列表路径</string>
   <string name="submission_url">提交路径</string>
   <string name="font_size">字体大小</string>
@@ -133,7 +131,7 @@
   <string name="save_as_error">保存的名字不能为空!</string>
   <string name="edit_prompt">修改提示</string>
   <string name="selected_google_account_text">Google账号</string>
-    <string name="font_size_extra_large">极大</string>
+  <string name="font_size_extra_large">极大</string>
   <string name="font_size_large">大</string>
   <string name="font_size_medium">中</string>
   <string name="font_size_small">小</string>
@@ -154,7 +152,7 @@
   <string name="version">版本:</string>
   <string name="launch_app">运行</string>
   <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
-  <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
+    <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
   <string name="save_and_close">保存并关闭</string>
   <string name="sign_button">收集签名</string>
   <string name="markup_image">修改图像</string>

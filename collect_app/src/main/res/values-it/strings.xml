@@ -8,6 +8,7 @@
   <string name="view_video">Mostra Video</string>
   <string name="choose_audio">Seleziona Audio</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Aggingere \"%s\"?</string>
   <string name="add_repeat">Aggiungere</string>
   <string name="dont_add_repeat">Non aggiungere</string>
   <string name="add_another_menu">Aggiungi un altro</string>
@@ -73,9 +74,8 @@
   <string name="jump_to_beginning">Vai all\'inizio</string>
   <string name="jump_to_end">Vai alla fine</string>
   <string name="jump_to_previous">Vai al livello superiore</string>
-    <string name="loading_form">Caricamento Modulo</string>
-  <string name="load_remote_form_error">Errore nel recupero Elenco Moduli.</string>
-    <string name="location_accuracy">Precisione: %1$s m</string>
+  <string name="loading_form">Caricamento Modulo</string>
+  <string name="location_accuracy">Precisione: %1$s m</string>
   <string name="manage_files">Elimina Modulo Salvato</string>
   <string name="mark_finished">Segna Modulo come Completato</string>
   <string name="noselect_error">Spiacenti, non hai selezionato alcun modulo!</string>
@@ -127,7 +127,7 @@
   <string name="change_splash_path">Cambiare immagine</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
-    <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
+  <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
   <string name="formlist_url">Percorso Elenco Moduli</string>
   <string name="submission_url">Luogo di consegna</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
@@ -149,7 +149,7 @@
   <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
   <string name="edit_prompt">Modifica Prompt</string>
   <string name="selected_google_account_text">Account Google</string>
-    <string name="font_size_extra_large">Molto Grande</string>
+  <string name="font_size_extra_large">Molto Grande</string>
   <string name="font_size_large">Grande</string>
   <string name="font_size_medium">Media</string>
   <string name="font_size_small">Piccolo</string>
@@ -173,7 +173,7 @@
   <string name="parent_form_not_present">Impossibile modificare questo modulo salvato perché il corrispondente modulo vuoto non esiste o è stato cancellato.\n\nModulo: %1$s</string>
   <string name="launch_app">Invio</string>
   <string name="no_app">L\'applicazione richiesta è mancante. Per piacere inserisci manualmente la lettura.</string>
-  <string name="savepoint_used">Cambiamenti non salvati recuperati da punto salvato!</string>
+    <string name="savepoint_used">Cambiamenti non salvati recuperati da punto salvato!</string>
   <string name="save_and_close">Salva e Chiudi</string>
   <string name="sign_button">Inserimento Firma</string>
   <string name="markup_image">Markup Immagine</string>
@@ -247,7 +247,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>
   <string name="modified_on_date_at_time">\'Modificato il\' EEE, dd MMM yyyy \'alle\' HH:mm</string>
-    <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>
+  <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
@@ -332,9 +332,6 @@
     <item quantity="one">%dmetri</item>
     <item quantity="other">%d metri</item>
   </plurals>
-  <string name="location_status_searching">Sto ricercando segnale GPS, prego attendere…</string>
-  <string name="location_status_accuracy">Precisione della localizzazione GPS%.2f m</string>
-  <string name="location_status_acceptable">Precisione localizzazione GPS: %.2fm (accettabile)</string>
   <string name="collection_status_paused">Punti inseriti: %d</string>
   <string name="collection_status_placement">Punti inseriti: %d (tocca per inserire punti)</string>
   <string name="collection_status_manual">Punti inseriti: %d (salvataggio manuale)</string>
@@ -369,7 +366,6 @@
   <string name="version_number">Versione: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visitare il sito web ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) è usato per raccogliere dati per il bene sociale in ambienti difficili.</string>
   <string name="odk_forum">Collegati al forum di ODK</string>
   <string name="odk_forum_summary">Entra nel forum per avere supporto, richiedere caratteristiche, contribuire a codificare/tradurre!</string>
   <string name="all_open_source_licenses">Librerie/Licenze open source</string>
@@ -443,17 +439,24 @@
   <string name="select_time">Seleziona un orario</string>
   <string name="no_date_selected">Nessuna data selezionata</string>
   <string name="no_time_selected">Nessun orario selezionato</string>
+  <string name="qr_code">Configurazione con codice QR</string>
+  <string name="view_qr_code_fragment_title">Codice QR</string>
+  <string name="import_qrcode_sd">Importare codice QR</string>
   <string name="successfully_imported_settings">Impostazioni importate con successo</string>
   <string name="encoding_max_limit">Numero massimo di caratteri raggiunto: codice QR non può essere generato per tutte le impostazioni</string>
   <string name="share">Condividi</string>
   <string name="turn_on_flashlight">Accendere il flash</string>
   <string name="turn_off_flashlight">Spegnere il flash</string>
+  <string name="qrcode_with_both_passwords">Contiene informazioni sensibili: <b>admin</b> and <b>server passwords</b></string>
+  <string name="qrcode_without_passwords">Il codice QR non contiene <b>admin</b> or <b>server</b> passwords. Toccare per configurare</string>
+  <string name="qrcode_with_admin_password">Contiene informazioni sensibili: <b>admin</b> password</string>
+  <string name="qrcode_with_server_password">Contiene informazioni sensibili: <b>server</b> password</string>
   <string name="barcode_scanner_prompt">Inserire il codice a barre dentro il rettangolo</string>
   <string name="server_password">Password del Server</string>
   <string name="include_password_dialog">Password inclusa nel Codice</string>
   <string name="generate">Genera</string>
   <string name="invalid_qrcode">Il codice QR non contiene parametri validi</string>
-    <string name="take_picture_instruction">Tocca lo schermo per scattare una foto</string>
+  <string name="take_picture_instruction">Tocca lo schermo per scattare una foto</string>
   <string name="error_front_camera_unavailable">Fotocamera frontale non disponibile in questo dispositivo</string>
   <string name="camera_error">Questo dispositivo non supporta la Camera2 API.</string>
   <string name="invalid_range_widget">Questo widget ha parametri invalidi!</string>
@@ -463,6 +466,7 @@
   <string name="user_setting_summary">Tocca per gestire elementi parametri generali</string>
   <string name="main_menu_settings">Parametri Menu Principale</string>
   <string name="main_menu_settings_summary">Tocca per gestire elementi menu principale</string>
+  <string name="app_configuration">Configurazione applicazione</string>
   <string name="user_access_control">Controllo Accesso Utente</string>
   <string name="autosend_selector_title">Invio automatico</string>
   <string name="off">Spento</string>
@@ -574,12 +578,14 @@
   <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
   <string name="hide_old_form_versions_setting_title">Nascondi le vecchie versioni dei questionario</string>
   <string name="hide_old_form_versions_setting_summary">Solo l\'ultima versione apparirà in Compila Formulario Vuoto</string>
-    <string name="rank_items">Ordina gli elementi</string>
+  <string name="rank_items">Ordina gli elementi</string>
   <string name="missing_google_account_dialog_title">Account Google non specificato</string>
   <string name="notification_channel_name">Impostazioni Generali</string>
   <string name="go_to_settings">Vai a impostazioni</string>
   <string name="track_location">Registra la posizione</string>
   <string name="open_file">Apri documento</string>
+  <string name="number_picker_title">Selezionatore numerico</string>
+  <string name="reading_files">Leggendo i files</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
   <string name="identity">Identità</string>
   <string name="enter_identity_description">Questo form necessita che tu ti dentifichi</string>
@@ -588,4 +594,5 @@
   <string name="reason">motivo</string>
   <string name="save">Salvare</string>
   <string name="reason_for_changes_description">Devi spiegare il motivo per la modifica di questo form</string>
+  <string name="scoped_storage_dismiss">Abbandonare</string>
 </resources>

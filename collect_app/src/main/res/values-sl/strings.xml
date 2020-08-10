@@ -70,9 +70,7 @@
   <string name="jump_to_beginning">Pojdi na začetek</string>
   <string name="jump_to_end">Pojdi na konec</string>
   <string name="jump_to_previous">Pojdi gor</string>
-    <string name="loading_form">Nalagam obrazec</string>
-  <string name="load_remote_form_error">Napaka pri pridobivanju seznama obrazcev</string>
-    <string name="location_accuracy">Natančnost je %1$s m</string>
+  <string name="loading_form">Nalagam obrazec</string>
   <string name="manage_files">Briši shranjen obrazec</string>
   <string name="mark_finished">Označi obrazec kot zaključen</string>
   <string name="noselect_error">Niste izbrali obrazca!</string>
@@ -122,7 +120,7 @@
   <string name="change_splash_path">Zamenjaj sliko</string>
   <string name="keep_changes">Shrani spremembe</string>
   <string name="change_formlist_url">Pot seznama obrazcev (dodana URL)</string>
-    <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
+  <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
   <string name="formlist_url">Pot seznama obrazcev</string>
   <string name="submission_url">Pot prispevkov</string>
   <string name="font_size">Velikost črk</string>
@@ -144,7 +142,7 @@
   <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
   <string name="edit_prompt">Uredi</string>
   <string name="selected_google_account_text">Goggle račun</string>
-    <string name="font_size_extra_large">Extra veliko</string>
+  <string name="font_size_extra_large">Extra veliko</string>
   <string name="font_size_large">Veliko</string>
   <string name="font_size_medium">Srednje</string>
   <string name="font_size_small">Malo</string>
@@ -167,7 +165,7 @@
   <string name="parent_form_not_present">Ne morem urejati shranjen obrazec ker je bil pripadajoči prazen obrazec  %1$s izbrisan ali ni na voljo.</string>
   <string name="launch_app">Zaženi</string>
   <string name="no_app">Zahtevane aplikacije ne najdem ali ni na voljo. Ročno vnesi vrednost.</string>
-  <string name="savepoint_used">Neshranjene spremembe vrnjene na shranjeno točko.</string>
+    <string name="savepoint_used">Neshranjene spremembe vrnjene na shranjeno točko.</string>
   <string name="save_and_close">Shrani in zapri</string>
   <string name="sign_button">Podpiši</string>
   <string name="markup_image">Označi sliko</string>
@@ -240,7 +238,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Deljeno z menoj</string>
   <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd,  yyyy \'ob\' HH:mm</string>
-    <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>
+  <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>
   <string name="drive_get_file">Pridobivam %1$s in medijske datoteke.</string>
   <string name="no_google_account">Google račun ni izbran!</string>
   <string name="google_set_account">Za svoj strežnik ste izbrali Googlove tabele, pred nadaljevanjem prosim izberite ustrezen Google Račun v splošnih nastavitvah</string>

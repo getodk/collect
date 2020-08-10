@@ -86,7 +86,7 @@
   <string name="change_splash_path">Görüntüyü Değiştir</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
-    <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
+  <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
   <string name="formlist_url">Form listesi yolu</string>
   <string name="submission_url">Gönderim yolu</string>
   <string name="font_size">Text font büyüklüğü</string>
@@ -103,7 +103,7 @@
   <string name="save_form_as">Form ismi </string>
   <string name="save_as_error">İsim alani boş bırakilamaz</string>
   <string name="selected_google_account_text">Google account</string>
-    <string name="font_size_extra_large">Çok Büyük</string>
+  <string name="font_size_extra_large">Çok Büyük</string>
   <string name="font_size_large">Büyük</string>
   <string name="font_size_medium">Orta</string>
   <string name="font_size_small">Küçük</string>
@@ -117,7 +117,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
   <string name="launch_app">Başla</string>
-  <string name="save_and_close">Sakla ve Kapat</string>
+    <string name="save_and_close">Sakla ve Kapat</string>
   <string name="admin_preferences">Yönetici Ayarlari</string>
   <string name="admin_access_settings">Yöbetici Ayarlari için Tap</string>
   <string name="save_mid">Formu Sakla</string>

@@ -106,7 +106,7 @@
   <string name="formlist_url">شیوه لیست فورم</string>
   <string name="font_size">اندازه فونت متن</string>
   <string name="change_font_size">اندازه فونت متن</string>
-    <string name="success">موفقیت </string>
+  <string name="success">موفقیت </string>
   <string name="failures">ناکامی</string>
   <string name="no_forms_uploaded">ببخشید، هیچ فورمی آپلود نشده است</string>
   <string name="upload_results">نتایج آپلود</string>
@@ -120,7 +120,7 @@
   <string name="save_as_error">نام ذخیره شده نباید خالی باشد!</string>
   <string name="edit_prompt">ویرایش عاجل</string>
   <string name="selected_google_account_text">حساب کاربری گوگل</string>
-    <string name="font_size_extra_large">بسیار بزرگ</string>
+  <string name="font_size_extra_large">بسیار بزرگ</string>
   <string name="font_size_large">بزرگ</string>
   <string name="font_size_medium">متوسط</string>
   <string name="font_size_small">کوچک</string>
@@ -136,7 +136,7 @@
   <string name="submission_deleted">ارسال حذف شد</string>
   <string name="version">نسخه:</string>
   <string name="launch_app">راه اندازی</string>
-  <string name="save_and_close">ذخیره کردن و خروج</string>
+    <string name="save_and_close">ذخیره کردن و خروج</string>
   <string name="sign_button">جمع آوری امضا</string>
   <string name="markup_image">نشانه گذاری تصویر</string>
   <string name="reset_image">تنظیم مجدد</string>

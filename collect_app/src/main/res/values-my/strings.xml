@@ -66,9 +66,7 @@
   <string name="jump_to_beginning">ျပန္လည္စတင္ရန္</string>
   <string name="jump_to_end">အဆံုးသတ္ရန္</string>
   <string name="jump_to_previous">အေပၚသို႔တက္ရန္</string>
-    <string name="loading_form">ပံုစံရယူေနပါသည္</string>
-  <string name="load_remote_form_error">ပံုစံစာရင္းရယူမွု မွားယြင္းေနပါသည္</string>
-    <string name="location_accuracy">တိက်မွန္ကန္မွု %1$s m</string>
+  <string name="loading_form">ပံုစံရယူေနပါသည္</string>
   <string name="manage_files">သိမ္းထားေသာပံုစံအားဖ်က္ရန္</string>
   <string name="mark_finished">အၿပီးသတ္ထားေသာပံုစံအားမွတ္သားရန္</string>
   <string name="noselect_error">ပံုစံေရြးခ်ယ္ထားျခင္းမရိွပါ</string>
@@ -111,7 +109,7 @@
   <string name="change_splash_path">ပံုေျပာင္းရန္</string>
   <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
   <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
-    <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
+  <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
   <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
   <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
   <string name="font_size">စာလံုးအရြယ္အစား</string>
@@ -130,7 +128,7 @@
   <string name="save_as_error">အမည္ေနရာတြင္ ကြပ္လပ္ထား၍ မရပါ</string>
   <string name="edit_prompt">ခ်က္ျခင္းျပင္ဆင္ရန္</string>
   <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
-    <string name="font_size_extra_large">အလြန္ႀကီး</string>
+  <string name="font_size_extra_large">အလြန္ႀကီး</string>
   <string name="font_size_large">အႀကီး</string>
   <string name="font_size_medium">အလယ္အလတ္</string>
   <string name="font_size_small">ေသး</string>
@@ -151,7 +149,7 @@
   <string name="version">လုပ္ေဆာင္မွုအဆင့္:</string>
   <string name="launch_app">စတင္ေဆာင္ရြက္ရန္</string>
   <string name="no_app">လုပ္ေဆာင္မွုလြဲေခ်ာ္ေနပါသည္၊ ေသခ်ာစြာဖတ္ရွု၍ ၿဖည့္သြင္းပါ</string>
-  <string name="savepoint_used">သိမ္းဆည္းေနရာမွ မသိမ္းဆည္းရေသးသည္မ်ား ျပန္လည္ရယူရန္</string>
+    <string name="savepoint_used">သိမ္းဆည္းေနရာမွ မသိမ္းဆည္းရေသးသည္မ်ား ျပန္လည္ရယူရန္</string>
   <string name="save_and_close">သိမ္းဆည္း ၿပီးပိတ္ရန္</string>
   <string name="sign_button">အမွန္အသားအား ရွာရန္</string>
   <string name="markup_image">ပံုမွတ္ရန္</string>

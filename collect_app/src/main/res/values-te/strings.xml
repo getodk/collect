@@ -71,9 +71,7 @@
   <string name="jump_to_beginning">మొదటికి వెళ్లు </string>
   <string name="jump_to_end">చివరికి వెళ్లు </string>
   <string name="jump_to_previous">పైకి వెళ్లు </string>
-    <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
-  <string name="load_remote_form_error">ఫారం జాబితాను పొందడంలో లోపం జరిగింది </string>
-    <string name="location_accuracy">ఖచ్చితత్వం %1$sm</string>
+  <string name="loading_form">ఫారం లోడ్ అవుతోంది </string>
   <string name="manage_files">సేవ్ చేసిన ఫారంలను తొలగించండి </string>
   <string name="mark_finished">ఫారంను ఖరారు చేసినట్లుగా గుర్తించండి</string>
   <string name="noselect_error">క్షమించండి, మీరు ఏ ఫారంలను ఎంచుకోలేదు!</string>
@@ -125,7 +123,7 @@
   <string name="change_splash_path">ఫోటో ని మార్చండి</string>
   <string name="keep_changes">మార్పులను సేవ్ చెయ్యి</string>
   <string name="change_formlist_url">ఫారం జాబితా లింకు (URL కు జోడించబడింది)</string>
-    <string name="change_submission_url">సబ్మిషన్ లింక్  (URL కు జోడించబడింది)</string>
+  <string name="change_submission_url">సబ్మిషన్ లింక్  (URL కు జోడించబడింది)</string>
   <string name="formlist_url">ఫారం జాబితా లింక్ </string>
   <string name="submission_url">సబ్మిషన్ లింక్ </string>
   <string name="font_size">అక్షరాల సైజు </string>
@@ -147,7 +145,7 @@
   <string name="save_as_error">సేవ్ చేసిన పేరు ఖాళీగా ఉండకూడదు!</string>
   <string name="edit_prompt">ప్రాంప్ట్ సవరించండి</string>
   <string name="selected_google_account_text">గూగుల్ ఖాతా</string>
-    <string name="font_size_extra_large">చాలా పెద్దది</string>
+  <string name="font_size_extra_large">చాలా పెద్దది</string>
   <string name="font_size_large">పెద్ద</string>
   <string name="font_size_medium">మధ్యస్థం </string>
   <string name="font_size_small">చిన్న</string>
@@ -171,7 +169,7 @@
   <string name="parent_form_not_present">సంబంధిత ఖాళీ ఫారం లేనందున లేదా తొలగించబడినందున ఈ సేవ్ చేసిన ఫారంను సవరించడం సాధ్యం కాలేదు. \ N \ n ఫార్మ్ ఐడి:%1$s</string>
   <string name="launch_app">ప్రారంభం</string>
   <string name="no_app">అభ్యర్థించిన అప్లికేషన్ లేదు. దయచేసి రీడింగ్ మాన్యువల్‌గా నమోదు చేయండి.</string>
-  <string name="savepoint_used">సేవ్ చేసినప్పటి  నుండి సేవ్ చేయని మార్పులు రికవర్ అయ్యాయి!</string>
+    <string name="savepoint_used">సేవ్ చేసినప్పటి  నుండి సేవ్ చేయని మార్పులు రికవర్ అయ్యాయి!</string>
   <string name="save_and_close">సేవ్ చేసి క్లోజ్ చెయ్యండి </string>
   <string name="sign_button">సంతకాన్ని సేకరించండి</string>
   <string name="markup_image">మార్కప్ చిత్రం</string>
@@ -245,7 +243,7 @@
   <string name="go_drive">నా డ్రైవ్</string>
   <string name="go_shared">నాతో పంచుకున్నవి </string>
   <string name="modified_on_date_at_time">\'సవరించిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm </string>
-    <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>
+  <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>
   <string name="drive_get_file">గెట్టింగ్ %1$sమరియు మీడియా ఫైల్స్.</string>
   <string name="no_google_account"> గూగుల్ ఖాతా ఎంచుకోబడలేదు</string>
   <string name="google_set_account">మీరు గూగుల్ షీట్లను మీ సర్వర్‌గా ఎంచుకున్నారు, దయచేసి కొనసాగడానికి ముందు సాధారణ సెట్టింగ్‌లలో సంబంధిత గూగుల్ అకౌంట్ ను ఎంచుకోండి</string>
@@ -334,7 +332,6 @@
     <item quantity="one">%d మీటర్ల</item>
     <item quantity="other">%d మీటర్ల</item>
   </plurals>
-  <string name="location_status_searching">GPS లొకేషన్ కోసం శోధిస్తోంది, దయచేసి వేచి ఉండండి…</string>
   <string name="collection_status_paused">నమోదు చేసిన పాయింట్లు:%d</string>
   <string name="collection_status_placement">నమోదు చేసిన పాయింట్లు:%d (పాయింట్లను ఉంచడానికి నొక్కండి)</string>
   <string name="collection_status_manual">నమోదు చేసిన పాయింట్లు: %d(మాన్యువల్ రికార్డింగ్)</string>
@@ -369,7 +366,6 @@
   <string name="version_number">వెర్షన్: %s</string>
   <string name="id_number">ID:%s</string>
   <string name="odk_website">ODK వెబ్‌సైట్‌ను సందర్శించండి</string>
-  <string name="odk_website_summary">సవాలు చేసే వాతావరణాలలో సామాజిక మంచి కోసం డేటాను సేకరించడానికి ఓపెన్ డేటా కిట్ (ODK) ఉపయోగించబడుతుంది.</string>
   <string name="odk_forum">ODK ఫోరమ్‌లో చేరండి</string>
   <string name="odk_forum_summary">మద్దతు పొందడానికి ఫోరమ్‌లో చేరండి, లక్షణాలను అభ్యర్థించండి, కోడ్ / అనువాదాలను అందించండి!</string>
   <string name="all_open_source_licenses">ఓపెన్ సోర్స్ లైబ్రరీలు/లైసెన్సులు</string>
@@ -453,7 +449,7 @@
   <string name="include_password_dialog">పాస్వర్డ్ కోడ్ లో జోడించి ఉంది. </string>
   <string name="generate">రూపొందించండి</string>
   <string name="invalid_qrcode">QR కోడ్‌లో చెల్లుబాటు అయ్యే సెట్టింగ్‌లు లేవు</string>
-    <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
+  <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
   <string name="error_front_camera_unavailable">ముందు వైపు కెమెరా ఈ పరికరంలో లేదు</string>
   <string name="camera_error">ఈ పరికరం కెమెరా2 API కి మద్దతు ఇవ్వదు.</string>
   <string name="invalid_range_widget">ఈ విడ్జెట్ లో చెల్లని ప్రాతిపదికలు కలిగి ఉంది!</string>
@@ -599,7 +595,7 @@
   <string name="instance_upload_cancelled">instance అప్‌లోడ్ రద్దు చేయబడింది</string>
   <string name="hide_old_form_versions_setting_title">పాత ఫారంలు కనిపించకుండా పెట్టు</string>
   <string name="hide_old_form_versions_setting_summary">ఫారం నింపడాంలో కొత్త వెర్షన్ మాత్రమే కనిపిస్తుంది</string>
-    <string name="rank_items">ర్యాంక్ అంశాలు</string>
+  <string name="rank_items">ర్యాంక్ అంశాలు</string>
   <string name="loading_form_failed">ఫారమ్‌ను లోడ్ చేస్తున్నప్పుడు లోపం సంభవించింది. దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="missing_google_account_dialog_title">గూగుల్ ఖాతా సెట్ చేయబడలేదు</string>
   <string name="missing_google_account_dialog_desc">గూగుల్ షీట్ల ద్వారా ఫారమ్‌లను సమర్పించడానికి మీరు మీ గూగుల్ ఖాతాను సర్వర్ సెట్టింగులలో సెటప్ చేయాలి.</string>

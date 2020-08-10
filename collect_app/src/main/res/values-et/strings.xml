@@ -60,9 +60,7 @@
   <string name="jump_to_beginning">Liigu algusesse</string>
   <string name="jump_to_end">Liigu lõppu</string>
   <string name="jump_to_previous">Liigu üles</string>
-    <string name="loading_form">Vormide laadimine</string>
-  <string name="load_remote_form_error">Vormide nimekirja laadimisel esines viga</string>
-  <string name="location_accuracy">Täpsusasteks on %1$s m</string>
+  <string name="loading_form">Vormide laadimine</string>
   <string name="manage_files">Kustuta salvestatud vorm</string>
   <string name="mark_finished">Märgi vorm lõpetatuks</string>
   <string name="noselect_error">Kahjuks ei ole te ühtegi vormi valinud!</string>
@@ -110,7 +108,7 @@
   <string name="change_splash_path">Muuda pilti</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>
-    <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
+  <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
   <string name="formlist_url">Vormi nimekirja asukoht</string>
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>
@@ -129,7 +127,7 @@
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
   <string name="edit_prompt">Muuda küsimust</string>
   <string name="selected_google_account_text">Google konto</string>
-    <string name="font_size_extra_large">Väga suur</string>
+  <string name="font_size_extra_large">Väga suur</string>
   <string name="font_size_large">Suur</string>
   <string name="font_size_medium">Keskmine</string>
   <string name="font_size_small">Väike</string>
@@ -152,7 +150,7 @@
   <string name="parent_form_not_present">Salvestatud vormi ei õnnestu muuta kuna vormi, kas ei ole olemas või on kustutatud. \n\nVormi ID: %1$s</string>
   <string name="launch_app">Alusta</string>
   <string name="no_app">Soovitud rakendust ei ole. Palun sisestage käsitsi.</string>
-  <string name="savepoint_used">Salvestamata muudatused on taastatud!</string>
+    <string name="savepoint_used">Salvestamata muudatused on taastatud!</string>
   <string name="save_and_close">Salvesta ja sulge</string>
   <string name="sign_button">Allkirja kogumine</string>
   <string name="markup_image">Markup pilt</string>

@@ -70,9 +70,7 @@
   <string name="jump_to_beginning">سٹارٹ پر جائیں</string>
   <string name="jump_to_end">اختتام پر جائیں</string>
   <string name="jump_to_previous">اوپر جائیں</string>
-    <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
-  <string name="load_remote_form_error">فارم لسٹ حاصل کرنے میں خرابی</string>
-    <string name="location_accuracy">درستگی ‎%1$s‏ ہے</string>
+  <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
   <string name="manage_files">محفوظ شدہ فارم کو ڈیلیٹ کردیں۔</string>
   <string name="mark_finished">فارم کو حتمی کردیں</string>
   <string name="noselect_error">معذرت، آپنے کسی فارم کا انتخاب نہیں کیا!</string>
@@ -122,7 +120,7 @@
   <string name="change_splash_path">تصویر بدل دیں</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="change_formlist_url">فارم لسٹ پاتھ (اپینڈڈ یو آر ایل)</string>
-    <string name="change_submission_url">سبمشن پاتھ(اپینڈڈ یو آر ایل)</string>
+  <string name="change_submission_url">سبمشن پاتھ(اپینڈڈ یو آر ایل)</string>
   <string name="formlist_url">فارم لسٹ کا پاتھ</string>
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
@@ -144,7 +142,7 @@
   <string name="save_as_error">محفوظ کیا گیا نام خالی نہیں ہونا چاہئے</string>
   <string name="edit_prompt">پرامپٹ کی ترمیم کریں</string>
   <string name="selected_google_account_text">گوگل اکاونٹ</string>
-    <string name="font_size_extra_large">زیادہ بڑا</string>
+  <string name="font_size_extra_large">زیادہ بڑا</string>
   <string name="font_size_large">بڑا</string>
   <string name="font_size_medium">درمیانہ</string>
   <string name="font_size_small">چھو ٹا</string>
@@ -167,7 +165,7 @@
   <string name="parent_form_not_present">اس محفوظ شدہ فارم میںترمیم نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر ڈیلیٹ کر دیا گیا ہے، فارم کی شناخت: ‎%1$s‏</string>
   <string name="launch_app"> شروع کریں</string>
   <string name="no_app">درخواست کی گئی ایپلیکیشن موجود نہیں ہے۔ براو مہربانی اعداد و شمار کو خود درج کریں۔</string>
-  <string name="savepoint_used"> غیر محفوظ شدہ تبدیلیاںسیو پوائنٹ سےبحال کرلی گئی</string>
+    <string name="savepoint_used"> غیر محفوظ شدہ تبدیلیاںسیو پوائنٹ سےبحال کرلی گئی</string>
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="sign_button">دستخط حاصل کریں</string>
   <string name="markup_image">مارک اپ تصویر </string>
@@ -240,7 +238,7 @@
   <string name="go_drive">مائی ڈرائیو</string>
   <string name="go_shared">میرے ساتھ شیئر کیا ہوا</string>
   <string name="modified_on_date_at_time"> EEE, MMM dd, yyyy\'کو\' HH:mm \'پر موڈیفائی کیا گیا\'</string>
-    <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>
+  <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>
   <string name="drive_get_file">%1$sاور میڈیا فائلز کو حاصل کیا جا رہا ہے</string>
   <string name="no_google_account">کوئی گوگل اکاؤنٹ منتخب نہیں ہوا!</string>
   <string name="google_set_account">آپ نے اپنے سرور کے طور پر گوگل شیٹ کو منتخب کیا ہے، براہ کرم شمار کرنے سے قبل عام ترتیب میں اسی گوگل اکاؤنٹ کو منتخب کریں</string>
@@ -321,7 +319,6 @@
   <string name="version_number">ورژن:%s</string>
   <string name="id_number">آئی ڈی: %s</string>
   <string name="odk_website">او ڈی کے ویب سائٹ وزٹ کریں</string>
-  <string name="odk_website_summary">اوپن ڈیٹا کٹ (او ڈی کے ) کومعاشرتی بہبودکے لیے ڈیٹا جمع کرنے کے لئے استعمال کیا جاتا ہے.</string>
   <string name="odk_forum">او ڈی کے فورم میں شمولیت اختیار کریں</string>
   <string name="odk_forum_summary">تعاون حاصل کرنے کے لئے فورم میں شمولیت اختیار کریں، خصوصیات کی درخواست کریں، کوڈ / ترجمہ کرنے میں اپنا حصہ ڈالیں  !</string>
   <string name="all_open_source_licenses">اوپن سورس لائبریری / لائسنسس</string>
@@ -405,7 +402,7 @@
   <string name="include_password_dialog">کوڈ میں شامل پاس ورڈ</string>
   <string name="generate">جنریٹ </string>
   <string name="invalid_qrcode">کیو آر کوڈ درست سیٹنگنز پر مشتمل نہیں ہے</string>
-    <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
+  <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
   <string name="error_front_camera_unavailable">اس ڈیوائس پر فرنٹ کمیرہ دستیاب نہیں ہے</string>
   <string name="camera_error">یہ ڈیوائس اے پی آئ کمیرہ 2 سپورٹ نہیں کرتا </string>
   <string name="invalid_range_widget">اس ویجیٹ میں غلط پیرامیٹرز ہیں!</string>
@@ -540,7 +537,7 @@
   <string name="instance_upload_cancelled">انسٹنس اپ لوڈ منسوخ</string>
   <string name="hide_old_form_versions_setting_title">پرانے فارم ورژن چھپائیں</string>
   <string name="hide_old_form_versions_setting_summary">صرف نئے ورژن  خالی فارم پرکریں میں نظر آئیں گے</string>
-    <string name="rank_items"> رینک آئٹمز</string>
+  <string name="rank_items"> رینک آئٹمز</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>

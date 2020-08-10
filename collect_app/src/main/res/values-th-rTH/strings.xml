@@ -2,12 +2,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
+  <string name="view_image">ดูรูปภาพ</string>
+  <string name="signature_capture">ลงลายมือชื่อ</string>
+  <string name="view_video">ดูภาพเคลื่อนไหว</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>
+  <string name="canceling">กำลังยกเลิก</string>
   <string name="capture_audio">บันทึกเสียง</string>
-  <string name="capture_image">บันทึกภาพ</string>
+  <string name="capture_image">ถ่ายภาพ</string>
   <string name="capture_osm">เปิด OpenMapKit</string>
   <string name="capture_video">บันทึกภาพเคลื่อนไหว</string>
   <string name="change_language">เปลี่ยนภาษา</string>
@@ -58,9 +62,7 @@
   <string name="jump_to_beginning">ไปที่จุดเริ่มต้น</string>
   <string name="jump_to_end">ไปที่จุดสิ้นสุด</string>
   <string name="jump_to_previous">เลื่อนขึ้น</string>
-    <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
-  <string name="load_remote_form_error">มีข้อผิดพลาด ไม่สามารถแสดงรายการแบบสำรวจได้</string>
-    <string name="location_accuracy">ความแม่นยำ %1$s เมตร</string>
+  <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
   <string name="manage_files">ลบแบบสำรวจที่บันทึกไว้</string>
   <string name="mark_finished">ทำเครื่องหมายแบบสำรวจว่าเสร็จเรียบร้อยแล้ว</string>
   <string name="noselect_error">ขออภัย ท่านยังไม่ได้เลือกแบบสำรวจ</string>
@@ -108,7 +110,7 @@
   <string name="change_splash_path">เปลี่ยนภาพใหม่</string>
   <string name="keep_changes">บันทึกการเปลี่ยนแปลง</string>
   <string name="change_formlist_url">Form list path (appended to URL)</string>
-    <string name="change_submission_url">Submission path (appended to URL)</string>
+  <string name="change_submission_url">Submission path (appended to URL)</string>
   <string name="formlist_url">Form list path</string>
   <string name="submission_url">Submission path</string>
   <string name="font_size">ขนาดตัวอักษร</string>
@@ -118,6 +120,7 @@
   <string name="success">สำเร็จ</string>
   <string name="no_forms_uploaded">ขออภัย ไม่สามารถส่งแบบสำรวจได้</string>
   <string name="upload_results">ส่งผลสำรวจ</string>
+  <string name="choose_file">เลือกไฟล์</string>
   <string name="choose_sound">เลือกไฟล์เสียง</string>
   <string name="choose_video">เลือกภาพเคลื่อนไหว</string>
   <string name="choose_image">เลือกรูปภาพ</string>
@@ -127,7 +130,7 @@
   <string name="save_as_error">Saved name must not be blank!</string>
   <string name="edit_prompt">แก้ไขจุดที่เลือก</string>
   <string name="selected_google_account_text">บัญชีกูเกิล</string>
-    <string name="font_size_extra_large">ขนาดใหญ่พิเศษ</string>
+  <string name="font_size_extra_large">ขนาดใหญ่พิเศษ</string>
   <string name="font_size_large">ขนาดใหญ่</string>
   <string name="font_size_medium">ขนาดปานกลาง</string>
   <string name="font_size_small">ขนาดเล็ก</string>
@@ -150,7 +153,7 @@
   <string name="parent_form_not_present">ไม่สามารถแก้ไขฟอร์มที่บันทึกไว้ได้ เนื่องจากฟอร์มเปล่าไม่มีอยู่หรือถูกลบไปแล้ว \n\nForm ID: %1$s</string>
   <string name="launch_app">เริ่มการทำงาน</string>
   <string name="no_app">ไม่พบโปรแกรมที่เรียกใช้ กรุณากรอกข้อมูลด้วยตนเอง</string>
-  <string name="savepoint_used">กู้คืนข้อมูลจากจุดที่บันทึกไว้</string>
+    <string name="savepoint_used">กู้คืนข้อมูลจากจุดที่บันทึกไว้</string>
   <string name="save_and_close">บันทึกและปิดการทำงาน</string>
   <string name="sign_button">บันทึกลายมือชื่อ</string>
   <string name="markup_image">Markup Image</string>
@@ -167,9 +170,11 @@
   <string name="admin_password_incorrect">ขออภัย รหัสผ่านไม่ถูกต้อง</string>
   <string name="enter_admin_password">ใส่รหัสผ่านสำหรับผู้ควบคุมระบบ</string>
   <string name="change_admin_password">เปลี่ยนรหัสผ่านของผู้ดูแลระบบ</string>
+  <string name="autosend">ส่งอัตโนมัติ</string>
   <string name="found_in_main">ปล่อยว่างเพื่อซ่อนจากเมนูหลัก</string>
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
   <string name="form_forward">ต่อไป</string>
+  <string name="form_backward">ย้อนกลับ</string>
   <string name="navigation">ค้นหา</string>
   <string name="swipe_navigation">ใช้การเลื่อนหน้าจอไปด้านข้าง</string>
   <string name="buttons_navigation">ใช่ปุ่มเลื่อนไปข้างหน้า/ย้อนกลับ</string>
@@ -180,6 +185,7 @@
   <string name="constraint_behavior_on_swipe">ตรวจสอบเมื่อปัดเลื่อนไปข้างหน้า</string>
   <string name="constraint_behavior_on_finalize">เลื่อนการตรวจสอบไปจนกว่าการสำรวจสิ้นสุด</string>
   <string name="view_change_location">แสดงหรือเปลี่ยนตำแหน่ง</string>
+  <string name="change_location">เปลี่ยนตำแหน่งพิกัด</string>
   <string name="open_url">ไปที่ Url</string>
   <string name="get_bearing">บันทึกทิศทาง</string>
   <string name="replace_bearing">แทนที่ทิศทาง</string>
@@ -213,7 +219,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">แบ่งปันกับฉัน</string>
   <string name="modified_on_date_at_time">\'แก้ไขเมื่อ\' EEE, MMM dd, yyy \'เวลา\' HH:mm</string>
-    <string name="drive_get_file">ได้รับ %1$s และไฟล์ภาพและเสียง</string>
+  <string name="drive_get_file">ได้รับ %1$s และไฟล์ภาพและเสียง</string>
   <string name="no_google_account">ไม่ได้เลือกบัญชีผู้ใช้งาน Google</string>
   <string name="google_set_account">คุณเลือก Google Sheets เป็นเซิร์ฟเวอร์ โปรดเลือกบัญชี Google ที่เกี่ยวข้องในการตั้งค่าทั่วไปก่อนดำเนินการต่อ</string>
   <string name="notification_error">การแสดงข้อความเตือนผิดพลาด</string>
@@ -230,6 +236,7 @@
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">แผนที่</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -317,6 +324,7 @@
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
+  <string name="autosend_selector_title">ส่งอัตโนมัติ</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

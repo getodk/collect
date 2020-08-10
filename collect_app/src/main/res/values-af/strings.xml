@@ -59,9 +59,7 @@
   <string name="jump_to_beginning">Gaan na Begin</string>
   <string name="jump_to_end">Gaan na Einde</string>
   <string name="jump_to_previous">Gaan op</string>
-    <string name="loading_form">Besig om vorm te laai</string>
-  <string name="load_remote_form_error">Fout tydens haal van vormlys</string>
-  <string name="location_accuracy">Akkuraatheid is %1$s m</string>
+  <string name="loading_form">Besig om vorm te laai</string>
   <string name="manage_files">Verwyder Gestoorde Vorm</string>
   <string name="mark_finished">Merk vorm as gefinaliseer</string>
   <string name="noselect_error">Jammer, u het nie enige vorms geselekteer nie!</string>
@@ -106,7 +104,7 @@
   <string name="change_splash_path">Verander Prentjie</string>
   <string name="keep_changes">Stoor Veranderinge</string>
   <string name="change_formlist_url">Vorm lys path (word bygevoeg tot URL)</string>
-    <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
+  <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
   <string name="formlist_url">Vorm lys path</string>
   <string name="submission_url">Indiening path</string>
   <string name="font_size">Teks font grootte</string>
@@ -148,7 +146,7 @@
   <string name="parent_form_not_present">Kon nie hierdie gestoorde vorm wysig nie omdat die ooreenstemmende vorm of nie teenwoordig is nie of uitgevee is.\n\nVorm ID: %1$s</string>
   <string name="launch_app">Loods</string>
   <string name="no_app">Die program of app wat u aangevra het word vermis. Tik asb self die lesing in.</string>
-  <string name="savepoint_used">Ongestoorde veranderinge is herstel vanaf stoor-punt!</string>
+    <string name="savepoint_used">Ongestoorde veranderinge is herstel vanaf stoor-punt!</string>
   <string name="save_and_close">Stoor en maak toe</string>
   <string name="sign_button">Verkry Handtekening</string>
   <string name="markup_image">Edit Prentjie</string>

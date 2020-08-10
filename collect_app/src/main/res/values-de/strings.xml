@@ -74,9 +74,10 @@
   <string name="jump_to_beginning">Zum Start</string>
   <string name="jump_to_end">Zum Ende</string>
   <string name="jump_to_previous">Zurück</string>
-    <string name="loading_form">Formular wird geladen</string>
-  <string name="load_remote_form_error">Fehler bei der Formularauflistung</string>
-  <string name="location_accuracy">Genauigkeit beträgt %1$s m</string>
+  <string name="loading_form">Formular wird geladen</string>
+  <string name="load_remote_form_error">Formularlisten-Download fehlgeschlagen</string>
+  <string name="location_accuracy">Genauigkeit: %1$s m</string>
+  <string name="location_provider">Standortdienst: %s</string>
   <string name="manage_files">Formulare löschen</string>
   <string name="mark_finished">Formular als vollständig markieren</string>
   <string name="noselect_error">Keine Formulare ausgewählt!</string>
@@ -99,6 +100,7 @@
   <string name="replace_barcode">Strichcode ersetzen</string>
   <string name="required_answer_error">Diese Antwort ist erforderlich!</string>
   <string name="review_data">Gespeichertes Formular ändern</string>
+  <string name="view_data">Gespeichertes Formular anzeigen</string>
   <string name="review_data_button">Gespeichertes Formular ändern (%s)</string>
   <string name="save_all_answers">Formular speichern</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
@@ -128,7 +130,7 @@
   <string name="change_splash_path">Bild ändern</string>
   <string name="keep_changes">Änderungen speichern</string>
   <string name="change_formlist_url">Formularlisten-Pfad (der Server-URL angehängt)</string>
-    <string name="change_submission_url">Submissionspfad (der Server-URL angehängt)</string>
+  <string name="change_submission_url">Submissionspfad (der Server-URL angehängt)</string>
   <string name="formlist_url">Formularlisten-Pfad</string>
   <string name="submission_url">Submissionspfad</string>
   <string name="font_size">Schriftgröße</string>
@@ -150,7 +152,7 @@
   <string name="save_as_error">Gespeicherter Name darf nicht leer sein!</string>
   <string name="edit_prompt">Eingabe ändern</string>
   <string name="selected_google_account_text">Google-Konto</string>
-    <string name="font_size_extra_large">Sehr gross</string>
+  <string name="font_size_extra_large">Sehr gross</string>
   <string name="font_size_large">Groß</string>
   <string name="font_size_medium">Mittel</string>
   <string name="font_size_small">Klein</string>
@@ -174,7 +176,7 @@
   <string name="parent_form_not_present">Das gespeicherte Formular kann nicht bearbeitet werden, weil das zugehörige leere Formular nicht vorhanden ist oder gelöscht wurde.\n\nForm ID: %1$s</string>
   <string name="launch_app">Starten</string>
   <string name="no_app">Die gewünschte Applikation steht nicht zur Verfügung. Bitte tragen sie den Wert manuell ein.</string>
-  <string name="savepoint_used">Nicht-gespeicherte Einträge aus dem letzten automatischen Speichern wiederhergestellt!</string>
+    <string name="savepoint_used">Nicht-gespeicherte Einträge aus dem letzten automatischen Speichern wiederhergestellt!</string>
   <string name="save_and_close">Speichern und schließen</string>
   <string name="sign_button">Unterschrift erfassen</string>
   <string name="markup_image">Zeichnung bearbeiten</string>
@@ -248,7 +250,7 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Shared with Me</string>
   <string name="modified_on_date_at_time">\'Geändert am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
-    <string name="google_sheets_url_hint">Formulare müssen eine Speicherort-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
+  <string name="google_sheets_url_hint">Formulare müssen eine Speicherort-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
   <string name="drive_get_file">Lade %1$s und Mediendateien.</string>
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
@@ -272,7 +274,7 @@
   <string name="google_play_services_error_occured">Zugriff auf Google Maps nicht möglich. Sind die Google Play Services installiert?</string>
   <string name="about_preferences">Über</string>
   <string name="tell_your_friends">ODK Collect teilen</string>
-  <string name="tell_your_friends_msg">Erfassen Ihre Kollegen Daten immer noch auf Papier. Empfehlen Sie Ihnen ODK Collect.</string>
+  <string name="tell_your_friends_msg">Erfassen Ihre Kollegen Daten immer noch auf Papier? Empfehlen Sie Ihnen ODK Collect.</string>
   <string name="leave_a_review">Geben Sie eine Play Store Bewertung ab</string>
   <string name="leave_a_review_msg">Ihre (hoffentlich positive) Bewertung steigert die Bekanntheit der App im Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -337,10 +339,10 @@
     <item quantity="one">%d Meter</item>
     <item quantity="other">%d Meter</item>
   </plurals>
-  <string name="location_status_searching">Suche nach GPS-Position, bitte warten…</string>
-  <string name="location_status_accuracy">GPS Ortungsgenauigkeit: %.2f m</string>
-  <string name="location_status_acceptable">GPS Ortungsgenauigkeit: %.2f m (akzeptabel)</string>
-  <string name="location_status_unacceptable">GPS Ortungsgenauigkeit: %.2f m (inakzeptabel)</string>
+  <string name="location_status_searching">Suche nach Standort, bitte warten…</string>
+  <string name="location_status_accuracy">Ortungsgenauigkeit: %.2f m</string>
+  <string name="location_status_acceptable">Ortungsgenauigkeit: %.2f m (akzeptabel)</string>
+  <string name="location_status_unacceptable">Ortungsgenauigkeit: %.2f m (inakzeptabel)</string>
   <string name="collection_status_paused">erfasste Punkte: %d</string>
   <string name="collection_status_placement">erfasste Punkte: %d (tippen zum Platzieren von Punkten)</string>
   <string name="collection_status_manual">erfasste Punkte: %d (manuelle Standorterfassung)</string>
@@ -376,7 +378,7 @@
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">ODK-Webseite öffnen</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) wird verwendet um Daten für soziale Zwecke in herausfordernden Umgebungen zu sammeln.</string>
+  <string name="odk_website_summary">ODK wird benutzt um Daten für soziale Zwecke in herausfordernden Umgebungen zu sammeln.</string>
   <string name="odk_forum">Dem ODK-Forum beitreten</string>
   <string name="odk_forum_summary">Treten Sie dem Forum bei, um Hilfe zu bekommen, Funktionen vorzuschlagen, Code/Übersetzungen beizutragen!</string>
   <string name="all_open_source_licenses">Open Source Libraries/Lizenzen</string>
@@ -469,7 +471,7 @@
   <string name="include_password_dialog">Passwörter im Code enthalten</string>
   <string name="generate">Generieren</string>
   <string name="invalid_qrcode">QR-Code enthält keine gültigen Einstellungen</string>
-    <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
+  <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
   <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
   <string name="invalid_range_widget">Dieses Widget hat ungültige Parameter!</string>
@@ -617,7 +619,7 @@
   <string name="instance_upload_cancelled">Instanz Upload abgebrochen</string>
   <string name="hide_old_form_versions_setting_title">Alte Formular-Versionen verbergen</string>
   <string name="hide_old_form_versions_setting_summary">Nur die neueste Version wird in \"Leeres Formular ausfüllen\" angezeigt</string>
-    <string name="rank_items">Rangfolge festlegen</string>
+  <string name="rank_items">Rangfolge festlegen</string>
   <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
   <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
   <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie Ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
@@ -648,7 +650,7 @@
   <string name="save_legacy_settings">Speichere alte .settings-Datei auf Laufwerk</string>
   <string name="save_legacy_settings_warning">Wird in einer zukünfigen Version entfernt. Bitte nutzen Sie den QR-Code oben.</string>
   <string name="reason_for_changes_description">Sie müssen den Grund für die Änderungen am Formular erklären</string>
-  <string name="scoped_storage_banner_text">Sie müssen Collect Formulare bis August 2020 in den privaten Speicher migrieren um den Android-Anforderungen zu entsprechen.</string>
+  <string name="scoped_storage_banner_text">Sie müssen Collect Formulare in den privaten Speicher migrieren um den Android-Anforderungen zu entsprechen. Ab Collect v1.29 <b>wird die Migration bei der Installation erzwungen</b>.</string>
   <string name="scoped_storage_learn_more">Mehr erfahren und migrieren</string>
   <string name="storage_migration_completed">Speichermigration abgeschlossen! </string>
   <string name="scoped_storage_dismiss">Verwerfen</string>
@@ -660,10 +662,21 @@
   <string name="migrate">Migrieren</string>
   <string name="error">Fehler:</string>
   <string name="storage_migration_not_enough_space">Sie haben nicht genug Platz auf Ihrem internen Speicher um Ihre Daten zu migrieren. Bitte geben Sie Speicherplatz frei und versuchen  Sie es erneut. </string>
-    <string name="changes_in_progress">Hintergrund-Formular-Downloader läuft. Bitte erneut versuchen. </string>
+  <string name="changes_in_progress">Automatisches Senden oder Leerformular-Download läuft. Bitte versuchen Sie es später nochmal.</string>
   <string name="storage_migration_failed">Datenmigration fehlgeschlagen. Bitte erneut versuchen. </string>
   <string name="storage_migration_dialog_title">Speichermigration</string>
   <string name="storage_migration_progress_msg">Migration läuft. \nDas kann einige Sekunden dauern… </string>
   <string name="install_id">Installations-ID - wird ab August 2020 die Geräte-ID ersetzen</string>
   <string name="preference_not_available">Nicht verfügbar</string>
+  <string name="custom_server_paths">Benutzerdefinierte Serverpfade</string>
+  <string name="legacy_custom_server_paths_summary">Wird in einer zukünftigen Version entfernt. Bitte benutzen Sie /formList und /submission auf Ihrem Server. </string>
+  <string name="experimental">Experimentell</string>
+  <string name="match_exactly">Exakt übereinstimmender Server</string>
+  <string name="manually">Manuell</string>
+  <string name="form_update_mode_title">Leerformular-Update-Modus</string>
+  <string name="previously_downloaded_only">Nur zuvor heruntergeladene Formulare</string>
+  <string name="form_update_frequency_title">Automatische Update-Frequenz</string>
+  <string name="form_update_error">Formular-Update fehlgeschlagen</string>
+  <string name="report_to_project_lead">Wenn Sie weiterhin dieses Problem haben, berichten Sie es an die Person, die Sie zum Daten sammeln beauftragt hat.</string>
+  <string name="unknown_host_error">Collect kann den Server unter %s nicht erreichen. Haben Sie die URL korrekt eingegeben? </string>
 </resources>
