@@ -52,8 +52,11 @@
         <!-- Always show scrollbars for a11y reasons -->
         <item name="android:fadeScrollbars">false</item>
 
-        <item name="android:textDirection" tools:targetApi="17">locale</item>
-        <item name="android:tintMode" tools:targetApi="21">src_in</item>
+        <!-- Use locale for text direction in views -->
+        <item name="android:textDirection">locale</item>
+
+        <!-- No idea why we need this -->
+        <item name="android:tintMode">src_in</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Magenta.Theme" parent="Widget.AppCompat.SearchView">
