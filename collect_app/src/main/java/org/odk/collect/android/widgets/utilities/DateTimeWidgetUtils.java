@@ -2,9 +2,9 @@ package org.odk.collect.android.widgets.utilities;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.FormIndex;
 import org.joda.time.DateTime;
@@ -31,6 +31,7 @@ import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
+import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -53,11 +54,6 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
     public static final String DATE_PICKER_THEME = "datePickerTheme";
 
     @Override
-    public void setWidgetWaitingForData(FormIndex formIndex) {
-        setWaitingForData(formIndex);
-    }
-
-    @Override
     public void displayDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails, LocalDateTime selectedDate) {
         showDatePickerDialog(context, formIndex, datePickerDetails, selectedDate);
     }
@@ -65,6 +61,13 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
     @Override
     public void displayTimePickerDialog(Context context, LocalDateTime selectedTime) {
         showTimePickerDialog(context, selectedTime);
+    }
+
+    public static void setWidgetWaitingForData(FormIndex formIndex) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(formIndex);
+        }
     }
 
     public static DatePickerDetails getDatePickerDetails(String appearance) {
@@ -222,24 +225,16 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
         return dateSkeleton;
     }
 
-    private static void setWaitingForData(FormIndex formIndex) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(formIndex);
-        }
-    }
-
     private static void showDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails,
                                             LocalDateTime date) {
         ThemeUtils themeUtils = new ThemeUtils(context);
+        DateTimeViewModel viewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(DATE_PICKER_THEME, getDatePickerTheme(themeUtils, datePickerDetails));
-        bundle.putSerializable(DATE, date);
-        bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
-        bundle.putSerializable(FORM_INDEX, formIndex);
-
-        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, ((ScreenContext) context).getActivity().getSupportFragmentManager());
+        viewModel.dialogTheme = getDatePickerTheme(themeUtils, datePickerDetails);
+        viewModel.localDateTime = date;
+        viewModel.datePickerDetails = datePickerDetails;
+        viewModel.formIndex = formIndex;
+        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), ((ScreenContext) context).getActivity().getSupportFragmentManager());
     }
 
     private static Class getClass(DatePickerDetails.DatePickerType datePickerType) {
@@ -263,11 +258,11 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
 
     private static void showTimePickerDialog(Context context, LocalDateTime dateTime) {
         ThemeUtils themeUtils = new ThemeUtils(context);
-        Bundle bundle = new Bundle();
-        bundle.putInt(CustomTimePickerDialog.TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());
-        bundle.putSerializable(CustomTimePickerDialog.CURRENT_TIME, dateTime);
+        DateTimeViewModel viewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
 
-        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
+        viewModel.dialogTheme = themeUtils.getHoloDialogTheme();
+        viewModel.localDateTime = dateTime;
+        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, ((AppCompatActivity) context).getSupportFragmentManager());
     }
 
     private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {

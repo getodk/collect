@@ -69,12 +69,12 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             binding.timeWidget.widgetButton.setText(getContext().getString(R.string.select_time));
 
             binding.dateWidget.widgetButton.setOnClickListener(v -> {
-                listener.setWidgetWaitingForData(prompt.getIndex());
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
                 listener.displayDatePickerDialog(context, prompt.getIndex(), datePickerDetails, selectedDateTime);
             });
 
             binding.timeWidget.widgetButton.setOnClickListener(v -> {
-                listener.setWidgetWaitingForData(prompt.getIndex());
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
                 listener.displayTimePickerDialog(context, selectedDateTime);
             });
         }

@@ -32,6 +32,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 @SuppressLint("ViewConstructor")
 public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
@@ -57,7 +58,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
             binding.widgetButton.setText(getContext().getString(R.string.select_time));
 
             binding.widgetButton.setOnClickListener(v -> {
-                listener.setWidgetWaitingForData(prompt.getIndex());
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
                 listener.displayTimePickerDialog(context, selectedTime);
             });
         }

@@ -83,15 +83,6 @@ public class TimeWidgetTest {
     }
 
     @Test
-    public void clickingButton_callsSetWidgetWaitingForData() {
-        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
-        TimeWidget widget = createWidget(prompt);
-        widget.binding.widgetButton.performClick();
-
-        verify(dateTimeWidgetListener).setWidgetWaitingForData(prompt.getIndex());
-    }
-
-    @Test
     public void clickingButton_callsDisplayTimePickerDialogWithCurrentTime_whenPromptDoesNotHaveAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         TimeWidget widget = createWidget(prompt);

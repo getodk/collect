@@ -90,15 +90,6 @@ public class DateWidgetTest {
     }
 
     @Test
-    public void clickingButton_callsSetWidgetWaitingForData() {
-        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
-        DateWidget widget = createWidget(prompt);
-        widget.binding.widgetButton.performClick();
-
-        verify(dateTimeWidgetListener).setWidgetWaitingForData(prompt.getIndex());
-    }
-
-    @Test
     public void clickingButton_callsDisplayDatePickerDialogWithCurrentDate_whenPromptDoesNotHaveAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DateWidget widget = createWidget(prompt);
