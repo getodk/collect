@@ -27,7 +27,7 @@ public final class AdminKeys {
     public static final String KEY_DELETE_SAVED                 = "delete_saved";
     public static final String KEY_QR_CODE_SCANNER              = "qr_code_scanner";
 
-    private static final String KEY_CHANGE_SERVER               = "change_server";
+    public static final String KEY_CHANGE_SERVER               = "change_server";
 
     public static final String KEY_APP_THEME                   = "change_app_theme";
     public static final String KEY_APP_LANGUAGE                = "change_app_language";
