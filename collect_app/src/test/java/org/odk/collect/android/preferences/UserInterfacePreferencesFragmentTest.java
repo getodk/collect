@@ -16,6 +16,7 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 @RunWith(AndroidJUnit4.class)
 public class UserInterfacePreferencesFragmentTest {
+    private final AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
 
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
@@ -48,11 +49,11 @@ public class UserInterfacePreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_APP_THEME, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_APP_LANGUAGE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_NAVIGATION, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
+        adminSharedPreferences.save(AdminKeys.KEY_APP_THEME, false);
+        adminSharedPreferences.save(AdminKeys.KEY_APP_LANGUAGE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_NAVIGATION, false);
+        adminSharedPreferences.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
         FragmentScenario<UserInterfacePreferencesFragment> scenario = FragmentScenario.launch(UserInterfacePreferencesFragment.class);
         scenario.onFragment(fragment -> {
@@ -67,11 +68,11 @@ public class UserInterfacePreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_APP_THEME, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_APP_LANGUAGE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_NAVIGATION, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
+        adminSharedPreferences.save(AdminKeys.KEY_APP_THEME, false);
+        adminSharedPreferences.save(AdminKeys.KEY_APP_LANGUAGE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_NAVIGATION, false);
+        adminSharedPreferences.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);

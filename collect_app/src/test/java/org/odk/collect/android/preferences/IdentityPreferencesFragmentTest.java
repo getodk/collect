@@ -15,6 +15,8 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 @RunWith(AndroidJUnit4.class)
 public class IdentityPreferencesFragmentTest {
+    private final AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
+
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
         FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class);
@@ -38,8 +40,8 @@ public class IdentityPreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_ANALYTICS, false);
+        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminSharedPreferences.save(AdminKeys.KEY_ANALYTICS, false);
 
         FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class);
         scenario.onFragment(fragment -> {
@@ -50,8 +52,8 @@ public class IdentityPreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_ANALYTICS, false);
+        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminSharedPreferences.save(AdminKeys.KEY_ANALYTICS, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);

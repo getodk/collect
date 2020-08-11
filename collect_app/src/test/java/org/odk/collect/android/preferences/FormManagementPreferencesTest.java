@@ -31,6 +31,7 @@ public class FormManagementPreferencesTest {
 
     private SharedPreferences prefs;
     private Context context;
+    private final AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
 
     @Before
     public void setup() {
@@ -136,17 +137,17 @@ public class FormManagementPreferencesTest {
 
     @Test
     public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOSEND, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIGH_RESOLUTION, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_IMAGE_SIZE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_GUIDANCE_HINT, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSharedPreferences.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSharedPreferences.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        adminSharedPreferences.save(AdminKeys.KEY_AUTOSEND, false);
+        adminSharedPreferences.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        adminSharedPreferences.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        adminSharedPreferences.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        adminSharedPreferences.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        adminSharedPreferences.save(AdminKeys.KEY_IMAGE_SIZE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        adminSharedPreferences.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
 
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
         scenario.onFragment(fragment -> {
@@ -166,17 +167,17 @@ public class FormManagementPreferencesTest {
 
     @Test
     public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOSEND, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIGH_RESOLUTION, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_IMAGE_SIZE, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_GUIDANCE_HINT, false);
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSharedPreferences.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSharedPreferences.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        adminSharedPreferences.save(AdminKeys.KEY_AUTOSEND, false);
+        adminSharedPreferences.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        adminSharedPreferences.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        adminSharedPreferences.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        adminSharedPreferences.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        adminSharedPreferences.save(AdminKeys.KEY_IMAGE_SIZE, false);
+        adminSharedPreferences.save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        adminSharedPreferences.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
