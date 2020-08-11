@@ -80,28 +80,28 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
             PreferenceFragmentCompat basePreferenceFragment = null;
-            boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
             switch (preference.getKey()) {
                 case "protocol":
-                    basePreferenceFragment = ServerPreferencesFragment.newInstance(adminMode);
+                    basePreferenceFragment = new ServerPreferencesFragment();
                     break;
                 case "user_interface":
                     basePreferenceFragment =  new UserInterfacePreferencesFragment();
                     break;
                 case "maps":
-                    basePreferenceFragment = MapsPreferences.newInstance(adminMode);
+                    basePreferenceFragment = new MapsPreferences();
                     break;
                 case "form_management":
-                    basePreferenceFragment = FormManagementPreferences.newInstance(adminMode);
+                    basePreferenceFragment = new FormManagementPreferences();
                     break;
                 case "user_and_device_identity":
-                    basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
+                    basePreferenceFragment = new IdentityPreferences();
                     break;
                 case "experimental":
                     basePreferenceFragment = new ExperimentalPreferencesFragment();
                     break;
             }
             if (basePreferenceFragment != null) {
+                basePreferenceFragment.setArguments(getArguments());
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.preferences_fragment_container, basePreferenceFragment)

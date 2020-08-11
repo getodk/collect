@@ -50,7 +50,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
 
@@ -58,16 +57,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
 
     @Inject
     VersionInformation versionInformation;
-
-    public static UserInterfacePreferencesFragment newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
-        UserInterfacePreferencesFragment userInterfacePreferencesFragment = new UserInterfacePreferencesFragment();
-        userInterfacePreferencesFragment.setArguments(bundle);
-
-        return userInterfacePreferencesFragment;
-    }
 
     @Override
     public void onAttach(Context context) {

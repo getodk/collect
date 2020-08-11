@@ -40,7 +40,6 @@ import java.util.List;
 
 import static org.odk.collect.android.preferences.GeneralKeys.CATEGORY_BASEMAP;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class MapsPreferences extends BasePreferenceFragment {
 
@@ -48,14 +47,6 @@ public class MapsPreferences extends BasePreferenceFragment {
     private ListPreference basemapSourcePref;
     private CaptionedListPreference referenceLayerPref;
     private boolean autoShowReferenceLayerDialog;
-
-    public static MapsPreferences newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-        MapsPreferences prefs = new MapsPreferences();
-        prefs.setArguments(bundle);
-        return prefs;
-    }
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
@@ -78,7 +69,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         // and attaching it to an activity.  So, we instantiate a MapsPreference
         // fragment that is configured to immediately open the dialog when it's
         // attached, then instantiate it and attach it.
-        MapsPreferences prefs = newInstance(false);
+        MapsPreferences prefs = new MapsPreferences();
         prefs.autoShowReferenceLayerDialog = true;  // makes dialog open immediately
         ((AppCompatActivity) activity).getSupportFragmentManager()
             .beginTransaction()

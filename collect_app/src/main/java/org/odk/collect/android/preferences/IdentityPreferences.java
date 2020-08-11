@@ -29,22 +29,11 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class IdentityPreferences extends BasePreferenceFragment {
 
     @Inject
     Analytics analytics;
-
-    public static IdentityPreferences newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
-        IdentityPreferences identityPreferences = new IdentityPreferences();
-        identityPreferences.setArguments(bundle);
-
-        return identityPreferences;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {

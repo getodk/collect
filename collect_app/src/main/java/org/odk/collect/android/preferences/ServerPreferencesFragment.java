@@ -68,7 +68,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MO
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, OnBackPressedListener {
@@ -92,17 +91,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
-
-    public static ServerPreferencesFragment newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
-        ServerPreferencesFragment serverPreferencesFragment = new ServerPreferencesFragment();
-        serverPreferencesFragment.setArguments(bundle);
-
-        return serverPreferencesFragment;
-    }
-
 
     @Override
     public void onAttach(@NotNull Context context) {
