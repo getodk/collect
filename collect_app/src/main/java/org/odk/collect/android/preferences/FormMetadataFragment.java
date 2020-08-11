@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
@@ -32,7 +31,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 
-public class FormMetadataFragment extends PreferenceFragmentCompat {
+public class FormMetadataFragment extends BasePreferenceFragment {
 
     @Inject
     InstallIDProvider installIDProvider;

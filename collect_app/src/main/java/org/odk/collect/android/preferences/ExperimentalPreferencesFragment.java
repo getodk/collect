@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.preference.PreferenceFragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
@@ -15,7 +14,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
-public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
+public class ExperimentalPreferencesFragment extends BasePreferenceFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -42,5 +41,4 @@ public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
             ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
         }
     }
-
 }

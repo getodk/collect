@@ -25,7 +25,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
@@ -53,7 +52,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
+public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
 

@@ -4,12 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.preference.PreferenceFragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 
-public class CustomServerPathsFragment extends PreferenceFragmentCompat {
+public class CustomServerPathsFragment extends BasePreferenceFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
