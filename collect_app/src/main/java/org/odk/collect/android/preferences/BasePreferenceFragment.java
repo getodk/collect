@@ -74,7 +74,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
     }
 
     private void removeDisabledPrefs() {
-        if (!isInAdminMode() && getActivity() instanceof PreferencesActivity) {
+        if (!isInAdminMode()) {
             DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this);
             preferencesRemover.remove(AdminKeys.adminToGeneral);
             preferencesRemover.removeEmptyCategories();

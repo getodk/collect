@@ -29,11 +29,11 @@ public final class AdminKeys {
 
     private static final String KEY_CHANGE_SERVER               = "change_server";
 
-    private static final String KEY_APP_THEME                   = "change_app_theme";
-    private static final String KEY_APP_LANGUAGE                = "change_app_language";
-    private static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
-    private static final String KEY_NAVIGATION                  = "change_navigation";
-    private static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
+    public static final String KEY_APP_THEME                   = "change_app_theme";
+    public static final String KEY_APP_LANGUAGE                = "change_app_language";
+    public static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
+    public static final String KEY_NAVIGATION                  = "change_navigation";
+    public static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
 
     static final String KEY_MAPS                                = "maps";
 
