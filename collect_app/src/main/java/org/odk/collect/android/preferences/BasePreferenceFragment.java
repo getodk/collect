@@ -73,7 +73,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
         settingsChangeHandler.onSettingChanged(key);
     }
 
-    void removeDisabledPrefs() {
+    private void removeDisabledPrefs() {
         if (!isInAdminMode() && getActivity() instanceof PreferencesActivity) {
             removeAllDisabledPrefs();
         }

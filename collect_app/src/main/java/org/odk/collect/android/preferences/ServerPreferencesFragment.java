@@ -139,7 +139,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     getPreferenceScreen().removeAll();
                     addPreferencesFromResource(R.xml.server_preferences);
                     initProtocolPrefs();
-                    removeDisabledPrefs();
                 }
 
                 if (Protocol.parse(getActivity(), (String) newValue) == Protocol.GOOGLE) {
