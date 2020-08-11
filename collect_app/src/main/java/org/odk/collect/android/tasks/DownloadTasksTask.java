@@ -344,6 +344,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, tr.settings.ft_specify_instancename);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, tr.settings.ft_prevent_disable_track);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, tr.settings.ft_enable_geofence == null || tr.settings.ft_enable_geofence.equals("on"));
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_ADMIN_MENU, tr.settings.ft_admin_menu);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_SERVER_MENU, tr.settings.ft_server_menu);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_META_MENU, tr.settings.ft_meta_menu);
@@ -701,6 +702,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             // Delete any points that had been collected
             TraceUtilities.deleteSource(0);
         }
+        Collect.getInstance().setSavedLocation(null);
 
         if(updateResponse.taskAssignments.size() > 0 ||
                 (updateResponse.taskCompletionInfo != null && updateResponse.taskCompletionInfo.size() > 0) ||

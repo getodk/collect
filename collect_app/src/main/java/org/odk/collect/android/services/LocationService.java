@@ -33,6 +33,7 @@ import com.google.android.gms.location.LocationServices;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.receivers.LocationReceiver;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.NotificationUtils;
@@ -57,7 +58,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     Handler mHandler = new Handler();           // Background thread to check for enabling / disabling the location listener
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationClient;
-    //private LocationCallback locationCallback;
+    private boolean isRecordingLocation = false;
     private Timer mTimer;
 
     public LocationService() {
@@ -71,6 +72,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         super.onStartCommand(intent, flags, startId);
         Timber.i("======================= Start Location Service");
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        isRecordingLocation = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, true);
+
+        if (mTimer == null) {
+            mTimer = new Timer();
+        }
+        mTimer.scheduleAtFixedRate(new CheckEnabledTimerTask(), 0, 60000);  // Peiodically check to see if location tracking is disabled
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
@@ -106,33 +115,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     public void onConnected(Bundle bundle) {
         Timber.i("++++++++++Connected to provider");
         stopLocationUpdates();
-        startLocationUpdates();
+        requestLocationUpdates();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         Timber.i("+++++++++++ Connection Suspended");
         stopLocationUpdates();
-    }
-
-    /*
-     * Start recording locations
-     */
-    private void startLocationUpdates() {
-        //Timber.i("=================== Location Recording turned on");
-        if(locationRequest == null) {
-            locationRequest = LocationRequest.create();
-        }
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setFastestInterval(Constants.GPS_INTERVAL / 2);
-        locationRequest.setInterval(Constants.GPS_INTERVAL);
-
-        try {
-            fusedLocationClient.requestLocationUpdates(locationRequest, getPendingIntent());
-            //fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-        } catch (SecurityException e) {
-            Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
-        }
     }
 
     @Override
@@ -159,10 +148,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 public void run() {
                     Timber.i("=================== Periodic check for user settings ");
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+                    isRecordingLocation = sharedPreferences.getBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, true);
 
-                    // Restart location monitoring - Incase permission was disabled and then reenabled
+                    // Restart location monitoring - Incase permission was disabled and then re-enabled
                     stopLocationUpdates();
-                    startLocationUpdates();
+                    requestLocationUpdates();
                 }
             });
 
@@ -180,11 +170,15 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     private void requestLocationUpdates() {
-        try {
-            Timber.i("+++++++ Requesting location updates");
-            fusedLocationClient.requestLocationUpdates(locationRequest, getPendingIntent());
-        } catch (SecurityException e) {
-            Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
+        if(isRecordingLocation) {
+            try {
+                Timber.i("+++++++ Requesting location updates");
+                fusedLocationClient.requestLocationUpdates(locationRequest, getPendingIntent());
+            } catch (SecurityException e) {
+                Timber.i("%%%%%%%%%%%%%%%%%%%% location recording not permitted: ");
+            }
+        } else {
+            Timber.i("+++++++ Location updates disabled");
         }
     }
 

@@ -43,7 +43,6 @@ public class LocationReceiver  extends BroadcastReceiver {
                     for (Location location : result.getLocations()) {
                         if (location != null) {
                             onLocationChanged(context, location);
-                            Timber.i("+++++ location changed");
                         }
                     }
                 }
@@ -53,56 +52,59 @@ public class LocationReceiver  extends BroadcastReceiver {
 
     public void onLocationChanged(Context context, Location location) {
 
+        Timber.i("+++++ location changed");
+
         if(isValidLocation(location) && isAccurateLocation(location)) {
 
-            Timber.i("+++++++++++++++++++++++++++++ location received");
             Collect.getInstance().setLocation(location);
             Location lastLocation = Collect.getInstance().getSavedLocation();
-            /*
-             * Test for geofence change if the user has moved more than the minimum distance
-             */
-            ArrayList<GeofenceEntry> geofences = Collect.getInstance().getGeofences();
-            if(geofences.size() > 0 && (lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE)) {
-                boolean refresh = false;
-                boolean notify = false;
-                for(GeofenceEntry gfe : geofences) {
-                    double yDistance = abs(location.getLatitude() - gfe.location.getLatitude()) * 111111.1;     // lattitude difference in meters
-                    if(gfe.in) {                                                        // Currently inside
-                        if (location.distanceTo(gfe.location) > gfe.showDist) {         // detailed check only
-                            refresh = true;
-                        }
-                    } else {
-                        if(yDistance < gfe.showDist) {                                      // Currently outside do rough check first
-                            if (location.distanceTo(gfe.location) < gfe.showDist) {
+
+            if(lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE ) {
+
+                Collect.getInstance().setSavedLocation(location);
+
+                /*
+                 * Test for geofence change if the user has moved more than the minimum distance
+                 */
+                ArrayList<GeofenceEntry> geofences = Collect.getInstance().getGeofences();
+                if (geofences.size() > 0) {
+                    boolean refresh = false;
+                    boolean notify = false;
+                    for (GeofenceEntry gfe : geofences) {
+                        double yDistance = abs(location.getLatitude() - gfe.location.getLatitude()) * 111111.1;     // lattitude difference in meters
+                        if (gfe.in) {                                                        // Currently inside
+                            if (location.distanceTo(gfe.location) > gfe.showDist) {         // detailed check only
                                 refresh = true;
-                                notify = true;
-                                break;      // No need to check more we have a notify and a refresh
+                            }
+                        } else {
+                            if (yDistance < gfe.showDist) {                                      // Currently outside do rough check first
+                                if (location.distanceTo(gfe.location) < gfe.showDist) {
+                                    refresh = true;
+                                    notify = true;
+                                    break;      // No need to check more we have a notify and a refresh
+                                }
                             }
                         }
                     }
-                }
-                if(refresh) {
-                    Intent intent = new Intent("org.smap.smapTask.refresh");
-                    LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-                    Timber.i("######## send org.smap.smapTask.refresh from location service");  // smap
-                }
-                if(notify) {
-                    NotificationUtils.showNotification(null,
-                            NotificationActivity.NOTIFICATION_ID,
-                            R.string.app_name,
-                            context.getString(R.string.smap_geofence_tasks), false);
+                    if (refresh) {
+                        Intent intent = new Intent("org.smap.smapTask.refresh");
+                        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+                        Timber.i("######## send org.smap.smapTask.refresh from location service");  // smap
+                    }
+                    if (notify) {
+                        NotificationUtils.showNotification(null,
+                                NotificationActivity.NOTIFICATION_ID,
+                                R.string.app_name,
+                                context.getString(R.string.smap_geofence_tasks), false);
+                    }
                 }
 
-            }
-
-            /*
-             * Save the location in the database
-             */
-            if(lastLocation == null || location.distanceTo(lastLocation) > Constants.GPS_DISTANCE) {
-                Collect.getInstance().setSavedLocation(location);
-                if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
-                    Timber.i("^^^^^^^^^^^^^^^^^^^^^^^^^^ insert point");
+                /*
+                 * Save the location in the database
+                 */
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
                     TraceUtilities.insertPoint(location);
+                    Timber.i("+++++ Insert Point");
                     LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("locationChanged"));  // update map
                 }
             }
@@ -117,7 +119,7 @@ public class LocationReceiver  extends BroadcastReceiver {
 
         boolean accurate = true;
         if (!location.hasAccuracy() || location.getAccuracy() >= Constants.GPS_ACCURACY) {
-            Timber.i("Ignore location. Poor accuracy.");
+            Timber.i("===== Inaccurate location");
             accurate = false;
         }
         return accurate;
@@ -136,6 +138,8 @@ public class LocationReceiver  extends BroadcastReceiver {
 
         // Return false if the location is 0 0, more likely than not this is a bad location
         if(Math.abs(location.getLongitude()) == 0.0 && Math.abs(location.getLongitude()) == 0.0) {
+            Timber.i("===== Invalid location");
+
             valid = false;
         }
 
