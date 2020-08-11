@@ -49,8 +49,8 @@ public final class AdminKeys {
     public static final String KEY_IMAGE_SIZE                  = "image_size";
     public static final String KEY_GUIDANCE_HINT               = "guidance_hint";
     public static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
-    private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
-    private static final String KEY_ANALYTICS                   = "analytics";
+    public static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
+    public static final String KEY_ANALYTICS                   = "analytics";
 
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
     public static final String KEY_ACCESS_SETTINGS              = "access_settings";
