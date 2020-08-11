@@ -34,21 +34,11 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class GeneralPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
     @Inject
     VersionInformation versionInformation;
-
-    public static GeneralPreferencesFragment newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
-        GeneralPreferencesFragment generalPreferencesFragment = new GeneralPreferencesFragment();
-        generalPreferencesFragment.setArguments(bundle);
-        return generalPreferencesFragment;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {

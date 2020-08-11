@@ -49,8 +49,10 @@ public class PreferencesActivity extends CollectAbstractActivity {
 
         setTitle(R.string.general_preferences);
         if (savedInstanceState == null) {
-            boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-            Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
+            Fragment fragment = new GeneralPreferencesFragment();
+            Bundle args = new Bundle();
+            args.putBoolean(INTENT_KEY_ADMIN_MODE, getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false));
+            fragment.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.preferences_fragment_container, fragment, TAG)
