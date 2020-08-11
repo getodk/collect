@@ -17,6 +17,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
+import org.odk.collect.android.utilities.MediaManager;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -64,7 +65,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics);
+        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics, MediaManager.INSTANCE);
         viewModel.formLoaded(formController);
     }
 

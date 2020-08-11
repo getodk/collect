@@ -25,6 +25,7 @@ import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.utilities.Clock;
 
@@ -41,6 +42,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     private final Clock clock;
     private final FormSaver formSaver;
+    private final MediaManager mediaManager;
 
     private String reason = "";
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
@@ -53,10 +55,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     private final Analytics analytics;
 
-    public FormSaveViewModel(Clock clock, FormSaver formSaver, Analytics analytics) {
+    public FormSaveViewModel(Clock clock, FormSaver formSaver, Analytics analytics, MediaManager mediaManager) {
         this.clock = clock;
         this.formSaver = formSaver;
         this.analytics = analytics;
+        this.mediaManager = mediaManager;
     }
 
     @Override
@@ -253,6 +256,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         return formController.getAuditEventLogger();
     }
 
+    public MediaManager getMediaManager() {
+        return mediaManager;
+    }
+
     public static class SaveResult {
 
         private final State state;
@@ -370,7 +377,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics);
+            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics, MediaManager.INSTANCE);
         }
     }
 }

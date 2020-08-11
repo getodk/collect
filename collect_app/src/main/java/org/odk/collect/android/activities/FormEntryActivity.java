@@ -141,6 +141,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -204,7 +205,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
-        QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
+        QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
+        QuestionMediaManager {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -347,8 +349,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         setupViewModels();
         setContentView(R.layout.form_entry);
 
-        compositeDisposable
-                .add(eventBus
+        compositeDisposable.add(eventBus
                         .register(ReadPhoneStatePermissionRxEvent.class)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -2672,6 +2673,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             t.destroy();
         }
         finish();
+    }
+
+    @Override
+    public void deleteOriginalFile(String questionIndex, String fileName) {
+        formSaveViewModel.getMediaManager().markOriginalFileOrDelete(questionIndex, fileName);
+    }
+
+    @Override
+    public void replaceRecentFile(String questionIndex, String fileName) {
+        formSaveViewModel.getMediaManager().replaceRecentFileForQuestion(questionIndex, fileName);
     }
 
     /**

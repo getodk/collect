@@ -14,6 +14,7 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,11 +27,13 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.FakeScheduler;
+import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
@@ -39,6 +42,8 @@ import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static android.content.Intent.ACTION_GET_CONTENT;
@@ -53,7 +58,6 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -65,7 +69,7 @@ public class AudioWidgetTest {
     private final FakeScheduler fakeScheduler = new FakeScheduler();
     private final FakePermissionUtils fakePermissionUtils = new FakePermissionUtils();
 
-    private TestScreenContextActivity widgetActivity;
+    private TestWidgetActivity widgetActivity;
     private ShadowActivity shadowActivity;
     private FakeWaitingForDataRegistry waitingForDataRegistry;
     private AudioControllerView audioController;
@@ -78,7 +82,7 @@ public class AudioWidgetTest {
 
     @Before
     public void setUp() {
-        widgetActivity = widgetTestActivity();
+        widgetActivity = RobolectricHelpers.buildThemedActivity(TestWidgetActivity.class).get();
         shadowActivity = shadowOf(widgetActivity);
 
         audioController = mock(AudioControllerView.class);
@@ -98,6 +102,12 @@ public class AudioWidgetTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
     }
 
+    @After
+    public void tearDown() {
+        widgetActivity.originalFiles.clear();
+        widgetActivity.recentFiles.clear();
+    }
+
     @Test
     public void usingReadOnlyOption_doesNotShowCaptureAndChooseButtons() {
         AudioWidget widget = createWidget(promptWithReadOnly());
@@ -108,7 +118,6 @@ public class AudioWidgetTest {
     @Test
     public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNullAndHidesAudioPlayer() {
         AudioWidget widget = createWidget(promptWithAnswer(null));
-
         assertThat(widget.getAnswer(), nullValue());
         verify(audioController).hidePlayer();
     }
@@ -148,6 +157,18 @@ public class AudioWidgetTest {
     }
 
     @Test
+    public void deleteFile_setsFileAsideForDeleting() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        AudioWidget widget = createWidget(prompt);
+        widget.deleteFile();
+
+        assertThat(widgetActivity.originalFiles.get("questionIndex"),
+                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+    }
+
+    @Test
     public void clearAnswer_removesAnswerAndHidesPlayer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.clearAnswer();
@@ -155,6 +176,18 @@ public class AudioWidgetTest {
         assertThat(widget.getAnswer(), nullValue());
         assertThat(audioHelper.isMediaStopped, equalTo(true));
         verify(audioController).hidePlayer();
+    }
+
+    @Test
+    public void clearAnswer_setsFileAsideForDeleting() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        AudioWidget widget = createWidget(prompt);
+        widget.clearAnswer();
+
+        assertThat(widgetActivity.originalFiles.get("questionIndex"),
+                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
     }
 
     @Test
@@ -167,10 +200,51 @@ public class AudioWidgetTest {
     }
 
     @Test
+    public void setData_whenFileExists_replacesOriginalFileWithNewFile() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        when(prompt.getIndex()).thenReturn(formIndex);
+        AudioWidget widget = createWidget(prompt);
+        widget.setBinaryData(mockedFile);
+
+        assertThat(widgetActivity.recentFiles.get("questionIndex"), equalTo("newFilePath"));
+    }
+
+    @Test
+    public void setData_whenPromptHasDifferentAudioFile_deletesOriginalAnswer() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        AudioWidget widget = createWidget(prompt);
+        widget.setBinaryData(mockedFile);
+
+        assertThat(widgetActivity.originalFiles.get("questionIndex"),
+                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+    }
+
+    @Test
+    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        when(prompt.getIndex()).thenReturn(formIndex);
+        AudioWidget widget = createWidget(prompt);
+        widget.setBinaryData(mockedFile);
+
+        assertThat(widgetActivity.originalFiles.isEmpty(), equalTo(true));
+    }
+
+    @Test
+    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("newFile.mp3"));
+        when(prompt.getIndex()).thenReturn(formIndex);
+        AudioWidget widget = createWidget(prompt);
+        widget.setBinaryData(mockedFile);
+
+        assertThat(widgetActivity.originalFiles.isEmpty(), equalTo(true));
+    }
+
+    @Test
     public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.setBinaryData(new File("newFile.mp3"));
-
         assertThat(widget.getAnswer().getDisplayText(), equalTo(FILE_PATH));
     }
 
@@ -328,13 +402,28 @@ public class AudioWidgetTest {
         return (new File(instanceFolderPath + File.separator + answer.getDisplayText())).getAbsolutePath();
     }
 
-    public static class FakeAudioHelper extends AudioHelper {
+    private static class TestWidgetActivity extends TestScreenContextActivity implements QuestionMediaManager {
+        Map<String, String> originalFiles = new HashMap<>();
+        Map<String, String> recentFiles = new HashMap<>();
+
+        @Override
+        public void deleteOriginalFile(String questionIndex, String fileName) {
+            originalFiles.put(questionIndex, fileName);
+        }
+
+        @Override
+        public void replaceRecentFile(String questionIndex, String fileName) {
+            recentFiles.put(questionIndex, fileName);
+        }
+    }
+
+    private static class FakeAudioHelper extends AudioHelper {
         public AudioControllerView audioController;
         public Clip clip;
 
         public boolean isMediaStopped;
 
-        public FakeAudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, Supplier<MediaPlayer> mediaPlayerFactory) {
+        FakeAudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, Supplier<MediaPlayer> mediaPlayerFactory) {
             super(activity, lifecycleOwner, scheduler, mediaPlayerFactory);
             isMediaStopped = false;
         }
