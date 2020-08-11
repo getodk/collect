@@ -2,6 +2,7 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.preference.CheckBoxPreference;
@@ -13,7 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.formmanagement.FormUpdateMode.MANUAL;
 import static org.odk.collect.android.formmanagement.FormUpdateMode.MATCH_EXACTLY;
 import static org.odk.collect.android.formmanagement.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY;
@@ -21,6 +24,7 @@ import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 @RunWith(AndroidJUnit4.class)
 public class FormManagementPreferencesTest {
@@ -88,6 +92,108 @@ public class FormManagementPreferencesTest {
         scenario.onFragment(f -> {
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(false));
+        });
+    }
+
+    @Test
+    public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
+        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOSEND).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_DELETE_AFTER_SEND).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_COMPLETED_DEFAULT).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIGH_RESOLUTION).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_IMAGE_SIZE).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_GUIDANCE_HINT).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_INSTANCE_SYNC).isVisible(), equalTo(true));
+        });
+    }
+
+    @Test
+    public void visiblePreferences_shouldBeVisibleIfOpenedFromAdminPreferences() {
+        Bundle args = new Bundle();
+        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+
+        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class, args);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOSEND).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_DELETE_AFTER_SEND).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_COMPLETED_DEFAULT).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIGH_RESOLUTION).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_IMAGE_SIZE).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_GUIDANCE_HINT).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_INSTANCE_SYNC).isVisible(), equalTo(true));
+        });
+    }
+
+    @Test
+    public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOSEND, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_IMAGE_SIZE, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+
+        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOSEND), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_DELETE_AFTER_SEND), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_COMPLETED_DEFAULT), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIGH_RESOLUTION), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_IMAGE_SIZE), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_GUIDANCE_HINT), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_INSTANCE_SYNC), nullValue());
+        });
+    }
+
+    @Test
+    public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_AUTOSEND, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_IMAGE_SIZE, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+
+        Bundle args = new Bundle();
+        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+
+        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class, args);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOSEND).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_DELETE_AFTER_SEND).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_COMPLETED_DEFAULT).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_HIGH_RESOLUTION).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_IMAGE_SIZE).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_GUIDANCE_HINT).isVisible(), equalTo(true));
+            assertThat(fragment.findPreference(GeneralKeys.KEY_INSTANCE_SYNC).isVisible(), equalTo(true));
         });
     }
 }

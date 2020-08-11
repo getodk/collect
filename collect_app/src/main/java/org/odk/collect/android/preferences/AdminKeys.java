@@ -38,17 +38,17 @@ public final class AdminKeys {
     static final String KEY_MAPS                                = "maps";
 
     private static final String KEY_FORM_UPDATE_MODE            = "form_update_mode";
-    private static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
-    private static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
-    private static final String KEY_HIDE_OLD_FORM_VERSIONS      = "hide_old_form_versions";
-    private static final String KEY_AUTOSEND                    = "change_autosend";
-    private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
-    private static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
-    private static final String KEY_CONSTRAINT_BEHAVIOR         = "change_constraint_behavior";
-    private static final String KEY_HIGH_RESOLUTION             = "high_resolution";
-    private static final String KEY_IMAGE_SIZE                  = "image_size";
-    private static final String KEY_GUIDANCE_HINT               = "guidance_hint";
-    private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
+    public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
+    public static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
+    public static final String KEY_HIDE_OLD_FORM_VERSIONS      = "hide_old_form_versions";
+    public static final String KEY_AUTOSEND                    = "change_autosend";
+    public static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
+    public static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
+    public static final String KEY_CONSTRAINT_BEHAVIOR         = "change_constraint_behavior";
+    public static final String KEY_HIGH_RESOLUTION             = "high_resolution";
+    public static final String KEY_IMAGE_SIZE                  = "image_size";
+    public static final String KEY_GUIDANCE_HINT               = "guidance_hint";
+    public static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
     private static final String KEY_ANALYTICS                   = "analytics";
 
