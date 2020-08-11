@@ -142,12 +142,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     removeDisabledPrefs();
                 }
 
-                switch (Protocol.parse(getActivity(), (String) newValue)) {
-                    case GOOGLE:
-                        preferencesProvider.getGeneralSharedPreferences().edit()
-                                .putString(KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(getActivity()))
-                                .apply();
-                        break;
+                if (Protocol.parse(getActivity(), (String) newValue) == Protocol.GOOGLE) {
+                    preferencesProvider.getGeneralSharedPreferences().edit()
+                            .putString(KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(getActivity()))
+                            .apply();
                 }
             }
             return true;
