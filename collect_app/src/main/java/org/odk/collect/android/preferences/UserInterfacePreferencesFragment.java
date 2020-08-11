@@ -21,14 +21,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -73,16 +70,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
         initFontSizePref();
         initLanguagePrefs();
         initSplashPrefs();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        FragmentActivity activity = getActivity();
-        if (activity instanceof CollectAbstractActivity) {
-            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
-        }
     }
 
     private void initThemePrefs() {

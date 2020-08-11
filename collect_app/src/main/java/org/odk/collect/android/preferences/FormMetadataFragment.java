@@ -6,13 +6,11 @@ import android.text.TextUtils;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.PropertyManager;
@@ -63,11 +61,6 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         deviceIDPreference = findPreference(PROPMGR_DEVICE_ID);
         simSerialPrererence = findPreference(PROPMGR_SIM_SERIAL);
         subscriberIDPreference = findPreference(PROPMGR_SUBSCRIBER_ID);
-
-        FragmentActivity activity = getActivity();
-        if (activity instanceof CollectAbstractActivity) {
-            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
-        }
     }
 
     @Override
@@ -89,11 +82,6 @@ public class FormMetadataFragment extends BasePreferenceFragment {
                 public void denied() {
                 }
             });
-        }
-
-        FragmentActivity activity = getActivity();
-        if (activity instanceof CollectAbstractActivity) {
-            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
         }
     }
 
