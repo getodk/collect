@@ -2,9 +2,9 @@ package org.odk.collect.android.widgets.utilities;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.FormIndex;
 import org.joda.time.DateTime;
@@ -27,10 +27,8 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -48,6 +46,10 @@ import timber.log.Timber;
 
 public class DateTimeWidgetUtils {
     public static final String DATE = "date";
+    public static final String TIME = "time";
+    public static final String DIALOG_THEME = "dialog_theme";
+    public static final String DATE_PICKER_DETAILS = "date_picker_details";
+    public static final String FORM_INDEX = "form_index";
 
     public static void setWidgetWaitingForData(FormIndex formIndex) {
         FormController formController = Collect.getInstance().getFormController();
@@ -190,23 +192,25 @@ public class DateTimeWidgetUtils {
 
     public void showTimePickerDialog(Context context, LocalDateTime dateTime) {
         ThemeUtils themeUtils = new ThemeUtils(context);
-        DateTimeViewModel viewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
 
-        viewModel.dialogTheme = themeUtils.getHoloDialogTheme();
-        viewModel.localDateTime = dateTime;
-        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, ((AppCompatActivity) context).getSupportFragmentManager());
+        Bundle bundle = new Bundle();
+        bundle.putInt(DIALOG_THEME, themeUtils.getHoloDialogTheme());
+        bundle.putSerializable(TIME, dateTime);
+
+        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
     }
 
     public void showDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails,
                                             LocalDateTime date) {
         ThemeUtils themeUtils = new ThemeUtils(context);
-        DateTimeViewModel viewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
 
-        viewModel.dialogTheme = getDatePickerTheme(themeUtils, datePickerDetails);
-        viewModel.localDateTime = date;
-        viewModel.datePickerDetails = datePickerDetails;
-        viewModel.formIndex = formIndex;
-        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), ((ScreenContext) context).getActivity().getSupportFragmentManager());
+        Bundle bundle = new Bundle();
+        bundle.putInt(DIALOG_THEME, getDatePickerTheme(themeUtils, datePickerDetails));
+        bundle.putSerializable(DATE, date);
+        bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
+        bundle.putSerializable(FORM_INDEX, formIndex);
+
+        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, ((AppCompatActivity) context).getSupportFragmentManager());
     }
 
     private static Class getClass(DatePickerDetails.DatePickerType datePickerType) {
