@@ -79,27 +79,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
-            PreferenceFragmentCompat basePreferenceFragment = null;
-            switch (preference.getKey()) {
-                case "protocol":
-                    basePreferenceFragment = new ServerPreferencesFragment();
-                    break;
-                case "user_interface":
-                    basePreferenceFragment =  new UserInterfacePreferencesFragment();
-                    break;
-                case "maps":
-                    basePreferenceFragment = new MapsPreferences();
-                    break;
-                case "form_management":
-                    basePreferenceFragment = new FormManagementPreferences();
-                    break;
-                case "user_and_device_identity":
-                    basePreferenceFragment = new IdentityPreferences();
-                    break;
-                case "experimental":
-                    basePreferenceFragment = new ExperimentalPreferencesFragment();
-                    break;
-            }
+            PreferenceFragmentCompat basePreferenceFragment = getPreferenceFragment(preference.getKey());
             if (basePreferenceFragment != null) {
                 basePreferenceFragment.setArguments(getArguments());
                 getActivity().getSupportFragmentManager()
@@ -112,6 +92,25 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         }
 
         return false;
+    }
+
+    private PreferenceFragmentCompat getPreferenceFragment(String preferenceKey) {
+        switch (preferenceKey) {
+            case "protocol":
+                return new ServerPreferencesFragment();
+            case "user_interface":
+                return new UserInterfacePreferencesFragment();
+            case "maps":
+                return new MapsPreferences();
+            case "form_management":
+                return new FormManagementPreferences();
+            case "user_and_device_identity":
+                return new IdentityPreferences();
+            case "experimental":
+                return new ExperimentalPreferencesFragment();
+            default:
+                return null;
+        }
     }
 
     private void setPreferencesVisibility() {
