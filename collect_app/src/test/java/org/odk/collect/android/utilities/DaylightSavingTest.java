@@ -34,7 +34,7 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
-import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.TimeZone;
@@ -56,13 +56,13 @@ public class DaylightSavingTest {
     private static final String CET_TIME_ZONE = "Europe/Warsaw";
 
     private TestScreenContextActivity widgetActivity;
-    private DateTimeWidgetListener listener;
+    private DateTimeWidgetUtils widgetUtils;
     private TimeZone currentTimeZone;
 
     @Before
     public void setUp() {
         widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
-        listener = mock(DateTimeWidgetListener.class);
+        widgetUtils = mock(DateTimeWidgetUtils.class);
         currentTimeZone = TimeZone.getDefault();
     }
 
@@ -117,7 +117,7 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        return new DateWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), listener);
+        return new DateWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), widgetUtils);
     }
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
@@ -133,7 +133,7 @@ public class DaylightSavingTest {
         when(formEntryPromptStub.getFormElement()).thenReturn(iformElementStub);
         when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
 
-        DateTimeWidget dateTimeWidget = new DateTimeWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), listener);
+        DateTimeWidget dateTimeWidget = new DateTimeWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), widgetUtils);
         dateTimeWidget.setData(new LocalDateTime().withDate(year, month, day));
         dateTimeWidget.setData(new DateTime().withTime(hour, minute, 0, 0));
 

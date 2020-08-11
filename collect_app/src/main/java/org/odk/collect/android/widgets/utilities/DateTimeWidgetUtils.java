@@ -30,7 +30,6 @@ import org.odk.collect.android.utilities.MyanmarDateUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 import java.text.DateFormat;
@@ -47,21 +46,8 @@ import mmcalendar.MyanmarDate;
 import mmcalendar.MyanmarDateConverter;
 import timber.log.Timber;
 
-public class DateTimeWidgetUtils implements DateTimeWidgetListener {
-    public static final String FORM_INDEX = "formIndex";
+public class DateTimeWidgetUtils {
     public static final String DATE = "date";
-    public static final String DATE_PICKER_DETAILS = "datePickerDetails";
-    public static final String DATE_PICKER_THEME = "datePickerTheme";
-
-    @Override
-    public void displayDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails, LocalDateTime selectedDate) {
-        showDatePickerDialog(context, formIndex, datePickerDetails, selectedDate);
-    }
-
-    @Override
-    public void displayTimePickerDialog(Context context, LocalDateTime selectedTime) {
-        showTimePickerDialog(context, selectedTime);
-    }
 
     public static void setWidgetWaitingForData(FormIndex formIndex) {
         FormController formController = Collect.getInstance().getFormController();
@@ -202,30 +188,16 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
         return String.format(context.getString(R.string.custom_date), customDateText, gregorianDateText);
     }
 
-    private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {
-        DateFormat dateFormatter;
-        locale = locale == null ? Locale.getDefault() : locale;
-        String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
-        dateFormatter = new SimpleDateFormat(format, locale);
-        return dateFormatter.format(date);
+    public void showTimePickerDialog(Context context, LocalDateTime dateTime) {
+        ThemeUtils themeUtils = new ThemeUtils(context);
+        DateTimeViewModel viewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
+
+        viewModel.dialogTheme = themeUtils.getHoloDialogTheme();
+        viewModel.localDateTime = dateTime;
+        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, ((AppCompatActivity) context).getSupportFragmentManager());
     }
 
-    private static String getDateTimeSkeleton(boolean containsTime, DatePickerDetails datePickerDetails) {
-        String dateSkeleton;
-        if (containsTime) {
-            dateSkeleton = "yyyyMMMdd HHmm";
-        } else {
-            dateSkeleton = "yyyyMMMdd";
-        }
-        if (datePickerDetails.isMonthYearMode()) {
-            dateSkeleton = "yyyyMMM";
-        } else if (datePickerDetails.isYearMode()) {
-            dateSkeleton = "yyyy";
-        }
-        return dateSkeleton;
-    }
-
-    private static void showDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails,
+    public void showDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails,
                                             LocalDateTime date) {
         ThemeUtils themeUtils = new ThemeUtils(context);
         DateTimeViewModel viewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
@@ -256,15 +228,6 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
         }
     }
 
-    private static void showTimePickerDialog(Context context, LocalDateTime dateTime) {
-        ThemeUtils themeUtils = new ThemeUtils(context);
-        DateTimeViewModel viewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
-
-        viewModel.dialogTheme = themeUtils.getHoloDialogTheme();
-        viewModel.localDateTime = dateTime;
-        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, ((AppCompatActivity) context).getSupportFragmentManager());
-    }
-
     private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {
         int theme = 0;
         if (!isBrokenSamsungDevice()) {
@@ -281,5 +244,28 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
     private static boolean isBrokenSamsungDevice() {
         return Build.MANUFACTURER.equalsIgnoreCase("samsung")
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
+    }
+
+    private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {
+        DateFormat dateFormatter;
+        locale = locale == null ? Locale.getDefault() : locale;
+        String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
+        dateFormatter = new SimpleDateFormat(format, locale);
+        return dateFormatter.format(date);
+    }
+
+    private static String getDateTimeSkeleton(boolean containsTime, DatePickerDetails datePickerDetails) {
+        String dateSkeleton;
+        if (containsTime) {
+            dateSkeleton = "yyyyMMMdd HHmm";
+        } else {
+            dateSkeleton = "yyyyMMMdd";
+        }
+        if (datePickerDetails.isMonthYearMode()) {
+            dateSkeleton = "yyyyMMM";
+        } else if (datePickerDetails.isYearMode()) {
+            dateSkeleton = "yyyy";
+        }
+        return dateSkeleton;
     }
 }

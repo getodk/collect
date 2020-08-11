@@ -29,7 +29,6 @@ import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
@@ -39,14 +38,14 @@ import java.util.Date;
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     WidgetAnswerBinding binding;
 
-    private final DateTimeWidgetListener listener;
+    private final DateTimeWidgetUtils widgetUtils;
 
     private LocalDateTime selectedDate;
     private DatePickerDetails datePickerDetails;
 
-    public DateWidget(Context context, QuestionDetails prompt, DateTimeWidgetListener listener) {
+    public DateWidget(Context context, QuestionDetails prompt, DateTimeWidgetUtils widgetUtils) {
         super(context, prompt);
-        this.listener = listener;
+        this.widgetUtils = widgetUtils;
     }
 
     @Override
@@ -62,7 +61,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
             binding.widgetButton.setOnClickListener(v -> {
                 DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
-                listener.displayDatePickerDialog(context, prompt.getIndex(), datePickerDetails, selectedDate);
+                widgetUtils.showDatePickerDialog(context, prompt.getIndex(), datePickerDetails, selectedDate);
             });
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
