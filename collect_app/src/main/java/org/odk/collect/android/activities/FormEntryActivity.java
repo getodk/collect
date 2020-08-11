@@ -2562,7 +2562,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             float diffX = e1.getX() - e2.getX();
             float diffY = e1.getY() - e2.getY();
 
-            if (getGestureAngle(diffX, diffY) > 30) {
+            if (getCurrentViewIfODKView().canScrollVertically() && getGestureAngle(diffX, diffY) > 30) {
                 return false;
             }
 
