@@ -74,18 +74,13 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
     }
 
     void removeDisabledPrefs() {
-        // removes disabled preferences if in general settings
-        if (getActivity() instanceof PreferencesActivity) {
-            Bundle args = getArguments();
-            if (args != null) {
-                final boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
-                if (!adminMode) {
-                    removeAllDisabledPrefs();
-                }
-            } else {
-                removeAllDisabledPrefs();
-            }
+        if (!isInAdminMode() && getActivity() instanceof PreferencesActivity) {
+            removeAllDisabledPrefs();
         }
+    }
+
+    private boolean isInAdminMode() {
+        return getArguments() != null && getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
     }
 
     private void removeAllDisabledPrefs() {
