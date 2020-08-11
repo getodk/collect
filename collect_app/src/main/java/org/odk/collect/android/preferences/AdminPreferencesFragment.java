@@ -17,7 +17,6 @@ package org.odk.collect.android.preferences;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
@@ -93,7 +92,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
                 case KEY_CHANGE_ADMIN_PASSWORD:
                     DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class,
-                            ((AppCompatActivity) getActivity()).getSupportFragmentManager());
+                            getActivity().getSupportFragmentManager());
                     break;
 
                 case KEY_IMPORT_SETTINGS:
@@ -170,17 +169,14 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
             addPreferencesFromResource(R.xml.form_entry_access_preferences);
 
-            findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (((CheckBoxPreference) preference).isChecked()) {
-                        new MovingBackwardsDialog().show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
-                    } else {
-                        SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
-                        onMovingBackwardsEnabled();
-                    }
-                    return true;
+            findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener((preference, newValue) -> {
+                if (((CheckBoxPreference) preference).isChecked()) {
+                    new MovingBackwardsDialog().show(getActivity().getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
+                } else {
+                    SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
+                    onMovingBackwardsEnabled();
                 }
+                return true;
             });
             findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
