@@ -81,7 +81,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
         }
     }
 
-    private boolean isInAdminMode() {
+    protected boolean isInAdminMode() {
         return getArguments() != null && getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
     }
 }

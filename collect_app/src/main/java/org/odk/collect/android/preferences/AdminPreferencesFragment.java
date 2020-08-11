@@ -43,6 +43,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.preferences.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -86,7 +87,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             switch (preference.getKey()) {
                 case "odk_preferences":
                     Intent intent = new Intent(getActivity(), PreferencesActivity.class);
-                    intent.putExtra("adminMode", true);
+                    intent.putExtra(INTENT_KEY_ADMIN_MODE, true);
                     startActivity(intent);
                     break;
 

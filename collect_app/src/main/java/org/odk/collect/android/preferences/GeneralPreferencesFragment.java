@@ -67,7 +67,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         findPreference("user_and_device_identity").setOnPreferenceClickListener(this);
         findPreference("experimental").setOnPreferenceClickListener(this);
 
-        if (!getArguments().getBoolean(INTENT_KEY_ADMIN_MODE)) {
+        if (!isInAdminMode()) {
             setPreferencesVisibility();
         }
 
