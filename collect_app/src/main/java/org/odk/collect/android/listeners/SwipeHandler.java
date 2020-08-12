@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
+import androidx.core.widget.NestedScrollView;
+
+import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -110,7 +113,7 @@ public class SwipeHandler {
                 float diffX = e1.getX() - e2.getX();
                 float diffY = e1.getY() - e2.getY();
 
-                if (odkView != null && odkView.canScrollVertically() && getGestureAngle(diffX, diffY) > 30) {
+                if (odkView != null && canScrollVertically() && getGestureAngle(diffX, diffY) > 30) {
                     return false;
                 }
 
@@ -140,6 +143,13 @@ public class SwipeHandler {
 
         private double getGestureAngle(float diffX, float diffY) {
             return Math.toDegrees(Math.atan2(Math.abs(diffY), Math.abs(diffX)));
+        }
+
+        public boolean canScrollVertically() {
+            NestedScrollView scrollView = odkView.findViewById(R.id.odk_view_container);
+            int screenHeight = scrollView.getHeight();
+            int viewHeight = scrollView.getChildAt(0).getHeight();
+            return viewHeight > screenHeight;
         }
     }
 }

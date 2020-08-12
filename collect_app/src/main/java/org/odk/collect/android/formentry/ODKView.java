@@ -38,7 +38,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -620,12 +619,5 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         if (widgetValueChangedListener != null) {
             widgetValueChangedListener.widgetValueChanged(changedWidget);
         }
-    }
-
-    public boolean canScrollVertically() {
-        NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.odk_view_container);
-        int screenHeight = scrollView.getHeight();
-        int viewHeight = scrollView.getChildAt(0).getHeight();
-        return viewHeight > screenHeight;
     }
 }
