@@ -49,7 +49,6 @@ public class DateTimeWidgetUtils {
     public static final String TIME = "time";
     public static final String DIALOG_THEME = "dialog_theme";
     public static final String DATE_PICKER_DETAILS = "date_picker_details";
-    public static final String FORM_INDEX = "form_index";
 
     public static void setWidgetWaitingForData(FormIndex formIndex) {
         FormController formController = Collect.getInstance().getFormController();
@@ -200,15 +199,13 @@ public class DateTimeWidgetUtils {
         DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
     }
 
-    public void showDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails,
-                                            LocalDateTime date) {
+    public void showDatePickerDialog(Context context, DatePickerDetails datePickerDetails, LocalDateTime date) {
         ThemeUtils themeUtils = new ThemeUtils(context);
 
         Bundle bundle = new Bundle();
         bundle.putInt(DIALOG_THEME, getDatePickerTheme(themeUtils, datePickerDetails));
         bundle.putSerializable(DATE, date);
         bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
-        bundle.putSerializable(FORM_INDEX, formIndex);
 
         DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, ((AppCompatActivity) context).getSupportFragmentManager());
     }

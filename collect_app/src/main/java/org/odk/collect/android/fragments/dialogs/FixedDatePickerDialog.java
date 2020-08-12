@@ -46,6 +46,10 @@ public class FixedDatePickerDialog extends DialogFragment {
         }
 
         viewModel = new ViewModelProvider(this).get(DateTimeViewModel.class);
+        viewModel.dialogTheme = getArguments().getInt(DateTimeWidgetUtils.DIALOG_THEME);
+        viewModel.localDateTime = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
+        viewModel.datePickerDetails = (DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS);
+
         viewModel.getSelectedDate().observe(this, localDateTime -> {
             if (localDateTime != null) {
                 dateChangeListener.onDateChanged(localDateTime);
@@ -57,16 +61,14 @@ public class FixedDatePickerDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        int dialogTheme = getArguments().getInt(DateTimeWidgetUtils.DIALOG_THEME);
-        LocalDateTime date = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
+        DatePickerDialog dialog = new DatePickerDialog(requireActivity(), viewModel.dialogTheme, viewModel.dateSetListener,
+                viewModel.localDateTime.getYear(), viewModel.localDateTime.getMonthOfYear() - 1, viewModel.localDateTime.getDayOfMonth());
 
-        DatePickerDialog dialog = new DatePickerDialog(requireActivity(), dialogTheme, viewModel.dateSetListener,
-                date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
-
-        if (themeUtils.isHoloDialogTheme(dialogTheme)) {
+        if (themeUtils.isHoloDialogTheme(viewModel.dialogTheme)) {
             dialog.setTitle(requireContext().getString(R.string.select_date));
-            fixSpinner(requireContext(), date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
-            hidePickersIfNeeded(dialog, date);
+            fixSpinner(requireContext(), viewModel.localDateTime.getYear(), viewModel.localDateTime.getMonthOfYear() - 1,
+                    viewModel.localDateTime.getDayOfMonth());
+            hidePickersIfNeeded(dialog, viewModel.localDateTime);
 
             Window window = dialog.getWindow();
             if (window != null) {
@@ -81,15 +83,14 @@ public class FixedDatePickerDialog extends DialogFragment {
     }
 
     private void hidePickersIfNeeded(DatePickerDialog dialog, LocalDateTime date) {
-        DatePickerDetails datePickerDetails = (DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS);
-        if (datePickerDetails.isYearMode()) {
+        if (viewModel.datePickerDetails.isYearMode()) {
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);
 
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("month", "id", "android"))
                     .setVisibility(View.GONE);
             dialog.getDatePicker().updateDate(date.getYear(), 1, 1);
-        } else if (datePickerDetails.isMonthYearMode()) {
+        } else if (viewModel.datePickerDetails.isMonthYearMode()) {
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);
             dialog.getDatePicker().updateDate(date.getYear(), date.getMonthOfYear() - 1, 1);

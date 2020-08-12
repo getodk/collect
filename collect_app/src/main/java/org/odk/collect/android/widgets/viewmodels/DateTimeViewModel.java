@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
 public class DateTimeViewModel extends ViewModel {
@@ -23,7 +24,9 @@ public class DateTimeViewModel extends ViewModel {
         setSelectedTime(hourOfDay, minuteOfHour);
     };
 
-    public LocalDateTime date;
+    public LocalDateTime localDateTime;
+    public DatePickerDetails datePickerDetails;
+    public int dialogTheme;
 
     private final MutableLiveData<LocalDateTime> selectedDate = new MutableLiveData<>();
     private final MutableLiveData<DateTime> selectedTime = new MutableLiveData<>();

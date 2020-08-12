@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets.utilities;
 
 import androidx.fragment.app.DialogFragment;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +36,6 @@ public class DateTimeWidgetUtilsTest {
     private DateTimeWidgetUtils dateTimeWidgetUtils;
 
     private FormEntryActivity activity;
-    private FormIndex formIndex;
     private DatePickerDetails datePickerDetails;
     private LocalDateTime date;
 
@@ -76,7 +74,6 @@ public class DateTimeWidgetUtilsTest {
 
         activity = RobolectricHelpers.createThemedActivity(FormEntryActivity.class, 0);
         datePickerDetails = mock(DatePickerDetails.class);
-        formIndex = mock(FormIndex.class);
 
         when(datePickerDetails.getDatePickerType()).thenReturn(GREGORIAN);
         date  = new LocalDateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
@@ -243,7 +240,7 @@ public class DateTimeWidgetUtilsTest {
     private void assertDialogIsShowing(DatePickerDetails.DatePickerType datePickerType, Class dialogClass) {
         when(datePickerDetails.getDatePickerType()).thenReturn(datePickerType);
 
-        dateTimeWidgetUtils.showDatePickerDialog(activity, formIndex, datePickerDetails, date);
+        dateTimeWidgetUtils.showDatePickerDialog(activity, datePickerDetails, date);
         DialogFragment dialog = (DialogFragment) activity.getSupportFragmentManager()
                 .findFragmentByTag(dialogClass.getName());
 

@@ -4,6 +4,7 @@ import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
+import org.joda.time.chrono.GregorianChronology;
 
 public class DateTimeUtils {
 
@@ -23,6 +24,13 @@ public class DateTimeUtils {
                 .withTime(currentTime.getHourOfDay(), currentTime.getMinuteOfHour(), 0, 0);
     }
 
+    public static LocalDateTime getDateAsGregorian(LocalDateTime date) {
+        return skipDaylightSavingGapIfExists(date)
+                .toDateTime()
+                .withChronology(GregorianChronology.getInstance())
+                .toLocalDateTime();
+    }
+
     public static LocalDateTime getSelectedTime(LocalDateTime selectedTime, LocalDateTime currentDate) {
         return new LocalDateTime()
                 .withDate(currentDate.getYear(), currentDate.getMonthOfYear(), currentDate.getDayOfMonth())
@@ -31,6 +39,12 @@ public class DateTimeUtils {
 
     public static TimeData getTimeData(DateTime dateTime) {
         return new TimeData(dateTime.toDate());
+    }
+
+    public static LocalDateTime getDateWithSkippedDaylightSavingGapIfExists(LocalDateTime date) {
+        return skipDaylightSavingGapIfExists(date)
+                .toDateTime()
+                .toLocalDateTime();
     }
 
     public static LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime date) {

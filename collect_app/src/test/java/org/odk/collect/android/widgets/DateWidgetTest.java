@@ -94,8 +94,8 @@ public class DateWidgetTest {
         DateWidget widget = createWidget(prompt);
         widget.binding.widgetButton.performClick();
 
-        verify(widgetUtils).showDatePickerDialog(widgetActivity, prompt.getIndex(),
-                DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
+        verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
+                prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
     }
 
     @Test
@@ -104,8 +104,8 @@ public class DateWidgetTest {
         DateWidget widget = createWidget(prompt);
         widget.binding.widgetButton.performClick();
 
-        verify(widgetUtils).showDatePickerDialog(widgetActivity, prompt.getIndex(),
-                DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), dateAnswer);
+        verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
+                prompt.getQuestion().getAppearanceAttr()), dateAnswer);
     }
 
     @Test

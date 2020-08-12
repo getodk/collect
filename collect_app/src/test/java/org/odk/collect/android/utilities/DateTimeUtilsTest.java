@@ -20,6 +20,7 @@ import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
+import org.joda.time.chrono.GregorianChronology;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -50,6 +51,15 @@ public class DateTimeUtilsTest {
     }
 
     @Test
+    public void getDateAsGregorian_returnsCorrectDateAndTimeData() {
+        LocalDateTime localDateTime = DateTimeUtils.skipDaylightSavingGapIfExists(date)
+                .toDateTime()
+                .withChronology(GregorianChronology.getInstance())
+                .toLocalDateTime();
+        assertEquals(DateTimeUtils.getDateAsGregorian(date), localDateTime);
+    }
+
+    @Test
     public void getSelectedTime_returnsCorrectDateAndTimeData() {
         LocalDateTime localDateTime = new LocalDateTime()
                 .withDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth())
@@ -60,6 +70,14 @@ public class DateTimeUtilsTest {
     @Test
     public void getTimeData_returnsCorrectTime() {
         assertEquals(DateTimeUtils.getTimeData(time.toDateTime()).getDisplayText(), new TimeData(time.toDate()).getDisplayText());
+    }
+
+    @Test
+    public void getDateWithSkippedDaylightSavingGapIfExists_returnsCorrectDateAndTimeData() {
+        LocalDateTime localDateTime = DateTimeUtils.skipDaylightSavingGapIfExists(date)
+                .toDateTime()
+                .toLocalDateTime();
+        assertEquals(DateTimeUtils.getDateWithSkippedDaylightSavingGapIfExists(date), localDateTime);
     }
 
     @Test

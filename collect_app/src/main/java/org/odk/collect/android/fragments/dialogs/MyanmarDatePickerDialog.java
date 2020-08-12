@@ -17,6 +17,7 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     }
 
     private void setUpDatePicker() {
-        MyanmarDate myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(getDateWithSkippedDaylightSavingGapIfExists());
+        MyanmarDate myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(DateTimeUtils.getDateWithSkippedDaylightSavingGapIfExists(getDate()));
 
         setUpDayPicker(MyanmarDateUtils.getFirstMonthDay(myanmarDate), myanmarDate.getMonthDay(), MyanmarDateUtils.getMonthLength(myanmarDate));
         setUpMonthPicker(MyanmarDateUtils.getMonthId(myanmarDate) + 1, MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt()));
