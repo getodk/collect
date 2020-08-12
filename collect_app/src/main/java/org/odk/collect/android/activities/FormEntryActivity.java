@@ -28,11 +28,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -112,6 +109,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -134,7 +132,6 @@ import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -198,7 +195,7 @@ import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
 
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
-        FormLoaderListener, AdvanceToNextListener, OnGestureListener,
+        FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
         CustomDatePickerDialog.CustomDatePickerDialogListener, RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
@@ -254,8 +251,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String formPath;
     private String saveName;
 
-    private GestureDetector gestureDetector;
-
     private Animation inAnimation;
     private Animation outAnimation;
     private View staleView;
@@ -267,8 +262,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String errorMessage;
     private boolean shownAlertDialogIsGroupRepeat;
 
-    // used to limit forward/backward swipes to one per question
-    private boolean beenSwiped;
     private FormLoaderTask formLoaderTask;
 
     private TextView nextButton;
@@ -277,7 +270,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private ODKView odkView;
     private final DestroyableLifecyleOwner odkViewLifecycle = new DestroyableLifecyleOwner();
 
-    private boolean doSwipe = true;
     private String instancePath;
     private String startingXPath;
     private String waitingXPath;
@@ -294,7 +286,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void allowSwiping(boolean doSwipe) {
-        this.doSwipe = doSwipe;
+        swipeHandler.setAllowSwiping(doSwipe);
     }
 
     enum AnimationType {
@@ -325,6 +317,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
+    private SwipeHandler swipeHandler;
+
     /**
      * True if the Android location permission was granted last time it was checked. Allows for
      * detection of location permissions changes while the activity is in the background.
@@ -346,6 +340,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Collect.getInstance().getComponent().inject(this);
         setupViewModels();
         setContentView(R.layout.form_entry);
+        swipeHandler = new SwipeHandler(this);
 
         compositeDisposable
                 .add(eventBus
@@ -358,9 +353,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         errorMessage = null;
 
-        beenSwiped = false;
-
-        gestureDetector = new GestureDetector(this, this);
         questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
@@ -376,13 +368,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
-            beenSwiped = true;
+            swipeHandler.setBeenSwiped(true);
             showNextView();
         });
 
         backButton = findViewById(R.id.form_back_button);
         backButton.setOnClickListener(v -> {
-            beenSwiped = true;
+            swipeHandler.setBeenSwiped(true);
             showPreviousView();
         });
 
@@ -1460,7 +1452,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent mv) {
-        boolean handled = gestureDetector.onTouchEvent(mv);
+        boolean handled = swipeHandler.getGestureDetector().onTouchEvent(mv);
         if (!handled) {
             return super.dispatchTouchEvent(mv);
         }
@@ -1473,7 +1465,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * a question, an ask repeat dialog, or the submit screen. Also saves
      * answers to the data model after checking constraints.
      */
-    private void showNextView() {
+    public void showNextView() {
         state = null;
         try {
             FormController formController = getFormController();
@@ -1487,7 +1479,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             // Helps prevent transition animation at the end of the form (if user swipes left
             // she will stay on the same screen)
             if (originalEvent == event && originalEvent == FormEntryController.EVENT_END_OF_FORM) {
-                beenSwiped = false;
+                swipeHandler.setBeenSwiped(false);
                 return;
             }
 
@@ -1536,7 +1528,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                 if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
                     // A constraint was violated so a dialog should be showing.
-                    beenSwiped = false;
+                    swipeHandler.setBeenSwiped(false);
                     return true;
                 }
 
@@ -1556,7 +1548,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Steps the global {@link FormController} to the previous question and saves answers to the
      * data model without checking constraints.
      */
-    private void showPreviousView() {
+    public void showPreviousView() {
         if (allowMovingBackwards) {
             state = null;
             FormController formController = getFormController();
@@ -1573,7 +1565,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         // If we are the beginning of the form, there is no previous view to show
                         if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
                             event = formController.stepToNextScreenEvent();
-                            beenSwiped = false;
+                            swipeHandler.setBeenSwiped(false);
 
                             if (event != EVENT_PROMPT_NEW_REPEAT) {
                                 // Returning here prevents the same view sliding when user is on the first screen
@@ -1599,7 +1591,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
         } else {
-            beenSwiped = false;
+            swipeHandler.setBeenSwiped(false);
         }
     }
 
@@ -1673,6 +1665,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // adjust which view is in the layout container...
         staleView = currentView;
         currentView = next;
+        swipeHandler.setOdkView(getCurrentViewIfODKView());
         questionHolder.addView(currentView, lp);
         animationCompletionSet = 0;
 
@@ -1748,7 +1741,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * repeat of the current group.
      */
     private void createRepeatDialog() {
-        beenSwiped = true;
+        swipeHandler.setBeenSwiped(true);
 
         // In some cases dialog might be present twice because refreshView() is being called
         // from onResume(). This ensures that we do not preset this modal dialog if it's already
@@ -1763,7 +1756,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         AddRepeatDialog.show(this, getFormController().getLastGroupText(), new AddRepeatDialog.Listener() {
             @Override
             public void onAddRepeatClicked() {
-                beenSwiped = false;
+                swipeHandler.setBeenSwiped(false);
                 shownAlertDialogIsGroupRepeat = false;
                 formEntryViewModel.addRepeat(true);
                 formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
@@ -1771,7 +1764,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             @Override
             public void onCancelClicked() {
-                beenSwiped = false;
+                swipeHandler.setBeenSwiped(false);
                 shownAlertDialogIsGroupRepeat = false;
 
                 // Make sure the error dialog will not disappear.
@@ -1833,7 +1826,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         };
         alertDialog.setCancelable(false);
         alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.ok), errorListener);
-        beenSwiped = false;
+        swipeHandler.setBeenSwiped(false);
         alertDialog.show();
     }
 
@@ -2198,15 +2191,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 createQuitDialog();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                if (event.isAltPressed() && !beenSwiped) {
-                    beenSwiped = true;
+                if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
+                    swipeHandler.setBeenSwiped(true);
                     showNextView();
                     return true;
                 }
                 break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                if (event.isAltPressed() && !beenSwiped) {
-                    beenSwiped = true;
+                if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
+                    swipeHandler.setBeenSwiped(true);
                     showPreviousView();
                     return true;
                 }
@@ -2257,7 +2250,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (getCurrentViewIfODKView() != null) {
             getCurrentViewIfODKView().setFocus(this);
         }
-        beenSwiped = false;
+        swipeHandler.setBeenSwiped(false);
     }
 
     @Override
@@ -2499,8 +2492,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     public void next() {
-        if (!beenSwiped) {
-            beenSwiped = true;
+        if (!swipeHandler.beenSwiped()) {
+            swipeHandler.setBeenSwiped(true);
             showNextView();
         }
     }
@@ -2519,104 +2512,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
         finish();
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                           float velocityY) {
-        FlingRegister.flingDetected();
-
-        // only check the swipe if it's enabled in preferences
-        String navigation = (String) GeneralSharedPreferences.getInstance()
-                .get(GeneralKeys.KEY_NAVIGATION);
-
-        if (e1 != null && e2 != null
-                && navigation.contains(GeneralKeys.NAVIGATION_SWIPE) && doSwipe) {
-            // Looks for user swipes. If the user has swiped, move to the
-            // appropriate screen.
-
-            // for all screens a swipe is left/right of at least
-            // .25" and up/down of less than .25"
-            // OR left/right of > .5"
-            DisplayMetrics dm = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(dm);
-            int xpixellimit = (int) (dm.xdpi * .25);
-            int ypixellimit = (int) (dm.ydpi * .25);
-
-            if (getCurrentViewIfODKView() != null) {
-                if (getCurrentViewIfODKView().suppressFlingGesture(e1, e2,
-                        velocityX, velocityY)) {
-                    return false;
-                }
-            }
-
-            if (beenSwiped) {
-                return false;
-            }
-
-            float diffX = e1.getX() - e2.getX();
-            float diffY = e1.getY() - e2.getY();
-
-            if (getCurrentViewIfODKView().canScrollVertically() && getGestureAngle(diffX, diffY) > 30) {
-                return false;
-            }
-
-            if ((Math.abs(diffX) > xpixellimit && Math.abs(diffY) < ypixellimit) || Math.abs(diffX) > xpixellimit * 2) {
-                beenSwiped = true;
-                if (velocityX > 0) {
-                    if (e1.getX() > e2.getX()) {
-                        Timber.e("showNextView VelocityX is bogus! %f > %f", e1.getX(), e2.getX());
-                        showNextView();
-                    } else {
-                        showPreviousView();
-                    }
-                } else {
-                    if (e1.getX() < e2.getX()) {
-                        Timber.e("showPreviousView VelocityX is bogus! %f < %f", e1.getX(), e2.getX());
-                        showPreviousView();
-                    } else {
-                        showNextView();
-                    }
-                }
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private double getGestureAngle(float diffX, float diffY) {
-        return Math.toDegrees(Math.atan2(Math.abs(diffY), Math.abs(diffX)));
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                            float distanceY) {
-        // The onFling() captures the 'up' event so our view thinks it gets long
-        // pressed.
-        // We don't wnat that, so cancel it.
-        if (currentView != null) {
-            currentView.cancelLongPress();
-        }
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
     }
 
     @Override
