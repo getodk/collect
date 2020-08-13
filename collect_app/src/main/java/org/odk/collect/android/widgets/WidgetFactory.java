@@ -120,17 +120,17 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
-                questionWidget = new ArbitraryFileWidget(context, questionDetails, waitingForDataRegistry);
+                questionWidget = new ArbitraryFileWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals(WidgetAppearanceUtils.SIGNATURE)) {
-                    questionWidget = new SignatureWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new SignatureWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else if (appearance.contains(WidgetAppearanceUtils.ANNOTATE)) {
-                    questionWidget = new AnnotateWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new AnnotateWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else if (appearance.equals(WidgetAppearanceUtils.DRAW)) {
-                    questionWidget = new DrawWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else {
-                    questionWidget = new ImageWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
@@ -140,7 +140,7 @@ public class WidgetFactory {
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(context, questionDetails, waitingForDataRegistry);
+                questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets

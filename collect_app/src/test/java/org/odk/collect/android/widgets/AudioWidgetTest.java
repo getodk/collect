@@ -32,8 +32,8 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.robolectric.RobolectricTestRunner;
@@ -41,8 +41,6 @@ import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static android.content.Intent.ACTION_GET_CONTENT;
@@ -67,11 +65,11 @@ public class AudioWidgetTest {
     private final MediaPlayer mediaPlayer = new MediaPlayer();
     private final FakeScheduler fakeScheduler = new FakeScheduler();
     private final FakePermissionUtils fakePermissionUtils = new FakePermissionUtils();
+    private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
+    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
-    private TestWidgetActivity widgetActivity;
+    private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
-    private QuestionMediaManager questionMediaManager;
-    private FakeWaitingForDataRegistry waitingForDataRegistry;
     private AudioControllerView audioController;
     private FileUtil fileUtil;
     private MediaUtil mediaUtil;
@@ -82,19 +80,16 @@ public class AudioWidgetTest {
 
     @Before
     public void setUp() {
-        widgetActivity = RobolectricHelpers.buildThemedActivity(TestWidgetActivity.class).get();
+        widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
         shadowActivity = shadowOf(widgetActivity);
 
-        questionMediaManager = mock(QuestionMediaManager.class);
         audioController = mock(AudioControllerView.class);
         fileUtil = mock(FileUtil.class);
         mediaUtil = mock(MediaUtil.class);
         activityAvailability = mock(ActivityAvailability.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
-
         audioHelper = new FakeAudioHelper(widgetActivity, new FakeLifecycleOwner(), fakeScheduler, () -> mediaPlayer);
-        waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
         when(mockedFile.exists()).thenReturn(true);
         when(mockedFile.getName()).thenReturn("newFile.mp3");
@@ -159,7 +154,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.deleteFile();
 
-        assertThat(widgetActivity.originalFiles.get("questionIndex"),
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
                 equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
     }
 
@@ -181,7 +176,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.clearAnswer();
 
-        assertThat(widgetActivity.originalFiles.get("questionIndex"),
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
                 equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
     }
 
@@ -201,7 +196,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        assertThat(widgetActivity.recentFiles.get("questionIndex"), equalTo("newFilePath"));
+        assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo("newFilePath"));
     }
 
     @Test
@@ -212,28 +207,22 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        assertThat(widgetActivity.originalFiles.get("questionIndex"),
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
                 equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
     }
 
     @Test
     public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
-        AudioWidget widget = createWidget(prompt);
+        AudioWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(mockedFile);
-
-        assertThat(widgetActivity.originalFiles.isEmpty(), equalTo(true));
+        assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
     public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("newFile.mp3"));
-        when(prompt.getIndex()).thenReturn(formIndex);
-        AudioWidget widget = createWidget(prompt);
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("newFile.mp3")));
         widget.setBinaryData(mockedFile);
-
-        assertThat(widgetActivity.originalFiles.isEmpty(), equalTo(true));
+        assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
@@ -395,25 +384,6 @@ public class AudioWidgetTest {
 
     private String getAudioFilePath(String instanceFolderPath, IAnswerData answer) {
         return (new File(instanceFolderPath + File.separator + answer.getDisplayText())).getAbsolutePath();
-    }
-
-    private static class TestWidgetActivity extends TestScreenContextActivity implements QuestionMediaManager {
-        Map<String, String> originalFiles = new HashMap<>();
-        Map<String, String> recentFiles = new HashMap<>();
-
-        @Override
-        public void markOriginalFileOrDelete(String questionIndex, String fileName) {
-            originalFiles.put(questionIndex, fileName);
-        }
-
-        @Override
-        public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
-            recentFiles.put(questionIndex, fileName);
-        }
-
-        @Override
-        public void saveChanges() {
-        }
     }
 
     private static class FakeAudioHelper extends AudioHelper {

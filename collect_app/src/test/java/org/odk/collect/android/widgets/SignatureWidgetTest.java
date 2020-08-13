@@ -20,6 +20,7 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
+import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import java.io.File;
@@ -47,7 +48,8 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @NonNull
     @Override
     public SignatureWidget createWidget() {
-        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
+        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
     @NonNull

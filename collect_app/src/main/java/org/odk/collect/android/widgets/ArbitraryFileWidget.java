@@ -64,38 +64,35 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     @NonNull
     private MediaUtil mediaUtil;
 
+    private final QuestionMediaManager questionMediaManager;
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    private QuestionMediaManager mediaManager;
     private String binaryName;
 
     Button chooseFileButton;
     TextView chosenFileNameTextView;
     private LinearLayout answerLayout;
 
-    public ArbitraryFileWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry);
+    public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry);
     }
 
-    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, WaitingForDataRegistry waitingForDataRegistry) {
+    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+                        QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
-
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
-
-        binaryName = questionDetails.getPrompt().getAnswerText();
+        this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
 
-        if (context instanceof QuestionMediaManager) {
-            mediaManager = (QuestionMediaManager) context;
-        }
+        binaryName = questionDetails.getPrompt().getAnswerText();
 
         setUpLayout(context);
     }
 
     @Override
     public void deleteFile() {
-        mediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }

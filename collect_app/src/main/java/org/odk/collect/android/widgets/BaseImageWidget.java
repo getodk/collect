@@ -69,15 +69,12 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected ExternalImageCaptureHandler imageCaptureHandler;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private QuestionMediaManager mediaManager;
+    private final QuestionMediaManager questionMediaManager;
 
-    public BaseImageWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
+        this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
-
-        if (context instanceof QuestionMediaManager) {
-            mediaManager = (QuestionMediaManager) context;
-        }
     }
 
     @Override
@@ -98,7 +95,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void deleteFile() {
-        mediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                         getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
@@ -122,7 +119,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
             values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
 
-            mediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
+            questionMediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
