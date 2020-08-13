@@ -41,7 +41,7 @@ public class InstanceUploaderUtilsTest {
     @Test
     public void getUploadResultMessageTest() {
         fillTestDatabase();
-        Assert.assertEquals(getExpectedResultMsg(), InstanceUploaderUtils.getUploadResultMessage(ApplicationProvider.getApplicationContext(), getTestUploadResult()));
+        Assert.assertEquals(getExpectedResultMsg(), InstanceUploaderUtils.getUploadResultMessage(null, ApplicationProvider.getApplicationContext(), getTestUploadResult()));
         instancesDao.deleteInstancesDatabase();
     }
 

@@ -261,7 +261,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         // If the activity is paused or in the process of pausing, don't show the dialog
         if (!isInstanceStateSaved()) {
-            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(this, result));
+            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(instancesRepository, this, result));
         } else {
             // Clean up
             finish();

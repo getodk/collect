@@ -13,6 +13,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -44,10 +45,12 @@ public class InstanceSubmitter {
 
     private final Analytics analytics;
     private final FormsRepository formsRepository;
+    private final InstancesRepository instancesRepository;
 
-    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
+        this.instancesRepository = instancesRepository;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -126,7 +129,7 @@ public class InstanceSubmitter {
             }
         }
 
-        return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(Collect.getInstance(), resultMessagesByInstanceId));
+        return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(instancesRepository, Collect.getInstance(), resultMessagesByInstanceId));
     }
 
     /**

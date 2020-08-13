@@ -1,13 +1,31 @@
 package org.odk.collect.android.utilities;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.InMemFormsRepository;
+import org.odk.collect.android.support.InMemInstancesRepository;
+import org.robolectric.RobolectricTestRunner;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+@RunWith(RobolectricTestRunner.class)
 public class InstanceUploaderUtilsTest {
+    /**
+     * 1000 instances is a big number that would product a very long sql query that would cause
+     * SQLiteException: Expression tree is too large if we didn't split it into parts.
+     */
+    private static final int NUMBER_OF_INSTANCES_TO_SEND = 1000;
+
     @Test
     public void shouldFormBeSentFunction_shouldReturnFalseIfAutoSendNotSpecifiedOnFormLevelAndDisabledInSettings() {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
@@ -114,5 +132,50 @@ public class InstanceUploaderUtilsTest {
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", false), is(true));
+    }
+
+    @Test
+    public void getUploadResultMessageTest() {
+        Assert.assertEquals(getExpectedResultMsg(), InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult()));
+    }
+
+    @Test
+    public void doesUrlRefersToGoogleSheetsFileTest() {
+        assertTrue(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://docs.google.com/spreadsheets/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"));
+        assertFalse(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://drive.google.com/file/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"));
+    }
+
+    private InMemInstancesRepository getTestInstancesRepository() {
+        InMemInstancesRepository instancesRepository = new InMemInstancesRepository();
+
+        for (int i = 1; i <= NUMBER_OF_INSTANCES_TO_SEND; i++) {
+            long time = System.currentTimeMillis();
+            Instance instance = new Instance.Builder()
+                    .id(Long.valueOf(i))
+                    .displayName("InstanceTest")
+                    .jrFormId("instanceTest")
+                    .status(InstanceProviderAPI.STATUS_COMPLETE)
+                    .lastStatusChangeDate(time)
+                    .build();
+
+            instancesRepository.addInstance(instance);
+        }
+        return instancesRepository;
+    }
+
+    private Map<String, String> getTestUploadResult() {
+        Map<String, String> result = new HashMap<>();
+        for (int i = 1; i <= NUMBER_OF_INSTANCES_TO_SEND; i++) {
+            result.put(String.valueOf(i), "full submission upload was successful!");
+        }
+        return result;
+    }
+
+    private String getExpectedResultMsg() {
+        StringBuilder expectedResultMsg = new StringBuilder();
+        for (int i = 1; i <= NUMBER_OF_INSTANCES_TO_SEND; i++) {
+            expectedResultMsg.append("InstanceTest - Success\n\n");
+        }
+        return expectedResultMsg.toString().trim();
     }
 }
