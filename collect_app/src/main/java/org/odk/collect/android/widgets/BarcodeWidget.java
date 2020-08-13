@@ -61,8 +61,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver,
 
         String s = questionDetails.getPrompt().getAnswerText();
         if (s != null) {
-            getBarcodeButton.setText(getContext().getString(
-                    R.string.replace_barcode));
+            getBarcodeButton.setText(getContext().getString(R.string.replace_barcode));
             stringAnswer.setText(s);
         }
         // finish complex layout
@@ -77,18 +76,13 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver,
     public void clearAnswer() {
         stringAnswer.setText(null);
         getBarcodeButton.setText(getContext().getString(R.string.get_barcode));
-
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = stringAnswer.getText().toString();
-        if (s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        String answerString = stringAnswer.getText().toString();
+        return answerString.equals("") ? null : new StringData(answerString);
     }
 
     /**
@@ -98,7 +92,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver,
     public void setBinaryData(Object answer) {
         String response = (String) answer;
         stringAnswer.setText(stripInvalidCharacters(response));
-
         widgetValueChanged();
     }
 

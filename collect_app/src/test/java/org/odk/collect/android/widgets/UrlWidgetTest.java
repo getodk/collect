@@ -34,7 +34,6 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class UrlWidgetTest {
-
     private TestScreenContextActivity spyActivity;
     private CustomTabHelper customTabHelper;
     private OnLongClickListener listener;
