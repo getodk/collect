@@ -22,6 +22,8 @@ import android.database.Cursor;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.Iterator;
@@ -127,5 +129,37 @@ public class InstanceUploaderUtils {
     // https://forum.getodk.org/t/error-400-bad-request-failed-precondition-on-collect-to-google-sheets/19801/5?u=grzesiek2010
     public static boolean doesUrlRefersToGoogleSheetsFile(String url) {
         return !url.contains("drive.google.com/file/d/");
+    }
+
+    /**
+     * Returns whether a form with the specified form_id should be auto-sent given the current
+     * app-level auto-send settings. Returns false if there is no form with the specified form_id.
+     *
+     * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
+     * auto-send settings OR if auto-send is on at the form-level.
+     *
+     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
+     */
+    public static boolean formShouldBeAutoSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
+        Form form = formsRepository.get(jrFormId, jrFormVersion);
+        if (form == null) {
+            return false;
+        }
+        return form.getAutoSend() == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(form.getAutoSend());
+    }
+
+    /**
+     * Returns whether instances of the form specified should be auto-deleted after successful
+     * update.
+     *
+     * If the form explicitly sets the auto-delete property, then it overrides the preference.
+     */
+    public static boolean formShouldBeAutoDeleted(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoDeleteAppSettingEnabled) {
+        Form form = formsRepository.get(jrFormId, jrFormVersion);
+        if (form == null) {
+            return false;
+        }
+
+        return form.getAutoDelete() == null ? isAutoDeleteAppSettingEnabled : Boolean.valueOf(form.getAutoDelete());
     }
 }

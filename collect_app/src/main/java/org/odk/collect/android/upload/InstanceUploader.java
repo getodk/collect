@@ -22,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -30,8 +29,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
 public abstract class InstanceUploader {
     static final String FAIL = "Error: ";
@@ -102,23 +99,5 @@ public abstract class InstanceUploader {
         ContentValues contentValues = new ContentValues();
         contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMISSION_FAILED);
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
-    }
-
-    /**
-     * Returns whether instances of the form specified should be auto-deleted after successful
-     * update.
-     *
-     * If the form explicitly sets the auto-delete property, then it overrides the preference.
-     */
-    public static boolean formShouldBeAutoDeleted(String jrFormId, String jrFormVersion, boolean isAutoDeleteAppSettingEnabled) {
-        String autoDelete = null;
-        try (Cursor cursor = new FormsDao().getFormsCursorForFormIdAndFormVersion(jrFormId, jrFormVersion)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
-                autoDelete = cursor.getString(autoDeleteColumnIndex);
-            }
-        }
-
-        return autoDelete == null ? isAutoDeleteAppSettingEnabled : Boolean.valueOf(autoDelete);
     }
 }

@@ -29,8 +29,8 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,7 +109,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                                 while (results.moveToNext()) {
                                     formId = results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID));
                                     formVersion = results.getString(results.getColumnIndex(InstanceColumns.JR_VERSION));
-                                    if (InstanceServerUploader.formShouldBeAutoDeleted(formId, formVersion, isFormAutoDeleteOptionEnabled)) {
+                                    if (InstanceUploaderUtils.formShouldBeAutoDeleted(formsRepository, formId, formVersion, isFormAutoDeleteOptionEnabled)) {
                                         toDelete.add(results.getLong(results.getColumnIndex(InstanceColumns._ID)));
                                     }
                                 }

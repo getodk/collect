@@ -103,6 +103,7 @@ import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
@@ -140,6 +141,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -325,6 +327,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     FormSubmitManager formSubmitManager;
+
+    @Inject
+    FormsRepository formsRepository;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1879,7 +1884,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         // finalized specifies that it should always be auto-sent.
                         String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
                         String formVersion = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "version");
-                        if (InstanceSubmitter.formShouldBeAutoSent(formId, formVersion, GeneralSharedPreferences.isAutoSendEnabled())) {
+                        if (InstanceUploaderUtils.formShouldBeAutoSent(formsRepository, formId, formVersion, GeneralSharedPreferences.isAutoSendEnabled())) {
                             formSubmitManager.scheduleSubmit();
                         }
                     }
