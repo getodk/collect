@@ -46,8 +46,8 @@ public class CustomTimePickerDialog extends DialogFragment {
         }
 
         viewModel = new ViewModelProvider(this).get(DateTimeViewModel.class);
-        viewModel.localDateTime = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.TIME);
-        viewModel.dialogTheme = getArguments().getInt(DateTimeWidgetUtils.DIALOG_THEME);
+        viewModel.setLocalDateTime((LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.TIME));
+        viewModel.setDialogTheme(getArguments().getInt(DateTimeWidgetUtils.DIALOG_THEME));
 
         viewModel.getSelectedTime().observe(this, dateTime -> {
             timeChangeListener.onTimeChanged(dateTime);
@@ -57,11 +57,11 @@ public class CustomTimePickerDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        TimePickerDialog dialog = new TimePickerDialog(requireContext(), viewModel.dialogTheme, viewModel.timeSetListener,
-                viewModel.localDateTime.getHourOfDay(), viewModel.localDateTime.getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
+        TimePickerDialog dialog = new TimePickerDialog(requireContext(), viewModel.getDialogTheme(), viewModel.getTimeSetListener(),
+                viewModel.getLocalDateTime().getHourOfDay(), viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
         dialog.setTitle(requireContext().getString(R.string.select_time));
-        fixSpinner(requireContext(), viewModel.localDateTime.getHourOfDay(), viewModel.localDateTime.getMinuteOfHour(),
+        fixSpinner(requireContext(), viewModel.getLocalDateTime().getHourOfDay(), viewModel.getLocalDateTime().getMinuteOfHour(),
                 DateFormat.is24HourFormat(requireContext()));
 
         Window window = dialog.getWindow();

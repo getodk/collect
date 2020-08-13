@@ -64,7 +64,7 @@ public class CopticDatePickerDialogTest {
     @Test
     public void settingDateInDatePicker_changesDateShownInTextView() {
         dialogFragment.show(fragmentManager, "TAG");
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("30 बैशाख 2077 (2020May12)");
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("4 Pashons 1736 (2020May12)");
     }
 
     @Test
