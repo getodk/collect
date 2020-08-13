@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.PropertyManager;
@@ -35,15 +35,16 @@ import java.util.Map;
 import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class InstanceSubmitter {
 
     private final Analytics analytics;
+    private final FormsRepository formsRepository;
 
-    public InstanceSubmitter(Analytics analytics) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository) {
         this.analytics = analytics;
+        this.formsRepository = formsRepository;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -98,7 +99,7 @@ public class InstanceSubmitter {
                 // TODO: this could take some time so might be better to do in a separate process,
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
-                if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(), instance.getJrVersion(),
+                if (InstanceUploaderUtils.formShouldBeAutoDeleted(formsRepository, instance.getJrFormId(), instance.getJrVersion(),
                         (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
                     Uri deleteForm = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instance.getId().toString());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
@@ -130,35 +131,11 @@ public class InstanceSubmitter {
 
         List<Instance> toUpload = new ArrayList<>();
         for (Instance instance : allFinalized) {
-            if (formShouldBeAutoSent(instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
+            if (InstanceUploaderUtils.formShouldBeAutoSent(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
                 toUpload.add(instance);
             }
         }
 
         return toUpload;
-    }
-
-    /**
-     * Returns whether a form with the specified form_id should be auto-sent given the current
-     * app-level auto-send settings. Returns false if there is no form with the specified form_id.
-     *
-     * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
-     * auto-send settings OR if auto-send is on at the form-level.
-     *
-     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
-     */
-    public static boolean formShouldBeAutoSent(String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormIdAndFormVersion(jrFormId, jrFormVersion);
-        String formLevelAutoSend = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoSendColumnIndex = cursor.getColumnIndex(AUTO_SEND);
-                formLevelAutoSend = cursor.getString(autoSendColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return formLevelAutoSend == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(formLevelAutoSend);
     }
 }
