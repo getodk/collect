@@ -28,8 +28,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.MediaManager;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 
 import java.util.List;
 
@@ -96,7 +94,6 @@ public class QuitFormDialogFragment extends DialogFragment {
                 }
 
                 viewModel.removeTempInstance();
-                viewModel.getMediaManager().revertChanges();
 
                 String action = getActivity().getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {

@@ -45,7 +45,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
@@ -99,7 +98,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void deleteFile() {
-        mediaManager.deleteOriginalFile(getFormEntryPrompt().getIndex().toString(),
+        mediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                         getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
@@ -123,7 +122,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
             values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
 
-            mediaManager.replaceRecentFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
+            mediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);

@@ -25,27 +25,29 @@ import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 
 import timber.log.Timber;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
-public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController {
-
+public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController, QuestionMediaManager {
     private final Clock clock;
     private final FormSaver formSaver;
-    private final MediaManager mediaManager;
 
-    private String reason = "";
+    private final Map<String, String> originalFiles = new HashMap<>();
+    private final Map<String, String> recentFiles = new HashMap<>();
+
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
+    private String reason = "";
 
     @Nullable
     private FormController formController;
@@ -55,11 +57,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     private final Analytics analytics;
 
-    public FormSaveViewModel(Clock clock, FormSaver formSaver, Analytics analytics, MediaManager mediaManager) {
+    public FormSaveViewModel(Clock clock, FormSaver formSaver, Analytics analytics) {
         this.clock = clock;
         this.formSaver = formSaver;
         this.analytics = analytics;
-        this.mediaManager = mediaManager;
     }
 
     @Override
@@ -126,6 +127,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 FileUtils.purgeMediaPath(instanceFolder);
             }
         }
+        releaseMediaManager();
     }
 
     @Nullable
@@ -171,7 +173,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private void saveToDisk(SaveRequest saveRequest) {
-        saveTask = new SaveTask(saveRequest, formSaver, formController, mediaManager, new SaveTask.Listener() {
+        saveTask = new SaveTask(saveRequest, formSaver, formController, this, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
@@ -256,8 +258,38 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         return formController.getAuditEventLogger();
     }
 
-    public MediaManager getMediaManager() {
-        return mediaManager;
+    @Override
+    public void markOriginalFileOrDelete(String questionIndex, String fileName) {
+        if (questionIndex != null && fileName != null) {
+            if (originalFiles.containsKey(questionIndex)) {
+                MediaUtils.deleteImageFileFromMediaProvider(fileName);
+            } else {
+                originalFiles.put(questionIndex, fileName);
+            }
+        }
+    }
+
+    @Override
+    public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
+        if (questionIndex != null && fileName != null) {
+            if (recentFiles.containsKey(questionIndex)) {
+                MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
+            }
+            recentFiles.put(questionIndex, fileName);
+        }
+    }
+
+    @Override
+    public void saveChanges() {
+        for (String fileName : originalFiles.values()) {
+            MediaUtils.deleteImageFileFromMediaProvider(fileName);
+        }
+        releaseMediaManager();
+    }
+
+    private void releaseMediaManager() {
+        originalFiles.clear();
+        recentFiles.clear();
     }
 
     public static class SaveResult {
@@ -328,15 +360,15 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         private final Listener listener;
         private final FormController formController;
-        private final MediaManager mediaManager;
+        private final QuestionMediaManager questionMediaManager;
         private final Analytics analytics;
 
-        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaManager mediaManager, Listener listener, Analytics analytics) {
+        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, QuestionMediaManager questionMediaManager, Listener listener, Analytics analytics) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
             this.formController = formController;
-            this.mediaManager = mediaManager;
+            this.questionMediaManager = questionMediaManager;
             this.analytics = analytics;
         }
 
@@ -345,7 +377,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return formSaver.save(saveRequest.uri, formController,
                     saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
-                    this::publishProgress, mediaManager, analytics
+                    this::publishProgress, questionMediaManager, analytics
             );
         }
 
@@ -379,7 +411,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics, new MediaManager());
+            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics);
         }
     }
 }

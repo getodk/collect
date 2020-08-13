@@ -62,6 +62,7 @@ import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -97,6 +98,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
     private final AudioHelper audioHelper;
+    private final QuestionMediaManager questionMediaManager;
 
     public static final String FIELD_LIST = "field-list";
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -111,16 +113,15 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *
-     * @param context         the activity creating this view
+     *  @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
-     *                        form. Used to determine whether to autoplay media.
      */
-    public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
-                   FormEntryCaption[] groups, boolean advancingPage, WaitingForDataRegistry waitingForDataRegistry) {
+    public ODKView(Context context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups,
+                   boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context);
+        this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
 
         getComponent(context).inject(this);
@@ -131,8 +132,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         widgets = new ArrayList<>();
         widgetsList = findViewById(R.id.widgets);
 
-        layout =
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+        layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
         // display which group you are in as well as the question
         setGroupText(groups);
@@ -263,7 +263,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
-        QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride, waitingForDataRegistry);
+        QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(),
+                readOnlyOverride, questionMediaManager, waitingForDataRegistry);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 

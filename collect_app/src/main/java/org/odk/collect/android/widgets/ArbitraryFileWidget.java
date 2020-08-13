@@ -40,7 +40,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -96,7 +95,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
 
     @Override
     public void deleteFile() {
-        mediaManager.deleteOriginalFile(getFormEntryPrompt().getIndex().toString(),
+        mediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }

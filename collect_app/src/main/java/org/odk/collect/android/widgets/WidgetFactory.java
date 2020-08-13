@@ -21,6 +21,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -46,8 +47,8 @@ public class WidgetFactory {
      * @param context          Android context
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
-    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, Context context,
-                                                        boolean readOnlyOverride, WaitingForDataRegistry waitingForDataRegistry) {
+    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, Context context, boolean readOnlyOverride,
+                                                        QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
@@ -136,7 +137,7 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(context, questionDetails, waitingForDataRegistry);
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, waitingForDataRegistry);

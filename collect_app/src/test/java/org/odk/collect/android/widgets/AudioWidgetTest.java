@@ -14,7 +14,6 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,6 +70,7 @@ public class AudioWidgetTest {
 
     private TestWidgetActivity widgetActivity;
     private ShadowActivity shadowActivity;
+    private QuestionMediaManager questionMediaManager;
     private FakeWaitingForDataRegistry waitingForDataRegistry;
     private AudioControllerView audioController;
     private FileUtil fileUtil;
@@ -85,6 +85,7 @@ public class AudioWidgetTest {
         widgetActivity = RobolectricHelpers.buildThemedActivity(TestWidgetActivity.class).get();
         shadowActivity = shadowOf(widgetActivity);
 
+        questionMediaManager = mock(QuestionMediaManager.class);
         audioController = mock(AudioControllerView.class);
         fileUtil = mock(FileUtil.class);
         mediaUtil = mock(MediaUtil.class);
@@ -385,7 +386,7 @@ public class AudioWidgetTest {
 
     public AudioWidget createWidget(FormEntryPrompt prompt) {
         return new AudioWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), fileUtil,
-                mediaUtil, audioController, waitingForDataRegistry, audioHelper, activityAvailability);
+                mediaUtil, audioController, questionMediaManager, waitingForDataRegistry, audioHelper, activityAvailability);
     }
 
     private Clip getAnswerAudioClip(String instanceFolderPath, IAnswerData answer) {
@@ -401,13 +402,17 @@ public class AudioWidgetTest {
         Map<String, String> recentFiles = new HashMap<>();
 
         @Override
-        public void deleteOriginalFile(String questionIndex, String fileName) {
+        public void markOriginalFileOrDelete(String questionIndex, String fileName) {
             originalFiles.put(questionIndex, fileName);
         }
 
         @Override
-        public void replaceRecentFile(String questionIndex, String fileName) {
+        public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
             recentFiles.put(questionIndex, fileName);
+        }
+
+        @Override
+        public void saveChanges() {
         }
     }
 
