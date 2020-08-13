@@ -1,6 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.forms.Form;
@@ -15,8 +14,6 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class InstanceUploaderUtilsTest {
@@ -136,13 +133,13 @@ public class InstanceUploaderUtilsTest {
 
     @Test
     public void getUploadResultMessageTest() {
-        Assert.assertEquals(getExpectedResultMsg(), InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult()));
+        assertThat(getExpectedResultMsg(), is(InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult())));
     }
 
     @Test
     public void doesUrlRefersToGoogleSheetsFileTest() {
-        assertTrue(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://docs.google.com/spreadsheets/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"));
-        assertFalse(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://drive.google.com/file/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"));
+        assertThat(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://docs.google.com/spreadsheets/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"), is(true));
+        assertThat(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://drive.google.com/file/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"), is(false));
     }
 
     private InMemInstancesRepository getTestInstancesRepository() {
