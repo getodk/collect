@@ -10,8 +10,6 @@ public interface FormsRepository {
 
     Uri save(Form form);
 
-    boolean contains(String jrFormId);
-
     List<Form> getAll();
 
     @Nullable
@@ -19,6 +17,8 @@ public interface FormsRepository {
 
     @Nullable
     Form get(String jrFormId, @Nullable String jrVersion);
+
+    List<Form> getByJrFormIdNotDeleted(String jrFormId);
 
     @Nullable
     Form getByMd5Hash(String hash);

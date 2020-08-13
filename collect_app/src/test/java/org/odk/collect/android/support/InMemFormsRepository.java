@@ -11,6 +11,8 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import static java.util.stream.Collectors.toList;
+
 public class InMemFormsRepository implements FormsRepository {
 
     private final List<Form> forms = new ArrayList<>();
@@ -22,8 +24,8 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public boolean contains(String jrFormId) {
-        return forms.stream().anyMatch(f -> f.getJrFormId().equals(jrFormId));
+    public List<Form> getByJrFormIdNotDeleted(String jrFormId) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && !f.isDeleted()).collect(toList());
     }
 
     @Override

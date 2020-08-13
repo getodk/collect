@@ -55,7 +55,22 @@ public class ServerFormsDetailsFetcherTest {
     }
 
     @Test
-    public void whenNoFormsExist_isNew() throws Exception {
+    public void whenNoFormsExist_isNotOnDevice() throws Exception {
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(0).isNotOnDevice(), is(true));
+        assertThat(serverFormDetails.get(1).isNotOnDevice(), is(true));
+    }
+
+    @Test
+    public void whenAFormIsSoftDeleted_isNotOnDevice() throws Exception {
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("form-1")
+                .jrVersion("server")
+                .md5Hash("form-1-hash")
+                .deleted(true)
+                .build());
+
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(0).isNotOnDevice(), is(true));
         assertThat(serverFormDetails.get(1).isNotOnDevice(), is(true));
