@@ -171,7 +171,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private void saveToDisk(SaveRequest saveRequest) {
-        saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
+        saveTask = new SaveTask(saveRequest, formSaver, formController, mediaManager, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
@@ -328,13 +328,15 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         private final Listener listener;
         private final FormController formController;
+        private final MediaManager mediaManager;
         private final Analytics analytics;
 
-        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener, Analytics analytics) {
+        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaManager mediaManager, Listener listener, Analytics analytics) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
             this.formController = formController;
+            this.mediaManager = mediaManager;
             this.analytics = analytics;
         }
 
@@ -343,7 +345,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return formSaver.save(saveRequest.uri, formController,
                     saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
-                    this::publishProgress, analytics
+                    this::publishProgress, mediaManager, analytics
             );
         }
 
@@ -377,7 +379,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics, MediaManager.INSTANCE);
+            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics, new MediaManager());
         }
     }
 }

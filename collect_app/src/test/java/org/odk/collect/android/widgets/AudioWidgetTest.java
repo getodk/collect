@@ -102,12 +102,6 @@ public class AudioWidgetTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
     }
 
-    @After
-    public void tearDown() {
-        widgetActivity.originalFiles.clear();
-        widgetActivity.recentFiles.clear();
-    }
-
     @Test
     public void usingReadOnlyOption_doesNotShowCaptureAndChooseButtons() {
         AudioWidget widget = createWidget(promptWithReadOnly());

@@ -47,6 +47,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -67,11 +68,17 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     protected ImageClickHandler imageClickHandler;
     protected ExternalImageCaptureHandler imageCaptureHandler;
+
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private QuestionMediaManager mediaManager;
 
     public BaseImageWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
         this.waitingForDataRegistry = waitingForDataRegistry;
+
+        if (context instanceof QuestionMediaManager) {
+            mediaManager = (QuestionMediaManager) context;
+        }
     }
 
     @Override
@@ -92,9 +99,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void deleteFile() {
-        MediaManager
-                .INSTANCE
-                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        mediaManager.deleteOriginalFile(getFormEntryPrompt().getIndex().toString(),
                         getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
@@ -118,9 +123,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
             values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
 
-            MediaManager
-                    .INSTANCE
-                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
+            mediaManager.replaceRecentFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);

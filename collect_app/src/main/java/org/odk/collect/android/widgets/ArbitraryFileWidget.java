@@ -42,6 +42,7 @@ import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
@@ -64,8 +65,10 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     @NonNull
     private MediaUtil mediaUtil;
 
-    private String binaryName;
     private final WaitingForDataRegistry waitingForDataRegistry;
+
+    private QuestionMediaManager mediaManager;
+    private String binaryName;
 
     Button chooseFileButton;
     TextView chosenFileNameTextView;
@@ -84,15 +87,17 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         binaryName = questionDetails.getPrompt().getAnswerText();
         this.waitingForDataRegistry = waitingForDataRegistry;
 
+        if (context instanceof QuestionMediaManager) {
+            mediaManager = (QuestionMediaManager) context;
+        }
+
         setUpLayout(context);
     }
 
     @Override
     public void deleteFile() {
-        MediaManager
-                .INSTANCE
-                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
+        mediaManager.deleteOriginalFile(getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 

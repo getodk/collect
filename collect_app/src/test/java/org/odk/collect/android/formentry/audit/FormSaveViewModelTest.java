@@ -65,7 +65,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics, MediaManager.INSTANCE);
+        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics, new MediaManager());
         viewModel.formLoaded(formController);
     }
 
@@ -91,10 +91,10 @@ public class FormSaveViewModelTest {
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(formSaver).save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any());
+        verify(formSaver).save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any(), any());
 
         Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable(); // Run any other queued tasks
-        verify(formSaver, times(1)).save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any());
+        verify(formSaver, times(1)).save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any(), any());
     }
 
     @Test
@@ -383,7 +383,7 @@ public class FormSaveViewModelTest {
         saveToDiskResult.setSaveResult(result, true);
         saveToDiskResult.setSaveErrorMessage(message);
 
-        when(formSaver.save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any())).thenReturn(saveToDiskResult);
+        when(formSaver.save(any(), any(), anyBoolean(), anyBoolean(), any(), any(), any(), any())).thenReturn(saveToDiskResult);
         Robolectric.getBackgroundThreadScheduler().runOneTask();
     }
 }

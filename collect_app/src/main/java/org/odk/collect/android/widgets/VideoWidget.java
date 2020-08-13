@@ -47,6 +47,7 @@ import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
@@ -81,6 +82,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private MediaUtil mediaUtil;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private QuestionMediaManager mediaManager;
 
     @NonNull
     private FileUtil fileUtil;
@@ -102,6 +104,10 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
         this.waitingForDataRegistry = waitingForDataRegistry;
+
+        if (context instanceof QuestionMediaManager) {
+            mediaManager = (QuestionMediaManager) context;
+        }
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
@@ -137,9 +143,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     @Override
     public void deleteFile() {
-        MediaManager
-                .INSTANCE
-                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        mediaManager.deleteOriginalFile(getFormEntryPrompt().getIndex().toString(),
                         getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
@@ -200,9 +204,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
             values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Video.Media.DATA, newVideo.getAbsolutePath());
 
-            MediaManager
-                    .INSTANCE
-                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+            mediaManager.replaceRecentFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
 
             Uri videoURI = getContext().getContentResolver().insert(
                     Video.Media.EXTERNAL_CONTENT_URI, values);

@@ -24,11 +24,9 @@ import java.util.Map;
  * remember an original media file answer (no matter how many times this answer is replaced), in order
  * to be able to restore the original answer in case of ignoring changes.
  */
-public enum MediaManager {
-    INSTANCE;
-
-    Map<String, String> originalFiles = new HashMap<>();
-    Map<String, String> recentFiles = new HashMap<>();
+public class MediaManager {
+    private Map<String, String> originalFiles = new HashMap<>();
+    private Map<String, String> recentFiles = new HashMap<>();
 
     public void markOriginalFileOrDelete(String questionIndex, String fileName) {
         if (questionIndex != null && fileName != null) {
