@@ -94,7 +94,7 @@ public class ServerFormsDetailsFetcher {
     }
 
     private boolean isThisFormAlreadyDownloaded(String formId) {
-        return formsRepository.contains(formId);
+        return !formsRepository.getByJrFormIdNotDeleted(formId).isEmpty();
     }
 
     private ManifestFile getManifestFile(FormListApi formListAPI, String manifestUrl) {

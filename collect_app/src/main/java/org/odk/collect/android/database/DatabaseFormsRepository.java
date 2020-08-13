@@ -24,10 +24,8 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_
 public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
-    public boolean contains(String jrFormId) {
-        try (Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId)) {
-            return cursor != null && cursor.getCount() > 0;
-        }
+    public List<Form> getByJrFormIdNotDeleted(String jrFormId) {
+        return queryForForms(JR_FORM_ID + "=? AND " + DELETED + "=0", new String[]{jrFormId});
     }
 
     @Override
@@ -82,6 +80,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE, form.getAutoDelete());
         v.put(FormsProviderAPI.FormsColumns.AUTO_SEND, form.getAutoSend());
         v.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
+        v.put(FormsProviderAPI.FormsColumns.DELETED, form.isDeleted());
         return new FormsDao().saveForm(v);
     }
 
@@ -125,6 +124,13 @@ public class DatabaseFormsRepository implements FormsRepository {
     private Form queryForForm(String selection, String[] selectionArgs) {
         try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
             return getFormOrNull(cursor);
+        }
+    }
+
+    @Nullable
+    private List<Form> queryForForms(String selection, String[] selectionArgs) {
+        try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
+            return new FormsDao().getFormsFromCursor(cursor);
         }
     }
 
