@@ -140,7 +140,7 @@ public class InstanceUploaderUtils {
      *
      * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
      */
-    public static boolean formShouldBeAutoSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
+    public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
         Form form = formsRepository.get(jrFormId, jrFormVersion);
         if (form == null) {
             return false;
@@ -154,7 +154,7 @@ public class InstanceUploaderUtils {
      *
      * If the form explicitly sets the auto-delete property, then it overrides the preference.
      */
-    public static boolean formShouldBeAutoDeleted(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoDeleteAppSettingEnabled) {
+    public static boolean shouldFormBeDeleted(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoDeleteAppSettingEnabled) {
         Form form = formsRepository.get(jrFormId, jrFormVersion);
         if (form == null) {
             return false;
