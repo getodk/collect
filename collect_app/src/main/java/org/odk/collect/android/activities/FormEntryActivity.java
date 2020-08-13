@@ -1885,8 +1885,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (result.getRequest().shouldFinalize()) {
                         // Request auto-send if app-wide auto-send is enabled or the form that was just
                         // finalized specifies that it should always be auto-sent.
-                        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-                        String formVersion = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "version");
+                        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue(null, "id");
+                        String formVersion = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue(null, "version");
                         if (InstanceUploaderUtils.shouldFormBeSent(formsRepository, formId, formVersion, GeneralSharedPreferences.isAutoSendEnabled())) {
                             formSubmitManager.scheduleSubmit();
                         }
