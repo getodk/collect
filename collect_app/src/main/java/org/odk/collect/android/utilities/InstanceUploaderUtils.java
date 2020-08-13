@@ -50,7 +50,7 @@ public class InstanceUploaderUtils {
         Iterator<String> it = keys.iterator();
         StringBuilder message = new StringBuilder();
 
-        while(it.hasNext()){
+        while (it.hasNext()) {
             Instance instance = instancesRepository.get(Long.valueOf(it.next()));
             message.append(getUploadResultMessageForInstances(instance, result));
         }
