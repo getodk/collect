@@ -29,6 +29,27 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void softDelete_marksDeletedAsTrue() {
+        FormsRepository formsRepository = buildSubject();
+        formsRepository.save(buildForm(1L, "1", null)
+                .build());
+
+        formsRepository.softDelete(1L);
+        assertThat(formsRepository.get(1L).isDeleted(), is(true));
+    }
+
+    @Test
+    public void restore_marksDeletedAsFalse() {
+        FormsRepository formsRepository = buildSubject();
+        formsRepository.save(buildForm(1L, "1", null)
+                .deleted(true)
+                .build());
+
+        formsRepository.restore(1L);
+        assertThat(formsRepository.get(1L).isDeleted(), is(false));
+    }
+
+    @Test
     public void getByJrFormIdNotDeleted_doesNotReturnDeletedForms() {
         FormsRepository formsRepository = buildSubject();
         formsRepository.save(buildForm(1L, "1", "deleted")
