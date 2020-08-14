@@ -55,12 +55,13 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.util.Collection;
 
 import timber.log.Timber;
 
@@ -77,10 +78,10 @@ public class SaveFormToDisk {
     private final boolean saveAndExit;
     private final boolean shouldFinalize;
     private final FormController formController;
-    private final QuestionMediaManager questionMediaManager;
     private Uri uri;
     private String instanceName;
     private final Analytics analytics;
+    private final Collection<String> files;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -88,14 +89,14 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, QuestionMediaManager questionMediaManager, Analytics analytics) {
+                          Uri uri, Analytics analytics, Collection<String> files) {
         this.formController = formController;
         this.uri = uri;
-        this.questionMediaManager = questionMediaManager;
         this.saveAndExit = saveAndExit;
         this.shouldFinalize = shouldFinalize;
         this.instanceName = updatedName;
         this.analytics = analytics;
+        this.files = files;
     }
 
     @Nullable
@@ -370,7 +371,9 @@ public class SaveFormToDisk {
         // write out xml
         String instancePath = formController.getInstanceFile().getAbsolutePath();
 
-        questionMediaManager.saveChanges();
+        for (String fileName : files) {
+            MediaUtils.deleteImageFileFromMediaProvider(fileName);
+        }
 
         progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_saving_message));
 

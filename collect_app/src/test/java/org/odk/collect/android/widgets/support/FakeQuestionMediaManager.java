@@ -18,8 +18,4 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
     public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
         recentFiles.put(questionIndex, fileName);
     }
-
-    @Override
-    public void saveChanges() {
-    }
 }

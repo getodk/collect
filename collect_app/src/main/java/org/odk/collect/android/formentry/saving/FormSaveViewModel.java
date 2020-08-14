@@ -32,6 +32,8 @@ import org.odk.collect.utilities.Clock;
 import java.io.File;
 
 import timber.log.Timber;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,6 +63,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         this.clock = clock;
         this.formSaver = formSaver;
         this.analytics = analytics;
+    }
+
+    @Override
+    protected void onCleared() {
+        releaseMediaManager();
     }
 
     @Override
@@ -173,7 +180,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private void saveToDisk(SaveRequest saveRequest) {
-        saveTask = new SaveTask(saveRequest, formSaver, formController, this, new SaveTask.Listener() {
+        saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
@@ -182,8 +189,9 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             @Override
             public void onComplete(SaveToDiskResult saveToDiskResult) {
                 handleTaskResult(saveToDiskResult, saveRequest);
+                releaseMediaManager();
             }
-        }, analytics).execute();
+        }, analytics, originalFiles.values()).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
@@ -279,14 +287,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
-    @Override
-    public void saveChanges() {
-        for (String fileName : originalFiles.values()) {
-            MediaUtils.deleteImageFileFromMediaProvider(fileName);
-        }
-        releaseMediaManager();
-    }
-
     private void releaseMediaManager() {
         originalFiles.clear();
         recentFiles.clear();
@@ -360,16 +360,16 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         private final Listener listener;
         private final FormController formController;
-        private final QuestionMediaManager questionMediaManager;
         private final Analytics analytics;
+        private final Collection<String> files;
 
-        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, QuestionMediaManager questionMediaManager, Listener listener, Analytics analytics) {
+        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener, Analytics analytics, Collection<String> files) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
             this.formController = formController;
-            this.questionMediaManager = questionMediaManager;
             this.analytics = analytics;
+            this.files = files;
         }
 
         @Override
@@ -377,7 +377,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return formSaver.save(saveRequest.uri, formController,
                     saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
-                    this::publishProgress, questionMediaManager, analytics
+                    this::publishProgress, analytics, files
             );
         }
 
