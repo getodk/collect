@@ -31,4 +31,6 @@ public interface FormsRepository {
     void softDelete(Long id);
 
     void deleteFormsByMd5Hash(String md5Hash);
+
+    void restore(Long id);
 }

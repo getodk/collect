@@ -77,6 +77,18 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
+    public void restore(Long id) {
+        Form form = forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
+
+        if (form != null) {
+            forms.remove(form);
+            forms.add(new Form.Builder(form)
+                    .deleted(false)
+                    .build());
+        }
+    }
+
+    @Override
     public void deleteFormsByMd5Hash(String md5Hash) {
         throw new UnsupportedOperationException();
     }

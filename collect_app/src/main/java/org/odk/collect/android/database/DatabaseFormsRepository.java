@@ -97,6 +97,13 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
+    public void restore(Long id) {
+        ContentValues values = new ContentValues();
+        values.put(DELETED, 0);
+        new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
+    }
+
+    @Override
     public void deleteFormsByMd5Hash(String md5Hash) {
         FormsDao formsDao = new FormsDao();
         List<String> idsToDelete = new ArrayList<>();
