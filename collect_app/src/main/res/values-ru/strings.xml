@@ -129,8 +129,7 @@
   <string name="font_size">Размер шрифта</string>
   <string name="change_font_size">Размер шрифта</string>
   <string name="form_download_progress">%1$s. Загрузка медиа-файлов: %2$s из %3$s</string>
-  <string name="fetching_manifest">%s. Загрузка манифеста</string>
-  <string name="success">Успешно</string>
+    <string name="success">Успешно</string>
   <string name="failures">Неудачи</string>
   <string name="no_forms_uploaded">Опрос НЕ выгружен</string>
   <string name="upload_results">Результаты выгрузки</string>

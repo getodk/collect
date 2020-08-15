@@ -132,7 +132,6 @@
   <string name="font_size">Wielkość czcionki</string>
   <string name="change_font_size">Wielkość czcionki</string>
   <string name="form_download_progress">%1$s. Pobieram pliki medialne: %2$s z %3$s</string>
-  <string name="fetching_manifest">%s. Pobieram manifest </string>
   <string name="success">Sukces</string>
   <string name="failures">Niepowodzenia</string>
   <string name="no_forms_uploaded">Przykro mi, nie wysłano żadnego formularza.</string>

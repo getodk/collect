@@ -67,7 +67,7 @@ public class NotificationManagerNotifier implements Notifier {
     @Override
     public void onUpdatesAvailable(List<ServerFormDetails> updates) {
         SharedPreferences metaPrefs = preferencesProvider.getMetaSharedPreferences();
-        Set<String> updateId = updates.stream().map(f -> f.getFormId() + f.getHash() + f.getManifestFileHash()).collect(toSet());
+        Set<String> updateId = updates.stream().map(f -> f.getFormId() + f.getHash() + f.getManifest().getHash()).collect(toSet());
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION, emptySet()).equals(updateId)) {
             return;
         }

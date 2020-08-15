@@ -136,8 +136,7 @@
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>
   <string name="form_download_progress">%1$s. Obtention de fichiers multimédia : %2$s de %3$s</string>
-  <string name="fetching_manifest">%s. Recherche du Manifest …</string>
-  <string name="success">Succès</string>
+    <string name="success">Succès</string>
   <string name="failures">Échecs</string>
   <string name="no_forms_uploaded">Désolé, pas de formulaires téléchargés.</string>
   <string name="upload_results">Résultats du Téléchargement</string>

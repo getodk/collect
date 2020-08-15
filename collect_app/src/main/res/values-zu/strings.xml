@@ -108,8 +108,7 @@
   <string name="font_size">Usayizi wombhalo (Font)</string>
   <string name="change_font_size">Usayizi wombhalo (Font)</string>
   <string name="form_download_progress">%1$s. Ukuthola amafayela emidya: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. Ukuthola izinkomba</string>
-  <string name="success">Impumelelo</string>
+    <string name="success">Impumelelo</string>
   <string name="no_forms_uploaded">Siyaxolisa, akukho fomu alayishiwe .</string>
   <string name="upload_results">Layisha imiphumela</string>
   <string name="choose_sound">Khetha umsindo</string>

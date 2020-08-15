@@ -107,8 +107,7 @@
   <string name="font_size">Kích thước chữ</string>
   <string name="change_font_size">Kích thước chữ</string>
   <string name="form_download_progress">%1$s. Lấy file đa phương tiện: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. Lấy manifest </string>
-  <string name="success">Thành công</string>
+    <string name="success">Thành công</string>
   <string name="no_forms_uploaded">Xin lỗi, biểu mẫu không tải lên được.</string>
   <string name="upload_results">Kết quả tải lên</string>
   <string name="choose_sound">Chọn âm thanh</string>

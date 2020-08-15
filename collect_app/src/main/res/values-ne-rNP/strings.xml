@@ -127,8 +127,7 @@
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
-  <string name="fetching_manifest">%s म्यनिफेष्ट प्राप्त गरिदै छ </string>
-  <string name="success">सफल</string>
+    <string name="success">सफल</string>
   <string name="no_forms_uploaded">माफ गर्नुहोस्, कुनै फारम पनि अपलोड गरिएन |</string>
   <string name="upload_results">अपलोडको परिणामहरु </string>
   <string name="xform_parse_error">X फारमको शब्द-सम्मतीमा गल्ति भयो | %1$s मा %2$s तत्व छुटेको छ |</string>

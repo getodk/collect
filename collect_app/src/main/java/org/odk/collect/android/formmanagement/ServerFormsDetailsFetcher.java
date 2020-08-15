@@ -33,8 +33,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static java.util.Collections.emptyList;
-
 public class ServerFormsDetailsFetcher {
 
     private final FormsRepository formsRepository;
@@ -83,10 +81,9 @@ public class ServerFormsDetailsFetcher {
                     listItem.getFormID(),
                     listItem.getVersion(),
                     listItem.getHashWithPrefix(),
-                    manifestFile != null ? manifestFile.getHash() : null,
                     !thisFormAlreadyDownloaded,
                     isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
-                    manifestFile != null ? manifestFile.getMediaFiles() : emptyList());
+                    manifestFile);
 
             serverFormDetailsList.add(serverFormDetails);
         }

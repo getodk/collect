@@ -122,8 +122,7 @@
   <string name="font_size">अक्षर फॉन्ट आकार</string>
   <string name="change_font_size">अक्षर फॉन्ट आकार</string>
   <string name="form_download_progress">%1$s. %3$sकी %2$sमीडिया फाइलें मिल रही हैं: </string>
-  <string name="fetching_manifest">%s. मेनीफेस्ट मिल रहा है </string>
-  <string name="success">सफल</string>
+    <string name="success">सफल</string>
   <string name="no_forms_uploaded">क्षमा करें, कोई फॉर्म अपलोड नहीं किया गया.</string>
   <string name="upload_results">परिणाम अपलोड करें</string>
   <string name="xform_parse_error">%1$sके लिए XForm पार्स गलती: %2$sलापता या अमान्य है. </string>

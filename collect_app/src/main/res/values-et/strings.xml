@@ -114,8 +114,7 @@
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
   <string name="form_download_progress">%1$s. Laeb faile: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. Laen manifest faili</string>
-  <string name="success">Õnnestus</string>
+    <string name="success">Õnnestus</string>
   <string name="no_forms_uploaded">Vabandage, ühtegi vormi ei ole üles laetud.</string>
   <string name="upload_results">Tulemuste üles laadimine</string>
   <string name="choose_sound">Vali heli</string>

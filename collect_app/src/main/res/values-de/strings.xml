@@ -136,8 +136,7 @@
   <string name="font_size">Schriftgröße</string>
   <string name="change_font_size">Schriftgröße</string>
   <string name="form_download_progress">%1$s. Media-Dateien werden geladen: %2$s von %3$s</string>
-  <string name="fetching_manifest">%s. Manifest wird geladen </string>
-  <string name="success">Erfolg</string>
+    <string name="success">Erfolg</string>
   <string name="failures">Fehler</string>
   <string name="no_forms_uploaded">Kein Formular wurde hochgeladen.</string>
   <string name="upload_results">Upload-Ergebnisse</string>

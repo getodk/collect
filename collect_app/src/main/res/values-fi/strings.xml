@@ -136,8 +136,7 @@
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
   <string name="form_download_progress">%1$s. Haetaan mediatiedostoja: %2$s / %3$s</string>
-  <string name="fetching_manifest">%s. Haetaan manifestia</string>
-  <string name="success">Onnistui</string>
+    <string name="success">Onnistui</string>
   <string name="failures">Epäonnistuneet</string>
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>
   <string name="upload_results">Siirrä tulokset.</string>

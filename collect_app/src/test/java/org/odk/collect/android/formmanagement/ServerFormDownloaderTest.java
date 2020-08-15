@@ -15,7 +15,6 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.Collections;
 import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,10 +53,9 @@ public class ServerFormDownloaderTest {
                 form.getJrFormId(),
                 form.getJrVersion(),
                 form.getMD5Hash(),
-                null,
                 true,
                 false,
-                Collections.emptyList());
+                null);
 
         MultiFormDownloader multiFormDownloader = mock(MultiFormDownloader.class);
         HashMap<ServerFormDetails, String> results = new HashMap<ServerFormDetails, String>() {{

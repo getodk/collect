@@ -129,8 +129,7 @@
   <string name="font_size">అక్షరాల సైజు </string>
   <string name="change_font_size">అక్షరాల సైజు  </string>
   <string name="form_download_progress">%1$s. మీడియా ఫైళ్ళను పొందుతున్నాము:  %3$s లో %2$s</string>
-  <string name="fetching_manifest"> %s. మానిఫెస్ట్ పొందడం</string>
-  <string name="success">సక్సెస్ </string>
+    <string name="success">సక్సెస్ </string>
   <string name="failures">వైఫల్యాలు</string>
   <string name="no_forms_uploaded">క్షమించండి, ఏ ఫారం కూడా అప్‌లోడ్ చేయబడలేదు.</string>
   <string name="upload_results">ఫలితాలను అప్‌లోడ్ చేయండి</string>

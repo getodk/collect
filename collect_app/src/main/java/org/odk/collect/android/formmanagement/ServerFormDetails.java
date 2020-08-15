@@ -14,12 +14,9 @@
 
 package org.odk.collect.android.formmanagement;
 
-import org.odk.collect.android.openrosa.api.MediaFile;
+import org.odk.collect.android.openrosa.api.ManifestFile;
 
 import java.io.Serializable;
-import java.util.List;
-
-import javax.annotation.Nullable;
 
 public class ServerFormDetails implements Serializable {
 
@@ -31,25 +28,22 @@ public class ServerFormDetails implements Serializable {
     private final String formID;
     private final String formVersion;
     private final String hash;
-    private final String manifestFileHash;
     private final boolean isNotOnDevice;
     private final boolean isUpdated;
-    private final List<MediaFile> mediaFiles;
+    private final ManifestFile manifest;
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
-                             String formVersion, String hash, String manifestFileHash,
-                             boolean isNotOnDevice, boolean isUpdated, List<MediaFile> mediaFiles) {
+                             String formVersion, String hash,
+                             boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
         this.formID = formID;
         this.formVersion = formVersion;
         this.hash = hash;
-        this.manifestFileHash = manifestFileHash;
         this.isNotOnDevice = isNotOnDevice;
         this.isUpdated = isUpdated;
-        this.mediaFiles = mediaFiles;
+        this.manifest = manifest;
     }
 
     public String getFormName() {
@@ -76,11 +70,6 @@ public class ServerFormDetails implements Serializable {
         return hash;
     }
 
-    @Nullable
-    public String getManifestFileHash() {
-        return manifestFileHash;
-    }
-
     public boolean isNotOnDevice() {
         return isNotOnDevice;
     }
@@ -89,7 +78,7 @@ public class ServerFormDetails implements Serializable {
         return isUpdated;
     }
 
-    public List<MediaFile> getMediaFiles() {
-        return mediaFiles;
+    public ManifestFile getManifest() {
+        return manifest;
     }
 }

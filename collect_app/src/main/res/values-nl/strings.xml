@@ -132,8 +132,7 @@
   <string name="font_size">Tekstgrootte</string>
   <string name="change_font_size">Tekstgrootte</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. Getting manifest </string>
-  <string name="success">Voltooid</string>
+    <string name="success">Voltooid</string>
   <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
   <string name="upload_results">Upload Results</string>
   <string name="xform_parse_error">Fout tijdens XForm parse voor %1$s: %2$s ontbreekt of is ongeldig</string>

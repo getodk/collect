@@ -118,8 +118,7 @@
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
-  <string name="fetching_manifest">%s. 加载Manifest</string>
-  <string name="success">成功</string>
+    <string name="success">成功</string>
   <string name="no_forms_uploaded">没有表格被上传.</string>
   <string name="upload_results">上传结果</string>
   <string name="choose_sound">选择音频</string>

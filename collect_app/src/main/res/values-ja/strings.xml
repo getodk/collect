@@ -136,8 +136,7 @@
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>
   <string name="form_download_progress">%1$s。 メディア ファイルの取得中: %2$s / %3$s</string>
-  <string name="fetching_manifest">%s。 マニフェストの取得中 </string>
-  <string name="success">成功しました</string>
+    <string name="success">成功しました</string>
   <string name="failures">失敗</string>
   <string name="no_forms_uploaded">申し訳ありません、アップロードしたフォームはありません。</string>
   <string name="upload_results">アップロード結果</string>

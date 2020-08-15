@@ -136,8 +136,7 @@
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
   <string name="form_download_progress">%1$s. Stahuji mediální soubory: %2$s z %3$s</string>
-  <string name="fetching_manifest">%s. Stahuji manifest </string>
-  <string name="success">Úspěch</string>
+    <string name="success">Úspěch</string>
   <string name="failures">Selhání</string>
   <string name="no_forms_uploaded">Žádný dotazník nebyl nahrán.</string>
   <string name="upload_results">Výsledky nahrávání</string>

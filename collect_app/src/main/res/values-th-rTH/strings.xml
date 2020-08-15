@@ -116,8 +116,7 @@
   <string name="font_size">ขนาดตัวอักษร</string>
   <string name="change_font_size">ขนาดอักษร</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. Getting manifest </string>
-  <string name="success">สำเร็จ</string>
+    <string name="success">สำเร็จ</string>
   <string name="no_forms_uploaded">ขออภัย ไม่สามารถส่งแบบสำรวจได้</string>
   <string name="upload_results">ส่งผลสำรวจ</string>
   <string name="choose_file">เลือกไฟล์</string>

@@ -136,9 +136,7 @@
   <string name="font_size">Tamaño del Texto</string>
   <string name="change_font_size">Tamaño del Texto</string>
   <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s de %3$s</string>
-  <string name="fetching_manifest">%s. Obteniendo el manifesto
-</string>
-  <string name="success">Correcto</string>
+    <string name="success">Correcto</string>
   <string name="failures">Fallas</string>
   <string name="no_forms_uploaded">No se ha cargado ningún formulario.</string>
   <string name="upload_results">Resultados de la carga</string>

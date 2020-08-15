@@ -132,8 +132,7 @@
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
-  <string name="fetching_manifest">%s. الحصول على القائمة </string>
-  <string name="success">نجاح</string>
+    <string name="success">نجاح</string>
   <string name="failures">فشل</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>
   <string name="upload_results">تحميل النتائج</string>

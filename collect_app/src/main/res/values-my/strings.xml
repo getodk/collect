@@ -115,8 +115,7 @@
   <string name="font_size">စာလံုးအရြယ္အစား</string>
   <string name="change_font_size">စာလံုးအရြယ္အစား</string>
   <string name="form_download_progress">%1$s. မီဒီယာဖိုင္ရယူေနပါသည္: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. ရွင္းလင္းခ်က္ရယူေနပါသည္</string>
-  <string name="success">ေအာင္ျမင္ပါၿပီ</string>
+    <string name="success">ေအာင္ျမင္ပါၿပီ</string>
   <string name="no_forms_uploaded">ပံုစံမရယူႏိုင္ေသးပါ</string>
   <string name="upload_results">ရယူမွုရလဒ္မ်ား</string>
   <string name="choose_sound">အသံေရြးခ်ယ္ရန္</string>

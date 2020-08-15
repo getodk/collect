@@ -110,8 +110,7 @@
   <string name="font_size">Teks font grootte</string>
   <string name="change_font_size">Teks font grootte</string>
   <string name="form_download_progress">%1$s. Besig om media leërs te haal: %2$s van %3$s</string>
-  <string name="fetching_manifest">%s. Besig om manifest te haal</string>
-  <string name="success">Sukses</string>
+    <string name="success">Sukses</string>
   <string name="no_forms_uploaded">Jammer, geen vorm is opgelaai nie.</string>
   <string name="upload_results">Oplaai Resultate</string>
   <string name="xform_parse_error">XForm verwerkingsfout. %1$s vermis element %2$s</string>

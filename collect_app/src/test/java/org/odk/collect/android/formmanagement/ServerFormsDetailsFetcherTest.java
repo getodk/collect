@@ -23,6 +23,7 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
@@ -61,8 +62,8 @@ public class ServerFormsDetailsFetcherTest {
     public void whenFormHasManifestUrl_returnsMediaFilesInDetails() throws Exception {
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
 
-        assertThat(serverFormDetails.get(0).getMediaFiles().isEmpty(), is(true));
-        assertThat(serverFormDetails.get(1).getMediaFiles(), contains(mediaFile));
+        assertThat(serverFormDetails.get(0).getManifest(), nullValue());
+        assertThat(serverFormDetails.get(1).getManifest().getMediaFiles(), contains(mediaFile));
     }
 
     @Test

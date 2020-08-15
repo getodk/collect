@@ -126,8 +126,7 @@
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
   <string name="change_font_size">ٹیکسٹ فونٹ سائز</string>
   <string name="form_download_progress"> ‎‏ %1$s۔میڈیا فائل حاصل کی جا رہی ہے :‎‏  %2$s آف%3$s</string>
-  <string name="fetching_manifest">%s۔ مینیفیسٹ کو حاصل کیا جا رہا ہے۔</string>
-  <string name="success">کامیابی</string>
+    <string name="success">کامیابی</string>
   <string name="failures">ناکامی </string>
   <string name="no_forms_uploaded">معافی، کوئی فارم اپ لوڈ نہیں کیا گیا</string>
   <string name="upload_results">نتیجہ اپ لوڈ کریں</string>

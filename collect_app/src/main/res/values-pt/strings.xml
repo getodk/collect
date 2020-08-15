@@ -135,8 +135,7 @@
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
   <string name="form_download_progress">%1$s. Acessando arquivos de mídia: %2$s de %3$s</string>
-  <string name="fetching_manifest">%s. Acessando manifesto</string>
-  <string name="success">Sucesso</string>
+    <string name="success">Sucesso</string>
   <string name="failures">Falhas</string>
   <string name="no_forms_uploaded">Desculpe, nenhum formulário foi enviado.</string>
   <string name="upload_results">Enviar Resultados</string>
