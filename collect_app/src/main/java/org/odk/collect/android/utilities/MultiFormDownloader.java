@@ -507,11 +507,6 @@ public class MultiFormDownloader {
             return null;
         }
 
-        if (stateListener != null) {
-            stateListener.progressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.fetching_manifest, fd.getFormName()),
-                    String.valueOf(count), String.valueOf(total));
-        }
-
         List<MediaFile> files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
 
         // OK we now have the full set of files to download...

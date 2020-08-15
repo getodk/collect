@@ -8,7 +8,7 @@ import java.io.File;
 public class FormUtils {
 
     private FormUtils() {
-        
+
     }
 
     public static Form.Builder buildForm(long id, String jrFormId, String jrVersion, String formFilesPath) {
