@@ -18,8 +18,8 @@ package org.odk.collect.android.formmanagement;
 
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static java.util.Collections.emptyList;
 
 public class ServerFormsDetailsFetcher {
 
@@ -62,21 +64,18 @@ public class ServerFormsDetailsFetcher {
             ManifestFile manifestFile = null;
 
             boolean thisFormAlreadyDownloaded = isThisFormAlreadyDownloaded(listItem.getFormID());
+            isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
 
-            if (thisFormAlreadyDownloaded) {
-                isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
-                if (!isNewerFormVersionAvailable && listItem.getManifestURL() != null) {
-                    manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
-                    if (manifestFile != null) {
-                        List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
-                        if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
-                        }
+            if (listItem.getManifestURL() != null) {
+                manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
+                if (manifestFile != null) {
+                    List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
+                    if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
+                        areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
                     }
                 }
             }
 
-            String manifestFileHash = manifestFile != null ? manifestFile.getHash() : null;
             ServerFormDetails serverFormDetails = new ServerFormDetails(
                     listItem.getName(),
                     listItem.getDownloadURL(),
@@ -84,9 +83,10 @@ public class ServerFormsDetailsFetcher {
                     listItem.getFormID(),
                     listItem.getVersion(),
                     listItem.getHashWithPrefix(),
-                    manifestFileHash,
+                    manifestFile != null ? manifestFile.getHash() : null,
                     !thisFormAlreadyDownloaded,
-                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable);
+                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
+                    manifestFile != null ? manifestFile.getMediaFiles() : emptyList());
 
             serverFormDetailsList.add(serverFormDetails);
         }

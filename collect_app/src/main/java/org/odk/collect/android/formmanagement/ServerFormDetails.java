@@ -14,7 +14,10 @@
 
 package org.odk.collect.android.formmanagement;
 
+import org.odk.collect.android.openrosa.api.MediaFile;
+
 import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -31,10 +34,12 @@ public class ServerFormDetails implements Serializable {
     private final String manifestFileHash;
     private final boolean isNotOnDevice;
     private final boolean isUpdated;
+    private final List<MediaFile> mediaFiles;
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
                              String formVersion, String hash, String manifestFileHash,
-                             boolean isNotOnDevice, boolean isUpdated) {
+                             boolean isNotOnDevice, boolean isUpdated, List<MediaFile> mediaFiles) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
@@ -44,6 +49,7 @@ public class ServerFormDetails implements Serializable {
         this.manifestFileHash = manifestFileHash;
         this.isNotOnDevice = isNotOnDevice;
         this.isUpdated = isUpdated;
+        this.mediaFiles = mediaFiles;
     }
 
     public String getFormName() {
@@ -81,5 +87,9 @@ public class ServerFormDetails implements Serializable {
 
     public boolean isUpdated() {
         return isUpdated;
+    }
+
+    public List<MediaFile> getMediaFiles() {
+        return mediaFiles;
     }
 }

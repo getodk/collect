@@ -20,6 +20,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class MultiFormDownloaderTest {
         MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails serverFormDetails = new ServerFormDetails("No media", "https://testserver/no-media.xml",
                 null, "basic", "2019121201",
-                "hash", null, false, false);
+                "hash", null, false, false, Collections.emptyList());
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(serverFormDetails.getFormName(), serverFormDetails.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
@@ -136,7 +137,7 @@ public class MultiFormDownloaderTest {
         MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails serverFormDetails = new ServerFormDetails("Media", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "media", "2019121201",
-                "hash", "manifestHash", false, false);
+                "hash", "manifestHash", false, false, Collections.emptyList());
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(serverFormDetails.getFormName(), serverFormDetails.getDownloadUrl(), null);
         doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
@@ -194,7 +195,7 @@ public class MultiFormDownloaderTest {
         MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails test1 = new ServerFormDetails("basic-external-xml-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-xml-instance", "20200101",
-                "hash", "manifestHash", false, false);
+                "hash", "manifestHash", false, false, Collections.emptyList());
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
@@ -245,7 +246,7 @@ public class MultiFormDownloaderTest {
         MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails test1 = new ServerFormDetails("basic-external-csv-instance", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "basic-external-csv-instance", "20200101",
-                "hash", "manifestHash", false, false);
+                "hash", "manifestHash", false, false, Collections.emptyList());
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn(true).when(downloader).installEverything(any(), any(), any());
@@ -293,7 +294,7 @@ public class MultiFormDownloaderTest {
         MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails test1 = new ServerFormDetails("Last Saved", "https://testserver/media.xml",
                 "https://testserver/media-manifest.xml", "basic-last-saved", "20200101",
-                "hash", "manifestHash", false, false);
+                "hash", "manifestHash", false, false, Collections.emptyList());
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(test1.getFormName(), test1.getDownloadUrl(), null);
         doReturn("").when(downloader).downloadManifestAndMediaFiles(any(), any(), any(), anyInt(), anyInt(), any());
@@ -359,7 +360,7 @@ public class MultiFormDownloaderTest {
         MultiFormDownloader downloader = spy(new MultiFormDownloader(openRosaXMLFetcher));
         ServerFormDetails serverFormDetails = new ServerFormDetails("last-saved-attached", "https://testserver/form.xml",
                 "https://testserver/manifest.xml", "last-saved-attached", "20200101",
-                "hash", "manifestHash", false, false);
+                "hash", "manifestHash", false, false, Collections.emptyList());
         MultiFormDownloader.FileResult result = new MultiFormDownloader.FileResult(formXml, true);
         doReturn(result).when(downloader).downloadXform(serverFormDetails.getFormName(), serverFormDetails.getDownloadUrl(), null);
 

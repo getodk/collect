@@ -29,6 +29,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -82,8 +83,8 @@ public class AutoUpdateTaskSpecTest {
 
     @Test
     public void whenThereAreUpdatedFormsOnServer_sendsUpdatesToNotifier() throws Exception {
-        ServerFormDetails updatedForm = new ServerFormDetails("", "", "", "", "", "", "", false, true);
-        ServerFormDetails oldForm = new ServerFormDetails("", "", "", "", "", "", "", false, false);
+        ServerFormDetails updatedForm = new ServerFormDetails("", "", "", "", "", "", "", false, true, emptyList());
+        ServerFormDetails oldForm = new ServerFormDetails("", "", "", "", "", "", "", false, false, emptyList());
         when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(
                 updatedForm,
                 oldForm
@@ -98,7 +99,7 @@ public class AutoUpdateTaskSpecTest {
 
     @Test
     public void whenAutoDownloadEnabled_andChangeLockLocked_doesNotDownload() throws Exception {
-        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", "", "", false, true)));
+        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", "", "", false, true, emptyList())));
         generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
         changeLock.lock();
 

@@ -21,6 +21,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,6 +34,8 @@ public class ServerFormsDetailsFetcherTest {
             new FormListItem("http://example.com/form-1", "form-1", "server", "md5:form-1-hash", "Form 1", null),
             new FormListItem("http://example.com/form-2", "form-2", "server", "md5:form-2-hash", "Form 2", "http://example.com/form-2-manifest")
     );
+
+    private final MediaFile mediaFile = new MediaFile("blah.txt", "md5:" + getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file");
 
     private ServerFormsDetailsFetcher fetcher;
     private FormsRepository formsRepository;
@@ -47,11 +50,19 @@ public class ServerFormsDetailsFetcherTest {
         when(formListAPI.fetchFormList()).thenReturn(formList);
 
         when(formListAPI.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(
-                new MediaFile("blah.txt", "md5:" + getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file")))
+                mediaFile))
         );
 
         DiskFormsSynchronizer diskFormsSynchronizer = mock(DiskFormsSynchronizer.class);
         fetcher = new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+    }
+
+    @Test
+    public void whenFormHasManifestUrl_returnsMediaFilesInDetails() throws Exception {
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+
+        assertThat(serverFormDetails.get(0).getMediaFiles().isEmpty(), is(true));
+        assertThat(serverFormDetails.get(1).getMediaFiles(), contains(mediaFile));
     }
 
     @Test
