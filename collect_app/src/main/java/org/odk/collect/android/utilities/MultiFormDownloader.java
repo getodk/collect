@@ -291,11 +291,6 @@ public class MultiFormDownloader {
         } else {
             uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, form.getId().toString());
             mediaPath = new StoragePathProvider().getAbsoluteFormFilePath(form.getFormMediaPath());
-
-            if (form.isDeleted()) {
-                formsRepository.restore(form.getId());
-            }
-
             return new UriResult(uri, mediaPath, false);
         }
     }

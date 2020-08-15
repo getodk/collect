@@ -9,7 +9,6 @@ import androidx.test.core.app.ApplicationProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
@@ -55,7 +54,7 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public MultiFormDownloader providesMultiFormDownloader(FormsDao formsDao, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+            public MultiFormDownloader providesMultiFormDownloader(OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
                 return multiFormDownloader;
             }
 

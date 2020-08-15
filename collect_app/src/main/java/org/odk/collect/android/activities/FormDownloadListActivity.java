@@ -40,6 +40,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
 import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
+import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -55,7 +56,6 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
@@ -142,7 +142,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     StorageInitializer storageInitializer;
 
     @Inject
-    MultiFormDownloader multiFormDownloader;
+    FormDownloader formDownloader;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -430,7 +430,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             // show dialog box
             DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-            downloadFormsTask = new DownloadFormsTask(multiFormDownloader);
+            downloadFormsTask = new DownloadFormsTask(formDownloader);
             downloadFormsTask.setDownloaderListener(this);
 
             if (viewModel.getUrl() != null) {

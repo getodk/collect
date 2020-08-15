@@ -16,10 +16,13 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formmanagement.FormDownloadException;
+import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +38,11 @@ import java.util.HashMap;
 public class DownloadFormsTask extends
         AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> implements FormDownloaderListener {
 
-    private final MultiFormDownloader multiFormDownloader;
+    private final FormDownloader formDownloader;
     private DownloadFormsTaskListener stateListener;
 
-    public DownloadFormsTask(MultiFormDownloader multiFormDownloader) {
-        this.multiFormDownloader = multiFormDownloader;
+    public DownloadFormsTask(FormDownloader formDownloader) {
+        this.formDownloader = formDownloader;
     }
 
     @Override
@@ -54,7 +57,18 @@ public class DownloadFormsTask extends
 
     @Override
     protected HashMap<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
-        return multiFormDownloader.downloadForms(values[0], this);
+        HashMap<ServerFormDetails, String> results = new HashMap<>();
+
+        for (ServerFormDetails serverFormDetails : values[0]) {
+            try {
+                formDownloader.downloadForm(serverFormDetails);
+                results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
+            } catch (FormDownloadException e) {
+                results.put(serverFormDetails, e.getResultMessage());
+            }
+        }
+
+        return results;
     }
 
     @Override
