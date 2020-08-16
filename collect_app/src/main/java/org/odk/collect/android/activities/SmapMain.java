@@ -397,7 +397,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     @Override
     protected void onDestroy() {
-        stopService(mLocationServiceIntent);
+        if(mLocationService != null) {
+            stopService(mLocationServiceIntent);
+        }
         super.onDestroy();
 
     }
