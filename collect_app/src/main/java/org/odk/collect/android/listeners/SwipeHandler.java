@@ -99,8 +99,8 @@ public class SwipeHandler {
                 // for all screens a swipe is left/right of at least
                 // .25" and up/down of less than .25"
                 // OR left/right of > .5"
-                int xpixellimit = (int) (ScreenUtils.getScreenWidth() * .25);
-                int ypixellimit = (int) (ScreenUtils.getScreenHeight() * .25);
+                int xpixellimit = (int) (ScreenUtils.getXPixelsNumberPerInch() * .25);
+                int ypixellimit = (int) (ScreenUtils.getYPixelsNumberPerInch() * .25);
 
                 if (odkView != null && odkView.suppressFlingGesture(e1, e2, velocityX, velocityY)) {
                     return false;
