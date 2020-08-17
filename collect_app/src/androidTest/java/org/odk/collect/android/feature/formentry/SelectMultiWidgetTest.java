@@ -39,18 +39,6 @@ public class SelectMultiWidgetTest {
                             "selectsForm-media/a.mp4"), true));
 
     @Test
-    public void whenAutocompleteAppearanceIsNotUsed_shouldSearchBoxBeHidden() {
-        new FormEntryPage("select_multi_form", activityTestRule)
-                .assertSearchBoxIsHidden(false)
-                .swipeToNextQuestion("Q2")
-                .assertSearchBoxIsVisible(false)
-                .swipeToNextQuestion("Q3")
-                .assertSearchBoxIsVisible(false)
-                .swipeToNextQuestion("Q4")
-                .assertSearchBoxIsHidden(false);
-    }
-
-    @Test
     public void whenMediaFilesAreMissing_shouldAppropriateMessageBeDisplayed() {
         new FormEntryPage("select_multi_form", activityTestRule)
                 .clickGoToArrow()

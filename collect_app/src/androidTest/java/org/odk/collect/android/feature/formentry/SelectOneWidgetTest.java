@@ -47,20 +47,6 @@ public class SelectOneWidgetTest {
     }
 
     @Test
-    public void whenAutocompleteAppearanceIsNotUsed_shouldSearchBoxBeHidden() {
-        new FormEntryPage("select_one_form", activityTestRule)
-                .assertSearchBoxIsHidden(false)
-                .swipeToNextQuestion("Q2")
-                .assertSearchBoxIsHidden(false)
-                .swipeToNextQuestion("Q3")
-                .assertSearchBoxIsVisible(false)
-                .swipeToNextQuestion("Q4")
-                .assertSearchBoxIsVisible(false)
-                .swipeToNextQuestion("Q5")
-                .assertSearchBoxIsHidden(false);
-    }
-
-    @Test
     public void whenMediaFilesAreMissing_shouldAppropriateMessageBeDisplayed() {
         new FormEntryPage("select_one_form", activityTestRule)
                 .clickGoToArrow()
