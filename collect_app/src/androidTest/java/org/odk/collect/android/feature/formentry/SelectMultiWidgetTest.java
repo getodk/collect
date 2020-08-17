@@ -147,19 +147,6 @@ public class SelectMultiWidgetTest {
     }
 
     @Test
-    public void bothClickingRadioButtonAndImage_shouldSelectItem() {
-        new FormEntryPage("select_multi_form", activityTestRule)
-                .clickOnText("AAA")
-                .assertItemChecked(0, false)
-                .assertItemNotChecked(1, false)
-                .assertItemNotChecked(2, false)
-                .clickImageButton(1)
-                .assertItemChecked(0, false)
-                .assertItemChecked(1, false)
-                .assertItemNotChecked(2, false);
-    }
-
-    @Test
     public void clickingOnAlreadySelectedOption_shouldUnselectIt() {
         new FormEntryPage("select_multi_form", activityTestRule)
                 .clickOnText("AAA")

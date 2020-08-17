@@ -189,6 +189,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         return labelTextView;
     }
 
+    public ImageView getImageView() {
+        return imageView;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

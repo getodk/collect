@@ -1,6 +1,8 @@
 package org.odk.collect.android.formentry;
 
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.RadioButton;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -18,11 +20,15 @@ import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.File;
+
 import static android.view.View.VISIBLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.createThemedActivity;
 
@@ -90,5 +96,49 @@ public class AudioVideoImageTextLabelTest {
         isPlaying.setValue(false);
         textColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
         assertThat(textColor, equalTo(originalTextColor));
+    }
+
+    @Test
+    public void bothClickingLabelAndImageView_shouldSelectOptionInSelectOneMode() {
+        File imageFile = mock(File.class);
+        when(imageFile.exists()).thenReturn(true);
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setTextView(new RadioButton(activity));
+
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+
+        // click on label
+        audioVideoImageTextLabel.getLabelTextView().performClick();
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+
+        // clear answer
+        ((RadioButton) audioVideoImageTextLabel.getLabelTextView()).setChecked(false);
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+
+        // click on image
+        audioVideoImageTextLabel.getImageView().performClick();
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+    }
+
+    @Test
+    public void bothClickingLabelAndImageView_shouldSelectOptionInSelectMultiMode() {
+        File imageFile = mock(File.class);
+        when(imageFile.exists()).thenReturn(true);
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setTextView(new CheckBox(activity));
+
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+
+        // click on label
+        audioVideoImageTextLabel.getLabelTextView().performClick();
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+
+        // click on image
+        audioVideoImageTextLabel.getImageView().performClick();
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
     }
 }

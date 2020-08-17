@@ -161,19 +161,6 @@ public class SelectOneWidgetTest {
     }
 
     @Test
-    public void bothClickingRadioButtonAndImage_shouldSelectItem() {
-        new FormEntryPage("select_one_form", activityTestRule)
-                .clickOnText("AAA")
-                .assertItemChecked(0, false)
-                .assertItemNotChecked(1, false)
-                .assertItemNotChecked(2, false)
-                .clickImageButton(1)
-                .assertItemNotChecked(0, false)
-                .assertItemChecked(1, false)
-                .assertItemNotChecked(2, false);
-    }
-
-    @Test
     public void clickingOnAlreadySelectedOption_shouldNotUnselectIt() {
         new FormEntryPage("select_one_form", activityTestRule)
                 .clickOnText("AAA")
