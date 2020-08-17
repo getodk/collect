@@ -114,7 +114,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     void setUpButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-        button.setText(StringUtils.textToHtml(props.getPrompt().getSelectItemText(props.getFilteredItems().get(index).selection())));
+        button.setText(StringUtils.textToHtml(props.getPrompt().getSelectChoiceText(props.getFilteredItems().get(index))));
         button.setTag(props.getItems().indexOf(props.getFilteredItems().get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
@@ -161,7 +161,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             TextView missingImage = new TextView(props.getContext());
             missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-            String choiceText = StringUtils.textToHtml(props.getPrompt().getSelectItemText(selectChoice.selection())).toString();
+            String choiceText = StringUtils.textToHtml(props.getPrompt().getSelectChoiceText(selectChoice)).toString();
 
             if (!choiceText.isEmpty()) {
                 missingImage.setText(choiceText);

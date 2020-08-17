@@ -56,6 +56,7 @@ public class MockFormEntryPromptBuilder {
     public MockFormEntryPromptBuilder withSelectChoices(List<SelectChoice> choices) {
         for (int i = 0; i < choices.size(); i++) {
             choices.get(i).setIndex(i);
+            when(prompt.getSelectChoiceText(choices.get(i))).thenReturn(choices.get(i).getValue());
         }
 
         when(prompt.getSelectChoices()).thenReturn(choices);
