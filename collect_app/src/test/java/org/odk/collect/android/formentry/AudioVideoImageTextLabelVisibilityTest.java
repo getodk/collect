@@ -50,6 +50,7 @@ public class AudioVideoImageTextLabelVisibilityTest {
     private View missingImage;
     private TextView textView;
     private boolean isReferenceManagerStubbed;
+    private boolean imageFileExists;
     private AudioHelper audioHelper;
 
     public AudioVideoImageTextLabelVisibilityTest(String audioURI, String imageURI, String videoURI) {
@@ -94,23 +95,30 @@ public class AudioVideoImageTextLabelVisibilityTest {
          */
         if (new Random().nextBoolean()) {
             stubReferenceManager();
+            imageFileExists = true;
         } else {
             when(referenceManager.deriveReference(RANDOM_URI)).thenThrow(InvalidReferenceException.class);
         }
     }
 
     @Test
-    public void viewShouldBecomeVisibleIfUriPresent() throws InvalidReferenceException {
+    public void viewShouldBecomeVisibleIfUriPresent() {
         Assert.assertNotNull(audioVideoImageTextLabel);
         Assert.assertEquals(VISIBLE, audioVideoImageTextLabel.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
+        File imageFile;
+        File videoFile;
+
         audioVideoImageTextLabel.setTextView(textView);
         if (imageURI != null && isReferenceManagerStubbed) {
-            audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()));
+            imageFile = mock(File.class);
+            when(imageFile.exists()).thenReturn(imageFileExists);
+            audioVideoImageTextLabel.setImage(imageFile);
         }
         if (videoURI != null && isReferenceManagerStubbed) {
-            audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
+            videoFile = mock(File.class);
+            audioVideoImageTextLabel.setVideo(videoFile);
         }
         if (audioURI != null && isReferenceManagerStubbed) {
             audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
@@ -123,9 +131,12 @@ public class AudioVideoImageTextLabelVisibilityTest {
         if (imageURI == null || !isReferenceManagerStubbed) {
             // either the URI wasn't provided or it encountered InvalidReferenceException
             assertVisibility(GONE, imageView, missingImage);
+        } else if (imageFileExists) {
+            assertVisibility(VISIBLE, imageView);
+            assertVisibility(GONE, missingImage);
         } else {
-            // either the bitmap was successfully loaded or the file was missing
-            Assert.assertNotSame(imageView.getVisibility(), missingImage.getVisibility());
+            assertVisibility(GONE, imageView);
+            assertVisibility(VISIBLE, missingImage);
         }
     }
 
