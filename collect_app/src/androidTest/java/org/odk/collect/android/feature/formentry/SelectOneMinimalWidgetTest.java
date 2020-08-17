@@ -149,29 +149,6 @@ public class SelectOneMinimalWidgetTest {
     }
 
     @Test
-    public void whenMediaFilesAreMissing_shouldAppropriateMessageBeDisplayed() {
-        new FormEntryPage("select_one_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q5")
-                .openSelectMinimalDialog()
-                .assertFileNotFoundMsg("/storage/emulated/0/odk/forms/select_one_minimal_form-media/x.png")
-                .assertFileNotFoundMsg("/storage/emulated/0/odk/forms/select_one_minimal_form-media/y.png")
-                .assertFileNotFoundMsg("/storage/emulated/0/odk/forms/select_one_minimal_form-media/z.png")
-                .clickAudioButton(0)
-                .assertFileNotFoundToast("//storage/emulated/0/odk/forms/select_one_minimal_form-media/x.wav")
-                .clickVideoButton(0)
-                .assertFileNotFoundToast("//storage/emulated/0/odk/forms/select_one_minimal_form-media/x.mp4")
-                .clickAudioButton(1)
-                .assertFileNotFoundToast("//storage/emulated/0/odk/forms/select_one_minimal_form-media/y.wav")
-                .clickVideoButton(1)
-                .assertFileNotFoundToast("//storage/emulated/0/odk/forms/select_one_minimal_form-media/y.mp4")
-                .clickAudioButton(2)
-                .assertFileNotFoundToast("//storage/emulated/0/odk/forms/select_one_minimal_form-media/z.wav")
-                .clickVideoButton(2)
-                .assertFileNotFoundToast("//storage/emulated/0/odk/forms/select_one_minimal_form-media/z.mp4");
-    }
-
-    @Test
     public void clickingOnAlreadySelectedOption_shouldNotUnselectIt() {
         new FormEntryPage("select_one_minimal_form", activityTestRule)
                 .openSelectMinimalDialog()

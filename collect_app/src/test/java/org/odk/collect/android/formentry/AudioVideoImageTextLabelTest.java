@@ -3,6 +3,7 @@ package org.odk.collect.android.formentry;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -19,6 +20,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 
@@ -27,6 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -196,5 +199,28 @@ public class AudioVideoImageTextLabelTest {
         // click on image again
         audioVideoImageTextLabel.getImageView().performClick();
         assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+    }
+
+    @Test
+    public void whenImageFileDoesNotExist_ShouldAnAppropriateMessageBeDisplayed() {
+        File imageFile = new File("file://image.png");
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setImage(imageFile);
+
+        assertThat(audioVideoImageTextLabel.getMissingImage().getVisibility(), is(VISIBLE));
+        assertThat(audioVideoImageTextLabel.getMissingImage().getText().toString(), is("File: file:/image.png is missing."));
+    }
+
+    @Test
+    public void whenVideoFileDoesNotExist_ShouldAnAppropriateMessageBeDisplayed() {
+        File videoFile = new File("file://video.mp4");
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setVideo(videoFile);
+        audioVideoImageTextLabel.getVideoButton().performClick();
+
+        assertEquals(ShadowToast.getTextOfLatestToast(), "File: file:/video.mp4 is missing.");
+        assertEquals(ShadowToast.getLatestToast().getDuration(), Toast.LENGTH_LONG);
     }
 }

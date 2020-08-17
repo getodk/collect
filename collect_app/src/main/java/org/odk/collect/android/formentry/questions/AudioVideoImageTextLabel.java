@@ -24,6 +24,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -167,8 +168,8 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     public void playVideo() {
         if (!videoFile.exists()) {
             // We should have a video clip, but the file doesn't exist.
-            String errorMsg = getContext().getString(R.string.file_missing, videoFile.getAbsolutePath());
-            Timber.d("File %s is missing", videoFile.getAbsolutePath());
+            String errorMsg = getContext().getString(R.string.file_missing, videoFile);
+            Timber.d("File %s is missing", videoFile);
             ToastUtils.showLongToast(errorMsg);
             return;
         }
@@ -191,6 +192,18 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public ImageView getImageView() {
         return imageView;
+    }
+
+    public TextView getMissingImage() {
+        return missingImage;
+    }
+
+    public Button getVideoButton() {
+        return videoButton;
+    }
+
+    public Button getAudioButton() {
+        return audioButton;
     }
 
     @Override
