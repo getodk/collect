@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -43,8 +44,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
@@ -136,16 +135,17 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 .build();
 
         SelectMultiWidget widget = getWidget();
+        populateRecyclerView(widget);
 
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItems(widget, "AAA", "BBB");
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItems(widget, "BBB");
         widget.binding.choicesSearchBox.setText("bc");
-        assertVisibleItems();
+        assertVisibleItems(widget);
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItems(widget, "BBB");
         widget.binding.choicesSearchBox.setText("");
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItems(widget, "AAA", "BBB");
     }
 
     @Test
@@ -160,16 +160,17 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 .build();
 
         SelectMultiWidget widget = getWidget();
+        populateRecyclerView(widget);
 
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "AAA", "BBB");
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "BBB");
         widget.binding.choicesSearchBox.setText("bc");
-        assertVisibleItems();
+        assertVisibleItemsInNoButtonsMode(widget);
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "BBB");
         widget.binding.choicesSearchBox.setText("");
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "AAA", "BBB");
     }
 
     @Test
@@ -343,7 +344,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     }
 
     private boolean isButtonItemSelected(SelectMultiWidget widget, int index) {
-        return getRadioButton(widget, index).isChecked();
+        return getCheckBox(widget, index).isChecked();
     }
 
     private void clickChoice(SelectMultiWidget widget, int index) {
@@ -370,14 +371,26 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         return (AudioVideoImageTextLabel) widget.binding.choicesRecyclerView.getChildAt(index);
     }
 
-    private CheckBox getRadioButton(SelectMultiWidget widget, int index) {
+    private CheckBox getCheckBox(SelectMultiWidget widget, int index) {
         return (CheckBox) getAudioVideoImageTextLabelView(widget, index).getLabelTextView();
     }
 
-    private void assertVisibleItems(String... items) {
+    private void assertVisibleItems(SelectMultiWidget widget, String... items) {
         assertThat(getWidget().binding.choicesRecyclerView.getAdapter().getItemCount(), is(items.length));
-        for (String item : items) {
-            assertThat(getVisibleItems(), hasItem(hasProperty("value", is(item))));
+        int index = 0;
+        for (SelectChoice item : getVisibleItems()) {
+            assertThat(getCheckBox(widget, getAllItems().indexOf(item)).getText().toString(), is(items[index]));
+            index++;
+        }
+    }
+
+    private void assertVisibleItemsInNoButtonsMode(SelectMultiWidget widget, String... items) {
+        assertThat(getWidget().binding.choicesRecyclerView.getAdapter().getItemCount(), is(items.length));
+        int index = 0;
+        for (SelectChoice item : getVisibleItems()) {
+            TextView label = (TextView) getChoiceView(widget, getAllItems().indexOf(item)).getChildAt(0);
+            assertThat(label.getText(), is(items[index]));
+            index++;
         }
     }
 
@@ -385,6 +398,12 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         return ((SelectMultipleListAdapter) getWidget().binding.choicesRecyclerView.getAdapter())
                 .getProps()
                 .getFilteredItems();
+    }
+
+    private List<SelectChoice> getAllItems() {
+        return ((SelectMultipleListAdapter) getWidget().binding.choicesRecyclerView.getAdapter())
+                .getProps()
+                .getItems();
     }
 
     private static final List<Pair<String, String>> REFERENCES = asList(

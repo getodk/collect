@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -43,8 +44,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
@@ -136,16 +135,17 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 .build();
 
         SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
 
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItemsInButtonsMode(widget, "AAA", "BBB");
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItemsInButtonsMode(widget, "BBB");
         widget.binding.choicesSearchBox.setText("bc");
-        assertVisibleItems();
+        assertVisibleItemsInButtonsMode(widget);
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItemsInButtonsMode(widget, "BBB");
         widget.binding.choicesSearchBox.setText("");
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItemsInButtonsMode(widget, "AAA", "BBB");
     }
 
     @Test
@@ -160,16 +160,17 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 .build();
 
         SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
 
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "AAA", "BBB");
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "BBB");
         widget.binding.choicesSearchBox.setText("bc");
-        assertVisibleItems();
+        assertVisibleItemsInNoButtonsMode(widget);
         widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItems("BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "BBB");
         widget.binding.choicesSearchBox.setText("");
-        assertVisibleItems("AAA", "BBB");
+        assertVisibleItemsInNoButtonsMode(widget, "AAA", "BBB");
     }
 
     @Test
@@ -389,10 +390,22 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         return (RadioButton) getAudioVideoImageTextLabelView(widget, index).getLabelTextView();
     }
 
-    private void assertVisibleItems(String... items) {
+    private void assertVisibleItemsInButtonsMode(SelectOneWidget widget, String... items) {
         assertThat(getWidget().binding.choicesRecyclerView.getAdapter().getItemCount(), is(items.length));
-        for (String item : items) {
-            assertThat(getVisibleItems(), hasItem(hasProperty("value", is(item))));
+        int index = 0;
+        for (SelectChoice item : getVisibleItems()) {
+            assertThat(getRadioButton(widget, getAllItems().indexOf(item)).getText().toString(), is(items[index]));
+            index++;
+        }
+    }
+
+    private void assertVisibleItemsInNoButtonsMode(SelectOneWidget widget, String... items) {
+        assertThat(getWidget().binding.choicesRecyclerView.getAdapter().getItemCount(), is(items.length));
+        int index = 0;
+        for (SelectChoice item : getVisibleItems()) {
+            TextView label = (TextView) getChoiceView(widget, getAllItems().indexOf(item)).getChildAt(0);
+            assertThat(label.getText(), is(items[index]));
+            index++;
         }
     }
 
@@ -400,6 +413,12 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         return ((SelectOneListAdapter) getWidget().binding.choicesRecyclerView.getAdapter())
                 .getProps()
                 .getFilteredItems();
+    }
+
+    private List<SelectChoice> getAllItems() {
+        return ((SelectOneListAdapter) getWidget().binding.choicesRecyclerView.getAdapter())
+                .getProps()
+                .getItems();
     }
 
     private static final List<Pair<String, String>> REFERENCES = asList(
