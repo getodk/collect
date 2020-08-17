@@ -173,29 +173,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     }
 
     @Test
-    public void whenClickOneElementTwice_shouldThatElementBeUnselectedInButtonsMode() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("AAA", "AAA"),
-                        new SelectChoice("BBB", "BBB")
-                ))
-                .build();
-
-        SelectMultiWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        clickChoice(widget, 0); // Select AAA
-        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
-        assertThat(isItemSelected(widget, 0), is(true));
-        assertThat(isItemSelected(widget, 1), is(false));
-
-        clickChoice(widget, 0); // Select AAA again
-        assertThat(widget.getAnswer(), is(nullValue()));
-        assertThat(isItemSelected(widget, 0), is(false));
-        assertThat(isItemSelected(widget, 1), is(false));
-    }
-
-    @Test
     public void whenClickOneElementTwice_shouldThatElementBeUnselectedInNoButtonsMode() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withSelectChoices(asList(

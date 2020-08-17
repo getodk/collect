@@ -141,4 +141,60 @@ public class AudioVideoImageTextLabelTest {
         audioVideoImageTextLabel.getImageView().performClick();
         assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
     }
+
+    @Test
+    public void whenClickOneElementTwiceInSelectOneMode_shouldThatElementRemainSelected() {
+        File imageFile = mock(File.class);
+        when(imageFile.exists()).thenReturn(true);
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setTextView(new RadioButton(activity));
+
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+
+        // click on label
+        audioVideoImageTextLabel.getLabelTextView().performClick();
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+
+        // click on label again
+        audioVideoImageTextLabel.getLabelTextView().performClick();
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+
+        // click on image
+        audioVideoImageTextLabel.getImageView().performClick();
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+
+        // click on image again
+        audioVideoImageTextLabel.getImageView().performClick();
+        assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+    }
+
+    @Test
+    public void whenClickOneElementTwiceInSelectMultiMode_shouldThatElementBeUnSelected() {
+        File imageFile = mock(File.class);
+        when(imageFile.exists()).thenReturn(true);
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setTextView(new CheckBox(activity));
+
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+
+        // click on label
+        audioVideoImageTextLabel.getLabelTextView().performClick();
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+
+        // click on label again
+        audioVideoImageTextLabel.getLabelTextView().performClick();
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+
+        // click on image
+        audioVideoImageTextLabel.getImageView().performClick();
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(true));
+
+        // click on image again
+        audioVideoImageTextLabel.getImageView().performClick();
+        assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
+    }
 }

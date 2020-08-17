@@ -173,29 +173,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     @Test
-    public void whenClickOneElementTwice_shouldThatElementRemainSelectedInButtonsMode() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("AAA", "AAA"),
-                        new SelectChoice("BBB", "BBB")
-                ))
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        clickChoice(widget, 0); // Select AAA
-        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
-        assertThat(isItemSelected(widget, 0), is(true));
-        assertThat(isItemSelected(widget, 1), is(false));
-
-        clickChoice(widget, 0); // Select AAA again
-        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
-        assertThat(isItemSelected(widget, 0), is(true));
-        assertThat(isItemSelected(widget, 1), is(false));
-    }
-
-    @Test
     public void whenClickOneElementTwice_shouldThatElementRemainSelectedInNoButtonsMode() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withSelectChoices(asList(
