@@ -39,14 +39,6 @@ public class SelectOneWidgetTest {
                             "selectsForm-media/a.mp4"), true));
 
     @Test
-    public void whenQuickAppearanceExist_shouldNavigateForwardAfterSelectingAnswer() {
-        new FormEntryPage("select_one_form", activityTestRule)
-                .swipeToNextQuestion("Q2")
-                .clickOnText("AAA")
-                .assertQuestion("Q3");
-    }
-
-    @Test
     public void clickingOnAlreadySelectedOption_shouldNotUnselectIt() {
         new FormEntryPage("select_one_form", activityTestRule)
                 .clickOnText("AAA")

@@ -121,4 +121,8 @@ public class SelectOneWidget extends BaseSelectListWidget implements SelectOneIt
             }
         }
     }
+
+    public void setListener(AdvanceToNextListener listener) {
+        this.listener = listener;
+    }
 }

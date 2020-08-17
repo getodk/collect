@@ -33,6 +33,7 @@ import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -48,6 +49,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
@@ -57,11 +59,16 @@ import static org.odk.collect.android.support.RobolectricHelpers.populateRecycle
  * @author James Knight
  */
 public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWidget> {
+    @Mock
+    private AdvanceToNextListener listener;
 
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        SelectOneWidget selectOneWidget = new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
+        SelectOneWidget selectOneWidget = new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), isQuick());
+        if (isQuick()) {
+            selectOneWidget.setListener(listener);
+        }
         selectOneWidget.onAttachedToWindow();
         return selectOneWidget;
     }
@@ -245,6 +252,81 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     @Test
+    public void whenQuickAppearanceIsUsed_shouldAdvanceToNextListenerBeCalledInButtonsMode() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(asList(
+                        new SelectChoice("AAA", "AAA"),
+                        new SelectChoice("BBB", "BBB")
+                ))
+                .withAppearance("quick")
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
+
+        clickChoice(widget, 0); // Select AAA
+        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
+
+        verify(listener).advance();
+    }
+
+    @Test
+    public void whenQuickAppearanceIsUsed_shouldAdvanceToNextListenerBeCalledInNoButtonsMode() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(asList(
+                        new SelectChoice("AAA", "AAA"),
+                        new SelectChoice("BBB", "BBB")
+                ))
+                .withAppearance("quick no-buttons")
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
+
+        clickChoice(widget, 0); // Select AAA
+        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
+
+        verify(listener).advance();
+    }
+
+    @Test
+    public void whenQuickAppearanceIsNotUsed_shouldNotAdvanceToNextListenerBeCalledInButtonsMode() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(asList(
+                        new SelectChoice("AAA", "AAA"),
+                        new SelectChoice("BBB", "BBB")
+                ))
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
+
+        clickChoice(widget, 0); // Select AAA
+        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
+
+        verify(listener, times(0)).advance();
+    }
+
+    @Test
+    public void whenQuickAppearanceIsNotUsed_shouldNotAdvanceToNextListenerBeCalledInNoButtonsMode() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(asList(
+                        new SelectChoice("AAA", "AAA"),
+                        new SelectChoice("BBB", "BBB")
+                ))
+                .withAppearance("no-buttons")
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        populateRecyclerView(widget);
+
+        clickChoice(widget, 0); // Select AAA
+        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
+
+        verify(listener, times(0)).advance();
+    }
+
+    @Test
     public void whenChoicesHaveAudio_audioButtonUsesIndexAsClipID() throws Exception {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
@@ -425,4 +507,8 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             new Pair<>("ref", "file://audio.mp3"),
             new Pair<>("ref1", "file://audio1.mp3")
     );
+
+    private boolean isQuick() {
+        return WidgetAppearanceUtils.getSanitizedAppearanceHint(formEntryPrompt).contains("quick");
+    }
 }
