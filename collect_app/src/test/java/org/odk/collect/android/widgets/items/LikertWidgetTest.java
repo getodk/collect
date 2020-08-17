@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.view.View;
 import android.widget.LinearLayout;

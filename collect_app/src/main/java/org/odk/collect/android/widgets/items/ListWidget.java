@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

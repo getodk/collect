@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.content.Context;
 
@@ -23,6 +23,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

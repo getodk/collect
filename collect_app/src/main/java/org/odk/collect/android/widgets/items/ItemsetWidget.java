@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -60,7 +60,7 @@ public class ItemsetWidget extends SelectOneWidget {
     private final ItemsetDbAdapter adapter;
     private final FileUtil fileUtil;
 
-    protected ItemsetWidget(Context context, QuestionDetails formEntryPrompt, boolean autoAdvanceToNext) {
+    public ItemsetWidget(Context context, QuestionDetails formEntryPrompt, boolean autoAdvanceToNext) {
         this(context, formEntryPrompt, autoAdvanceToNext, new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil());
     }
 

@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.app.Application;
 import android.view.View;

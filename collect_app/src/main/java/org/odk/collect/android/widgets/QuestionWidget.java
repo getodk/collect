@@ -55,6 +55,7 @@ import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
+import org.odk.collect.android.widgets.items.SelectImageMapWidget;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.widgets.ItemsetWidgetTest;
+import org.odk.collect.android.widgets.items.ItemsetWidgetTest;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 

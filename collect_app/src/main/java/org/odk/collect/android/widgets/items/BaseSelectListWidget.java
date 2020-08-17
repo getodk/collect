@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.app.Activity;
 import android.content.Context;
@@ -74,7 +74,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
     }
 
     private void setUpSearchBox() {
-        binding.choicesSearchBox.setVisibility(VISIBLE);
+        binding.choicesSearchBox.setVisibility(View.VISIBLE);
         binding.choicesSearchBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         binding.choicesSearchBox.addTextChangedListener(new TextWatcher() {
             private String oldText = "";

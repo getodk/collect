@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,12 +21,19 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatCheckBox;
+
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.SelectMultiData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
@@ -34,35 +41,78 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
 /**
- * The Label Widget does not return an answer. The purpose of this widget is to be the top entry in
- * a field-list with a bunch of list widgets below. This widget provides the labels, so that the
- * list widgets can hide their labels and reduce the screen clutter. This class is essentially
- * ListWidget with all the answer generating code removed.
+ * ListMultiWidget handles multiple selection fields using check boxes. The check boxes are aligned
+ * horizontally. They are typically meant to be used in a field list, where multiple questions with
+ * the same multiple choice answers can sit on top of each other and make a grid of buttons that is
+ * easy to navigate quickly. Optionally, you can turn off the labels. This would be done if a label
+ * widget was at the top of your field list to provide the labels. If audio or video are specified
+ * in the select answers they are ignored. This class is almost identical to ListWidget, except it
+ * uses checkboxes. It also did not require a custom clickListener class.
  *
- * @author Jeff Beorse
+ * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class LabelWidget extends ItemsWidget {
+public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
 
-    public LabelWidget(Context context, QuestionDetails questionDetails) {
+    final ArrayList<CheckBox> checkBoxes;
+
+    @SuppressWarnings("unchecked")
+    public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel) {
         super(context, questionDetails);
-        addItems(context, questionDetails);
-        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-    }
 
-    private void addItems(Context context, QuestionDetails questionDetails) {
+        checkBoxes = new ArrayList<>();
+
         // Layout holds the horizontal list of buttons
-        LinearLayout listItems = findViewById(R.id.list_items);
+        LinearLayout buttonLayout = findViewById(R.id.list_items);
+
+        List<Selection> ve = new ArrayList<>();
+        if (questionDetails.getPrompt().getAnswerValue() != null) {
+            ve = (List<Selection>) questionDetails.getPrompt().getAnswerValue().getValue();
+        }
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
+
+                AppCompatCheckBox c = new AppCompatCheckBox(getContext());
+                c.setTag(i);
+                c.setId(View.generateViewId());
+                c.setFocusable(!questionDetails.getPrompt().isReadOnly());
+                c.setEnabled(!questionDetails.getPrompt().isReadOnly());
+
+                for (int vi = 0; vi < ve.size(); vi++) {
+                    // match based on value, not key
+                    if (items.get(i).getValue().equals(ve.get(vi).getValue())) {
+                        c.setChecked(true);
+                        break;
+                    }
+
+                }
+                checkBoxes.add(c);
+
+                // when clicked, check for readonly before toggling
+                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (getFormEntryPrompt().isReadOnly()) {
+                            if (buttonView.isChecked()) {
+                                buttonView.setChecked(false);
+                            } else {
+                                buttonView.setChecked(true);
+                            }
+                        }
+
+                        widgetValueChanged();
+                    }
+                });
 
                 String imageURI;
                 if (items.get(i) instanceof ExternalSelectChoice) {
@@ -93,7 +143,6 @@ public class LabelWidget extends ItemsWidget {
                                 int screenHeight = metrics.heightPixels;
                                 b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                             } catch (OutOfMemoryError e) {
-                                Timber.e(e);
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
 
@@ -128,9 +177,8 @@ public class LabelWidget extends ItemsWidget {
                         }
 
                     } catch (InvalidReferenceException e) {
-                        Timber.e(e, "Invalid image reference");
+                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
-
                 }
 
                 // build text label. Don't assign the text to the built in label to he
@@ -139,53 +187,111 @@ public class LabelWidget extends ItemsWidget {
                 label.setText(questionDetails.getPrompt().getSelectChoiceText(items.get(i)));
                 label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
+                if (!displayLabel) {
+                    label.setVisibility(View.GONE);
+                }
 
                 // answer layout holds the label text/image on top and the radio button on bottom
-                LinearLayout answer = new LinearLayout(getContext());
-                answer.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams headerParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                RelativeLayout answer = new RelativeLayout(getContext());
+                RelativeLayout.LayoutParams headerParams =
+                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                                 LayoutParams.WRAP_CONTENT);
-                headerParams.gravity = Gravity.CENTER_HORIZONTAL;
+                headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                headerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-                LinearLayout.LayoutParams buttonParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams buttonParams =
+                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                                 LayoutParams.WRAP_CONTENT);
-                buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
+                buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
                 if (imageView != null) {
                     imageView.setScaleType(ScaleType.CENTER);
+                    if (!displayLabel) {
+                        imageView.setVisibility(View.GONE);
+                    }
                     answer.addView(imageView, headerParams);
                 } else if (missingImage != null) {
                     answer.addView(missingImage, headerParams);
                 } else {
-                    label.setId(labelId);
-                    answer.addView(label, headerParams);
+                    if (displayLabel) {
+                        label.setId(labelId);
+                        answer.addView(label, headerParams);
+                    }
+
                 }
+                if (displayLabel) {
+                    buttonParams.addRule(RelativeLayout.BELOW, labelId);
+                }
+                answer.addView(c, buttonParams);
                 answer.setPadding(4, 0, 4, 0);
 
-                // Each button gets equal weight
+                // /Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
                         new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                                 LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
-                listItems.addView(answer, answerParams);
+
+                buttonLayout.addView(answer, answerParams);
             }
         }
     }
 
     @Override
-    protected int getLayout() {
-        return R.layout.label_widget;
-    }
-
-    @Override
     public void clearAnswer() {
-        // Do nothing, no answers to clear
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            CheckBox c = checkBoxes.get(i);
+            if (c.isChecked()) {
+                c.setChecked(false);
+            }
+        }
+        widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return null;
+        List<Selection> vc = new ArrayList<>();
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            CheckBox c = checkBoxes.get(i);
+            if (c.isChecked()) {
+                vc.add(new Selection(items.get(i)));
+            }
+        }
+
+        if (vc.isEmpty()) {
+            return null;
+        } else {
+            return new SelectMultiData(vc);
+        }
+
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        for (CheckBox c : checkBoxes) {
+            c.setOnLongClickListener(l);
+        }
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        for (CheckBox c : checkBoxes) {
+            c.cancelLongPress();
+        }
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return checkBoxes.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        checkBoxes.get(choiceIndex).setChecked(isSelected);
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.label_widget;
     }
 }

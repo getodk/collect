@@ -22,6 +22,18 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.items.ItemsetWidget;
+import org.odk.collect.android.widgets.items.LabelWidget;
+import org.odk.collect.android.widgets.items.LikertWidget;
+import org.odk.collect.android.widgets.items.ListMultiWidget;
+import org.odk.collect.android.widgets.items.ListWidget;
+import org.odk.collect.android.widgets.items.RankingWidget;
+import org.odk.collect.android.widgets.items.SelectMultiImageMapWidget;
+import org.odk.collect.android.widgets.items.SelectMultiMinimalWidget;
+import org.odk.collect.android.widgets.items.SelectMultiWidget;
+import org.odk.collect.android.widgets.items.SelectOneImageMapWidget;
+import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
+import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;

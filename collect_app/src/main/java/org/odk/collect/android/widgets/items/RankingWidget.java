@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.items;
 
 import android.content.Context;
 import android.widget.Button;
