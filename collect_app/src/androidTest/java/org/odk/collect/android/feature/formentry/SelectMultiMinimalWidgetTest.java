@@ -132,20 +132,6 @@ public class SelectMultiMinimalWidgetTest {
     }
 
     @Test
-    public void clickingOnAlreadySelectedOption_shouldUnselectIt() {
-        new FormEntryPage("select_multi_minimal_form", activityTestRule)
-                .openSelectMinimalDialog()
-                .clickOnText("AAA")
-                .assertItemChecked(0, false)
-                .clickOnText("AAA")
-                .assertItemNotChecked(0, false)
-                .clickImageButton(1)
-                .assertItemChecked(1, false)
-                .clickImageButton(1)
-                .assertItemNotChecked(1, false);
-    }
-
-    @Test
     public void clickingOnAlreadySelectedOption_shouldNotUnselectItInNoButtonsMode() {
         new FormEntryPage("select_multi_minimal_form", activityTestRule)
                 .clickGoToArrow()
