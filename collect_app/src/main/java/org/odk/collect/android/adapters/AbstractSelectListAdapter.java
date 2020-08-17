@@ -227,11 +227,22 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             String imageURI = getImageURI(index, items);
             String videoURI = props.getPrompt().getSpecialFormSelectChoiceText(item, "video");
             String bigImageURI = props.getPrompt().getSpecialFormSelectChoiceText(item, "big-image");
-            audioVideoImageTextLabel.setImageVideo(imageURI, videoURI, bigImageURI, props.getReferenceManager());
-
             String audioURI = getPlayableAudioURI(props.getPrompt(), item, props.getReferenceManager());
-            if (audioURI != null) {
-                audioVideoImageTextLabel.setAudio(audioURI, props.getAudioHelper());
+            try {
+                if (imageURI != null) {
+                    audioVideoImageTextLabel.setImage(new File(props.getReferenceManager().deriveReference(imageURI).getLocalURI()));
+                }
+                if (bigImageURI != null) {
+                    audioVideoImageTextLabel.setBigImage(new File(props.getReferenceManager().deriveReference(bigImageURI).getLocalURI()));
+                }
+                if (videoURI != null) {
+                    audioVideoImageTextLabel.setVideo(new File(props.getReferenceManager().deriveReference(videoURI).getLocalURI()));
+                }
+                if (audioURI != null) {
+                    audioVideoImageTextLabel.setAudio(audioURI, props.getAudioHelper());
+                }
+            } catch (InvalidReferenceException e) {
+                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
             }
 
             textView.setGravity(Gravity.CENTER_VERTICAL);

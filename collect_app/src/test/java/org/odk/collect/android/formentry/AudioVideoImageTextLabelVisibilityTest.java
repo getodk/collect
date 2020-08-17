@@ -21,6 +21,7 @@ import org.odk.collect.async.Scheduler;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -99,20 +100,25 @@ public class AudioVideoImageTextLabelVisibilityTest {
     }
 
     @Test
-    public void viewShouldBecomeVisibleIfUriPresent() {
+    public void viewShouldBecomeVisibleIfUriPresent() throws InvalidReferenceException {
         Assert.assertNotNull(audioVideoImageTextLabel);
         Assert.assertEquals(VISIBLE, audioVideoImageTextLabel.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
         audioVideoImageTextLabel.setTextView(textView);
-        audioVideoImageTextLabel.setImageVideo(imageURI, videoURI, null, referenceManager);
-        if (audioURI != null) {
+        if (imageURI != null && isReferenceManagerStubbed) {
+            audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()));
+        }
+        if (videoURI != null && isReferenceManagerStubbed) {
+            audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
+        }
+        if (audioURI != null && isReferenceManagerStubbed) {
             audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
         }
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
-        assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);
-        assertVisibility(videoURI == null ? GONE : VISIBLE, videoButton);
+        assertVisibility(audioURI == null || !isReferenceManagerStubbed ? GONE : VISIBLE, audioButton);
+        assertVisibility(videoURI == null || !isReferenceManagerStubbed ? GONE : VISIBLE, videoButton);
 
         if (imageURI == null || !isReferenceManagerStubbed) {
             // either the URI wasn't provided or it encountered InvalidReferenceException
