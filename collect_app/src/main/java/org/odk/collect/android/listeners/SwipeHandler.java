@@ -93,12 +93,9 @@ public class SwipeHandler {
 
             if (e1 != null && e2 != null
                     && navigation.contains(GeneralKeys.NAVIGATION_SWIPE) && allowSwiping) {
-                // Looks for user swipes. If the user has swiped, move to the
-                // appropriate screen.
+                // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 
-                // for all screens a swipe is left/right of at least
-                // .25" and up/down of less than .25"
-                // OR left/right of > .5"
+                // For all screens a swipe is left/right of at least .25" and up/down of less than .25" OR left/right of > .5"
                 int xpixellimit = (int) (ScreenUtils.getXPixelsNumberPerInch() * .25);
                 int ypixellimit = (int) (ScreenUtils.getYPixelsNumberPerInch() * .25);
 
@@ -110,14 +107,14 @@ public class SwipeHandler {
                     return false;
                 }
 
-                float diffX = e1.getX() - e2.getX();
-                float diffY = e1.getY() - e2.getY();
+                float diffX = Math.abs(e1.getX() - e2.getX());
+                float diffY = Math.abs(e1.getY() - e2.getY());
 
                 if (odkView != null && canScrollVertically() && getGestureAngle(diffX, diffY) > 30) {
                     return false;
                 }
 
-                if ((Math.abs(diffX) > xpixellimit && Math.abs(diffY) < ypixellimit) || Math.abs(diffX) > xpixellimit * 2) {
+                if ((diffX > xpixellimit && diffY < ypixellimit) || diffX > xpixellimit * 2) {
                     beenSwiped = true;
                     if (velocityX > 0) {
                         if (e1.getX() > e2.getX()) {
@@ -142,7 +139,7 @@ public class SwipeHandler {
         }
 
         private double getGestureAngle(float diffX, float diffY) {
-            return Math.toDegrees(Math.atan2(Math.abs(diffY), Math.abs(diffX)));
+            return Math.toDegrees(Math.atan2(diffY, diffX));
         }
 
         public boolean canScrollVertically() {
