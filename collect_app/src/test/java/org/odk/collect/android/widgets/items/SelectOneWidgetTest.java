@@ -138,7 +138,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                         new SelectChoice("BBB", "BBB")
                 ))
                 .withAppearance("autocomplete")
-                .withSelectChoiceText(asList("AAA", "BBB"))
                 .build();
 
         SelectOneWidget widget = getWidget();
@@ -163,7 +162,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                         new SelectChoice("BBB", "BBB")
                 ))
                 .withAppearance("autocomplete no-buttons")
-                .withSelectChoiceText(asList("AAA", "BBB"))
                 .build();
 
         SelectOneWidget widget = getWidget();

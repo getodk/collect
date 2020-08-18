@@ -131,7 +131,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                         new SelectChoice("BBB", "BBB")
                 ))
                 .withAppearance("autocomplete")
-                .withSelectChoiceText(asList("AAA", "BBB"))
                 .build();
 
         SelectMultiWidget widget = getWidget();
@@ -156,7 +155,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                         new SelectChoice("BBB", "BBB")
                 ))
                 .withAppearance("autocomplete no-buttons")
-                .withSelectChoiceText(asList("AAA", "BBB"))
                 .build();
 
         SelectMultiWidget widget = getWidget();
