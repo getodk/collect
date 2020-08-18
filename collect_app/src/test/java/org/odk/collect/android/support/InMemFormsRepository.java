@@ -56,7 +56,7 @@ public class InMemFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form getByPath(String path) {
-        throw new UnsupportedOperationException();
+        return forms.stream().filter(f -> f.getFormFilePath().equals(path)).findFirst().orElse(null);
     }
 
     @Override

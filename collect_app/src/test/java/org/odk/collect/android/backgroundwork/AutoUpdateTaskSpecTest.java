@@ -16,7 +16,6 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -24,7 +23,6 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.MultiFormDownloader;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.function.Supplier;
@@ -56,7 +54,7 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public MultiFormDownloader providesMultiFormDownloader(OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+            public MultiFormDownloader providesMultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
                 return multiFormDownloader;
             }
 

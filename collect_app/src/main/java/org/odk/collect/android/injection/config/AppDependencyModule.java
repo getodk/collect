@@ -67,7 +67,6 @@ import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
@@ -170,13 +169,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public MultiFormDownloader providesMultiFormDownloader(OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
-        return new MultiFormDownloader(new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils));
+    public MultiFormDownloader providesMultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
+        return new MultiFormDownloader(formsRepository, formListApi);
     }
 
     @Provides
-    FormDownloader providesFormDownloader(MultiFormDownloader multiFormDownloader, FormsRepository formsRepository) {
-        return new ServerFormDownloader(multiFormDownloader, formsRepository);
+    FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository) {
+        return new ServerFormDownloader(formListApi, formsRepository);
     }
 
     @Provides

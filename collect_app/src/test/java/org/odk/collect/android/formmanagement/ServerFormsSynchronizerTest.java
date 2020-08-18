@@ -99,7 +99,7 @@ public class ServerFormsSynchronizerTest {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(serverForms);
 
         FormDownloader formDownloader = mock(FormDownloader.class);
-        doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0));
+        doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0), null);
 
         ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
 
@@ -107,7 +107,7 @@ public class ServerFormsSynchronizerTest {
             synchronizer.synchronize();
         } catch (FormApiException e) {
             assertThat(e.getType(), is(FormApiException.Type.FETCH_ERROR));
-            verify(formDownloader).downloadForm(serverForms.get(1));
+            verify(formDownloader).downloadForm(serverForms.get(1), null);
         }
     }
 
@@ -116,7 +116,7 @@ public class ServerFormsSynchronizerTest {
         private final List<String> formsDownloaded = new ArrayList<>();
 
         @Override
-        public void downloadForm(ServerFormDetails form) {
+        public void downloadForm(ServerFormDetails form, ProgressReporter progressReporter) {
             formsDownloaded.add(form.getFormId());
         }
 

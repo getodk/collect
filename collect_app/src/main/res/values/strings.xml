@@ -147,7 +147,7 @@
     <string name="submission_url">Submission path</string>
     <string name="font_size">Text font size</string>
     <string name="change_font_size">Text font size</string>
-    <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
+    <string name="form_download_progress" tools:ignore="UnusedResources">%1$s. Getting media files: %2$s of %3$s</string>
     <string name="fetching_manifest" tools:ignore="UnusedResources">%s. Getting manifest </string>
     <string name="success">Success</string>
     <string name="failures">Failures</string>

@@ -61,10 +61,10 @@ public class DownloadFormsTask extends
 
         for (ServerFormDetails serverFormDetails : values[0]) {
             try {
-                formDownloader.downloadForm(serverFormDetails);
+                formDownloader.downloadForm(serverFormDetails, null);
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
             } catch (FormDownloadException e) {
-                results.put(serverFormDetails, e.getResultMessage());
+                results.put(serverFormDetails, e.getMessage());
             }
         }
 

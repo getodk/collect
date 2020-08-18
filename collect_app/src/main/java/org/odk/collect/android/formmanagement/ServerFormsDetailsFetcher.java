@@ -61,13 +61,17 @@ public class ServerFormsDetailsFetcher {
             boolean areNewerMediaFilesAvailable = false;
             ManifestFile manifestFile = null;
 
-            boolean thisFormAlreadyDownloaded = isThisFormAlreadyDownloaded(listItem.getFormID());
-            isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
-
             if (listItem.getManifestURL() != null) {
                 manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
+            }
+
+            boolean thisFormAlreadyDownloaded = !formsRepository.getByJrFormIdNotDeleted(listItem.getFormID()).isEmpty();
+            if (thisFormAlreadyDownloaded) {
+                isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
+
                 if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
+
                     if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
                         areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
                     }
@@ -89,10 +93,6 @@ public class ServerFormsDetailsFetcher {
         }
 
         return serverFormDetailsList;
-    }
-
-    private boolean isThisFormAlreadyDownloaded(String formId) {
-        return !formsRepository.getByJrFormIdNotDeleted(formId).isEmpty();
     }
 
     private ManifestFile getManifestFile(FormListApi formListAPI, String manifestUrl) {

@@ -23,7 +23,6 @@ import org.javarosa.core.reference.RootTranslator;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
@@ -64,9 +63,15 @@ public class MultiFormDownloader {
     private final FormsRepository formsRepository;
 
     @Deprecated
-    public MultiFormDownloader(OpenRosaXmlFetcher openRosaXmlFetcher) {
-        this.formsRepository = new DatabaseFormsRepository();
+    public MultiFormDownloader(FormsRepository formsRepository, OpenRosaXmlFetcher openRosaXmlFetcher) {
+        this.formsRepository = formsRepository;
         formListApi = new OpenRosaFormListApi(openRosaXmlFetcher);
+    }
+
+    @Deprecated
+    public MultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
+        this.formsRepository = formsRepository;
+        this.formListApi = formListApi;
     }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
@@ -123,9 +128,6 @@ public class MultiFormDownloader {
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
     private boolean processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
-        if (stateListener != null) {
-            stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
-        }
         boolean success = true;
         if (stateListener != null && stateListener.isTaskCanceled()) {
             throw new TaskCancelledException();
@@ -141,11 +143,11 @@ public class MultiFormDownloader {
             // if we've downloaded a duplicate, this gives us the file
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener);
 
-            if (fd.getManifestUrl() != null) {
+            if (fd.getManifest() != null) {
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                        count, total, stateListener);
+                        count, total, stateListener, fd.getManifest().getMediaFiles());
                 if (error != null && !error.isEmpty()) {
                     success = false;
                 }
@@ -223,8 +225,6 @@ public class MultiFormDownloader {
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
             if (uriResult != null) {
-                Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
-
                 // move the media files in the media folder
                 if (tempMediaPath != null) {
                     File formMediaPath = new File(uriResult.getMediaPath());
@@ -502,12 +502,10 @@ public class MultiFormDownloader {
 
     String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                          ServerFormDetails fd, int count,
-                                         int total, FormDownloaderListener stateListener) throws Exception {
+                                         int total, FormDownloaderListener stateListener, List<MediaFile> files) throws Exception {
         if (fd.getManifestUrl() == null) {
             return null;
         }
-
-        List<MediaFile> files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
 
         // OK we now have the full set of files to download...
         Timber.i("Downloading %d media files.", files.size());
@@ -523,10 +521,9 @@ public class MultiFormDownloader {
                 ++mediaCount;
                 if (stateListener != null) {
                     stateListener.progressUpdate(
-                            TranslationHandler.getString(Collect.getInstance(), R.string.form_download_progress,
-                                    fd.getFormName(),
-                                    String.valueOf(mediaCount), String.valueOf(files.size())),
-                            String.valueOf(count), String.valueOf(total));
+                            "",
+                            String.valueOf(mediaCount),
+                            "");
                 }
 
                 //try {
