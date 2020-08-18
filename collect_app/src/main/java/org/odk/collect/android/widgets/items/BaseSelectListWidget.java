@@ -13,13 +13,11 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.databinding.SelectListWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 public abstract class BaseSelectListWidget extends ItemsWidget implements MultiChoiceWidget {
@@ -119,14 +117,6 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
                 }
             }
         }
-    }
-
-    protected ChoicesRecyclerViewAdapterProps getChoicesRecyclerViewProps() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
-        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
-
-        return new ChoicesRecyclerViewAdapterProps(getContext(), items, getFormEntryPrompt(), getReferenceManager(),
-                getAudioHelper(), getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
     }
 
     protected abstract AbstractSelectListAdapter setUpAdapter();

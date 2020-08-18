@@ -32,8 +32,11 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.SelectOneItemClickListener;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -59,7 +62,12 @@ public class SelectOneWidget extends BaseSelectListWidget implements SelectOneIt
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getChoicesRecyclerViewProps());
+        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
+        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
+
+        recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getContext(), items,
+                getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
+                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
         return recyclerViewAdapter;
     }
 

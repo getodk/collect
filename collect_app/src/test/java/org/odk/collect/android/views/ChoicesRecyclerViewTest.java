@@ -23,7 +23,6 @@ import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.listeners.SelectOneItemClickListener;
-import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
@@ -64,13 +63,15 @@ public class ChoicesRecyclerViewTest {
 
     @Test
     public void whenNonFLexAppearanceIsUsed_shouldGridLayoutManagerBeUsed() {
-        recyclerView.initRecyclerView(getSelectOneListAdapter(1), false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false);
+        recyclerView.initRecyclerView(adapter, false);
         assertThat(recyclerView.getLayoutManager().getClass().getName(), equalTo(GridLayoutManager.class.getName()));
     }
 
     @Test
     public void whenFLexAppearanceIsUsed_shouldFlexboxLayoutManagerBeUsed() {
-        recyclerView.initRecyclerView(getSelectOneListAdapter(1), true);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false);
+        recyclerView.initRecyclerView(adapter, true);
         assertThat(recyclerView.getLayoutManager().getClass().getName(), equalTo(FlexboxLayoutManager.class.getName()));
     }
 
@@ -79,10 +80,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, false);
-
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -95,10 +93,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 2, false);
-
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -110,10 +105,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 2, false);
-
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false);
 
         recyclerView.initRecyclerView(adapter, true);
 
@@ -125,10 +117,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, false);
-
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -148,10 +137,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, false);
-
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, props);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -171,10 +157,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, true);
-
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -194,10 +177,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, true);
-
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, props);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -217,11 +197,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, false);
-
         SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -239,11 +216,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, false);
-
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, props);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -261,11 +235,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, true);
-
         SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -283,11 +254,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, true);
-
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, props);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -305,11 +273,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, false);
-
         SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -327,11 +292,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, false);
-
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, props);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -349,11 +311,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, true);
-
         SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, props);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -371,11 +330,8 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(activityController.get(), items, formEntryPrompt,
-                null, null, 0, 1, true);
-
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, props);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);
 
@@ -438,7 +394,6 @@ public class ChoicesRecyclerViewTest {
 
     private List<SelectChoice> getVisibleItems() {
         return ((AbstractSelectListAdapter) recyclerView.getAdapter())
-                .getProps()
                 .getFilteredItems();
     }
 
@@ -472,11 +427,5 @@ public class ChoicesRecyclerViewTest {
         return recyclerView.getAdapter() instanceof SelectOneListAdapter
                 ? getRadioButton(index).isChecked()
                 : getCheckBox(index).isChecked();
-    }
-
-    private SelectOneListAdapter getSelectOneListAdapter(int numOfColumns) {
-        ChoicesRecyclerViewAdapterProps props = new ChoicesRecyclerViewAdapterProps(null, new ArrayList<>(), null,
-                null, null, 0, numOfColumns, false);
-        return new SelectOneListAdapter(null, null, props);
     }
 }

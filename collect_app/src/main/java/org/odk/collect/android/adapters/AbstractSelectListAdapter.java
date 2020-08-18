@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.TypedValue;
@@ -38,10 +39,11 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.ImageConverter;
@@ -62,10 +64,28 @@ import static org.odk.collect.android.widgets.QuestionWidget.isRTL;
 public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<AbstractSelectListAdapter.ViewHolder>
         implements Filterable {
 
-    protected ChoicesRecyclerViewAdapterProps props;
+    protected final Context context;
+    protected List<SelectChoice> items;
+    protected List<SelectChoice> filteredItems;
+    protected final FormEntryPrompt prompt;
+    protected final ReferenceManager referenceManager;
+    protected final AudioHelper audioHelper;
+    protected final int playColor;
+    protected final int numColumns;
+    protected boolean noButtonsMode;
 
-    AbstractSelectListAdapter(ChoicesRecyclerViewAdapterProps props) {
-        this.props = props;
+    AbstractSelectListAdapter(Context context, List<SelectChoice> items, FormEntryPrompt prompt,
+                              ReferenceManager referenceManager, AudioHelper audioHelper,
+                              int playColor, int numColumns, boolean noButtonsMode) {
+        this.context = context;
+        this.items = items;
+        this.filteredItems = items;
+        this.prompt = prompt;
+        this.referenceManager = referenceManager;
+        this.audioHelper = audioHelper;
+        this.playColor = playColor;
+        this.numColumns = numColumns;
+        this.noButtonsMode = noButtonsMode;
     }
 
     @Override
@@ -75,7 +95,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     @Override
     public int getItemCount() {
-        return props.getFilteredItems().size();
+        return filteredItems.size();
     }
 
     @Override
@@ -86,12 +106,12 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 String searchStr = charSequence.toString().toLowerCase(Locale.US);
                 FilterResults filterResults = new FilterResults();
                 if (searchStr.isEmpty()) {
-                    filterResults.values = props.getItems();
-                    filterResults.count = props.getItems().size();
+                    filterResults.values = items;
+                    filterResults.count = items.size();
                 } else {
                     List<SelectChoice> filteredList = new ArrayList<>();
-                    for (SelectChoice item : props.getItems()) {
-                        if (props.getPrompt().getSelectChoiceText(item).toLowerCase(Locale.US).contains(searchStr)) {
+                    for (SelectChoice item : items) {
+                        if (prompt.getSelectChoiceText(item).toLowerCase(Locale.US).contains(searchStr)) {
                             filteredList.add(item);
                         }
                     }
@@ -104,7 +124,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                props.setFilteredItems((List<SelectChoice>) filterResults.values);
+                filteredItems = (List<SelectChoice>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -114,20 +134,20 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     void setUpButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-        button.setText(StringUtils.textToHtml(props.getPrompt().getSelectChoiceText(props.getFilteredItems().get(index))));
-        button.setTag(props.getItems().indexOf(props.getFilteredItems().get(index)));
+        button.setText(StringUtils.textToHtml(prompt.getSelectChoiceText(filteredItems.get(index))));
+        button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
     }
 
     View setUpNoButtonsView(int index) {
-        View view = new View(props.getContext());
+        View view = new View(context);
 
-        SelectChoice selectChoice = props.getFilteredItems().get(index);
+        SelectChoice selectChoice = filteredItems.get(index);
 
         String imageURI = selectChoice instanceof ExternalSelectChoice
                 ? ((ExternalSelectChoice) selectChoice).getImage()
-                : props.getPrompt().getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+                : prompt.getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
 
         String errorMsg = null;
         if (imageURI != null) {
@@ -137,18 +157,18 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                     Bitmap bitmap = FileUtils.getBitmap(imageFile.getPath(), new BitmapFactory.Options());
 
                     if (bitmap != null) {
-                        ImageView imageView = new ImageView(props.getContext());
-                        if (!WidgetAppearanceUtils.isFlexAppearance(props.getPrompt())) {
-                            bitmap = ImageConverter.scaleImageToNewWidth(bitmap, props.getContext().getResources().getDisplayMetrics().widthPixels / props.getNumColumns());
+                        ImageView imageView = new ImageView(context);
+                        if (!WidgetAppearanceUtils.isFlexAppearance(prompt)) {
+                            bitmap = ImageConverter.scaleImageToNewWidth(bitmap, context.getResources().getDisplayMetrics().widthPixels / numColumns);
                         }
                         imageView.setImageBitmap(bitmap);
                         imageView.setAdjustViewBounds(true);
                         view = imageView;
                     } else {
-                        errorMsg = props.getContext().getString(R.string.file_invalid, imageFile);
+                        errorMsg = context.getString(R.string.file_invalid, imageFile);
                     }
                 } else {
-                    errorMsg = props.getContext().getString(R.string.file_missing, imageFile);
+                    errorMsg = context.getString(R.string.file_missing, imageFile);
                 }
             } catch (InvalidReferenceException e) {
                 Timber.e("Image invalid reference due to %s ", e.getMessage());
@@ -158,10 +178,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
 
         if (errorMsg != null) {
-            TextView missingImage = new TextView(props.getContext());
+            TextView missingImage = new TextView(context);
             missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
             missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-            String choiceText = StringUtils.textToHtml(props.getPrompt().getSelectChoiceText(selectChoice)).toString();
+            String choiceText = StringUtils.textToHtml(prompt.getSelectChoiceText(selectChoice)).toString();
 
             if (!choiceText.isEmpty()) {
                 missingImage.setText(choiceText);
@@ -174,8 +194,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             view = missingImage;
         }
 
-        int itemPadding = props.getContext().getResources().getDimensionPixelSize(R.dimen.select_item_border);
-        int paddingStart = props.getContext().getResources().getDimensionPixelSize(R.dimen.margin_standard);
+        int itemPadding = context.getResources().getDimensionPixelSize(R.dimen.select_item_border);
+        int paddingStart = context.getResources().getDimensionPixelSize(R.dimen.margin_standard);
 
         view.setPadding(paddingStart, itemPadding, itemPadding, itemPadding);
 
@@ -195,6 +215,14 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     public abstract List<Selection> getSelectedItems();
 
+    public List<SelectChoice> getFilteredItems() {
+        return filteredItems;
+    }
+
+    public AudioHelper getAudioHelper() {
+        return audioHelper;
+    }
+
     abstract class ViewHolder extends RecyclerView.ViewHolder {
         AudioVideoImageTextLabel audioVideoImageTextLabel;
         FrameLayout view;
@@ -204,15 +232,15 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
 
         void bind(final int index) {
-            if (props.isNoButtonsMode()) {
+            if (noButtonsMode) {
                 view.removeAllViews();
                 view.addView(setUpNoButtonsView(index));
-                view.setOnClickListener(v -> onItemClick(props.getFilteredItems().get(index).selection(), v));
-                view.setEnabled(!props.getPrompt().isReadOnly());
+                view.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
+                view.setEnabled(!prompt.isReadOnly());
                 view.setLongClickable(true);
             } else {
-                addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), props.getFilteredItems());
-                audioVideoImageTextLabel.setEnabled(!props.getPrompt().isReadOnly());
+                addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
+                audioVideoImageTextLabel.setEnabled(!prompt.isReadOnly());
                 audioVideoImageTextLabel.setLongClickable(true);
             }
         }
@@ -223,25 +251,25 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         public void addMediaFromChoice(AudioVideoImageTextLabel audioVideoImageTextLabel, int index, TextView textView, List<SelectChoice> items) {
             SelectChoice item = items.get(index);
 
-            audioVideoImageTextLabel.setTag(getClipID(props.getPrompt(), item));
+            audioVideoImageTextLabel.setTag(getClipID(prompt, item));
             audioVideoImageTextLabel.setTextView(textView);
 
             String imageURI = getImageURI(index, items);
-            String videoURI = props.getPrompt().getSpecialFormSelectChoiceText(item, "video");
-            String bigImageURI = props.getPrompt().getSpecialFormSelectChoiceText(item, "big-image");
-            String audioURI = getPlayableAudioURI(props.getPrompt(), item, props.getReferenceManager());
+            String videoURI = prompt.getSpecialFormSelectChoiceText(item, "video");
+            String bigImageURI = prompt.getSpecialFormSelectChoiceText(item, "big-image");
+            String audioURI = getPlayableAudioURI(prompt, item, referenceManager);
             try {
                 if (imageURI != null) {
-                    audioVideoImageTextLabel.setImage(new File(props.getReferenceManager().deriveReference(imageURI).getLocalURI()));
+                    audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()));
                 }
                 if (bigImageURI != null) {
-                    audioVideoImageTextLabel.setBigImage(new File(props.getReferenceManager().deriveReference(bigImageURI).getLocalURI()));
+                    audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));
                 }
                 if (videoURI != null) {
-                    audioVideoImageTextLabel.setVideo(new File(props.getReferenceManager().deriveReference(videoURI).getLocalURI()));
+                    audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
                 }
                 if (audioURI != null) {
-                    audioVideoImageTextLabel.setAudio(audioURI, props.getAudioHelper());
+                    audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
                 }
             } catch (InvalidReferenceException e) {
                 Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
@@ -255,14 +283,14 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             if (items.get(index) instanceof ExternalSelectChoice) {
                 imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
             } else {
-                imageURI = props.getPrompt().getSpecialFormSelectChoiceText(items.get(index),
+                imageURI = prompt.getSpecialFormSelectChoiceText(items.get(index),
                         FormEntryCaption.TEXT_FORM_IMAGE);
             }
             return imageURI;
         }
 
         void adjustAudioVideoImageTextLabelParams() {
-            if (WidgetAppearanceUtils.isFlexAppearance(props.getPrompt())) {
+            if (WidgetAppearanceUtils.isFlexAppearance(prompt)) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 audioVideoImageTextLabel.findViewById(R.id.audio_video_image_text_label_container).setLayoutParams(params);
@@ -272,13 +300,8 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     }
 
     public int getNumColumns() {
-        return props.getNumColumns();
+        return numColumns;
     }
 
     public abstract void clearAnswer();
-
-    // Just for tests
-    public ChoicesRecyclerViewAdapterProps getProps() {
-        return props;
-    }
 }

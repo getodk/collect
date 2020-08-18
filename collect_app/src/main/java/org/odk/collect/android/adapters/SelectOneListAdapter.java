@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +29,12 @@ import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectOneItemClickListener;
-import org.odk.collect.android.logic.ChoicesRecyclerViewAdapterProps;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,17 +46,19 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     private View selectedItem;
     private SelectOneItemClickListener listener;
 
-    public SelectOneListAdapter(String selectedValue, SelectOneItemClickListener listener, ChoicesRecyclerViewAdapterProps props) {
-        super(props);
+    public SelectOneListAdapter(String selectedValue, SelectOneItemClickListener listener, Context context,
+                                List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
+                                AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode) {
+        super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode);
         this.selectedValue = selectedValue;
         this.listener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(props.isNoButtonsMode()
+        return new ViewHolder(noButtonsMode
                 ? new FrameLayout(parent.getContext())
-                : new AudioVideoImageTextLabel(props.getContext()));
+                : new AudioVideoImageTextLabel(context));
     }
 
     @Override
@@ -64,7 +69,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
                 listener.onClearNextLevelsOfCascadingSelect();
             }
             selectedRadioButton = (RadioButton) buttonView;
-            selectedValue = props.getItems().get((int) selectedRadioButton.getTag()).getValue();
+            selectedValue = items.get((int) selectedRadioButton.getTag()).getValue();
         }
     }
 
@@ -75,11 +80,11 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     class ViewHolder extends AbstractSelectListAdapter.ViewHolder {
         ViewHolder(View v) {
             super(v);
-            if (props.isNoButtonsMode()) {
+            if (noButtonsMode) {
                 view = (FrameLayout) v;
             } else {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
-                audioVideoImageTextLabel.setPlayTextColor(props.getPlayColor());
+                audioVideoImageTextLabel.setPlayTextColor(playColor);
                 audioVideoImageTextLabel.setItemClickListener(listener);
                 adjustAudioVideoImageTextLabelParams();
             }
@@ -87,8 +92,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
 
         void bind(final int index) {
             super.bind(index);
-            if (props.isNoButtonsMode()) {
-                if (props.getFilteredItems().get(index).getValue().equals(selectedValue)) {
+            if (noButtonsMode) {
+                if (filteredItems.get(index).getValue().equals(selectedValue)) {
                     view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
                     selectedItem = view;
                 } else {
@@ -104,7 +109,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
         setUpButton(radioButton, index);
         radioButton.setOnCheckedChangeListener(this);
 
-        String value = props.getFilteredItems().get(index).getValue();
+        String value = filteredItems.get(index).getValue();
 
         if (value != null && value.equals(selectedValue)) {
             radioButton.setChecked(true);
@@ -147,7 +152,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
 
     public Selection getSelectedItem() {
         if (selectedValue != null) {
-            for (SelectChoice item : props.getItems()) {
+            for (SelectChoice item : items) {
                 if (selectedValue.equalsIgnoreCase(item.getValue())) {
                     return item.selection();
                 }
