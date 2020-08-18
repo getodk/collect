@@ -33,11 +33,11 @@ public class ScreenUtils {
         return getDisplayMetrics().heightPixels;
     }
 
-    public static float getXPixelsNumberPerInch() {
+    public static float xdpi() {
         return getDisplayMetrics().xdpi;
     }
 
-    public static float getYPixelsNumberPerInch() {
+    public static float ydpi() {
         return getDisplayMetrics().ydpi;
     }
 
