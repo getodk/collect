@@ -209,9 +209,11 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.addView(setUpNoButtonsView(index));
                 view.setOnClickListener(v -> onItemClick(props.getFilteredItems().get(index).selection(), v));
                 view.setEnabled(!props.getPrompt().isReadOnly());
+                view.setLongClickable(true);
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), props.getFilteredItems());
                 audioVideoImageTextLabel.setEnabled(!props.getPrompt().isReadOnly());
+                audioVideoImageTextLabel.setLongClickable(true);
             }
         }
 
