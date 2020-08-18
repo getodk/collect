@@ -71,6 +71,7 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        viewModel.getSelectListAdapter().getProps().getAudioHelper().stop();
         binding = null;
     }
 
