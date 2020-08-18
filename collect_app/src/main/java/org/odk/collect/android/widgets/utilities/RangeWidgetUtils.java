@@ -135,9 +135,6 @@ public class RangeWidgetUtils {
                 } else {
                     slider.setValue(rangeStart.add(rangeEnd).subtract(actualValue).floatValue());
                 }
-            } else {
-                slider.setValue(slider.getValueFrom());
-                slider.setThumbRadius(0);
             }
         }
 
