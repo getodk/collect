@@ -314,7 +314,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage assertSelectMinimalDialogAnswer(String answer) {
-        onView(withId(R.id.choices_search_box)).check(matches(withText(answer)));
+        onView(withId(R.id.answer)).check(matches(withText(answer)));
         return this;
     }
 

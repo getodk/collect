@@ -6,7 +6,7 @@
     android:paddingVertical="@dimen/margin_small">
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/choices_search_box"
+        android:id="@+id/answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="@dimen/margin_small"
