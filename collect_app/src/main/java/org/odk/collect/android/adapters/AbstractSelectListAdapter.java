@@ -242,7 +242,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                     audioVideoImageTextLabel.setAudio(audioURI, props.getAudioHelper());
                 }
             } catch (InvalidReferenceException e) {
-                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+                Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
             }
 
             textView.setGravity(Gravity.CENTER_VERTICAL);

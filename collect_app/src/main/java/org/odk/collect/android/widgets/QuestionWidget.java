@@ -194,7 +194,7 @@ public abstract class QuestionWidget
                 analytics.logEvent(AUDIO_QUESTION, "AudioLabel", questionDetails.getFormAnalyticsID());
             }
         } catch (InvalidReferenceException e) {
-            Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+            Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
         }
 
         label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));

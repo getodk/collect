@@ -167,7 +167,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
                         }
 
                     } catch (InvalidReferenceException e) {
-                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+                        Timber.d(e, "Invalid image reference due to %s ", e.getMessage());
                     }
                 }
 

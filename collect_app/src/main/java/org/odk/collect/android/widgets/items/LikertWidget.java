@@ -315,9 +315,8 @@ public class LikertWidget extends ItemsWidget {
             if (errorMsg != null) {
                 Timber.e(errorMsg);
             }
-
         } catch (InvalidReferenceException e) {
-            Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+            Timber.d(e, "Invalid image reference due to %s ", e.getMessage());
         }
         return errorMsg;
     }
