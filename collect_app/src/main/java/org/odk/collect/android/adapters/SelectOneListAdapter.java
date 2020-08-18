@@ -46,6 +46,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     private View selectedItem;
     private SelectOneItemClickListener listener;
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectOneListAdapter(String selectedValue, SelectOneItemClickListener listener, Context context,
                                 List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
                                 AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode) {

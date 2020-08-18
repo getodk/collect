@@ -21,6 +21,7 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements Selec
     public SelectOneMinimalDialog() {
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectOneMinimalDialog(String selectedItem, boolean isFlex, boolean isAutoComplete, Context context,
                                   List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
                                   AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode) {

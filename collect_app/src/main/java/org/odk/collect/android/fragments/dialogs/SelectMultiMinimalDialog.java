@@ -18,6 +18,7 @@ public class SelectMultiMinimalDialog extends SelectMinimalDialog {
     public SelectMultiMinimalDialog() {
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectMultiMinimalDialog(List<Selection> selectedItems, boolean isFlex, boolean isAutoComplete, Context context,
                                     List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
                                     AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode) {
