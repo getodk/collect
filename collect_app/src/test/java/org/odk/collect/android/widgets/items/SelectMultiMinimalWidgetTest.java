@@ -31,13 +31,13 @@ public class SelectMultiMinimalWidgetTest extends GeneralSelectMultiWidgetTest<S
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
-        assertThat(getSpyWidget().binding.choicesSearchBox.getVisibility(), is(View.VISIBLE));
-        assertThat(getSpyWidget().binding.choicesSearchBox.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().binding.answer.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().binding.answer.isEnabled(), is(Boolean.FALSE));
     }
 
     @Test
     public void whenThereIsNoAnswer_shouldDefaultTextBeDisplayed() {
-        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is("Select Answer"));
+        assertThat(getSpyWidget().binding.answer.getText().toString(), is("Select Answer"));
     }
 
     @Test
@@ -47,21 +47,21 @@ public class SelectMultiMinimalWidgetTest extends GeneralSelectMultiWidgetTest<S
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
         when(formEntryPrompt.getSelectItemText(selectedChoice)).thenReturn(selectedChoice.getValue());
 
-        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is(selectedChoice.getValue()));
+        assertThat(getSpyWidget().binding.answer.getText().toString(), is(selectedChoice.getValue()));
     }
 
     @Test
     public void whenAnswerChanges_shouldAnswerLabelBeUpdated() {
-        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is("Select Answer"));
+        assertThat(getSpyWidget().binding.answer.getText().toString(), is("Select Answer"));
 
         SelectMultiData answer = getInitialAnswer();
         Selection selectedChoice = ((List<Selection>) answer.getValue()).get(0);
         when(formEntryPrompt.getSelectItemText(selectedChoice)).thenReturn(selectedChoice.getValue());
         getSpyWidget().setBinaryData(Collections.singletonList(selectedChoice));
 
-        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is(selectedChoice.getValue()));
+        assertThat(getSpyWidget().binding.answer.getText().toString(), is(selectedChoice.getValue()));
         getSpyWidget().clearAnswer();
-        assertThat(getSpyWidget().binding.choicesSearchBox.getText().toString(), is("Select Answer"));
+        assertThat(getSpyWidget().binding.answer.getText().toString(), is("Select Answer"));
     }
 
     @Test
