@@ -39,85 +39,6 @@ public class SelectOneMinimalWidgetTest {
                             "selectsForm-media/a.mp4"), true));
 
     @Test
-    public void assertAllItemsAreDisplayedInVariousAppearances() {
-        new FormEntryPage("select_one_minimal_form", activityTestRule)
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .closeSelectMinimalDialog()
-                .swipeToNextQuestion("Q2")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .closeSelectMinimalDialog()
-                .swipeToNextQuestion("Q3")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .closeSelectMinimalDialog()
-                .swipeToNextQuestion("Q4")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .closeSelectMinimalDialog()
-                .swipeToNextQuestion("Q5")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC");
-    }
-
-    @Test
-    public void assertFilteringWorksAsExpected() {
-        new FormEntryPage("select_one_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q3")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .filterChoices("bk", true)
-                .assertTextDoesNotExist("AAA", "BBB", "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .filterChoices("", true)
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC");
-    }
-
-    @Test
-    public void assertFilteringWorksAsExpectedInNoButtonsMode() {
-        new FormEntryPage("select_one_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q4")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .filterChoices("bk", true)
-                .assertTextDoesNotExist("AAA", "BBB", "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .filterChoices("", true)
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC");
-    }
-
-    @Test
     public void whenQuickAppearanceExist_shouldNavigateForwardAfterSelectingAnswer() {
         new FormEntryPage("select_one_minimal_form", activityTestRule)
                 .swipeToNextQuestion("Q2")
@@ -146,20 +67,6 @@ public class SelectOneMinimalWidgetTest {
                 .closeSelectMinimalDialog()
                 .swipeToNextQuestion("Q5")
                 .assertSearchBoxIsHidden(true);
-    }
-
-    @Test
-    public void clickingOnAlreadySelectedOption_shouldNotUnselectItInNoButtonsMode() {
-        new FormEntryPage("select_one_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q4")
-                .openSelectMinimalDialog()
-                .clickOnText("AAA")
-                .openSelectMinimalDialog()
-                .assertItemChecked(0, true)
-                .clickOnText("AAA")
-                .openSelectMinimalDialog()
-                .assertItemChecked(0, true);
     }
 
     @Test

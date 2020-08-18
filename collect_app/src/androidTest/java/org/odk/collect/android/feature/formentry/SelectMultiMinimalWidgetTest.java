@@ -39,80 +39,6 @@ public class SelectMultiMinimalWidgetTest {
                             "selectsForm-media/a.mp4"), true));
 
     @Test
-    public void assertAllItemsAreDisplayedInVariousAppearances() {
-        new FormEntryPage("select_multi_minimal_form", activityTestRule)
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .closeSelectMinimalDialog()
-                .swipeToNextQuestion("Q2")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .closeSelectMinimalDialog()
-                .swipeToNextQuestion("Q3")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .closeSelectMinimalDialog()
-                .swipeToNextQuestion("Q4")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC");
-    }
-
-    @Test
-    public void assertFilteringWorksAsExpected() {
-        new FormEntryPage("select_multi_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q2")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .filterChoices("bk", true)
-                .assertTextDoesNotExist("AAA", "BBB", "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .filterChoices("", true)
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC");
-    }
-
-    @Test
-    public void assertFilteringWorksAsExpectedInNoButtonsMode() {
-        new FormEntryPage("select_multi_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q3")
-                .openSelectMinimalDialog()
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .clickOnText("BBB")
-                .filterChoices("bk", true)
-                .assertTextDoesNotExist("AAA", "BBB", "CCC")
-                .filterChoices("b", true)
-                .assertItemLabel(0, "BBB")
-                .assertTextDoesNotExist("AAA", "CCC")
-                .filterChoices("", true)
-                .assertItemLabel(0, "AAA")
-                .assertItemLabel(1, "BBB")
-                .assertItemLabel(2, "CCC");
-    }
-
-    @Test
     public void whenAutocompleteAppearanceIsNotUsed_shouldSearchBoxBeHidden() {
         new FormEntryPage("select_multi_minimal_form", activityTestRule)
                 .openSelectMinimalDialog()
@@ -129,18 +55,6 @@ public class SelectMultiMinimalWidgetTest {
                 .swipeToNextQuestion("Q4")
                 .openSelectMinimalDialog()
                 .assertSearchBoxIsHidden(true);
-    }
-
-    @Test
-    public void clickingOnAlreadySelectedOption_shouldNotUnselectItInNoButtonsMode() {
-        new FormEntryPage("select_multi_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q3")
-                .openSelectMinimalDialog()
-                .clickOnText("AAA")
-                .assertItemChecked(0, true)
-                .clickOnText("AAA")
-                .assertItemNotChecked(0, true);
     }
 
     @Test

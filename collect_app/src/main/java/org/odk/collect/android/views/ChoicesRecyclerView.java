@@ -59,7 +59,7 @@ public class ChoicesRecyclerView extends RecyclerView {
         setLayoutManager(new GridLayoutManager(getContext(), numColumns));
     }
 
-    void enableDivider() {
+    private void enableDivider() {
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.inset_divider_64dp);
 
@@ -71,7 +71,7 @@ public class ChoicesRecyclerView extends RecyclerView {
         addItemDecoration(divider);
     }
 
-    void adjustRecyclerViewSize() {
+    private void adjustRecyclerViewSize() {
         if (getAdapter().getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
             // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
             getLayoutParams().height = (int) (ScreenUtils.getScreenHeight() * 0.9);

@@ -43,7 +43,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
         restoreSavedSearchText();

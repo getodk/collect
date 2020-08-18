@@ -4,8 +4,6 @@ import android.app.Application;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -23,7 +21,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
@@ -128,125 +125,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     public void whenAutocompleteAppearanceDoesNotExist_shouldSearchBoxBeHidden() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
         assertThat(getSpyWidget().binding.choicesSearchBox.getVisibility(), is(View.GONE));
-    }
-
-    @Test
-    public void whenChoicesFiltered_shouldProperValuesBeReturnedInButtonsMode() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("AAA", "AAA"),
-                        new SelectChoice("BBB", "BBB")
-                ))
-                .withAppearance("autocomplete")
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        assertVisibleItemsInButtonsMode(widget, "AAA", "BBB");
-        widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItemsInButtonsMode(widget, "BBB");
-        widget.binding.choicesSearchBox.setText("bc");
-        assertVisibleItemsInButtonsMode(widget);
-        widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItemsInButtonsMode(widget, "BBB");
-        widget.binding.choicesSearchBox.setText("");
-        assertVisibleItemsInButtonsMode(widget, "AAA", "BBB");
-    }
-
-    @Test
-    public void whenChoicesFiltered_shouldProperValuesBeReturnedInNoButtonsMode() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("AAA", "AAA"),
-                        new SelectChoice("BBB", "BBB")
-                ))
-                .withAppearance("autocomplete no-buttons")
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        assertVisibleItemsInNoButtonsMode(widget, "AAA", "BBB");
-        widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItemsInNoButtonsMode(widget, "BBB");
-        widget.binding.choicesSearchBox.setText("bc");
-        assertVisibleItemsInNoButtonsMode(widget);
-        widget.binding.choicesSearchBox.setText("b");
-        assertVisibleItemsInNoButtonsMode(widget, "BBB");
-        widget.binding.choicesSearchBox.setText("");
-        assertVisibleItemsInNoButtonsMode(widget, "AAA", "BBB");
-    }
-
-    @Test
-    public void whenClickOneElementTwice_shouldThatElementRemainSelectedInNoButtonsMode() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("AAA", "AAA"),
-                        new SelectChoice("BBB", "BBB")
-                ))
-                .withAppearance("no-buttons")
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        clickChoice(widget, 0); // Select AAA
-        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
-        assertThat(isItemSelected(widget, 0), is(true));
-        assertThat(isItemSelected(widget, 1), is(false));
-
-        clickChoice(widget, 0); // Select AAA again
-        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
-        assertThat(isItemSelected(widget, 0), is(true));
-        assertThat(isItemSelected(widget, 1), is(false));
-    }
-
-    @Test
-    public void whenCLickOneOption_shouldPreviouslySelectedOptionBeUnselectedInButtonsMode() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("AAA", "AAA"),
-                        new SelectChoice("BBB", "BBB")
-                ))
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        clickChoice(widget, 0); // Select AAA
-        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
-        assertThat(isItemSelected(widget, 0), is(true));
-        assertThat(isItemSelected(widget, 1), is(false));
-
-        clickChoice(widget, 1); // Select BBB
-        assertThat(widget.getAnswer().getDisplayText(), is("BBB"));
-        assertThat(isItemSelected(widget, 0), is(false));
-        assertThat(isItemSelected(widget, 1), is(true));
-    }
-
-    @Test
-    public void whenClickOneOption_shouldPreviouslySelectedOptionBeUnselectedInNoMode() {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(
-                        new SelectChoice("AAA", "AAA"),
-                        new SelectChoice("BBB", "BBB")
-                ))
-                .withAppearance("no-buttons")
-                .build();
-
-        SelectOneWidget widget = getWidget();
-        populateRecyclerView(widget);
-
-        clickChoice(widget, 0); // Select AAA
-        assertThat(widget.getAnswer().getDisplayText(), is("AAA"));
-        assertThat(isItemSelected(widget, 0), is(true));
-        assertThat(isItemSelected(widget, 1), is(false));
-
-        clickChoice(widget, 1); // Select BBB
-        assertThat(widget.getAnswer().getDisplayText(), is("BBB"));
-        assertThat(isItemSelected(widget, 0), is(false));
-        assertThat(isItemSelected(widget, 1), is(true));
     }
 
     @Test
@@ -428,20 +306,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         });
     }
 
-    private boolean isItemSelected(SelectOneWidget widget, int index) {
-        return WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt)
-                ? isNoButtonItemSelected(widget, index)
-                : isButtonItemSelected(widget, index);
-    }
-
-    private boolean isNoButtonItemSelected(SelectOneWidget widget, int index) {
-        return getChoiceView(widget, index).getBackground() != null;
-    }
-
-    private boolean isButtonItemSelected(SelectOneWidget widget, int index) {
-        return getRadioButton(widget, index).isChecked();
-    }
-
     private void clickChoice(SelectOneWidget widget, int index) {
         if (WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt)) {
             clickNoButtonChoice(widget, index);
@@ -460,45 +324,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
     private ViewGroup getChoiceView(SelectOneWidget widget, int index) {
         return (ViewGroup) widget.binding.choicesRecyclerView.getChildAt(index);
-    }
-
-    private AudioVideoImageTextLabel getAudioVideoImageTextLabelView(SelectOneWidget widget, int index) {
-        return (AudioVideoImageTextLabel) widget.binding.choicesRecyclerView.getChildAt(index);
-    }
-
-    private RadioButton getRadioButton(SelectOneWidget widget, int index) {
-        return (RadioButton) getAudioVideoImageTextLabelView(widget, index).getLabelTextView();
-    }
-
-    private void assertVisibleItemsInButtonsMode(SelectOneWidget widget, String... items) {
-        assertThat(getWidget().binding.choicesRecyclerView.getAdapter().getItemCount(), is(items.length));
-        int index = 0;
-        for (SelectChoice item : getVisibleItems()) {
-            assertThat(getRadioButton(widget, getAllItems().indexOf(item)).getText().toString(), is(items[index]));
-            index++;
-        }
-    }
-
-    private void assertVisibleItemsInNoButtonsMode(SelectOneWidget widget, String... items) {
-        assertThat(getWidget().binding.choicesRecyclerView.getAdapter().getItemCount(), is(items.length));
-        int index = 0;
-        for (SelectChoice item : getVisibleItems()) {
-            TextView label = (TextView) getChoiceView(widget, getAllItems().indexOf(item)).getChildAt(0);
-            assertThat(label.getText(), is(items[index]));
-            index++;
-        }
-    }
-
-    private List<SelectChoice> getVisibleItems() {
-        return ((SelectOneListAdapter) getWidget().binding.choicesRecyclerView.getAdapter())
-                .getProps()
-                .getFilteredItems();
-    }
-
-    private List<SelectChoice> getAllItems() {
-        return ((SelectOneListAdapter) getWidget().binding.choicesRecyclerView.getAdapter())
-                .getProps()
-                .getItems();
     }
 
     private static final List<Pair<String, String>> REFERENCES = asList(
