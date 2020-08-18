@@ -58,7 +58,7 @@ the License.
         android:layout_above="@+id/buttonholder"
         android:layout_below="@id/appBarLayout"
         android:clipToPadding="false"
-        android:divider="?dividerCompat"
+        android:divider="@drawable/list_item_divider"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:scrollbarStyle="outsideOverlay"

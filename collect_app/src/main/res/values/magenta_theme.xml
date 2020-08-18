@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-
     <style name="Theme.Collect.Magenta" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!--Material theme attributes-->
+
+        <!--Material theme attributes from https://material.io/develop/android/theming -->
         <item name="colorPrimary">#BD006B</item>
         <item name="colorSecondary">#009ECC</item>
         <item name="colorError">#D42C2C</item>
-
-        <item name="colorPrimaryDark">#BD006B</item>
 
         <item name="colorSurface">#F7F7F7</item>
         <item name="colorOnPrimary">#FFFFFF</item>
@@ -16,23 +14,15 @@
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorOnSurface">#000000</item>
-        <item name="android:textColorHint">#E3E3E3</item> // defines the hint color for search
-        <item name="scrimBackground">@color/mtrl_scrim_color</item>
 
-        <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
-        </item>
-        <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2
-        </item>
-        <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3
-        </item>
-        <item name="textAppearanceHeadline4">@style/TextAppearance.MaterialComponents.Headline4
-        </item>
-        <item name="textAppearanceHeadline5">@style/TextAppearance.MaterialComponents.Headline5
-        </item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MaterialComponents.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MaterialComponents.Headline5</item>
         <item name="textAppearanceHeadline6">@style/TextAppearance.Collect.Headline6</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.Collect.Subtitle1</item>
-        <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2
-        </item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2</item>
         <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
         <item name="textAppearanceBody2">@style/TextAppearance.Collect.Body2</item>
         <item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
@@ -50,21 +40,20 @@
         </item>
         <!--/Material theme attributes-->
 
-        <!-- Needed so dialogs use secondary color for buttons -->
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <!-- Needed to customize the status bar color -->
+        <item name="android:statusBarColor">?colorPrimary</item>
 
-        <!-- Used to control icon colors. Should use theme value instead -->
-        <item name="iconColor">#000000</item>
+        <!-- defines the hint color for search -->
+        <item name="android:textColorHint">#E3E3E3</item>
 
-        <!-- Used for list item dividers. Should use theme value instead -->
-        <item name="dividerColor">#1e000000</item>
-
-        <!-- Used as divider in many places. Not sure why. -->
-        <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
+        <!-- Used to customize search view -->
         <item name="searchViewStyle">@style/Widget.Collect.SearchView.Magenta.Theme</item>
 
-        <item name="android:textDirection" tools:targetApi="17">locale</item>
-        <item name="android:tintMode" tools:targetApi="21">src_in</item>
+        <!-- Always show scrollbars for a11y reasons -->
+        <item name="android:fadeScrollbars">false</item>
+
+        <!-- Use locale for text direction in views -->
+        <item name="android:textDirection">locale</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Magenta.Theme" parent="Widget.AppCompat.SearchView">

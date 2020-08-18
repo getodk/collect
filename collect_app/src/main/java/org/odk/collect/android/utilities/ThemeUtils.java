@@ -24,49 +24,57 @@ import androidx.annotation.StyleRes;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
 
 public final class ThemeUtils {
 
     private final Context context;
+    private final PreferencesProvider preferencesProvider;
 
     public ThemeUtils(Context context) {
         this.context = context;
+        this.preferencesProvider = new PreferencesProvider(context);
     }
 
     @StyleRes
     public int getAppTheme() {
-        String theme = getPrefsTheme();
-        if (theme.equals(context.getString(R.string.app_theme_dark))) {
-            return R.style.Theme_Collect_Dark;
-        } else if (theme.equals(context.getString(R.string.app_theme_magenta))) {
+        if (isMagentaEnabled()) {
             return R.style.Theme_Collect_Magenta;
         } else {
-            return R.style.Theme_Collect_Light;
+            String theme = getPrefsTheme();
+            if (theme.equals(context.getString(R.string.app_theme_dark))) {
+                return R.style.Theme_Collect_Dark;
+            } else {
+                return R.style.Theme_Collect_Light;
+            }
         }
     }
 
     @StyleRes
     public int getFormEntryActivityTheme() {
-        String theme = getPrefsTheme();
-        if (theme.equals(context.getString(R.string.app_theme_dark))) {
-            return R.style.Theme_Collect_Activity_FormEntryActivity_Dark;
-        } else if (theme.equals(context.getString(R.string.app_theme_magenta))) {
+        if (isMagentaEnabled()) {
             return R.style.Theme_Collect_Activity_FormEntryActivity_Magenta;
         } else {
-            return R.style.Theme_Collect_Activity_FormEntryActivity_Light;
+            String theme = getPrefsTheme();
+            if (theme.equals(context.getString(R.string.app_theme_dark))) {
+                return R.style.Theme_Collect_Activity_FormEntryActivity_Dark;
+            } else {
+                return R.style.Theme_Collect_Activity_FormEntryActivity_Light;
+            }
         }
     }
 
     @StyleRes
     public int getSettingsTheme() {
-        String theme = getPrefsTheme();
-        if (theme.equals(context.getString(R.string.app_theme_dark))) {
-            return R.style.Theme_Collect_Settings_Dark;
-        } else if (theme.equals(context.getString(R.string.app_theme_magenta))) {
+        if (isMagentaEnabled()) {
             return R.style.Theme_Collect_Settings_Magenta;
         } else {
-            return R.style.Theme_Collect_Settings_Light;
+            String theme = getPrefsTheme();
+            if (theme.equals(context.getString(R.string.app_theme_dark))) {
+                return R.style.Theme_Collect_Settings_Dark;
+            } else {
+                return R.style.Theme_Collect_Settings_Light;
+            }
         }
     }
 
@@ -114,8 +122,12 @@ public final class ThemeUtils {
         return theme.equals(context.getString(R.string.app_theme_dark));
     }
 
+    private boolean isMagentaEnabled() {
+        return preferencesProvider.getGeneralSharedPreferences().getBoolean(GeneralKeys.KEY_MAGENTA_THEME, false);
+    }
+
     private String getPrefsTheme() {
-        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_APP_THEME);
+        return preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_APP_THEME, "light_theme");
     }
 
     /**
@@ -133,7 +145,7 @@ public final class ThemeUtils {
 
     @ColorInt
     public int getIconColor() {
-        return getAttributeValue(R.attr.iconColor);
+        return getAttributeValue(R.attr.colorOnSurface);
     }
 
     @ColorInt

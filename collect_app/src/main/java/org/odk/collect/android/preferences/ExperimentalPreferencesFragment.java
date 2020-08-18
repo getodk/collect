@@ -10,13 +10,21 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.DaggerUtils;
+
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
 public class ExperimentalPreferencesFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.experimental_preferences, rootKey);
+
+        findPreference(GeneralKeys.KEY_MAGENTA_THEME).setOnPreferenceChangeListener((preference, newValue) -> {
+            startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
+            return true;
+        });
     }
 
     @Override

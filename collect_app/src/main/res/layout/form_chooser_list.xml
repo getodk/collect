@@ -36,7 +36,7 @@ the License.
                 android:paddingBottom="8dp"
                 android:clipToPadding="false"
                 android:scrollbarStyle="outsideOverlay"
-                android:divider="?dividerCompat"/>
+                android:divider="@drawable/list_item_divider"/>
 
         <TextView
                 android:id="@android:id/empty"
