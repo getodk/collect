@@ -137,7 +137,6 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.ImageConverter;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -1883,13 +1882,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
-                        // Request auto-send if app-wide auto-send is enabled or the form that was just
-                        // finalized specifies that it should always be auto-sent.
-                        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue(null, "id");
-                        String formVersion = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue(null, "version");
-                        if (InstanceUploaderUtils.shouldFormBeSent(formsRepository, formId, formVersion, GeneralSharedPreferences.isAutoSendEnabled())) {
-                            formSubmitManager.scheduleSubmit();
-                        }
+                        formSubmitManager.scheduleSubmit();
                     }
 
                     finishAndReturnInstance();
