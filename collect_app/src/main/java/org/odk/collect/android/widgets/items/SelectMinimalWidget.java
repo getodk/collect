@@ -28,11 +28,11 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SelectMinimalWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        binding.choicesSearchBox.setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
+        binding.answer.setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
         if (prompt.isReadOnly()) {
-            binding.choicesSearchBox.setEnabled(false);
+            binding.answer.setEnabled(false);
         } else {
-            binding.choicesSearchBox.setOnClickListener(v -> {
+            binding.answer.setOnClickListener(v -> {
                 FormController formController = Collect.getInstance().getFormController();
                 if (formController != null) {
                     formController.setIndexWaitingForData(prompt.getIndex());
@@ -45,7 +45,7 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
 
     @Override
     public void clearAnswer() {
-        binding.choicesSearchBox.setText(R.string.select_answer);
+        binding.answer.setText(R.string.select_answer);
         widgetValueChanged();
     }
 

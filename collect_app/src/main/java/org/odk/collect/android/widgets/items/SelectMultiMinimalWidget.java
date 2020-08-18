@@ -64,7 +64,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
 
     private void updateAnswerLabel() {
         if (selectedItems.isEmpty()) {
-            binding.choicesSearchBox.setText(R.string.select_answer);
+            binding.answer.setText(R.string.select_answer);
         } else {
             StringBuilder builder = new StringBuilder();
             for (Selection selectedItem : selectedItems) {
@@ -73,7 +73,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
                     builder.append(", ");
                 }
             }
-            binding.choicesSearchBox.setText(builder.toString());
+            binding.answer.setText(builder.toString());
         }
     }
 
