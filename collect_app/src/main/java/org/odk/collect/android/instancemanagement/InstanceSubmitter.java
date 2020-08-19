@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.instances.Instance;
@@ -141,11 +141,28 @@ public class InstanceSubmitter {
     private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
         List<Instance> toUpload = new ArrayList<>();
         for (Instance instance : instancesRepository.getAllFinalized()) {
-            if (InstanceUploaderUtils.shouldFormBeSent(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
+            if (shouldFormBeSent(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
                 toUpload.add(instance);
             }
         }
 
         return toUpload;
+    }
+
+    /**
+     * Returns whether a form with the specified form_id should be auto-sent given the current
+     * app-level auto-send settings. Returns false if there is no form with the specified form_id.
+     *
+     * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
+     * auto-send settings OR if auto-send is on at the form-level.
+     *
+     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
+     */
+    public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
+        Form form = formsRepository.get(jrFormId, jrFormVersion);
+        if (form == null) {
+            return false;
+        }
+        return form.getAutoSend() == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(form.getAutoSend());
     }
 }

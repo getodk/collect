@@ -24,60 +24,6 @@ public class InstanceUploaderUtilsTest {
     private static final int NUMBER_OF_INSTANCES_TO_SEND = 1000;
 
     @Test
-    public void shouldFormBeSentFunction_shouldReturnFalseIfAutoSendNotSpecifiedOnFormLevelAndDisabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeSent(formsRepository, "1", "1", false), is(false));
-    }
-
-    @Test
-    public void shouldFormBeSentFunction_shouldReturnTrueIfAutoSendNotSpecifiedOnFormLevelButEnabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeSent(formsRepository, "1", "1", true), is(true));
-    }
-
-    @Test
-    public void shouldFormBeSentFunction_shouldReturnFalseIfAutoSendSpecifiedAsFalseOnFormLevelButEnabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
-                .autoSend("false")
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeSent(formsRepository, "1", "1", true), is(false));
-    }
-
-    @Test
-    public void shouldFormBeSentFunction_shouldReturnTrueIfAutoSendSpecifiedAsTrueOnFormLevelButDisabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
-                .autoSend("true")
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeSent(formsRepository, "1", "1", false), is(true));
-    }
-
-    @Test
     public void shouldFormBeDeletedFunction_shouldReturnFalseIfAutoDeleteNotSpecifiedOnFormLevelAndDisabledInSettings() {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
