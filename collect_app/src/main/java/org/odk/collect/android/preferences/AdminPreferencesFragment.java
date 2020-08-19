@@ -129,6 +129,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             }
 
             if (fragment != null) {
+                fragment.setArguments(getArguments());
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.preferences_fragment_container, fragment)
                         .addToBackStack(null)
