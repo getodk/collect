@@ -58,7 +58,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     @Override
     public SelectMultiWidget createWidget() {
         SelectMultiWidget selectMultiWidget = new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
-        selectMultiWidget.onAttachedToWindow();
         return selectMultiWidget;
     }
 

@@ -29,6 +29,8 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
     public BaseSelectListWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
         logAnalytics(questionDetails);
+        binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
+        restoreSavedSearchText();
     }
 
     @Override
@@ -38,13 +40,6 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
             setUpSearchBox();
         }
         return binding.getRoot();
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
-        restoreSavedSearchText();
     }
 
     @Override

@@ -22,7 +22,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.formentry.questions.ItemsetQuestionDetails;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.XPathParseTool;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
@@ -96,9 +96,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @NonNull
     @Override
     public ItemsetWidget createWidget() {
-        ItemsetWidget itemsetWidget = new ItemsetWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
-                false, parseTool, adapter, fileUtil);
-        itemsetWidget.onAttachedToWindow();
+        ItemsetWidget itemsetWidget = new ItemsetWidget(activity, new ItemsetQuestionDetails(formEntryPrompt, "formAnalyticsID", parseTool, adapter, fileUtil), false);
         return itemsetWidget;
     }
 

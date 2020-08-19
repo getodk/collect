@@ -66,7 +66,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         if (isQuick()) {
             selectOneWidget.setListener(listener);
         }
-        selectOneWidget.onAttachedToWindow();
         return selectOneWidget;
     }
 

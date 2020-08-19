@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import androidx.annotation.NonNull;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormDef;
@@ -34,6 +33,7 @@ import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.formentry.questions.ItemsetQuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtil;
@@ -56,28 +56,12 @@ public class ItemsetWidget extends SelectOneWidget {
 
     private static final String QUOTATION_MARK = "\"";
 
-    private final XPathParseTool parseTool;
-    private final ItemsetDbAdapter adapter;
-    private final FileUtil fileUtil;
-
     public ItemsetWidget(Context context, QuestionDetails formEntryPrompt, boolean autoAdvanceToNext) {
-        this(context, formEntryPrompt, autoAdvanceToNext, new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil());
+        this(context, new ItemsetQuestionDetails(formEntryPrompt.getPrompt(), formEntryPrompt.getFormAnalyticsID(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()), autoAdvanceToNext);
     }
 
-    public ItemsetWidget(Context context,
-                         QuestionDetails formEntryPrompt,
-                         boolean autoAdvance,
-                         @NonNull XPathParseTool parseTool,
-                         @NonNull ItemsetDbAdapter adapter,
-                         @NonNull FileUtil fileUtil) {
-
+    public ItemsetWidget(Context context, ItemsetQuestionDetails formEntryPrompt, boolean autoAdvance) {
         super(context, formEntryPrompt, autoAdvance);
-
-        this.parseTool = parseTool;
-        this.adapter = adapter;
-        this.fileUtil = fileUtil;
-
-        items = getItems();
     }
 
     @Override
@@ -93,7 +77,7 @@ public class ItemsetWidget extends SelectOneWidget {
 
     @Override
     protected void readItems() {
-        // Do nothing here. We want to read items from an external csv later.
+        items = getItems();
     }
 
     @Override
@@ -211,7 +195,7 @@ public class ItemsetWidget extends SelectOneWidget {
         for (int i = 0; i < arguments.size(); i++) {
             XPathExpression xpr;
             try {
-                xpr = parseTool.parseXPath(arguments.get(i));
+                xpr = ((ItemsetQuestionDetails) getQuestionDetails()).getParseTool().parseXPath(arguments.get(i));
             } catch (XPathSyntaxException e) {
                 Timber.e(e);
                 TextView error = new TextView(getContext());
@@ -244,15 +228,15 @@ public class ItemsetWidget extends SelectOneWidget {
     private List<SelectChoice> getItemsFromDatabase(String selection, String[] selectionArgs, FormController formController) {
         List<SelectChoice> items = new ArrayList<>();
 
-        File itemsetFile =  fileUtil.getItemsetFile(formController.getMediaFolder().getAbsolutePath());
+        File itemsetFile =  ((ItemsetQuestionDetails) getQuestionDetails()).getFileUtil().getItemsetFile(formController.getMediaFolder().getAbsolutePath());
 
         if (itemsetFile.exists()) {
-            adapter.open();
+            ((ItemsetQuestionDetails) getQuestionDetails()).getAdapter().open();
 
             // name of the itemset table for this form
             String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath());
             try {
-                Cursor c = adapter.query(pathHash, selection, selectionArgs);
+                Cursor c = ((ItemsetQuestionDetails) getQuestionDetails()).getAdapter().query(pathHash, selection, selectionArgs);
                 if (c != null) {
                     c.move(-1);
                     int index = 0;
@@ -288,7 +272,7 @@ public class ItemsetWidget extends SelectOneWidget {
             } catch (SQLiteException e) {
                 Timber.i(e);
             } finally {
-                adapter.close();
+                ((ItemsetQuestionDetails) getQuestionDetails()).getAdapter().close();
             }
         } else {
             showWarning(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
