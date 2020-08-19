@@ -1,6 +1,9 @@
 package org.odk.collect.android.widgets;
 
+import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.test.core.view.MotionEventBuilder;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
@@ -33,6 +36,7 @@ public class RangeIntegerWidgetTest {
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
 
     private RangeQuestion rangeQuestion;
+    private MotionEvent motionEvent;
 
     @Before
     public void setup() {
@@ -40,6 +44,10 @@ public class RangeIntegerWidgetTest {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
+
+        motionEvent = MotionEventBuilder.newBuilder().build();
+        motionEvent.setAction(MotionEvent.ACTION_DOWN);
+        motionEvent.setLocation(50, 0);
     }
 
     @Test
@@ -126,34 +134,51 @@ public class RangeIntegerWidgetTest {
     @Test
     public void changingSliderValue_showsSliderThumb() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.setValue(4.0F);
+        widget.slider.onTouchEvent(motionEvent);
         assertThat(widget.slider.getThumbRadius(), not(0));
     }
 
     @Test
     public void changingSliderValue_whenRangeStartIsSmallerThanRangeEnd_updatesAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.setValue(4.0F);
-        assertThat(widget.currentValue.getText(), equalTo("4"));
+        widget.slider.onTouchEvent(motionEvent);
+        assertThat(widget.currentValue.getText(), equalTo("10"));
     }
 
     @Test
     public void changingSliderValue_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
-        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.setValue(4.0F);
 
-        assertThat(widget.currentValue.getText(), equalTo("7"));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.onTouchEvent(motionEvent);
+
+        assertThat(widget.currentValue.getText(), equalTo("1"));
     }
 
     @Test
     public void changingSliderValue_callsValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.slider.setValue(4.0F);
+        widget.slider.onTouchEvent(motionEvent);
 
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void changingSliderValueProgramatically_doesNotUpdateAnswer() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.setValue(4);
+        assertThat(widget.currentValue.getText(), equalTo(""));
+    }
+
+    @Test
+    public void changingSliderValueProgramatically_doesNotCallValueChangeListener() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.slider.setValue(4);
+
+        verify(valueChangedListener, never()).widgetValueChanged(widget);
     }
 
     @Test
