@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface InstancesRepository {
 
+    List<Instance> getAllFinalized();
+
     Instance get(long databaseId);
 
     List<Instance> getAllByJrFormId(String formId);

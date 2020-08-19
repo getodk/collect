@@ -37,6 +37,12 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     private final InstancesDao dao = new InstancesDao();
 
     @Override
+    public List<Instance> getAllFinalized() {
+        Cursor c = dao.getFinalizedInstancesCursor();
+        return dao.getInstancesFromCursor(c);
+    }
+
+    @Override
     public Instance get(long databaseId) {
         Cursor c = dao.getInstancesCursorForId(Long.toString(databaseId));
         List<Instance> result = dao.getInstancesFromCursor(c);

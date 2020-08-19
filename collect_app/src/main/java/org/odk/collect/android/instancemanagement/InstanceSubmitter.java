@@ -1,6 +1,5 @@
 package org.odk.collect.android.instancemanagement;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.util.Pair;
 
@@ -140,12 +139,8 @@ public class InstanceSubmitter {
      */
     @NonNull
     private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
-        InstancesDao dao = new InstancesDao();
-        Cursor c = dao.getFinalizedInstancesCursor();
-        List<Instance> allFinalized = dao.getInstancesFromCursor(c);
-
         List<Instance> toUpload = new ArrayList<>();
-        for (Instance instance : allFinalized) {
+        for (Instance instance : instancesRepository.getAllFinalized()) {
             if (InstanceUploaderUtils.shouldFormBeSent(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
                 toUpload.add(instance);
             }
