@@ -93,6 +93,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver 
     public void setBinaryData(Object answer) {
         String response = (String) answer;
         binding.barcodeAnswerText.setText(stripInvalidCharacters(response));
+        binding.getBarcodeButton.setText(getContext().getString(R.string.replace_barcode));
         widgetValueChanged();
     }
 

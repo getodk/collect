@@ -70,7 +70,7 @@ public class BarcodeWidgetTest {
     @Test
     public void whenPromptHasAnswer_replaceBarcodeButtonIsDisplayed() {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.binding.getBarcodeButton.getText().toString(), is(widget.getContext().getString(R.string.replace_barcode)));
+        assertThat(widget.binding.getBarcodeButton.getText().toString(), is(widgetTestActivity.getString(R.string.replace_barcode)));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class BarcodeWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.binding.barcodeAnswerText.getText().toString(), is(""));
-        assertThat(widget.binding.getBarcodeButton.getText().toString(), is(widget.getContext().getString(R.string.get_barcode)));
+        assertThat(widget.binding.getBarcodeButton.getText().toString(), is(widgetTestActivity.getString(R.string.get_barcode)));
     }
 
     @Test
@@ -114,6 +114,13 @@ public class BarcodeWidgetTest {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData("\ud800blah\b");
         assertThat(widget.binding.barcodeAnswerText.getText().toString(), is("blah"));
+    }
+
+    @Test
+    public void setData_updatesButtonLabel() {
+        BarcodeWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData("\ud800blah\b");
+        assertThat(widget.binding.getBarcodeButton.getText(), is(widgetTestActivity.getString(R.string.replace_barcode)));
     }
 
     @Test
@@ -180,7 +187,7 @@ public class BarcodeWidgetTest {
         widget.setPermissionUtils(permissionUtils);
         widget.binding.getBarcodeButton.performClick();
 
-        assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.error_front_camera_unavailable)));
+        assertThat(ShadowToast.getTextOfLatestToast(), is(widgetTestActivity.getString(R.string.error_front_camera_unavailable)));
     }
 
     @Test
