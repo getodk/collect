@@ -10,7 +10,7 @@ references:
   android_config: &android_config
     working_directory: *workspace
     docker:
-      - image: circleci/android@sha256:518e47707dd74ee23aad7fc68fef2742b58c1d855be2348bfd4c8214e3db4ef0
+      - image: circleci/android:api-27
 
 jobs:
   check_quality:

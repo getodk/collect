@@ -22,6 +22,9 @@ public class TestCollect extends Collect {
     public void onCreate() {
         super.onCreate();
 
+        // Prevents OKHttp from exploding on initialization https://github.com/robolectric/robolectric/issues/5115
+        System.setProperty("javax.net.ssl.trustStore", "NONE");
+
         // We need this so WorkManager.getInstance doesn't explode
         try {
             WorkManager.initialize(RuntimeEnvironment.application, new Configuration.Builder().build());
