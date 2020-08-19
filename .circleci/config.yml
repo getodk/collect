@@ -40,7 +40,7 @@ jobs:
   test_unit:
     <<: *android_config
     environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -Dkotlin.compiler.execution.strategy=in-process'
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
 
