@@ -81,8 +81,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
-            Fragment fragment = null;
-
             switch (preference.getKey()) {
                 case "odk_preferences":
                     Intent intent = new Intent(getActivity(), PreferencesActivity.class);
@@ -118,28 +116,30 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     }
                     return true;
                 case "main_menu":
-                    fragment = new MainMenuAccessPreferences();
+                    displayPreferences(new MainMenuAccessPreferences());
                     break;
                 case "user_settings":
-                    fragment = new UserSettingsAccessPreferences();
+                    displayPreferences(new UserSettingsAccessPreferences());
                     break;
                 case "form_entry":
-                    fragment = new FormEntryAccessPreferences();
+                    displayPreferences(new FormEntryAccessPreferences());
                     break;
-            }
-
-            if (fragment != null) {
-                fragment.setArguments(getArguments());
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.preferences_fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit();
             }
 
             return true;
         }
 
         return false;
+    }
+
+    private void displayPreferences(Fragment fragment) {
+        if (fragment != null) {
+            fragment.setArguments(getArguments());
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.preferences_fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     public static class MainMenuAccessPreferences extends BasePreferenceFragment {

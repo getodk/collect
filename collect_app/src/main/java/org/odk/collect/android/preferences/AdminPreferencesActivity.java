@@ -90,7 +90,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
         Fragment fragment = new AdminPreferencesFragment();
         Bundle args = new Bundle();
-        args.putBoolean(INTENT_KEY_ADMIN_MODE, getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, true));
+        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
         fragment.setArguments(args);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
