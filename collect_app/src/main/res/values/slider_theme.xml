@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SliderTheme" parent="Base.Widget.MaterialComponents.Slider">
+        <item name="thumbColor">?colorSecondary</item>
+        <item name="tickColor">?colorOnBackground</item>
+        <item name="haloColor">?sliderTrackColor</item>
+        <item name="trackColorInactive">?sliderTrackColor</item>
+        <item name="trackColorActive">?colorSecondary</item>
+    </style>
+</resources>

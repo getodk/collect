@@ -36,13 +36,9 @@ limitations under the License.
 
         <org.odk.collect.android.views.TrackingTouchSlider
             android:id="@+id/slider"
+            style="@style/SliderTheme"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:thumbColor="?colorSecondary"
-            app:tickColor="?colorOnBackground"
-            app:haloColor="?dividerColor"
-            app:trackColorInactive="?dividerColor"
-            app:trackColorActive="?colorSecondary" />
+            android:layout_height="wrap_content" />
 
     </FrameLayout>
 

@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.databinding.WidgetAnswerBinding;
+import org.odk.collect.android.databinding.WidgetButtonAndAnswerLayoutBinding;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.views.TrackingTouchSlider;
@@ -34,7 +34,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class RangeWidgetUtilsTest {
     private static final String VERTICAL_APPEARANCE = "vertical";
 
-    private WidgetAnswerBinding binding;
+    private WidgetButtonAndAnswerLayoutBinding binding;
     private RangeQuestion rangeQuestion;
     private TrackingTouchSlider slider;
     private TextView sampleTextView1;
@@ -48,7 +48,7 @@ public class RangeWidgetUtilsTest {
         sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
-        binding = WidgetAnswerBinding.inflate((widgetTestActivity()).getLayoutInflater());
+        binding = WidgetButtonAndAnswerLayoutBinding.inflate((widgetTestActivity()).getLayoutInflater());
 
         rangeQuestion = mock(RangeQuestion.class);
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
