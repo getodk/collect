@@ -55,7 +55,10 @@ public class InstanceSubmitter {
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
         List<Instance> toUpload = getInstancesToAutoSend(GeneralSharedPreferences.isAutoSendEnabled());
+        return submitSelectedInstances(toUpload);
+    }
 
+    public Pair<Boolean, String> submitSelectedInstances(List<Instance> toUpload) throws SubmitException {
         if (toUpload.isEmpty()) {
             throw new SubmitException(Type.NOTHING_TO_SUBMIT);
         }
