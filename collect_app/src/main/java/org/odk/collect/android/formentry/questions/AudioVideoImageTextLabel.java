@@ -111,7 +111,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         this.questionText = questionText.getText();
 
         labelTextView = questionText;
-        labelTextView.setLongClickable(true);
         labelTextView.setId(R.id.text_label);
         labelTextView.setOnClickListener(v -> {
             if (listener != null) {
@@ -270,7 +269,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
                 imageView.setVisibility(VISIBLE);
                 imageView.setImageBitmap(b);
                 imageView.setOnClickListener(this);
-                imageView.setLongClickable(true);
             } else {
                 // Loading the image failed, so it's likely a bad file.
                 errorMsg = getContext().getString(R.string.file_invalid, imageFile);
@@ -286,7 +284,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             imageView.setVisibility(View.GONE);
             missingImage.setVisibility(VISIBLE);
             missingImage.setText(errorMsg);
-            missingImage.setLongClickable(true);
         }
     }
 
@@ -294,12 +291,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         videoButton.setVisibility(VISIBLE);
         mediaButtonsContainer.setVisibility(VISIBLE);
         videoButton.setOnClickListener(this);
-        videoButton.setLongClickable(true);
     }
 
     private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
         audioButton.setVisibility(VISIBLE);
-        audioButton.setLongClickable(true);
         mediaButtonsContainer.setVisibility(VISIBLE);
 
         ScreenContext activity = getScreenContext();

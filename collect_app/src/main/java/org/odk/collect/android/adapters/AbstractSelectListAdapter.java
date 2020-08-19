@@ -229,6 +229,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         ViewHolder(View itemView) {
             super(itemView);
+            enableLongClickToAllowRemovingAnswers(itemView);
         }
 
         void bind(final int index) {
@@ -237,11 +238,20 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 view.addView(setUpNoButtonsView(index));
                 view.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
                 view.setEnabled(!prompt.isReadOnly());
-                view.setLongClickable(true);
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
                 audioVideoImageTextLabel.setEnabled(!prompt.isReadOnly());
-                audioVideoImageTextLabel.setLongClickable(true);
+            }
+        }
+
+        private void enableLongClickToAllowRemovingAnswers(View view) {
+            if (view instanceof ViewGroup) {
+                view.setLongClickable(true);
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    enableLongClickToAllowRemovingAnswers(((ViewGroup) view).getChildAt(i));
+                }
+            } else {
+                view.setLongClickable(true);
             }
         }
 
