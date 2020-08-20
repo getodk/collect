@@ -24,7 +24,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.jetbrains.annotations.Contract;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
@@ -101,7 +100,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver 
     }
 
     // Remove control characters, invisible characters and unused code points.
-    @Contract("null -> null; !null -> !null")
     private String stripInvalidCharacters(String data) {
         return data == null ? null : data.replaceAll("\\p{C}", "");
     }
