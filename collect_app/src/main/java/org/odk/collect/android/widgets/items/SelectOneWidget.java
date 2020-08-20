@@ -31,7 +31,6 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.listeners.SelectOneItemClickListener;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import timber.log.Timber;
@@ -45,7 +44,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneWidget extends BaseSelectListWidget implements SelectOneItemClickListener {
+public class SelectOneWidget extends BaseSelectListWidget {
 
     @Nullable
     private AdvanceToNextListener listener;
@@ -100,15 +99,21 @@ public class SelectOneWidget extends BaseSelectListWidget implements SelectOneIt
             listener.advance();
         }
 
+        onClearNextLevelsOfCascadingSelect();
         widgetValueChanged();
+    }
+
+    @Override
+    public void clearAnswer() {
+        onClearNextLevelsOfCascadingSelect();
+        super.clearAnswer();
     }
 
     /**
      * It's needed only for external choices. Everything works well and
      * out of the box when we use internal choices instead
      */
-    @Override
-    public void onClearNextLevelsOfCascadingSelect() {
+    private void onClearNextLevelsOfCascadingSelect() {
         FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;

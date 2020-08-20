@@ -23,7 +23,6 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends BaseSelectListWidget implements SelectItemClickListener {
+public class SelectMultiWidget extends BaseSelectListWidget {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }

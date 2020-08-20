@@ -25,7 +25,6 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectItemClickListener;
-import org.odk.collect.android.listeners.SelectOneItemClickListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
@@ -203,7 +202,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
@@ -241,7 +240,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);
@@ -279,7 +278,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
         recyclerView.initRecyclerView(adapter, false);
@@ -317,7 +316,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        SelectOneItemClickListener listener = mock(SelectOneItemClickListener.class);
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
         recyclerView.initRecyclerView(adapter, false);

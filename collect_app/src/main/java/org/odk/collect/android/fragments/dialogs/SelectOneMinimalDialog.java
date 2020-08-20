@@ -11,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.listeners.SelectOneItemClickListener;
+import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.List;
 
-public class SelectOneMinimalDialog extends SelectMinimalDialog implements SelectOneItemClickListener {
+public class SelectOneMinimalDialog extends SelectMinimalDialog implements SelectItemClickListener {
     private SelectOneListAdapter adapter;
 
     public SelectOneMinimalDialog() {
@@ -45,10 +45,5 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements Selec
     @Override
     public void onItemClicked() {
         closeDialogAndSaveAnswers();
-    }
-
-    @Override
-    public void onClearNextLevelsOfCascadingSelect() {
-        // do nothing
     }
 }

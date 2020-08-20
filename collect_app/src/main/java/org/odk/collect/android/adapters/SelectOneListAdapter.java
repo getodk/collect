@@ -34,7 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.listeners.SelectOneItemClickListener;
+import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,10 +44,10 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     private String selectedValue;
     private RadioButton selectedRadioButton;
     private View selectedItem;
-    private SelectOneItemClickListener listener;
+    private SelectItemClickListener listener;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public SelectOneListAdapter(String selectedValue, SelectOneItemClickListener listener, Context context,
+    public SelectOneListAdapter(String selectedValue, SelectItemClickListener listener, Context context,
                                 List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
                                 AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode) {
         super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode);
@@ -67,14 +67,13 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
         if (isChecked) {
             if (selectedRadioButton != null && buttonView != selectedRadioButton) {
                 selectedRadioButton.setChecked(false);
-                listener.onClearNextLevelsOfCascadingSelect();
             }
             selectedRadioButton = (RadioButton) buttonView;
             selectedValue = items.get((int) selectedRadioButton.getTag()).getValue();
         }
     }
 
-    public void setSelectItemClickListener(SelectOneItemClickListener listener) {
+    public void setSelectItemClickListener(SelectItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -148,7 +147,6 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
             selectedItem.setBackground(null);
             selectedItem = null;
         }
-        listener.onClearNextLevelsOfCascadingSelect();
     }
 
     public Selection getSelectedItem() {
