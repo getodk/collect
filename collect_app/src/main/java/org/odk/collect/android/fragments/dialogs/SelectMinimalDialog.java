@@ -28,8 +28,8 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
     private boolean isAutocomplete;
 
     protected SelectMinimalViewModel viewModel;
-    private SearchView searchView;
     protected SelectMinimalDialogListener listener;
+    protected AbstractSelectListAdapter adapter;
 
     public interface SelectMinimalDialogListener {
         void updateSelectedItems(List<Selection> items);
@@ -49,7 +49,7 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
         if (context instanceof SelectMinimalDialogListener) {
             listener = (SelectMinimalDialogListener) context;
         }
-        viewModel = new ViewModelProvider(this, new SelectMinimalViewModel.Factory(getAdapter(), isFlex, isAutocomplete)).get(SelectMinimalViewModel.class);
+        viewModel = new ViewModelProvider(this, new SelectMinimalViewModel.Factory(adapter, isFlex, isAutocomplete)).get(SelectMinimalViewModel.class);
         if (viewModel.getSelectListAdapter() == null) {
             dismiss();
         }
@@ -97,20 +97,18 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
         return getView().findViewById(R.id.toolbar);
     }
 
-    protected abstract AbstractSelectListAdapter getAdapter();
-
     private void initToolbar() {
         getToolbar().setNavigationIcon(R.drawable.ic_arrow_back);
 
         if (viewModel.isAutoComplete()) {
-            addSearchBar();
+            initSearchBar();
         }
     }
 
-    private void addSearchBar() {
+    private void initSearchBar() {
         getToolbar().inflateMenu(R.menu.select_minimal_dialog_menu);
 
-        searchView = (SearchView) getToolbar().getMenu().findItem(R.id.menu_filter).getActionView();
+        SearchView searchView = (SearchView) getToolbar().getMenu().findItem(R.id.menu_filter).getActionView();
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.onActionViewExpanded();

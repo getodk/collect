@@ -8,7 +8,6 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.listeners.SelectItemClickListener;
@@ -16,8 +15,6 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import java.util.List;
 
 public class SelectOneMinimalDialog extends SelectMinimalDialog implements SelectItemClickListener {
-    private SelectOneListAdapter adapter;
-
     public SelectOneMinimalDialog() {
     }
 
@@ -35,11 +32,6 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements Selec
         super.onViewCreated(view, savedInstanceState);
         // update the listener on dialog recreation (screen rotation for example)
         ((SelectOneListAdapter) viewModel.getSelectListAdapter()).setSelectItemClickListener(this);
-    }
-
-    @Override
-    protected AbstractSelectListAdapter getAdapter() {
-        return adapter;
     }
 
     @Override
