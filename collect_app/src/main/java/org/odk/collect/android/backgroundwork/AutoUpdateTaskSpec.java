@@ -83,7 +83,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                                 HashMap<ServerFormDetails, String> results = new HashMap<>();
                                 for (ServerFormDetails serverFormDetails : updatedForms) {
                                     try {
-                                        formDownloader.downloadForm(serverFormDetails, null);
+                                        formDownloader.downloadForm(serverFormDetails, null, null);
                                         results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
                                     } catch (FormDownloadException e) {
                                         results.put(serverFormDetails, e.getMessage());

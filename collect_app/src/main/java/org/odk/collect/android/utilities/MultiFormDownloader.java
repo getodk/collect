@@ -81,7 +81,7 @@ public class MultiFormDownloader {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 
-    private static class TaskCancelledException extends Exception {
+    public static class TaskCancelledException extends Exception {
         private final File file;
 
         TaskCancelledException(File file) {
@@ -96,22 +96,18 @@ public class MultiFormDownloader {
     }
 
     @Deprecated
-    public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) {
+    public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) throws TaskCancelledException {
         int total = toDownload.size();
         int count = 1;
 
         final HashMap<ServerFormDetails, String> result = new HashMap<>();
 
         for (ServerFormDetails fd : toDownload) {
-            try {
-                boolean success = processOneForm(total, count++, fd, stateListener);
-                if (success) {
-                    result.put(fd, TranslationHandler.getString(Collect.getInstance(), R.string.success));
-                } else {
-                    result.put(fd, TranslationHandler.getString(Collect.getInstance(), R.string.failure));
-                }
-            } catch (TaskCancelledException cd) {
-                break;
+            boolean success = processOneForm(total, count++, fd, stateListener);
+            if (success) {
+                result.put(fd, TranslationHandler.getString(Collect.getInstance(), R.string.success));
+            } else {
+                result.put(fd, TranslationHandler.getString(Collect.getInstance(), R.string.failure));
             }
         }
 
@@ -129,9 +125,6 @@ public class MultiFormDownloader {
      */
     private boolean processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
         boolean success = true;
-        if (stateListener != null && stateListener.isTaskCanceled()) {
-            throw new TaskCancelledException();
-        }
 
         // use a temporary media path until everything is ok.
         String tempMediaPath = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE),
@@ -281,8 +274,6 @@ public class MultiFormDownloader {
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
 
         FileUtils.checkMediaPath(new File(mediaPath));
-
-
         Form form = formsRepository.getByPath(formFile.getAbsolutePath());
 
         if (form == null) {
@@ -361,7 +352,6 @@ public class MultiFormDownloader {
      * <p>
      * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
      * is okay, so that garbage is not left over on cancel.
-     *
      */
     private void writeFile(File file, FormDownloaderListener stateListener, InputStream inputStream)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {

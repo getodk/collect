@@ -11,6 +11,7 @@ import org.odk.collect.android.support.InMemInstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -99,7 +100,7 @@ public class ServerFormsSynchronizerTest {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(serverForms);
 
         FormDownloader formDownloader = mock(FormDownloader.class);
-        doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0), null);
+        doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0), null, null);
 
         ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
 
@@ -107,7 +108,7 @@ public class ServerFormsSynchronizerTest {
             synchronizer.synchronize();
         } catch (FormApiException e) {
             assertThat(e.getType(), is(FormApiException.Type.FETCH_ERROR));
-            verify(formDownloader).downloadForm(serverForms.get(1), null);
+            verify(formDownloader).downloadForm(serverForms.get(1), null, null);
         }
     }
 
@@ -116,7 +117,7 @@ public class ServerFormsSynchronizerTest {
         private final List<String> formsDownloaded = new ArrayList<>();
 
         @Override
-        public void downloadForm(ServerFormDetails form, ProgressReporter progressReporter) {
+        public void downloadForm(ServerFormDetails form, ProgressReporter progressReporter, Supplier<Boolean> isCancelled) {
             formsDownloaded.add(form.getFormId());
         }
 

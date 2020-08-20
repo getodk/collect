@@ -42,7 +42,7 @@ public class ServerFormsSynchronizer {
         for (ServerFormDetails form : formList) {
             if (form.isNotOnDevice() || form.isUpdated()) {
                 try {
-                    formDownloader.downloadForm(form, null);
+                    formDownloader.downloadForm(form, null, null);
                 } catch (FormDownloadException e) {
                     downloadException = true;
                 }

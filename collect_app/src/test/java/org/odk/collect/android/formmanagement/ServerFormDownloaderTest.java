@@ -7,7 +7,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.openrosa.api.FormListApi;
+import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -17,17 +19,24 @@ import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiFormDownloader;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -51,6 +60,63 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
+    public void afterDownloadingXForm_cancelling_throwsCancelledExceptionAndDoesNotSaveAnything() throws Exception {
+        String xform = createXForm("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "http://manifestUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                null);
+
+        CancelAfterFormDownloadFormListApi formListApi = new CancelAfterFormDownloadFormListApi(xform);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository);
+
+        try {
+            downloader.downloadForm(serverFormDetails, null, formListApi);
+            fail("Excepted exception");
+        } catch (CancellationException e) {
+            assertThat(formsRepository.getAll(), is(empty()));
+            assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
+        }
+    }
+
+    @Test
+    public void afterDownloadingMediaFile_cancelling_throwsCancelledExceptionAndDoesNotSaveAnything() throws Exception {
+        String xform = createXForm("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "http://manifestUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", "hash-1", "http://file1"),
+                        new MediaFile("file2", "hash-2", "http://file2")
+                )));
+
+        CancelAfterMediaFileDownloadFormListApi formListApi = new CancelAfterMediaFileDownloadFormListApi(xform);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository);
+
+        try {
+            downloader.downloadForm(serverFormDetails, null, formListApi);
+            fail("Excepted exception");
+        } catch (CancellationException e) {
+            assertThat(formsRepository.getAll(), is(empty()));
+
+            // The media directory is created early for some reason
+            assertThat(asList(new File(getFormFilesPath()).listFiles()), contains(new File(getFormFilesPath() + "/Form-media")));
+        }
+    }
+
+    @Test
     public void beforeDownloadingMediaFile_reportsProgress() throws Exception {
         String xform = createXForm("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
@@ -67,12 +133,12 @@ public class ServerFormDownloaderTest {
                     new MediaFile("file2", "hash-2", "http://file2")
                 )));
         when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
+        when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
 
         ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository);
         RecordingProgressReporter progressReporter = new RecordingProgressReporter();
-        downloader.downloadForm(serverFormDetails, progressReporter);
+        downloader.downloadForm(serverFormDetails, progressReporter, null);
 
         assertThat(progressReporter.reports, contains(1, 2));
     }
@@ -104,7 +170,7 @@ public class ServerFormDownloaderTest {
         when(multiFormDownloader.downloadForms(any(), any())).thenReturn(results);
 
         ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository);
-        downloader.downloadForm(serverFormDetails, null);
+        downloader.downloadForm(serverFormDetails, null, null);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
     }
 
@@ -119,6 +185,98 @@ public class ServerFormDownloaderTest {
         @Override
         public void onDownloadingMediaFile(int count) {
             reports.add(count);
+        }
+    }
+
+    public static class CancelAfterFormDownloadFormListApi implements FormListApi, Supplier<Boolean> {
+
+        private final String xform;
+        private boolean isCancelled;
+
+        public CancelAfterFormDownloadFormListApi(String xform) {
+            this.xform = xform;
+        }
+
+        @Override
+        public InputStream fetchForm(String formURL) throws FormApiException {
+            isCancelled = true;
+            return new ByteArrayInputStream(xform.getBytes());
+        }
+
+        @Override
+        public List<FormListItem> fetchFormList() throws FormApiException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ManifestFile fetchManifest(String manifestURL) throws FormApiException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void updateUrl(String url) {
+
+        }
+
+        @Override
+        public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
+
+        }
+
+        @Override
+        public Boolean get() {
+            return isCancelled;
+        }
+    }
+
+    public static class CancelAfterMediaFileDownloadFormListApi implements FormListApi, Supplier<Boolean> {
+
+        private final String xform;
+        private boolean isCancelled;
+
+        public CancelAfterMediaFileDownloadFormListApi(String xform) {
+            this.xform = xform;
+        }
+
+        @Override
+        public InputStream fetchForm(String formURL) throws FormApiException {
+            return new ByteArrayInputStream(xform.getBytes());
+        }
+
+        @Override
+        public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
+            isCancelled = true;
+            return new ByteArrayInputStream("contents".getBytes());
+        }
+
+        @Override
+        public void updateUrl(String url) {
+
+        }
+
+        @Override
+        public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
+
+        }
+
+        @Override
+        public List<FormListItem> fetchFormList() throws FormApiException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ManifestFile fetchManifest(String manifestURL) throws FormApiException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Boolean get() {
+            return isCancelled;
         }
     }
 }

@@ -90,6 +90,6 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public void deleteFormsByMd5Hash(String md5Hash) {
-        throw new UnsupportedOperationException();
+        forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
     }
 }
