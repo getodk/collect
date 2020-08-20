@@ -2,7 +2,7 @@
 
 fieldTask is a clone of [odkCollect](http://opendatakit.org/use/collect/) with Task Management functionality. 
  
-Follow the latest news about Smap on our [blog](http://blog.smap.com.au) and on twitter [@dgmsot](https://twitter.com/dgmsot).
+Follow the latest news about Smap on our [blog](http://blog.smap.com.au)
 
 Frequently Asked Questions
 ---------------------------
@@ -15,7 +15,7 @@ Frequently Asked Questions
     * Google Play Services
     * Google Repository
 * Clone as a GIT project into Android Studio
-* Checkout branch "smap"
+* Checkout branch "producion"
 * Select fieldTask and run as an Android application
 
 Instructions on installing a Smap server can be found in the operations manual [here](http://www.smap.com.au/downloads.shtml)
