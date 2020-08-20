@@ -21,9 +21,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 import android.widget.Button;
@@ -57,10 +55,12 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver,
     final EditText answer;
     private final Drawable textBackground;
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final SensorManager sensorManager;
 
-    public BearingWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    public BearingWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, SensorManager sensorManager) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.sensorManager = sensorManager;
 
         isSensorAvailable = checkForRequiredSensors();
 
@@ -79,9 +79,6 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver,
         String s = questionDetails.getPrompt().getAnswerText();
         if (s != null && !s.equals("")) {
             getBearingButton.setText(getContext().getString(R.string.replace_bearing));
-            if (!isSensorAvailable) {
-                answer.setText(s);
-            }
             setBinaryData(s);
         }
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
@@ -130,18 +127,15 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver,
     }
 
     private boolean checkForRequiredSensors() {
-
         boolean isAccelerometerSensorAvailable = false;
         boolean isMagneticFieldSensorAvailable = false;
 
-        SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             isAccelerometerSensorAvailable = true;
         }
         if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
             isMagneticFieldSensorAvailable = true;
         }
-
         return isAccelerometerSensorAvailable && isMagneticFieldSensorAvailable;
     }
 
@@ -156,34 +150,15 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver,
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
         manualData.setLayoutParams(params);
-
-        manualData.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                widgetValueChanged();
-            }
-        });
-
         return manualData;
     }
 
     @Override
     public void onButtonClick(int buttonId) {
         if (isSensorAvailable) {
-            Intent i = new Intent(getContext(), BearingActivity.class);
+            Intent intent = new Intent(getContext(), BearingActivity.class);
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.BEARING_CAPTURE);
+            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.BEARING_CAPTURE);
         } else {
             getBearingButton.setEnabled(false);
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
