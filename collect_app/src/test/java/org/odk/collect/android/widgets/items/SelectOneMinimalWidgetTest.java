@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.items;
 
+import android.text.InputType;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,11 @@ public class SelectOneMinimalWidgetTest extends GeneralSelectOneWidgetTest<Selec
     @Override
     public SelectOneMinimalWidget createWidget() {
         return new SelectOneMinimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
+    }
+
+    @Test
+    public void answerView_shouldBeMultilineTextNoSuggestion() {
+        assertThat(getSpyWidget().binding.answer.getInputType(), is(InputType.TYPE_CLASS_TEXT + InputType.TYPE_TEXT_FLAG_MULTI_LINE + InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
     }
 
     @Test

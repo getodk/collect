@@ -58,19 +58,6 @@ public class SelectMultiMinimalWidgetTest {
     }
 
     @Test
-    public void whenSelectingLongLabel_shouldEntireAnswerBeDisplayed() {
-        new FormEntryPage("select_multi_minimal_form", activityTestRule)
-                .clickGoToArrow()
-                .clickOnQuestion("Q5")
-                .openSelectMinimalDialog()
-                .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
-                .assertText("Nam varius, lectus non consectetur tincidunt, augue augue dapibus dolor, nec convallis ligula erat eget")
-                .clickOnText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel")
-                .closeSelectMinimalDialog()
-                .assertText("Integer a eleifend libero, sit amet tincidunt lacus. Donec orci tellus, facilisis et ultricies vel");
-    }
-
-    @Test
     public void bothClickingBackArrowIconAndDeviceBackButton_shouldCloseDialogAndSaveAnswers() {
         new FormEntryPage("select_multi_minimal_form", activityTestRule)
                 .openSelectMinimalDialog()
