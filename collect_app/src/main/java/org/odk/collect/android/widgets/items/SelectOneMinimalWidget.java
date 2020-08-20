@@ -43,7 +43,7 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
         SelectOneMinimalDialog dialog = new SelectOneMinimalDialog(getSavedSelectedValue(),
                 WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()),
                 WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()), getContext(), items,
-                getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
+                getFormEntryPrompt(), getReferenceManager(),
                 getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
         dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), SelectMinimalDialog.class.getName());
     }

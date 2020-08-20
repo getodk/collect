@@ -99,21 +99,20 @@ public class SelectOneWidget extends BaseSelectListWidget {
             listener.advance();
         }
 
-        onClearNextLevelsOfCascadingSelect();
+        clearFollowingItemsetWidgets();
         widgetValueChanged();
     }
 
     @Override
     public void clearAnswer() {
-        onClearNextLevelsOfCascadingSelect();
+        clearFollowingItemsetWidgets();
         super.clearAnswer();
     }
 
     /**
-     * It's needed only for external choices. Everything works well and
-     * out of the box when we use internal choices instead
+     * If there are "fast external itemset" selects right after this select, assume that they are linked to the current question and clear them.
      */
-    private void onClearNextLevelsOfCascadingSelect() {
+    private void clearFollowingItemsetWidgets() {
         FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;
