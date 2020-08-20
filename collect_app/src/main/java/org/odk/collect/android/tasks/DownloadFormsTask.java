@@ -22,7 +22,6 @@ import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
-import org.odk.collect.android.listeners.FormDownloaderListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +35,7 @@ import java.util.HashMap;
  * @author carlhartung
  */
 public class DownloadFormsTask extends
-        AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> implements FormDownloaderListener {
+        AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> {
 
     private final FormDownloader formDownloader;
     private DownloadFormsTaskListener stateListener;
@@ -46,25 +45,32 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    public void progressUpdate(String currentFile, String progress, String total) {
-        publishProgress(currentFile, progress, total);
-    }
-
-    @Override
-    public boolean isTaskCanceled() {
-        return isCancelled();
-    }
-
-    @Override
     protected HashMap<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
         HashMap<ServerFormDetails, String> results = new HashMap<>();
+
+        int index = 1;
         for (ServerFormDetails serverFormDetails : values[0]) {
             try {
-                formDownloader.downloadForm(serverFormDetails, null, null);
+                String currentFormNumber = String.valueOf(index);
+                String totalForms = String.valueOf(values[0].size());
+                publishProgress(serverFormDetails.getFormName(), currentFormNumber, totalForms);
+
+                formDownloader.downloadForm(serverFormDetails, count -> {
+                    String message = Collect.getInstance().getString(R.string.form_download_progress,
+                            serverFormDetails.getFormName(),
+                            String.valueOf(count),
+                            String.valueOf(serverFormDetails.getManifest().getMediaFiles().size())
+                    );
+
+                    publishProgress(message, currentFormNumber, totalForms);
+                }, this::isCancelled);
+
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
             } catch (FormDownloadException e) {
                 results.put(serverFormDetails, e.getMessage());
             }
+
+            index++;
         }
 
         return results;
