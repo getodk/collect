@@ -73,6 +73,7 @@ collect_app/.settings/
 
 # Submodules
 javarosa/
+libs/
 
 # Config for the official ODK Collect build
 collect_app/src/odkCollectRelease/
