@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -20,6 +21,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
+import org.odk.collect.android.audio.AudioButton;
+import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.listeners.SelectOneItemClickListener;
@@ -30,6 +33,7 @@ import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +42,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
 
 @RunWith(RobolectricTestRunner.class)
@@ -342,6 +348,46 @@ public class ChoicesRecyclerViewTest {
         clickChoice(0); // Select AAA again
         assertThat(isItemSelected(0), is(false));
         assertThat(isItemSelected(1), is(false));
+    }
+
+    @Test
+    public void whenButtonsModeIsUsed_shouldViewAndItsElementsBeLongClickableToSupportRemovingAnswers() {
+        List<SelectChoice> items = getTestChoices();
+        setUpFormEntryPrompt(items, "");
+
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+
+        recyclerView.initRecyclerView(adapter, false);
+
+        AudioVideoImageTextLabel view = (AudioVideoImageTextLabel) getChoiceView(0);
+        File file = mock(File.class);
+        when(file.exists()).thenReturn(true);
+        view.setImage(file);
+        view.setVideo(file);
+        AudioHelper audioHelper = mock(AudioHelper.class);
+        MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(false);
+        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(isPlaying);
+        view.setAudio("file://audio.mp3", audioHelper);
+
+        assertThat(view.isLongClickable(), is(true));
+        assertThat(view.getImageView().isLongClickable(), is(true));
+        assertThat(view.getVideoButton().isLongClickable(), is(true));
+        assertThat(view.getAudioButton().isLongClickable(), is(true));
+        assertThat(view.getLabelTextView().isLongClickable(), is(true));
+    }
+
+    @Test
+    public void whenNoButtonsModeIsUsed_shouldViewBeLongClickableToSupportRemovingAnswers() {
+        List<SelectChoice> items = getTestChoices();
+        setUpFormEntryPrompt(items, "no-buttons");
+
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
+
+        recyclerView.initRecyclerView(adapter, false);
+
+        assertThat(getChoiceView(0).isLongClickable(), is(true));
     }
 
     private List<SelectChoice> getTestChoices() {

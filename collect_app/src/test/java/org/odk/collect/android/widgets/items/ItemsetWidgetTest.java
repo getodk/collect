@@ -96,8 +96,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @NonNull
     @Override
     public ItemsetWidget createWidget() {
-        ItemsetWidget itemsetWidget = new ItemsetWidget(activity, new ItemsetQuestionDetails(formEntryPrompt, "formAnalyticsID", parseTool, adapter, fileUtil), false);
-        return itemsetWidget;
+        return new ItemsetWidget(activity, new ItemsetQuestionDetails(formEntryPrompt, "formAnalyticsID", parseTool, adapter, fileUtil), false);
     }
 
     @NonNull
