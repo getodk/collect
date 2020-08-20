@@ -16,10 +16,15 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.databinding.SelectMinimalDialogLayoutBinding;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.fragments.viewmodels.SelectMinimalViewModel;
 import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 import java.util.List;
+
+import javax.inject.Inject;
+
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
 public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
     private SelectMinimalDialogLayoutBinding binding;
@@ -30,6 +35,9 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
     protected SelectMinimalViewModel viewModel;
     protected SelectMinimalDialogListener listener;
     protected AbstractSelectListAdapter adapter;
+
+    @Inject
+    public AudioHelperFactory audioHelperFactory;
 
     public interface SelectMinimalDialogListener {
         void updateSelectedItems(List<Selection> items);
@@ -46,6 +54,7 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
+        getComponent(context).inject(this);
         if (context instanceof SelectMinimalDialogListener) {
             listener = (SelectMinimalDialogListener) context;
         }

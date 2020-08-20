@@ -64,12 +64,12 @@ import static org.odk.collect.android.widgets.QuestionWidget.isRTL;
 public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<AbstractSelectListAdapter.ViewHolder>
         implements Filterable {
 
-    protected final Context context;
+    protected Context context;
     protected List<SelectChoice> items;
     protected List<SelectChoice> filteredItems;
     protected final FormEntryPrompt prompt;
     protected final ReferenceManager referenceManager;
-    protected final AudioHelper audioHelper;
+    protected AudioHelper audioHelper;
     protected final int playColor;
     protected final int numColumns;
     protected boolean noButtonsMode;
@@ -221,6 +221,14 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     public AudioHelper getAudioHelper() {
         return audioHelper;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void setAudioHelper(AudioHelper audioHelper) {
+        this.audioHelper = audioHelper;
     }
 
     abstract class ViewHolder extends RecyclerView.ViewHolder {
