@@ -89,7 +89,6 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
@@ -169,12 +168,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public MultiFormDownloader providesMultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
-        return new MultiFormDownloader(formsRepository, formListApi);
-    }
-
-    @Provides
-    FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository) {
+    public FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository) {
         return new ServerFormDownloader(formListApi, formsRepository);
     }
 

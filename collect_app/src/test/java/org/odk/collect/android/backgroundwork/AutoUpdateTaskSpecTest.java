@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
+import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.FormsRepository;
@@ -22,7 +23,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.function.Supplier;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 public class AutoUpdateTaskSpecTest {
 
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
-    private final MultiFormDownloader multiFormDownloader = mock(MultiFormDownloader.class);
+    private final FormDownloader formDownloader = mock(FormDownloader.class);
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
     private final Notifier notifier = mock(Notifier.class);
     private SharedPreferences generalPrefs;
@@ -54,8 +54,8 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public MultiFormDownloader providesMultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
-                return multiFormDownloader;
+            public FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository) {
+                return formDownloader;
             }
 
             @Override
@@ -106,6 +106,6 @@ public class AutoUpdateTaskSpecTest {
         Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
         task.get();
 
-        verifyNoInteractions(multiFormDownloader);
+        verifyNoInteractions(formDownloader);
     }
 }

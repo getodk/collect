@@ -58,7 +58,6 @@ public class DownloadFormsTask extends
     @Override
     protected HashMap<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
         HashMap<ServerFormDetails, String> results = new HashMap<>();
-
         for (ServerFormDetails serverFormDetails : values[0]) {
             try {
                 formDownloader.downloadForm(serverFormDetails, null);
