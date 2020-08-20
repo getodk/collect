@@ -2,13 +2,19 @@ package org.odk.collect.android.formentry.saving;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.savedstate.SavedStateRegistryOwner;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -42,32 +48,46 @@ import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController, QuestionMediaManager {
+    private static final String ORIGINAL_FILES = "originalFiles";
+    private static final String RECENT_FILES = "recentFiles";
+
+    private final SavedStateHandle stateHandle;
     private final Clock clock;
     private final FormSaver formSaver;
 
-    private final Map<String, String> originalFiles = new HashMap<>();
-    private final Map<String, String> recentFiles = new HashMap<>();
-
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
     private String reason = "";
+
+    private Map<String, String> originalFiles = new HashMap<>();
+    private Map<String, String> recentFiles = new HashMap<>();
 
     @Nullable
     private FormController formController;
 
     @Nullable
-    private AsyncTask saveTask;
+    private AsyncTask<Void, String, SaveToDiskResult> saveTask;
 
     private final Analytics analytics;
 
-    public FormSaveViewModel(Clock clock, FormSaver formSaver, Analytics analytics) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, Analytics analytics) {
+        this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
         this.analytics = analytics;
+
+        if (stateHandle.get(ORIGINAL_FILES) != null) {
+            originalFiles = stateHandle.get(ORIGINAL_FILES);
+        }
+        if (stateHandle.get(RECENT_FILES) != null) {
+            recentFiles = stateHandle.get(RECENT_FILES);
+        }
     }
 
     @Override
     protected void onCleared() {
         releaseMediaManager();
+        stateHandle.set(ORIGINAL_FILES, originalFiles);
+        stateHandle.set(RECENT_FILES, recentFiles);
     }
 
     @Override
@@ -180,6 +200,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     private void saveToDisk(SaveRequest saveRequest) {
+
         saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
@@ -268,6 +289,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     public void markOriginalFileOrDelete(String questionIndex, String fileName) {
+//        Map<String, String> originalFiles = stateHandle.get(ORIGINAL_FILES);
         if (questionIndex != null && fileName != null) {
             if (originalFiles.containsKey(questionIndex)) {
                 MediaUtils.deleteImageFileFromMediaProvider(fileName);
@@ -279,6 +301,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
+//        Map<String, String> recentFiles = stateHandle.get(RECENT_FILES);
         if (questionIndex != null && fileName != null) {
             if (recentFiles.containsKey(questionIndex)) {
                 MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
@@ -293,7 +316,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public static class SaveResult {
-
         private final State state;
         private final String message;
         private final SaveRequest request;
@@ -398,20 +420,21 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
-    public static class Factory implements ViewModelProvider.Factory {
+    public static class Factory extends AbstractSavedStateViewModelFactory {
+        private Analytics analytics;
 
-        private final Analytics analytics;
+        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs) {
+            super(owner, defaultArgs);
+        }
 
-
-        public Factory(Analytics analytics) {
+        public void setAnalytics(Analytics analytics) {
             this.analytics = analytics;
         }
 
-        @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormSaveViewModel(System::currentTimeMillis, new DiskFormSaver(), analytics);
+        protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
+            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), analytics);
         }
     }
 }

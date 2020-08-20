@@ -48,8 +48,9 @@ public class QuitFormDialogFragment extends DialogFragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        viewModel = new ViewModelProvider(requireActivity(), new FormSaveViewModel.Factory(analytics))
-                .get(FormSaveViewModel.class);
+        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null);
+        factory.setAnalytics(analytics);
+        viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
 
         if (context instanceof Listener) {
             listener = (Listener) context;
