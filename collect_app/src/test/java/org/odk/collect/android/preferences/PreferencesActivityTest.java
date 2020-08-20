@@ -27,7 +27,7 @@ public class PreferencesActivityTest {
 
     private GeneralPreferencesFragment generalPreferencesFragment;
     private ActivityController<PreferencesActivity> activityController;
-    private boolean accessedFromAdminSettings;
+    private final boolean accessedFromAdminSettings;
 
     public PreferencesActivityTest(boolean accessedFromAdminSettings) {
         this.accessedFromAdminSettings = accessedFromAdminSettings;
@@ -44,10 +44,11 @@ public class PreferencesActivityTest {
     public void setUp() throws Exception {
         Intent intent = new Intent();
         intent.putExtra(INTENT_KEY_ADMIN_MODE, accessedFromAdminSettings);
-        activityController = Robolectric.buildActivity(PreferencesActivity.class, intent);
-        PreferencesActivity activity = activityController.setup().get();
+        activityController = Robolectric
+                .buildActivity(PreferencesActivity.class, intent)
+                .setup();
 
-        generalPreferencesFragment = (GeneralPreferencesFragment) activity
+        generalPreferencesFragment = (GeneralPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
     }

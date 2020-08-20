@@ -42,13 +42,17 @@ public class AdminPreferencesActivityTest {
 
     @Before
     public void setUp() throws Exception {
-        activityController = Robolectric.buildActivity(AdminPreferencesActivity.class);
-        AdminPreferencesActivity activity = activityController.setup().get();
+        activityController = Robolectric
+                .buildActivity(AdminPreferencesActivity.class)
+                .setup();
 
-        adminPreferencesFragment = (AdminPreferencesFragment) activity
-                .getSupportFragmentManager().findFragmentByTag(AdminPreferencesActivity.TAG);
+        adminPreferencesFragment = (AdminPreferencesFragment) activityController.get()
+                .getSupportFragmentManager()
+                .findFragmentById(R.id.preferences_fragment_container);
 
-        sharedPreferences = activity.getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+        sharedPreferences = activityController
+                .get()
+                .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
     }
 
     @Test
@@ -83,7 +87,7 @@ public class AdminPreferencesActivityTest {
 
         adminPreferencesFragment.onPreferenceClick(preference);
 
-        Intent expectedIntent = new Intent(adminPreferencesFragment.getActivity(), PreferencesActivity.class);
+        Intent expectedIntent = new Intent(activityController.get(), PreferencesActivity.class);
         Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
         assertThat(expectedIntent.getComponent(), is(actual.getComponent()));
         assertThat(actual.getExtras().getBoolean(INTENT_KEY_ADMIN_MODE), is(true));
