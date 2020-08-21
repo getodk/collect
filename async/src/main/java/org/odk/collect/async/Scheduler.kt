@@ -13,12 +13,18 @@ import java.util.function.Supplier
 interface Scheduler {
 
     /**
-     * Run a task in the background (off the UI thread). Cancelled if application closed.
+     * Run work in the background (off the UI thread) and then use the result of that work
+     * in the foreground. Cancelled if application closed.
      *
      * @param background the task to be run
      * @param foreground run on the foreground once the task is complete
      */
     fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>)
+
+    /**
+     * Run work in the foreground. Cancelled if application closed.
+     */
+    fun immediate(foreground: Runnable)
 
     /**
      * Schedule a task to run in the background even if the app isn't running. The task
