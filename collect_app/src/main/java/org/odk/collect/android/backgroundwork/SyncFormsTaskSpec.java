@@ -52,12 +52,12 @@ public class SyncFormsTaskSpec implements TaskSpec {
                     try {
                         serverFormsSynchronizer.synchronize();
                         syncStatusRepository.finishSync(null);
-                        notifier.onSync(null);
+                        notifier.onSync(null, false);
 
                         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
                     } catch (FormApiException e) {
                         syncStatusRepository.finishSync(e);
-                        notifier.onSync(e);
+                        notifier.onSync(e, false);
 
                         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, e.getType().toString());
                     }

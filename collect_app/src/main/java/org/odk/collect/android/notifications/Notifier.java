@@ -12,7 +12,7 @@ public interface Notifier {
 
     void onUpdatesDownloaded(HashMap<ServerFormDetails, String> result);
 
-    void onSync(FormApiException exception);
+    void onSync(FormApiException exception, boolean manual);
 
     void onSubmission(boolean failure, String message);
 }

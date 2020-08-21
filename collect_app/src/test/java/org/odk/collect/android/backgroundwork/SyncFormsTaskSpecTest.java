@@ -23,6 +23,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.async.Scheduler;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.function.Supplier;
@@ -62,7 +63,7 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
+            public Notifier providesNotifier(Application application, Scheduler scheduler, PreferencesProvider preferencesProvider) {
                 return notifier;
             }
 
@@ -85,7 +86,7 @@ public class SyncFormsTaskSpecTest {
         inOrder.verify(serverFormsSynchronizer).synchronize();
         inOrder.verify(syncStatusRepository).finishSync(null);
 
-        verify(notifier).onSync(null);
+        verify(notifier).onSync(null, false);
     }
 
     @Test
@@ -111,7 +112,7 @@ public class SyncFormsTaskSpecTest {
         inOrder.verify(serverFormsSynchronizer).synchronize();
         inOrder.verify(syncStatusRepository).finishSync(exception);
 
-        verify(notifier).onSync(exception);
+        verify(notifier).onSync(exception, false);
     }
 
     @Test

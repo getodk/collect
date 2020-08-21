@@ -84,12 +84,12 @@ public class BlankFormsListViewModel extends ViewModel {
                     try {
                         serverFormsSynchronizer.synchronize();
                         syncRepository.finishSync(null);
-                        notifier.onSync(null);
+                        notifier.onSync(null, true);
 
                         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
                     } catch (FormApiException e) {
                         syncRepository.finishSync(e);
-                        notifier.onSync(e);
+                        notifier.onSync(e, true);
 
                         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, e.getType().toString());
                     }

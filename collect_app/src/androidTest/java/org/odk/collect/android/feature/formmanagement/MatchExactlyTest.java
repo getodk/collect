@@ -59,7 +59,7 @@ public class MatchExactlyTest {
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly()
                 .clickFillBlankForm()
-                .clickRefresh();
+                .clickRefreshWithError();
 
         notificationDrawerRule
                 .open()

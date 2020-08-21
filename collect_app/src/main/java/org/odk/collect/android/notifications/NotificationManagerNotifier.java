@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FillBlankFormActivity;
@@ -20,6 +21,7 @@ import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
+import org.odk.collect.async.Scheduler;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,14 +44,16 @@ public class NotificationManagerNotifier implements Notifier {
 
     private final Application application;
     private final NotificationManager notificationManager;
+    private final Scheduler scheduler;
     private final PreferencesProvider preferencesProvider;
 
     private static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     private static final int FORM_SYNC_NOTIFICATION_ID = 1;
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
-    public NotificationManagerNotifier(Application application, PreferencesProvider preferencesProvider) {
+    public NotificationManagerNotifier(Application application, Scheduler scheduler, PreferencesProvider preferencesProvider) {
         this.application = application;
+        this.scheduler = scheduler;
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
         this.preferencesProvider = preferencesProvider;
     }
@@ -103,7 +107,7 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onSync(@Nullable FormApiException exception) {
+    public void onSync(@Nullable FormApiException exception, boolean manual) {
         if (exception != null) {
             Intent intent = new Intent(application, FillBlankFormActivity.class);
             PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -119,6 +123,16 @@ public class NotificationManagerNotifier implements Notifier {
             );
         } else {
             notificationManager.cancel(FORM_SYNC_NOTIFICATION_ID);
+
+            if (manual) {
+                scheduler.immediate(() -> {
+                    Toast.makeText(
+                            application,
+                            getLocalizedResources(application).getString(R.string.form_update_complete),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                });
+            }
         }
     }
 

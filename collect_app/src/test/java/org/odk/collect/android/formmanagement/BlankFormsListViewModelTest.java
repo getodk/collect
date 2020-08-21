@@ -113,7 +113,7 @@ public class BlankFormsListViewModelTest {
 
         fakeScheduler.runBackground();
         verify(syncRepository).finishSync(null);
-        verify(notifier).onSync(null);
+        verify(notifier).onSync(null, true);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class BlankFormsListViewModelTest {
         fakeScheduler.runBackground();
 
         verify(syncRepository).finishSync(exception);
-        verify(notifier).onSync(exception);
+        verify(notifier).onSync(exception, true);
     }
 
     @Test
