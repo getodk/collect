@@ -157,7 +157,10 @@ public class InstanceSubmitter {
      * auto-send settings OR if auto-send is on at the form-level.
      *
      * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
+     *
+     * @deprecated should be private what requires refactoring the whole class to make it testable
      */
+    @Deprecated
     public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
         Form form = formsRepository.get(jrFormId, jrFormVersion);
         if (form == null) {
