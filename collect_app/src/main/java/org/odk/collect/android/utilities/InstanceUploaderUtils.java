@@ -92,23 +92,6 @@ public class InstanceUploaderUtils {
     }
 
     /**
-     * Returns whether a form with the specified form_id should be auto-sent given the current
-     * app-level auto-send settings. Returns false if there is no form with the specified form_id.
-     *
-     * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
-     * auto-send settings OR if auto-send is on at the form-level.
-     *
-     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
-     */
-    public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
-        Form form = formsRepository.get(jrFormId, jrFormVersion);
-        if (form == null) {
-            return false;
-        }
-        return form.getAutoSend() == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(form.getAutoSend());
-    }
-
-    /**
      * Returns whether instances of the form specified should be auto-deleted after successful
      * update.
      *
