@@ -17,7 +17,6 @@ package org.odk.collect.android.preferences;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
@@ -43,6 +42,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.preferences.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -81,18 +81,16 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
-            Fragment fragment = null;
-
             switch (preference.getKey()) {
                 case "odk_preferences":
                     Intent intent = new Intent(getActivity(), PreferencesActivity.class);
-                    intent.putExtra("adminMode", true);
+                    intent.putExtra(INTENT_KEY_ADMIN_MODE, true);
                     startActivity(intent);
                     break;
 
                 case KEY_CHANGE_ADMIN_PASSWORD:
                     DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class,
-                            ((AppCompatActivity) getActivity()).getSupportFragmentManager());
+                            getActivity().getSupportFragmentManager());
                     break;
 
                 case KEY_IMPORT_SETTINGS:
@@ -118,27 +116,30 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     }
                     return true;
                 case "main_menu":
-                    fragment = new MainMenuAccessPreferences();
+                    displayPreferences(new MainMenuAccessPreferences());
                     break;
                 case "user_settings":
-                    fragment = new UserSettingsAccessPreferences();
+                    displayPreferences(new UserSettingsAccessPreferences());
                     break;
                 case "form_entry":
-                    fragment = new FormEntryAccessPreferences();
+                    displayPreferences(new FormEntryAccessPreferences());
                     break;
-            }
-
-            if (fragment != null) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.preferences_fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit();
             }
 
             return true;
         }
 
         return false;
+    }
+
+    private void displayPreferences(Fragment fragment) {
+        if (fragment != null) {
+            fragment.setArguments(getArguments());
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.preferences_fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     public static class MainMenuAccessPreferences extends BasePreferenceFragment {
@@ -169,17 +170,14 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
             addPreferencesFromResource(R.xml.form_entry_access_preferences);
 
-            findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (((CheckBoxPreference) preference).isChecked()) {
-                        new MovingBackwardsDialog().show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
-                    } else {
-                        SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
-                        onMovingBackwardsEnabled();
-                    }
-                    return true;
+            findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener((preference, newValue) -> {
+                if (((CheckBoxPreference) preference).isChecked()) {
+                    new MovingBackwardsDialog().show(getActivity().getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
+                } else {
+                    SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
+                    onMovingBackwardsEnabled();
                 }
+                return true;
             });
             findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));

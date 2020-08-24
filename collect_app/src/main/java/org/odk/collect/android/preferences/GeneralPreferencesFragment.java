@@ -34,21 +34,11 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class GeneralPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
     @Inject
     VersionInformation versionInformation;
-
-    public static GeneralPreferencesFragment newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
-        GeneralPreferencesFragment generalPreferencesFragment = new GeneralPreferencesFragment();
-        generalPreferencesFragment.setArguments(bundle);
-        return generalPreferencesFragment;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -67,7 +57,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         findPreference("user_and_device_identity").setOnPreferenceClickListener(this);
         findPreference("experimental").setOnPreferenceClickListener(this);
 
-        if (!getArguments().getBoolean(INTENT_KEY_ADMIN_MODE)) {
+        if (!isInAdminMode()) {
             setPreferencesVisibility();
         }
 
@@ -79,29 +69,9 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
-            PreferenceFragmentCompat basePreferenceFragment = null;
-            boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
-            switch (preference.getKey()) {
-                case "protocol":
-                    basePreferenceFragment = ServerPreferencesFragment.newInstance(adminMode);
-                    break;
-                case "user_interface":
-                    basePreferenceFragment =  new UserInterfacePreferencesFragment();
-                    break;
-                case "maps":
-                    basePreferenceFragment = MapsPreferences.newInstance(adminMode);
-                    break;
-                case "form_management":
-                    basePreferenceFragment = FormManagementPreferences.newInstance(adminMode);
-                    break;
-                case "user_and_device_identity":
-                    basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
-                    break;
-                case "experimental":
-                    basePreferenceFragment = new ExperimentalPreferencesFragment();
-                    break;
-            }
+            PreferenceFragmentCompat basePreferenceFragment = getPreferenceFragment(preference.getKey());
             if (basePreferenceFragment != null) {
+                basePreferenceFragment.setArguments(getArguments());
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.preferences_fragment_container, basePreferenceFragment)
@@ -112,6 +82,25 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         }
 
         return false;
+    }
+
+    private PreferenceFragmentCompat getPreferenceFragment(String preferenceKey) {
+        switch (preferenceKey) {
+            case "protocol":
+                return new ServerPreferencesFragment();
+            case "user_interface":
+                return new UserInterfacePreferencesFragment();
+            case "maps":
+                return new MapsPreferences();
+            case "form_management":
+                return new FormManagementPreferences();
+            case "user_and_device_identity":
+                return new IdentityPreferences();
+            case "experimental":
+                return new ExperimentalPreferencesFragment();
+            default:
+                return null;
+        }
     }
 
     private void setPreferencesVisibility() {

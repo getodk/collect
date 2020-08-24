@@ -17,7 +17,6 @@ import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.TestScheduler;
-import org.odk.collect.android.support.pages.AdminSettingsPage;
 import org.odk.collect.android.support.pages.FormManagementPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -130,26 +129,5 @@ public class FormManagementSettingsTest {
                 .assertText(R.string.manually);
 
         assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(0));
-    }
-
-    @Test
-    public void whenFormUpdatesPrefsDisabledInAdminSettings_disablesPrefs() {
-        new MainMenuPage(rule)
-                .clickOnMenu()
-                .clickAdminSettings()
-                .openUserSettings()
-                .uncheckUserSettings(R.string.form_update_mode_title)
-                .uncheckUserSettings(R.string.periodic_form_updates_check_title)
-                .uncheckUserSettings(R.string.automatic_download)
-                .uncheckUserSettings(R.string.hide_old_form_versions_setting_title)
-                .pressBack(new AdminSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickFormManagement()
-                .assertTextDoesNotExist(R.string.form_update_mode_title)
-                .assertTextDoesNotExist(R.string.periodic_form_updates_check_title)
-                .assertTextDoesNotExist(R.string.automatic_download)
-                .assertTextDoesNotExist(R.string.hide_old_form_versions_setting_title);
     }
 }

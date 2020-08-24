@@ -13,6 +13,7 @@ import androidx.preference.Preference;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -45,7 +46,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
         if (activity instanceof CollectAbstractActivity) {
             ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
@@ -72,24 +73,15 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
         settingsChangeHandler.onSettingChanged(key);
     }
 
-    void removeDisabledPrefs() {
-        // removes disabled preferences if in general settings
-        if (getActivity() instanceof PreferencesActivity) {
-            Bundle args = getArguments();
-            if (args != null) {
-                final boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
-                if (!adminMode) {
-                    removeAllDisabledPrefs();
-                }
-            } else {
-                removeAllDisabledPrefs();
-            }
+    private void removeDisabledPrefs() {
+        if (!isInAdminMode()) {
+            DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this);
+            preferencesRemover.remove(AdminKeys.adminToGeneral);
+            preferencesRemover.removeEmptyCategories();
         }
     }
 
-    private void removeAllDisabledPrefs() {
-        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
-        preferencesRemover.remove(AdminKeys.adminToGeneral);
-        preferencesRemover.removeEmptyCategories();
+    protected boolean isInAdminMode() {
+        return getArguments() != null && getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
     }
 }
