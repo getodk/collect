@@ -89,10 +89,6 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         String formIdent = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "form_identifier");
         initialData = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "initial");
 
-        // debug TODO convert paramter to XML - ensure null if empy
-        initialData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><main id=\"s34_364\"><Look><Ward_s>29</Ward_s></Look><Booth/><meta><instanceID/><instanceName/></meta></main>";
-
-
         if(formIdent == null) {
             validForm = false;
             Toast.makeText(getContext(),
