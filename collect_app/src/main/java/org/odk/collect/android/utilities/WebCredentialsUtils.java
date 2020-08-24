@@ -30,9 +30,9 @@ public class WebCredentialsUtils {
         HOST_CREDENTIALS.put(host, new HttpCredentials(username, password));
     }
 
-    public void saveCredentialsPreferences(String userName, String password, PropertyManager propertyManager) {
-        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_USERNAME, userName);
-        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_PASSWORD, password);
+    public void saveCredentialsPreferences(GeneralSharedPreferences generalSharedPreferences, String userName, String password, PropertyManager propertyManager) {
+        generalSharedPreferences.save(GeneralKeys.KEY_USERNAME, userName);
+        generalSharedPreferences.save(GeneralKeys.KEY_PASSWORD, password);
 
         propertyManager.reload();
     }
