@@ -96,7 +96,6 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public FillBlankFormPage clickRefresh() {
         onView(withId(R.id.menu_refresh)).perform(click());
-        checkIsToastWithMessageDisplayed(R.string.form_update_complete);
         return this;
     }
 
