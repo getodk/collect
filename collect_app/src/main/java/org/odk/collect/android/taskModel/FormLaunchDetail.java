@@ -8,10 +8,12 @@ public class FormLaunchDetail {
 	public String instancePath;
 	public FormIndex formIndex;
 	public String formName;
+	public String initialData;
 	
-	public FormLaunchDetail(long id, String formName) {
+	public FormLaunchDetail(long id, String formName, String initialData) {
 	    this.id = id;
 	    this.formName = formName;
+        this.initialData = initialData;
     }
     public FormLaunchDetail(String instancePath, FormIndex formIndex, String formName) {
         this.instancePath = instancePath;

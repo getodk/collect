@@ -161,8 +161,10 @@ import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 
+import java.io.BufferedWriter;  // smap
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;      // smap
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -234,6 +236,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_ERROR = "error";
     public static final String KEY_TASK = "task";                       // smap
     public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
+    public static final String KEY_INITIAL_DATA = "initialData";        // smap
     public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
     private long mTaskId;                                               // smap
     private String mSurveyNotes = null;                                 // smap
@@ -687,6 +690,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         break;
                     }
                 }
+                // Start smap - Create initial instance from passed in intent string
+                String initialData = intent.getStringExtra(KEY_INITIAL_DATA);
+                if(instancePath == null && initialData != null) {
+                    try {
+                        FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
+                                storagePathProvider,
+                                System::currentTimeMillis
+                        );
+                        File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
+
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(instanceFile.getAbsolutePath()));
+                        writer.write(initialData);
+                        writer.close();
+                        instancePath = instanceFile.getAbsolutePath();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // End Smap
             }
         } else {
             Timber.e("Unrecognized URI: %s", uri);

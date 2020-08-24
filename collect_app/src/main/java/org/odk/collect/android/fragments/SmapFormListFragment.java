@@ -270,7 +270,7 @@ public class SmapFormListFragment extends ListFragment {
                     ((SmapMain) getActivity()).completeTask(entry, false);
                 }
             } else {
-                ((SmapMain) getActivity()).completeForm(entry, false);
+                ((SmapMain) getActivity()).completeForm(entry, false, null);
             }
         }
     }

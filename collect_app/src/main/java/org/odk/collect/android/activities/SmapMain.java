@@ -875,8 +875,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                         Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
                         i.setData(instanceUri);
 
-                        //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
-
                         i.putExtra(FormEntryActivity.KEY_TASK, taskId);
                         i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
                         i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
@@ -899,17 +897,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                         if (instanceCount > 1) {
                             Timber.e(new Exception("Unique instance not found: deleting extra, count is:" +
                                     cInstanceProvider.getCount()));
-                            /*
-                            cInstanceProvider.moveToNext();
-                            while(!cInstanceProvider.isAfterLast()) {
-
-                                Long id = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                                Uri taskUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id.toString());
-                                Collect.getInstance().getContentResolver().delete(taskUri, null, null);
-
-                                cInstanceProvider.moveToNext();
-                            }
-                            */
                         }
                     }
                 } else {
@@ -926,9 +913,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     /*
      * The user has selected an option to edit / complete a form
-     * The force parameter can be used to force launching of the new form ven with the smap activity is paused
+     * The force parameter can be used to force launching of the new form even when the smap activity is paused
      */
-    public void completeForm(TaskEntry entry, boolean force) {
+    public void completeForm(TaskEntry entry, boolean force, String initialData) {
         if(!mPaused || force) {
             Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, entry.id);
 
@@ -936,6 +923,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
             i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
             i.setData(formUri);
+            if(initialData != null) {
+                i.putExtra(FormEntryActivity.KEY_INITIAL_DATA, initialData);
+            }
             startActivityForResult(i, COMPLETE_FORM);
         } else {
             Timber.i("################# form launch blocked");
@@ -956,12 +946,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent),
                         Collect.getInstance().getString(R.string.smap_starting_form, fld.formName));
-                //Toast.makeText(
-                //        SmapMain.this,
-                //        getString(R.string.smap_starting_form, fld.formName),
-                //        Toast.LENGTH_LONG).show();
 
-                completeForm(te, true);
+                completeForm(te, true, fld.initialData);
             } else if(fld.instancePath != null) {
                 // Start a task or saved instance
                 te.id = 0;
@@ -976,10 +962,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.pager),
                         Collect.getInstance().getString(R.string.smap_restarting_form, fld.formName));
 
-                //Toast.makeText(
-                //        SmapMain.this,
-                //        getString(R.string.smap_restarting_form, fld.formName),
-                //        Toast.LENGTH_LONG).show();
                 completeTask(te, true);
             }
         }

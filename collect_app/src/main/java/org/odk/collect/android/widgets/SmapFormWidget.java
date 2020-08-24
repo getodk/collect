@@ -64,6 +64,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
     private final Drawable textBackground;
 
     private ManageForm mf;
+    private String initialData;
     private ManageForm.ManageFormDetails mfd;
     private FormEntryActivity mFormEntryActivity;
 
@@ -86,6 +87,11 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         mFormEntryActivity = (FormEntryActivity) context;
 
         String formIdent = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "form_identifier");
+        initialData = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "initial");
+
+        // debug TODO convert paramter to XML - ensure null if empy
+        initialData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><main id=\"s34_364\"><Look><Ward_s>29</Ward_s></Look><Booth/><meta><instanceID/><instanceName/></meta></main>";
+
 
         if(formIdent == null) {
             validForm = false;
@@ -242,7 +248,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex, title));
 
         // 2. Set form details to be launched in collect app
-        Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id, mfd.formName));
+        Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id, mfd.formName, initialData));
 
         // 3. Save and exit current form
         mFormEntryActivity.saveForm(true, false,
@@ -251,24 +257,5 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     private void focusAnswer() {
         SoftKeyboardUtils.showSoftKeyboard(answer);
-    }
-
-    private void onException(String toastText) {
-        hasExApp = false;
-        if (!getFormEntryPrompt().isReadOnly()) {
-            answer.setBackground(textBackground);
-            answer.setFocusable(true);
-            answer.setFocusableInTouchMode(true);
-            answer.setEnabled(true);
-        }
-        launchIntentButton.setEnabled(false);
-        launchIntentButton.setFocusable(false);
-        cancelWaitingForData();
-
-        Toast.makeText(getContext(),
-                toastText, Toast.LENGTH_SHORT)
-                .show();
-        Timber.d(toastText);
-        focusAnswer();
     }
 }
