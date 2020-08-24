@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -37,13 +38,15 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
-import timber.log.Timber;
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
@@ -88,6 +91,26 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
         String formIdent = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "form_identifier");
         initialData = questionDetails.getPrompt().getQuestion().getAdditionalAttribute(null, "initial");
+
+        // Update initial data with dynamic values from current form
+        if(initialData != null) {
+            FormController fc = Collect.getInstance().getFormController();
+            if (fc != null) {
+                FormDef fd = fc.getFormDef();
+                HashMap<String, String> dynVariables = getDynamicVariables(initialData);
+                if(dynVariables.size() > 0) {
+                    fd.populateLaunchModel(dynVariables);       // Get matching values from the current form
+                    for(String k : dynVariables.keySet()) {
+                        String v = dynVariables.get(k);
+                        if(v == null) {
+                            v = "";
+                        }
+                        initialData.replace("${" + k + "}",  v);
+                    }
+                }
+
+            }
+        }
 
         if(formIdent == null) {
             validForm = false;
@@ -253,5 +276,20 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     private void focusAnswer() {
         SoftKeyboardUtils.showSoftKeyboard(answer);
+    }
+
+    /*
+     * Extract question placeholders out of XML
+     */
+    private HashMap<String, String> getDynamicVariables(String input) {
+        HashMap<String, String> dynVariables = new HashMap<> ();
+        Pattern pattern = Pattern.compile("\\$\\{.+?\\}");
+        java.util.regex.Matcher matcher = pattern.matcher(input);
+        while (matcher.find()) {
+            String matched = matcher.group();
+            String qname = matched.substring(2, matched.length() - 1).trim();
+            dynVariables.put(qname, null);
+        }
+        return dynVariables;
     }
 }
