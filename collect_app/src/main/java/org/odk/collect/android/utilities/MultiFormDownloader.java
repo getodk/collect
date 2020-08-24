@@ -24,7 +24,7 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.forms.DatabaseFormsRepository;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.listeners.FormDownloaderListener;

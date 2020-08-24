@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
@@ -15,16 +16,22 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.preferences.MetaKeys;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
@@ -35,18 +42,26 @@ public class NotificationManagerNotifier implements Notifier {
 
     private final Application application;
     private final NotificationManager notificationManager;
+    private final PreferencesProvider preferencesProvider;
 
     private static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     private static final int FORM_SYNC_NOTIFICATION_ID = 1;
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
-    public NotificationManagerNotifier(Application application) {
+    public NotificationManagerNotifier(Application application, PreferencesProvider preferencesProvider) {
         this.application = application;
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
+        this.preferencesProvider = preferencesProvider;
     }
 
     @Override
-    public void onUpdatesAvailable() {
+    public void onUpdatesAvailable(List<ServerFormDetails> updates) {
+        SharedPreferences metaPrefs = preferencesProvider.getMetaSharedPreferences();
+        Set<String> updateId = updates.stream().map(f -> f.getFormId() + f.getHash() + f.getManifestFileHash()).collect(toSet());
+        if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION, emptySet()).equals(updateId)) {
+            return;
+        }
+
         Intent intent = new Intent(application, FormDownloadListActivity.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
         PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -60,6 +75,10 @@ public class NotificationManagerNotifier implements Notifier {
                 contentIntent,
                 FORM_UPDATE_NOTIFICATION_ID
         );
+
+        metaPrefs.edit()
+                .putStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId)
+                .apply();
     }
 
     @Override

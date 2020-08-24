@@ -42,13 +42,12 @@ import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
-import org.odk.collect.android.forms.DatabaseFormsRepository;
-import org.odk.collect.android.forms.DatabaseMediaFileRepository;
+import org.odk.collect.android.database.DatabaseFormsRepository;
+import org.odk.collect.android.database.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
@@ -418,8 +417,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application) {
-        return new NotificationManagerNotifier(application);
+    public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
+        return new NotificationManagerNotifier(application, preferencesProvider);
     }
 
     @Provides
@@ -434,11 +433,6 @@ public class AppDependencyModule {
     @Singleton
     public ChangeLock providesInstancesChangeLock() {
         return new ReentrantLockChangeLock();
-    }
-
-    @Provides
-    public ServerFormsUpdateChecker providesServerFormUpdatesChecker(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository) {
-        return new ServerFormsUpdateChecker(serverFormsDetailsFetcher, formsRepository);
     }
 
     @Provides

@@ -27,6 +27,7 @@ import android.provider.BaseColumns;
  * {@link FormsColumns#JR_FORM_ID} unless multiple {@link FormsColumns#JR_VERSION}s are defined.
  */
 public final class FormsProviderAPI {
+
     static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
 
     private FormsProviderAPI() {
@@ -63,7 +64,6 @@ public final class FormsProviderAPI {
         public static final String SUBMISSION_URI = "submissionUri"; // can be null
         public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey"; // can be null
         public static final String AUTO_DELETE = "autoDelete"; // can be null
-        public static final String LAST_DETECTED_FORM_VERSION_HASH = "lastDetectedFormVersionHash"; // can be null
         // Column is called autoSubmit for legacy support but the attribute is auto-send
         public static final String AUTO_SEND = "autoSubmit"; // can be null
         public static final String GEOMETRY_XPATH = "geometryXpath"; // can be null

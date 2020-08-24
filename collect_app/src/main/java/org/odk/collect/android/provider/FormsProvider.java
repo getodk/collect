@@ -25,8 +25,10 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -37,10 +39,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import timber.log.Timber;
 
-import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
@@ -562,7 +563,6 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
         sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
         sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
-        sFormsProjectionMap.put(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH, FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
         sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);
     }
 }

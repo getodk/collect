@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,21 +53,6 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form getByLastDetectedUpdate(String formHash, String manifestHash) {
-        String lastDetectedVersion = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
-
-        return forms.stream().filter(f -> {
-            String formLastDetectedVersion = f.getLastDetectedFormVersionHash();
-            if (formLastDetectedVersion != null) {
-                return formLastDetectedVersion.equals(lastDetectedVersion);
-            } else {
-                return false;
-            }
-        }).findFirst().orElse(null);
-    }
-
-    @Nullable
-    @Override
     public Form getByPath(String path) {
         throw new UnsupportedOperationException();
     }
@@ -88,19 +72,6 @@ public class InMemFormsRepository implements FormsRepository {
                     .deleted(true)
                     .build());
         }
-    }
-
-    @Override
-    public void setLastDetectedUpdated(String jrFormId, String formHash, String manifestHash) {
-        Form form = forms.stream().filter(f -> f.getJrFormId().equals(jrFormId)).findFirst().orElse(null);
-
-        if (form != null) {
-            forms.remove(form);
-            forms.add(new Form.Builder(form)
-                    .lastDetectedFormVersionHash(MultiFormDownloader.getMd5Hash(formHash) + manifestHash)
-                    .build());
-        }
-
     }
 
     @Override

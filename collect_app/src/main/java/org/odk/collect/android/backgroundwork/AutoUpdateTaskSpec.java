@@ -22,9 +22,10 @@ import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.previouslydownloaded.ServerFormsUpdateChecker;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
+import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.MultiFormDownloader;
@@ -34,6 +35,7 @@ import org.odk.collect.async.WorkerAdapter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,7 +45,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDA
 public class AutoUpdateTaskSpec implements TaskSpec {
 
     @Inject
-    ServerFormsUpdateChecker serverFormsUpdateChecker;
+    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
@@ -67,24 +69,29 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
-            List<ServerFormDetails> newUpdates = serverFormsUpdateChecker.check();
+            try {
+                List<ServerFormDetails> serverForms = serverFormsDetailsFetcher.fetchFormDetails();
+                List<ServerFormDetails> updatedForms = serverForms.stream().filter(ServerFormDetails::isUpdated).collect(Collectors.toList());
 
-            if (!newUpdates.isEmpty()) {
-                if (preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
-                    changeLock.withLock(acquiredLock -> {
-                        if (acquiredLock) {
-                            final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(newUpdates, null);
-                            notifier.onUpdatesDownloaded(result);
-                        }
+                if (!updatedForms.isEmpty()) {
+                    if (preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                        changeLock.withLock(acquiredLock -> {
+                            if (acquiredLock) {
+                                final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(updatedForms, null);
+                                notifier.onUpdatesDownloaded(result);
+                            }
 
-                        return null;
-                    });
-                } else {
-                    notifier.onUpdatesAvailable();
+                            return null;
+                        });
+                    } else {
+                        notifier.onUpdatesAvailable(updatedForms);
+                    }
                 }
-            }
 
-            return true;
+                return true;
+            } catch (FormApiException e) {
+                return true;
+            }
         };
     }
 

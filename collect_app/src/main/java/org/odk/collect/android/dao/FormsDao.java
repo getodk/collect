@@ -24,6 +24,7 @@ import android.provider.BaseColumns;
 import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used to encapsulate all access to the {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
+ * This class is used to encapsulate all access to the {@link FormsDatabaseHelper#DATABASE_NAME}
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class FormsDao {
@@ -237,7 +238,6 @@ public class FormsDao {
                     int languageColumnIndex = cursor.getColumnIndex(FormsColumns.LANGUAGE);
                     int autoSendColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SEND);
                     int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
-                    int lastDetectedFormVersionHashColumnIndex = cursor.getColumnIndex(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
                     int geometryXpathColumnIndex = cursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH);
 
                     Form form = new Form.Builder()
@@ -256,7 +256,6 @@ public class FormsDao {
                             .language(cursor.getString(languageColumnIndex))
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))
-                            .lastDetectedFormVersionHash(cursor.getString(lastDetectedFormVersionHashColumnIndex))
                             .geometryXpath(cursor.getString(geometryXpathColumnIndex))
                             .build();
 

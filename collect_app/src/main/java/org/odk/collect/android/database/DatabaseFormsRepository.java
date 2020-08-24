@@ -1,13 +1,14 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.android.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,6 @@ import static org.odk.collect.android.dao.FormsDao.getFormsFromCursor;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 
 public class DatabaseFormsRepository implements FormsRepository {
 
@@ -63,17 +63,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
     }
 
-
-    @Override
-    public Form getByLastDetectedUpdate(String formHash, String manifestHash) {
-        FormsDao formsDao = new FormsDao();
-        String formVersionHash = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
-
-        try (Cursor cursor = formsDao.getFormsCursor(LAST_DETECTED_FORM_VERSION_HASH + "=?", new String[]{formVersionHash})) {
-            return getFormOrNull(cursor);
-        }
-    }
-
     @Nullable
     @Override
     public Form getByPath(String path) {
@@ -106,15 +95,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         ContentValues values = new ContentValues();
         values.put(DELETED, 1);
         new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
-    }
-
-    @Override
-    public void setLastDetectedUpdated(String jrFormId, String formHash, String manifestHash) {
-        String formVersionHash = MultiFormDownloader.getMd5Hash(formHash) + manifestHash;
-
-        ContentValues values = new ContentValues();
-        values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
-        new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[]{jrFormId});
     }
 
     @Override
