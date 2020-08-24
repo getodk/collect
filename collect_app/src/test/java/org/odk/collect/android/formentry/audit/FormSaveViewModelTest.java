@@ -3,6 +3,7 @@ package org.odk.collect.android.formentry.audit;
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.SavedStateHandle;
 
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -64,7 +65,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(() -> CURRENT_TIME, formSaver, analytics);
+        viewModel = new FormSaveViewModel(new SavedStateHandle(), () -> CURRENT_TIME, formSaver, analytics);
         viewModel.formLoaded(formController);
     }
 

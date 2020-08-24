@@ -10,10 +10,7 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
-import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.savedstate.SavedStateRegistryOwner;
 
 import org.javarosa.core.model.FormIndex;
@@ -48,6 +45,8 @@ import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController, QuestionMediaManager {
+    public static final String ANALYTICS = "analytics";
+
     private static final String ORIGINAL_FILES = "originalFiles";
     private static final String RECENT_FILES = "recentFiles";
 
@@ -85,7 +84,9 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     protected void onCleared() {
-        releaseMediaManager();
+        originalFiles.clear();
+        recentFiles.clear();
+
         stateHandle.set(ORIGINAL_FILES, originalFiles);
         stateHandle.set(RECENT_FILES, recentFiles);
     }
@@ -154,7 +155,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 FileUtils.purgeMediaPath(instanceFolder);
             }
         }
-        releaseMediaManager();
+        onCleared();
     }
 
     @Nullable
@@ -210,7 +211,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             @Override
             public void onComplete(SaveToDiskResult saveToDiskResult) {
                 handleTaskResult(saveToDiskResult, saveRequest);
-                releaseMediaManager();
+                onCleared();
             }
         }, analytics, originalFiles.values()).execute();
     }
@@ -289,7 +290,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     public void markOriginalFileOrDelete(String questionIndex, String fileName) {
-//        Map<String, String> originalFiles = stateHandle.get(ORIGINAL_FILES);
         if (questionIndex != null && fileName != null) {
             if (originalFiles.containsKey(questionIndex)) {
                 MediaUtils.deleteImageFileFromMediaProvider(fileName);
@@ -297,22 +297,18 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 originalFiles.put(questionIndex, fileName);
             }
         }
+        stateHandle.set(ORIGINAL_FILES, originalFiles);
     }
 
     @Override
     public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
-//        Map<String, String> recentFiles = stateHandle.get(RECENT_FILES);
         if (questionIndex != null && fileName != null) {
             if (recentFiles.containsKey(questionIndex)) {
                 MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
             }
             recentFiles.put(questionIndex, fileName);
         }
-    }
-
-    private void releaseMediaManager() {
-        originalFiles.clear();
-        recentFiles.clear();
+        stateHandle.set(RECENT_FILES, recentFiles);
     }
 
     public static class SaveResult {
