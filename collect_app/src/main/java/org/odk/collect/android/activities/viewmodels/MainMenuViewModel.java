@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.version.VersionInformation;
 
@@ -84,8 +84,7 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     private boolean isMatchExactlyEnabled() {
-        FormUpdateMode formUpdateMode = FormUpdateMode.parse(application, generalSharedPreferences.getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
-        return formUpdateMode == FormUpdateMode.MATCH_EXACTLY;
+        return SettingsUtils.getFormUpdateMode(application, generalSharedPreferences) == FormUpdateMode.MATCH_EXACTLY;
     }
 
     @NotNull

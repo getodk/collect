@@ -1,7 +1,9 @@
 package org.odk.collect.android.application.initialization.migration;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.junit.Assert.assertEquals;
 import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 
@@ -18,6 +20,12 @@ public class SharedPreferenceUtils {
             put(editor, (String) pairs[i], pairs[i + 1]);
         }
         editor.commit();
+    }
+
+    public static SharedPreferences initPrefs(Object... pairs) {
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("test", Context.MODE_PRIVATE);
+        initPrefs(prefs, pairs);
+        return prefs;
     }
 
     public static void assertPrefs(SharedPreferences prefs, Object... pairs) {
