@@ -10,10 +10,15 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public class DatabaseMediaFileRepository implements MediaFileRepository {
+    private final FormsDao formsDao;
+
+    public DatabaseMediaFileRepository(FormsDao formsDao) {
+        this.formsDao = formsDao;
+    }
 
     @Override
     public List<File> getAll(String jrFormID, String formVersion) {
-        String formMediaPath = new FormsDao().getFormMediaPath(jrFormID, formVersion);
+        String formMediaPath = formsDao.getFormMediaPath(jrFormID, formVersion);
         return formMediaPath == null
                 ? new ArrayList<>()
                 : asList(new File(formMediaPath).listFiles());

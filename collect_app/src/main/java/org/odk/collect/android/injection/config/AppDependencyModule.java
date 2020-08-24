@@ -383,7 +383,7 @@ public class AppDependencyModule {
 
     @Provides
     public MediaFileRepository providesMediaFileRepository() {
-        return new DatabaseMediaFileRepository();
+        return new DatabaseMediaFileRepository(new FormsDao());
     }
 
     @Provides
