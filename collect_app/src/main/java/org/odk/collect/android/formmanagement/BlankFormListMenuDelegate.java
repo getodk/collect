@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement;
 
-import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import org.odk.collect.android.utilities.MenuDelegate;
 
 public class BlankFormListMenuDelegate implements MenuDelegate {
 
-    private final Context context;
+    private final FragmentActivity activity;
     private final BlankFormsListViewModel blankFormsListViewModel;
     private final NetworkStateProvider networkStateProvider;
 
@@ -22,7 +21,7 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
     private Boolean syncing;
 
     public BlankFormListMenuDelegate(FragmentActivity activity, BlankFormsListViewModel blankFormsListViewModel, NetworkStateProvider networkStateProvider) {
-        this.context = activity;
+        this.activity = activity;
         this.blankFormsListViewModel = blankFormsListViewModel;
         this.networkStateProvider = networkStateProvider;
 
@@ -62,11 +61,18 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_refresh) {
             if (networkStateProvider.isDeviceOnline()) {
-                blankFormsListViewModel.syncWithServer();
+                blankFormsListViewModel.syncWithServer().observe(activity, success -> {
+                if (success) {
+                    Toast.makeText(
+                            activity,
+                            activity.getString(R.string.form_update_complete),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            });
             } else {
-                Toast.makeText(context, R.string.no_connection, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.no_connection, Toast.LENGTH_SHORT).show();
             }
-
             return true;
         } else {
             return false;

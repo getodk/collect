@@ -16,6 +16,7 @@ import org.robolectric.shadows.ShadowToast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -33,6 +34,7 @@ public class BlankFormListMenuDelegateTest {
     public void setup() {
         when(viewModel.isSyncing()).thenReturn(new MutableLiveData<>(false));
         when(viewModel.isOutOfSync()).thenReturn(new MutableLiveData<>(false));
+        when(networkStateProvider.isDeviceOnline()).thenReturn(true);
 
         activity = Robolectric.setupActivity(FragmentActivity.class);
     }
@@ -76,13 +78,23 @@ public class BlankFormListMenuDelegateTest {
     }
 
     @Test
-    public void onOptionsItemSelected_whenDeviceIsOffline_showsErrorToastAndDoesNotSync() {
+    public void onOptionsItemSelected_forSync_whenDeviceIsOffline_showsErrorToastAndDoesNotSync() {
         when(networkStateProvider.isDeviceOnline()).thenReturn(false);
         BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_refresh));
 
         assertThat(ShadowToast.getTextOfLatestToast(), is(activity.getString(R.string.no_connection)));
         verify(viewModel, never()).syncWithServer();
+    }
+
+    @Test
+    public void onOptionsSelected_forSync_whenSyncingFails_doesNotShowToast() {
+        when(viewModel.syncWithServer()).thenReturn(new MutableLiveData<>(false));
+
+        BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
+        menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_refresh));
+
+        assertThat(ShadowToast.getLatestToast(), nullValue());
     }
 
     private RoboMenu createdMenu() {
