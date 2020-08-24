@@ -78,6 +78,16 @@ public class BlankFormListMenuDelegateTest {
     }
 
     @Test
+    public void onOptionsSelected_forSync_showsSuccessToast() {
+        when(viewModel.syncWithServer()).thenReturn(new MutableLiveData<>(true));
+
+        BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
+        menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_refresh));
+
+        assertThat(ShadowToast.getTextOfLatestToast(), is(activity.getString(R.string.form_update_complete)));
+    }
+
+    @Test
     public void onOptionsItemSelected_forSync_whenDeviceIsOffline_showsErrorToastAndDoesNotSync() {
         when(networkStateProvider.isDeviceOnline()).thenReturn(false);
         BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
