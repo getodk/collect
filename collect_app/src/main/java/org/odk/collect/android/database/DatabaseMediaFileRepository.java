@@ -13,7 +13,10 @@ public class DatabaseMediaFileRepository implements MediaFileRepository {
     @Override
     public List<File> getAll(String jrFormID, String formVersion) {
         String formMediaPath = new FormsDao().getFormMediaPath(jrFormID, formVersion);
-        File[] files = new File(formMediaPath).listFiles();
+        File[] files = new File[0];
+        if (formMediaPath != null) {
+            files = new File(formMediaPath).listFiles();
+        }
         return asList(files);
     }
 }
