@@ -25,7 +25,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -88,9 +87,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver 
         return answer.isEmpty() ? null : new StringData(answer);
     }
 
-    /**
-     * Allows answer to be set externally in {@link FormEntryActivity}.
-     */
     @Override
     public void setBinaryData(Object answer) {
         String response = (String) answer;
