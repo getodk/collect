@@ -13,21 +13,16 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.support.FakeScheduler;
-import org.robolectric.shadows.ShadowToast;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class NotificationManagerNotifierTest {
-
-    private final FakeScheduler scheduler = new FakeScheduler();
 
     private NotificationManagerNotifier notifier;
     private NotificationManager notificationManager;
@@ -36,15 +31,15 @@ public class NotificationManagerNotifierTest {
     public void setup() {
         Application context = ApplicationProvider.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifier = new NotificationManagerNotifier(context, scheduler, new PreferencesProvider(context));
+        notifier = new NotificationManagerNotifier(context, new PreferencesProvider(context));
     }
 
     @Test
     public void onSync_whenExceptionNull_clearsNotification() {
-        notifier.onSync(new FormApiException(FormApiException.Type.FETCH_ERROR), false);
+        notifier.onSync(new FormApiException(FormApiException.Type.FETCH_ERROR));
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
-        notifier.onSync(null, false);
+        notifier.onSync(null);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(0));
     }
 
@@ -96,13 +91,5 @@ public class NotificationManagerNotifierTest {
         notificationManager.cancelAll();
         notifier.onUpdatesAvailable(updates);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
-    }
-
-    @Test
-    public void onSync_whenExceptionNull_andNotManual_doesNotShowToast() {
-        notifier.onSync(null, false);
-
-        scheduler.runForeground();
-        assertThat(ShadowToast.getLatestToast(), nullValue());
     }
 }

@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -73,33 +74,46 @@ public class BlankFormsListViewModel extends ViewModel {
         });
     }
 
-    public void syncWithServer() {
+    public LiveData<Boolean> syncWithServer() {
         logManualSync();
+
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
 
         changeLock.withLock(acquiredLock -> {
             if (acquiredLock) {
                 syncRepository.startSync();
 
                 scheduler.immediate(() -> {
+                    FormApiException exception = null;
+
                     try {
                         serverFormsSynchronizer.synchronize();
-                        syncRepository.finishSync(null);
-                        notifier.onSync(null, true);
-
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
                     } catch (FormApiException e) {
-                        syncRepository.finishSync(e);
-                        notifier.onSync(e, true);
-
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, e.getType().toString());
+                        exception = e;
                     }
 
-                    return null;
-                }, ignored -> { });
+                    return exception;
+                }, exception -> {
+                        if (exception == null) {
+                        syncRepository.finishSync(null);
+                        notifier.onSync(null);
+                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
+
+                        result.setValue(true);
+                    } else {
+                        syncRepository.finishSync(exception);
+                        notifier.onSync(exception);
+                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, exception.getType().toString());
+
+                        result.setValue(false);
+                    }
+                });
             }
 
             return null;
         });
+
+        return result;
     }
 
     private void logManualSync() {

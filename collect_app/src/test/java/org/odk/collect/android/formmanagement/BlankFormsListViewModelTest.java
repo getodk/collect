@@ -104,7 +104,7 @@ public class BlankFormsListViewModelTest {
     }
 
     @Test
-    public void syncWithServer_whenTaskFinishes_finishesSyncOnRepository() {
+    public void syncWithServer_whenTaskFinishes_finishesSyncOnRepositoryAndNotifies() {
         FakeScheduler fakeScheduler = new FakeScheduler();
         Notifier notifier = mock(Notifier.class);
 
@@ -113,7 +113,18 @@ public class BlankFormsListViewModelTest {
 
         fakeScheduler.runBackground();
         verify(syncRepository).finishSync(null);
-        verify(notifier).onSync(null, true);
+        verify(notifier).onSync(null);
+    }
+
+    @Test
+    public void syncWithServer_whenTaskFinishes_setsResultToTrue() {
+        FakeScheduler fakeScheduler = new FakeScheduler();
+
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, mock(ServerFormsSynchronizer.class), preferencesProvider, mock(Notifier.class), changeLock, analytics);
+        LiveData<Boolean> result = viewModel.syncWithServer();
+        fakeScheduler.runBackground();
+
+        assertThat(result.getValue(), is(true));
     }
 
     @Test
@@ -141,7 +152,7 @@ public class BlankFormsListViewModelTest {
         fakeScheduler.runBackground();
 
         verify(syncRepository).finishSync(exception);
-        verify(notifier).onSync(exception, true);
+        verify(notifier).onSync(exception);
     }
 
     @Test
@@ -158,6 +169,22 @@ public class BlankFormsListViewModelTest {
         fakeScheduler.runBackground();
 
         verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "FETCH_ERROR");
+    }
+
+    @Test
+    public void syncWithServer_whenThereIsAnError_setsResultToFalse() throws Exception {
+        FakeScheduler fakeScheduler = new FakeScheduler();
+        ServerFormsSynchronizer synchronizer = mock(ServerFormsSynchronizer.class);
+
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, preferencesProvider, mock(Notifier.class), changeLock, analytics);
+
+        FormApiException exception = new FormApiException(FormApiException.Type.FETCH_ERROR);
+        doThrow(exception).when(synchronizer).synchronize();
+
+        LiveData<Boolean> result = viewModel.syncWithServer();
+        fakeScheduler.runBackground();
+
+        assertThat(result.getValue(), is(false));
     }
 
     @Test

@@ -25,7 +25,6 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.async.Scheduler;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.function.Supplier;
@@ -76,7 +75,7 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public Notifier providesNotifier(Application application, Scheduler scheduler, PreferencesProvider preferencesProvider) {
+            public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
                 return notifier;
             }
         });
