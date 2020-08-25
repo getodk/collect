@@ -420,13 +420,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public static class Factory extends AbstractSavedStateViewModelFactory {
-        private Analytics analytics;
+        private final Analytics analytics;
 
-        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs) {
+        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs, Analytics analytics) {
             super(owner, defaultArgs);
-        }
-
-        public void setAnalytics(Analytics analytics) {
             this.analytics = analytics;
         }
 
