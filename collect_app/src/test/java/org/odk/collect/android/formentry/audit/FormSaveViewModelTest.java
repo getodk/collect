@@ -423,10 +423,9 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void replaceRecentFileForQuestion_whenQuestionIndexHasAnswer_deletesOriginalFile() {
+    public void replaceRecentFileForQuestion_whenQuestionIndexHasAnswer_deletesFile() {
         viewModel.markOriginalFileOrDelete("questionIndex", "name");
-        Map<String, String> recentFiles = savedStateHandle.get(FormSaveViewModel.RECENT_FILES);
-        verify(mediaUtils).deleteImageFileFromMediaProvider(recentFiles.get("questionIndex"));
+        verify(mediaUtils).deleteImageFileFromMediaProvider("name");
     }
 
     @Test

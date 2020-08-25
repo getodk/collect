@@ -91,7 +91,7 @@ public class MediaUtils {
         }
     }
 
-    public final int deleteImageFileFromMediaProvider(String imageFile) {
+    public int deleteImageFileFromMediaProvider(String imageFile) {
         ContentResolver cr = Collect.getInstance().getContentResolver();
         // images
         int count = 0;
