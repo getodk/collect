@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.Collections;
+import java.util.HashMap;
 
 import javax.net.ssl.SSLException;
 
@@ -21,12 +22,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.SECURITY_ERROR;
-import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNKNOWN_HOST;
+import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNREACHABLE;
 
 public class OpenRosaFormListApiTest {
 
     @Test
-    public void fetchFormList_whenThereIsAnUnknownHostException_throwsUnknownHostFormApiException() throws Exception {
+    public void fetchFormList_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() throws Exception {
         OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
         WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
 
@@ -37,7 +38,7 @@ public class OpenRosaFormListApiTest {
             formListApi.fetchFormList();
             fail("No exception thrown!");
         } catch (FormApiException e) {
-            assertThat(e.getType(), is(UNKNOWN_HOST));
+            assertThat(e.getType(), is(UNREACHABLE));
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
@@ -60,7 +61,24 @@ public class OpenRosaFormListApiTest {
     }
 
     @Test
-    public void fetchManifest_whenThereIsAnUnknownHostException_throwsUnknownHostFormApiException() throws Exception {
+    public void fetchFormList_whenThereIsA404_throwsUnreachableApiException() throws Exception {
+        OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
+        WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
+
+        OpenRosaFormListApi formListApi = new OpenRosaFormListApi("http://blah.com", "/formList", httpInterface, webCredentialsUtils);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 404));
+            formListApi.fetchFormList();
+            fail("No exception thrown!");
+        } catch (FormApiException e) {
+            assertThat(e.getType(), is(UNREACHABLE));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
+        }
+    }
+
+    @Test
+    public void fetchManifest_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() throws Exception {
         OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
         WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
 
@@ -71,7 +89,7 @@ public class OpenRosaFormListApiTest {
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
         } catch (FormApiException e) {
-            assertThat(e.getType(), is(UNKNOWN_HOST));
+            assertThat(e.getType(), is(UNREACHABLE));
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
