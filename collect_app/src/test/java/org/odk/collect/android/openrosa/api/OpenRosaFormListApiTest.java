@@ -10,6 +10,8 @@ import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.Collections;
 
+import javax.net.ssl.SSLException;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
@@ -18,6 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.openrosa.api.FormApiException.Type.SECURITY_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNKNOWN_HOST;
 
 public class OpenRosaFormListApiTest {
@@ -35,6 +38,23 @@ public class OpenRosaFormListApiTest {
             fail("No exception thrown!");
         } catch (FormApiException e) {
             assertThat(e.getType(), is(UNKNOWN_HOST));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
+        }
+    }
+
+    @Test
+    public void fetchFormList_whenThereIsAnSSLException_throwsSecurityErrorFormApiException() throws Exception {
+        OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
+        WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
+
+        OpenRosaFormListApi formListApi = new OpenRosaFormListApi("http://blah.com", "/formList", httpInterface, webCredentialsUtils);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(SSLException.class);
+            formListApi.fetchFormList();
+            fail("No exception thrown!");
+        } catch (FormApiException e) {
+            assertThat(e.getType(), is(SECURITY_ERROR));
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }

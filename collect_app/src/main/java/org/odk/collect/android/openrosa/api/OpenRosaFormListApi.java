@@ -13,9 +13,13 @@ import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import javax.net.ssl.SSLException;
 
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.AUTH_REQUIRED;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.FETCH_ERROR;
+import static org.odk.collect.android.openrosa.api.FormApiException.Type.SECURITY_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNKNOWN_HOST;
 
 public class OpenRosaFormListApi implements FormListApi {
@@ -53,13 +57,7 @@ public class OpenRosaFormListApi implements FormListApi {
             throw new UnsupportedOperationException("Using deprecated constructor!");
         }
 
-        String downloadListUrl = getURL();
-        DocumentFetchResult result = null;
-        try {
-            result = openRosaXMLFetcher.getXML(downloadListUrl);
-        } catch (UnknownHostException e) {
-            throw new FormApiException(UNKNOWN_HOST, serverURL);
-        }
+        DocumentFetchResult result = mapException(() -> openRosaXMLFetcher.getXML(getFormListURL()));
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
@@ -229,13 +227,7 @@ public class OpenRosaFormListApi implements FormListApi {
             return null;
         }
 
-        DocumentFetchResult result = null;
-
-        try {
-            result = openRosaXMLFetcher.getXML(manifestURL);
-        } catch (UnknownHostException e) {
-            throw new FormApiException(UNKNOWN_HOST, serverURL);
-        }
+        DocumentFetchResult result = mapException(() -> openRosaXMLFetcher.getXML(manifestURL));
 
         if (result.errorMessage != null) {
             throw new FormApiException(FETCH_ERROR);
@@ -321,24 +313,28 @@ public class OpenRosaFormListApi implements FormListApi {
 
     @Override
     public InputStream fetchForm(String formURL) throws FormApiException {
-        return fetchFile(formURL);
+        return mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
     }
 
     @Override
     public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
-        return fetchFile(mediaFileURL);
+        return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
     }
 
-    private InputStream fetchFile(String formURL) throws FormApiException {
+    private <T> T mapException(Callable<T> callable) throws FormApiException {
         try {
-            return openRosaXMLFetcher.getFile(formURL, null);
+            return callable.call();
+        } catch (UnknownHostException e) {
+            throw new FormApiException(UNKNOWN_HOST, serverURL);
+        } catch (SSLException e) {
+            throw new FormApiException(SECURITY_ERROR, serverURL);
         } catch (Exception e) {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormApiException(FETCH_ERROR, serverURL);
         }
     }
 
     @NotNull
-    private String getURL() {
+    private String getFormListURL() {
         String downloadListUrl = serverURL;
 
         while (downloadListUrl.endsWith("/")) {
