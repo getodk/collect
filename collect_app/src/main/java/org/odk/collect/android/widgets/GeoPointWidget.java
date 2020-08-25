@@ -121,7 +121,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         stringAnswer = (String) answer;
         binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
-        binding.simpleButton.setText(answer != null ? R.string.change_location : R.string.get_point);
+        binding.simpleButton.setText(stringAnswer.isEmpty() ? R.string.get_point : R.string.change_location);
         widgetValueChanged();
     }
 }

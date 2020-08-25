@@ -126,7 +126,7 @@ public class GeoPointWidgetTest {
     @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
-        widget.setBinaryData(null);
+        widget.setBinaryData("");
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
     }
 
