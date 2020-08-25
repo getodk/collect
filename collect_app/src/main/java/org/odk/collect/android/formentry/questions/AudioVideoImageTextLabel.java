@@ -33,6 +33,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.google.android.material.button.MaterialButton;
@@ -141,23 +142,17 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         setupAudioButton(audioURI, audioHelper);
     }
 
-    public void setImage(File imageFile) {
-        if (imageFile != null) {
-            setupImage(imageFile);
-        }
+    public void setImage(@NonNull File imageFile) {
+        setupImage(imageFile);
     }
 
-    public void setBigImage(File bigImageFile) {
-        if (bigImageFile != null) {
-            this.bigImageFile = bigImageFile;
-        }
+    public void setBigImage(@NonNull File bigImageFile) {
+        this.bigImageFile = bigImageFile;
     }
 
-    public void setVideo(File videoFile) {
-        if (videoFile != null) {
-            this.videoFile = videoFile;
-            setupVideoButton();
-        }
+    public void setVideo(@NonNull File videoFile) {
+        this.videoFile = videoFile;
+        setupVideoButton();
     }
 
     public void setPlayTextColor(int textColor) {

@@ -2665,6 +2665,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    /*
+     *TODO: this is not an ideal way to solve communication between a dialog created by a widget and the widget.
+     * Instead we should use viewmodels: https://github.com/getodk/collect/pull/3964#issuecomment-670155433
+     */
     @Override
     public void updateSelectedItems(List<Selection> items) {
         ODKView odkView = getCurrentViewIfODKView();
