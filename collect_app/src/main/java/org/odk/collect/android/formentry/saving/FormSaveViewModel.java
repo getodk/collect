@@ -45,14 +45,13 @@ import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController, QuestionMediaManager {
-    public static final String ANALYTICS = "analytics";
-
-    private static final String ORIGINAL_FILES = "originalFiles";
-    private static final String RECENT_FILES = "recentFiles";
+    public static final String ORIGINAL_FILES = "originalFiles";
+    public static final String RECENT_FILES = "recentFiles";
 
     private final SavedStateHandle stateHandle;
     private final Clock clock;
     private final FormSaver formSaver;
+    private final MediaUtils mediaUtils;
 
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
     private String reason = "";
@@ -68,10 +67,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     private final Analytics analytics;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, Analytics analytics) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
+        this.mediaUtils = mediaUtils;
         this.analytics = analytics;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
@@ -202,7 +202,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     private void saveToDisk(SaveRequest saveRequest) {
 
-        saveTask = new SaveTask(saveRequest, formSaver, formController, new SaveTask.Listener() {
+        saveTask = new SaveTask(saveRequest, formSaver, formController, mediaUtils, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, progress));
@@ -292,23 +292,23 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     public void markOriginalFileOrDelete(String questionIndex, String fileName) {
         if (questionIndex != null && fileName != null) {
             if (originalFiles.containsKey(questionIndex)) {
-                MediaUtils.deleteImageFileFromMediaProvider(fileName);
+                mediaUtils.deleteImageFileFromMediaProvider(fileName);
             } else {
                 originalFiles.put(questionIndex, fileName);
+                stateHandle.set(ORIGINAL_FILES, originalFiles);
             }
         }
-        stateHandle.set(ORIGINAL_FILES, originalFiles);
     }
 
     @Override
     public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
         if (questionIndex != null && fileName != null) {
             if (recentFiles.containsKey(questionIndex)) {
-                MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
+                mediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
             }
             recentFiles.put(questionIndex, fileName);
+            stateHandle.set(RECENT_FILES, recentFiles);
         }
-        stateHandle.set(RECENT_FILES, recentFiles);
     }
 
     public static class SaveResult {
@@ -378,14 +378,17 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         private final Listener listener;
         private final FormController formController;
+        private final MediaUtils mediaUtils;
         private final Analytics analytics;
         private final Collection<String> files;
 
-        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, Listener listener, Analytics analytics, Collection<String> files) {
+        SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaUtils mediaUtils,
+                 Listener listener, Analytics analytics, Collection<String> files) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
             this.formController = formController;
+            this.mediaUtils = mediaUtils;
             this.analytics = analytics;
             this.files = files;
         }
@@ -393,7 +396,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         @Override
         protected SaveToDiskResult doInBackground(Void... voids) {
             return formSaver.save(saveRequest.uri, formController,
-                    saveRequest.shouldFinalize,
+                    mediaUtils, saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
                     this::publishProgress, analytics, files
             );
@@ -430,7 +433,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         @NonNull
         @Override
         protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), analytics);
+            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics);
         }
     }
 }

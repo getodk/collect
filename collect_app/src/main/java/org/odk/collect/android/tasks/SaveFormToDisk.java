@@ -78,6 +78,7 @@ public class SaveFormToDisk {
     private final boolean saveAndExit;
     private final boolean shouldFinalize;
     private final FormController formController;
+    private final MediaUtils mediaUtils;
     private Uri uri;
     private String instanceName;
     private final Analytics analytics;
@@ -88,9 +89,10 @@ public class SaveFormToDisk {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-    public SaveFormToDisk(FormController formController, boolean saveAndExit, boolean shouldFinalize, String updatedName,
+    public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
                           Uri uri, Analytics analytics, Collection<String> files) {
         this.formController = formController;
+        this.mediaUtils = mediaUtils;
         this.uri = uri;
         this.saveAndExit = saveAndExit;
         this.shouldFinalize = shouldFinalize;
@@ -372,7 +374,7 @@ public class SaveFormToDisk {
         String instancePath = formController.getInstanceFile().getAbsolutePath();
 
         for (String fileName : files) {
-            MediaUtils.deleteImageFileFromMediaProvider(fileName);
+            mediaUtils.deleteImageFileFromMediaProvider(fileName);
         }
 
         progressListener.onProgressUpdate(Collect.getInstance().getString(R.string.survey_saving_saving_message));
