@@ -83,15 +83,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
-    protected void onCleared() {
-        originalFiles.clear();
-        recentFiles.clear();
-
-        stateHandle.set(ORIGINAL_FILES, originalFiles);
-        stateHandle.set(RECENT_FILES, recentFiles);
-    }
-
-    @Override
     public void formLoaded(FormController formController) {
         this.formController = formController;
     }
@@ -155,7 +146,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 FileUtils.purgeMediaPath(instanceFolder);
             }
         }
-        onCleared();
+        clearMediaFiles();
     }
 
     @Nullable
@@ -211,7 +202,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             @Override
             public void onComplete(SaveToDiskResult saveToDiskResult) {
                 handleTaskResult(saveToDiskResult, saveRequest);
-                onCleared();
+                clearMediaFiles();
             }
         }, analytics, originalFiles.values()).execute();
     }
@@ -309,6 +300,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             recentFiles.put(questionIndex, fileName);
             stateHandle.set(RECENT_FILES, recentFiles);
         }
+    }
+
+    private void clearMediaFiles() {
+        originalFiles.clear();
+        recentFiles.clear();
     }
 
     public static class SaveResult {

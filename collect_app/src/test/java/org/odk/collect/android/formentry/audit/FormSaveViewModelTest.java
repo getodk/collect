@@ -414,12 +414,6 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void markOriginalFileOrDelete_whenFileNameIsEmpty_doesNotSaveFileForDelete() {
-        viewModel.markOriginalFileOrDelete("index", null);
-        assertThat(savedStateHandle.get(FormSaveViewModel.ORIGINAL_FILES), equalTo(null));
-    }
-
-    @Test
     public void markOriginalFileOrDelete_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
         viewModel.markOriginalFileOrDelete("index", "blah");
 
@@ -431,19 +425,6 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void markOriginalFileOrDelete_whenQuestionIndexDoesNotHaveAnswer_savesFileForIndex() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
-        Map<String, String> originalFiles = savedStateHandle.get(FormSaveViewModel.ORIGINAL_FILES);
-        assertThat(originalFiles.get("index"), equalTo("blah"));
-    }
-
-    @Test
-    public void replaceRecentFileForQuestion_whenFileNameIsNull_doesNotReplaceFile() {
-        viewModel.replaceRecentFileForQuestion("index", null);
-        assertThat(savedStateHandle.get(FormSaveViewModel.RECENT_FILES), equalTo(null));
-    }
-
-    @Test
     public void replaceRecentFileForQuestion_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
         viewModel.replaceRecentFileForQuestion("index", "blah");
 
@@ -452,13 +433,6 @@ public class FormSaveViewModelTest {
         restoredViewModel.replaceRecentFileForQuestion("index", "blah");
 
         verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
-    }
-
-    @Test
-    public void replaceRecentFileForQuestion_whenQuestionIndexDoesNotHaveAnswer_addsFile() {
-        viewModel.replaceRecentFileForQuestion("index", "blah");
-        Map<String, String> recentFiles = savedStateHandle.get(FormSaveViewModel.RECENT_FILES);
-        assertThat(recentFiles.get("index"), equalTo("blah"));
     }
 
     private void whenReasonRequiredToSave() {
