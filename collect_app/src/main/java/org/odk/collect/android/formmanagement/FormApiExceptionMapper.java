@@ -15,7 +15,7 @@ public class FormApiExceptionMapper {
 
     public String getMessage(FormApiException exception) {
         switch (exception.getType()) {
-            case UNKNOWN_HOST:
+            case UNREACHABLE:
                 return resources.getString(R.string.unknown_host_error, exception.getServerUrl()) + " " + resources.getString(R.string.report_to_project_lead);
             case SECURITY_ERROR:
                 return resources.getString(R.string.security_error, exception.getServerUrl()) + " " + resources.getString(R.string.report_to_project_lead);
