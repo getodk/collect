@@ -45,7 +45,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class BearingWidget extends QuestionWidget implements BinaryDataReceiver {
     BearingWidgetAnswerBinding binding;
 
-    private final boolean areSensorsAvailable;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final SensorManager sensorManager;
 
@@ -53,8 +52,6 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver 
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.sensorManager = sensorManager;
-
-        areSensorsAvailable = areSensorsAvailable();
     }
 
     @Override
@@ -118,7 +115,7 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver 
     }
 
     private void onButtonClick() {
-        if (areSensorsAvailable) {
+        if (areSensorsAvailable()) {
             Intent intent = new Intent(getContext(), BearingActivity.class);
 
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
