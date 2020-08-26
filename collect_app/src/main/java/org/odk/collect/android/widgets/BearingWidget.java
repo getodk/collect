@@ -32,7 +32,6 @@ import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.databinding.BearingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.UiUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -117,18 +116,13 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver 
     private void onButtonClick() {
         if (areSensorsAvailable()) {
             Intent intent = new Intent(getContext(), BearingActivity.class);
+            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.BEARING_CAPTURE);
 
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.BEARING_CAPTURE);
         } else {
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
 
             binding.bearingButton.setEnabled(false);
-
-            MarginLayoutParams marginLayoutParams = (MarginLayoutParams) binding.answerText.getLayoutParams();
-            marginLayoutParams.setMarginStart(UiUtils.getDimen(R.dimen.margin_standard));
-            marginLayoutParams.setMarginEnd(UiUtils.getDimen(R.dimen.margin_standard));
-            binding.answerText.setLayoutParams(marginLayoutParams);
 
             binding.answerText.setBackground(new EditText(getContext()).getBackground());
             binding.answerText.setFocusable(true);
