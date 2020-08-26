@@ -105,7 +105,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
                         if(v == null) {
                             v = "";
                         }
-                        initialData.replace("${" + k + "}",  v);
+                        initialData = initialData.replace("${" + k + "}",  v);
                     }
                 }
 
@@ -288,7 +288,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         while (matcher.find()) {
             String matched = matcher.group();
             String qname = matched.substring(2, matched.length() - 1).trim();
-            dynVariables.put(qname, null);
+            dynVariables.put(qname, "");
         }
         return dynVariables;
     }

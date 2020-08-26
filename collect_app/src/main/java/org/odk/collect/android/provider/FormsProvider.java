@@ -240,10 +240,14 @@ public class FormsProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(formUri, null);
                     getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
                 return formUri;
+            } else {        // smap - additional debug information
+                throw new SQLException("Failed to insert into the forms database - rowId zero. Table: " + FORMS_TABLE_NAME + " Values:" + values.toString());
             }
+        } else {    // smap additional debug information
+            throw new SQLException("Failed to insert into the forms database - FormDatabaseHelper not found.");
         }
 
-        throw new SQLException("Failed to insert into the forms database.");
+        //throw new SQLException("Failed to insert into the forms database.");  // smap - not used
     }
 
     private void deleteFileOrDir(String fileName) {

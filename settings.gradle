@@ -2,3 +2,5 @@ include ':collect_app', ':AWSMobileHelper'
 include ':collect_app'
 include ':nbi-stubs'
 include ':material'
+
+include ':collect_app:libs'

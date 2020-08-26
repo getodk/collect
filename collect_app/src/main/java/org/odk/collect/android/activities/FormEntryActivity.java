@@ -2370,7 +2370,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        Collect.getInstance().setFormEntryActivity(null);   // smap
+        //Collect.getInstance().setFormEntryActivity(null);   // smap - commented out because on destroy for old activity cn be called after on Create for new
         releaseOdkView();
         if (progressBar != null) {    // smap
             progressBar.dismiss();
