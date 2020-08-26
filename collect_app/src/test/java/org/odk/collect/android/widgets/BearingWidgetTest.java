@@ -26,7 +26,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -96,8 +95,13 @@ public class BearingWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         BearingWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.clearAnswer();
-
         assertThat(widget.binding.answerText.getText().toString(), is(""));
+    }
+
+    @Test
+    public void clearAnswer_updatesButtonLabel() {
+        BearingWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        widget.clearAnswer();
         assertThat(widget.binding.bearingButton.getText(), is(widgetActivity.getString(R.string.get_bearing)));
     }
 
@@ -115,6 +119,13 @@ public class BearingWidgetTest {
         BearingWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData("blah");
         assertThat(widget.binding.answerText.getText().toString(), is("blah"));
+    }
+
+    @Test
+    public void setData_updatesButtonLabel() {
+        BearingWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData("blah");
+        assertThat(widget.binding.bearingButton.getText(), is(widgetActivity.getString(R.string.replace_bearing)));
     }
 
     @Test
@@ -136,13 +147,12 @@ public class BearingWidgetTest {
     }
 
     @Test
-    public void clickingBearingButtonForLong_whenAccelerometerSensorIsNotAvailable_doesNotCallOnLongClickListener() {
-        assertListenerNotCalledWhenSensorIsUnavailable(Sensor.TYPE_ACCELEROMETER);
-    }
+    public void clickingBearingButtonForLong_callOnLongClickListener() {
+        BearingWidget widget = createWidget(promptWithAnswer(null));
+        widget.setOnLongClickListener(listener);
 
-    @Test
-    public void clickingBearingButtonForLong_whenMagneticSensorIsNotAvailable_doesNotCallOnLongClickListener() {
-        assertListenerNotCalledWhenSensorIsUnavailable(Sensor.TYPE_MAGNETIC_FIELD);
+        widget.binding.bearingButton.performLongClick();
+        verify(listener).onLongClick(widget.binding.bearingButton);
     }
 
     @Test
@@ -206,15 +216,6 @@ public class BearingWidgetTest {
 
     private BearingWidget createWidget(FormEntryPrompt prompt) {
         return new BearingWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), fakeWaitingForDataRegistry, sensorManager);
-    }
-
-    private void assertListenerNotCalledWhenSensorIsUnavailable(int sensorType) {
-        when(sensorManager.getDefaultSensor(sensorType)).thenReturn(null);
-        BearingWidget widget = createWidget(promptWithAnswer(null));
-        widget.setOnLongClickListener(listener);
-
-        widget.binding.bearingButton.performLongClick();
-        verify(listener, never()).onLongClick(widget.binding.bearingButton);
     }
 
     private void assertNoIntentLaunchedWhenSensorIsUnavailable(int sensorType) {

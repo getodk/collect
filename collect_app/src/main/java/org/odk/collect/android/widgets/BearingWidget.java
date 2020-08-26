@@ -18,11 +18,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -32,6 +32,7 @@ import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.databinding.BearingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.UiUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -44,8 +45,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class BearingWidget extends QuestionWidget implements BinaryDataReceiver {
     BearingWidgetAnswerBinding binding;
 
-    private final boolean isSensorAvailable;
-    private final Drawable textBackground;
+    private final boolean areSensorsAvailable;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final SensorManager sensorManager;
 
@@ -54,15 +54,7 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.sensorManager = sensorManager;
 
-        isSensorAvailable = checkForRequiredSensors();
-        textBackground = binding.answerText.getBackground();
-        binding.answerText.setBackground(null);
-
-        String answerText = questionDetails.getPrompt().getAnswerText();
-        if (answerText != null && !answerText.equals("")) {
-            binding.bearingButton.setText(getContext().getString(R.string.replace_bearing));
-            binding.answerText.setText(answerText);
-        }
+        areSensorsAvailable = areSensorsAvailable();
     }
 
     @Override
@@ -76,6 +68,13 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver 
             binding.bearingButton.setOnClickListener(v -> onButtonClick());
         }
         binding.answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.answerText.setBackground(null);
+
+        String answerText = prompt.getAnswerText();
+        if (answerText != null && !answerText.isEmpty()) {
+            binding.bearingButton.setText(getContext().getString(R.string.replace_bearing));
+            binding.answerText.setText(answerText);
+        }
 
         return binding.getRoot();
     }
@@ -96,48 +95,45 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver 
     @Override
     public void setBinaryData(Object answer) {
         binding.answerText.setText((String) answer);
+        binding.bearingButton.setText(getContext().getString(R.string.replace_bearing));
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        if (isSensorAvailable) {
-            binding.bearingButton.setOnLongClickListener(l);
-        }
+        binding.bearingButton.setOnLongClickListener(l);
         binding.answerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        if (isSensorAvailable) {
-            binding.bearingButton.cancelLongPress();
-        }
+        binding.bearingButton.cancelLongPress();
         binding.answerText.cancelLongPress();
     }
 
-    private boolean checkForRequiredSensors() {
-        boolean isAccelerometerSensorAvailable = false;
-        boolean isMagneticFieldSensorAvailable = false;
-
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-            isAccelerometerSensorAvailable = true;
-        }
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
-            isMagneticFieldSensorAvailable = true;
-        }
-        return isAccelerometerSensorAvailable && isMagneticFieldSensorAvailable;
+    private boolean areSensorsAvailable() {
+        return sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
+                && sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
     }
 
     private void onButtonClick() {
-        if (isSensorAvailable) {
+        if (areSensorsAvailable) {
             Intent intent = new Intent(getContext(), BearingActivity.class);
+
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(intent, RequestCodes.BEARING_CAPTURE);
         } else {
-            binding.bearingButton.setEnabled(false);
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
-            binding.answerText.setBackground(textBackground);
+
+            binding.bearingButton.setEnabled(false);
+
+            MarginLayoutParams marginLayoutParams = (MarginLayoutParams) binding.answerText.getLayoutParams();
+            marginLayoutParams.setMarginStart(UiUtils.getDimen(R.dimen.margin_standard));
+            marginLayoutParams.setMarginEnd(UiUtils.getDimen(R.dimen.margin_standard));
+            binding.answerText.setLayoutParams(marginLayoutParams);
+
+            binding.answerText.setBackground(new EditText(getContext()).getBackground());
             binding.answerText.setFocusable(true);
             binding.answerText.setFocusableInTouchMode(true);
             binding.answerText.requestFocus();
