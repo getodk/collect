@@ -111,6 +111,9 @@ public class SettingsDialogFragment extends DialogFragment {
                 .setTitle(getString(R.string.input_method))
                 .setView(settingsView)
                 .setPositiveButton(getString(R.string.start), (dialog, id) -> {
+                    callback.updateRecordingMode(radioGroup.getCheckedRadioButtonId());
+                    callback.setIntervalIndex(intervalIndex);
+                    callback.setAccuracyThresholdIndex(accuracyThresholdIndex);
                     callback.startInput();
                     dialog.cancel();
                     dismiss();
@@ -143,14 +146,6 @@ public class SettingsDialogFragment extends DialogFragment {
         return meters > 0 ?
                 getResources().getQuantityString(R.plurals.number_of_meters, meters, meters) :
                 getString(R.string.none);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        callback.updateRecordingMode(radioGroup.getCheckedRadioButtonId());
-        callback.setIntervalIndex(intervalIndex);
-        callback.setAccuracyThresholdIndex(accuracyThresholdIndex);
     }
 
     public interface SettingsDialogCallback {
