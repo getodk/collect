@@ -150,7 +150,6 @@
   <string name="parent_form_not_present">ไม่สามารถแก้ไขฟอร์มที่บันทึกไว้ได้ เนื่องจากฟอร์มเปล่าไม่มีอยู่หรือถูกลบไปแล้ว \n\nForm ID: %1$s</string>
   <string name="launch_app">เริ่มการทำงาน</string>
   <string name="no_app">ไม่พบโปรแกรมที่เรียกใช้ กรุณากรอกข้อมูลด้วยตนเอง</string>
-  <string name="select_one">เลือกคำตอบใดคำตอบหนึ่ง</string>
   <string name="savepoint_used">กู้คืนข้อมูลจากจุดที่บันทึกไว้</string>
   <string name="save_and_close">บันทึกและปิดการทำงาน</string>
   <string name="sign_button">บันทึกลายมือชื่อ</string>

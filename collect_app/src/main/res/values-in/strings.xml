@@ -174,7 +174,6 @@
   <string name="parent_form_not_present">Formulir tersimpan ini tidak dapat diubah karena formulir kosong terkait tidak ada atau telah dihapus.\n\nID Formulir:%1$s</string>
   <string name="launch_app">Buka Aplikasi</string>
   <string name="no_app">Aplikasi yang dibutuhkan tidak tersedia. Silahkan pasang secara manual.</string>
-  <string name="select_one">Pilih Salah Satu Jawaban</string>
   <string name="savepoint_used">Perubahan yang belum tersimpan dipulihkan dari savepoint</string>
   <string name="save_and_close">Simpan dan Tutup</string>
   <string name="sign_button">Minta Tanda Tangan</string>
@@ -371,7 +370,6 @@
   <string name="record_geopoint">Rekam titik</string>
   <string name="gps_result">Lintang: %1$s\nBujur: %2$s\nKetinggian: %3$s m\nAkurasi: %4$s m</string>
   <string name="parser_exception">Pengecualian XPathParser: \"%s\"</string>
-  <string name="selected_answer">Terpilih: %s</string>
   <string name="version_number">Versi: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Kunjungi situs ODK </string>

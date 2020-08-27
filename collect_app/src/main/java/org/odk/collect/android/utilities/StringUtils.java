@@ -25,22 +25,18 @@ import static java.lang.Character.isWhitespace;
 
 public class StringUtils {
 
-    private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
-        public String matchFound(MatchResult match) {
-            int level = match.group(1).length();
-            return "<h" + level + ">" + match.group(2).replaceAll("#+$", "").trim() + "</h" + level
-                    + ">";
-        }
+    private static ReplaceCallback.Callback createHeader = match -> {
+        int level = match.group(1).length();
+        return "<h" + level + ">" + match.group(2).replaceAll("#+$", "").trim() + "</h" + level
+                + ">";
     };
 
-    private static ReplaceCallback.Callback createParagraph = new ReplaceCallback.Callback() {
-        public String matchFound(MatchResult match) {
-            String trimmed = match.group(1).trim();
-            if (trimmed.matches("(?i)^<\\/?(h|p|bl)")) {
-                return match.group(1);
-            }
-            return "<p>" + trimmed + "</p>";
+    private static ReplaceCallback.Callback createParagraph = match -> {
+        String trimmed = match.group(1).trim();
+        if (trimmed.matches("(?i)^<\\/?(h|p|bl)")) {
+            return match.group(1);
         }
+        return "<p>" + trimmed + "</p>";
     };
 
     private static ReplaceCallback.Callback createSpan = new ReplaceCallback.Callback() {
@@ -114,12 +110,7 @@ public class StringUtils {
     }
 
     public static CharSequence textToHtml(String text) {
-
-        if (text == null) {
-            return null;
-        }
-
-        return Html.fromHtml(markdownToHtml(text));
+        return text == null ? "" : Html.fromHtml(markdownToHtml(text));
     }
 
     public static String ellipsizeBeginning(String text) {

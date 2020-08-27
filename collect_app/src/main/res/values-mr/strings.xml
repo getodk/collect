@@ -156,7 +156,6 @@
   <string name="parent_form_not_present">हा जतन केलेला फॉर्म संपादित करण्यास अक्षम कारण संबंधीत रिक्त फॉर्म उपलब्ध नाही किंवा हटविला गेला नाही. \ n \ n फॉर्म ID %1$s</string>
   <string name="launch_app">लाँच करा</string>
   <string name="no_app">विनंती केलेले अनुप्रयोग गहाळ आहे. कृपया स्वतः वाचन प्रविष्ट करा.</string>
-  <string name="select_one">एक उत्तर निवडा</string>
   <string name="savepoint_used">जतन न केलेले बदल पुनर्प्राप्त!</string>
   <string name="save_and_close">जतन करा आणि बंद करा</string>
   <string name="sign_button">स्वाक्षरी एकत्रीकरण</string>
@@ -295,7 +294,6 @@
   <string name="download_selected">निवडलेल्या डाउनलोड करा</string>
   <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <string name="parser_exception">एक्स पाथ पार्सर अपवादः  \"%s\"</string>
-  <string name="selected_answer">निवडलेले: %s</string>
   <string name="version_number">आवृत्ती: %s</string>
   <string name="odk_website">ओडीके वेबसाइट ला भेट द्या</string>
   <string name="odk_website_summary">ओपन डाटा किट (ओडीकेे) चा उपयोग आव्हानात्मक पर्यावरणात सामाजिक चांगल्यासाठी डेटा गोळा करण्यासाठी केला जातो.</string>

@@ -167,7 +167,6 @@
   <string name="parent_form_not_present">Ne morem urejati shranjen obrazec ker je bil pripadajoči prazen obrazec  %1$s izbrisan ali ni na voljo.</string>
   <string name="launch_app">Zaženi</string>
   <string name="no_app">Zahtevane aplikacije ne najdem ali ni na voljo. Ročno vnesi vrednost.</string>
-  <string name="select_one">Izberi en odgovor</string>
   <string name="savepoint_used">Neshranjene spremembe vrnjene na shranjeno točko.</string>
   <string name="save_and_close">Shrani in zapri</string>
   <string name="sign_button">Podpiši</string>

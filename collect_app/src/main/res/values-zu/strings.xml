@@ -143,7 +143,6 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="launch_app">Yethula</string>
   <string name="no_app">Isicelo asiphumelelanga. Sicela ufake imibhalo ngesandla.</string>
-  <string name="select_one">Khetha impendulo eyodwa</string>
   <string name="savepoint_used">Izinguquko ezingagciniwe zitholakele from savepoint!</string>
   <string name="save_and_close">Londoloza bese uyavala</string>
   <string name="sign_button">Thola isithupha</string>

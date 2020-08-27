@@ -174,7 +174,6 @@
   <string name="parent_form_not_present">Das gespeicherte Formular kann nicht bearbeitet werden, weil das zugehörige leere Formular nicht vorhanden ist oder gelöscht wurde.\n\nForm ID: %1$s</string>
   <string name="launch_app">Starten</string>
   <string name="no_app">Die gewünschte Applikation steht nicht zur Verfügung. Bitte tragen sie den Wert manuell ein.</string>
-  <string name="select_one">Eine Antwort auswählen</string>
   <string name="savepoint_used">Nicht-gespeicherte Einträge aus dem letzten automatischen Speichern wiederhergestellt!</string>
   <string name="save_and_close">Speichern und schließen</string>
   <string name="sign_button">Unterschrift erfassen</string>
@@ -374,7 +373,6 @@
   <string name="record_geopoint">Punkt erfassen</string>
   <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
-  <string name="selected_answer">Ausgewählt: %s</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">ODK-Webseite öffnen</string>

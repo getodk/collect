@@ -161,7 +161,6 @@ Escolher Imagem</string>
   <string name="parent_form_not_present">Não foi possível editar o formulário salvo porque o formulário em branco correspondente não está presente ou foi deletado.\n\nID do formulário: %1$s</string>
   <string name="launch_app">Play App</string>
   <string name="no_app">Aplicativo perdido. Por favor, inserir manualmente</string>
-  <string name="select_one">Selecionar uma resposta</string>
   <string name="savepoint_used">Alterações não salvas recuperadas</string>
   <string name="save_and_close">Salvar e Fechar</string>
   <string name="sign_button">Coletar Assinatura</string>
@@ -310,7 +309,6 @@ Escolher Imagem</string>
   <string name="download_selected">Baixar selecionados</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
   <string name="parser_exception">Exceção XPathParser: \"%s\"</string>
-  <string name="selected_answer">Selecionado: %s</string>
   <string name="version_number">Versão: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visite o site ODK</string>

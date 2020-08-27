@@ -152,7 +152,6 @@
   <string name="parent_form_not_present">Salvestatud vormi ei õnnestu muuta kuna vormi, kas ei ole olemas või on kustutatud. \n\nVormi ID: %1$s</string>
   <string name="launch_app">Alusta</string>
   <string name="no_app">Soovitud rakendust ei ole. Palun sisestage käsitsi.</string>
-  <string name="select_one">Valige üks vastus</string>
   <string name="savepoint_used">Salvestamata muudatused on taastatud!</string>
   <string name="save_and_close">Salvesta ja sulge</string>
   <string name="sign_button">Allkirja kogumine</string>
@@ -286,7 +285,6 @@
   <string name="download_selected">Allalaadimine valitud</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <string name="parser_exception">XPathParser Viga: \"%s\"</string>
-  <string name="selected_answer">Valitud: %s</string>
   <string name="version_number">Versoon: %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>

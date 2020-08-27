@@ -167,7 +167,6 @@
   <string name="parent_form_not_present">Opgeslagen formulier kan niet bewerkt worden omdat het benodigde lege formulier niet gevonden kon worden of was verwijderd.\n\nForm ID: %1$s</string>
   <string name="launch_app">Starten</string>
   <string name="no_app">Benodigde applicatie ontbreekt. Voer de waarde handmatig in.</string>
-  <string name="select_one">Kies een antwoord</string>
   <string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
   <string name="save_and_close">Opslaan en sluiten</string>
   <string name="sign_button">Zet handtekening</string>

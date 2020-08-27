@@ -172,7 +172,6 @@
   <string name="parent_form_not_present">შენახული ფორმის რედაქტირება შეუძლებელია, რადგან შესაბამისი ცარიელი ფორმა არ არსებობს, ან - წაშლილია. \n\nფორმის ID: %1$s</string>
   <string name="launch_app">ჩართვა</string>
   <string name="no_app">მოთხოვნილი აპლიკაცია არ მოიძებნა, გთხოვთ მიუთითოთ ხელით.</string>
-  <string name="select_one">აირჩიეთ ერთი პასუხი</string>
   <string name="savepoint_used">მოხდა შეუნახავი ცვლილებების აღდგენა!</string>
   <string name="save_and_close">შენახვა და დახურვა</string>
   <string name="sign_button">ხელმოწერის შენახვა</string>

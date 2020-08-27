@@ -185,6 +185,7 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryDataReceive
 
     @Override
     public void clearAnswer() {
+        widgetValueChanged();
     }
 
     @Override

@@ -171,7 +171,6 @@
   <string name="parent_form_not_present">Не удалось отредактировть сохранённый опрос, потому что соответствующий бланк опросника отсутствует или был удалён.\n\nID опросника: %1$s</string>
   <string name="launch_app">Запуск</string>
   <string name="no_app">Запрошенное приложение отсутствует. Пожалуйста, выполните ручной ввод.</string>
-  <string name="select_one">Выберите один из ответов</string>
   <string name="savepoint_used">Несохранённые изменения загружены из точки восстановления!</string>
   <string name="save_and_close">Сохранить и закрыть</string>
   <string name="sign_button">Взять подпись</string>
@@ -327,7 +326,6 @@
   <string name="download_selected">Загрузить выбранные</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
   <string name="parser_exception">Исключение XPathParser: \"%s\"</string>
-  <string name="selected_answer">Выбрано: %s</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Вебсайт ODK</string>

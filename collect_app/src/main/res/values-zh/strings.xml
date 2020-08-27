@@ -154,7 +154,6 @@
   <string name="version">版本:</string>
   <string name="launch_app">运行</string>
   <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
-  <string name="select_one">选择一个回答</string>
   <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
   <string name="save_and_close">保存并关闭</string>
   <string name="sign_button">收集签名</string>

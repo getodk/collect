@@ -144,7 +144,6 @@
   <string name="parent_form_not_present">اس محفوظ شدہ فارم کی تدوین نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر مٹا یا گیا ہے، ِِ؟؟؟؟ فارم کی شناخت: ‎%1$s‏</string>
   <string name="launch_app">آغاز</string>
   <string name="no_app">درخواست کیا گیا ایپلیکیشن موجود نہیں ہے۔ براو مہربانی اعداد و شمار کو خود درج کریں۔</string>
-  <string name="select_one">ایک جواب منتخب کریں</string>
   <string name="savepoint_used">سیو پوائنٹ سے حاصل شدہ غیر محفوظ شدہ تبدیلیاں</string>
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="sign_button">signature حاصل کریں</string>

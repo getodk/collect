@@ -167,7 +167,6 @@
   <string name="parent_form_not_present">اس محفوظ شدہ فارم میںترمیم نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر ڈیلیٹ کر دیا گیا ہے، فارم کی شناخت: ‎%1$s‏</string>
   <string name="launch_app"> شروع کریں</string>
   <string name="no_app">درخواست کی گئی ایپلیکیشن موجود نہیں ہے۔ براو مہربانی اعداد و شمار کو خود درج کریں۔</string>
-  <string name="select_one">ایک جواب منتخب کریں</string>
   <string name="savepoint_used"> غیر محفوظ شدہ تبدیلیاںسیو پوائنٹ سےبحال کرلی گئی</string>
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="sign_button">دستخط حاصل کریں</string>
@@ -319,7 +318,6 @@
   <string name="download_selected">منتخب کردہ ڈاؤنلوڈ کریں</string>
   <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <string name="parser_exception"> ایکس پاتھ پارسر ایکسپشن:\"%s\"</string>
-  <string name="selected_answer">منتخب شدہ: %s</string>
   <string name="version_number">ورژن:%s</string>
   <string name="id_number">آئی ڈی: %s</string>
   <string name="odk_website">او ڈی کے ویب سائٹ وزٹ کریں</string>

@@ -109,8 +109,6 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
 
         // reset buttons
         captureButton.setText(getContext().getString(R.string.capture_image));
-
-        widgetValueChanged();
     }
 
     @Override

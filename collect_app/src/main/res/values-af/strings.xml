@@ -148,7 +148,6 @@
   <string name="parent_form_not_present">Kon nie hierdie gestoorde vorm wysig nie omdat die ooreenstemmende vorm of nie teenwoordig is nie of uitgevee is.\n\nVorm ID: %1$s</string>
   <string name="launch_app">Loods</string>
   <string name="no_app">Die program of app wat u aangevra het word vermis. Tik asb self die lesing in.</string>
-  <string name="select_one">Kies Een Antwoord</string>
   <string name="savepoint_used">Ongestoorde veranderinge is herstel vanaf stoor-punt!</string>
   <string name="save_and_close">Stoor en maak toe</string>
   <string name="sign_button">Verkry Handtekening</string>

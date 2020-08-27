@@ -173,7 +173,6 @@
   <string name="parent_form_not_present">Impossibile modificare questo modulo salvato perché il corrispondente modulo vuoto non esiste o è stato cancellato.\n\nModulo: %1$s</string>
   <string name="launch_app">Invio</string>
   <string name="no_app">L\'applicazione richiesta è mancante. Per piacere inserisci manualmente la lettura.</string>
-  <string name="select_one">Selezione una risposta</string>
   <string name="savepoint_used">Cambiamenti non salvati recuperati da punto salvato!</string>
   <string name="save_and_close">Salva e Chiudi</string>
   <string name="sign_button">Inserimento Firma</string>
@@ -367,7 +366,6 @@
   <string name="record_geopoint">Memorizza un punto</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="parser_exception">Eccezione XPathParser: \"%s\"</string>
-  <string name="selected_answer">Selezionato: %s</string>
   <string name="version_number">Versione: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Visitare il sito web ODK</string>

@@ -21,6 +21,7 @@ import org.odk.collect.async.Scheduler;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -49,6 +50,7 @@ public class AudioVideoImageTextLabelVisibilityTest {
     private View missingImage;
     private TextView textView;
     private boolean isReferenceManagerStubbed;
+    private boolean imageFileExists;
     private AudioHelper audioHelper;
 
     public AudioVideoImageTextLabelVisibilityTest(String audioURI, String imageURI, String videoURI) {
@@ -93,6 +95,7 @@ public class AudioVideoImageTextLabelVisibilityTest {
          */
         if (new Random().nextBoolean()) {
             stubReferenceManager();
+            imageFileExists = true;
         } else {
             when(referenceManager.deriveReference(RANDOM_URI)).thenThrow(InvalidReferenceException.class);
         }
@@ -104,22 +107,36 @@ public class AudioVideoImageTextLabelVisibilityTest {
         Assert.assertEquals(VISIBLE, audioVideoImageTextLabel.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage);
 
+        File imageFile;
+        File videoFile;
+
         audioVideoImageTextLabel.setTextView(textView);
-        audioVideoImageTextLabel.setImageVideo(imageURI, videoURI, null, referenceManager);
-        if (audioURI != null) {
+        if (imageURI != null && isReferenceManagerStubbed) {
+            imageFile = mock(File.class);
+            when(imageFile.exists()).thenReturn(imageFileExists);
+            audioVideoImageTextLabel.setImage(imageFile);
+        }
+        if (videoURI != null && isReferenceManagerStubbed) {
+            videoFile = mock(File.class);
+            audioVideoImageTextLabel.setVideo(videoFile);
+        }
+        if (audioURI != null && isReferenceManagerStubbed) {
             audioVideoImageTextLabel.setAudio(audioURI, audioHelper);
         }
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
-        assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);
-        assertVisibility(videoURI == null ? GONE : VISIBLE, videoButton);
+        assertVisibility(audioURI == null || !isReferenceManagerStubbed ? GONE : VISIBLE, audioButton);
+        assertVisibility(videoURI == null || !isReferenceManagerStubbed ? GONE : VISIBLE, videoButton);
 
         if (imageURI == null || !isReferenceManagerStubbed) {
             // either the URI wasn't provided or it encountered InvalidReferenceException
             assertVisibility(GONE, imageView, missingImage);
+        } else if (imageFileExists) {
+            assertVisibility(VISIBLE, imageView);
+            assertVisibility(GONE, missingImage);
         } else {
-            // either the bitmap was successfully loaded or the file was missing
-            Assert.assertNotSame(imageView.getVisibility(), missingImage.getVisibility());
+            assertVisibility(GONE, imageView);
+            assertVisibility(VISIBLE, missingImage);
         }
     }
 
