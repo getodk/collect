@@ -27,11 +27,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
-import org.odk.collect.android.formmanagement.FormUpdateMode;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
+import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
@@ -71,7 +71,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
 
-        setupFormUpdateMode();
+        updateDisabledPrefs();
     }
 
     @Override
@@ -79,33 +79,29 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         super.onSharedPreferenceChanged(sharedPreferences, key);
 
         if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-            String newValue = sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null);
-            updateDisabledPrefs(newValue, sharedPreferences.getString(KEY_PROTOCOL, null));
+            updateDisabledPrefs();
         }
     }
 
-    private void setupFormUpdateMode() {
-        SharedPreferences sharedPreferences = preferencesProvider.getGeneralSharedPreferences();
-        updateDisabledPrefs(sharedPreferences.getString(KEY_FORM_UPDATE_MODE, null), sharedPreferences.getString(KEY_PROTOCOL, null));
-    }
+    private void updateDisabledPrefs() {
+        SharedPreferences sharedPrefs = preferencesProvider.getGeneralSharedPreferences();
 
-    private void updateDisabledPrefs(String formUpdateMode, String protocol) {
         Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
-        if (Protocol.parse(getActivity(), protocol) == Protocol.GOOGLE) {
+        if (Protocol.parse(getActivity(), sharedPrefs.getString(KEY_PROTOCOL, null)) == Protocol.GOOGLE) {
             displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(R.string.manually));
             displayDisabled(automaticDownload, false);
             updateFrequency.setEnabled(false);
         } else {
-            switch (FormUpdateMode.parse(getActivity(), formUpdateMode)) {
+            switch (getFormUpdateMode(requireContext(), sharedPrefs)) {
                 case MANUAL:
                     displayDisabled(automaticDownload, false);
                     updateFrequency.setEnabled(false);
                     break;
                 case PREVIOUSLY_DOWNLOADED_ONLY:
                     automaticDownload.setEnabled(true);
-                    automaticDownload.setChecked(preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false));
+                    automaticDownload.setChecked(sharedPrefs.getBoolean(KEY_AUTOMATIC_UPDATE, false));
 
                     updateFrequency.setEnabled(true);
                     break;

@@ -47,4 +47,18 @@ public class MainMenuAccessPreferencesTest {
             assertThat(adminPrefs.getBoolean(KEY_GET_BLANK, false), is(true));
         });
     }
+
+    @Test
+    public void whenMatchExactlyEnabled_andGoogleUsedAsProtocol_getBlankFormIsEnabled() {
+        generalPrefs.edit()
+                .putString(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
+                .putString(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context))
+                .apply();
+
+        FragmentScenario<MainMenuAccessPreferences> scenario = FragmentScenario.launch(MainMenuAccessPreferences.class);
+        scenario.onFragment(f -> {
+            CheckBoxPreference getBlankForm = f.findPreference(KEY_GET_BLANK);
+            assertThat(getBlankForm.isEnabled(), is(true));
+        });
+    }
 }

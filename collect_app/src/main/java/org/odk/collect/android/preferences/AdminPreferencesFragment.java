@@ -39,6 +39,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
@@ -168,8 +169,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
             findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
 
-            String formUpdateMode = preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_FORM_UPDATE_MODE, "");
-            if (FormUpdateMode.MATCH_EXACTLY.getValue(getContext()).equals(formUpdateMode)) {
+            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), preferencesProvider.getGeneralSharedPreferences());
+            if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
                 displayDisabled(findPreference(KEY_GET_BLANK), false);
             }
         }
