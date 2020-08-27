@@ -98,9 +98,9 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver
 
     @Override
     public void clearAnswer() {
-        super.cancelLongPress();
-        binding.simpleButton.cancelLongPress();
-        binding.geoAnswerText.cancelLongPress();
+        binding.geoAnswerText.setText(null);
+        updateButtonLabelsAndVisibility(false);
+        widgetValueChanged();
     }
 
     @Override
