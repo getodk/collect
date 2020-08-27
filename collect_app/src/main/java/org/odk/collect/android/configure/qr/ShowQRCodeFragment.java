@@ -29,7 +29,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
@@ -64,9 +63,6 @@ public class ShowQRCodeFragment extends Fragment {
     LinearLayout passwordStatus;
 
     private AlertDialog dialog;
-
-    @Inject
-    public Analytics analytics;
 
     @Inject
     public QRCodeGenerator qrCodeGenerator;

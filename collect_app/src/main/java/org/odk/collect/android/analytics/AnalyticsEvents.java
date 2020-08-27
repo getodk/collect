@@ -119,4 +119,29 @@ public class AnalyticsEvents {
      * - "FETCH_ERROR"
      */
     public static final String MATCH_EXACTLY_SYNC_COMPLETED = "MatchExactlySyncCompleted";
+
+    /**
+     * Track the outcome of a QR code scan. Used to see whether changes in UX or documentation are
+     * needed to get users to a successful state. The action should be the outcome. The label should
+     * be a hash of the settings represented by the code.
+     */
+    public static final String SETTINGS_IMPORT_QR = "SettingsImportQr";
+
+    /**
+     * Track the outcome of a QR code read from image. The action should be the outcome. The label should
+     * be a hash of the settings represented by the code.
+     */
+    public static final String SETTINGS_IMPORT_QR_IMAGE = "SettingsImportQrImage";
+
+    /**
+     * Track the outcome of a .collect.settings file being imported. The action should be the outcome.
+     * The label should be a hash of the settings represented by the file.
+     */
+    public static final String SETTINGS_IMPORT_SERIALIZED = "SettingsImportSerialized";
+
+    /**
+     * Track the outcome of a .collect.settings.json file being imported. The action should be the outcome.
+     * The label should be a hash of the settings represented by the file.
+     */
+    public static final String SETTINGS_IMPORT_JSON = "SettingsImportJson";
 }
