@@ -26,7 +26,6 @@ import org.odk.collect.android.database.TraceProviderAPI.TraceColumns;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.STFileUtils;
 import org.odk.collect.android.utilities.Utilities;
 
@@ -64,7 +63,7 @@ public class TraceUtilities {
     /*
      * Get the trail of points
      */
-    public static long getPoints(List<org.odk.collect.android.loaders.PointEntry> entries, int limit, boolean desc) {
+    public static long getPoints(List<PointEntry> entries, int limit, boolean desc) {
 
         String [] proj = {
                 org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID,

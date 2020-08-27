@@ -278,8 +278,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                                                     @Nullable HttpCredentialsInterface credentials
     ) throws IOException {
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
+        // debug
+        //for(PointEntry p : updateResponse.userTrail) {
+        //    Timber.i(String.valueOf(p.time));
+        //}
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd HH:mm").create();
         String resp = gson.toJson(updateResponse);
+        Timber.i("###########################################" + resp);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("assignInput", resp)

@@ -65,7 +65,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+        if /*(action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {
@@ -73,7 +73,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 }
             }
 
-        } else if (action.equals("org.odk.collect.android.FormSaved")) {
+        } else if */(action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
@@ -150,6 +150,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
             mContext = context;
             mDownloadTasks = new DownloadTasksTask();
             mDownloadTasks.setDownloaderListener(this, context);
+            Timber.i("=============================================" + " in Network Receiver");
             mDownloadTasks.execute();
         }
     }
