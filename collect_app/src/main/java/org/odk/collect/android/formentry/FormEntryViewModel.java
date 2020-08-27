@@ -95,9 +95,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             return;
         }
 
-        analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
-
         if (jumpBackIndex != null) {
+            analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
+            
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
         } else {

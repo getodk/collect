@@ -84,6 +84,12 @@ public class FormEntryViewModelTest {
     }
 
     @Test
+    public void cancelRepeatPrompt_doesNotLogInlineDeclineAnalytics() {
+        viewModel.cancelRepeatPrompt();
+        verify(analytics, never()).logEvent(AnalyticsEvents.ADD_REPEAT, "InlineDecline", "formIdentifierHash");
+    }
+
+    @Test
     public void cancelRepeatPrompt_afterPromptForNewRepeatAndAddRepeat_doesNotJumpBack() {
         viewModel.promptForNewRepeat();
         viewModel.addRepeat(true);
