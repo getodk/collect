@@ -19,13 +19,6 @@ public class AnalyticsEvents {
     public static final String SET_SERVER = "SetServer";
 
     /**
-     * Track changes to the custom formList or submission endpoint settings. The action should be
-     * the standard endpoint name followed by a space followed by the hash of the custom endpoint
-     * name.
-     */
-    public static final String SET_CUSTOM_ENDPOINT = "SetCustomEndpoint";
-
-    /**
      * Track changes to the Google Sheets fallback submission URL setting. The action should be
      * a hash of the URL.
      */
@@ -144,4 +137,10 @@ public class AnalyticsEvents {
      * The label should be a hash of the settings represented by the file.
      */
     public static final String SETTINGS_IMPORT_JSON = "SettingsImportJson";
+
+    /**
+     * Track submissions to a URL with a custom submission endpoint configured in settings. The action
+     * should be a hash of the endpoint setting.
+     */
+    public static final String CUSTOM_ENDPOINT_SUB = "CustomEndpointSub";
 }
