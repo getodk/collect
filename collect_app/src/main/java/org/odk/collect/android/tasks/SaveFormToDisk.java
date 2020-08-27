@@ -61,7 +61,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.util.Collection;
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -82,7 +82,7 @@ public class SaveFormToDisk {
     private Uri uri;
     private String instanceName;
     private final Analytics analytics;
-    private final Collection<String> files;
+    private final ArrayList<String> tempFiles;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -90,7 +90,7 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, Analytics analytics, Collection<String> files) {
+                          Uri uri, Analytics analytics, ArrayList<String> tempFiles) {
         this.formController = formController;
         this.mediaUtils = mediaUtils;
         this.uri = uri;
@@ -98,7 +98,7 @@ public class SaveFormToDisk {
         this.shouldFinalize = shouldFinalize;
         this.instanceName = updatedName;
         this.analytics = analytics;
-        this.files = files;
+        this.tempFiles = tempFiles;
     }
 
     @Nullable
@@ -373,7 +373,7 @@ public class SaveFormToDisk {
         // write out xml
         String instancePath = formController.getInstanceFile().getAbsolutePath();
 
-        for (String fileName : files) {
+        for (String fileName : tempFiles) {
             mediaUtils.deleteImageFileFromMediaProvider(fileName);
         }
 

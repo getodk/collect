@@ -22,13 +22,12 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -333,22 +332,19 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void saveForm_runsWith_correctFiles() {
+    public void saveForm_savesCorrectFiles() {
         viewModel.markOriginalFileOrDelete("index", "blah");
         viewModel.replaceRecentFileForQuestion("index", "blah");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
-        restoredViewModel.formLoaded(formController);
-
-        restoredViewModel.saveForm(Uri.parse("file://form"), true, "", true);
+        viewModel.saveForm(Uri.parse("file://form"), true, "", true);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
 
-        assertThat(formSaver.files.contains("blah"), equalTo(true));
+        assertThat(formSaver.tempFiles.contains("blah"), equalTo(true));
 
-        restoredViewModel.saveForm(Uri.parse("file://form"), true, "", true);
+        viewModel.saveForm(Uri.parse("file://form"), true, "", true);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
 
-        assertThat(formSaver.files, nullValue());
+        assertThat(formSaver.tempFiles.isEmpty(), equalTo(true));
     }
 
     @Test
@@ -437,14 +433,14 @@ public class FormSaveViewModelTest {
     public static class FakeFormSaver implements FormSaver {
 
         public SaveToDiskResult saveToDiskResult;
-        public Collection<String> files;
+        public ArrayList<String> tempFiles;
 
         public int numberOfTimesCalled;
 
         @Override
         public SaveToDiskResult save(Uri instanceContentURI, FormController formController, MediaUtils mediaUtils, boolean shouldFinalize,
-                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, Analytics analytics, Collection<String> files) {
-            this.files = files;
+                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, Analytics analytics, ArrayList<String> tempFiles) {
+            this.tempFiles = tempFiles;
             numberOfTimesCalled++;
 
             return saveToDiskResult;

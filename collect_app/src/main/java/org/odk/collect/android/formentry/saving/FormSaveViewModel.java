@@ -36,7 +36,7 @@ import java.io.File;
 
 import timber.log.Timber;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -204,7 +204,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 handleTaskResult(saveToDiskResult, saveRequest);
                 clearMediaFiles();
             }
-        }, analytics, originalFiles.values()).execute();
+        }, analytics, new ArrayList<>(originalFiles.values())).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
@@ -376,17 +376,17 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         private final FormController formController;
         private final MediaUtils mediaUtils;
         private final Analytics analytics;
-        private final Collection<String> files;
+        private final ArrayList<String> tempFiles;
 
         SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaUtils mediaUtils,
-                 Listener listener, Analytics analytics, Collection<String> files) {
+                 Listener listener, Analytics analytics, ArrayList<String> tempFiles) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
             this.formController = formController;
             this.mediaUtils = mediaUtils;
             this.analytics = analytics;
-            this.files = files;
+            this.tempFiles = tempFiles;
         }
 
         @Override
@@ -394,7 +394,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return formSaver.save(saveRequest.uri, formController,
                     mediaUtils, saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
-                    this::publishProgress, analytics, files
+                    this::publishProgress, analytics, tempFiles
             );
         }
 
