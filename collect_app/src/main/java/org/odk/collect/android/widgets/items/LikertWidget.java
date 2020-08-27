@@ -36,7 +36,6 @@ import timber.log.Timber;
 import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_IN_PARENT;
 import static android.widget.RelativeLayout.TRUE;
-import static org.odk.collect.android.analytics.AnalyticsEvents.LIKERT;
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 
 @SuppressLint("ViewConstructor")
@@ -63,8 +62,6 @@ public class LikertWidget extends ItemsWidget {
         setButtonListener();
         setSavedButton();
         addAnswerView(view, dpFromPx(context, 10));
-
-        analytics.logEvent(LIKERT, questionDetails.getFormAnalyticsID());
     }
 
     public void setMainViewLayoutParameters() {

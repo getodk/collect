@@ -56,22 +56,6 @@ public class AnalyticsEvents {
     public static final String ENCRYPT_SUBMISSION = "EncryptSubmission";
 
     /**
-     * Track changes to the filter applied to the list of forms to send. The action should be a
-     * filter.
-     */
-    public static final String FILTER_FORMS_TO_SEND = "FilterSendForms";
-
-    /**
-     * Track displays of the likert question type. The action should be a hash of the form definition.
-     */
-    public static final String LIKERT = "Likert";
-
-    /**
-     * Track null form controllers. The action should be a description of when this occurred.
-     */
-    public static final String NULL_FORM_CONTROLLER_EVENT = "NullFormControllerEvent";
-
-    /**
      * Track changes to preferences related to automatic form updates. The action should be the
      * preference name and the label should be the new preference value.
      */
@@ -96,28 +80,9 @@ public class AnalyticsEvents {
     public static final String AUDIO_QUESTION = "Prompt";
 
     /**
-     * Track initiations of a configuration QR code scan. The action should describe where the scan
-     * was launched from.
-     */
-    public static final String SCAN_QR_CODE = "ScanQRCode";
-
-    /**
-     * Track launches of form definitions that have a background location action. The action should
-     * be a hash of the form definition.
-     */
-    public static final String LAUNCH_FORM_WITH_BG_LOCATION = "LaunchFormWithBGLocation";
-
-    /**
      * Track scoped storage migration attempts. The action should be the result of the attempt.
      */
     public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
-
-    /**
-     * Track presses of QRCode Configuration options which can be used to remove
-     * the admin or server password from the generated QR Code.
-     * The action should be the password removed/added.
-     */
-    public static final String CONFIGURE_QR_CODE = "ConfigureQRCode";
 
     /**
      * Track downloads initiated when there are no downloaded forms on the device. The action should

@@ -38,7 +38,6 @@ import androidx.lifecycle.ViewModelProviders;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.LegacySettingsFileReader;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -319,8 +318,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_configure_qr_code:
-                analytics.logEvent(AnalyticsEvents.SCAN_QR_CODE, "MainMenu");
-
                 if (adminPasswordProvider.isAdminPasswordSet()) {
                     Bundle args = new Bundle();
                     args.putSerializable(AdminPasswordDialogFragment.ARG_ACTION, Action.SCAN_QR_CODE);

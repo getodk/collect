@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
@@ -131,10 +130,7 @@ public class ShowQRCodeFragment extends Fragment {
 
             dialog = new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.include_password_dialog)
-                    .setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> {
-                        checkedItems[which] = isChecked;
-                        analytics.logEvent(AnalyticsEvents.CONFIGURE_QR_CODE, items[which]);
-                    })
+                    .setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked)
                     .setCancelable(false)
                     .setPositiveButton(R.string.generate, (dialog, which) -> {
                         qrCodeViewModel.setIncludedKeys(getSelectedPasswordKeys());
