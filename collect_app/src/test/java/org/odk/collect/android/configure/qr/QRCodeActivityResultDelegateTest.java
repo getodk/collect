@@ -57,7 +57,19 @@ public class QRCodeActivityResultDelegateTest {
     }
 
     @Test
-    public void forSelectPhoto_importsSettingsFromQRCode_showsSuccessToast_andLogsAnalytics() {
+    public void forSelectPhoto_importsSettingsFromQRCode_showsSuccessToast() {
+        importSettingsFromQRCode_successfully();
+        assertThat(getTextOfLatestToast(), is(context.getString(R.string.successfully_imported_settings)));
+    }
+
+    @Test
+    public void forSelectPhoto_importsSettingsFromQRCode_logsSuccessAnalytics() {
+        importSettingsFromQRCode_successfully();
+        String contentsHash = FileUtils.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
+        verify(analytics).logEvent("SettingsImportQrImage", "Success", contentsHash);
+    }
+
+    private void importSettingsFromQRCode_successfully() {
         QRCodeActivityResultDelegate delegate = new QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, analytics);
 
         Intent data = intentWithData("file://qr", "qr");
@@ -65,14 +77,22 @@ public class QRCodeActivityResultDelegateTest {
         when(settingsImporter.fromJSON("data")).thenReturn(true);
 
         delegate.onActivityResult(SELECT_PHOTO, Activity.RESULT_OK, data);
-        assertThat(getTextOfLatestToast(), is(context.getString(R.string.successfully_imported_settings)));
-
-        String contentsHash = FileUtils.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
-        verify(analytics).logEvent("SettingsImportQrImage", "Success", contentsHash);
     }
 
     @Test
-    public void forSelectPhoto_whenImportingFails_showsInvalidToast_andLogsAnalytics() {
+    public void forSelectPhoto_whenImportingFails_showsInvalidToast() {
+        importSettingsFromQRCode_withFailedImport();
+        assertThat(getTextOfLatestToast(), is(context.getString(R.string.invalid_qrcode)));
+    }
+
+    @Test
+    public void forSelectPhoto_whenImportingFails_logsInvalidAnalytics() {
+        importSettingsFromQRCode_withFailedImport();
+        String contentsHash = FileUtils.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
+        verify(analytics).logEvent("SettingsImportQrImage", "No valid settings", contentsHash);
+    }
+
+    private void importSettingsFromQRCode_withFailedImport() {
         QRCodeActivityResultDelegate delegate = new QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, analytics);
 
         Intent data = intentWithData("file://qr", "qr");
@@ -80,14 +100,21 @@ public class QRCodeActivityResultDelegateTest {
         when(settingsImporter.fromJSON("data")).thenReturn(false);
 
         delegate.onActivityResult(SELECT_PHOTO, Activity.RESULT_OK, data);
-        assertThat(getTextOfLatestToast(), is(context.getString(R.string.invalid_qrcode)));
-
-        String contentsHash = FileUtils.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
-        verify(analytics).logEvent("SettingsImportQrImage", "No valid settings", contentsHash);
     }
 
     @Test
-    public void forSelectPhoto_whenQRCodeDecodeFailsWithInvalid_showsInvalidToast_andLogsAnalytics() {
+    public void forSelectPhoto_whenQRCodeDecodeFailsWithInvalid_showsInvalidToast() {
+        importSettingsFromQrCode_withInvalidQrCode();
+        assertThat(getTextOfLatestToast(), is(context.getString(R.string.invalid_qrcode)));
+    }
+
+    @Test
+    public void forSelectPhoto_whenQRCodeDecodeFailsWithInvalid_logsInvalidAnalytics() {
+        importSettingsFromQrCode_withInvalidQrCode();
+        verify(analytics).logEvent("SettingsImportQrImage", "Invalid exception", "none");
+    }
+
+    private void importSettingsFromQrCode_withInvalidQrCode() {
         QRCodeActivityResultDelegate delegate = new QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, analytics);
 
         Intent data = intentWithData("file://qr", "qr");
@@ -95,13 +122,21 @@ public class QRCodeActivityResultDelegateTest {
         when(settingsImporter.fromJSON("data")).thenReturn(false);
 
         delegate.onActivityResult(SELECT_PHOTO, Activity.RESULT_OK, data);
-        assertThat(getTextOfLatestToast(), is(context.getString(R.string.invalid_qrcode)));
-
-        verify(analytics).logEvent("SettingsImportQrImage", "Invalid exception", "none");
     }
 
     @Test
-    public void forSelectPhoto_whenQRCodeDecodeFailsWithNotFound_showsNoQRToast_andLogsAnalytics() {
+    public void forSelectPhoto_whenQRCodeDecodeFailsWithNotFound_showsNoQRToast() {
+        importSettingsFromImage_withoutQrCode();
+        assertThat(getTextOfLatestToast(), is(context.getString(R.string.qr_code_not_found)));
+    }
+
+    @Test
+    public void forSelectPhoto_whenQRCodeDecodeFailsWithNotFound_logsNoQrAnalytics() {
+        importSettingsFromImage_withoutQrCode();
+        verify(analytics).logEvent("SettingsImportQrImage", "No QR code", "none");
+    }
+
+    private void importSettingsFromImage_withoutQrCode() {
         QRCodeActivityResultDelegate delegate = new QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, analytics);
 
         Intent data = intentWithData("file://qr", "qr");
@@ -109,9 +144,6 @@ public class QRCodeActivityResultDelegateTest {
         when(settingsImporter.fromJSON("data")).thenReturn(false);
 
         delegate.onActivityResult(SELECT_PHOTO, Activity.RESULT_OK, data);
-        assertThat(getTextOfLatestToast(), is(context.getString(R.string.qr_code_not_found)));
-
-        verify(analytics).logEvent("SettingsImportQrImage", "No QR code", "none");
     }
 
     @Test
