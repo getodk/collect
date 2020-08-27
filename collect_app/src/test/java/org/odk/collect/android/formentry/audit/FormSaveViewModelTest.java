@@ -23,11 +23,12 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -35,7 +36,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
@@ -50,10 +50,10 @@ public class FormSaveViewModelTest {
     private static final long CURRENT_TIME = 123L;
 
     private final SavedStateHandle savedStateHandle = new SavedStateHandle();
+    private final FakeFormSaver formSaver = new FakeFormSaver();
 
     private AuditEventLogger logger;
     private FormSaveViewModel viewModel;
-    private FormSaver formSaver;
     private MediaUtils mediaUtils;
     private FormController formController;
 
@@ -64,18 +64,11 @@ public class FormSaveViewModelTest {
 
         formController = mock(FormController.class);
         logger = mock(AuditEventLogger.class);
-        formSaver = mock(FormSaver.class);
         mediaUtils = mock(MediaUtils.class);
         Analytics analytics = mock(Analytics.class);
 
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
-
-        Map<String, String> originalFiles = new HashMap<>();
-        Map<String, String> recentFiles = new HashMap<>();
-
-        originalFiles.put("questionIndex", "blah");
-        recentFiles.put("questionIndex", "blah");
 
         viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics);
         viewModel.formLoaded(formController);
@@ -103,10 +96,11 @@ public class FormSaveViewModelTest {
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
-        verify(formSaver).save(any(), any(), any(), anyBoolean(), anyBoolean(), any(), any(), any(), any());
+        assertThat(formSaver.numberOfTimesCalled, equalTo(1));
 
         Robolectric.getBackgroundThreadScheduler().advanceToLastPostedRunnable(); // Run any other queued tasks
-        verify(formSaver, times(1)).save(any(), any(), any(), anyBoolean(), anyBoolean(), any(), any(), any(), any());
+
+        assertThat(formSaver.numberOfTimesCalled, equalTo(1));
     }
 
     @Test
@@ -339,36 +333,22 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_mediaManagerIsCleared() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
-        viewModel.replaceRecentFileForQuestion("index", "blah");
-
-        viewModel.saveForm(Uri.parse("file://form"), true, "", true);
-        whenFormSaverFinishes(SaveFormToDisk.SAVED);
-
-        Map<String, String> originalFiles = savedStateHandle.get(FormSaveViewModel.ORIGINAL_FILES);
-        Map<String, String> recentFiles = savedStateHandle.get(FormSaveViewModel.RECENT_FILES);
-
-        assertThat(originalFiles.isEmpty(), equalTo(true));
-        assertThat(recentFiles.isEmpty(), equalTo(true));
-    }
-
-    @Test
-    public void whenFormSaverFinishes_onRecreatingFormSaveViewModel_mediaManagerIsCleared() {
+    public void saveForm_runsWith_correctFiles() {
         viewModel.markOriginalFileOrDelete("index", "blah");
         viewModel.replaceRecentFileForQuestion("index", "blah");
 
         FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
         restoredViewModel.formLoaded(formController);
 
-        restoredViewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        restoredViewModel.saveForm(Uri.parse("file://form"), true, "", true);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
 
-        Map<String, String> originalFiles = savedStateHandle.get(FormSaveViewModel.ORIGINAL_FILES);
-        Map<String, String> recentFiles = savedStateHandle.get(FormSaveViewModel.RECENT_FILES);
+        assertThat(formSaver.files.contains("blah"), equalTo(true));
 
-        assertThat(originalFiles.isEmpty(), equalTo(true));
-        assertThat(recentFiles.isEmpty(), equalTo(true));
+        restoredViewModel.saveForm(Uri.parse("file://form"), true, "", true);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
+
+        assertThat(formSaver.files, nullValue());
     }
 
     @Test
@@ -450,7 +430,24 @@ public class FormSaveViewModelTest {
         saveToDiskResult.setSaveResult(result, true);
         saveToDiskResult.setSaveErrorMessage(message);
 
-        when(formSaver.save(any(), any(), any(), anyBoolean(), anyBoolean(), any(), any(), any(), any())).thenReturn(saveToDiskResult);
+        formSaver.saveToDiskResult = saveToDiskResult;
         Robolectric.getBackgroundThreadScheduler().runOneTask();
+    }
+
+    public static class FakeFormSaver implements FormSaver {
+
+        public SaveToDiskResult saveToDiskResult;
+        public Collection<String> files;
+
+        public int numberOfTimesCalled;
+
+        @Override
+        public SaveToDiskResult save(Uri instanceContentURI, FormController formController, MediaUtils mediaUtils, boolean shouldFinalize,
+                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, Analytics analytics, Collection<String> files) {
+            this.files = files;
+            numberOfTimesCalled++;
+
+            return saveToDiskResult;
+        }
     }
 }
