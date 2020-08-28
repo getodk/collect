@@ -66,7 +66,6 @@ public class MatchExactlyTest {
                 .clickNotification(
                         "ODK Collect",
                         "Form update failed",
-                        "If you keep having this problem, report it to the person who asked you to collect data.",
                         "Fill Blank Form",
                         new FillBlankFormPage(rule)
                 ).pressBack(new MainMenuPage(rule)); // Check we return to Fill Blank Form, not open a new one

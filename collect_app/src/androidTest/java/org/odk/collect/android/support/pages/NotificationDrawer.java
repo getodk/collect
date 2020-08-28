@@ -77,22 +77,6 @@ public class NotificationDrawer {
         return destination.assertOnPage();
     }
 
-    public <D extends Page<D>> D clickNotification(String appName, String title, String body, String expectedTextOnClick, D destination) {
-        UiDevice device = waitForNotification(appName);
-
-        UiObject2 titleElement = device.findObject(By.text(title));
-        assertThat(titleElement.getText(), is(title));
-
-        UiObject2 bodyElement = device.findObject(By.text(body));
-        assertThat(bodyElement.getText(), is(body));
-
-        titleElement.click();
-
-        device.wait(Until.hasObject(By.textStartsWith(expectedTextOnClick)), 2000L);
-        isOpen = false;
-        return destination.assertOnPage();
-    }
-
     public void pressBack() {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.pressBack();
