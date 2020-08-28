@@ -3,9 +3,10 @@ package org.odk.collect.android.openrosa.api;
 public class FormApiException extends Exception {
 
     public enum Type {
-        UNKNOWN_HOST,
+        UNREACHABLE,
         AUTH_REQUIRED,
-        FETCH_ERROR
+        FETCH_ERROR,
+        SECURITY_ERROR
     }
 
     private final Type type;
