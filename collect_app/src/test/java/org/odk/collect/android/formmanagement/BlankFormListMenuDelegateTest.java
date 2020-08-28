@@ -84,7 +84,7 @@ public class BlankFormListMenuDelegateTest {
         BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_refresh));
 
-        assertThat(ShadowToast.getTextOfLatestToast(), is(activity.getString(R.string.form_update_complete)));
+        assertThat(ShadowToast.getTextOfLatestToast(), is(activity.getString(R.string.form_update_succeeded)));
     }
 
     @Test
