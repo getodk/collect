@@ -64,7 +64,7 @@ public class ServerFormsSynchronizerTest {
         ));
 
         synchronizer.synchronize();
-        assertThat(formsRepository.contains("form-3"), is(false));
+        assertThat(formsRepository.getAll().isEmpty(), is(true));
     }
 
     @Test

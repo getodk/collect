@@ -243,6 +243,7 @@ public class FormsDao {
                     int autoSendColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SEND);
                     int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
                     int geometryXpathColumnIndex = cursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH);
+                    int deletedColumnIndex = cursor.getColumnIndex(FormsColumns.DELETED);
 
                     Form form = new Form.Builder()
                             .id(cursor.getLong(idColumnIndex))
@@ -261,6 +262,7 @@ public class FormsDao {
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))
                             .geometryXpath(cursor.getString(geometryXpathColumnIndex))
+                            .deleted(cursor.getInt(deletedColumnIndex) != 0)
                             .build();
 
                     forms.add(form);

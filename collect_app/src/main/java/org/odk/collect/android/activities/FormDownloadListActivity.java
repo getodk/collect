@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -498,10 +497,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             return true;
         }
 
-        try (Cursor formCursor = formsDao.getFormsCursorForFormId(formId)) {
-            return formCursor != null && formCursor.getCount() == 0 // form does not already exist locally
-                    || viewModel.getFormDetailsByFormId().get(formId).isUpdated(); // or a newer version of this form is available
-        }
+        ServerFormDetails form = viewModel.getFormDetailsByFormId().get(formId);
+        return form.isNotOnDevice() || form.isUpdated();
     }
 
     /**
@@ -510,7 +507,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      * convenience to users to download the latest version of those forms from the server.
      */
     private void selectSupersededForms() {
-
         ListView ls = listView;
         for (int idx = 0; idx < filteredFormList.size(); idx++) {
             HashMap<String, String> item = filteredFormList.get(idx);
