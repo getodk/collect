@@ -37,6 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -79,6 +80,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     Analytics analytics;
+
+    @Inject
+    InstancesRepository instancesRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +263,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
                 result.size(), instancesToSend.length);
 
-        createAlertDialog(InstanceUploaderUtils.getUploadResultMessage(this, result));
+        createAlertDialog(InstanceUploaderUtils.getUploadResultMessage(instancesRepository, this, result));
     }
 
     @Override

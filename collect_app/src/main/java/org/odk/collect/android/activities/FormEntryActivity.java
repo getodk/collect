@@ -75,6 +75,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -317,6 +318,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     FormSubmitManager formSubmitManager;
+
+    @Inject
+    FormsRepository formsRepository;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1868,12 +1872,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
-                        // Request auto-send if app-wide auto-send is enabled or the form that was just
-                        // finalized specifies that it should always be auto-sent.
-                        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-                        if (InstanceSubmitter.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
-                            formSubmitManager.scheduleSubmit();
-                        }
+                        formSubmitManager.scheduleSubmit();
                     }
 
                     finishAndReturnInstance();

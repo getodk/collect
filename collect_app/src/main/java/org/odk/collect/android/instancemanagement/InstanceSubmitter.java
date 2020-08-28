@@ -1,6 +1,5 @@
 package org.odk.collect.android.instancemanagement;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.util.Pair;
 
@@ -9,10 +8,11 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -38,20 +38,26 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.CUSTOM_ENDPOINT_SUB;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class InstanceSubmitter {
 
     private final Analytics analytics;
+    private final FormsRepository formsRepository;
+    private final InstancesRepository instancesRepository;
 
-    public InstanceSubmitter(Analytics analytics) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository) {
         this.analytics = analytics;
+        this.formsRepository = formsRepository;
+        this.instancesRepository = instancesRepository;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
         List<Instance> toUpload = getInstancesToAutoSend(GeneralSharedPreferences.isAutoSendEnabled());
+        return submitSelectedInstances(toUpload);
+    }
 
+    public Pair<Boolean, String> submitSelectedInstances(List<Instance> toUpload) throws SubmitException {
         if (toUpload.isEmpty()) {
             throw new SubmitException(Type.NOTHING_TO_SUBMIT);
         }
@@ -101,7 +107,7 @@ public class InstanceSubmitter {
                 // TODO: this could take some time so might be better to do in a separate process,
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
-                if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
+                if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, instance.getJrFormId(), instance.getJrVersion(),
                         (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
                     Uri deleteForm = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instance.getId().toString());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
@@ -125,7 +131,7 @@ public class InstanceSubmitter {
             }
         }
 
-        return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(Collect.getInstance(), resultMessagesByInstanceId));
+        return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(instancesRepository, Collect.getInstance(), resultMessagesByInstanceId));
     }
 
     /**
@@ -133,13 +139,9 @@ public class InstanceSubmitter {
      */
     @NonNull
     private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
-        InstancesDao dao = new InstancesDao();
-        Cursor c = dao.getFinalizedInstancesCursor();
-        List<Instance> allFinalized = dao.getInstancesFromCursor(c);
-
         List<Instance> toUpload = new ArrayList<>();
-        for (Instance instance : allFinalized) {
-            if (formShouldBeAutoSent(instance.getJrFormId(), isAutoSendAppSettingEnabled)) {
+        for (Instance instance : instancesRepository.getAllFinalized()) {
+            if (shouldFormBeSent(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
                 toUpload.add(instance);
             }
         }
@@ -155,20 +157,15 @@ public class InstanceSubmitter {
      * auto-send settings OR if auto-send is on at the form-level.
      *
      * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
+     *
+     * @deprecated should be private what requires refactoring the whole class to make it testable
      */
-    public static boolean formShouldBeAutoSent(String jrFormId, boolean isAutoSendAppSettingEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-        String formLevelAutoSend = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoSendColumnIndex = cursor.getColumnIndex(AUTO_SEND);
-                formLevelAutoSend = cursor.getString(autoSendColumnIndex);
-            } finally {
-                cursor.close();
-            }
+    @Deprecated
+    public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
+        Form form = formsRepository.get(jrFormId, jrFormVersion);
+        if (form == null) {
+            return false;
         }
-
-        return formLevelAutoSend == null ? isAutoSendAppSettingEnabled
-                : Boolean.valueOf(formLevelAutoSend);
+        return form.getAutoSend() == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(form.getAutoSend());
     }
 }
