@@ -7,13 +7,20 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.coroutines.CoroutineContext
 
-class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext, private val background: CoroutineContext, private val workManager: WorkManager) : Scheduler {
+class CoroutineAndWorkManagerScheduler(private val foregroundContext: CoroutineContext, private val backgroundContext: CoroutineContext, private val workManager: WorkManager) : Scheduler {
 
     constructor(workManager: WorkManager) : this(Dispatchers.Main, Dispatchers.IO, workManager) // Needed for Java construction
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
-        CoroutineScope(this.foreground).launch {
-            foreground.accept(withContext(this@CoroutineAndWorkManagerScheduler.background) { background.get() })
+        CoroutineScope(foregroundContext).launch {
+            val result = withContext(backgroundContext) { background.get() }
+            foreground.accept(result)
+        }
+    }
+
+    override fun immediate(foreground: java.lang.Runnable) {
+        CoroutineScope(foregroundContext).launch {
+            foreground.run()
         }
     }
 
@@ -45,7 +52,7 @@ class CoroutineAndWorkManagerScheduler(private val foreground: CoroutineContext,
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
-        val repeatScope = CoroutineScope(this.foreground)
+        val repeatScope = CoroutineScope(foregroundContext)
 
         repeatScope.launch {
             while (isActive) {

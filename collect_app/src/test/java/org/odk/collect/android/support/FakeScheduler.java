@@ -21,6 +21,11 @@ public class FakeScheduler implements Scheduler {
     }
 
     @Override
+    public void immediate(@NotNull Runnable foreground) {
+        foregroundTask = foreground;
+    }
+
+    @Override
     public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec) {
 
     }
@@ -42,15 +47,16 @@ public class FakeScheduler implements Scheduler {
     }
 
     public void runForeground() {
-        foregroundTask.run();
+        if (foregroundTask != null) {
+            foregroundTask.run();
+        }
+
     }
 
     public void runBackground() {
-        if (backgroundTask == null) {
-            return;
+        if (backgroundTask != null) {
+            backgroundTask.run();
         }
-
-        backgroundTask.run();
     }
 
     public Boolean hasBeenCancelled() {

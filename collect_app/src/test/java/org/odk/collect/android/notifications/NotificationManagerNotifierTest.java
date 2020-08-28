@@ -24,8 +24,8 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(AndroidJUnit4.class)
 public class NotificationManagerNotifierTest {
 
-    private NotificationManager notificationManager;
     private NotificationManagerNotifier notifier;
+    private NotificationManager notificationManager;
 
     @Before
     public void setup() {

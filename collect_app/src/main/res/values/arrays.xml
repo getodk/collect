@@ -169,7 +169,7 @@ the specific language governing permissions and limitations under the License. -
     </string-array>
 
     <string-array name="form_update_mode_entries">
-        <item>@string/manually</item>
+        <item>@string/manual</item>
         <item>@string/previously_downloaded_only</item>
         <item>@string/match_exactly</item>
     </string-array>

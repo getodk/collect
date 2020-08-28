@@ -14,7 +14,7 @@ import org.odk.collect.android.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProgressBar extends FrameLayout {
+public class InstanceUploaderProgressBar extends FrameLayout {
 
     private static final int DURATION_MILLIS = 1000;
     @BindView(R.id.progress_view)
@@ -24,15 +24,15 @@ public class ProgressBar extends FrameLayout {
     @BindView(R.id.main_layout)
     FrameLayout mainLayout;
 
-    public ProgressBar(Context context) {
+    public InstanceUploaderProgressBar(Context context) {
         this(context, null);
     }
 
-    public ProgressBar(@NonNull Context context, AttributeSet attrs) {
+    public InstanceUploaderProgressBar(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ProgressBar(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
+    public InstanceUploaderProgressBar(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         if (!isInEditMode()) {

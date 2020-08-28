@@ -99,6 +99,11 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         return this;
     }
 
+    public FillBlankFormPage clickRefreshWithError() {
+        onView(withId(R.id.menu_refresh)).perform(click());
+        return this;
+    }
+
     public ServerAuthDialog clickRefreshWithAuthError() {
         onView(withId(R.id.menu_refresh)).perform(click());
         return new ServerAuthDialog(rule).assertOnPage();
