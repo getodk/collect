@@ -181,7 +181,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOption(R.string.manually)
+                .clickOption(R.string.manual)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule));
     }
