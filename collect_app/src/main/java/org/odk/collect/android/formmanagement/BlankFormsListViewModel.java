@@ -27,6 +27,8 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
+
 public class BlankFormsListViewModel extends ViewModel {
 
     private final Application application;
@@ -50,8 +52,7 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     public boolean isMatchExactlyEnabled() {
-        FormUpdateMode formUpdateMode = FormUpdateMode.parse(application, preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_FORM_UPDATE_MODE, null));
-        return formUpdateMode == FormUpdateMode.MATCH_EXACTLY;
+        return getFormUpdateMode(application, preferencesProvider.getGeneralSharedPreferences()) == FormUpdateMode.MATCH_EXACTLY;
     }
 
     public LiveData<Boolean> isSyncing() {

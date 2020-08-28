@@ -39,4 +39,10 @@ public class CollectSettingsChangeHandlerTest {
         handler.onSettingChanged(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK);
         verify(formUpdateManager).scheduleUpdates();
     }
+
+    @Test
+    public void whenChangedKeyIsProtocol_schedulesUpdates() {
+        handler.onSettingChanged(GeneralKeys.KEY_PROTOCOL);
+        verify(formUpdateManager).scheduleUpdates();
+    }
 }

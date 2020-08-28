@@ -14,17 +14,21 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
+import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
-import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -33,16 +37,21 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
+import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_GET_BLANK;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.preferences.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -144,12 +153,26 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
     public static class MainMenuAccessPreferences extends BasePreferenceFragment {
 
+        @Inject
+        PreferencesProvider preferencesProvider;
+
+        @Override
+        public void onAttach(@NonNull Context context) {
+            super.onAttach(context);
+            DaggerUtils.getComponent(context).inject(this);
+        }
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
             setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
             findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+
+            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), preferencesProvider.getGeneralSharedPreferences());
+            if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
+                displayDisabled(findPreference(KEY_GET_BLANK), false);
+            }
         }
     }
 

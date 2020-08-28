@@ -38,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
-import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -63,7 +62,6 @@ import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
@@ -126,12 +124,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     getPreferenceScreen().removeAll();
                     addPreferencesFromResource(R.xml.server_preferences);
                     initProtocolPrefs();
-                }
-
-                if (Protocol.parse(getActivity(), (String) newValue) == Protocol.GOOGLE) {
-                    preferencesProvider.getGeneralSharedPreferences().edit()
-                            .putString(KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(getActivity()))
-                            .apply();
                 }
             }
             return true;
