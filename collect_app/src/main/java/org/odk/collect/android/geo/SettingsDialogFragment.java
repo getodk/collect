@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 
 public class SettingsDialogFragment extends DialogFragment {
@@ -36,7 +35,7 @@ public class SettingsDialogFragment extends DialogFragment {
     private int accuracyThresholdIndex = -1;
 
     @Override
-    public void onAttach(@NotNull Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         if (context instanceof SettingsDialogCallback) {
