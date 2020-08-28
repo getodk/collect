@@ -193,19 +193,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.smap_main_layout);
-        //ButterKnife.bind(this);  // banner
-        initToolbar();
-
-        // DaggerUtils.getComponent(this).inject(this);  // banner
-
-        model = new ViewModelProvider(this).get(SurveyDataViewModel.class);
-        model.getSurveyData().observe(this, surveyData -> {
-            // update U
-            Timber.i("-------------------------------------- Smap Main Activity got Data ");
-            updateData(surveyData);
-        });
 
         String[] tabNames = {getString(R.string.smap_forms), getString(R.string.smap_tasks), getString(R.string.smap_map)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
@@ -227,12 +215,25 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         tabLayout.setTabTextColors(Color.LTGRAY, Color.WHITE);
         tabLayout.setupWithViewPager(viewPager);
 
-        // get notification registration token
-        Intent intent = new Intent(this, NotificationRegistrationService.class);
-        startService(intent);
+        stateChanged();
+
+        // Show login status if it was set
+        String login_status = getIntent().getStringExtra(LOGIN_STATUS);
+        if(login_status != null) {
+            if(login_status.equals("success")) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_success));
+            } else if(login_status.equals("failed")) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_failed));
+            }
+        }
+
+        // Initiate a refresh if requested in start parameters
+        String refresh = getIntent().getStringExtra(EXTRA_REFRESH);
+        if(refresh != null && refresh.equals("yes")) {
+            processGetTask();
+        }
 
         // Start the location service
-
         new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
             @Override public void granted() {
 
@@ -250,22 +251,38 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
             @Override public void denied() { }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);
+        stateChanged();
+
+    }
+
+    /*
+     * Do all the actions required on create or rotate
+     */
+    private void stateChanged() {
+
+        //ButterKnife.bind(this);  // banner
+        initToolbar();
+
+        // DaggerUtils.getComponent(this).inject(this);  // banner
+
+        model = new ViewModelProvider(this).get(SurveyDataViewModel.class);
+        model.getSurveyData().observe(this, surveyData -> {
+            // update U
+            Timber.i("-------------------------------------- Smap Main Activity got Data ");
+            updateData(surveyData);
+        });
 
 
-        // Show login status if it was set
-        String login_status = getIntent().getStringExtra(LOGIN_STATUS);
-        if(login_status != null) {
-            if(login_status.equals("success")) {
-                SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_success));
-            } else if(login_status.equals("failed")) {
-                SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_failed));
-            }
-        }
-        // Initiate a refresh if requested in start parameters
-        String refresh = getIntent().getStringExtra(EXTRA_REFRESH);
-        if(refresh != null && refresh.equals("yes")) {
-            processGetTask();
-        }
+        // get notification registration token
+        Intent intent = new Intent(this, NotificationRegistrationService.class);
+        startService(intent);
 
         // Get settings if available in a file
         StoragePathProvider storagePathProvider = new StoragePathProvider();
@@ -295,13 +312,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_nav);
     }
 
     @Override

@@ -116,6 +116,7 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.SmapMain"
             android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
 
         <activity android:name=".activities.SmapLoginActivity" />

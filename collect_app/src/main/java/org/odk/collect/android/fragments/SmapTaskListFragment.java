@@ -176,6 +176,12 @@ public class SmapTaskListFragment extends ListFragment {
         });
 
         super.onViewCreated(view, savedInstanceState);
+
+        // Notify the user if tracking is turned on
+        if(PreferenceManager
+                .getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
+            SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.llParent), getString(R.string.smap_location_tracking));
+        }
     }
 
     @Override
@@ -199,11 +205,6 @@ public class SmapTaskListFragment extends ListFragment {
             setupBottomSheet();
         }
 
-        // Notify the user if tracking is turned on
-        if(PreferenceManager
-                .getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
-            SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.llParent), getString(R.string.smap_location_tracking));
-        }
     }
 
     private void setupBottomSheet() {
