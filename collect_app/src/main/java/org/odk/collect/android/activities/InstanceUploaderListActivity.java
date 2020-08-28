@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -28,6 +27,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -59,7 +59,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.FILTER_FORMS_TO_SEND;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
@@ -415,7 +414,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                         case 1: // show all
                             showAllMode = true;
                             updateAdapter();
-                            analytics.logEvent(FILTER_FORMS_TO_SEND, "SentAndUnsent");
                             break;
 
                         case 2:// do nothing

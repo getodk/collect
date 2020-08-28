@@ -58,7 +58,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_FORM_CONTROLLER_EVENT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 
 public class FormHierarchyActivity extends CollectAbstractActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
@@ -141,7 +140,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         if (formController == null) {
             finish();
             Timber.w("FormController is null");
-            analytics.logEvent(NULL_FORM_CONTROLLER_EVENT, "FormHierarchyActivity", null);
             return;
         }
 

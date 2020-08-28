@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -22,11 +22,13 @@ import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.CUSTOM_ENDPOINT_SUB;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
@@ -108,6 +111,12 @@ public class InstanceSubmitter {
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
                 analytics.logEvent(SUBMISSION, action, label);
+
+                String submissionEndpoint = (String) settings.get(GeneralKeys.KEY_SUBMISSION_URL);
+                if (!submissionEndpoint.equals(Collect.getInstance().getString(R.string.default_odk_submission))) {
+                    String submissionEndpointHash = FileUtils.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
+                    analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);
+                }
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;

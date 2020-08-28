@@ -60,7 +60,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SET_CUSTOM_ENDPOINT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
@@ -344,10 +343,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 case KEY_FORMLIST_URL:
                 case KEY_SUBMISSION_URL:
                     preference.setSummary(newValue.toString());
-
-                    String customEndpointId = FileUtils.getMd5Hash(new ByteArrayInputStream(newValue.toString().getBytes()));
-                    String action = preference.getKey() + " " + customEndpointId;
-                    analytics.logEvent(SET_CUSTOM_ENDPOINT, action);
                     break;
             }
             return true;
