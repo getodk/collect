@@ -1,5 +1,10 @@
 package org.odk.collect.android.formmanagement;
 
+import android.view.Menu;
+
+import androidx.appcompat.view.SupportMenuInflater;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.internal.view.SupportMenu;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 
@@ -8,9 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.robolectric.Robolectric;
+import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.fakes.RoboMenu;
 import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowToast;
 
@@ -36,7 +40,7 @@ public class BlankFormListMenuDelegateTest {
         when(viewModel.isOutOfSync()).thenReturn(new MutableLiveData<>(false));
         when(networkStateProvider.isDeviceOnline()).thenReturn(true);
 
-        activity = Robolectric.setupActivity(FragmentActivity.class);
+        activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
     }
 
     @Test
@@ -46,8 +50,10 @@ public class BlankFormListMenuDelegateTest {
 
         BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
 
-        RoboMenu menu = createdMenu();
+        Menu menu = createdMenu();
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
         menuDelegate.onPrepareOptionsMenu(menu);
+
         assertThat(shadowOf(menu.findItem(R.id.menu_refresh).getIcon()).getCreatedFromResId(), is(R.drawable.ic_baseline_refresh_24));
     }
 
@@ -59,8 +65,10 @@ public class BlankFormListMenuDelegateTest {
 
         BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
 
-        RoboMenu menu = createdMenu();
+        Menu menu = createdMenu();
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
         menuDelegate.onPrepareOptionsMenu(menu);
+
         assertThat(shadowOf(menu.findItem(R.id.menu_refresh).getIcon()).getCreatedFromResId(), is(R.drawable.ic_baseline_refresh_error_24));
     }
 
@@ -72,8 +80,10 @@ public class BlankFormListMenuDelegateTest {
 
         BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
 
-        RoboMenu menu = createdMenu();
+        Menu menu = createdMenu();
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
         menuDelegate.onPrepareOptionsMenu(menu);
+
         assertThat(menu.findItem(R.id.menu_refresh).isEnabled(), is(false));
     }
 
@@ -107,9 +117,47 @@ public class BlankFormListMenuDelegateTest {
         assertThat(ShadowToast.getLatestToast(), nullValue());
     }
 
-    private RoboMenu createdMenu() {
-        RoboMenu menu = new RoboMenu();
-        Robolectric.setupActivity(FragmentActivity.class).getMenuInflater().inflate(R.menu.list_menu, menu);
+    @Test
+    public void clickingSearch_whenMatchExactlyEnabled_hidesRefreshAndSort_andThenCollapsingSearch_showsThemAgain() {
+        when(viewModel.isMatchExactlyEnabled()).thenReturn(true);
+
+        Menu menu = createdMenu();
+
+        BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
+        menuDelegate.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.menu_filter).expandActionView();
+        assertThat(menu.findItem(R.id.menu_refresh).isVisible(), is(false));
+        assertThat(menu.findItem(R.id.menu_sort).isVisible(), is(false));
+
+        menu.findItem(R.id.menu_filter).collapseActionView();
+        assertThat(menu.findItem(R.id.menu_refresh).isVisible(), is(true));
+        assertThat(menu.findItem(R.id.menu_sort).isVisible(), is(true));
+    }
+
+    @Test
+    public void collapsingSearch_whenMatchExactlyNotEnabled_doesNotShowRefresh() {
+        when(viewModel.isMatchExactlyEnabled()).thenReturn(false);
+
+        Menu menu = createdMenu();
+
+        BlankFormListMenuDelegate menuDelegate = new BlankFormListMenuDelegate(activity, viewModel, networkStateProvider);
+        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
+        menuDelegate.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.menu_filter).expandActionView();
+        menu.findItem(R.id.menu_filter).collapseActionView();
+        assertThat(menu.findItem(R.id.menu_refresh).isVisible(), is(false));
+    }
+
+    private Menu createdMenu() {
+        SupportMenu menu = new MenuBuilder(activity);
+        getMenuInflater().inflate(R.menu.list_menu, menu);
         return menu;
+    }
+
+    private SupportMenuInflater getMenuInflater() {
+        return new SupportMenuInflater(activity);
     }
 }

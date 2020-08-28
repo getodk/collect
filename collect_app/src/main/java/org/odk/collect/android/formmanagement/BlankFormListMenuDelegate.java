@@ -41,6 +41,22 @@ public class BlankFormListMenuDelegate implements MenuDelegate {
         // FormChooserListActivity uses the list inflated in AppListActivityMenu. It probably
         // makes sense to decouple this if we can so each Activity can have control over
         // its own menu layout
+
+        menu.findItem(R.id.menu_filter).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                menu.findItem(R.id.menu_refresh).setVisible(false);
+                menu.findItem(R.id.menu_sort).setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                menu.findItem(R.id.menu_refresh).setVisible(blankFormsListViewModel.isMatchExactlyEnabled());
+                menu.findItem(R.id.menu_sort).setVisible(true);
+                return true;
+            }
+        });
     }
 
     @Override
