@@ -131,14 +131,16 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
         menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
-        return super.onCreateOptionsMenu(menu);
+        return result;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean result = super.onPrepareOptionsMenu(menu);
         menuDelegate.onPrepareOptionsMenu(menu);
-        return super.onPrepareOptionsMenu(menu);
+        return result;
     }
 
     @Override
