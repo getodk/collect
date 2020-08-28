@@ -13,6 +13,7 @@ public class FakeScheduler implements Scheduler {
     private Runnable foregroundTask;
     private Runnable backgroundTask;
     private Boolean cancelled = false;
+    private Boolean isRepeatRunning = false;
 
     @Override
     public <T> void immediate(Supplier<T> foreground, Consumer<T> background) {
@@ -32,7 +33,9 @@ public class FakeScheduler implements Scheduler {
     @Override
     public Cancellable repeat(Runnable foreground, long repeatPeriod) {
         this.foregroundTask = foreground;
+        isRepeatRunning = true;
         return () -> {
+            isRepeatRunning = false;
             cancelled = true;
             return true;
         };
@@ -52,6 +55,10 @@ public class FakeScheduler implements Scheduler {
 
     public Boolean hasBeenCancelled() {
         return cancelled;
+    }
+
+    public Boolean checkRepeatRunning() {
+        return isRepeatRunning;
     }
 
     @Override

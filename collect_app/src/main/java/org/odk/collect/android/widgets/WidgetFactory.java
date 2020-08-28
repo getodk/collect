@@ -21,6 +21,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -58,8 +59,8 @@ public class WidgetFactory {
      * @param context          Android context
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
-    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, Context context,
-                                                        boolean readOnlyOverride, WaitingForDataRegistry waitingForDataRegistry) {
+    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, Context context, boolean readOnlyOverride,
+                                                        QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
@@ -131,27 +132,27 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
-                questionWidget = new ArbitraryFileWidget(context, questionDetails, waitingForDataRegistry);
+                questionWidget = new ArbitraryFileWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals(WidgetAppearanceUtils.SIGNATURE)) {
-                    questionWidget = new SignatureWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new SignatureWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else if (appearance.contains(WidgetAppearanceUtils.ANNOTATE)) {
-                    questionWidget = new AnnotateWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new AnnotateWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else if (appearance.equals(WidgetAppearanceUtils.DRAW)) {
-                    questionWidget = new DrawWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else {
-                    questionWidget = new ImageWidget(context, questionDetails, waitingForDataRegistry);
+                    questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(context, questionDetails, waitingForDataRegistry);
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(context, questionDetails, waitingForDataRegistry);
+                questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 boolean isQuick = appearance.contains(WidgetAppearanceUtils.QUICK);

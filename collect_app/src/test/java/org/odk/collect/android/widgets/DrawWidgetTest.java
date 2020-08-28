@@ -21,6 +21,7 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
+import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -50,7 +51,8 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @NonNull
     @Override
     public DrawWidget createWidget() {
-        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
+        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
     @NonNull

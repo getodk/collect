@@ -6,14 +6,8 @@
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/url_button"
-        style="@style/Widget.Collect.Button.Custom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_small"
-        android:text="@string/open_url"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_extra_small">
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/open_url">
     </org.odk.collect.android.views.MultiClickSafeButton>
 
     <com.google.android.material.textview.MaterialTextView

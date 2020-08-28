@@ -26,8 +26,8 @@ public class SaveFormProgressDialogFragment extends ProgressDialogFragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        viewModel = new ViewModelProvider(requireActivity(), new FormSaveViewModel.Factory(analytics))
-                .get(FormSaveViewModel.class);
+        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null, analytics);
+        viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
 
         setCancelable(false);
         setTitle(getString(R.string.saving_form));

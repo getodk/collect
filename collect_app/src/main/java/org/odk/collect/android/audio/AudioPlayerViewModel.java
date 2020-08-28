@@ -178,16 +178,14 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     private void schedulePositionUpdates() {
-        if (positionUpdatesCancellable == null) {
-            positionUpdatesCancellable = scheduler.repeat(() -> {
-                CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
+        positionUpdatesCancellable = scheduler.repeat(() -> {
+            CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
 
-                if (currentlyPlaying != null) {
-                    MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clip.getClipID());
-                    position.postValue(getMediaPlayer().getCurrentPosition());
-                }
-            }, 500);
-        }
+            if (currentlyPlaying != null) {
+                MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clip.getClipID());
+                position.postValue(getMediaPlayer().getCurrentPosition());
+            }
+        }, 500);
     }
 
     private void cancelPositionUpdates() {

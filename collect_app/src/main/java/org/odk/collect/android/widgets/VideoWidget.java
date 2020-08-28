@@ -45,8 +45,8 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
@@ -81,6 +81,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private MediaUtil mediaUtil;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private QuestionMediaManager questionMediaManager;
 
     @NonNull
     private FileUtil fileUtil;
@@ -92,15 +93,17 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private boolean selfie;
 
-    public VideoWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry);
+    public VideoWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry);
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, WaitingForDataRegistry waitingForDataRegistry) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+                       QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
+        this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
@@ -137,9 +140,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     @Override
     public void deleteFile() {
-        MediaManager
-                .INSTANCE
-                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                         getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
@@ -200,9 +201,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
             values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Video.Media.DATA, newVideo.getAbsolutePath());
 
-            MediaManager
-                    .INSTANCE
-                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+            questionMediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
 
             Uri videoURI = getContext().getContentResolver().insert(
                     Video.Media.EXTERNAL_CONTENT_URI, values);

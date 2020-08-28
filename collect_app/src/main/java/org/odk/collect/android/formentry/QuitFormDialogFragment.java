@@ -28,7 +28,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.MediaManager;
 
 import java.util.List;
 
@@ -49,8 +48,8 @@ public class QuitFormDialogFragment extends DialogFragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        viewModel = new ViewModelProvider(requireActivity(), new FormSaveViewModel.Factory(analytics))
-                .get(FormSaveViewModel.class);
+        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null, analytics);
+        viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
 
         if (context instanceof Listener) {
             listener = (Listener) context;
@@ -95,7 +94,6 @@ public class QuitFormDialogFragment extends DialogFragment {
                 }
 
                 viewModel.removeTempInstance();
-                MediaManager.INSTANCE.revertChanges();
 
                 String action = getActivity().getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {

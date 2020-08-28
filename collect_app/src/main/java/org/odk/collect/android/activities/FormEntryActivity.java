@@ -55,6 +55,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -349,8 +350,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         setupViewModels();
         setContentView(R.layout.form_entry);
 
-        compositeDisposable
-                .add(eventBus
+        compositeDisposable.add(eventBus
                         .register(ReadPhoneStatePermissionRxEvent.class)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -458,9 +458,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        formSaveViewModel = ViewModelProviders
-                .of(this, new FormSaveViewModel.Factory(analytics))
-                .get(FormSaveViewModel.class);
+        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(this, null, analytics);
+        formSaveViewModel = new ViewModelProvider(this, factory).get(FormSaveViewModel.class);
 
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
     }
@@ -1292,7 +1291,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @NotNull
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
-        return new ODKView(this, prompts, groups, advancingPage, waitingForDataRegistry);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry);
     }
 
     @Override

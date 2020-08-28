@@ -84,7 +84,18 @@ public class AudioPlayerViewModelTest {
     }
 
     @Test
-    public void playInOrder_playsClipsOneAfterTheOther() throws Exception {
+    public void playMultipleClips_updatesProgress_forAllClips() {
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
+
+        viewModel.onCleared();
+
+        viewModel.play(new Clip("clip1", "file://audio.mp3"));
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
+    }
+
+    @Test
+    public void playInOrder_playsClipsOneAfterTheOther_andUpdatesProgress() throws Exception {
         viewModel.playInOrder(asList(
                 new Clip("clip1", "file://audio1.mp3"),
                 new Clip("clip2", "file://audio2.mp3")
@@ -96,14 +107,17 @@ public class AudioPlayerViewModelTest {
 
         verify(mediaPlayer).setDataSource("file://audio1.mp3");
         verify(mediaPlayer, times(1)).start();
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
 
         onCompletionListener.onCompletion(mediaPlayer);
 
         verify(mediaPlayer).setDataSource("file://audio2.mp3");
         verify(mediaPlayer, times(2)).start();
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true));
 
         onCompletionListener.onCompletion(mediaPlayer);
         verify(mediaPlayer, times(2)).start();
+        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(false));
     }
 
     @Test

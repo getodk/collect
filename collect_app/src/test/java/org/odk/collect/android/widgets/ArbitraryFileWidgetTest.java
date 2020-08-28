@@ -18,6 +18,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
+import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import java.io.File;
@@ -54,7 +55,8 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     @NonNull
     @Override
     public ArbitraryFileWidget createWidget() {
-        return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), fileUtil, mediaUtil, new FakeWaitingForDataRegistry());
+        return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+                fileUtil, mediaUtil, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
     @NonNull
