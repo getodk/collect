@@ -36,10 +36,12 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
+    private final List<Selection> originallySelectedItems;
     private final List<Selection> selectedItems;
     protected SelectItemClickListener listener;
 
@@ -49,6 +51,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                                      FormEntryPrompt prompt, ReferenceManager referenceManager, AudioHelper audioHelper,
                                      int playColor, int numColumns, boolean noButtonsMode) {
         super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode);
+        this.originallySelectedItems = new ArrayList<>(selectedItems);
         this.selectedItems = selectedItems;
         this.listener = listener;
     }
@@ -156,5 +159,26 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     @Override
     public List<Selection> getSelectedItems() {
         return selectedItems;
+    }
+
+    @Override
+    public boolean hasAnswerChanged() {
+        if (originallySelectedItems.size() != selectedItems.size()) {
+            return true;
+        }
+        for (Selection item : originallySelectedItems) {
+            boolean foundEqualElement = false;
+            for (Selection item2 : selectedItems) {
+                if (item.xmlValue.equals(item2.xmlValue)) {
+                    foundEqualElement = true;
+                    break;
+                }
+            }
+            if (!foundEqualElement) {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

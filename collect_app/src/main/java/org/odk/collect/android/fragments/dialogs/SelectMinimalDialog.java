@@ -96,7 +96,9 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
 
     protected void closeDialogAndSaveAnswers() {
         viewModel.getSelectListAdapter().getFilter().filter("");
-        listener.updateSelectedItems(viewModel.getSelectListAdapter().getSelectedItems());
+        if (viewModel.getSelectListAdapter().hasAnswerChanged()) {
+            listener.updateSelectedItems(viewModel.getSelectListAdapter().getSelectedItems());
+        }
         dismiss();
     }
 

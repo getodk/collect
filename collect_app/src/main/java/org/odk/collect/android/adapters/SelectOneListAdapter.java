@@ -39,8 +39,10 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SelectOneListAdapter extends AbstractSelectListAdapter implements CompoundButton.OnCheckedChangeListener {
+    private final String originallySelectedValue;
     private String selectedValue;
     private RadioButton selectedRadioButton;
     private View selectedItem;
@@ -51,6 +53,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
                                 List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
                                 AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode) {
         super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode);
+        this.originallySelectedValue = selectedValue;
         this.selectedValue = selectedValue;
         this.listener = listener;
     }
@@ -158,5 +161,10 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean hasAnswerChanged() {
+        return !Objects.equals(originallySelectedValue, selectedValue);
     }
 }

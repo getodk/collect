@@ -323,4 +323,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     }
 
     public abstract void clearAnswer();
+
+    public abstract boolean hasAnswerChanged();
 }
