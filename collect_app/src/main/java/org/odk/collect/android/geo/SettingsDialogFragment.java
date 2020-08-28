@@ -35,7 +35,7 @@ public class SettingsDialogFragment extends DialogFragment {
     private int accuracyThresholdIndex = -1;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         if (context instanceof SettingsDialogCallback) {
@@ -50,16 +50,9 @@ public class SettingsDialogFragment extends DialogFragment {
 
         View settingsView = getActivity().getLayoutInflater().inflate(R.layout.geopoly_dialog, null);
         radioGroup = settingsView.findViewById(R.id.radio_group);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                checkedRadioButtonId = checkedId;
-                if (checkedId == R.id.automatic_mode) {
-                    autoOptions.setVisibility(View.VISIBLE);
-                } else {
-                    autoOptions.setVisibility(View.GONE);
-                }
-            }
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            checkedRadioButtonId = checkedId;
+            autoOptions.setVisibility(checkedId == R.id.automatic_mode ? View.VISIBLE : View.GONE);
         });
 
         autoOptions = settingsView.findViewById(R.id.auto_options);
@@ -111,12 +104,13 @@ public class SettingsDialogFragment extends DialogFragment {
                 .setTitle(getString(R.string.input_method))
                 .setView(settingsView)
                 .setPositiveButton(getString(R.string.start), (dialog, id) -> {
+                    callback.updateRecordingMode(radioGroup.getCheckedRadioButtonId());
+                    callback.setIntervalIndex(intervalIndex);
+                    callback.setAccuracyThresholdIndex(accuracyThresholdIndex);
                     callback.startInput();
-                    dialog.cancel();
                     dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> {
-                    dialog.cancel();
                     dismiss();
                 })
                 .create();
@@ -125,9 +119,9 @@ public class SettingsDialogFragment extends DialogFragment {
     /** Formats a time interval as a whole number of seconds or minutes. */
     private String formatInterval(int seconds) {
         int minutes = seconds / 60;
-        return minutes > 0 ?
-                getResources().getQuantityString(R.plurals.number_of_minutes, minutes, minutes) :
-                getResources().getQuantityString(R.plurals.number_of_seconds, seconds, seconds);
+        return minutes > 0
+                ? getResources().getQuantityString(R.plurals.number_of_minutes, minutes, minutes)
+                : getResources().getQuantityString(R.plurals.number_of_seconds, seconds, seconds);
     }
 
     /** Populates a Spinner with the option labels in the given array. */
@@ -140,21 +134,12 @@ public class SettingsDialogFragment extends DialogFragment {
 
     /** Formats an entry in the accuracy threshold dropdown. */
     private String formatAccuracyThreshold(int meters) {
-        return meters > 0 ?
-                getResources().getQuantityString(R.plurals.number_of_meters, meters, meters) :
-                getString(R.string.none);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        callback.updateRecordingMode(radioGroup.getCheckedRadioButtonId());
-        callback.setIntervalIndex(intervalIndex);
-        callback.setAccuracyThresholdIndex(accuracyThresholdIndex);
+        return meters > 0
+                ? getResources().getQuantityString(R.plurals.number_of_meters, meters, meters)
+                : getString(R.string.none);
     }
 
     public interface SettingsDialogCallback {
-
         void startInput();
         void updateRecordingMode(int checkedId);
 
