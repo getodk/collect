@@ -7,7 +7,7 @@ OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <resources>
     <!-- strings that should not be translated -->
-    <string name="app_name" translatable="false">ODK Collect</string>
+    <string name="app_name" translatable="false">Shail Data Collect</string>
     <string name="protocol_odk_default" translatable="false">odk_default</string>
     <string name="protocol_google_sheets" translatable="false">google_sheets</string>
     <string name="default_server_url" translatable="false">https://opendatakit.appspot.com</string>
