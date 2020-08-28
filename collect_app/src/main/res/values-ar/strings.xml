@@ -74,9 +74,7 @@
   <string name="jump_to_beginning">الذهاب إلى البداية</string>
   <string name="jump_to_end">الذهاب إلى النهاية</string>
   <string name="jump_to_previous">الذهاب صعودًا</string>
-    <string name="loading_form">تحميل الاستمارة</string>
-  <string name="load_remote_form_error">خطأ في جلب لائحة النماذج.</string>
-  <string name="location_accuracy">الدقة هي is %1$s متر</string>
+  <string name="loading_form">تحميل الاستمارة</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>
   <string name="mark_finished">حدد الاستمارة كاستمارة منتهية</string>
   <string name="noselect_error">عذرًا، لم تختَر أيّ استمارة!</string>
@@ -128,7 +126,7 @@
   <string name="change_splash_path">تغيير الصورة</string>
   <string name="keep_changes">حفظ التعديلات</string>
   <string name="change_formlist_url">مسار الارسال (مظاف الى الرابط)</string>
-    <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
+  <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
   <string name="formlist_url">مسار قائمة الاستمارات</string>
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
@@ -150,7 +148,7 @@
   <string name="save_as_error">اسم الحفظ لا يمكن أن يكون فارغ!</string>
   <string name="edit_prompt">تعديل التوجيه</string>
   <string name="selected_google_account_text">حساب جوجل</string>
-    <string name="font_size_extra_large">كبير جدا</string>
+  <string name="font_size_extra_large">كبير جدا</string>
   <string name="font_size_large">كبير</string>
   <string name="font_size_medium">متوسط</string>
   <string name="font_size_small">صغير</string>
@@ -349,10 +347,6 @@
     <item quantity="many">%dمتر </item>
     <item quantity="other">%dمتر </item>
   </plurals>
-  <string name="location_status_searching">جاري البحث عن موقع GPS، يرجى الانتظار …</string>
-  <string name="location_status_accuracy">دقة GPS للموقع: %.2f متر</string>
-  <string name="location_status_acceptable">دقة GPS للموقع: %.2f متر (مقبولة)</string>
-  <string name="location_status_unacceptable">دقة GPS للموقع: %.2f متر (غير مقبولة)</string>
   <string name="collection_status_paused">النقاط التي تم إدخالها: %d</string>
   <string name="collection_status_placement">النقاط التي تم إدخالها: %d (انقر لوضع نقاط)</string>
   <string name="collection_status_manual">النقاط التي تم إدخالها: %d (التسجيل اليدوي)</string>
@@ -388,7 +382,6 @@
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
   <string name="odk_website">زيارة موقع ODK</string>
-  <string name="odk_website_summary">حزمة البيانات المفتوحة (ODK) تستخدم لجمع البيانات لمصلحة المجتمع في البيئات الصعبة.</string>
   <string name="odk_forum">انضم إلى منتدى ODK</string>
   <string name="odk_forum_summary">انضم إلى المنتدى للحصول على الدعم وطلب الميزات والمساهمة بالكود / الترجمات!</string>
   <string name="all_open_source_licenses">مكتبات و تراخيص مفتوحة المصدر</string>
@@ -472,7 +465,7 @@
   <string name="include_password_dialog">تضمين كلمات المرور في الكود</string>
   <string name="generate">توليد</string>
   <string name="invalid_qrcode">كود QR لا يتضمن إعدادات صحيحة</string>
-    <string name="take_picture_instruction">انقر على الشاشة لإلتقاط صورة</string>
+  <string name="take_picture_instruction">انقر على الشاشة لإلتقاط صورة</string>
   <string name="error_front_camera_unavailable">الكاميرا الأمامية غير متوفرة على هذا الجهاز</string>
   <string name="camera_error">خطأ في الكاميرا</string>
   <string name="invalid_range_widget">هذة الميزة غير موجودة</string>
@@ -647,6 +640,5 @@
   <string name="reason">السبب</string>
   <string name="save">حفظ</string>
   <string name="reason_for_changes_description">أنت بحاجة إلى توضيح سبب التغييرات في هذه الاستمارة</string>
-  <string name="scoped_storage_banner_text">يجب عليك ترحيل نماذج Collect إلى التخزين الخاص بحلول أغسطس 2020 للامتثال إلى متطلبات أندرويد.</string>
   <string name="scoped_storage_learn_more">تعلم المزيد وقم بالترحيل</string>
 </resources>

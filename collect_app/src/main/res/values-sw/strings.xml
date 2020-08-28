@@ -74,9 +74,7 @@
   <string name="jump_to_beginning">Nenda mwanzo</string>
   <string name="jump_to_end">Nenda mwisho</string>
   <string name="jump_to_previous">Nenda juu</string>
-    <string name="loading_form">Fomu inakuja</string>
-  <string name="load_remote_form_error">Hitilafu kupata orodha ya fomu</string>
-    <string name="location_accuracy">Usahihi ni %1$s m</string>
+  <string name="loading_form">Fomu inakuja</string>
   <string name="manage_files">Futa fomu zilizohifadhiwa</string>
   <string name="mark_finished">Weka alama kuonesha fomu imekamilika</string>
   <string name="noselect_error">Samahani, hujachagua fomu zozote!</string>
@@ -128,7 +126,7 @@
   <string name="change_splash_path">Badili picha</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="change_formlist_url">Orodhesha njia ya Fomu (iliyotumwa kwenye URL)</string>
-    <string name="change_submission_url">Njia ya kuwasilisha (iliyotumwa kwenye URL)</string>
+  <string name="change_submission_url">Njia ya kuwasilisha (iliyotumwa kwenye URL)</string>
   <string name="formlist_url">Njia ya orodha ya fomu</string>
   <string name="submission_url">Njia ya kuwasilisha </string>
   <string name="font_size">Ukubwa wa maandishi</string>
@@ -150,7 +148,7 @@
   <string name="save_as_error">Jina la Kuhifadhi halipaswi kuwa tupu!</string>
   <string name="edit_prompt">Hariri prompt</string>
   <string name="selected_google_account_text">Akaunti ya Google</string>
-    <string name="font_size_extra_large">Kubwa sana</string>
+  <string name="font_size_extra_large">Kubwa sana</string>
   <string name="font_size_large">Kubwa</string>
   <string name="font_size_medium">Kati</string>
   <string name="font_size_small">Ndogo</string>
@@ -248,7 +246,7 @@
   <string name="go_drive">Hifadhi yangu</string>
   <string name="go_shared">Imeshirikishwa na mimi</string>
   <string name="modified_on_date_at_time">\'Imerekebishwa\' EEE, MMM dd, yyyy \'katika\' HH:mm</string>
-    <string name="google_sheets_url_hint">Fomu lazima iwe na URL ya uwasilishaji. Kama haina, hii URL itatumika.</string>
+  <string name="google_sheets_url_hint">Fomu lazima iwe na URL ya uwasilishaji. Kama haina, hii URL itatumika.</string>
   <string name="drive_get_file">Inachukuwa %1$s na mafaili ya midia.</string>
   <string name="no_google_account">Hakuna akaunti ya Google Iliyochaguliwa!</string>
   <string name="google_set_account">Umechagua karatasi za Google kama seva yako, tafadhali chagua akaunti ya Google inayoshabiliana katika mpangilio wa jumla kabla ya kuendelea</string>
@@ -325,10 +323,6 @@
   <string name="recording_interval">Muda wa kurekodi</string>
   <string name="accuracy_requirement">Sharti sahihi</string>
   <string name="none">Hakuna</string>
-  <string name="location_status_searching">Natafuta GPS ilipo, tafadhali subiri</string>
-  <string name="location_status_accuracy">Usahihi wa eneo la GPS %.2f</string>
-  <string name="location_status_acceptable">Usahihi wa eneo la GPS: %.2f m (imekubali)</string>
-  <string name="location_status_unacceptable">Usahihi wa eneo la GPS: %.2f m (haukubali)</string>
   <string name="collection_status_paused">Vidokezo vilivyoingizwa: %d</string>
   <string name="geopoint_instruction">Bonyeza kwa mda kuweka alama au bofya kitufe ongeza alama.</string>
   <string name="geopoint_no_draggable_instruction">Bofya kitufe cha kuongeza alama.</string>
@@ -358,7 +352,6 @@
   <string name="version_number">Toleo: %s</string>
   <string name="id_number">Utambulisho: %s</string>
   <string name="odk_website">Tembelea tovuti ya ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) inatumika kwenye ukusanyaji wa taarifa za kijamii katika mazingira yenye changamoto.</string>
   <string name="odk_forum">Jiunge na jukwaa la ODK</string>
   <string name="odk_forum_summary">Jiunge na jukwaa kupata msaada, kuomba makala,  kuchangia kanuni au kutafsiri!</string>
   <string name="all_open_source_licenses">Maktaba/leseni ya chanzo wazi</string>
@@ -442,7 +435,7 @@
   <string name="include_password_dialog">Nenosiri limejumuishwa ndani ya kanuni</string>
   <string name="generate">Zalisha</string>
   <string name="invalid_qrcode">Kanuni za QR hazijajumuisha mipangilio sahihi</string>
-    <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
+  <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
   <string name="error_front_camera_unavailable">Kamera ya mbele haipo katika kifaa hiki</string>
   <string name="camera_error">Kifaa hiki hakina uwezo wa kutumia Kamera2 API.</string>
   <string name="invalid_range_widget">Widget hii  ina vigezo batili!</string>
@@ -577,12 +570,11 @@
   <string name="instance_upload_cancelled">Mfano wa kupakia umesitishwa</string>
   <string name="hide_old_form_versions_setting_title">Ficha matoleo ya fomu za zamani</string>
   <string name="hide_old_form_versions_setting_summary">Toleo jipya zaidi pekee itaonekana katika kujaza fomu tupu</string>
-    <string name="rank_items">Pangilia vitu</string>
+  <string name="rank_items">Pangilia vitu</string>
   <string name="loading_form_failed">Tatizo limetokea wakati wa kupakua fomu. Tafadhali jaribu tena.</string>
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
   <string name="storage_migration_not_enough_space">Huna nafasi kwenye kifaa chako cha ndani kuhamisha data, Tafadhali ongeza nafasi kiasi na ujaribu tena.</string>
-    <string name="changes_in_progress">Fomu inatumika kwenye upakuaji. Tafadhali jaribu tena.</string>
   <string name="storage_migration_failed">Hamisho la data limesitishwa, Tafadhali jaribu tena</string>
   <string name="storage_migration_dialog_title">Uhamiaji wa uhifadhi</string>
   <string name="storage_migration_progress_msg">Uhamiaji unaendelea. \ Hii inaweza kuchukua sekunde chache…</string>

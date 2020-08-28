@@ -61,9 +61,7 @@
   <string name="jump_to_beginning">सुरू करण्यासाठी जा</string>
   <string name="jump_to_end">संम्पतही कडे जा </string>
   <string name="jump_to_previous">वर जा</string>
-    <string name="loading_form">फॉर्म लोड होत आहे</string>
-  <string name="load_remote_form_error">प्रपत्र यादी प्राप्त करताना त्रुटी</string>
-    <string name="location_accuracy">अचूकता %1$s मी आहे</string>
+  <string name="loading_form">फॉर्म लोड होत आहे</string>
   <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
   <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
   <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>
@@ -113,7 +111,7 @@
   <string name="change_splash_path">प्रतिमा बदला</string>
   <string name="keep_changes">बदल जतन करा</string>
   <string name="change_formlist_url">फॉर्म यादी पथ ( यु र एल  वर जोडलेले )</string>
-    <string name="change_submission_url">सबमिशन पथ (यु र एल वर जोडला आहे)</string>
+  <string name="change_submission_url">सबमिशन पथ (यु र एल वर जोडला आहे)</string>
   <string name="formlist_url">फॉर्म यादी पथ</string>
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">मजकूर फॉन्ट आकार</string>
@@ -133,7 +131,7 @@
   <string name="save_as_error">जतन केलेले नाव रिक्त असू शकत नाही!</string>
   <string name="edit_prompt">सूचना संपादित करा</string>
   <string name="selected_google_account_text">गूगल खाते</string>
-    <string name="font_size_extra_large">जास्त मोठं</string>
+  <string name="font_size_extra_large">जास्त मोठं</string>
   <string name="font_size_large">मोठा</string>
   <string name="font_size_medium">मध्यम</string>
   <string name="font_size_small">लहान</string>
@@ -227,7 +225,7 @@
   <string name="go_drive">माझे ड्राइव्ह</string>
   <string name="go_shared">माझ्यासह शेअर केलेले</string>
   <string name="modified_on_date_at_time">\'सुधारित\' वर EEE, d MMM, yyyy \'at\' HH: mm</string>
-    <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>
+  <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
@@ -296,7 +294,6 @@
   <string name="parser_exception">एक्स पाथ पार्सर अपवादः  \"%s\"</string>
   <string name="version_number">आवृत्ती: %s</string>
   <string name="odk_website">ओडीके वेबसाइट ला भेट द्या</string>
-  <string name="odk_website_summary">ओपन डाटा किट (ओडीकेे) चा उपयोग आव्हानात्मक पर्यावरणात सामाजिक चांगल्यासाठी डेटा गोळा करण्यासाठी केला जातो.</string>
   <string name="odk_forum">ओडीके मंचात सहभागी व्हा</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम %1$s%2$s%3$s</string>
@@ -368,7 +365,7 @@
   <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>
   <string name="generate">व्युत्पन्न करा</string>
   <string name="invalid_qrcode">क्यूआर कोडमध्ये वैध सेटिंग्ज नाहीत</string>
-    <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
+  <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
   <string name="camera_error">हे साधन कॅमेरॅ2 API ला समर्थन देत नाही.</string>
   <string name="invalid_range_widget">या विजेटमध्ये अवैध मापदंड आहेत!</string>
   <string name="form_entry_setting">फॉर्म प्रवेश सेटिंग्ज</string>

@@ -71,9 +71,7 @@
   <string name="jump_to_beginning">Idi na početak</string>
   <string name="jump_to_end">Idi na kraj</string>
   <string name="jump_to_previous">Idi gore</string>
-    <string name="loading_form">Učitavanje formulara</string>
-  <string name="load_remote_form_error">Greška u pristupu formularima na serveru</string>
-    <string name="location_accuracy">Preciznost %1$s m</string>
+  <string name="loading_form">Učitavanje formulara</string>
   <string name="manage_files">Obriši sačuvani formular</string>
   <string name="mark_finished">Označi formular kao završen</string>
   <string name="noselect_error">Niste odabrali nijedan formular!</string>
@@ -125,7 +123,7 @@
   <string name="change_splash_path">Promijeni sliku</string>
   <string name="keep_changes">Sačuvaj izmjene</string>
   <string name="change_formlist_url">Web putanja liste formulara (dodata URL adresi)</string>
-    <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
+  <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
   <string name="formlist_url">Web putanja liste formulara</string>
   <string name="submission_url">Web putanja za slanje formulara</string>
   <string name="font_size">Veličina teksta</string>
@@ -147,7 +145,7 @@
   <string name="save_as_error">Sačuvano ime ne može biti prazno!</string>
   <string name="edit_prompt">Uredi Prompt</string>
   <string name="selected_google_account_text">Google korisnički nalog</string>
-    <string name="font_size_extra_large">Veoma veliko</string>
+  <string name="font_size_extra_large">Veoma veliko</string>
   <string name="font_size_large">Veliko</string>
   <string name="font_size_medium">Srednje</string>
   <string name="font_size_small">Malo</string>
@@ -245,7 +243,7 @@
   <string name="go_drive">Moj Drive</string>
   <string name="go_shared">Podijeljeno sa mnom</string>
   <string name="modified_on_date_at_time">\'Modifikovano na\' EEE, MMM dd, yyyy \'u\' HH:mm</string>
-    <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
+  <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
   <string name="drive_get_file">Preuzimam %1$s i medija sadržaje.</string>
   <string name="no_google_account">Google nalog nije odabran!</string>
   <string name="google_set_account">Odabrali ste Google Sheets kao svoj server, molim Vas da odaberete ogovarajući Goodle korisnički nalog u opštim podešavanjima prije nego nastavite</string>
@@ -323,7 +321,6 @@
     <item quantity="few">%d metara</item>
     <item quantity="other">%d metara</item>
   </plurals>
-  <string name="location_status_searching">Tražim GPS lokaciju, molim sačekajte…</string>
   <string name="collection_status_paused">Unijeti podaci: %d</string>
   <string name="collection_status_placement">Unijeti podaci: %d (dodirni kako bi unio podatke)</string>
   <string name="collection_status_manual">Unijeti podaci: %d (ručni unos)</string>
@@ -358,7 +355,6 @@
   <string name="version_number">Verzija: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Posjeti ODK vebsajt</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) se koristi za prikupljanje podataka o društvenim stvarima u izazovnim situacijama.</string>
   <string name="odk_forum">Pridruži se ODK forumu</string>
   <string name="odk_forum_summary">Pridruži se forumu za podršku, traži opcije, ili doprinesi kodu/prevodu!</string>
   <string name="all_open_source_licenses">Otvori biblioteke/ licence koda</string>
@@ -442,7 +438,7 @@
   <string name="include_password_dialog">Lozinka je dio Koda</string>
   <string name="generate">Generiši</string>
   <string name="invalid_qrcode">QR kod ne sadrži validna podešavanja</string>
-    <string name="take_picture_instruction">Dodirni ekran kako bi fotografisao</string>
+  <string name="take_picture_instruction">Dodirni ekran kako bi fotografisao</string>
   <string name="error_front_camera_unavailable">Prednja kamera nije dostupna na ovom uređaju</string>
   <string name="camera_error">Ovaj uređaj ne podržava Camera2 API.</string>
   <string name="invalid_range_widget">Ovaj widget ima nepravilne parametre!</string>
@@ -577,7 +573,7 @@
   <string name="instance_upload_cancelled">Otpremanje prekinuto</string>
   <string name="hide_old_form_versions_setting_title">Sakrij stare verzije formulara</string>
   <string name="hide_old_form_versions_setting_summary">Samo nova verzija će se pojaviti u Popuni prazan formular</string>
-    <string name="rank_items">Rangiraj stavke</string>
+  <string name="rank_items">Rangiraj stavke</string>
   <string name="loading_form_failed">Došlo je do greške prilikom učitavanja formulara. Molim pokušajte ponovo.</string>
   <string name="missing_google_account_dialog_title">Google korisnički nalog nije napravljen</string>
   <string name="missing_google_account_dialog_desc">Da biste otpremili formulara putem Goodle Sheeta morate da postavite Google korisnički nalog u podešavanjima Servera.</string>

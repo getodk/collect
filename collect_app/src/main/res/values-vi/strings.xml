@@ -59,9 +59,7 @@
   <string name="jump_to_beginning">Về đầu tiên</string>
   <string name="jump_to_end">Đến cuối cùng</string>
   <string name="jump_to_previous">Về trước</string>
-    <string name="loading_form">Tải biểu mẫu</string>
-  <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
-    <string name="location_accuracy">Độ chính xác là %1$s m</string>
+  <string name="loading_form">Tải biểu mẫu</string>
   <string name="manage_files">Xoá biểu mẫu cũ</string>
   <string name="mark_finished">Đánh dấu biểu mẫu là hoàn thành</string>
   <string name="noselect_error">Xin lỗi, bạn không chọn biểu mẫu nào!</string>
@@ -103,7 +101,7 @@
   <string name="change_splash_path">Đổi ảnh</string>
   <string name="keep_changes">Lưu thay đổi</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
-    <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
+  <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="formlist_url">Danh sách đường dẫn biểu mẫu</string>
   <string name="submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="font_size">Kích thước chữ</string>
@@ -122,7 +120,7 @@
   <string name="save_as_error">Tên được lưu không để trống!</string>
   <string name="edit_prompt">Sửa thông tin</string>
   <string name="selected_google_account_text">Tài khoản Google</string>
-    <string name="font_size_extra_large">Cực lớn</string>
+  <string name="font_size_extra_large">Cực lớn</string>
   <string name="font_size_large">Lớn</string>
   <string name="font_size_medium">Vừa</string>
   <string name="font_size_small">Nhỏ</string>

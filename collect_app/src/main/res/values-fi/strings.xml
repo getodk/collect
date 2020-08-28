@@ -74,9 +74,10 @@
   <string name="jump_to_beginning">Alkuun</string>
   <string name="jump_to_end">Loppuun</string>
   <string name="jump_to_previous">Ylös</string>
-    <string name="loading_form">Ladataan lomaketta</string>
-  <string name="load_remote_form_error">Virhe lomakelistaa hakiessa.</string>
-  <string name="location_accuracy">Tarkkuus %1$s m</string>
+  <string name="loading_form">Ladataan lomaketta</string>
+  <string name="load_remote_form_error">Lomakeluettelon lataaminen epäonnistui</string>
+  <string name="location_accuracy">Tarkkuus: %1$s m</string>
+  <string name="location_provider">Sijaintilähde: %s</string>
   <string name="manage_files">Poista tallennettu lomake</string>
   <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="noselect_error">Pahoittelen, et ole valinnut yhtään lomaketta!</string>
@@ -99,6 +100,7 @@
   <string name="replace_barcode">Korvaa viivakoodi</string>
   <string name="required_answer_error">Pahoittelut, tämä vastaus on pakollinen!</string>
   <string name="review_data">Muokkaa tallennettua lomaketta</string>
+  <string name="view_data">Tallennetun lomakkeen tarkastelu</string>
   <string name="review_data_button">Muokkaa tallennettua lomaketta (%s)</string>
   <string name="save_all_answers">Tallenna lomake</string>
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
@@ -128,7 +130,7 @@
   <string name="change_splash_path">Vaihda kuva</string>
   <string name="keep_changes">Tallenna muutokset</string>
   <string name="change_formlist_url">Lomakkeiden listan polku (lisätään URL:ään)</string>
-    <string name="change_submission_url">Lähetettävien lomakkeiden polku (lisätään URL:ään)</string>
+  <string name="change_submission_url">Lähetettävien lomakkeiden polku (lisätään URL:ään)</string>
   <string name="formlist_url">Lomakelistauksen polku</string>
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>
@@ -150,7 +152,7 @@
   <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
   <string name="edit_prompt">Vastauksen muokkaus</string>
   <string name="selected_google_account_text">Google-tili</string>
-    <string name="font_size_extra_large">Erittäin suuri</string>
+  <string name="font_size_extra_large">Erittäin suuri</string>
   <string name="font_size_large">Suuri</string>
   <string name="font_size_medium">Keskikokoinen</string>
   <string name="font_size_small">Pieni</string>
@@ -248,7 +250,7 @@
   <string name="go_drive">Oma Drive</string>
   <string name="go_shared">Minun kanssani jaetut</string>
   <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
-    <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
+  <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
   <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
@@ -337,10 +339,10 @@
     <item quantity="one">%d metri</item>
     <item quantity="other">%d metriä</item>
   </plurals>
-  <string name="location_status_searching">Etsitään GPS-sijaintia, ole hyvä ja odota…</string>
-  <string name="location_status_accuracy">GPS-sijaintitarkkuus: %.2f m</string>
-  <string name="location_status_acceptable">GPS-sijaintitarkkuus: %.2f m (hyväksyttävä)</string>
-  <string name="location_status_unacceptable">GPS-sijaintitarkkuus: %.2f m (ei hyväksyttävä)</string>
+  <string name="location_status_searching">Etsitään sijaintia, odota hetki…</string>
+  <string name="location_status_accuracy">Sijaintitarkkuus: %.2f m</string>
+  <string name="location_status_acceptable">Sijaintitarkkuus: %.2f m (riittävä)</string>
+  <string name="location_status_unacceptable">Sijaintitarkkuus: %.2f m (riittämätön)</string>
   <string name="collection_status_paused">Syötettyjä pisteitä: %d</string>
   <string name="collection_status_placement">Syötettyjä pisteitä: %d (napsauta sijoittaaksesi pisteitä)</string>
   <string name="collection_status_manual">Syötettyjä pisteitä: %d (manuaalinen tallennus)</string>
@@ -376,7 +378,7 @@
   <string name="version_number">Versio: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Käy ODK:n verkkosivulla</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) -sovellusta käytetään vaativissa olosuhteissa keräämään dataa yhteisen hyvän edistämiseksi.</string>
+  <string name="odk_website_summary">ODK:ta käytetään vaativien olosuhteiden tiedonkeruuseen sosiaalisen hyvän tarkoituksissa.</string>
   <string name="odk_forum">Liity ODK-foorumiin</string>
   <string name="odk_forum_summary">Liity foorumiin saadaksesi tukea, pyytääksesi toimintoja, ja auttaaksesi koodaamisessa tai kääntämisessä!</string>
   <string name="all_open_source_licenses">Avoimen lähdekoodin kirjastot/lisenssit</string>
@@ -469,7 +471,7 @@
   <string name="include_password_dialog">Koodiin sisältyvät salasanat</string>
   <string name="generate">Luo</string>
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
-    <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
+  <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
   <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>
   <string name="invalid_range_widget">Tällä widgetillä on väärät asetukset!</string>
@@ -610,14 +612,14 @@
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>
   <string name="theme_dark">Tumma teema</string>
-  <string name="theme_magenta">Purppurateema (kokeellinen)</string>
+  <string name="theme_magenta">Purppurateema</string>
   <string name="cannot_create_directory">Hakemistoa ei voi luoda: %s</string>
   <string name="not_a_directory">%s on olemassa, mutta ei ole hakemisto</string>
   <string name="location_metadata">Käytettävissä sateliitteja: %1$d/24\n\nKulunut aika: %2$s</string>
   <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
   <string name="hide_old_form_versions_setting_title">Piilota vanhat lomakeversiot</string>
   <string name="hide_old_form_versions_setting_summary">Vain uusin versio tulee näkymään \"Täytä tyhjä lomake\" -näkymässä.</string>
-    <string name="rank_items">Järjestä</string>
+  <string name="rank_items">Järjestä</string>
   <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
   <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
@@ -648,7 +650,7 @@
   <string name="save_legacy_settings">Tallenna vanhanmuotoinen .settings -tiedosto</string>
   <string name="save_legacy_settings_warning">Poistetaan tulevassa versiossa. Käytä QR-koodia yllä.</string>
   <string name="reason_for_changes_description">Tämän lomakkeen muutoksille tarvitaan selitys</string>
-  <string name="scoped_storage_banner_text">Sinun täytyy siirtää Collect-lomakkeet yksityiseen tallennukseen elokuuhun 2020 mennessä moudattaaksesi Androidin vaatimuksia.</string>
+  <string name="scoped_storage_banner_text">Collect-lomakkeet on siirrettävä yksityiseen tallennustilaan Androidin vaatimusten täyttämiseksi. Asentaessa Collect-versiota 1.29 <b>siirtyminen tehdään pakotettuna </b>.</string>
   <string name="scoped_storage_learn_more">Lisätiedot ja siirtyminen</string>
   <string name="storage_migration_completed">Tietojen tallennuksen siirto valmis!</string>
   <string name="scoped_storage_dismiss">Hylkää</string>
@@ -660,10 +662,19 @@
   <string name="migrate">Siirrä</string>
   <string name="error">Virhe:</string>
   <string name="storage_migration_not_enough_space">Sinulla ei ole riittävästi tilaa sisäisessä muistissa tietojesi siirtämiseen. Ole hyvä ja vapauta tilaa ja yritä uudelleen.</string>
-    <string name="changes_in_progress">Lomakkeiden taustalataus käynnissä. Ole hyvä ja yritä uudelleen.</string>
+  <string name="changes_in_progress">Automaattinen lähetys tai tyhjän lomakkeen lataaminen on meneillään. Ole hyvä ja yritä myöhemmin uudelleen.</string>
   <string name="storage_migration_failed">Tietojen siirto epäonnistui. Ole hyvä ja yritä uudelleen.</string>
   <string name="storage_migration_dialog_title">Tallennuksen siirto</string>
   <string name="storage_migration_progress_msg">Siirto käynnissä.\Tässä voi kulua muutama sekunti…</string>
   <string name="install_id">Install ID - korvaa Device ID -laitetunnisteen elokuussa 2020</string>
   <string name="preference_not_available">Ei käytettävissä</string>
+  <string name="custom_server_paths">Mukautetut palvelinpolut</string>
+  <string name="legacy_custom_server_paths_summary">Poistetaan tulevassa versiossa. Ole hyvä ja käytä palvelimellasi alapolkuja /formList ja /submission.</string>
+  <string name="experimental">Kokeellinen</string>
+  <string name="match_exactly">Palvelimen tarkka täsmääminen</string>
+  <string name="form_update_mode_title">Tyhjien lomakkeiden päivitystila</string>
+  <string name="previously_downloaded_only">Vain aikaisemmin ladatut lomakkeet</string>
+  <string name="form_update_frequency_title">Automaattisen päivityksen väli</string>
+  <string name="form_update_error">Lomakkeen päivitys epäonnistui</string>
+  <string name="report_to_project_lead">Jos ongelma jatkuu, ilmoita siitä tiedonkeruusta vastaavalle.</string>
 </resources>
