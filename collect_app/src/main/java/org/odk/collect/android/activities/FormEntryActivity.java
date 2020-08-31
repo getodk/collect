@@ -1977,7 +1977,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                     */
 
-                    sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));     // smap - use network receiver to sync
                     finishAndReturnInstance(result.isComplete());     // smap add isComplete
                 }
                 formSaveViewModel.resumeFormEntry();

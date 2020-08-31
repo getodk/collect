@@ -69,7 +69,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -141,7 +140,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     SurveyDataViewModel model;
     private MainTaskListener listener = null;
-    private NetworkReceiver networkReceiver = null;
     private RefreshListener refreshListener = null;
 
     boolean listenerRegistered = false;
@@ -326,12 +324,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             filter.addAction("startTask");
             registerReceiver(listener, filter);
 
-            networkReceiver = new NetworkReceiver();
-            filter = new IntentFilter();
-            filter.addAction("org.odk.collect.android.FormSaved");
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            registerReceiver(networkReceiver, filter);
-
             refreshListener = new RefreshListener(this);   // Listen for updates to the form list
 
             listenerRegistered = true;
@@ -370,39 +362,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
 
         // setUpStorageMigrationBanner();      // banner StorageMigration
-    }
-
-    @Override
-    protected void onStop() {
-        if (listener != null) {
-            try {
-                unregisterReceiver(listener);
-                listener = null;
-            } catch (Exception e) {
-                Timber.e("Error on unregister: " + e.getMessage());
-                // Ignore - preumably already unregistered
-            }
-        }
-        if (networkReceiver != null) {
-            try {
-                unregisterReceiver(networkReceiver);
-                networkReceiver = null;
-            } catch (Exception e) {
-                Timber.e("Error on unregister: " + e.getMessage());
-                // Ignore - preumably already unregistered
-            }
-        }
-        if (refreshListener != null) {
-            try {
-                unregisterReceiver(refreshListener);
-                refreshListener = null;
-            } catch (Exception e) {
-                Timber.e("Error on unregister: " + e.getMessage());
-                // Ignore - preumably already unregistered
-            }
-        }
-        listenerRegistered = false;
-        super.onStop();
     }
 
     @Override
@@ -724,6 +683,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == COMPLETE_FORM && intent != null) {
+
             String instanceId = intent.getStringExtra("instanceid");
             String formStatus = intent.getStringExtra("status");
             String formURI = intent.getStringExtra("uri");
@@ -974,6 +934,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
                 completeTask(te, true);
             }
+        } else {
+            processGetTask();
         }
     }
 
@@ -1089,6 +1051,27 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     protected void onPause() {
         mPaused = true;
         super.onPause();
+
+        if (listener != null) {
+            try {
+                unregisterReceiver(listener);
+                listener = null;
+            } catch (Exception e) {
+                Timber.e("Error on unregister: " + e.getMessage());
+                // Ignore - presumably already unregistered
+            }
+        }
+
+        if (refreshListener != null) {
+            try {
+                unregisterReceiver(refreshListener);
+                refreshListener = null;
+            } catch (Exception e) {
+                Timber.e("Error on unregister: " + e.getMessage());
+                // Ignore - presumably already unregistered
+            }
+        }
+        listenerRegistered = false;
     }
 
     /*

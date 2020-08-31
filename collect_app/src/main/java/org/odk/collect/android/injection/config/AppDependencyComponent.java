@@ -36,7 +36,6 @@ import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
-import org.odk.collect.android.receivers.NetworkReceiver;               // smap
 import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
 import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
@@ -143,8 +142,6 @@ public interface AppDependencyComponent {
     void inject(SmapRemoteWebServicePostTask smapRemoteWebServicePostTask);     // smap
 
     void inject(SmapLoginTask smapLoginTask);                                   // smap
-
-    void inject(NetworkReceiver networkReceiver);                               // smap
 
     void inject(InstanceUploaderListActivity activity);
 
