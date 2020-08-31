@@ -15,6 +15,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.List;
 
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
 
@@ -54,6 +55,15 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
             return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ?", new String[]{jrFormId, jrVersion}));
         } else {
             return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId}));
+        }
+    }
+
+    @Override
+    public List<Instance> getAllByJrFormIdAndJrVersionNotDeleted(String jrFormId, String jrVersion) {
+        if (jrVersion != null) {
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
+        } else {
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}));
         }
     }
 

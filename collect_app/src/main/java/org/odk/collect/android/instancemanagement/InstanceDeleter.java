@@ -23,14 +23,10 @@ public class InstanceDeleter {
 
         Form form = formsRepository.get(instance.getJrFormId(), instance.getJrVersion());
         if (form != null && form.isDeleted()) {
-            List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersion(form.getJrFormId(), form.getJrVersion());
-            if (instancesForVersion.isEmpty() || instancesAreSoftDeleted(instancesForVersion)) {
+            List<Instance> otherInstances = instancesRepository.getAllByJrFormIdAndJrVersionNotDeleted(form.getJrFormId(), form.getJrVersion());
+            if (otherInstances.isEmpty()) {
                 formsRepository.delete(form.getId());
             }
         }
-    }
-
-    private boolean instancesAreSoftDeleted(List<Instance> instancesForVersion) {
-        return instancesForVersion.stream().allMatch(f -> f.getDeletedDate() != null);
     }
 }

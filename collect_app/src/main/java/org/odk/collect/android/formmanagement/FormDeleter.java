@@ -19,16 +19,12 @@ public class FormDeleter {
 
     public void delete(Long id) {
         Form form = formsRepository.get(id);
-        List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersion(form.getJrFormId(), form.getJrVersion());
 
-        if (instancesForVersion.isEmpty() || instancesAreSoftDeleted(instancesForVersion)) {
+        List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersionNotDeleted(form.getJrFormId(), form.getJrVersion());
+        if (instancesForVersion.isEmpty()) {
             formsRepository.delete(id);
         } else {
             formsRepository.softDelete(form.getId());
         }
-    }
-
-    private boolean instancesAreSoftDeleted(List<Instance> instancesForVersion) {
-        return instancesForVersion.stream().allMatch(f -> f.getDeletedDate() != null);
     }
 }
