@@ -35,22 +35,13 @@ public class ObviousProgressBar extends ProgressBar {
         handler = new Handler();
     }
 
-    @Override
-    public void setVisibility(int visibility) {
-        if (visibility == View.VISIBLE) {
-            show();
-        } else {
-            hide(visibility);
-        }
-    }
-
-    private void show() {
+    public void show() {
         handler.removeCallbacksAndMessages(null);
         shownAt = System.currentTimeMillis();
         super.setVisibility(View.VISIBLE);
     }
 
-    private void hide(int visibility) {
+    public void hide(int visibility) {
         if (shownAt != null) {
             long timeShown = System.currentTimeMillis() - shownAt;
 
