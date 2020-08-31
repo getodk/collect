@@ -224,7 +224,7 @@ public class SmapTaskMapFragment extends Fragment
                 }
                 return true;
             case R.id.menu_gettasks:
-                ((SmapMain) getActivity()).processGetTask();
+                ((SmapMain) getActivity()).processGetTask(true);
                 return true;
             case R.id.menu_history:
                 ((SmapMain) getActivity()).processHistory();

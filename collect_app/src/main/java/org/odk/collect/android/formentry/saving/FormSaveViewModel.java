@@ -162,7 +162,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
             @Override
             public void onComplete(SaveToDiskResult saveToDiskResult) {
-                handleTaskResult(saveToDiskResult, saveRequest, !canUpdate, taskId, saveMessage);  // smap add isComplete, taskId, saveMessage
+                handleTaskResult(saveToDiskResult, saveRequest, saveToDiskResult.isComplete(), taskId, saveMessage);  // smap add isComplete, taskId, saveMessage
             }
         }, null, taskId, formPath, surveyNotes, canUpdate, saveMessage		// smap added task, formPath, surveyNotes, canUpdate, saveMessage, nulled out analytics
         ).execute();

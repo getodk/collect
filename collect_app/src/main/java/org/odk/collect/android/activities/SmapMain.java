@@ -30,6 +30,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -228,7 +229,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         // Initiate a refresh if requested in start parameters
         String refresh = getIntent().getStringExtra(EXTRA_REFRESH);
         if(refresh != null && refresh.equals("yes")) {
-            processGetTask();
+            processGetTask(false);
         }
 
         // Start the location service
@@ -378,15 +379,17 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
 
     // Get tasks and forms from the server
-    public void processGetTask() {
+    public void processGetTask(boolean manual) {
 
-        mProgressMsg = getString(R.string.smap_synchronising);
-        if(!this.isFinishing()) {
-            showDialog(PROGRESS_DIALOG);
+        if(manual || isFormAutoSendOptionEnabled()) {
+            mProgressMsg = getString(R.string.smap_synchronising);
+            if (!this.isFinishing()) {
+                showDialog(PROGRESS_DIALOG);
+            }
+            mDownloadTasks = new DownloadTasksTask();
+            mDownloadTasks.setDownloaderListener(this, this);
+            mDownloadTasks.execute();
         }
-        mDownloadTasks = new DownloadTasksTask();
-        mDownloadTasks.setDownloaderListener(this, this);
-        mDownloadTasks.execute();
     }
 
     public void processHistory() {
@@ -529,12 +532,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void taskDownloadingComplete(HashMap<String, String> result) {
 
         Timber.i("Complete - Send intent");
-
-        // Refresh task list
-        //Intent intent = new Intent("org.smap.smapTask.refresh");
-        //intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        //LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-        //Timber.i("######## send org.smap.smapTask.refresh from smapMain2");  // smap
 
         try {
             dismissDialog(PROGRESS_DIALOG);
@@ -935,7 +932,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 completeTask(te, true);
             }
         } else {
-            processGetTask();
+            if(formStatus != null && formStatus.equals("complete")) {
+                processGetTask(false);
+            }
         }
     }
 
@@ -1152,5 +1151,27 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         }
     }
+
+    private boolean isFormAutoSendOptionEnabled() {
+        // make sure autosend is enabled on the given connected interface
+
+        Context context = Collect.getInstance().getApplicationContext();
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+
+        String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
+        boolean sendwifi = autosend.equals("wifi_only");
+        boolean sendnetwork = autosend.equals("cellular_only");
+        if (autosend.equals("wifi_and_cellular")) {
+            sendwifi = true;
+            sendnetwork = true;
+        }
+
+        return ni.getType() == ConnectivityManager.TYPE_WIFI
+                && sendwifi || ni.getType() == ConnectivityManager.TYPE_MOBILE
+                && sendnetwork;
+    }
+
 
 }

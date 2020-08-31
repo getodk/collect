@@ -434,7 +434,7 @@ public class SmapTaskListFragment extends ListFragment {
                 }
                 return true;
             case R.id.menu_gettasks:
-                ((SmapMain) getActivity()).processGetTask();
+                ((SmapMain) getActivity()).processGetTask(true);
                 return true;
             case MENU_ENTERDATA:
                 processEnterData();
