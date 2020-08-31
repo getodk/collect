@@ -9,6 +9,7 @@ import org.odk.collect.android.support.InMemInstancesRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 public class InstanceDeleterTest {
 
@@ -26,9 +27,31 @@ public class InstanceDeleterTest {
                 .build()
         );
 
+        instancesRepository.save(buildInstance(1L, "1", "version").build());
+        instancesRepository.save(buildInstance(2L, "1", "version").build());
+
+        instanceDeleter.delete(2L);
+        assertThat(formsRepository.getAll().size(), is(1));
+    }
+
+    @Test
+    public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherSubmittedInstance_doesNotDeleteForm() {
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .jrVersion("version")
+                .deleted(true)
+                .build()
+        );
+
+        instancesRepository.save(buildInstance(1L, "1", "version")
+                .status(Instance.STATUS_SUBMITTED)
+                .build());
+
         instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
+                .status(Instance.STATUS_SUBMITTED)
                 .jrVersion("version")
                 .build()
         );
@@ -42,6 +65,36 @@ public class InstanceDeleterTest {
 
         instanceDeleter.delete(2L);
         assertThat(formsRepository.getAll().size(), is(1));
+    }
+
+    @Test
+    public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherSoftDeletedSubmittedInstance_deletesForm() {
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .jrVersion("version")
+                .deleted(true)
+                .build()
+        );
+
+        instancesRepository.save(new Instance.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .status(Instance.STATUS_SUBMITTED)
+                .deletedDate(0L)
+                .jrVersion("version")
+                .build()
+        );
+
+        instancesRepository.save(new Instance.Builder()
+                .id(2L)
+                .jrFormId("1")
+                .jrVersion("version")
+                .build()
+        );
+
+        instanceDeleter.delete(2L);
+        assertThat(formsRepository.getAll().size(), is(0));
     }
 
     @Test

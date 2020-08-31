@@ -5,6 +5,10 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
+import java.util.List;
+
+import static org.odk.collect.android.instances.Instance.STATUS_SUBMITTED;
+
 public class InstanceDeleter {
 
     private final InstancesRepository instancesRepository;
@@ -17,14 +21,20 @@ public class InstanceDeleter {
 
     public void delete(Long id) {
         Instance instance = instancesRepository.get(id);
-        if (instancesRepository.getAllByJrFormIdAndJrVersion(instance.getJrFormId(), instance.getJrVersion()).size() == 1) {
-            Form form = formsRepository.get(instance.getJrFormId(), instance.getJrVersion());
+        instancesRepository.delete(id);
 
-            if (form != null && form.isDeleted()) {
+        Form form = formsRepository.get(instance.getJrFormId(), instance.getJrVersion());
+        if (form != null && form.isDeleted()) {
+            List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersion(form.getJrFormId(), form.getJrVersion());
+            if (instancesForVersion.isEmpty() || instancesAreSoftDeleted(instancesForVersion)) {
                 formsRepository.delete(form.getId());
             }
         }
+    }
 
-        instancesRepository.delete(id);
+    private boolean instancesAreSoftDeleted(List<Instance> instancesForVersion) {
+        return instancesForVersion.stream().allMatch(f -> {
+            return f.getStatus().equals(STATUS_SUBMITTED) && f.getDeletedDate() != null;
+        });
     }
 }
