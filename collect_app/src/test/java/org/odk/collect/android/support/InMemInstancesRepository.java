@@ -73,7 +73,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         instances.removeIf(instance -> instance.getId().equals(id));
     }
 
-    public void addInstance(Instance instance) {
+    public void save(Instance instance) {
         instances.add(instance);
     }
 

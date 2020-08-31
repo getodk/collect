@@ -24,7 +24,6 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -40,7 +39,7 @@ public class InstancesDao {
 
     public Cursor getSentInstancesCursor() {
         String selection = InstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
         String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
 
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
@@ -55,7 +54,7 @@ public class InstancesDao {
                     InstanceColumns.STATUS + " =? and "
                             + InstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
-                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    Instance.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
@@ -66,14 +65,14 @@ public class InstancesDao {
 
     public CursorLoader getSentInstancesCursorLoader(String sortOrder) {
         String selection = InstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
     }
 
     public Cursor getUnsentInstancesCursor() {
         String selection = InstanceColumns.STATUS + " !=? ";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
         String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
 
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
@@ -81,7 +80,7 @@ public class InstancesDao {
 
     public CursorLoader getUnsentInstancesCursorLoader(String sortOrder) {
         String selection = InstanceColumns.STATUS + " !=? ";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
+        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
     }
@@ -95,7 +94,7 @@ public class InstancesDao {
                     InstanceColumns.STATUS + " !=? and "
                             + InstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
-                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    Instance.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
@@ -133,7 +132,7 @@ public class InstancesDao {
 
     public Cursor getFinalizedInstancesCursor() {
         String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
+        String[] selectionArgs = {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED};
         String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
 
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
@@ -141,7 +140,7 @@ public class InstancesDao {
 
     public CursorLoader getFinalizedInstancesCursorLoader(String sortOrder) {
         String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
+        String[] selectionArgs = {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED};
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
     }
@@ -156,8 +155,8 @@ public class InstancesDao {
                             + InstanceColumns.STATUS + "=?) and "
                             + InstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
-                    InstanceProviderAPI.STATUS_COMPLETE,
-                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
+                    Instance.STATUS_COMPLETE,
+                    Instance.STATUS_SUBMISSION_FAILED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
@@ -179,9 +178,9 @@ public class InstancesDao {
                 + InstanceColumns.STATUS + "=? or "
                 + InstanceColumns.STATUS + "=?)";
 
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_COMPLETE,
-                InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
-                InstanceProviderAPI.STATUS_SUBMITTED};
+        String[] selectionArgs = {Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED,
+                Instance.STATUS_SUBMITTED};
         String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
 
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
@@ -193,9 +192,9 @@ public class InstancesDao {
                 + InstanceColumns.STATUS + "=? or "
                 + InstanceColumns.STATUS + "=?)";
 
-        String[] selectionArgs = {InstanceProviderAPI.STATUS_COMPLETE,
-                InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
-                InstanceProviderAPI.STATUS_SUBMITTED};
+        String[] selectionArgs = {Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED,
+                Instance.STATUS_SUBMITTED};
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
     }
@@ -212,9 +211,9 @@ public class InstancesDao {
                     + InstanceColumns.DISPLAY_NAME + " LIKE ?";
 
             String[] selectionArgs = {
-                    InstanceProviderAPI.STATUS_COMPLETE,
-                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
-                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    Instance.STATUS_COMPLETE,
+                    Instance.STATUS_SUBMISSION_FAILED,
+                    Instance.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);

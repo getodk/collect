@@ -7,6 +7,8 @@ import org.odk.collect.android.instances.InstancesRepository;
 
 import java.util.List;
 
+import static org.odk.collect.android.instances.Instance.STATUS_SUBMITTED;
+
 public class FormDeleter {
 
     private final FormsRepository formsRepository;
@@ -21,10 +23,16 @@ public class FormDeleter {
         Form form = formsRepository.get(id);
         List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersion(form.getJrFormId(), form.getJrVersion());
 
-        if (instancesForVersion.isEmpty()) {
+        if (instancesForVersion.isEmpty() || instancesAreSoftDeleted(instancesForVersion)) {
             formsRepository.delete(id);
         } else {
             formsRepository.softDelete(form.getId());
         }
+    }
+
+    private boolean instancesAreSoftDeleted(List<Instance> instancesForVersion) {
+        return instancesForVersion.stream().allMatch(f -> {
+            return f.getStatus().equals(STATUS_SUBMITTED) && f.getDeletedDate() != null;
+        });
     }
 }

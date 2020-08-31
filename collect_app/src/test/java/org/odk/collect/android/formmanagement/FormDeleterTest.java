@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 
 public class FormDeleterTest {
@@ -19,11 +20,46 @@ public class FormDeleterTest {
     private final FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
 
     @Test
-    public void whenOtherVersionOfFormHasInstances_deletesForm() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-        InMemInstancesRepository instancesRepository = new InMemInstancesRepository();
-        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
+    public void whenFormHasSubmittedInstances_softDeletesForm() {
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("id")
+                .jrVersion("version")
+                .build());
 
+        instancesRepository.save(new Instance.Builder()
+                .jrFormId("id")
+                .jrVersion("version")
+                .status(Instance.STATUS_SUBMITTED)
+                .build());
+
+        formDeleter.delete(1L);
+        List<Form> forms = formsRepository.getAll();
+        assertThat(forms.size(), is(1));
+        assertThat(forms.get(0).isDeleted(), is(true));
+    }
+
+    @Test
+    public void whenFormHasSubmitted_andSoftDeletedInstances_deletesForm() {
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("id")
+                .jrVersion("version")
+                .build());
+
+        instancesRepository.save(new Instance.Builder()
+                .jrFormId("id")
+                .jrVersion("version")
+                .status(Instance.STATUS_SUBMITTED)
+                .deletedDate(0L)
+                .build());
+
+        formDeleter.delete(1L);
+        assertThat(formsRepository.getAll().size(), is(0));
+    }
+
+    @Test
+    public void whenOtherVersionOfFormHasInstances_deletesForm() {
         formsRepository.save(new Form.Builder()
                 .id(1L)
                 .jrFormId("1")
@@ -36,7 +72,7 @@ public class FormDeleterTest {
                 .jrVersion("new")
                 .build());
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("old")
                 .build());
@@ -61,7 +97,7 @@ public class FormDeleterTest {
                 .jrVersion(null)
                 .build());
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("version")
                 .build());
@@ -80,10 +116,7 @@ public class FormDeleterTest {
                 .jrVersion(null)
                 .build());
 
-        instancesRepository.addInstance(new Instance.Builder()
-                .jrFormId("1")
-                .jrVersion(null)
-                .build());
+        instancesRepository.save(buildInstance(1L, "1", null).build());
 
         formDeleter.delete(1L);
         List<Form> forms = formsRepository.getAll();

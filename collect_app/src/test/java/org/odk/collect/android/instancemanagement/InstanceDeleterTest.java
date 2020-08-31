@@ -26,14 +26,14 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(2L)
                 .jrFormId("1")
                 .jrVersion("version")
@@ -54,7 +54,7 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
@@ -83,14 +83,14 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(2L)
                 .jrFormId("1")
                 .jrVersion("2")
@@ -112,7 +112,7 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
@@ -141,7 +141,7 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("2")

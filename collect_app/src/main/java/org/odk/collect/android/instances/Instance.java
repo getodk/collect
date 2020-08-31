@@ -24,6 +24,12 @@ import org.odk.collect.android.storage.StoragePathProvider;
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Instance {
+    // status for instances
+    public static final String STATUS_INCOMPLETE = "incomplete";
+    public static final String STATUS_COMPLETE = "complete";
+    public static final String STATUS_SUBMITTED = "submitted";
+    public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";
+
     private final String displayName;
     private final String submissionUri;
     private final boolean canEditWhenComplete;

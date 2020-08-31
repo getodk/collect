@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of theø License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,8 +20,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.odk.collect.android.provider.InstanceProviderAPI;
-
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.SQLiteUtils;
@@ -140,7 +139,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
                     + CAN_EDIT_WHEN_COMPLETE + " = '" + true
                     + "' WHERE " + STATUS + " IS NOT NULL AND "
-                    + STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                    + STATUS + " != '" + Instance.STATUS_INCOMPLETE
                     + "'");
         }
     }
@@ -155,8 +154,8 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Upgrade to version 5. Prior versions of the instances table included a {@code displaySubtext}
-     * column which was redundant with the {@link InstanceProviderAPI.InstanceColumns#STATUS} and
-     * {@link InstanceProviderAPI.InstanceColumns#LAST_STATUS_CHANGE_DATE} columns and included
+     * column which was redundant with the {@link org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns#STATUS} and
+     * {@link org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns#LAST_STATUS_CHANGE_DATE} columns and included
      * unlocalized text. Version 5 removes this column.
      */
     private void upgradeToVersion5(SQLiteDatabase db) {

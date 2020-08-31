@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -117,13 +116,13 @@ public class FormMapViewModel extends ViewModel {
                 return ClickAction.DELETED_TOAST;
             }
 
-            if ((instance.getStatus().equals(InstanceProviderAPI.STATUS_COMPLETE)
-                    || instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)
-                    || instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMISSION_FAILED))
+            if ((instance.getStatus().equals(Instance.STATUS_COMPLETE)
+                    || instance.getStatus().equals(Instance.STATUS_SUBMITTED)
+                    || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED))
                     && !instance.canEditWhenComplete()) {
                 return ClickAction.NOT_VIEWABLE_TOAST;
             } else if (instance.getId() != null) {
-                if (instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                if (instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
                     return ClickAction.OPEN_READ_ONLY;
                 }
                 return ClickAction.OPEN_EDIT;

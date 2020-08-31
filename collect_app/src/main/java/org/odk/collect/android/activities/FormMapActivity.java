@@ -43,6 +43,7 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -308,13 +309,13 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     private static int getDrawableIdForStatus(String status, boolean enlarged) {
         switch (status) {
-            case InstanceProviderAPI.STATUS_INCOMPLETE:
+            case Instance.STATUS_INCOMPLETE:
                 return enlarged ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
-            case InstanceProviderAPI.STATUS_COMPLETE:
+            case Instance.STATUS_COMPLETE:
                 return enlarged ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
-            case InstanceProviderAPI.STATUS_SUBMITTED:
+            case Instance.STATUS_SUBMITTED:
                 return enlarged ? R.drawable.ic_room_green_48dp : R.drawable.ic_room_green_24dp;
-            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
+            case Instance.STATUS_SUBMISSION_FAILED:
                 return enlarged ? R.drawable.ic_room_red_48dp : R.drawable.ic_room_red_24dp;
         }
         return R.drawable.ic_map_point;

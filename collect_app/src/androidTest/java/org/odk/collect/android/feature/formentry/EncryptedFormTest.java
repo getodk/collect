@@ -24,7 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -54,7 +54,7 @@ public class EncryptedFormTest {
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok)
                 .clickEditSavedForm()
-                .checkInstanceState("encrypted", InstanceProviderAPI.STATUS_COMPLETE)
+                .checkInstanceState("encrypted", Instance.STATUS_COMPLETE)
                 .clickOnFormWithDialog("encrypted")
                 .assertText(R.string.cannot_edit_completed_form);
     }
@@ -68,6 +68,6 @@ public class EncryptedFormTest {
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
                 .clickEditSavedForm()
-                .checkInstanceState("encrypted-no-instanceID", InstanceProviderAPI.STATUS_INCOMPLETE);
+                .checkInstanceState("encrypted-no-instanceID", Instance.STATUS_INCOMPLETE);
     }
 }

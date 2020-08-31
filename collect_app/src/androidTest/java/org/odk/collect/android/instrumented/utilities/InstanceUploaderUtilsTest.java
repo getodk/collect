@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -59,7 +58,7 @@ public class InstanceUploaderUtilsTest {
                     .displayName("InstanceTest")
                     .instanceFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + "/InstanceTest_" + time + "/InstanceTest_" + time + ".xml")
                     .jrFormId("instanceTest")
-                    .status(InstanceProviderAPI.STATUS_COMPLETE)
+                    .status(Instance.STATUS_COMPLETE)
                     .lastStatusChangeDate(time)
                     .build();
             instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance));

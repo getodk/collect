@@ -23,11 +23,11 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -88,7 +88,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
 
                         count -= selectionArgs.length - 1;
                         selection.append(") and status=?");
-                        selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
+                        selectionArgs[i] = Instance.STATUS_SUBMITTED;
 
                         try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(),
                                 selectionArgs)) {
