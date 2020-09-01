@@ -297,7 +297,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // smap
-    private void createInstancesTableV16(SQLiteDatabase db, String name) {
+    private static void createInstancesTableV16(SQLiteDatabase db, String name) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -358,5 +358,19 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             Timber.i(e);
         }
         return isDatabaseHelperOutOfDate;
+    }
+
+    // smap
+    public static void recreateDatabase() {
+
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
+            SQLiteUtils.dropTable(db, INSTANCES_TABLE_NAME);
+            createInstancesTableV16(db, INSTANCES_TABLE_NAME);
+            db.close();
+
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
     }
 }

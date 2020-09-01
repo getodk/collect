@@ -155,4 +155,17 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         }
         return isDatabaseHelperOutOfDate;
     }
+
+    // smap
+    public static void recreateDatabase() {
+
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
+            SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
+            createFormsTableV17(db);
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
+    }
 }

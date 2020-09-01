@@ -20,10 +20,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.TraceUtilities;
+import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
+import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -33,9 +33,6 @@ import org.osmdroid.config.Configuration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import timber.log.Timber;
 
 public class ResetUtility {
 
@@ -74,12 +71,7 @@ public class ResetUtility {
                     }
                     break;
                 case ResetAction.SMAP_RESET_LOCATIONS:  // smap
-                    if (TraceUtilities.deleteSource(0)) {
-                        Intent intent = new Intent("org.smap.smapTask.refresh");
-                        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-                        Timber.i("######## send org.smap.smapTask.refresh from resetUtility");  // smap
-                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.SMAP_RESET_LOCATIONS));
-                    }
+                    TraceUtilities.deleteSource(0);
                     break;
             }
         }
@@ -109,7 +101,8 @@ public class ResetUtility {
     }
 
     private void resetInstances() {
-        new InstancesDao().deleteInstancesDatabase();
+        //new InstancesDao().deleteInstancesDatabase();
+        InstancesDatabaseHelper.recreateDatabase();      // smap - really delete the database
 
         if (deleteFolderContents(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES))) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_INSTANCES));
@@ -117,7 +110,8 @@ public class ResetUtility {
     }
 
     private void resetForms() {
-        new FormsDao().deleteFormsDatabase();
+       // new FormsDao().deleteFormsDatabase();  // smap
+        FormsDatabaseHelper.recreateDatabase();      // smap - really delete the database
 
         File itemsetDbFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.METADATA) + File.separator + ItemsetDbAdapter.DATABASE_NAME);
 
