@@ -62,7 +62,6 @@ public class ServerFormsDetailsFetcher {
 
         for (FormListItem listItem : formListItems) {
             boolean isNewerFormVersionAvailable = false;
-            boolean areNewerMediaFilesAvailable = false;
             ManifestFile manifestFile = null;
 
             if (listItem.getManifestURL() != null) {
@@ -71,13 +70,13 @@ public class ServerFormsDetailsFetcher {
 
             boolean thisFormAlreadyDownloaded = !formsRepository.getByJrFormIdNotDeleted(listItem.getFormID()).isEmpty();
             if (thisFormAlreadyDownloaded) {
-                isNewerFormVersionAvailable = isNewerFormVersionAvailable(getMd5HashWithoutPrefix(listItem.getHashWithPrefix()));
+                isNewerFormVersionAvailable = isNewerFormVersionAvailable(listItem);
 
                 if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
 
                     if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                        areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
+                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
                     }
                 }
             }
@@ -90,7 +89,7 @@ public class ServerFormsDetailsFetcher {
                     listItem.getVersion(),
                     listItem.getHashWithPrefix(),
                     !thisFormAlreadyDownloaded,
-                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
+                    isNewerFormVersionAvailable,
                     manifestFile);
 
             serverFormDetailsList.add(serverFormDetails);
@@ -112,12 +111,13 @@ public class ServerFormsDetailsFetcher {
         }
     }
 
-    private boolean isNewerFormVersionAvailable(String md5Hash) {
-        if (md5Hash == null) {
+    private boolean isNewerFormVersionAvailable(FormListItem formListItem) {
+        if (formListItem.getHashWithPrefix() == null) {
             return false;
         }
 
-        return formsRepository.getByMd5Hash(md5Hash) == null;
+        String hash = getMd5HashWithoutPrefix(formListItem.getHashWithPrefix());
+        return formsRepository.getByMd5Hash(hash) == null;
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
