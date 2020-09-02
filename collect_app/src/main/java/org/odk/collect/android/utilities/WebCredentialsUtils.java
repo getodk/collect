@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.openrosa.HttpCredentials;
-import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.http.HttpCredentials;
+import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 

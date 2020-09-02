@@ -16,13 +16,13 @@
 
 package org.odk.collect.android.formmanagement;
 
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.openrosa.api.FormApiException;
-import org.odk.collect.android.openrosa.api.FormListApi;
-import org.odk.collect.android.openrosa.api.FormListItem;
-import org.odk.collect.android.openrosa.api.ManifestFile;
-import org.odk.collect.android.openrosa.api.MediaFile;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.MediaFileRepository;
+import org.odk.collect.openrosa.FormApiException;
+import org.odk.collect.openrosa.FormListApi;
+import org.odk.collect.openrosa.FormListItem;
+import org.odk.collect.openrosa.ManifestFile;
+import org.odk.collect.openrosa.MediaFile;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 

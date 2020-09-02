@@ -15,7 +15,7 @@
 package org.odk.collect.android.listeners;
 
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.openrosa.FormApiException;
 
 import java.util.HashMap;
 

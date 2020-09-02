@@ -5,10 +5,10 @@ import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.openrosa.FormApiException;
 
 import java.util.List;
 

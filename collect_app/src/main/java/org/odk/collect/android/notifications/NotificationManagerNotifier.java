@@ -16,7 +16,7 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.openrosa.FormApiException;
 import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.IconUtils;

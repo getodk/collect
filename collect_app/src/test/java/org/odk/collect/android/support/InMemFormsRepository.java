@@ -2,8 +2,8 @@ package org.odk.collect.android.support;
 
 import android.net.Uri;
 
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 
 import java.util.ArrayList;
 import java.util.List;

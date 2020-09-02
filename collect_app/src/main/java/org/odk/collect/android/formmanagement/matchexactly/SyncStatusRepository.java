@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.openrosa.FormApiException;
 
 public class SyncStatusRepository {
 

@@ -1,8 +1,8 @@
 package org.odk.collect.android.database;
 
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.forms.MediaFileRepository;
 
 import java.io.File;
 import java.util.ArrayList;

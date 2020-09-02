@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;

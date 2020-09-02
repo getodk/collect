@@ -37,7 +37,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.gdrive.sheets.DriveApi;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.gdrive.sheets.SheetsApi;
@@ -53,6 +52,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.forms.Form;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,7 +110,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             }
             Form form = forms.get(0);
-            String formFilePath = new StoragePathProvider().getAbsoluteFormFilePath(form.formFilePath);
+            String formFilePath = new StoragePathProvider().getAbsoluteFormFilePath(form.getFormFilePath());
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
             setUpSpreadsheet(spreadsheetUrl);

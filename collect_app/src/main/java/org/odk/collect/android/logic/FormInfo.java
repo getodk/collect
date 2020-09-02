@@ -17,7 +17,7 @@ package org.odk.collect.android.logic;
 /**
  * Represents a subset of information about a form.
  *
- * @deprecated Use the full {@link org.odk.collect.android.forms.Form} instead.
+ * @deprecated Use the full {@link org.odk.collect.forms.Form} instead.
  */
 @Deprecated
 public class FormInfo {

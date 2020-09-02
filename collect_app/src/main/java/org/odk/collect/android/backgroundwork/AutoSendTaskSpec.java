@@ -28,8 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.Form;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instancemanagement.InstanceSubmitter;
@@ -42,6 +41,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
+import org.odk.collect.forms.FormsRepository;
 
 import java.util.List;
 import java.util.function.Supplier;

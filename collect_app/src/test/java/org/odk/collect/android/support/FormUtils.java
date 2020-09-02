@@ -1,6 +1,6 @@
 package org.odk.collect.android.support;
 
-import org.odk.collect.android.forms.Form;
+import org.odk.collect.forms.Form;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;

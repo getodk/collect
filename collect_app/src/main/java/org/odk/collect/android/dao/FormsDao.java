@@ -25,7 +25,7 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormsDatabaseHelper;
-import org.odk.collect.android.forms.Form;
+import org.odk.collect.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 
