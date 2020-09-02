@@ -182,6 +182,14 @@ android {
             returnDefaultValues = true
         }
     }
+
+    lintOptions {
+        abortOnError true
+        xmlReport true
+        htmlReport true
+        checkGeneratedSources true
+        lintConfig file("${project.rootDir}/config/lint.xml")
+    }
 }
 
 configurations.all {

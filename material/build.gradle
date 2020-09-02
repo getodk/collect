@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 
+apply from: '../config/quality.gradle'
+
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.2"
