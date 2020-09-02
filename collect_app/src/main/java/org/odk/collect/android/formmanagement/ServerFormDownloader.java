@@ -6,18 +6,18 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.openrosa.FormListApi;
-import org.odk.collect.openrosa.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.openrosa.FormListApi;
+import org.odk.collect.openrosa.MediaFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -127,13 +127,10 @@ public class ServerFormDownloader implements FormDownloader {
 
         @Deprecated
         public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) throws TaskCancelledException {
-            int total = toDownload.size();
-            int count = 1;
-
             final HashMap<ServerFormDetails, String> result = new HashMap<>();
 
             for (ServerFormDetails fd : toDownload) {
-                boolean success = processOneForm(total, count++, fd, stateListener);
+                boolean success = processOneForm(fd, stateListener);
                 if (success) {
                     result.put(fd, Collect.getInstance().getString(R.string.success));
                 } else {
@@ -147,13 +144,11 @@ public class ServerFormDownloader implements FormDownloader {
         /**
          * Processes one form download.
          *
-         * @param total the total number of forms being downloaded by this task
-         * @param count the number of this form
          * @param fd    the FormDetails
          * @return an empty string for success, or a nonblank string with one or more error messages
          * @throws TaskCancelledException to signal that form downloading is to be canceled
          */
-        private boolean processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
+        private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
             boolean success = true;
 
             // use a temporary media path until everything is ok.
@@ -170,7 +165,7 @@ public class ServerFormDownloader implements FormDownloader {
                     finalMediaPath = FileUtils.constructMediaPath(
                             fileResult.getFile().getAbsolutePath());
                     String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                            count, total, stateListener, fd.getManifest().getMediaFiles());
+                            stateListener, fd.getManifest().getMediaFiles());
                     if (error != null && !error.isEmpty()) {
                         success = false;
                     }
@@ -538,8 +533,8 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
-                                             ServerFormDetails fd, int count,
-                                             int total, FormDownloaderListener stateListener, List<MediaFile> files) throws Exception {
+                                             ServerFormDetails fd,
+                                             FormDownloaderListener stateListener, List<MediaFile> files) throws Exception {
             if (fd.getManifestUrl() == null) {
                 return null;
             }
