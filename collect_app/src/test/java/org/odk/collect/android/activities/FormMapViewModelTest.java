@@ -10,7 +10,6 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.Arrays;
 import java.util.List;
@@ -123,9 +122,9 @@ public class FormMapViewModelTest {
                 .geometryType("Point")
                 .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
                 .canEditWhenComplete(true)
-                .status(InstanceProviderAPI.STATUS_COMPLETE).build();
+                .status(Instance.STATUS_COMPLETE).build();
 
-        ((InMemInstancesRepository) testInstancesRepository).addInstance(newInstance);
+        ((InMemInstancesRepository) testInstancesRepository).save(newInstance);
 
         instances = viewModel.getMappableFormInstances();
         assertThat(viewModel.getTotalInstanceCount(), is(8));
@@ -143,13 +142,13 @@ public class FormMapViewModelTest {
         assertThat(mappableInstances.get(5).getClickAction(), is(FormMapViewModel.ClickAction.NOT_VIEWABLE_TOAST));
         ((InMemInstancesRepository) testInstancesRepository).removeInstanceById(6L);
 
-        ((InMemInstancesRepository) testInstancesRepository).addInstance(new Instance.Builder().id(6L)
+        ((InMemInstancesRepository) testInstancesRepository).save(new Instance.Builder().id(6L)
                 .jrFormId("formId1")
                 .jrVersion("2019103101")
                 .geometryType("")
                 .geometry("")
                 .canEditWhenComplete(false)
-                .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build());
+                .status(Instance.STATUS_SUBMISSION_FAILED).build());
 
         mappableInstances = viewModel.getMappableFormInstances();
         assertThat(viewModel.getTotalInstanceCount(), is(7));
@@ -180,7 +179,7 @@ public class FormMapViewModelTest {
                     .deletedDate(1487782554846L)
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.0]}")
-                    .status(InstanceProviderAPI.STATUS_SUBMITTED).build(),
+                    .status(Instance.STATUS_SUBMITTED).build(),
 
             new Instance.Builder().id(1L)
                     .displayName("Form2")
@@ -190,7 +189,7 @@ public class FormMapViewModelTest {
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.1]}")
                     .canEditWhenComplete(true)
-                    .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
+                    .status(Instance.STATUS_COMPLETE).build(),
 
             new Instance.Builder().id(2L)
                     .displayName("Form3")
@@ -199,14 +198,14 @@ public class FormMapViewModelTest {
                     .jrVersion("2019103102")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[126.6, 10.1]}")
-                    .status(InstanceProviderAPI.STATUS_INCOMPLETE).build(),
+                    .status(Instance.STATUS_INCOMPLETE).build(),
 
             new Instance.Builder().id(3L)
                     .displayName("Form4")
                     .lastStatusChangeDate(1488582557456L)
                     .jrFormId("formId1")
                     .jrVersion("2019103101")
-                    .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
+                    .status(Instance.STATUS_COMPLETE).build(),
 
             new Instance.Builder().id(4L)
                     .displayName("Form5")
@@ -216,7 +215,7 @@ public class FormMapViewModelTest {
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.3]}")
                     .canEditWhenComplete(true)
-                    .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build(),
+                    .status(Instance.STATUS_SUBMISSION_FAILED).build(),
 
             new Instance.Builder().id(5L)
                     .displayName("Form6")
@@ -226,7 +225,7 @@ public class FormMapViewModelTest {
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.7, 10.3]}")
                     .canEditWhenComplete(true)
-                    .status(InstanceProviderAPI.STATUS_SUBMITTED).build(),
+                    .status(Instance.STATUS_SUBMITTED).build(),
 
             new Instance.Builder().id(6L)
                     .displayName("Form7")
@@ -236,7 +235,7 @@ public class FormMapViewModelTest {
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.4]}")
                     .canEditWhenComplete(false)
-                    .status(InstanceProviderAPI.STATUS_SUBMISSION_FAILED).build(),
+                    .status(Instance.STATUS_SUBMISSION_FAILED).build(),
 
             new Instance.Builder().id(7L)
                     .displayName("Form8")
@@ -245,7 +244,7 @@ public class FormMapViewModelTest {
                     .jrVersion("2019103101")
                     .geometryType("Point")
                     .geometry("Crazy stuff")
-                    .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
+                    .status(Instance.STATUS_COMPLETE).build(),
 
             new Instance.Builder().id(8L)
                     .displayName("Form9")
@@ -254,6 +253,6 @@ public class FormMapViewModelTest {
                     .jrVersion("2019103101")
                     .geometryType("Crazy stuff")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.4]}")
-                    .status(InstanceProviderAPI.STATUS_COMPLETE).build(),
+                    .status(Instance.STATUS_COMPLETE).build(),
             };
 }

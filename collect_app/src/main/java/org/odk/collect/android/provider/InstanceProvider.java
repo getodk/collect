@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -171,7 +172,7 @@ public class InstanceProvider extends ContentProvider {
             }
 
             if (!values.containsKey(InstanceColumns.STATUS)) {
-                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+                values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
             }
 
             long rowId = instancesDatabaseHelper.getWritableDatabase().insert(INSTANCES_TABLE_NAME, null, values);
@@ -190,16 +191,16 @@ public class InstanceProvider extends ContentProvider {
             if (state == null) {
                 return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
-            } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
+            } else if (Instance.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(context.getString(R.string.saved_on_date_at_time),
                         Locale.getDefault()).format(date);
-            } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
+            } else if (Instance.STATUS_COMPLETE.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(context.getString(R.string.finalized_on_date_at_time),
                         Locale.getDefault()).format(date);
-            } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
+            } else if (Instance.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(context.getString(R.string.sent_on_date_at_time),
                         Locale.getDefault()).format(date);
-            } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
+            } else if (Instance.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(
                         context.getString(R.string.sending_failed_on_date_at_time),
                         Locale.getDefault()).format(date);
@@ -303,7 +304,7 @@ public class InstanceProvider extends ContentProvider {
                     }
 
                     // Keep sent instance database rows but delete corresponding files
-                    if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                    if (status != null && status.equals(Instance.STATUS_SUBMITTED)) {
                         ContentValues cv = new ContentValues();
                         cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
 

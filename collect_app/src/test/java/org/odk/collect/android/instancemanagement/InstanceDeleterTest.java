@@ -9,6 +9,7 @@ import org.odk.collect.android.support.InMemInstancesRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 public class InstanceDeleterTest {
 
@@ -26,14 +27,32 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(buildInstance(1L, "1", "version").build());
+        instancesRepository.save(buildInstance(2L, "1", "version").build());
+
+        instanceDeleter.delete(2L);
+        assertThat(formsRepository.getAll().size(), is(1));
+    }
+
+    @Test
+    public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherSoftDeletedInstance_deletesForm() {
+        formsRepository.save(new Form.Builder()
                 .id(1L)
                 .jrFormId("1")
+                .jrVersion("version")
+                .deleted(true)
+                .build()
+        );
+
+        instancesRepository.save(new Instance.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .deletedDate(0L)
                 .jrVersion("version")
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(2L)
                 .jrFormId("1")
                 .jrVersion("version")
@@ -41,7 +60,7 @@ public class InstanceDeleterTest {
         );
 
         instanceDeleter.delete(2L);
-        assertThat(formsRepository.getAll().size(), is(1));
+        assertThat(formsRepository.getAll().size(), is(0));
     }
 
     @Test
@@ -54,7 +73,7 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
@@ -83,14 +102,14 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(2L)
                 .jrFormId("1")
                 .jrVersion("2")
@@ -112,7 +131,7 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
@@ -141,7 +160,7 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.addInstance(new Instance.Builder()
+        instancesRepository.save(new Instance.Builder()
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("2")

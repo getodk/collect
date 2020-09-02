@@ -5,6 +5,8 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
+import java.util.List;
+
 public class InstanceDeleter {
 
     private final InstancesRepository instancesRepository;
@@ -17,14 +19,14 @@ public class InstanceDeleter {
 
     public void delete(Long id) {
         Instance instance = instancesRepository.get(id);
-        if (instancesRepository.getAllByJrFormIdAndJrVersion(instance.getJrFormId(), instance.getJrVersion()).size() == 1) {
-            Form form = formsRepository.get(instance.getJrFormId(), instance.getJrVersion());
+        instancesRepository.delete(id);
 
-            if (form != null && form.isDeleted()) {
+        Form form = formsRepository.get(instance.getJrFormId(), instance.getJrVersion());
+        if (form != null && form.isDeleted()) {
+            List<Instance> otherInstances = instancesRepository.getAllByJrFormIdAndJrVersionNotDeleted(form.getJrFormId(), form.getJrVersion());
+            if (otherInstances.isEmpty()) {
                 formsRepository.delete(form.getId());
             }
         }
-
-        instancesRepository.delete(id);
     }
 }

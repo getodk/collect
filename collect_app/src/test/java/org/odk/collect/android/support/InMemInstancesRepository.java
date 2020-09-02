@@ -52,6 +52,15 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAllByJrFormIdAndJrVersionNotDeleted(String jrFormId, String jrVersion) {
+        return instances.stream().filter(instance -> {
+            return Objects.equals(instance.getJrFormId(), jrFormId)
+                    && Objects.equals(instance.getJrVersion(), jrVersion)
+                    && instance.getDeletedDate() == null;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
     public Instance getByPath(String instancePath) {
         List<Instance> result = new ArrayList<>();
 
@@ -73,7 +82,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         instances.removeIf(instance -> instance.getId().equals(id));
     }
 
-    public void addInstance(Instance instance) {
+    public void save(Instance instance) {
         instances.add(instance);
     }
 

@@ -19,8 +19,8 @@ public class FormDeleter {
 
     public void delete(Long id) {
         Form form = formsRepository.get(id);
-        List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersion(form.getJrFormId(), form.getJrVersion());
 
+        List<Instance> instancesForVersion = instancesRepository.getAllByJrFormIdAndJrVersionNotDeleted(form.getJrFormId(), form.getJrVersion());
         if (instancesForVersion.isEmpty()) {
             formsRepository.delete(id);
         } else {

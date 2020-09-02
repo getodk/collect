@@ -19,6 +19,8 @@ public interface InstancesRepository {
 
     List<Instance> getAllByJrFormIdAndJrVersion(String jrFormId, String jrVersion);
 
+    List<Instance> getAllByJrFormIdAndJrVersionNotDeleted(String jrFormId, String jrVersion);
+
     /**
      * Get the Instance corresponding to the given path or null if no unique Instance matches.
      */

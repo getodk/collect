@@ -31,7 +31,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -158,7 +157,7 @@ public class InstancesDaoTest {
                 .displayName("Biggest N of Set")
                 .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml")
                 .jrFormId("N_Biggest")
-                .status(InstanceProviderAPI.STATUS_SUBMITTED)
+                .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487597090653L)
                 .build();
 
@@ -180,7 +179,7 @@ public class InstancesDaoTest {
                 .jrFormId("fake")
                 .displayName("Form with geopoint")
                 .instanceFilePath("/my/fake/path")
-                .status(InstanceProviderAPI.STATUS_SUBMITTED)
+                .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487595836793L)
                 .geometryType("Point")
                 .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
@@ -201,7 +200,7 @@ public class InstancesDaoTest {
                 .displayName("Hypertension Screening")
                 .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml")
                 .jrFormId("hypertension")
-                .status(InstanceProviderAPI.STATUS_INCOMPLETE)
+                .status(Instance.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487595836793L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(hypertensionScreeningInstance));
@@ -210,7 +209,7 @@ public class InstancesDaoTest {
                 .displayName("Cascading Select Form")
                 .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Cascading Select Form_2017-02-20_14-06-44/Cascading Select Form_2017-02-20_14-06-44.xml")
                 .jrFormId("CascadingSelect")
-                .status(InstanceProviderAPI.STATUS_INCOMPLETE)
+                .status(Instance.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596015000L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(cascadingSelectInstance));
@@ -219,7 +218,7 @@ public class InstancesDaoTest {
                 .displayName("Biggest N of Set")
                 .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-06-51/Biggest N of Set_2017-02-20_14-06-51.xml")
                 .jrFormId("N_Biggest")
-                .status(InstanceProviderAPI.STATUS_SUBMITTED)
+                .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487596015100L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSetInstance));
@@ -228,7 +227,7 @@ public class InstancesDaoTest {
                 .displayName("Widgets")
                 .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Widgets_2017-02-20_14-06-58/Widgets_2017-02-20_14-06-58.xml")
                 .jrFormId("widgets")
-                .status(InstanceProviderAPI.STATUS_SUBMITTED)
+                .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487596020803L)
                 .deletedDate(1487596020803L)
                 .build();
@@ -238,7 +237,7 @@ public class InstancesDaoTest {
                 .displayName("sample")
                 .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/sample_2017-02-20_14-07-03/sample_2017-02-20_14-07-03.xml")
                 .jrFormId("sample")
-                .status(InstanceProviderAPI.STATUS_INCOMPLETE)
+                .status(Instance.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596026373L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(sampleInstance));
@@ -247,7 +246,7 @@ public class InstancesDaoTest {
                 .displayName("Biggest N of Set")
                 .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml")
                 .jrFormId("N_Biggest")
-                .status(InstanceProviderAPI.STATUS_COMPLETE)
+                .status(Instance.STATUS_COMPLETE)
                 .lastStatusChangeDate(1487597090653L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance));

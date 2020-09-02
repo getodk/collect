@@ -14,10 +14,12 @@ import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.matchers.ToastMatcher;
 
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 import timber.log.Timber;
@@ -388,6 +390,16 @@ abstract class Page<T extends Page<T>> {
 
     protected void assertToolbarTitle(int title) {
         assertToolbarTitle(getTranslatedString(title));
+    }
+
+    public T copyForm(String formFilename) {
+        try {
+            FormLoadingUtils.copyFormToStorage(formFilename);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return (T) this;
     }
 }
 

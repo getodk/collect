@@ -25,7 +25,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -92,7 +91,7 @@ public abstract class InstanceUploader {
                 instance.getId().toString());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
@@ -101,7 +100,7 @@ public abstract class InstanceUploader {
                 instance.getId().toString());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+        contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMISSION_FAILED);
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
