@@ -76,7 +76,10 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void logAuditEvent(AuditEvent.AuditEventType eventType) {
-        Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
+        FormController fc = Collect.getInstance().getFormController();      // smap prevent nullpointer
+        if(fc != null) {                                                    // smap
+            Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
+        }
     }
 
     /**
