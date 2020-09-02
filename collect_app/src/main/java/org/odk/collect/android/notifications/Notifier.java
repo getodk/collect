@@ -1,7 +1,7 @@
 package org.odk.collect.android.notifications;
 
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.openrosa.FormApiException;
+import org.odk.collect.server.FormApiException;
 
 import java.util.HashMap;
 import java.util.List;

@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement;
 import android.content.Context;
 
 import org.odk.collect.android.R;
-import org.odk.collect.openrosa.FormApiException;
+import org.odk.collect.server.FormApiException;
 import org.odk.collect.android.utilities.TranslationHandler;
 
 public class FormApiExceptionMapper {

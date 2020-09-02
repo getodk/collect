@@ -16,8 +16,8 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.openrosa.FormListApi;
-import org.odk.collect.openrosa.MediaFile;
+import org.odk.collect.server.FormListApi;
+import org.odk.collect.server.MediaFile;
 
 import java.io.File;
 import java.io.FileOutputStream;

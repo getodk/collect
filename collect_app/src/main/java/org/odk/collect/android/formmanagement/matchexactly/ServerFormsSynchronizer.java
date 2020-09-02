@@ -8,7 +8,7 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.openrosa.FormApiException;
+import org.odk.collect.server.FormApiException;
 
 import java.util.List;
 

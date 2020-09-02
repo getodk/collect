@@ -5,8 +5,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.openrosa.FormApiException;
-import org.odk.collect.openrosa.FormApiException.Type;
+import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormApiException.Type;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

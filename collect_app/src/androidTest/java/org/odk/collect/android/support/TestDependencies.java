@@ -10,11 +10,11 @@ import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.gdrive.sheets.DriveApi;
 import org.odk.collect.android.gdrive.sheets.SheetsApi;
-import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.List;

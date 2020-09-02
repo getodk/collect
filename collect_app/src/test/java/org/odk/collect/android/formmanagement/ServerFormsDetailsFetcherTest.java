@@ -5,10 +5,10 @@ import org.junit.Test;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFileRepository;
-import org.odk.collect.openrosa.FormListApi;
-import org.odk.collect.openrosa.FormListItem;
-import org.odk.collect.openrosa.ManifestFile;
-import org.odk.collect.openrosa.MediaFile;
+import org.odk.collect.server.FormListApi;
+import org.odk.collect.server.FormListItem;
+import org.odk.collect.server.ManifestFile;
+import org.odk.collect.server.MediaFile;
 import org.odk.collect.android.support.InMemFormsRepository;
 
 import java.io.BufferedWriter;

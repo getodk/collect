@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.formmanagement;
 
-import org.odk.collect.openrosa.ManifestFile;
+import org.odk.collect.server.ManifestFile;
 
 import java.io.Serializable;
 

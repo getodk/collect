@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.openrosa.FormApiException;
-import org.odk.collect.openrosa.ManifestFile;
+import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.ManifestFile;
 import org.odk.collect.android.preferences.PreferencesProvider;
 
 import java.util.List;

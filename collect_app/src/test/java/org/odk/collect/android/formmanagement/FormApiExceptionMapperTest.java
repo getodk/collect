@@ -9,13 +9,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.openrosa.FormApiException;
+import org.odk.collect.server.FormApiException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.openrosa.FormApiException.Type.FETCH_ERROR;
-import static org.odk.collect.openrosa.FormApiException.Type.SECURITY_ERROR;
-import static org.odk.collect.openrosa.FormApiException.Type.UNREACHABLE;
+import static org.odk.collect.server.FormApiException.Type.FETCH_ERROR;
+import static org.odk.collect.server.FormApiException.Type.SECURITY_ERROR;
+import static org.odk.collect.server.FormApiException.Type.UNREACHABLE;
 
 @RunWith(AndroidJUnit4.class)
 public class FormApiExceptionMapperTest {
