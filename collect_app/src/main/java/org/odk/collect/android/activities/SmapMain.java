@@ -216,6 +216,43 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         stateChanged();
 
+        // get notification registration token
+        Intent intent = new Intent(this, NotificationRegistrationService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
+
+        // Get settings if available in a file
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
+        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
+        // Give JSON file preference
+        if (j.exists()) {
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                j.delete();
+
+                // Delete settings file to prevent overwrite of settings from JSON file on next startup
+                if (f.exists()) {
+                    f.delete();
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        } else if (f.exists()) {
+            boolean success = loadSharedPreferencesFromFile(f);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                f.delete();
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        }
+
         // Show login status if it was set
         String login_status = getIntent().getStringExtra(LOGIN_STATUS);
         if(login_status != null) {
@@ -250,6 +287,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
             @Override public void denied() { }
         });
+
     }
 
     @Override
@@ -277,40 +315,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             Timber.i("-------------------------------------- Smap Main Activity got Data ");
             updateData(surveyData);
         });
-
-
-        // get notification registration token
-        Intent intent = new Intent(this, NotificationRegistrationService.class);
-        startService(intent);
-
-        // Get settings if available in a file
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
-        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
-        // Give JSON file preference
-        if (j.exists()) {
-            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
-            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                j.delete();
-
-                // Delete settings file to prevent overwrite of settings from JSON file on next startup
-                if (f.exists()) {
-                    f.delete();
-                }
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        } else if (f.exists()) {
-            boolean success = loadSharedPreferencesFromFile(f);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                f.delete();
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        }
     }
 
     @Override
@@ -1162,17 +1166,21 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
-        boolean sendwifi = autosend.equals("wifi_only");
-        boolean sendnetwork = autosend.equals("cellular_only");
-        if (autosend.equals("wifi_and_cellular")) {
-            sendwifi = true;
-            sendnetwork = true;
-        }
+        if(ni != null) {
+            String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
+            boolean sendwifi = autosend.equals("wifi_only");
+            boolean sendnetwork = autosend.equals("cellular_only");
+            if (autosend.equals("wifi_and_cellular")) {
+                sendwifi = true;
+                sendnetwork = true;
+            }
 
-        return ni.getType() == ConnectivityManager.TYPE_WIFI
-                && sendwifi || ni.getType() == ConnectivityManager.TYPE_MOBILE
-                && sendnetwork;
+            return ni.getType() == ConnectivityManager.TYPE_WIFI
+                    && sendwifi || ni.getType() == ConnectivityManager.TYPE_MOBILE
+                    && sendnetwork;
+        } else {
+            return false;
+        }
     }
 
 
