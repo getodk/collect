@@ -24,7 +24,6 @@ import org.odk.collect.android.openrosa.api.FormListItem;
 import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
@@ -50,6 +49,11 @@ public class ServerFormsDetailsFetcher {
         this.diskFormsSynchronizer = diskFormsSynchronizer;
     }
 
+    public void updateFormListApi(String url, WebCredentialsUtils webCredentialsUtils) {
+        formListAPI.updateUrl(url);
+        formListAPI.updateWebCredentialsUtils(webCredentialsUtils);
+    }
+
     public List<ServerFormDetails> fetchFormDetails() throws FormApiException {
         diskFormsSynchronizer.synchronize();
 
@@ -67,7 +71,7 @@ public class ServerFormsDetailsFetcher {
 
             boolean thisFormAlreadyDownloaded = !formsRepository.getByJrFormIdNotDeleted(listItem.getFormID()).isEmpty();
             if (thisFormAlreadyDownloaded) {
-                isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
+                isNewerFormVersionAvailable = isNewerFormVersionAvailable(getMd5HashWithoutPrefix(listItem.getHashWithPrefix()));
 
                 if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
@@ -148,8 +152,7 @@ public class ServerFormsDetailsFetcher {
         return false;
     }
 
-    public void updateFormListApi(String url, WebCredentialsUtils webCredentialsUtils) {
-        formListAPI.updateUrl(url);
-        formListAPI.updateWebCredentialsUtils(webCredentialsUtils);
+    private String getMd5HashWithoutPrefix(String hash) {
+        return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
     }
 }

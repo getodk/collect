@@ -3,8 +3,6 @@ package org.odk.collect.android.formmanagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.openrosa.api.FormApiException;
@@ -18,7 +16,6 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.robolectric.RobolectricTestRunner;
 
@@ -26,7 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
@@ -37,7 +33,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.FormUtils.buildForm;
@@ -239,12 +234,6 @@ public class ServerFormDownloaderTest {
 
         FormListApi formListApi = mock(FormListApi.class);
         when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-
-        MultiFormDownloader multiFormDownloader = mock(MultiFormDownloader.class);
-        HashMap<ServerFormDetails, String> results = new HashMap<ServerFormDetails, String>() {{
-            put(serverFormDetails, Collect.getInstance().getString(R.string.success));
-        }};
-        when(multiFormDownloader.downloadForms(any(), any())).thenReturn(results);
 
         ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository);
         downloader.downloadForm(serverFormDetails, null, null);
