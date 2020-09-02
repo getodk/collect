@@ -7,7 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.formmanagement.FormUpdateMode;
+import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.Protocol;
 

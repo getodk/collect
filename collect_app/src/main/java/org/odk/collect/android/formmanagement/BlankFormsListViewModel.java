@@ -17,6 +17,7 @@ import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchroniz
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.FileUtils;

@@ -25,7 +25,6 @@ import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
-import org.odk.collect.android.formmanagement.FormUpdateMode;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
