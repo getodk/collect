@@ -81,9 +81,6 @@ public class SmapRemoteDataHandlerGetMedia implements IFunctionHandler {
 
         String url = XPathFuncExpr.toString(args[0]);
         String timeoutValue = "0";
-        if(args.length == 2) {
-            timeoutValue = XPathFuncExpr.toString(args[1]);
-        }
 
         if(url.length() > 0 && url.startsWith("http")) {
 
