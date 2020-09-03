@@ -634,8 +634,7 @@
   <string name="number_picker_title">Numerovalitsin</string>
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="reading_files">Luetaan tiedostoja</string>
-  <string name="copying_media_files_failed">Mediatiedostojen kopiointi epäonnistui</string>
-  <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
+    <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
   <string name="not_granted_permission">Toiminto, jota yrität käynnistää, vaatii käyttöluvan jota ei ole myönnetty.</string>
   <string name="basemap_source_unavailable">Pahoittelut, %s pohjakarttoja ei ole käytettävissä tällä laitteella. Ole kyvä ja valitse toinen pohjakartta kohdassa Yleiset asetukset &gt; Kartat.</string>
   <string name="enter_identity">Syötä käyttäjätunnus</string>

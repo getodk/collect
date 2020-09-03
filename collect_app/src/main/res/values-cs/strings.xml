@@ -633,8 +633,7 @@
   <string name="number_picker_title">Výběr čísla</string>
   <string name="too_complex_form">Tento dotazník je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>
   <string name="reading_files">Čtení souborů</string>
-  <string name="copying_media_files_failed">Kopírování mediálních souborů se nezdařilo</string>
-  <string name="qr_code_not_found">QR kód nebyl nalezen ve vybraném snímku</string>
+    <string name="qr_code_not_found">QR kód nebyl nalezen ve vybraném snímku</string>
   <string name="not_granted_permission">Aktivita, kterou se pokoušíte spustit, vyžaduje oprávnění, které není uděleno.</string>
   <string name="basemap_source_unavailable">Litujeme, na tomto zařízení nejsou k dispozici základní mapy %s. Vyberte jiný základní soubor v části Obecné nastavení a Mapy.</string>
   <string name="enter_identity">Zadat identitu</string>

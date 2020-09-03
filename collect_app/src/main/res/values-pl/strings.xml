@@ -629,8 +629,7 @@
   <string name="number_picker_title">Wybór Wartości</string>
   <string name="too_complex_form">Formularz jest zbyt skomplikowany dla tego urządzenia. Spróbuj uprościć wyrażenia, lub poproś o pomoc na forum.</string>
   <string name="reading_files">Odczyt plików</string>
-  <string name="copying_media_files_failed">Kopiowanie plików mediów nie powiodło się</string>
-  <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
+    <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
   <string name="not_granted_permission">Aktywność, którą próbujesz wykonać, wymaga autoryzacji, której nie posiadasz.</string>
   <string name="basemap_source_unavailable">Przepraszamy, mapy bazowe %s nie są dostępne na tym urządzeniu.  Wybierz inną mapę bazową z Ustawień Ogólnych &gt; Mapy.</string>
   <string name="enter_identity">Wprowadź swoje dane</string>

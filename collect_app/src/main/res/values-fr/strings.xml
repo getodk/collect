@@ -634,8 +634,7 @@
   <string name="number_picker_title">Sélecteur de numéro</string>
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="reading_files">lecture des fichiers</string>
-  <string name="copying_media_files_failed">Echec de la copie des fichiers media</string>
-  <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
+    <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
   <string name="not_granted_permission">Vous n\'avez pas les permissions requises pour démarrer l\'activité demandée</string>
   <string name="basemap_source_unavailable">Désolé mais %s cartes de base ne sont pas disponibles sur votre appareil. Merci de choisir une auter carte de base dans les Paramètres Gànéraux / Cartes</string>
   <string name="enter_identity">Entrez l\'identité</string>

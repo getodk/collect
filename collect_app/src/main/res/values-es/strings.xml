@@ -636,8 +636,7 @@
   <string name="number_picker_title">Selector de números</string>
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="reading_files">Leyendo archivos</string>
-  <string name="copying_media_files_failed">La copia de los archivos de medios falló</string>
-  <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
+    <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="not_granted_permission">La actividad que está intentando iniciar requiere un permiso que no se ha concedido.</string>
   <string name="basemap_source_unavailable">Lo sentimos, Los mapas base %s no están disponibles en este dispositivo. Por favor escoja otro mapa base en   Please choose another basemap in Cambiar la configuración &gt; Mapas.</string>
   <string name="enter_identity">Ingrese su Identidad</string>

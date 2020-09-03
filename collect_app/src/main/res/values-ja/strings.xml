@@ -631,8 +631,7 @@
   <string name="number_picker_title">数値選択</string>
   <string name="too_complex_form">この形式はこの端末には複雑すぎます。 表現を単純化するか、フォーラムで助けを求めてください。</string>
   <string name="reading_files">ファイルを読み込んでいます</string>
-  <string name="copying_media_files_failed">メディアファイルのコピーに失敗しました</string>
-  <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
+    <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
   <string name="not_granted_permission">開始しようとしているアクティビティは、必要なアクセス許可が付与されていません。</string>
   <string name="basemap_source_unavailable">申し訳ありません。 このデバイスでは %s ベースマップは利用できません。 一般設定 &gt; 地図 で別のベースマップを選択してください。</string>
   <string name="enter_identity">IDの入力</string>

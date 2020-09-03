@@ -616,8 +616,7 @@
   <string name="number_picker_title">నెంబర్ ను ఎంచుకునేది </string>
   <string name="too_complex_form">ఈ పరికరం కోసం ఈ ఫారం చాలా క్లిష్టంగా ఉంటుంది. వ్యక్తీకరణలను సరళీకృతం చేయడానికి ప్రయత్నించండి లేదా ఫోరమ్‌లో సహాయం కోసం అడగండి.</string>
   <string name="reading_files">ఫైళ్ళను చదవడం జరుగుతున్నది</string>
-  <string name="copying_media_files_failed">మీడియా ఫైళ్ళను కాపీ చేయడం విఫలమైంది</string>
-  <string name="qr_code_not_found">ఎంచుకున్న ఫోటో లో QR కోడ్ కనపడటం లేదు</string>
+    <string name="qr_code_not_found">ఎంచుకున్న ఫోటో లో QR కోడ్ కనపడటం లేదు</string>
   <string name="not_granted_permission">మీరు మొదులు పెట్టడానికి ప్రయత్నిస్తున్న పనికి అనుమతి అవసరం. అది మీకు ఇవ్వబడలేదు.</string>
   <string name="basemap_source_unavailable">క్షమించండి, %s ఈ పరికరంలో బేస్‌మ్యాప్‌లు అందుబాటులో లేవు. దయచేసి సాధారణ సెట్టింగులలో మరొక బేస్‌మ్యాప్‌ ఎంచుకోండి &amp; gt; మ్యాప్స్.</string>
 </resources>
