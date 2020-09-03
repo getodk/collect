@@ -19,6 +19,7 @@ package org.odk.collect.android.preferences;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
+
 import android.content.Intent;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -39,13 +40,13 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -344,9 +345,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
-                    	// Re-register with the server - smap
-                    	Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);   // smap
-                    	getActivity().startService(intent);   // smap
+                        Utilities.updateServerRegistration(false);     // Re-register with the server - smap
                         ChangingServerUrlUtils.addUrlToList(url);
                         setupUrlDropdownAdapter();
                     } else {
@@ -364,9 +363,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         return false;
                     }
 
-                    // Re-register with the server - smap
-                    Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);  // smap
-                    getActivity().startService(intent);    // smap
+                    Utilities.updateServerRegistration(false);     // Re-register with the server - smap
 
                     preference.setSummary(username);
                     return true;

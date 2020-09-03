@@ -14,24 +14,19 @@
 
 package org.odk.collect.android.services;
 
-import android.app.NotificationManager;
-import android.content.Context;
-import android.media.RingtoneManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.utilities.NotificationUtils;
+import org.odk.collect.android.utilities.Utilities;
 
 import timber.log.Timber;
 
@@ -42,15 +37,14 @@ import timber.log.Timber;
 /*
  * Respond to a notification from the server
  */
-public class NotificationService extends GcmListenerService {
+public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onDeletedMessages() {
-        // TODO refresh
     }
 
     @Override
-    public void onMessageReceived(final String from, Bundle data) {
+    public void onMessageReceived(RemoteMessage message){
         Timber.i("Message received beginning refresh");
 
         // make sure sd card is ready, if not don't try to send
@@ -58,25 +52,15 @@ public class NotificationService extends GcmListenerService {
             return;
         }
 
-        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        ConnectivityManager manager = (ConnectivityManager) Collect.getInstance().getBaseContext().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-
         boolean automaticNofification = false;
-        if (currentNetworkInfo != null
-                && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-            if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {
-                // Refresh
-                DownloadTasksTask dt = new DownloadTasksTask();
-                dt.doInBackground();
+        if (Utilities.isFormAutoSendOptionEnabled()) {
+            // Refresh
+            DownloadTasksTask dt = new DownloadTasksTask();
+            dt.doInBackground();
 
-                automaticNofification = true;
-            }
+            automaticNofification = true;
         }
+
 
         if (!automaticNofification) {
             NotificationUtils.showNotification(null,
@@ -87,18 +71,20 @@ public class NotificationService extends GcmListenerService {
 
     }
 
-    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
-        // make sure autosend is enabled on the given connected interface
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
-        boolean sendwifi = autosend.equals("wifi_only");
-        boolean sendnetwork = autosend.equals("cellular_only");
-        if (autosend.equals("wifi_and_cellular")) {
-            sendwifi = true;
-            sendnetwork = true;
-        }
+    @Override
+    public void onNewToken(String token) {
+        Timber.i("Refreshed token: " + token);
+        sendRegistrationToServer(token);
+    }
 
-        return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
-                && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
-                && sendnetwork);
+    private void sendRegistrationToServer(String token) {
+
+        // Clear the existing token
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_ID, token);
+        editor.apply();
+
+        Utilities.updateServerRegistration(true);
     }
 }

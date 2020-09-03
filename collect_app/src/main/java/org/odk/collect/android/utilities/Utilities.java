@@ -16,17 +16,23 @@ package org.odk.collect.android.utilities;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
+import org.odk.collect.android.amazonaws.models.nosql.DevicesDO;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
@@ -34,6 +40,7 @@ import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -989,6 +996,83 @@ public class Utilities {
 
 
         return message;
+    }
+
+    public static void updateServerRegistration(boolean newToken) {
+
+        Timber.i("================================================== Update Server registration");
+
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try {
+
+            // Get the token
+            String token = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_ID, null);
+            if(token != null && token.trim().length() > 0) {
+
+                String username = sharedPreferences.getString(GeneralKeys.KEY_USERNAME, null);
+                String server = getSource();
+
+                if (username != null && server != null && token != null) {
+
+                    String registeredServer = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_SERVER, null);
+                    String registeredUser = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_USER, null);
+
+                    // Update the server if the token is new or the server or username's have changed
+                    if (newToken || registeredServer == null || registeredUser == null ||
+                            !username.equals(registeredUser) || !server.equals(registeredServer)) {
+
+                        Timber.i("================================================== Notifying server of update");
+                        Timber.i("    token: " + token);
+                        Timber.i("    server: " + server);
+                        Timber.i("    user: " + username);
+                        AWSMobileClient.initializeMobileClientIfNecessary(Collect.getInstance());
+                        final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+                        DevicesDO devices = new DevicesDO();
+                        devices.setRegistrationId(token);
+                        devices.setSmapServer(server);
+                        devices.setUserIdent(username);
+                        mapper.save(devices);
+
+                        editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_SERVER, server);
+                        editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_USER, username);
+                        editor.apply();
+                    } else {
+                        Timber.i("================================================== Notification not required");
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    // make sure autosend is enabled on the given connected interface
+    public static boolean isFormAutoSendOptionEnabled() {
+
+        ConnectivityManager manager = (ConnectivityManager) Collect.getInstance().getBaseContext().getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+
+        if(currentNetworkInfo != null) {
+            String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
+            boolean sendwifi = autosend.equals("wifi_only");
+            boolean sendnetwork = autosend.equals("cellular_only");
+            if (autosend.equals("wifi_and_cellular")) {
+                sendwifi = true;
+                sendnetwork = true;
+            }
+
+            return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
+                    && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
+                    && sendnetwork);
+        } else {
+            return false;
+        }
     }
 
     private static String getTaskSortOrderExpr(String sortOrder) {

@@ -29,8 +29,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -45,7 +43,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
@@ -71,7 +68,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.services.LocationService;
-import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
@@ -216,14 +212,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         stateChanged();
 
-        // get notification registration token
-        Intent intent = new Intent(this, NotificationRegistrationService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
-
         // Get settings if available in a file
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
@@ -258,6 +246,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         if(login_status != null) {
             if(login_status.equals("success")) {
                 SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_success));
+                Utilities.updateServerRegistration(false);     // Update the server registration
             } else if(login_status.equals("failed")) {
                 SnackbarUtils.showShortSnackbar(findViewById(R.id.pager), Collect.getInstance().getString(R.string.smap_login_failed));
             }
@@ -385,7 +374,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     // Get tasks and forms from the server
     public void processGetTask(boolean manual) {
 
-        if(manual || isFormAutoSendOptionEnabled()) {
+      if(manual || Utilities.isFormAutoSendOptionEnabled()) {
             mDownloadTasks = new DownloadTasksTask();
             if(manual) {
                 mProgressMsg = getString(R.string.smap_synchronising);
@@ -1157,31 +1146,5 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         }
     }
-
-    private boolean isFormAutoSendOptionEnabled() {
-        // make sure autosend is enabled on the given connected interface
-
-        Context context = Collect.getInstance().getApplicationContext();
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-        if(ni != null) {
-            String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
-            boolean sendwifi = autosend.equals("wifi_only");
-            boolean sendnetwork = autosend.equals("cellular_only");
-            if (autosend.equals("wifi_and_cellular")) {
-                sendwifi = true;
-                sendnetwork = true;
-            }
-
-            return ni.getType() == ConnectivityManager.TYPE_WIFI
-                    && sendwifi || ni.getType() == ConnectivityManager.TYPE_MOBILE
-                    && sendnetwork;
-        } else {
-            return false;
-        }
-    }
-
 
 }
