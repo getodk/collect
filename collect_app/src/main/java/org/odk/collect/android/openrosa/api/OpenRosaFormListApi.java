@@ -99,12 +99,23 @@ public class OpenRosaFormListApi implements FormListApi {
 
     @Override
     public InputStream fetchForm(String formURL) throws FormApiException {
-        return mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
+        return fetchFile(formURL);
     }
 
     @Override
     public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
         return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
+    }
+
+    @NotNull
+    private InputStream fetchFile(String formURL) throws FormApiException {
+        InputStream formFile = mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
+
+        if (formFile != null) {
+            return formFile;
+        } else {
+            throw new FormApiException(FETCH_ERROR);
+        }
     }
 
     private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormApiException {
