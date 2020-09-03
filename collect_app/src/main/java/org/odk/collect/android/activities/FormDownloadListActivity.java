@@ -48,8 +48,6 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.openrosa.HttpCredentialsInterface;
-import org.odk.collect.server.FormApiException;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -60,6 +58,8 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.openrosa.HttpCredentialsInterface;
+import org.odk.collect.server.FormApiException;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -67,6 +67,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -687,7 +688,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void formsDownloadingComplete(HashMap<ServerFormDetails, String> result) {
+    public void formsDownloadingComplete(Map<ServerFormDetails, String> result) {
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(null);
         }
@@ -712,7 +713,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
     }
 
-    public static String getDownloadResultMessage(HashMap<ServerFormDetails, String> result) {
+    public static String getDownloadResultMessage(Map<ServerFormDetails, String> result) {
         Set<ServerFormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
         for (ServerFormDetails k : keys) {

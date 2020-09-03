@@ -87,6 +87,8 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                                         results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
                                     } catch (FormDownloadException e) {
                                         results.put(serverFormDetails, e.getMessage());
+                                    } catch (InterruptedException e) {
+                                        return null;
                                     }
                                 }
                                 notifier.onUpdatesDownloaded(results);

@@ -5,9 +5,9 @@ import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.server.FormApiException;
 
 import java.util.List;
@@ -45,6 +45,8 @@ public class ServerFormsSynchronizer {
                     formDownloader.downloadForm(form, null, null);
                 } catch (FormDownloadException e) {
                     downloadException = true;
+                } catch (InterruptedException e) {
+                    return;
                 }
             }
         }

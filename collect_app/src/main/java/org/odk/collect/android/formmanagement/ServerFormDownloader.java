@@ -28,7 +28,6 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -54,7 +53,7 @@ public class ServerFormDownloader implements FormDownloader {
     }
 
     @Override
-    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException {
+    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
         Form formOnDevice = formsRepository.get(form.getFormId(), form.getFormVersion());
         if (formOnDevice != null && formOnDevice.isDeleted()) {
             formsRepository.restore(formOnDevice.getId());
@@ -68,7 +67,7 @@ public class ServerFormDownloader implements FormDownloader {
                 throw new FormDownloadException();
             }
         } catch (MultiFormDownloader.TaskCancelledException e) {
-            throw new CancellationException();
+            throw new InterruptedException();
         }
     }
 

@@ -3,13 +3,6 @@ package org.odk.collect.android.formmanagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.server.FormApiException;
-import org.odk.collect.server.FormListApi;
-import org.odk.collect.server.FormListItem;
-import org.odk.collect.server.ManifestFile;
-import org.odk.collect.server.MediaFile;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -17,6 +10,13 @@ import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormListApi;
+import org.odk.collect.server.FormListItem;
+import org.odk.collect.server.ManifestFile;
+import org.odk.collect.server.MediaFile;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.ByteArrayInputStream;
@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
@@ -128,7 +127,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void afterDownloadingXForm_cancelling_throwsCancelledExceptionAndDoesNotSaveAnything() throws Exception {
+    public void afterDownloadingXForm_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
         String xform = createXForm("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -147,14 +146,14 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Excepted exception");
-        } catch (CancellationException e) {
+        } catch (InterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
         }
     }
 
     @Test
-    public void afterDownloadingMediaFile_cancelling_throwsCancelledExceptionAndDoesNotSaveAnything() throws Exception {
+    public void afterDownloadingMediaFile_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
         String xform = createXForm("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -176,7 +175,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Excepted exception");
-        } catch (CancellationException e) {
+        } catch (InterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
 
             // The media directory is created early for some reason

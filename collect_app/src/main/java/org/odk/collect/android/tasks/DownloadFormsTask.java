@@ -25,6 +25,9 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
 
 /**
  * Background task for downloading a given list of forms. We assume right now that the forms are
@@ -35,7 +38,7 @@ import java.util.HashMap;
  * @author carlhartung
  */
 public class DownloadFormsTask extends
-        AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> {
+        AsyncTask<ArrayList<ServerFormDetails>, String, Map<ServerFormDetails, String>> {
 
     private final FormDownloader formDownloader;
     private DownloadFormsTaskListener stateListener;
@@ -45,7 +48,7 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected HashMap<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
+    protected Map<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
         HashMap<ServerFormDetails, String> results = new HashMap<>();
 
         int index = 1;
@@ -68,6 +71,8 @@ public class DownloadFormsTask extends
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
             } catch (FormDownloadException e) {
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.failure));
+            } catch (InterruptedException e) {
+                return emptyMap();
             }
 
             index++;
@@ -77,7 +82,7 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected void onCancelled(HashMap<ServerFormDetails, String> formDetailsStringHashMap) {
+    protected void onCancelled(Map<ServerFormDetails, String> formDetailsStringHashMap) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingCancelled();
@@ -86,7 +91,7 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected void onPostExecute(HashMap<ServerFormDetails, String> value) {
+    protected void onPostExecute(Map<ServerFormDetails, String> value) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingComplete(value);
