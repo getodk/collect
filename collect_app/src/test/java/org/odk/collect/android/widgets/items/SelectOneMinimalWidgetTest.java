@@ -33,6 +33,11 @@ public class SelectOneMinimalWidgetTest extends GeneralSelectOneWidgetTest<Selec
     }
 
     @Test
+    public void answerView_shouldHaveSavingStateDisabled() {
+        assertThat(getSpyWidget().binding.answer.isSaveEnabled(), is(false));
+    }
+
+    @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         assertThat(getSpyWidget().binding.answer.getVisibility(), is(View.VISIBLE));
