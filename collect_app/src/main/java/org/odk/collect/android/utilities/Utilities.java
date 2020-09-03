@@ -47,6 +47,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.InstanceXML;
+import org.odk.collect.android.tasks.SmapRegisterForMessagingTask;
+import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1014,7 +1016,7 @@ public class Utilities {
                 String username = sharedPreferences.getString(GeneralKeys.KEY_USERNAME, null);
                 String server = getSource();
 
-                if (username != null && server != null && token != null) {
+                if (username != null && server != null && token != null && username.trim().length() != 0 && server.trim().length() != 0) {
 
                     String registeredServer = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_SERVER, null);
                     String registeredUser = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_USER, null);
@@ -1023,17 +1025,8 @@ public class Utilities {
                     if (newToken || registeredServer == null || registeredUser == null ||
                             !username.equals(registeredUser) || !server.equals(registeredServer)) {
 
-                        Timber.i("================================================== Notifying server of update");
-                        Timber.i("    token: " + token);
-                        Timber.i("    server: " + server);
-                        Timber.i("    user: " + username);
-                        AWSMobileClient.initializeMobileClientIfNecessary(Collect.getInstance());
-                        final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-                        DevicesDO devices = new DevicesDO();
-                        devices.setRegistrationId(token);
-                        devices.setSmapServer(server);
-                        devices.setUserIdent(username);
-                        mapper.save(devices);
+                        SmapRegisterForMessagingTask task = new SmapRegisterForMessagingTask();
+                        task.execute(token, server, username);
 
                         editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_SERVER, server);
                         editor.putString(GeneralKeys.KEY_SMAP_REGISTRATION_USER, username);

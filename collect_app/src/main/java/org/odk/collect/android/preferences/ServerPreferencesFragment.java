@@ -19,6 +19,8 @@ package org.odk.collect.android.preferences;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import timber.log.Timber;
 
 import android.content.Intent;
 import android.preference.EditTextPreference;
@@ -533,10 +535,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     @Override
     public void doBack() {
-        try {
+        try {   // smap
             Utilities.updateServerRegistration(false);     // Re-register with the server - smap
+            Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify task list of change
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+            Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");
         } catch (Exception e) {
-            
+
         }
         runGoogleAccountValidation();
     }
