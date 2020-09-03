@@ -67,7 +67,7 @@ public class DownloadFormsTask extends
 
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
             } catch (FormDownloadException e) {
-                results.put(serverFormDetails, e.getMessage());
+                results.put(serverFormDetails, Collect.getInstance().getString(R.string.failure));
             }
 
             index++;

@@ -16,6 +16,7 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.server.FormApiException;
 import org.odk.collect.server.FormListApi;
 import org.odk.collect.server.MediaFile;
 
@@ -25,9 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
@@ -65,11 +63,9 @@ public class ServerFormDownloader implements FormDownloader {
         FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
 
         try {
-            HashMap<ServerFormDetails, String> results = multiFormDownloader.downloadForms(Collections.singletonList(form), stateListener);
-            String result = new ArrayList<>(results.values()).get(0);
-
-            if (!result.equals(Collect.getInstance().getString(R.string.success))) {
-                throw new FormDownloadException(result);
+            boolean result = multiFormDownloader.processOneForm(form, stateListener);
+            if (!result) {
+                throw new FormDownloadException();
             }
         } catch (MultiFormDownloader.TaskCancelledException e) {
             throw new CancellationException();
@@ -128,29 +124,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         @Deprecated
-        public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) throws TaskCancelledException {
-            final HashMap<ServerFormDetails, String> result = new HashMap<>();
-
-            for (ServerFormDetails fd : toDownload) {
-                boolean success = processOneForm(fd, stateListener);
-                if (success) {
-                    result.put(fd, Collect.getInstance().getString(R.string.success));
-                } else {
-                    result.put(fd, Collect.getInstance().getString(R.string.failure));
-                }
-            }
-
-            return result;
-        }
-
-        /**
-         * Processes one form download.
-         *
-         * @param fd    the FormDetails
-         * @return an empty string for success, or a nonblank string with one or more error messages
-         * @throws TaskCancelledException to signal that form downloading is to be canceled
-         */
-        private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
+        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
             boolean success = true;
 
             // use a temporary media path until everything is ok.
@@ -180,7 +154,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                 // do not download additional forms.
                 throw e;
-            } catch (Exception e) {
+            } catch (FormApiException | IOException e) {
                 return false;
             }
 
@@ -350,7 +324,7 @@ public class ServerFormDownloader implements FormDownloader {
          * Takes the formName and the URL and attempts to download the specified file. Returns a file
          * object representing the downloaded file.
          */
-        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener) throws Exception {
+        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener) throws FormApiException, IOException, TaskCancelledException {
             // clean up friendly form name...
             String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
@@ -535,7 +509,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                              ServerFormDetails fd,
-                                             FormDownloaderListener stateListener, List<MediaFile> files) throws Exception {
+                                             FormDownloaderListener stateListener, List<MediaFile> files) throws FormApiException, IOException, TaskCancelledException {
             if (fd.getManifestUrl() == null) {
                 return null;
             }
