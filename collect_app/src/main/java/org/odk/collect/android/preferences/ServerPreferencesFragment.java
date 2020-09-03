@@ -345,7 +345,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
-                        Utilities.updateServerRegistration(false);     // Re-register with the server - smap
                         ChangingServerUrlUtils.addUrlToList(url);
                         setupUrlDropdownAdapter();
                     } else {
@@ -362,8 +361,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         ToastUtils.showShortToast(R.string.username_error_whitespace);
                         return false;
                     }
-
-                    Utilities.updateServerRegistration(false);     // Re-register with the server - smap
 
                     preference.setSummary(username);
                     return true;
@@ -529,12 +526,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void continueOnBackPressed() {
+
         ((PreferencesActivity) getActivity()).setOnBackPressedListener(null);
         getActivity().onBackPressed();
     }
 
     @Override
     public void doBack() {
+        try {
+            Utilities.updateServerRegistration(false);     // Re-register with the server - smap
+        } catch (Exception e) {
+            
+        }
         runGoogleAccountValidation();
     }
 

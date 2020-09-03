@@ -1002,7 +1002,6 @@ public class Utilities {
 
         Timber.i("================================================== Update Server registration");
 
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
