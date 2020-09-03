@@ -13,6 +13,7 @@ import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFileRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -54,7 +55,7 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository) {
+            public FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
                 return formDownloader;
             }
 

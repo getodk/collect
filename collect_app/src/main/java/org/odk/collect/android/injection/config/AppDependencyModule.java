@@ -168,8 +168,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository) {
-        return new ServerFormDownloader(formListApi, formsRepository);
+    public FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
+        return new ServerFormDownloader(formListApi, formsRepository, storagePathProvider);
     }
 
     @Provides

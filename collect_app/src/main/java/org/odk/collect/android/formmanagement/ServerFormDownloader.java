@@ -50,8 +50,8 @@ public class ServerFormDownloader implements FormDownloader {
     private final MultiFormDownloader multiFormDownloader;
     private final FormsRepository formsRepository;
 
-    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository) {
-        this.multiFormDownloader = new MultiFormDownloader(formsRepository, formListApi);
+    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
+        this.multiFormDownloader = new MultiFormDownloader(formsRepository, formListApi, storagePathProvider);
         this.formsRepository = formsRepository;
     }
 
@@ -108,12 +108,14 @@ public class ServerFormDownloader implements FormDownloader {
         private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
         private final FormListApi formListApi;
+        private final StoragePathProvider storagePathProvider;
         private final FormsRepository formsRepository;
 
         @Deprecated
-        MultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
+        MultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi, StoragePathProvider storagePathProvider) {
             this.formsRepository = formsRepository;
             this.formListApi = formListApi;
+            this.storagePathProvider = storagePathProvider;
         }
 
         public static class TaskCancelledException extends Exception {
@@ -152,7 +154,7 @@ public class ServerFormDownloader implements FormDownloader {
             boolean success = true;
 
             // use a temporary media path until everything is ok.
-            String tempMediaPath = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE),
+            String tempMediaPath = new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE),
                     String.valueOf(System.currentTimeMillis())).getAbsolutePath();
             final String finalMediaPath;
             FileResult fileResult = null;
@@ -322,15 +324,15 @@ public class ServerFormDownloader implements FormDownloader {
                 return new UriResult(uri, mediaPath, true);
             } else {
                 uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, form.getId().toString());
-                mediaPath = new StoragePathProvider().getAbsoluteFormFilePath(form.getFormMediaPath());
+                mediaPath = storagePathProvider.getAbsoluteFormFilePath(form.getFormMediaPath());
                 return new UriResult(uri, mediaPath, false);
             }
         }
 
         private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
             Form form = new Form.Builder()
-                    .formFilePath(new StoragePathProvider().getFormDbPath(formFile.getAbsolutePath()))
-                    .formMediaPath(new StoragePathProvider().getFormDbPath(mediaPath))
+                    .formFilePath(storagePathProvider.getFormDbPath(formFile.getAbsolutePath()))
+                    .formMediaPath(storagePathProvider.getFormDbPath(mediaPath))
                     .displayName(formInfo.get(FileUtils.TITLE))
                     .jrVersion(formInfo.get(FileUtils.VERSION))
                     .jrFormId(formInfo.get(FileUtils.FORMID))
@@ -353,7 +355,6 @@ public class ServerFormDownloader implements FormDownloader {
             String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
             // proposed name of xml file...
-            StoragePathProvider storagePathProvider = new StoragePathProvider();
             String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
             int i = 2;
             File f = new File(path);
@@ -399,7 +400,7 @@ public class ServerFormDownloader implements FormDownloader {
                 throws IOException, TaskCancelledException {
 
             File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
-                    new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));
+                    new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)));
 
             // WiFi network connections can be renegotiated during a large form download sequence.
             // This will cause intermittent download failures.  Silently retry once after each
