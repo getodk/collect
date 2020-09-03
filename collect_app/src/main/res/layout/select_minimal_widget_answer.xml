@@ -15,6 +15,7 @@
         android:focusable="false"
         android:drawableEnd="@drawable/ic_arrow_drop_down"
         android:cursorVisible="false"
-        android:inputType="textMultiLine|textNoSuggestions">
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:saveEnabled="false">
     </com.google.android.material.textfield.TextInputEditText>
 </FrameLayout>
