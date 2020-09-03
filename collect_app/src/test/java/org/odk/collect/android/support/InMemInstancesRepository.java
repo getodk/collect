@@ -2,7 +2,6 @@ package org.odk.collect.android.support;
 
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {
-            if (instance.getStatus().equals(InstanceProviderAPI.STATUS_COMPLETE) || instance.getStatus().equals(InstanceProviderAPI.STATUS_SUBMISSION_FAILED)) {
+            if (instance.getStatus().equals(Instance.STATUS_COMPLETE) || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED)) {
                 result.add(instance);
             }
         }

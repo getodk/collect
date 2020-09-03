@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 import org.robolectric.RobolectricTestRunner;
@@ -97,11 +96,11 @@ public class InstanceUploaderUtilsTest {
                     .id(Long.valueOf(i))
                     .displayName("InstanceTest")
                     .jrFormId("instanceTest")
-                    .status(InstanceProviderAPI.STATUS_COMPLETE)
+                    .status(Instance.STATUS_COMPLETE)
                     .lastStatusChangeDate(time)
                     .build();
 
-            instancesRepository.addInstance(instance);
+            instancesRepository.save(instance);
         }
         return instancesRepository;
     }
