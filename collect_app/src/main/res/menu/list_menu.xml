@@ -20,13 +20,13 @@
 
     <item
         android:id="@+id/menu_sort"
-        android:icon="@drawable/ic_sort"
+        android:icon="@drawable/ic_baseline_sort_24"
         android:title="@string/sort_the_list"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/menu_filter"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_baseline_search_24"
         android:title="@string/filter_the_list"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView"/>

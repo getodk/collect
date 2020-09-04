@@ -51,7 +51,7 @@ public class FormManagementPreferencesTest {
 
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
         scenario.onFragment(f -> {
-            assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).getSummary(), is(context.getString(R.string.manually)));
+            assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).getSummary(), is(context.getString(R.string.manual)));
             assertThat(prefs.getString(KEY_FORM_UPDATE_MODE, ""), is(MATCH_EXACTLY.getValue(context)));
 
             assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).isEnabled(), is(false));

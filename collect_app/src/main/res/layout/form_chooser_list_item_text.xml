@@ -43,7 +43,7 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <org.odk.collect.android.views.ProgressBar
+    <org.odk.collect.android.views.InstanceUploaderProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

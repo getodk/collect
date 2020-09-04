@@ -52,6 +52,16 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
+    public void immediate(@NotNull Runnable foreground) {
+        increment();
+
+        wrappedScheduler.immediate(() -> {
+            foreground.run();
+            decrement();
+        });
+    }
+
+    @Override
     public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec) {
         deferredTasks.add(new DeferredTask(tag, spec, null));
     }

@@ -51,6 +51,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.views.ObviousProgressBar;
 
 import javax.inject.Inject;
 
@@ -91,10 +92,12 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         BlankFormsListViewModel blankFormsListViewModel = new ViewModelProvider(this, blankFormsListViewModelFactory).get(BlankFormsListViewModel.class);
         blankFormsListViewModel.isSyncing().observe(this, syncing -> {
+            ObviousProgressBar progressBar = findViewById(R.id.progressBar);
+
             if (syncing) {
-                findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+                progressBar.show();
             } else {
-                findViewById(R.id.progressBar).setVisibility(View.GONE);
+                progressBar.hide(View.GONE);
             }
         });
 
@@ -131,14 +134,16 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
         menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
-        return super.onCreateOptionsMenu(menu);
+        return result;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean result = super.onPrepareOptionsMenu(menu);
         menuDelegate.onPrepareOptionsMenu(menu);
-        return super.onPrepareOptionsMenu(menu);
+        return result;
     }
 
     @Override

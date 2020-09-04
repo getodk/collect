@@ -126,7 +126,7 @@ public class FormManagementSettingsTest {
                 .assertDisabled(R.string.form_update_mode_title)
                 .assertDisabled(R.string.form_update_frequency_title)
                 .assertDisabled(R.string.automatic_download)
-                .assertText(R.string.manually);
+                .assertText(R.string.manual);
 
         assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(0));
     }
