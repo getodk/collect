@@ -77,7 +77,7 @@ public final class ContentResolverHelper {
      * Using contentResolver to get a file's extension by the uri
      *
      * @param fileUri Whose name we want to get
-     * @return The file's extension
+     * @return The file's extension without a dot eg. "mp3" not ".mp3"
      */
     public static String getFileExtensionFromUri(Context context, Uri fileUri) {
         try (Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null)) {
