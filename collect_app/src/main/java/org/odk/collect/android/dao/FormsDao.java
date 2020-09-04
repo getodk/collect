@@ -115,6 +115,10 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public Cursor getFormsCursorForFormIdAndFormVersion(String formId, String formVersion) {
+        return getFormsCursorSortedByDateDesc(formId, formVersion);
+    }
+
     public String getFormTitleForFormIdAndFormVersion(String formId, String formVersion) {
         String formTitle = "";
 

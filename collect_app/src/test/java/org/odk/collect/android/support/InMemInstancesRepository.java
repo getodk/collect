@@ -21,6 +21,19 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAllFinalized() {
+        List<Instance> result = new ArrayList<>();
+
+        for (Instance instance : instances) {
+            if (instance.getStatus().equals(Instance.STATUS_COMPLETE) || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED)) {
+                result.add(instance);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
     public Instance get(long databaseId) {
         for (Instance instance : instances) {
             if (instance.getId() == databaseId) {

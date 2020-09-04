@@ -103,6 +103,7 @@ import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
@@ -110,7 +111,6 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
-import org.odk.collect.android.instancemanagement.InstanceSubmitter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -325,6 +325,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     FormSubmitManager formSubmitManager;
+
+    @Inject
+    FormsRepository formsRepository;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1875,12 +1878,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
-                        // Request auto-send if app-wide auto-send is enabled or the form that was just
-                        // finalized specifies that it should always be auto-sent.
-                        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-                        if (InstanceSubmitter.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
-                            formSubmitManager.scheduleSubmit();
-                        }
+                        formSubmitManager.scheduleSubmit();
                     }
 
                     finishAndReturnInstance();

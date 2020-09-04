@@ -29,8 +29,10 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instancemanagement.InstanceSubmitter;
 import org.odk.collect.android.instancemanagement.SubmitException;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -62,6 +64,12 @@ public class AutoSendTaskSpec implements TaskSpec {
     @Inject
     @Named("INSTANCES")
     ChangeLock changeLock;
+
+    @Inject
+    FormsRepository formsRepository;
+
+    @Inject
+    InstancesRepository instancesRepository;
 
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
@@ -97,7 +105,7 @@ public class AutoSendTaskSpec implements TaskSpec {
             return changeLock.withLock(acquiredLock -> {
                 if (acquiredLock) {
                     try {
-                        Pair<Boolean, String> results = new InstanceSubmitter(analytics).submitUnsubmittedInstances();
+                        Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepository, instancesRepository).submitUnsubmittedInstances();
                         notifier.onSubmission(results.first, results.second);
                     } catch (SubmitException e) {
                         switch (e.getType()) {
