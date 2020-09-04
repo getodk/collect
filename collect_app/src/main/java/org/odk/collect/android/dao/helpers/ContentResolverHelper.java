@@ -89,7 +89,7 @@ public final class ContentResolverHelper {
                     filename = returnCursor.getString(nameIndex);
                 }
                 if (filename != null && filename.lastIndexOf('.') != -1) {
-                    return filename.substring(filename.lastIndexOf('.'));
+                    return filename.substring(filename.lastIndexOf('.') + 1);
                 } else {
                     return fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
                             ? MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(fileUri))
