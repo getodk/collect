@@ -23,16 +23,14 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
 public class SelectMinimalDialogTest {
 
-    private FragmentManager fragmentManager;
-    private SelectOneMinimalDialog dialogFragment;
-    private FormEntryPrompt formEntryPrompt;
+    protected FragmentManager fragmentManager;
+    protected SelectMinimalDialog dialogFragment;
+    protected FormEntryPrompt formEntryPrompt;
 
     @Before
     public void setup() {
@@ -41,7 +39,7 @@ public class SelectMinimalDialogTest {
     }
 
     @Test
-    public void whenClickBackButton_shouldDialogBeClosedAndListenerCalled() {
+    public void whenClickBackButton_shouldDialogBeClosed() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "autocomplete");
         dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false);
@@ -52,11 +50,10 @@ public class SelectMinimalDialogTest {
         assertThat(isDialogVisible(), is(true));
         dialogFragment.onBackPressed();
         assertThat(isDialogVisible(), is(false));
-        verify(listener).updateSelectedItems(anyList());
     }
 
     @Test
-    public void whenClickBackArrowButton_shouldDialogBeClosedAndListenerCalled() {
+    public void whenClickBackArrowButton_shouldDialogBeClosed() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "autocomplete");
         dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false);
@@ -67,7 +64,6 @@ public class SelectMinimalDialogTest {
         assertThat(isDialogVisible(), is(true));
         dialogFragment.getToolbar().getChildAt(0).performClick();
         assertThat(isDialogVisible(), is(false));
-        verify(listener).updateSelectedItems(anyList());
     }
 
     @Test
@@ -82,21 +78,21 @@ public class SelectMinimalDialogTest {
         assertThat(dialogFragment.getToolbar().findViewById(R.id.menu_filter).getVisibility(), equalTo(View.VISIBLE));
     }
 
-    private boolean isDialogVisible() {
+    protected boolean isDialogVisible() {
         return dialogFragment != null
                 && dialogFragment.getDialog() != null
                 && dialogFragment.getDialog().isShowing()
                 && !dialogFragment.isRemoving();
     }
 
-    private List<SelectChoice> getTestChoices() {
+    protected List<SelectChoice> getTestChoices() {
         return asList(
                 new SelectChoice("AAA", "AAA"),
                 new SelectChoice("BBB", "BBB")
         );
     }
 
-    private void setUpFormEntryPrompt(List<SelectChoice> items, String appearance) {
+    protected void setUpFormEntryPrompt(List<SelectChoice> items, String appearance) {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withSelectChoices(items)
                 .withAppearance(appearance)

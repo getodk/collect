@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -387,6 +388,28 @@ public class ChoicesRecyclerViewTest {
         recyclerView.initRecyclerView(adapter, false);
 
         assertThat(getChoiceView(0).isLongClickable(), is(true));
+    }
+
+    @Test
+    public void whenChangingAnswer_shouldHasAnswerChangedReturnCorrectValue() {
+        List<SelectChoice> items = getTestChoices();
+        setUpFormEntryPrompt(items, "");
+
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
+        List<Selection> selectedItems = new ArrayList<>();
+        selectedItems.add(items.get(0).selection());
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+
+        recyclerView.initRecyclerView(adapter, false);
+
+        clickChoice(1); // Select BBB
+        assertThat(adapter.hasAnswerChanged(), is(true));
+
+        clickChoice(1); // Unselect BBB
+        assertThat(adapter.hasAnswerChanged(), is(false));
+
+        clickChoice(0); // Unselect AAA
+        assertThat(adapter.hasAnswerChanged(), is(true));
     }
 
     private List<SelectChoice> getTestChoices() {
