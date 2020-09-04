@@ -82,14 +82,14 @@ public final class ContentResolverHelper {
     public static String getFileExtensionFromUri(Context context, Uri fileUri) {
         try (Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null)) {
             if (returnCursor != null && returnCursor.getCount() > 0) {
-                String filename = null;
+                String fileName = null;
                 int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 if (nameIndex != -1) {
                     returnCursor.moveToFirst();
-                    filename = returnCursor.getString(nameIndex);
+                    fileName = returnCursor.getString(nameIndex);
                 }
-                if (filename != null && filename.lastIndexOf('.') != -1) {
-                    return filename.substring(filename.lastIndexOf('.') + 1);
+                if (fileName != null && fileName.contains(".")) {
+                    return fileName.substring(fileName.lastIndexOf('.') + 1);
                 } else {
                     return fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
                             ? MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(fileUri))
