@@ -241,8 +241,8 @@
   <string name="google_sheets_access_denied">Ju është mohuar aksesi. Lutemi, sigurohuni që zotëruesi i spreadsheet-it ju ka dhënë të drejtën për të modifikuar.</string>
   <string name="google_play_services_error_occured">E pamundur të aksesohen Google Maps. A është i instaluar Google Play Services?</string>
   <string name="about_preferences">Rreth</string>
-  <string name="tell_your_friends">Ndaj ODK Collect</string>
-  <string name="tell_your_friends_msg">Kolegët tuaj i mbledhin të dhënat me letër akoma? Ndaj ODK Collect me ta.</string>
+  <string name="tell_your_friends">Ndaj PulseFE</string>
+  <string name="tell_your_friends_msg">Kolegët tuaj i mbledhin të dhënat me letër akoma? Ndaj PulseFE me ta.</string>
   <string name="leave_a_review">Vlerëso në Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.

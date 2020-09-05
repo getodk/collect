@@ -272,8 +272,8 @@
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
   <string name="about_preferences">アプリについて</string>
-  <string name="tell_your_friends">ODK Collect を共有</string>
-  <string name="tell_your_friends_msg">あなたの同僚はまだ紙でデータを収集しているのですか? ODK Collect を彼らと共有しましょう。</string>
+  <string name="tell_your_friends">PulseFE を共有</string>
+  <string name="tell_your_friends_msg">あなたの同僚はまだ紙でデータを収集しているのですか? PulseFE を彼らと共有しましょう。</string>
   <string name="leave_a_review">Play ストアにレビューを残す</string>
   <string name="leave_a_review_msg">あなたの (肯定的な) レビューが Play ストアでアプリの認知度を向上させてくれます</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -595,7 +595,7 @@
   <string name="get_accounts_runtime_permission_denied_title">アカウントのアクセス許可を取得</string>
   <string name="get_accounts_runtime_permission_denied_desc">このアクセス許可がないと、Collect はアカウントにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="read_phone_state_runtime_permission_denied_title">電話の状態読み取りアクセス許可</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect は電話はかけませんが、電話番号やデバイス ID など、デバイスに関する特定のプロパティにアクセスする必要があります。</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">PulseFE は電話はかけませんが、電話番号やデバイス ID など、デバイスに関する特定のプロパティにアクセスする必要があります。</string>
   <string name="form_update_category">フォームの更新</string>
   <string name="periodic_form_updates_check_title">定期的なフォームの更新チェック</string>
   <string name="every_fifteen_minutes">15 分ごと</string>

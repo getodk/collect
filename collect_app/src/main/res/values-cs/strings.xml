@@ -272,8 +272,8 @@
   <string name="username_error_whitespace">Počáteční nebo koncové mezery v uživatelských jménech nejsou povoleny</string>
   <string name="google_play_services_error_occured">Nelze přistupovat k Mapám Google. Je služba Google Play nainstalována?</string>
   <string name="about_preferences">Více o….</string>
-  <string name="tell_your_friends">Sdílet ODK Collect</string>
-  <string name="tell_your_friends_msg">Shromažďují vaši kolegové data jen na papíře? Sdílejte s nimi ODK Collect.</string>
+  <string name="tell_your_friends">Sdílet PulseFE</string>
+  <string name="tell_your_friends_msg">Shromažďují vaši kolegové data jen na papíře? Sdílejte s nimi PulseFE.</string>
   <string name="leave_a_review">Nechte recenzi v Play Store</string>
   <string name="leave_a_review_msg">Vaše recenze (snad pozitivní) zvyšuje viditelnost aplikace v Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -597,7 +597,7 @@
   <string name="get_accounts_runtime_permission_denied_title">Získat oprávnění k účtům</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže přistupovat k účtům. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Přečtěte si povolení k telefonu</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect neprovádí volání, ale potřebuje přístup k určitým vlastnostem vašeho zařízení, jako je například telefonní číslo a device ID.</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">PulseFE neprovádí volání, ale potřebuje přístup k určitým vlastnostem vašeho zařízení, jako je například telefonní číslo a device ID.</string>
   <string name="form_update_category">Aktualizace formuláře</string>
   <string name="periodic_form_updates_check_title">Pravidelná kontrola aktualizací dotazníků</string>
   <string name="every_fifteen_minutes">Každých patnáct minut</string>

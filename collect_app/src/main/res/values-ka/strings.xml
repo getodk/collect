@@ -226,7 +226,7 @@
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>
   <string name="about_preferences">შესახებ</string>
-  <string name="tell_your_friends">ODK Collect გაზიარება</string>
+  <string name="tell_your_friends">PulseFE გაზიარება</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="maps">რუკები</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.

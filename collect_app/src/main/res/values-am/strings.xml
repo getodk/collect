@@ -12,8 +12,8 @@
   <string name="capture_osm">OpenMapKitን አስጀምር</string>
   <string name="capture_video">ቪዲዮ ቅዳ</string>
   <string name="change_language">ቋንቋ ይቀይሩ</string>
-  <string name="change_password">ODK የይለፍ ቃል</string>
-  <string name="change_username">ODK የተጠቃሚ ስም</string>
+  <string name="change_password">PulseFE የይለፍ ቃል</string>
+  <string name="change_username">PulseFE የተጠቃሚ ስም</string>
   <string name="clearanswer_confirm">የ \" 1 %s \" ምላሽ ይወግድ?</string>
   <string name="clear_answer">ምላሹን አስወግድ</string>
   <string name="clear_answer_ask">ይህ ምላሽ ይወገድ?</string>
@@ -211,8 +211,8 @@
   <string name="download_selected">የተመረጠውን አውርድ</string>
   <string name="selected_answer">ተመርጧል: 1 %s</string>
   <string name="version_number">ሥሪት: 1 %s</string>
-  <string name="odk_website">የODKን ድረ ገፅ ይጎብኙ</string>
-  <string name="odk_forum">የODKን መድረክ ይቀላቀሉ</string>
+  <string name="odk_website">የPulseFEን ድረ ገፅ ይጎብኙ</string>
+  <string name="odk_forum">የPulseFEን መድረክ ይቀላቀሉ</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ም 1 %1$s  2 %2$s  3%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

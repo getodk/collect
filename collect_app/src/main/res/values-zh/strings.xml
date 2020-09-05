@@ -202,7 +202,7 @@
   <string name="delete_after_send">发送后自动删除</string>
   <string name="change_server_url">服務器 URL</string>
   <string name="about_preferences">关于</string>
-  <string name="tell_your_friends">分享ODK Collect</string>
+  <string name="tell_your_friends">分享PulseFE</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing

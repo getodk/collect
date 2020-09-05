@@ -19,8 +19,8 @@
   <string name="recapture_osm">OSM ټک کول بیا ترسره کړی</string>
   <string name="capture_video">ویدیو ثبت کړی</string>
   <string name="change_language">ژبه تغیر کړی</string>
-  <string name="change_password">ODK پټنوم</string>
-  <string name="change_username">ODK کارنوم</string>
+  <string name="change_password">PulseFE پټنوم</string>
+  <string name="change_username">PulseFE کارنوم</string>
   <string name="clearanswer_confirm">ځواب %sته لري کړي</string>
   <string name="clear_answer">ځواب لري کړی</string>
   <string name="clear_answer_ask">ځواب لري کړی؟</string>

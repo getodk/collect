@@ -421,7 +421,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             @Override
             public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
+                // The activity has to finish because PulseFE cannot function without these permissions.
                 finishAllActivities(FormEntryActivity.this);
             }
         });
@@ -2361,7 +2361,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // it can be a normal flow for a pending activity result to restore from a savepoint
                 // (the call flow handled by the above if statement). For all other use cases, the
                 // user should be notified, as it means they wandered off doing other things then
-                // returned to ODK Collect and chose Edit Saved Form, but that the savepoint for
+                // returned to PulseFE and chose Edit Saved Form, but that the savepoint for
                 // that form is newer than the last saved version of their form data.
                 boolean hasUsedSavepoint = task.hasUsedSavepoint();
 

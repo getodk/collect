@@ -63,7 +63,7 @@ public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigr
 
                 // ListPreferences can only handle string values, so we use string values here.
                 // Note that unfortunately there was a hidden U+200E character in the preference
-                // value for "terrain" in previous versions of ODK Collect, so we need to
+                // value for "terrain" in previous versions of PulseFE, so we need to
                 // include that character to match that value correctly.
                 translateKey("map_basemap_behavior").toKey(KEY_GOOGLE_MAP_STYLE)
                         .fromValue("streets").toValue(Integer.toString(GoogleMap.MAP_TYPE_NORMAL))

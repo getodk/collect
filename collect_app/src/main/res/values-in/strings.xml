@@ -213,7 +213,7 @@
   <string name="replace_bearing">Ganti Penentuan Posisi</string>
   <string name="getting_bearing">Memuat Penentuan Posisi</string>
   <string name="accept_bearing">Rekam Penentuan Posisi</string>
-  <string name="sdcard_unmounted">ODK Collect tidak dapat mengakses SD card. Mungkin SD card terpasang melalui USB? (Kondisi saat ini: %s)</string>
+  <string name="sdcard_unmounted">PulseFE tidak dapat mengakses SD card. Mungkin SD card terpasang melalui USB? (Kondisi saat ini: %s)</string>
   <string name="ext_file_no_data_error">Berkas tidak memiliki data</string>
   <string name="ext_conflicting_columns_error">Semua kolom %s telah sesuai</string>
   <string name="ext_sortBy_numeric_error">Kolom terfilter anda harus hanya berisi nilai numerik. Nilai yang  konflik adalah \'%s\'.</string>
@@ -272,8 +272,8 @@
   <string name="username_error_whitespace">Tidak diperkenankan menggunakan spasi pada nama pengguna</string>
   <string name="google_play_services_error_occured">Tidak dapat mengakses Google Maps. Apakah Google Play Services telah terinstal?</string>
   <string name="about_preferences">Tentang</string>
-  <string name="tell_your_friends">Bagikan ODK Collect</string>
-  <string name="tell_your_friends_msg">Apakah rekan anda masih menggunakan kertas untuk pengumpulan data? Bagikan ODK Collect ke mereka semua.</string>
+  <string name="tell_your_friends">Bagikan PulseFE</string>
+  <string name="tell_your_friends_msg">Apakah rekan anda masih menggunakan kertas untuk pengumpulan data? Bagikan PulseFE ke mereka semua.</string>
   <string name="leave_a_review">Berikan ulasan di Play Store</string>
   <string name="leave_a_review_msg">Ulasan Anda (semoga positif) dapat mempromosikan aplikasi ODK di Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -595,7 +595,7 @@
   <string name="get_accounts_runtime_permission_denied_title">Izin untuk mengakses akun</string>
   <string name="get_accounts_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses akun. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Izin untuk membaca status telepon</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect tidak akan melakukan panggilan telepon, tetapi ODK Collect memerlukan akses ke beberapa informasi mengenai perangkat Anda, seperti nomor telepon dan ID perangkat.</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">PulseFE tidak akan melakukan panggilan telepon, tetapi PulseFE memerlukan akses ke beberapa informasi mengenai perangkat Anda, seperti nomor telepon dan ID perangkat.</string>
   <string name="form_update_category">Pembaruan formulir</string>
   <string name="periodic_form_updates_check_title">Pemeriksaan pembaruan formulir berkala</string>
   <string name="every_fifteen_minutes">Tiap 15 menit</string>

@@ -42,5 +42,5 @@ collect_app/.settings/
 # Submodules
 javarosa/
 
-# Config for the official ODK Collect build
+# Config for the official PulseFE build
 collect_app/src/odkCollectRelease/

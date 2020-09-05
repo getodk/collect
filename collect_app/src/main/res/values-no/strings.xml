@@ -12,7 +12,7 @@
   <string name="capture_video">Ta opp video</string>
   <string name="change_language">Endre språk</string>
   <string name="change_password">Passord</string>
-  <string name="change_username">ODK brukernavn</string>
+  <string name="change_username">PulseFE brukernavn</string>
   <string name="clearanswer_confirm">Slette svar til \"%s\"?</string>
   <string name="clear_answer">Slett svar</string>
   <string name="clear_answer_ask">Slette svaret?</string>
@@ -100,7 +100,7 @@
   <string name="general_preferences">Endre innstillinger</string>
   <string name="show_splash_summary">Vis når programmet starter</string>
   <string name="splash_path">Velg oppstartbilde</string>
-  <string name="default_splash_path">ODK Default</string>
+  <string name="default_splash_path">PulseFE Default</string>
   <string name="select_another_image">Velg annet bilde</string>
   <string name="use_odk_default">Bruk standard bilde</string>
   <string name="change_splash_path">Endre bilde</string>

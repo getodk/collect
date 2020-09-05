@@ -45,12 +45,12 @@ public class PreviouslyDownloadedOnlyTest {
         testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
-                .assertAndDismissNotification("ODK Collect", "Form updates available");
+                .assertAndDismissNotification("PulseFE", "Form updates available");
 
         testDependencies.server.addForm("Two Question Updated", "two_question", "two-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
-                .assertAndDismissNotification("ODK Collect", "Form updates available");
+                .assertAndDismissNotification("PulseFE", "Form updates available");
     }
 
     @Test

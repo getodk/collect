@@ -20,8 +20,8 @@
   <string name="recapture_osm">OSM စာကပ်ခြင်း ပြန်လုပ်ပါ</string>
   <string name="capture_video">ဗီဒီယိုရိုက်ပါ</string>
   <string name="change_language">ဘာသာစကားပြောင်းပါ</string>
-  <string name="change_password">ODK စကားဝှက်</string>
-  <string name="change_username">ODK အသုံးပြုသူအမည်</string>
+  <string name="change_password">PulseFE စကားဝှက်</string>
+  <string name="change_username">PulseFE အသုံးပြုသူအမည်</string>
   <string name="clearanswer_confirm">\"%s\" ၏အဖြေကို ဖယ်မည်လား?</string>
   <string name="clear_answer">ဖြေကြားမှုကို ဖယ်ထုတ်ရန်</string>
   <string name="clear_answer_ask">ဤဖြေကြားမှုကို ဖယ်ထုတ်လိုပါသလား</string>

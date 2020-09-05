@@ -64,7 +64,7 @@ public class MatchExactlyTest {
         notificationDrawerRule
                 .open()
                 .clickNotification(
-                        "ODK Collect",
+                        "PulseFE",
                         "Form update failed",
                         "If you keep having this problem, report it to the person who asked you to collect data.",
                         "Fill Blank Form",

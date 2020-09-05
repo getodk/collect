@@ -18,7 +18,7 @@ and update this document as the code evolves.
 * App has mixture of unit tests (JUnit), Robolectric tests (Junit + Robolectric) and Espresso tests but coverage is far from complete
 * UI is "iconic" (old) but with a lot of inconsistencies and quirks and is best adapted to small screens
 * A lot of code lives in between one "god" Activity (FormEntryActivity) and a process singleton (FormController)
-* Core form entry flow uses custom side-to-side swipe view (in FormEntryActivity made up of ODKView)
+* Core form entry flow uses custom side-to-side swipe view (in FormEntryActivity made up of PulseFEView)
 * Questions are rendered using a view "framework" of implementations inheriting from `QuestionWidget`
 * Async/reactivity handled with a mixture of callbacks, LiveData and Rx
 * App stores data in flat files indexed in SQLite

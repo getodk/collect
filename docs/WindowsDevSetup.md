@@ -1,7 +1,7 @@
-# Developing ODK Collect on Windows
+# Developing PulseFE on Windows
 
 ## Overview
-Most ODK devs are using OS X or Linux. Occasionally problems surface for Windows users due to code changes or tool changes. Such problems commonly include file path separators and file permissions differences from Linux/OSX. However in general it is possible to develop ODK using Android Studio on Windows.
+Most PulseFE devs are using OS X or Linux. Occasionally problems surface for Windows users due to code changes or tool changes. Such problems commonly include file path separators and file permissions differences from Linux/OSX. However in general it is possible to develop PulseFE using Android Studio on Windows.
 
 ## Known Issues
 * Do not upgrade to Android Studio 3.6. See: [Issue 3507](https://github.com/getodk/collect/issues/3507)

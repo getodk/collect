@@ -274,7 +274,7 @@
   <string name="username_error_whitespace">No se permiten espacios al inicio o al final en el nombre de usuario.</string>
   <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Están los servicios de Google Play instalados?</string>
   <string name="about_preferences">Acerca de</string>
-  <string name="tell_your_friends">Compartir ODK Collect</string>
+  <string name="tell_your_friends">Compartir PulseFE</string>
   <string name="tell_your_friends_msg">Sus colegas aún recogen datos en papel? Comparte con ellos la aplicación</string>
   <string name="leave_a_review">Ir a Play Store - Comentar y/o Actualizar</string>
   <string name="leave_a_review_msg">Su reseña (ojalá positiva) incrementa la visibilidad de la aplicación en Play Store</string>

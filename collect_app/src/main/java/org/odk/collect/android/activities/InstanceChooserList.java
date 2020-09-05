@@ -105,7 +105,7 @@ public class InstanceChooserList extends InstanceListActivity implements
 
             @Override
             public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
+                // The activity has to finish because PulseFE cannot function without these permissions.
                 finishAllActivities(InstanceChooserList.this);
             }
         });

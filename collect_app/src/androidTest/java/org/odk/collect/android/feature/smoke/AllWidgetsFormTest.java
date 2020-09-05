@@ -177,7 +177,7 @@ public class AllWidgetsFormTest {
     //region Widget tests.
 
     public void skipInitialLabel() {
-        onView(withText(startsWith("Welcome to ODK Collect!"))).perform(swipeLeft());
+        onView(withText(startsWith("Welcome to PulseFE!"))).perform(swipeLeft());
     }
 
     public void testStringWidget() {

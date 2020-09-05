@@ -23,7 +23,7 @@
   <string name="recapture_osm">أعادة تعليم ال OSM</string>
   <string name="capture_video">سجل فيديو</string>
   <string name="change_language">تغيير اللغة</string>
-  <string name="change_password">ODK كلمة المرور</string>
+  <string name="change_password">PulseFE كلمة المرور</string>
   <string name="change_username">إسم المستخدم</string>
   <string name="clearanswer_confirm">حذف الإجابة ل \"%s\"؟</string>
   <string name="clear_answer">حذف الإجابة</string>
@@ -122,7 +122,7 @@
   <string name="client">إعدادات واجهة المستخدم</string>
   <string name="show_splash_summary">اظهار عند بدء التطبيق</string>
   <string name="splash_path">اختيار صورة البداية</string>
-  <string name="default_splash_path">ODK الإفتراضي</string>
+  <string name="default_splash_path">PulseFE الإفتراضي</string>
   <string name="select_another_image">حدد صورة أخرى</string>
   <string name="use_odk_default">استخدام الصورة الإفتراضية</string>
   <string name="change_splash_path">تغيير الصورة</string>
@@ -254,9 +254,9 @@
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="media_upload_error">فشل في تحميل ملف الوسائط المتعددة الغير موجود: %1$s</string>
-  <string name="odk_permissions_fail">فشل إذن ODK للإرسال التلقائي، يرجى التأكد من منحك جميع الأذونات المطلوبة</string>
-  <string name="odk_auto_note">ODK يرسل النتائج تلقائيا</string>
-  <string name="odk_auto_download_notification_title">ODK ينزل النتائج تلقائيا</string>
+  <string name="odk_permissions_fail">فشل إذن PulseFE للإرسال التلقائي، يرجى التأكد من منحك جميع الأذونات المطلوبة</string>
+  <string name="odk_auto_note">PulseFE يرسل النتائج تلقائيا</string>
+  <string name="odk_auto_download_notification_title">PulseFE ينزل النتائج تلقائيا</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
@@ -272,8 +272,8 @@
   <string name="username_error_whitespace">الفراغات في البداية أو النهاية غير مسموح بها في اسم المستخدم</string>
   <string name="google_play_services_error_occured">غير قادر على الوصول إلى خرائط الجوجل. هل خدمات Google Play مثبتة؟</string>
   <string name="about_preferences">حول التطبيق</string>
-  <string name="tell_your_friends">مشاركة رابط ODK Collect</string>
-  <string name="tell_your_friends_msg">هل ما زال زملائك يجمعون البيانات على الورق؟ شارك ODK Collect معهم.</string>
+  <string name="tell_your_friends">مشاركة رابط PulseFE</string>
+  <string name="tell_your_friends_msg">هل ما زال زملائك يجمعون البيانات على الورق؟ شارك PulseFE معهم.</string>
   <string name="leave_a_review">اترك تقييم في Play Store</string>
   <string name="leave_a_review_msg">تقييمك (الذي نأمل أن يكون إيجابيا) يزيد من رؤية التطبيق في Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -316,7 +316,7 @@
   <string name="geotrace_title">تتبع المسار</string>
   <string name="gps_enable_message">GPS غير مفعلة على جهازك. هل تريد تفعيلها؟</string>
   <string name="geo_clear_warning">الميزة تم إنشاؤها مسبقاً. هل ترغب في إزالتها؟</string>
-  <string name="geo_exit_warning">تجاهل التعديلات والعودة إلى ODK؟</string>
+  <string name="geo_exit_warning">تجاهل التعديلات والعودة إلى PulseFE؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط لإنشاء مضلع</string>
   <string name="polyline_validator">يجب توفر نقطتين لإنشاء خط</string>
   <string name="clear">إلغاء</string>
@@ -369,7 +369,7 @@
   <string name="geometry_status">الاستمارات المحفوظة: %d (%d يظهر على الخريطة)</string>
   <string name="bearing">تحمل %.3f</string>
   <string name="direction">الاتجاه: %s</string>
-  <string name="select_odk_shortcut">اختيار اختصار ODK</string>
+  <string name="select_odk_shortcut">اختيار اختصار PulseFE</string>
   <string name="bad_uri">عنوان غير صحيح: %s</string>
   <string name="unrecognized_uri">عنوان غير معروف: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
@@ -389,9 +389,9 @@
   <string name="selected_answer">المحددة: %s</string>
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
-  <string name="odk_website">زيارة موقع ODK</string>
-  <string name="odk_website_summary">حزمة البيانات المفتوحة (ODK) تستخدم لجمع البيانات لمصلحة المجتمع في البيئات الصعبة.</string>
-  <string name="odk_forum">انضم إلى منتدى ODK</string>
+  <string name="odk_website">زيارة موقع PulseFE</string>
+  <string name="odk_website_summary">حزمة البيانات المفتوحة (PulseFE) تستخدم لجمع البيانات لمصلحة المجتمع في البيئات الصعبة.</string>
+  <string name="odk_forum">انضم إلى منتدى PulseFE</string>
   <string name="odk_forum_summary">انضم إلى المنتدى للحصول على الدعم وطلب الميزات والمساهمة بالكود / الترجمات!</string>
   <string name="all_open_source_licenses">مكتبات و تراخيص مفتوحة المصدر</string>
   <string name="all_open_source_licenses_msg">نقف على أكتاف العمالقة!</string>
@@ -412,7 +412,7 @@
   <string name="encryption_error_message">الاستمارة لم يتم حفظها كنهائية %s </string>
   <string name="analytics_preferences">بيانات الاستخدام</string>
   <string name="analytics">جمع بيانات الاستخدام دون تحديد هوية المستخدم</string>
-  <string name="analytics_summary">جمع بيانات الاستخدام دون تحديد هوية المستخدم يساعد فريق عمل ODK على ترتيب أولويات الإصلاحات والمزايا.</string>
+  <string name="analytics_summary">جمع بيانات الاستخدام دون تحديد هوية المستخدم يساعد فريق عمل PulseFE على ترتيب أولويات الإصلاحات والمزايا.</string>
   <string name="select_all">تحديد الكل</string>
   <string name="clear_all">إلغاء التحديد</string>
   <string name="reset_settings">كافة الإعدادات (الإعدادات الداخلية، والإعدادات المحفوظة)</string>
@@ -590,17 +590,17 @@
   <string name="stop_video_capture_instruction">بدأ التسجيل. إنقر مجددا للتوقف</string>
   <string name="no_columns_to_upload">لا توجد أعمدة في الاستمارة للتحميل.</string>
   <string name="storage_runtime_permission_denied_title">أذونات التخزين</string>
-  <string name="storage_runtime_permission_denied_desc">بدون هذه الأذونات لا يمكن لبرنامج ODK Collect الوصول إلى الاستمارات أو حفظ الإجابات. أعد فتح التطبيق عندما تكون مستعدًا لمنحهم.</string>
+  <string name="storage_runtime_permission_denied_desc">بدون هذه الأذونات لا يمكن لبرنامج PulseFE الوصول إلى الاستمارات أو حفظ الإجابات. أعد فتح التطبيق عندما تكون مستعدًا لمنحهم.</string>
   <string name="location_runtime_permissions_denied_title">الأذونات الخاصة بالموقع</string>
-  <string name="location_runtime_permissions_denied_desc">بدون هذه الأذونات لا يمكن لبرنامج ODK Collect تسجيل موقعك. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحهم.</string>
+  <string name="location_runtime_permissions_denied_desc">بدون هذه الأذونات لا يمكن لبرنامج PulseFE تسجيل موقعك. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحهم.</string>
   <string name="camera_runtime_permission_denied_title">إذن الكاميرا</string>
-  <string name="camera_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الكاميرا. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
+  <string name="camera_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج PulseFE الوصول إلى الكاميرا. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="record_audio_runtime_permission_denied_title">إذن تسجيل الصوت</string>
-  <string name="record_audio_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الميكروفون. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
+  <string name="record_audio_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج PulseFE الوصول إلى الميكروفون. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="get_accounts_runtime_permission_denied_title">الحصول على إذن الحسابات</string>
-  <string name="get_accounts_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الحسابات. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
+  <string name="get_accounts_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج PulseFE الوصول إلى الحسابات. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="read_phone_state_runtime_permission_denied_title">إذن قراءة حالة الهاتف</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">لا يقوم ODK Collect بإجراء مكالمات ولكنه يحتاج إلى الوصول إلى بعض الخصائص المتعلقة بجهازك مثل رقم الهاتف ومعرف الجهاز.</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">لا يقوم PulseFE بإجراء مكالمات ولكنه يحتاج إلى الوصول إلى بعض الخصائص المتعلقة بجهازك مثل رقم الهاتف ومعرف الجهاز.</string>
   <string name="form_update_category">تحديث الاستمارة</string>
   <string name="periodic_form_updates_check_title">تحقق من وجود تحديثات الاستمارة بشكل دوري</string>
   <string name="every_fifteen_minutes">كل 15 دقيقة</string>

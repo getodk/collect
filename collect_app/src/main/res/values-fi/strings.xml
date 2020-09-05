@@ -272,8 +272,8 @@
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
   <string name="about_preferences">Lisätietoja</string>
-  <string name="tell_your_friends">Jaa ODK Collect</string>
-  <string name="tell_your_friends_msg">Keräävätkö kollegasi vielä dataa paperilla? Jaa ODK Collect heidän kanssaan.</string>
+  <string name="tell_your_friends">Jaa PulseFE</string>
+  <string name="tell_your_friends_msg">Keräävätkö kollegasi vielä dataa paperilla? Jaa PulseFE heidän kanssaan.</string>
   <string name="leave_a_review">Kirjoita Play Store -arvio</string>
   <string name="leave_a_review_msg">Sinun (toivottavasti myönteinen) arviosi lisää sovelluksen näkyvyyttä Play Store -kaupassa.</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -598,7 +598,7 @@
   <string name="get_accounts_runtime_permission_denied_title">Hae tilin käyttöluvat</string>
   <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen käyttölupa</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">PulseFE ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <string name="form_update_category">Lomakepäivitys</string>
   <string name="periodic_form_updates_check_title">Ajastettu lomakepäivitysten tarkistus</string>
   <string name="every_fifteen_minutes">Vartin välein</string>

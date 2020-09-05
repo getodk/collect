@@ -269,7 +269,7 @@
   <string name="username_error_whitespace">Prazan prostor na početku ili kraju nije dozvoljen kod korisničkih imena</string>
   <string name="google_play_services_error_occured">Ne mogu da pristupim Google Mapama. Je li Google Play Service instaliran?</string>
   <string name="about_preferences">Informacije </string>
-  <string name="tell_your_friends">Podijeli ODK Collect</string>
+  <string name="tell_your_friends">Podijeli PulseFE</string>
   <string name="tell_your_friends_msg">Da li tvoje kolege i dalje prikupljaju podatke na papiru? Podijeli ODK sa njima</string>
   <string name="leave_a_review">Napiši Play Store recenziju</string>
   <string name="leave_a_review_msg">Vaša (nadamo se pozitivna) recenzija povećava vidljivost aplikacije u Play Storu.</string>

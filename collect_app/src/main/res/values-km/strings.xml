@@ -266,8 +266,8 @@
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
   <string name="about_preferences">អំពី</string>
-  <string name="tell_your_friends">ចែក​រំលែក​ ODK Collect</string>
-  <string name="tell_your_friends_msg">តើ​សហការី​របស់​អ្នក​នៅ​តែ​ប្រមូល​ទិន្នន័យ​នៅ​លើ​ក្រដាស​មែន​ទេ? ចែក​រំលែក ODK Collect ជាមួយពួកគេ។</string>
+  <string name="tell_your_friends">ចែក​រំលែក​ PulseFE</string>
+  <string name="tell_your_friends_msg">តើ​សហការី​របស់​អ្នក​នៅ​តែ​ប្រមូល​ទិន្នន័យ​នៅ​លើ​ក្រដាស​មែន​ទេ? ចែក​រំលែក PulseFE ជាមួយពួកគេ។</string>
   <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
   <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
   <!--Geo string added in feature-geofeatures branch-->

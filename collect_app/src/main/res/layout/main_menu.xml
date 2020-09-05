@@ -111,7 +111,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/margin_standard"
-                        tools:text="commit sha" />
+                        tools:text="commit sha"
+                        tools:visibility="invisible" />
 
                 </LinearLayout>
             </LinearLayout>

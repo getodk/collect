@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * This is an exact copy of com.mapbox.mapboxsdk.maps.MapFragment as of tag
- * android-v7.3.0, with only these changes for compatibility with ODK Collect:
+ * android-v7.3.0, with only these changes for compatibility with PulseFE:
  *   - "final" is removed, so this class can be extended.
  *   - The getMapView() method is added to provide access to the private "map" field.
  *   - android.support classes are replaced with the corresponding androidx classes.

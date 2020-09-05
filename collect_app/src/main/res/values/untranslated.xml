@@ -7,13 +7,13 @@ OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <resources>
     <!-- strings that should not be translated -->
-    <string name="app_name" translatable="false">ODK Collect</string>
+    <string name="app_name" translatable="false">PulseFE</string>
     <string name="protocol_odk_default" translatable="false">odk_default</string>
     <string name="protocol_google_sheets" translatable="false">google_sheets</string>
     <string name="default_server_url" translatable="false">https://opendatakit.appspot.com</string>
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
-    <string name="app_url" translatable="false">http://getodk.org</string>
+    <string name="app_url" translatable="false">https://www.softofficepro.com/mobile-survey-system/</string>
     <string name="never_value" translatable="false">never</string>
     <string name="every_fifteen_minutes_value" translatable="false">every_fifteen_minutes</string>
     <string name="every_one_hour_value" translatable="false">every_one_hour</string>
@@ -21,7 +21,7 @@ the specific language governing permissions and limitations under the License. -
     <string name="every_24_hours_value" translatable="false">every_24_hours</string>
     <string name="app_theme_light" translatable="false">light_theme</string>
     <string name="app_theme_dark" translatable="false">dark_theme</string>
-    <string name="server_platform_odk" translatable="false">ODK</string>
+    <string name="server_platform_odk" translatable="false">PulseFE</string>
     <string name="form_update_mode_manual" translatable="false">manual</string>
     <string name="form_update_mode_previously_downloaded" translatable="false">previously_downloaded</string>
     <string name="form_update_mode_match_exactly" translatable="false">match_exactly</string>

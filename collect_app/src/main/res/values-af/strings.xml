@@ -11,8 +11,8 @@
   <string name="recapture_osm">Doen OSM-tagging oor</string>
   <string name="capture_video">Neem video</string>
   <string name="change_language">Verander Taal</string>
-  <string name="change_password">ODK Wagwoord</string>
-  <string name="change_username">ODK Gebruikersnaam</string>
+  <string name="change_password">PulseFE Wagwoord</string>
+  <string name="change_username">PulseFE Gebruikersnaam</string>
   <string name="clearanswer_confirm">Verwyer die antwoord op \"%s\"?</string>
   <string name="clear_answer">Verwyder antwoord</string>
   <string name="clear_answer_ask">Verwyder hierdie antwoord?</string>
@@ -100,7 +100,7 @@
   <string name="general_preferences">Algemene Verstellings</string>
   <string name="show_splash_summary">Vertoon wanneer program begin</string>
   <string name="splash_path">Geselekteerde splash prentjie</string>
-  <string name="default_splash_path">ODK Default</string>
+  <string name="default_splash_path">PulseFE Default</string>
   <string name="select_another_image">Kies \'n ander prentjie</string>
   <string name="use_odk_default">Gebruik default prentjie</string>
   <string name="change_splash_path">Verander Prentjie</string>

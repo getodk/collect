@@ -1,16 +1,16 @@
-# ODK Collect
+# PulseFE
 ![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build status](https://circleci.com/gh/getodk/collect.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/getodk/collect)
 [![codecov.io](https://codecov.io/github/getodk/collect/branch/master/graph/badge.svg)](https://codecov.io/github/getodk/collect)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-brightgreen)](https://slack.getodk.org)
 
-ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part the ODK Project, a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the ODK project and its history [here](https://getodk.org/) and read about example ODK deployments [here](https://forum.getodk.org/c/showcase).
+PulseFE is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. PulseFE is part the PulseFE Project, a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the PulseFE project and its history [here](https://getodk.org/) and read about example PulseFE deployments [here](https://forum.getodk.org/c/showcase).
 
-ODK Collect renders forms that are compliant with the [ODK XForms standard](https://getodk.github.io/xforms-spec/), a subset of the [XForms 1.1 standard](https://www.w3.org/TR/xforms/) with some extensions. The form parsing is done by the [JavaRosa library](https://github.com/getodk/javarosa) which Collect includes as a dependency.
+PulseFE renders forms that are compliant with the [PulseFE XForms standard](https://getodk.github.io/xforms-spec/), a subset of the [XForms 1.1 standard](https://www.w3.org/TR/xforms/) with some extensions. The form parsing is done by the [JavaRosa library](https://github.com/getodk/javarosa) which Collect includes as a dependency.
 
 ## Table of Contents
-* [Learn more about ODK Collect](#learn-more-about-odk-collect)
+* [Learn more about PulseFE](#learn-more-about-odk-collect)
 * [Release cycle](#release-cycle)
 * [Setting up your development environment](#setting-up-your-development-environment)
 * [Testing a form without a server](#testing-a-form-without-a-server)
@@ -23,11 +23,11 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 * [Creating signed releases for Google Play Store](#creating-signed-releases-for-google-play-store)
 * [Troubleshooting](#troubleshooting)
 
-## Learn more about ODK Collect
-* ODK website: [https://getodk.org](https://getodk.org)
-* ODK Collect usage documentation: [https://docs.getodk.org/collect-intro/](https://docs.getodk.org/collect-intro/)
-* ODK forum: [https://forum.getodk.org](https://forum.getodk.org)
-* ODK developer Slack chat: [https://slack.getodk.org](https://slack.getodk.org)
+## Learn more about PulseFE
+* PulseFE website: [https://getodk.org](https://getodk.org)
+* PulseFE usage documentation: [https://docs.getodk.org/collect-intro/](https://docs.getodk.org/collect-intro/)
+* PulseFE forum: [https://forum.getodk.org](https://forum.getodk.org)
+* PulseFE developer Slack chat: [https://slack.getodk.org](https://slack.getodk.org)
 
 ## Release cycle
 Releases can be requested by any community member and generally happen every 2 months.
@@ -55,7 +55,7 @@ We try to make sure that all issues in the issue tracker are as close to fully s
 
 1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
 
-1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing ODK Collect on Windows](docs/WindowsDevSetup.md).
+1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing PulseFE on Windows](docs/WindowsDevSetup.md).
 
 1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
 
@@ -75,33 +75,33 @@ When you first run Collect, it is set to download forms from [https://opendataki
 
 1. The `All Widgets` form from the default Aggregate server is [here](https://docs.google.com/spreadsheets/d/1af_Sl8A_L8_EULbhRLHVl8OclCfco09Hq2tqb9CslwQ/edit#gid=0). You can also try [example forms](https://github.com/XLSForm/example-forms) and [test forms](https://github.com/XLSForm/test-forms) or [make your own](https://xlsform.org).
 
-1. Convert the XLSForm (xlsx) to XForm (xml). Use the [ODK website](http://getodk.org/xlsform/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
+1. Convert the XLSForm (xlsx) to XForm (xml). Use the [PulseFE website](http://getodk.org/xlsform/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
 
 1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
 	```
 	adb push my_form.xml /sdcard/odk/forms/
 	```
 
-1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
+1. Launch PulseFE and tap `Fill Blank Form`. The new form will be there.
 
 ## Using APIs for local development
 
-Certain functions in ODK Collect depend on cloud services that require API keys or authorization steps to work.  Here are the steps you need to take in order to use these functions in your development builds.
+Certain functions in PulseFE depend on cloud services that require API keys or authorization steps to work.  Here are the steps you need to take in order to use these functions in your development builds.
 
-**Google Drive and Sheets APIs**: When the "Google Drive, Google Sheets" option is selected in the "Server" settings, ODK Collect uses these APIs to store submitted form data in Google Sheets and submitted media in Google Drive.  To enable these APIs:
+**Google Drive and Sheets APIs**: When the "Google Drive, Google Sheets" option is selected in the "Server" settings, PulseFE uses these APIs to store submitted form data in Google Sheets and submitted media in Google Drive.  To enable these APIs:
   - Follow [these instructions to generate a signing certificate fingerprint and register the application with the Google API Console](https://developers.google.com/drive/android/auth#generate_the_signing_certificate_fingerprint_and_register_your_application).
   - [Enable the Google Drive API](https://console.developers.google.com/apis/api/drive.googleapis.com).
   - [Enable the Google Sheets API](https://console.developers.google.com/apis/api/sheets.googleapis.com).
   - Copy the oauth clientID from [the developer console](https://console.developers.google.com/apis/credentials) into the `client_id` of `collect_app/google-services.json` file
 
-**Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+**Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, PulseFE uses the Google Maps API for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   - [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  Note that this requires a credit card number, though the card will not be charged immediately; some free API usage is permitted.  You should carefully read the terms before providing a credit card number.
   - Edit or create `collect_app/secrets.properties` and set the `GOOGLE_MAPS_API_KEY` property to your API key.  You should end up with a line that looks like this:
     ```
     GOOGLE_MAPS_API_KEY=AIbzvW8e0ub...
     ```
 
-**Mapbox Maps SDK for Android**: When the "Mapbox SDK" option is selected in the "User interface" settings, ODK Collect uses the Mapbox SDK for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
+**Mapbox Maps SDK for Android**: When the "Mapbox SDK" option is selected in the "User interface" settings, PulseFE uses the Mapbox SDK for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   - [Create a Mapbox account](https://www.mapbox.com/signup/).  Note that signing up with the "Pay-As-You-Go" plan does not require a credit card.  Mapbox provides free API usage up to the monthly thresholds documented at [https://www.mapbox.com/pricing](https://www.mapbox.com/pricing).  If your usage exceeds these thresholds, you will receive e-mail with instructions on how to add a credit card for payment; services will remain live until the end of the 30-day billing term, after which the account will be deactivated and will require a credit card to reactivate.
   - Find your access token on your [account page](https://account.mapbox.com/).
   - Edit or create `collect_app/secrets.properties` and set the `MAPBOX_ACCESS_TOKEN` property to your access token.  You should end up with a line that looks like this:
@@ -145,9 +145,9 @@ JavaRosa is the form engine that powers Collect. If you want to debug or change 
 	```
 
 ## Contributing code
-Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
+Any and all contributions to the project are welcome. PulseFE is used across the world primarily by organizations with a social purpose so you can have real impact!
 
-Issues tagged as [good first issue](https://github.com/getodk/collect/labels/good%20first%20issue) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/getodk/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
+Issues tagged as [good first issue](https://github.com/getodk/collect/labels/good%20first%20issue) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/getodk/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of PulseFE and comment on the issue with their findings.
 
 If you're ready to contribute code, see [the contribution guide](docs/CONTRIBUTING.md).
 
@@ -180,7 +180,7 @@ If you have finished testing a pull request, please use a template from [Testing
 ## Downloading builds
 Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/getodk/collect). Login with your GitHub account, click the build you'd like, then find the APK in the Artifacts tab.
 
-Current and previous production builds can be found on the [ODK website](https://getodk.org/software/#odk-collect).
+Current and previous production builds can be found on the [PulseFE website](https://getodk.org/software/#odk-collect).
 
 ## Creating signed releases for Google Play Store
 Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 1.8.

@@ -111,7 +111,7 @@ android {
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }
 
-        // Release build for the official ODK Collect app
+        // Release build for the official PulseFE app
         odkCollectRelease {
             if (secrets.getProperty('RELEASE_STORE_FILE')) {
                 signingConfig signingConfigs.release
@@ -162,7 +162,7 @@ android {
         pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
         pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
 
-        // To ensure that ODK Collect is installable on all devices, we don't use
+        // To ensure that PulseFE is installable on all devices, we don't use
         // abiFilters to exclude any ABIs; but to keep the APK slim, we include
         // the Mapbox native library only for 32-bit and 64-bit ARM devices and
         // omit it for all X86 devices.

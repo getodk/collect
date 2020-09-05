@@ -1,4 +1,4 @@
-# Contributing code to ODK Collect
+# Contributing code to PulseFE
 
 This is a living document. If you see something that could be improved, edit this document and submit a pull request following the instructions below!
 
@@ -10,7 +10,7 @@ This is a living document. If you see something that could be improved, edit thi
 * [Triage issues](#triage-issues-)
 
 ## Submitting a pull request
-To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project. Generally, a pull request is submitted when a unit of work is considered complete but it can sometimes be helpful to share ideas through a work in progress (WIP) pull request ([learn more](#work-in-progress-pull-requests)).
+To contribute code to PulseFE, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project. Generally, a pull request is submitted when a unit of work is considered complete but it can sometimes be helpful to share ideas through a work in progress (WIP) pull request ([learn more](#work-in-progress-pull-requests)).
 
 1. Read our ["state of the union"](STATE.md) to get a quick understanding of the codebase and its history. The "Where we're going" section may suggest efforts you can get involved in if you are having a hard time finding ways to contribute.
 
@@ -40,7 +40,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Once you have completed your code changes, verify that you have followed the [style guidelines](https://github.com/getodk/collect/blob/master/CONTRIBUTING.md#style-guidelines).
 
-1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `getodk/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
+1. When your changes are ready to be added to the core PulseFE project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `getodk/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
 
 1. Pull requests will be reviewed when committers have time. If you haven't received a review in 10 days, you may notify committers by putting `@getodk/collect` in a comment.
 

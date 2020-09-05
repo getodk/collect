@@ -15,6 +15,7 @@
             <!--android:dependency="change_server"-->
             <!--/>-->
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="change_app_theme"
             android:title="@string/app_theme"
             app:iconSpaceReserved="false" />

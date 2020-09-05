@@ -45,6 +45,6 @@ public class AutoSendTest {
                 .assertText("One Question");
 
         notificationDrawerRule.open()
-                .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
+                .assertAndDismissNotification("PulseFE", "PulseFE auto-send results", "Success");
     }
 }

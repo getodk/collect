@@ -13,8 +13,8 @@
   <string name="recapture_osm">OSM टॅगिंग पुन्हा करा</string>
   <string name="capture_video">व्हिडिओ रेकॉर्ड करा</string>
   <string name="change_language">भाषा बदला</string>
-  <string name="change_password">ODK संकेतशब्द</string>
-  <string name="change_username">ODK वापरकर्तानाव</string>
+  <string name="change_password">PulseFE संकेतशब्द</string>
+  <string name="change_username">PulseFE वापरकर्तानाव</string>
   <string name="clearanswer_confirm">\"%s\" ला प्रतिसाद काढायचा का ?</string>
   <string name="clear_answer">प्रतिसाद काढा</string>
   <string name="clear_answer_ask">हा प्रतिसाद काढायचा का ?</string>

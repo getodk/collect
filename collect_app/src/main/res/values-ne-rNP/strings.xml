@@ -259,8 +259,8 @@
   <string name="username_error_whitespace">प्रयोगकर्ता नाममा खाली स्पेस हुनु हुँदैन ।</string>
   <string name="google_play_services_error_occured">गुगल  म्याप्स् मा जान सकिएन । के गुगल प्ले सर्भिसेस इन्स्टल गरिएको छ ?</string>
   <string name="about_preferences">जानकारी</string>
-  <string name="tell_your_friends">ODK Collect शेयर गर्नुहोस् ।</string>
-  <string name="tell_your_friends_msg">के तपाईँका सहकर्मीहरू अझै कागजमा डाटा संकलन गर्दै हुनुहुन्छ? तिनीहरुसँग ODK Collect शेयर गर्नुहोस् ।</string>
+  <string name="tell_your_friends">PulseFE शेयर गर्नुहोस् ।</string>
+  <string name="tell_your_friends_msg">के तपाईँका सहकर्मीहरू अझै कागजमा डाटा संकलन गर्दै हुनुहुन्छ? तिनीहरुसँग PulseFE शेयर गर्नुहोस् ।</string>
   <string name="leave_a_review">हामीलाई  प्ले स्टोर आफ्नो मा समीक्षा छोड्नुहोस् ।</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.

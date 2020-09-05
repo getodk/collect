@@ -22,8 +22,8 @@
   <string name="capture_osm">Запустить OpenMapKit</string>
   <string name="capture_video">Записать видео</string>
   <string name="change_language">Смена языка</string>
-  <string name="change_password">Пароль ODK</string>
-  <string name="change_username">Имя пользователя ODK</string>
+  <string name="change_password">Пароль PulseFE</string>
+  <string name="change_username">Имя пользователя PulseFE</string>
   <string name="clearanswer_confirm">Удалить ответ к \"%s\"?</string>
   <string name="clear_answer">Удалить ответ</string>
   <string name="clear_answer_ask">Удалить этот ответ?</string>
@@ -269,7 +269,7 @@
   <string name="username_error_whitespace">Не допускается использовать пробелы в начале и конце имени пользователя</string>
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
   <string name="about_preferences">О программе</string>
-  <string name="tell_your_friends">Рекомендовать ODK</string>
+  <string name="tell_your_friends">Рекомендовать PulseFE</string>
   <string name="tell_your_friends_msg">Коллеги ведут сбор данных на бумаге? Поделитесь с ними этим решением</string>
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store</string>
@@ -300,7 +300,7 @@
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
   <string name="geotrace_title">Геослед</string>
-  <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
+  <string name="geo_exit_warning">Отказаться от изменений и вернуться к PulseFE?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
   <string name="clear">Очистить</string>
@@ -311,7 +311,7 @@
   <string name="geotrace_view_change_location">Показать или изменить геослед</string>
   <string name="bearing">Азимут: %.3f</string>
   <string name="direction">Направление: %s</string>
-  <string name="select_odk_shortcut">Выбрать ярлык ODK</string>
+  <string name="select_odk_shortcut">Выбрать ярлык PulseFE</string>
   <string name="bad_uri">Неправильный URI: %s</string>
   <string name="unrecognized_uri">Не удалось распознать URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
@@ -330,7 +330,7 @@
   <string name="selected_answer">Выбрано: %s</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
-  <string name="odk_website">Вебсайт ODK</string>
+  <string name="odk_website">Вебсайт PulseFE</string>
   <string name="odk_website_summary">Open Data Kit — приложение для сбора данных работающее без интернета</string>
   <string name="odk_forum">Форум</string>
   <string name="odk_forum_summary">Вопросы и предложения</string>

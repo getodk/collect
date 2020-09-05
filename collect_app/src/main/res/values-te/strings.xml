@@ -270,7 +270,7 @@
   <string name="google_play_services_error_occured">Google మ్యాప్స్‌ను యాక్సెస్ చేయడం సాధ్యం కాట్లేదు. Google Play సేవలు ఇన్‌స్టాల్ చేయబడిందా?</string>
   <string name="about_preferences">ODK గురించి</string>
   <string name="tell_your_friends">ODK కలెక్ట్ ని షేర్ చెయ్యండి</string>
-  <string name="tell_your_friends_msg">మీ సహచరులు ఇప్పటికీ కాగితంపై డేటాను సేకరిస్తున్నారా? వారితో ODK Collect పంచుకోండి </string>
+  <string name="tell_your_friends_msg">మీ సహచరులు ఇప్పటికీ కాగితంపై డేటాను సేకరిస్తున్నారా? వారితో PulseFE పంచుకోండి </string>
   <string name="leave_a_review">ప్లే స్టోర్ విమర్షని ఇక్కడ రాయండి</string>
   <string name="leave_a_review_msg">మీ ( సానుకూల) సమీక్ష Play Store లో ఈ App గురించి ఎక్కువ మందికి తెలిసేలా చేస్తుంది </string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -581,7 +581,7 @@
   <string name="get_accounts_runtime_permission_denied_title">ఖాతాల అనుమతి పొందండి</string>
   <string name="get_accounts_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా ఖాతాలను యాక్సెస్ చేయదు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="read_phone_state_runtime_permission_denied_title">ఫోన్ స్టేట్ అనుమతి చదవండి</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ఎటువంటి కాల్స్ చేయదు. కాని దీనికి మీ పరికరం గురించిన ఫోన్ నంబర్, పరికరం ID వంటి కొంత సమాచారాన్ని సేకరించవలసి ఉంటుంది.</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">PulseFE ఎటువంటి కాల్స్ చేయదు. కాని దీనికి మీ పరికరం గురించిన ఫోన్ నంబర్, పరికరం ID వంటి కొంత సమాచారాన్ని సేకరించవలసి ఉంటుంది.</string>
   <string name="form_update_category">ఫారం నవీకరణ</string>
   <string name="periodic_form_updates_check_title">ఫారంలో జరిగిన మార్పులను ఎంత సమయంలో చూడాలి</string>
   <string name="every_fifteen_minutes">ప్రతి పదిహేను నిమిషాలకు</string>

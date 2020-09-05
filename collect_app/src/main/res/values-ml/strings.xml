@@ -13,8 +13,8 @@
   <string name="recapture_osm">OSM ടാഗ്ഗിംഗ് വീണ്ടും ചെയ്യുക</string>
   <string name="capture_video"> വീഡിയോ റെക്കോർഡ് ചെയ്യുക</string>
   <string name="change_language">ഭാഷ മാറ്റുക</string>
-  <string name="change_password">ODK സങ്കേതപദം</string>
-  <string name="change_username">ODK ഉപയോക്തൃനാമം</string>
+  <string name="change_password">PulseFE സങ്കേതപദം</string>
+  <string name="change_username">PulseFE ഉപയോക്തൃനാമം</string>
   <string name="clearanswer_confirm"> 1 %s  എന്നയാൾക്ക് പ്രതികരണം നീക്കംചെയ്യണോ?</string>
   <string name="clear_answer">പ്രതികരണം നീക്കം ചെയ്യുക</string>
   <string name="clear_answer_ask">ഈ പ്രതികരണം നീക്കംചെയ്യണോ?</string>

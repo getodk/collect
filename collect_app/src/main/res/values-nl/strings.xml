@@ -20,7 +20,7 @@
   <string name="capture_video">Video vastleggen</string>
   <string name="change_language">Taal wijzigen</string>
   <string name="change_password">Wachtwoord</string>
-  <string name="change_username">ODK Username</string>
+  <string name="change_username">PulseFE Username</string>
   <string name="clearanswer_confirm">Verwijder het antwoord voor \"%s\"?</string>
   <string name="clear_answer">Verwijder antwoord</string>
   <string name="clear_answer_ask">Verwijder dit antwoord?</string>
@@ -117,7 +117,7 @@
   <string name="client">Gebruikersinterface</string>
   <string name="show_splash_summary">Toon welkomstscherm bij opstarten van de applicatie</string>
   <string name="splash_path">Kies afbeelding voor welkomstscherm</string>
-  <string name="default_splash_path">ODK Default</string>
+  <string name="default_splash_path">PulseFE Default</string>
   <string name="select_another_image">Kies andere afbeelding</string>
   <string name="use_odk_default">Gebruik standaard afbeelding</string>
   <string name="change_splash_path">Wijzig afbeelding</string>
@@ -240,14 +240,14 @@
   <string name="go_shared">Gedeeld met mij</string>
   <string name="modified_on_date_at_time">\'Gewijzigd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
     <string name="no_google_account">Geen Google account geselecteerd!</string>
-  <string name="odk_auto_note">ODK automatische verzendresultaten</string>
-  <string name="odk_auto_download_notification_title">ODK automatische downloadresultaten</string>
+  <string name="odk_auto_note">PulseFE automatische verzendresultaten</string>
+  <string name="odk_auto_download_notification_title">PulseFE automatische downloadresultaten</string>
   <string name="delete_after_send">Verwijderen na versturen</string>
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
   <string name="change_server_url">Server URL</string>
   <string name="about_preferences">Over</string>
-  <string name="tell_your_friends">Deel ODK Collect</string>
-  <string name="tell_your_friends_msg">Verzamelen jouw collega\'s nog steeds data op papier? Deel ODK Collect met hen. </string>
+  <string name="tell_your_friends">Deel PulseFE</string>
+  <string name="tell_your_friends_msg">Verzamelen jouw collega\'s nog steeds data op papier? Deel PulseFE met hen. </string>
   <string name="leave_a_review">Schrijf een review op de Google Play Store.</string>
   <string name="leave_a_review_msg">Jouw (hopelijk positieve) review vergroot de zichtbaarheid van de Applicatie in de Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -258,7 +258,7 @@
   <string name="terrain">Terrein</string>
   <string name="start">Start</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="odk_website">Bezoek de ODK website</string>
+  <string name="odk_website">Bezoek de PulseFE website</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->

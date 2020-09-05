@@ -23,8 +23,8 @@
   <string name="recapture_osm">Ponów oznaczanie OSM </string>
   <string name="capture_video">Nagraj Wideo</string>
   <string name="change_language">Zmień Język</string>
-  <string name="change_password">Hasło ODK</string>
-  <string name="change_username">Nazwa użytkownika ODK</string>
+  <string name="change_password">Hasło PulseFE</string>
+  <string name="change_username">Nazwa użytkownika PulseFE</string>
   <string name="clearanswer_confirm">Czy usunąć odpowiedź na \"%s\"?</string>
   <string name="clear_answer">Usuń odpowiedź</string>
   <string name="clear_answer_ask">Czy Usunąć Tę Odpowiedź?</string>
@@ -122,7 +122,7 @@
   <string name="client">Interfejs użytkownika</string>
   <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>
   <string name="splash_path">Wybrany obraz ekranu powitalnego</string>
-  <string name="default_splash_path">Domyślne ODK</string>
+  <string name="default_splash_path">Domyślne PulseFE</string>
   <string name="select_another_image">Wybierz inny obraz</string>
   <string name="use_odk_default">Użyj obraz domyślny</string>
   <string name="change_splash_path">Zmień obraz</string>
@@ -254,9 +254,9 @@
   <string name="no_google_account">Nie wybrałeś konta Google!</string>
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
   <string name="media_upload_error">Nie można załadować multimediów, plik nie istnieje: %1$s</string>
-  <string name="odk_permissions_fail">Błąd uprawnień automatycznego wysyłania ODK. Upewnij się, że nadałeś wszystkie wymagane uprawnienia</string>
-  <string name="odk_auto_note">Wyniki automatycznego wysyłania ODK</string>
-  <string name="odk_auto_download_notification_title">Wyniki automatycznego pobierania ODK</string>
+  <string name="odk_permissions_fail">Błąd uprawnień automatycznego wysyłania PulseFE. Upewnij się, że nadałeś wszystkie wymagane uprawnienia</string>
+  <string name="odk_auto_note">Wyniki automatycznego wysyłania PulseFE</string>
+  <string name="odk_auto_download_notification_title">Wyniki automatycznego pobierania PulseFE</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
   <string name="delete_after_send">Skasuj po wysłaniu</string>
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>
@@ -272,8 +272,8 @@
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="about_preferences">O Aplikacji</string>
-  <string name="tell_your_friends">Udostępnij ODK Collect</string>
-  <string name="tell_your_friends_msg">Czy Twoi koledzy wciąż używają do zbierania danych arkuszy papieru? Podziel się z nimi ODK Collect.</string>
+  <string name="tell_your_friends">Udostępnij PulseFE</string>
+  <string name="tell_your_friends_msg">Czy Twoi koledzy wciąż używają do zbierania danych arkuszy papieru? Podziel się z nimi PulseFE.</string>
   <string name="leave_a_review">Zostaw swoją opinię na Play Store</string>
   <string name="leave_a_review_msg">Twoja (mamy nadzieję pozytywna) recenzja przyczyni się do zwiększenia widoczności Aplikacji w Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -316,7 +316,7 @@
   <string name="geotrace_title">GeoTrace</string>
   <string name="gps_enable_message">GPS jest nieaktywne na twoim urządzeniu. Czy chcesz je włączyc?</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
-  <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
+  <string name="geo_exit_warning">Usunąć zmiany i wrócić do PulseFE?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
   <string name="polyline_validator">Wymagane co najmniej 2 punkty, by utworzyć polilinię</string>
   <string name="clear">Wyczyść</string>
@@ -363,7 +363,7 @@
   <string name="geometry_status">Zapisane formularze: %d (%d pokazane na mapie)</string>
   <string name="bearing">Namiar: %.3f</string>
   <string name="direction">Kierunek: %s</string>
-  <string name="select_odk_shortcut">Wybierz skrót ODK</string>
+  <string name="select_odk_shortcut">Wybierz skrót PulseFE</string>
   <string name="bad_uri">Zły URI: %s</string>
   <string name="unrecognized_uri">Nierozpoznany URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
@@ -383,9 +383,9 @@
   <string name="selected_answer">Wybrany: %s</string>
   <string name="version_number">Wersja: %s</string>
   <string name="id_number">ID: %s</string>
-  <string name="odk_website">Odwiedź stronę ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) służy do zbierania danych w trudnych warunkach dla społeczego dobra.</string>
-  <string name="odk_forum">Dołącz do forum ODK</string>
+  <string name="odk_website">Odwiedź stronę PulseFE</string>
+  <string name="odk_website_summary">Open Data Kit (PulseFE) służy do zbierania danych w trudnych warunkach dla społeczego dobra.</string>
+  <string name="odk_forum">Dołącz do forum PulseFE</string>
   <string name="odk_forum_summary">Dołącz do forum by uzyskać wsparcie, zgłaszać potrzeby nowych opcji, wnieść swój wkład w tłumaczenie i kodowanie.</string>
   <string name="all_open_source_licenses">Biblioteki/licencje open source</string>
   <string name="all_open_source_licenses_msg">Stoimy na ramionach gigantów!</string>
@@ -406,7 +406,7 @@
   <string name="encryption_error_message">Formularz %s nie został zapisany jako zakończony.</string>
   <string name="analytics_preferences">Dane użytkowania</string>
   <string name="analytics">Zbieraj anonimowe dane dotyczące użytkowania</string>
-  <string name="analytics_summary">Anonimowe dane dotyczące użytkowania pomagają zespołowi ODK priorytetyzować poprawki i funkcjonalność</string>
+  <string name="analytics_summary">Anonimowe dane dotyczące użytkowania pomagają zespołowi PulseFE priorytetyzować poprawki i funkcjonalność</string>
   <string name="select_all">Zaznacz Wszystkie</string>
   <string name="clear_all">Odznacz Wszystkie</string>
   <string name="reset_settings">Wszystkie ustawienia (ustawienia wewnętrzne, ustawienia zapisane)</string>
@@ -594,7 +594,7 @@
   <string name="get_accounts_runtime_permission_denied_title">Uzyskaj uprawnienia do kont</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do kont. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Sprawdź uprawnienia dostępu do właściwości telefonu</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect nie wykonuje połączeń, ale wymaga dostępu do niektórych właściwości twojego urządzenia, w tym do numeru telefonu i numeru ID</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">PulseFE nie wykonuje połączeń, ale wymaga dostępu do niektórych właściwości twojego urządzenia, w tym do numeru telefonu i numeru ID</string>
   <string name="form_update_category">Aktualizacja formularza</string>
   <string name="periodic_form_updates_check_title">Cykliczne sprawdzenie możliwych aktualizacji</string>
   <string name="every_fifteen_minutes">Co piętnaście minut</string>
