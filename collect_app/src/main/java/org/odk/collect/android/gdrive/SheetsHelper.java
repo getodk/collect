@@ -16,12 +16,7 @@ package org.odk.collect.android.gdrive;
 
 import androidx.annotation.NonNull;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.AddSheetRequest;
-import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.GridProperties;
 import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.SheetProperties;
@@ -37,23 +32,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class SheetsHelper {
-    private final SheetsService sheetsService;
 
-    protected SheetsHelper(GoogleAccountCredential credential, HttpTransport transport, JsonFactory jsonFactory) {
-        // Initialize sheets service
-        Sheets sheets = new Sheets.Builder(transport, jsonFactory, credential)
-                .setApplicationName("ODK-Collect")
-                .build();
+    private final SheetsAPI sheetsAPI;
 
-        sheetsService = new SheetsService(sheets);
-    }
-
-    /**
-     * Constructs a new SheetsHelper with the provided Sheets Service.
-     * This Constructor should only be used for testing.
-     */
-   protected SheetsHelper(@NonNull SheetsService sheetsService) {
-        this.sheetsService = sheetsService;
+   public SheetsHelper(@NonNull SheetsAPI sheetsAPI) {
+        this.sheetsAPI = sheetsAPI;
     }
 
     /**
@@ -95,7 +78,7 @@ public class SheetsHelper {
         requests.add(new Request().setUpdateSheetProperties(updateSheetPropertyRequest));
 
         // send the API request
-        sheetsService.batchUpdate(spreadsheetId, requests);
+        sheetsAPI.batchUpdate(spreadsheetId, requests);
     }
 
     /**
@@ -106,7 +89,7 @@ public class SheetsHelper {
             throw new IllegalArgumentException("ValueRange cannot be null");
         }
 
-        sheetsService.insertRow(spreadsheetId, sheetName, row);
+        sheetsAPI.insertRow(spreadsheetId, sheetName, row);
     }
 
     public void updateRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
@@ -114,7 +97,7 @@ public class SheetsHelper {
             throw new IllegalArgumentException("ValueRange cannot be null");
         }
 
-        sheetsService.updateRow(spreadsheetId, sheetName, row);
+        sheetsAPI.updateRow(spreadsheetId, sheetName, row);
     }
 
     public void addSheet(String spreadsheetId, String sheetName) throws IOException {
@@ -122,7 +105,7 @@ public class SheetsHelper {
         addSheetRequest.setProperties(new SheetProperties().setTitle(sheetName));
         Request request = new Request();
         request.setAddSheet(addSheetRequest);
-        sheetsService.batchUpdate(spreadsheetId, Collections.singletonList(request));
+        sheetsAPI.batchUpdate(spreadsheetId, Collections.singletonList(request));
     }
 
     /**
@@ -138,7 +121,7 @@ public class SheetsHelper {
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
      */
     public List<List<Object>> getSheetCells(String spreadsheetId, String sheetName) throws IOException {
-        ValueRange response = sheetsService.getSpreadsheet(spreadsheetId, sheetName);
+        ValueRange response = sheetsAPI.getSpreadsheet(spreadsheetId, sheetName);
         return response.getValues();
     }
 
@@ -157,7 +140,7 @@ public class SheetsHelper {
          */
 
         // fetching the google spreadsheet
-        Spreadsheet spreadsheet = sheetsService.getSpreadsheet(spreadsheetId);
+        Spreadsheet spreadsheet = sheetsAPI.getSpreadsheet(spreadsheetId);
 
         String spreadsheetFileName = spreadsheet.getProperties().getTitle();
 
@@ -182,58 +165,8 @@ public class SheetsHelper {
                                 .setFields("title")));
 
         // updating the spreadsheet with the given id
-        sheetsService.batchUpdate(spreadsheetId, requests);
+        sheetsAPI.batchUpdate(spreadsheetId, requests);
         return spreadsheet;
     }
 
-    /**
-     * This class only makes API calls using the sheets API and does not contain any business logic
-     *
-     * @author Shobhit Agarwal
-     */
-
-    public static class SheetsService {
-        private final Sheets sheets;
-
-        SheetsService(Sheets sheets) {
-            this.sheets = sheets;
-        }
-
-        public void batchUpdate(String spreadsheetId, List<Request> requests) throws IOException {
-            sheets.spreadsheets()
-                    .batchUpdate(
-                            spreadsheetId,
-                            new BatchUpdateSpreadsheetRequest().setRequests(requests)
-                    ).execute();
-        }
-
-        public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
-            sheets.spreadsheets().values()
-                    .append(spreadsheetId, sheetName, row)
-                    .setIncludeValuesInResponse(true)
-                    .setInsertDataOption("INSERT_ROWS")
-                    .setValueInputOption("USER_ENTERED").execute();
-        }
-
-        public void updateRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
-            sheets.spreadsheets().values()
-                    .update(spreadsheetId, sheetName, row)
-                    .setIncludeValuesInResponse(true)
-                    .setValueInputOption("USER_ENTERED").execute();
-        }
-
-        ValueRange getSpreadsheet(String spreadsheetId, String sheetName) throws IOException {
-            return sheets.spreadsheets()
-                    .values()
-                    .get(spreadsheetId, sheetName)
-                    .execute();
-        }
-
-        public Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
-            return sheets.spreadsheets()
-                    .get(spreadsheetId)
-                    .setIncludeGridData(false)
-                    .execute();
-        }
-    }
 }

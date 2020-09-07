@@ -80,7 +80,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
         driveHelper = accountsManager.getDriveHelper();
-        sheetsHelper = accountsManager.getSheetsHelper();
+        sheetsHelper = new SheetsHelper(accountsManager.getSheetsAPI());
     }
 
     @Override

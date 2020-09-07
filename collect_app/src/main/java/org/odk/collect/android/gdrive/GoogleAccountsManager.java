@@ -31,6 +31,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.sheets.v4.Sheets;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -54,7 +55,6 @@ public class GoogleAccountsManager {
     private Intent intentChooseAccount;
     private Context context;
     private DriveHelper driveHelper;
-    private SheetsHelper sheetsHelper;
     private GoogleAccountCredential credential;
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
@@ -162,11 +162,12 @@ public class GoogleAccountsManager {
         return driveHelper;
     }
 
-    public SheetsHelper getSheetsHelper() {
-        if (sheetsHelper == null) {
-            sheetsHelper = new SheetsHelper(credential, transport, jsonFactory);
-        }
-        return sheetsHelper;
+    public SheetsAPI getSheetsAPI() {
+        Sheets sheets = new Sheets.Builder(transport, jsonFactory, credential)
+                .setApplicationName("ODK-Collect")
+                .build();
+
+        return new GoogleSheetsAPI(sheets);
     }
 
     public String getToken() throws IOException, GoogleAuthException {

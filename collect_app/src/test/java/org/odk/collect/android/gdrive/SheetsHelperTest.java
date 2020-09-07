@@ -32,13 +32,13 @@ import static org.mockito.Mockito.verify;
 public class SheetsHelperTest {
 
     @Mock
-    private SheetsHelper.SheetsService sheetsService;
+    private GoogleSheetsAPI googleSheetsAPI;
 
     private SheetsHelper sheetsHelper;
 
     @Before
     public void setup() {
-        sheetsHelper = spy(new SheetsHelper(sheetsService));
+        sheetsHelper = spy(new SheetsHelper(googleSheetsAPI));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class SheetsHelperTest {
     public void insertRowTest() throws IOException {
         ValueRange valueRange = new ValueRange();
         sheetsHelper.insertRow("spreadsheet_id", "sheet_name", valueRange);
-        verify(sheetsService).insertRow("spreadsheet_id", "sheet_name", valueRange);
+        verify(googleSheetsAPI).insertRow("spreadsheet_id", "sheet_name", valueRange);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -80,7 +80,7 @@ public class SheetsHelperTest {
     public void updateRowTest() throws IOException {
         ValueRange valueRange = new ValueRange();
         sheetsHelper.updateRow("spreadsheet_id", "sheet_name!A1", valueRange);
-        verify(sheetsService).updateRow("spreadsheet_id", "sheet_name!A1", valueRange);
+        verify(googleSheetsAPI).updateRow("spreadsheet_id", "sheet_name!A1", valueRange);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class SheetsHelperTest {
 
         doReturn("sheet_title").when(mockedProperties).getTitle();
         doReturn(mockedProperties).when(mockedSpreadsheet).getProperties();
-        doReturn(mockedSpreadsheet).when(sheetsService).getSpreadsheet("spreadsheet_id");
+        doReturn(mockedSpreadsheet).when(googleSheetsAPI).getSpreadsheet("spreadsheet_id");
 
         Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet("spreadsheet_id");
 
@@ -99,6 +99,6 @@ public class SheetsHelperTest {
     }
 
     private void assertBatchUpdateCalled(int timesInvocations) throws IOException {
-        verify(sheetsService, times(timesInvocations)).batchUpdate(anyString(), ArgumentMatchers.<Request>anyList());
+        verify(googleSheetsAPI, times(timesInvocations)).batchUpdate(anyString(), ArgumentMatchers.<Request>anyList());
     }
 }
