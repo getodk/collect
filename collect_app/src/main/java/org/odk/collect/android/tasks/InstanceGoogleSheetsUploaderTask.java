@@ -25,7 +25,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 
 import java.util.List;
 

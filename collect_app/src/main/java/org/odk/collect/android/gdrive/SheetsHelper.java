@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities.gdrive;
+package org.odk.collect.android.gdrive;
 
 import androidx.annotation.NonNull;
 
@@ -39,7 +39,7 @@ import java.util.List;
 public class SheetsHelper {
     private final SheetsService sheetsService;
 
-    SheetsHelper(GoogleAccountCredential credential, HttpTransport transport, JsonFactory jsonFactory) {
+    protected SheetsHelper(GoogleAccountCredential credential, HttpTransport transport, JsonFactory jsonFactory) {
         // Initialize sheets service
         Sheets sheets = new Sheets.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
@@ -52,7 +52,7 @@ public class SheetsHelper {
      * Constructs a new SheetsHelper with the provided Sheets Service.
      * This Constructor should only be used for testing.
      */
-    SheetsHelper(@NonNull SheetsService sheetsService) {
+   protected SheetsHelper(@NonNull SheetsService sheetsService) {
         this.sheetsService = sheetsService;
     }
 

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities.gdrive;
+package org.odk.collect.android.gdrive;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +42,7 @@ public class DriveHelper {
     public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
     private final DriveService driveService;
 
-    DriveHelper(@NonNull GoogleAccountCredential credential,
+    protected DriveHelper(@NonNull GoogleAccountCredential credential,
                 @NonNull HttpTransport transport,
                 @NonNull JsonFactory jsonFactory) {
         Drive drive = new Drive.Builder(transport, jsonFactory, credential)
@@ -56,7 +56,7 @@ public class DriveHelper {
      * Constructs a new DriveHelper with the provided Drive Service.
      * This Constructor should only be used for testing.
      */
-    DriveHelper(DriveService driveService) {
+    protected DriveHelper(DriveService driveService) {
         this.driveService = driveService;
     }
 

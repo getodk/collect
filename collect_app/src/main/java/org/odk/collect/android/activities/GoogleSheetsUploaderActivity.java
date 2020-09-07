@@ -49,7 +49,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -59,7 +59,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
+import static org.odk.collect.android.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener, GoogleSheetsUploaderProgressDialog.OnSendingFormsCanceledListener {
 

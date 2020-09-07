@@ -45,9 +45,9 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.utilities.gdrive.DriveHelper;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.utilities.gdrive.SheetsHelper;
+import org.odk.collect.android.gdrive.DriveHelper;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.SheetsHelper;
 
 import java.io.File;
 import java.io.IOException;

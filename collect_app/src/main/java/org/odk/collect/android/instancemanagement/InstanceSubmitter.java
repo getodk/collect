@@ -26,7 +26,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;

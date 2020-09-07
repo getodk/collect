@@ -55,8 +55,8 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.gdrive.DriveHelper;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.DriveHelper;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +71,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
+import static org.odk.collect.android.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener {

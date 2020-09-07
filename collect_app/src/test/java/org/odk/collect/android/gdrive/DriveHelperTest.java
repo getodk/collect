@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities.gdrive;
+package org.odk.collect.android.gdrive;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;

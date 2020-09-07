@@ -61,8 +61,8 @@ public class ServerSettingsTest {
     /**
      * This test could definitely be extended to cover form download/submit with the creation
      * of a stub
-     * {@link org.odk.collect.android.utilities.gdrive.DriveHelper} and
-     * {@link org.odk.collect.android.utilities.gdrive.GoogleAccountsManager}
+     * {@link org.odk.collect.android.gdrive.DriveHelper} and
+     * {@link org.odk.collect.android.gdrive.GoogleAccountsManager}
      */
     @Test
     public void selectingGoogleAccount_showsGoogleAccountSettings() {
