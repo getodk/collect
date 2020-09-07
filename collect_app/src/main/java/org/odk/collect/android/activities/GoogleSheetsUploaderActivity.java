@@ -35,6 +35,7 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -84,6 +85,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     @Inject
     InstancesRepository instancesRepository;
 
+    @Inject
+    FormsRepository formsRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +135,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     private void runTask() {
         instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager, analytics);
+        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository);
 
         // ensure we have a google account selected
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
