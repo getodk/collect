@@ -17,19 +17,14 @@ package org.odk.collect.android.gdrive;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.FileContent;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,43 +35,29 @@ public class DriveHelper {
     public static final String ODK_GOOGLE_DRIVE_SUBMISSION_FOLDER_NAME = "Submissions";
 
     public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
-    private final DriveService driveService;
+    private final DriveApi driveApi;
 
-    protected DriveHelper(@NonNull GoogleAccountCredential credential,
-                @NonNull HttpTransport transport,
-                @NonNull JsonFactory jsonFactory) {
-        Drive drive = new Drive.Builder(transport, jsonFactory, credential)
-                .setApplicationName("ODK-Collect")
-                .build();
-
-        driveService = new DriveService(drive);
-    }
-
-    /**
-     * Constructs a new DriveHelper with the provided Drive Service.
-     * This Constructor should only be used for testing.
-     */
-    protected DriveHelper(DriveService driveService) {
-        this.driveService = driveService;
+    public DriveHelper(DriveApi driveApi) {
+        this.driveApi = driveApi;
     }
 
     /**
      * Returns id of the root folder or null
      */
     public String getRootFolderId() throws IOException {
-        return driveService.getFileId("root", "id");
+        return driveApi.getFileId("root", "id");
     }
 
     @Nullable
     public Drive.Files.List buildRequest(String query, String fields) throws IOException {
         if (query != null && fields != null) {
-            return driveService.generateRequest(query, fields);
+            return driveApi.generateRequest(query, fields);
         }
         return null;
     }
 
     public void downloadFile(@NonNull String fileId, @NonNull File file) throws IOException {
-        driveService.downloadFile(fileId, file);
+        driveApi.downloadFile(fileId, file);
     }
 
     public String createOrGetIDOfSubmissionsFolder()
@@ -135,7 +116,7 @@ public class DriveHelper {
         String fields = "id, parents";
         FileContent mediaContent = new FileContent(mimeType, toUpload);
 
-        return driveService.uploadFile(fileMetadata, mediaContent, fields);
+        return driveApi.uploadFile(fileMetadata, mediaContent, fields);
     }
 
     /**
@@ -154,7 +135,7 @@ public class DriveHelper {
         fileMetadata = createNewFile(folderName, FOLDER_MIME_TYPE, parentId);
 
         // make api call using drive service to create the folder on google drive
-        String newFolderId = driveService.createFile(fileMetadata, "id");
+        String newFolderId = driveApi.createFile(fileMetadata, "id");
 
         //adding the permissions to folder
         setSharingPermissions(newFolderId);
@@ -196,7 +177,7 @@ public class DriveHelper {
                 .setType("anyone")
                 .setRole("reader");
 
-        driveService.setPermission(folderId, "id", sharePermission);
+        driveApi.setPermission(folderId, "id", sharePermission);
     }
 
     /**
@@ -218,7 +199,7 @@ public class DriveHelper {
         Drive.Files.List request = buildRequest(requestString, fields);
 
         if (request != null) {
-            driveService.fetchAllFiles(request, files);
+            driveApi.fetchAllFiles(request, files);
         }
         return files;
     }
@@ -255,79 +236,7 @@ public class DriveHelper {
 
     public void fetchFilesForCurrentPage(Drive.Files.List request, List<com.google.api.services.drive.model.File> files)
             throws IOException {
-        driveService.fetchFilesForCurrentPage(request, files);
+        driveApi.fetchFilesForCurrentPage(request, files);
     }
 
-    /**
-     * This class only makes API calls using the drives API and does not contain any business logic
-     *
-     * @author Shobhit Agarwal
-     */
-
-    public static class DriveService {
-        private final Drive drive;
-
-        DriveService(Drive drive) {
-            this.drive = drive;
-        }
-
-        public String getFileId(String fileId, String fields) throws IOException {
-            return drive.files()
-                    .get(fileId)
-                    .setFields(fields)
-                    .execute()
-                    .getId();
-        }
-
-        public Drive.Files.List generateRequest(String query, String fields) throws IOException {
-            return drive.files()
-                    .list()
-                    .setQ(query)
-                    .setFields(fields);
-        }
-
-        public void downloadFile(String fileId, File file) throws IOException {
-            try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-                drive.files()
-                        .get(fileId)
-                        .executeMediaAndDownloadTo(fileOutputStream);
-            }
-        }
-
-        String uploadFile(com.google.api.services.drive.model.File metadata, FileContent fileContent, String fields) throws IOException {
-            return drive.files()
-                    .create(metadata, fileContent)
-                    .setFields(fields)
-                    .setIgnoreDefaultVisibility(true)
-                    .execute()
-                    .getId();
-        }
-
-        public String createFile(com.google.api.services.drive.model.File file, String fields) throws IOException {
-            return drive.files()
-                    .create(file)
-                    .setFields(fields)
-                    .execute()
-                    .getId();
-        }
-
-        public void setPermission(String folderId, String fields, Permission permission) throws IOException {
-            drive.permissions()
-                    .create(folderId, permission)
-                    .setFields(fields)
-                    .execute();
-        }
-
-        public void fetchAllFiles(Drive.Files.List request, List<com.google.api.services.drive.model.File> files) throws IOException {
-            do {
-                fetchFilesForCurrentPage(request, files);
-            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
-        }
-
-        void fetchFilesForCurrentPage(Drive.Files.List request, List<com.google.api.services.drive.model.File> files) throws IOException {
-            FileList fileList = request.execute();
-            files.addAll(fileList.getFiles());
-            request.setPageToken(fileList.getNextPageToken());
-        }
-    }
 }

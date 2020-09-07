@@ -33,9 +33,9 @@ import java.util.List;
 
 public class SheetsHelper {
 
-    private final SheetsAPI sheetsAPI;
+    private final SheetsApi sheetsAPI;
 
-   public SheetsHelper(@NonNull SheetsAPI sheetsAPI) {
+   public SheetsHelper(@NonNull SheetsApi sheetsAPI) {
         this.sheetsAPI = sheetsAPI;
     }
 

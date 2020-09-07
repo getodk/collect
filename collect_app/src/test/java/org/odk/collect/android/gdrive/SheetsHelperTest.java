@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 public class SheetsHelperTest {
 
     @Mock
-    private GoogleSheetsAPI googleSheetsAPI;
+    private GoogleSheetsApi googleSheetsAPI;
 
     private SheetsHelper sheetsHelper;
 

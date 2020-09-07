@@ -15,11 +15,11 @@ import java.util.List;
  * @author Shobhit Agarwal
  */
 
-public class GoogleSheetsAPI implements SheetsAPI {
+public class GoogleSheetsApi implements SheetsApi {
 
     private final Sheets sheets;
 
-    public GoogleSheetsAPI(Sheets sheets) {
+    public GoogleSheetsApi(Sheets sheets) {
         this.sheets = sheets;
     }
 

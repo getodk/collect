@@ -79,8 +79,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private Spreadsheet spreadsheet;
 
     public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
-        driveHelper = accountsManager.getDriveHelper();
-        sheetsHelper = new SheetsHelper(accountsManager.getSheetsAPI());
+        driveHelper = new DriveHelper(accountsManager.getDriveApi());
+        sheetsHelper = new SheetsHelper(accountsManager.getSheetsApi());
     }
 
     @Override
