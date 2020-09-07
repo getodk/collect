@@ -15,10 +15,9 @@
 package org.odk.collect.android.gdrive;
 
 import android.accounts.Account;
-import android.app.Activity;
-import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -34,7 +33,6 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.sheets.v4.Sheets;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -43,8 +41,6 @@ import java.io.IOException;
 import java.util.Collections;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager {
 
@@ -78,41 +74,6 @@ public class GoogleAccountsManager {
         this.themeUtils = themeUtils;
     }
 
-    private void initCredential(@NonNull Context context) {
-        this.context = context;
-
-        transport = AndroidHttp.newCompatibleTransport();
-        jsonFactory = JacksonFactory.getDefaultInstance();
-        preferences = GeneralSharedPreferences.getInstance();
-
-        credential = GoogleAccountCredential
-                .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
-                .setBackOff(new ExponentialBackOff());
-
-        intentChooseAccount = credential.newChooseAccountIntent();
-        themeUtils = new ThemeUtils(context);
-    }
-
-    public static void showSettingsDialog(Activity activity) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setTitle(R.string.missing_google_account_dialog_title)
-                .setMessage(R.string.missing_google_account_dialog_desc)
-                .setOnCancelListener(dialog -> {
-                    dialog.dismiss();
-                    if (activity != null) {
-                        activity.finish();
-                    }
-                })
-                .setPositiveButton(activity.getString(R.string.ok), (dialog, which) -> {
-                    dialog.dismiss();
-                    activity.finish();
-                })
-                .create();
-
-        showDialog(alertDialog, activity);
-    }
-
     public boolean isAccountSelected() {
         return credential.getSelectedAccountName() != null;
     }
@@ -142,33 +103,12 @@ public class GoogleAccountsManager {
         }
     }
 
-    private Account getAccountPickerCurrentAccount() {
-        String selectedAccountName = getLastSelectedAccountIfValid();
-        if (selectedAccountName.isEmpty()) {
-            Account[] googleAccounts = credential.getAllAccounts();
-            if (googleAccounts != null && googleAccounts.length > 0) {
-                selectedAccountName = googleAccounts[0].name;
-            } else {
-                return null;
-            }
-        }
-        return new Account(selectedAccountName, "com.google");
-    }
-
     public DriveApi getDriveApi() {
         Drive drive = new Drive.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
 
         return new GoogleDriveApi(drive);
-    }
-
-    public SheetsApi getSheetsApi() {
-        Sheets sheets = new Sheets.Builder(transport, jsonFactory, credential)
-                .setApplicationName("ODK-Collect")
-                .build();
-
-        return new GoogleSheetsApi(sheets);
     }
 
     public String getToken() throws IOException, GoogleAuthException {
@@ -185,5 +125,41 @@ public class GoogleAccountsManager {
         intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
         return intentChooseAccount;
+    }
+
+    public SheetsApi getSheetsApi() {
+        Sheets sheets = new Sheets.Builder(transport, jsonFactory, credential)
+                .setApplicationName("ODK-Collect")
+                .build();
+
+        return new GoogleSheetsApi(sheets);
+    }
+
+    private Account getAccountPickerCurrentAccount() {
+        String selectedAccountName = getLastSelectedAccountIfValid();
+        if (selectedAccountName.isEmpty()) {
+            Account[] googleAccounts = credential.getAllAccounts();
+            if (googleAccounts != null && googleAccounts.length > 0) {
+                selectedAccountName = googleAccounts[0].name;
+            } else {
+                return null;
+            }
+        }
+        return new Account(selectedAccountName, "com.google");
+    }
+
+    private void initCredential(@NonNull Context context) {
+        this.context = context;
+
+        transport = AndroidHttp.newCompatibleTransport();
+        jsonFactory = JacksonFactory.getDefaultInstance();
+        preferences = GeneralSharedPreferences.getInstance();
+
+        credential = GoogleAccountCredential
+                .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
+                .setBackOff(new ExponentialBackOff());
+
+        intentChooseAccount = credential.newChooseAccountIntent();
+        themeUtils = new ThemeUtils(context);
     }
 }

@@ -44,6 +44,7 @@ import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.gdrive.GoogleAccountNotSetDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -70,8 +71,6 @@ import java.util.Stack;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener {
@@ -259,7 +258,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     // re-attempt to list google drive files
                     getResultsFromApi();
                 } else {
-                    showSettingsDialog(GoogleDriveActivity.this);
+                    GoogleAccountNotSetDialog.show(GoogleDriveActivity.this);
                 }
             }
 

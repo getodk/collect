@@ -20,7 +20,6 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +29,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
@@ -37,6 +38,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
+import org.odk.collect.android.gdrive.GoogleAccountNotSetDialog;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -49,7 +52,6 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.gdrive.GoogleAccountsManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -59,7 +61,6 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
-import static org.odk.collect.android.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener, GoogleSheetsUploaderProgressDialog.OnSendingFormsCanceledListener {
 
@@ -176,7 +177,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                     // re-attempt to list google drive files
                     getResultsFromApi();
                 } else {
-                    showSettingsDialog(GoogleSheetsUploaderActivity.this);
+                    GoogleAccountNotSetDialog.show(GoogleSheetsUploaderActivity.this);
                 }
             }
 
