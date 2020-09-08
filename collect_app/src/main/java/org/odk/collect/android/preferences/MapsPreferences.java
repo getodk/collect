@@ -58,7 +58,7 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
         if (dialogFragment != null) {
             dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), null);
+            dialogFragment.show(getParentFragmentManager(), ReferenceLayerPreferenceDialog.class.getName());
         }
     }
 
@@ -166,6 +166,10 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
         referenceLayerPref.setOnPreferenceChangeListener((preference, newValue) -> {
             updateReferenceLayerSummary(newValue);
+            DialogFragment dialogFragment = (DialogFragment) getParentFragmentManager().findFragmentByTag(ReferenceLayerPreferenceDialog.class.getName());
+            if (dialogFragment != null) {
+                dialogFragment.dismiss();
+            }
             return true;
         });
     }
