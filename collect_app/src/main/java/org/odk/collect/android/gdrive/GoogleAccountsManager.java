@@ -19,19 +19,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.sheets.v4.Sheets;
 
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -44,10 +37,7 @@ import javax.inject.Inject;
 
 public class GoogleAccountsManager {
 
-    @Nullable
-    private HttpTransport transport;
-    @Nullable
-    private JsonFactory jsonFactory;
+    private final GoogleApiProvider googleApiProvider;
 
     private Intent intentChooseAccount;
     private Context context;
@@ -56,7 +46,8 @@ public class GoogleAccountsManager {
     private ThemeUtils themeUtils;
 
     @Inject
-    public GoogleAccountsManager(@NonNull Context context) {
+    public GoogleAccountsManager(@NonNull Context context, GoogleApiProvider googleApiProvider) {
+        this.googleApiProvider = googleApiProvider;
         initCredential(context);
     }
 
@@ -72,6 +63,7 @@ public class GoogleAccountsManager {
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
+        this.googleApiProvider = new GoogleApiProvider();
     }
 
     public boolean isAccountSelected() {
@@ -103,14 +95,6 @@ public class GoogleAccountsManager {
         }
     }
 
-    public DriveApi getDriveApi() {
-        Drive drive = new Drive.Builder(transport, jsonFactory, credential)
-                .setApplicationName("ODK-Collect")
-                .build();
-
-        return new GoogleDriveApi(drive);
-    }
-
     public String getToken() throws IOException, GoogleAuthException {
         String token = credential.getToken();
 
@@ -128,11 +112,11 @@ public class GoogleAccountsManager {
     }
 
     public SheetsApi getSheetsApi() {
-        Sheets sheets = new Sheets.Builder(transport, jsonFactory, credential)
-                .setApplicationName("ODK-Collect")
-                .build();
+        return googleApiProvider.getSheetsApi(credential);
+    }
 
-        return new GoogleSheetsApi(sheets);
+    public DriveApi getDriveApi() {
+        return googleApiProvider.getDriveApi(credential);
     }
 
     private Account getAccountPickerCurrentAccount() {
@@ -151,8 +135,6 @@ public class GoogleAccountsManager {
     private void initCredential(@NonNull Context context) {
         this.context = context;
 
-        transport = AndroidHttp.newCompatibleTransport();
-        jsonFactory = JacksonFactory.getDefaultInstance();
         preferences = GeneralSharedPreferences.getInstance();
 
         credential = GoogleAccountCredential

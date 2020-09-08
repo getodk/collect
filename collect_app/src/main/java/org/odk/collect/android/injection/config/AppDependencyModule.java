@@ -46,6 +46,7 @@ import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -438,5 +439,10 @@ public class AppDependencyModule {
     @Provides
     public InstancesRepository providesInstancesRepository() {
         return new DatabaseInstancesRepository();
+    }
+
+    @Provides
+    public GoogleApiProvider providesGoogleApiProvider() {
+        return new GoogleApiProvider();
     }
 }

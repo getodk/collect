@@ -45,11 +45,13 @@ public class InstanceSubmitter {
     private final Analytics analytics;
     private final FormsRepository formsRepository;
     private final InstancesRepository instancesRepository;
+    private final GoogleAccountsManager googleAccountsManager;
 
-    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository, GoogleAccountsManager googleAccountsManager) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
+        this.googleAccountsManager = googleAccountsManager;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -72,13 +74,12 @@ public class InstanceSubmitter {
 
         if (protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets))) {
             if (PermissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
-                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                String googleUsername = accountsManager.getLastSelectedAccountIfValid();
+                String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_SET);
                 }
-                accountsManager.selectAccount(googleUsername);
-                uploader = new InstanceGoogleSheetsUploader(accountsManager);
+                googleAccountsManager.selectAccount(googleUsername);
+                uploader = new InstanceGoogleSheetsUploader(googleAccountsManager);
             } else {
                 throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_PERMITTED);
             }
