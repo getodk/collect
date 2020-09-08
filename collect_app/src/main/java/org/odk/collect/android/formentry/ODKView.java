@@ -263,8 +263,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
-        QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(),
-                readOnlyOverride, questionMediaManager, waitingForDataRegistry);
+        QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride,
+                waitingForDataRegistry, questionMediaManager, analytics);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 

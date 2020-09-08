@@ -19,6 +19,7 @@ import android.hardware.SensorManager;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -39,6 +40,7 @@ import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.URL_WIDGET;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
@@ -62,7 +64,7 @@ public class WidgetFactory {
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, Context context, boolean readOnlyOverride,
-                                                        QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+                                                        WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, Analytics analytics) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
@@ -125,6 +127,8 @@ public class WidgetFactory {
                             questionWidget = new StringNumberWidget(context, questionDetails, readOnlyOverride);
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
+
+                            analytics.logEvent(URL_WIDGET, "UrlWidget", questionDetails.getFormAnalyticsID());
                         } else {
                             questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
                         }

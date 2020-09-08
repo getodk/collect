@@ -73,6 +73,12 @@ public class AnalyticsEvents {
     public static final String AUDIO_QUESTION = "Prompt";
 
     /**
+     * Track form definitions with url widget. The action should be the widget name and
+     * the label should be a hash of the form definition.
+     */
+    public static final String URL_WIDGET = "Prompt";
+
+    /**
      * Track scoped storage migration attempts. The action should be the result of the attempt.
      */
     public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
