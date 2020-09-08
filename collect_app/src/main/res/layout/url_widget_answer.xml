@@ -11,13 +11,6 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/url_answer_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/margin_extra_small"
-        android:paddingStart="@dimen/margin_standard"
-        android:paddingEnd="@dimen/margin_standard"
-        android:textColor="?colorOnSurface"
-        android:textAppearance="@style/TextAppearance.Collect.Body1" />
+        style="@style/Widget.Collect.TextView.WidgetAnswer" />
 
 </LinearLayout>

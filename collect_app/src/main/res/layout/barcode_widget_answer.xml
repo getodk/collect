@@ -4,12 +4,12 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/simple_button"
+        android:id="@+id/get_barcode_button"
         style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/get_location" />
+        android:text="@string/get_barcode" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/geo_answer_text"
+        android:id="@+id/barcode_answer_text"
         style="@style/Widget.Collect.TextView.WidgetAnswer" />
 
 </LinearLayout>

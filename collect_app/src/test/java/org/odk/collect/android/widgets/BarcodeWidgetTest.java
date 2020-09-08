@@ -64,19 +64,19 @@ public class BarcodeWidgetTest {
 
     @Test
     public void usingReaDOnly_shouldHideBarcodeButton() {
-        assertThat(createWidget(promptWithReadOnly()).getBarcodeButton.getVisibility(), is(View.GONE));
+        assertThat(createWidget(promptWithReadOnly()).binding.getBarcodeButton.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void whenPromptHasAnswer_replaceBarcodeButtonIsDisplayed() {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.getBarcodeButton.getText().toString(), is(widget.getContext().getString(R.string.replace_barcode)));
+        assertThat(widget.binding.getBarcodeButton.getText().toString(), is(widget.getContext().getString(R.string.replace_barcode)));
     }
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.stringAnswer.getText().toString(), is("blah"));
+        assertThat(widget.binding.barcodeAnswerText.getText().toString(), is("blah"));
     }
 
     @Test
@@ -96,8 +96,8 @@ public class BarcodeWidgetTest {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.clearAnswer();
 
-        assertThat(widget.stringAnswer.getText().toString(), is(""));
-        assertThat(widget.getBarcodeButton.getText().toString(), is(widget.getContext().getString(R.string.get_barcode)));
+        assertThat(widget.binding.barcodeAnswerText.getText().toString(), is(""));
+        assertThat(widget.binding.getBarcodeButton.getText().toString(), is(widget.getContext().getString(R.string.get_barcode)));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class BarcodeWidgetTest {
     public void setData_updatesWidgetAnswer_afterStrippingInvalidCharacters() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData("\ud800blah\b");
-        assertThat(widget.stringAnswer.getText().toString(), is("blah"));
+        assertThat(widget.binding.barcodeAnswerText.getText().toString(), is("blah"));
     }
 
     @Test
@@ -129,11 +129,11 @@ public class BarcodeWidgetTest {
     public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
-        widget.getBarcodeButton.performLongClick();
-        widget.stringAnswer.performLongClick();
+        widget.binding.getBarcodeButton.performLongClick();
+        widget.binding.barcodeAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.getBarcodeButton);
-        verify(listener).onLongClick(widget.stringAnswer);
+        verify(listener).onLongClick(widget.binding.getBarcodeButton);
+        verify(listener).onLongClick(widget.binding.barcodeAnswerText);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class BarcodeWidgetTest {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         permissionUtils.setPermissionGranted(false);
         widget.setPermissionUtils(permissionUtils);
-        widget.getBarcodeButton.performClick();
+        widget.binding.getBarcodeButton.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
         assertThat(waitingForDataRegistry.waiting.isEmpty(), is(true));
@@ -154,7 +154,7 @@ public class BarcodeWidgetTest {
 
         BarcodeWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
-        widget.getBarcodeButton.performClick();
+        widget.binding.getBarcodeButton.performClick();
 
         assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
     }
@@ -163,7 +163,7 @@ public class BarcodeWidgetTest {
     public void clickingBarcodeButton_whenPermissionGranted_launchesCorrectIntent() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         widget.setPermissionUtils(permissionUtils);
-        widget.getBarcodeButton.performClick();
+        widget.binding.getBarcodeButton.performClick();
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertThat(startedIntent.getComponent(), is(new ComponentName(widgetTestActivity, ScannerWithFlashlightActivity.class)));
@@ -178,7 +178,7 @@ public class BarcodeWidgetTest {
 
         BarcodeWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
-        widget.getBarcodeButton.performClick();
+        widget.binding.getBarcodeButton.performClick();
 
         assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.error_front_camera_unavailable)));
     }
@@ -191,7 +191,7 @@ public class BarcodeWidgetTest {
 
         BarcodeWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
-        widget.getBarcodeButton.performClick();
+        widget.binding.getBarcodeButton.performClick();
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertThat(startedIntent.getBooleanExtra(WidgetAppearanceUtils.FRONT, false), is(true));

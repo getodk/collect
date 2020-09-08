@@ -51,7 +51,6 @@ public class UrlWidget extends QuestionWidget {
             binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.urlButton.setOnClickListener(v -> onButtonClick());
         }
-
         binding.urlAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.urlAnswerText.setText(prompt.getAnswerText());
 
