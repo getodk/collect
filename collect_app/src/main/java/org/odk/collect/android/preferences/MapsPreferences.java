@@ -32,6 +32,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,15 +51,17 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
-        DialogFragment dialogFragment = null;
-        if (preference instanceof CaptionedListPreference) {
-            dialogFragment = ReferenceLayerPreferenceDialog.newInstance(preference.getKey());
-        } else {
-            super.onDisplayPreferenceDialog(preference);
-        }
-        if (dialogFragment != null) {
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), ReferenceLayerPreferenceDialog.class.getName());
+        if (MultiClickGuard.allowClick(getClass().getName())) {
+            DialogFragment dialogFragment = null;
+            if (preference instanceof CaptionedListPreference) {
+                dialogFragment = ReferenceLayerPreferenceDialog.newInstance(preference.getKey());
+            } else {
+                super.onDisplayPreferenceDialog(preference);
+            }
+            if (dialogFragment != null) {
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(getParentFragmentManager(), ReferenceLayerPreferenceDialog.class.getName());
+            }
         }
     }
 
