@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,7 +63,6 @@ public class CaptionedListPreference extends ListPreference {
         this.dialogCaption = dialogCaption;
     }
 
-
     /** Updates the contents of the dialog to show the items passed in by setItems etc.*/
     public void updateContent() {
         CharSequence[] values = getEntryValues();
@@ -73,9 +70,8 @@ public class CaptionedListPreference extends ListPreference {
 
         if (ReferenceLayerPreferenceDialog.listView != null && values != null && labels != null && captions != null) {
             ReferenceLayerPreferenceDialog.listView.removeAllViews();
-            List<RadioButton> radioButtons = new ArrayList<>();
             for (int i = 0; i < values.length; i++) {
-                radioButtons.add(inflateItem(ReferenceLayerPreferenceDialog.listView, i, values[i], labels[i], captions[i]));
+                inflateItem(ReferenceLayerPreferenceDialog.listView, i, values[i], labels[i], captions[i]);
             }
         }
         if (captionView != null) {
@@ -102,9 +98,9 @@ public class CaptionedListPreference extends ListPreference {
     }
 
     /** Saves the selected value to the preferences when the dialog is closed. */
-    protected void onDialogClosed(boolean positiveResult) {
+    protected void onDialogClosed() {
         CharSequence[] values = getEntryValues();
-        if (positiveResult && clickedIndex >= 0 && values != null) {
+        if (clickedIndex >= 0 && values != null) {
             Object value = values[clickedIndex];
             if (callChangeListener(value)) {
                 setValue(value != null ? value.toString() : null);
@@ -115,7 +111,7 @@ public class CaptionedListPreference extends ListPreference {
     /** When an item is clicked, record which item and then dismiss the dialog. */
     protected void onItemClicked(int index) {
         clickedIndex = index;
-        onDialogClosed(true);
+        onDialogClosed();
     }
 
     public static class Item {
