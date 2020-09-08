@@ -119,7 +119,7 @@ public class FormManagementSettingsTest {
     public void whenGoogleDriveUsingAsServer_disablesPrefsAndOnlyAllowsManualUpdates() {
         new MainMenuPage(rule).assertOnPage()
                 .enablePreviouslyDownloadedOnlyUpdates() // Enabled a different mode before setting up Google
-                .setGoogleAccount("steph@curry.basket", testDependencies.googleApi)
+                .setGoogleAccount("steph@curry.basket", testDependencies.googleAccountPicker)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickFormManagement()

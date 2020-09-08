@@ -1,9 +1,5 @@
 package org.odk.collect.android.support;
 
-import android.accounts.Account;
-import android.content.Intent;
-
-import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.Permission;
@@ -15,7 +11,6 @@ import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.odk.collect.android.gdrive.DriveApi;
-import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.SheetsApi;
 
 import java.io.File;
@@ -27,16 +22,9 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 
-public class StubGoogleApi implements DriveApi, SheetsApi, GoogleAccountPicker {
-
-    private String deviceAccount;
-    private String selectedAccountName;
+public class FakeGoogleApi implements DriveApi, SheetsApi {
 
     private final Map<String, List<List<Object>>> spreadsheets = new HashMap<>();
-
-    public void setDeviceAccount(String deviceAccount) {
-        this.deviceAccount = deviceAccount;
-    }
 
     @Override
     public String getFileId(String fileId, String fields) throws IOException {
@@ -124,38 +112,5 @@ public class StubGoogleApi implements DriveApi, SheetsApi, GoogleAccountPicker {
         spreadsheet.setSheets(asList(sheet));
 
         return spreadsheet;
-    }
-
-    @Override
-    public String getSelectedAccountName() {
-        return selectedAccountName;
-    }
-
-    @Override
-    public Account[] getAllAccounts() {
-        if (deviceAccount != null) {
-            return new Account[] {new Account(deviceAccount, "com.google")};
-        } else {
-            return new Account[]{};
-        }
-    }
-
-    @Override
-    public void setSelectedAccountName(String accountName) {
-        this.selectedAccountName = accountName;
-    }
-
-    @Override
-    public String getToken() throws IOException, GoogleAuthException {
-        if (selectedAccountName != null) {
-            return "token";
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public Intent newChooseAccountIntent() {
-        return new Intent("PICK_GOOGLE_ACCOUNT");
     }
 }

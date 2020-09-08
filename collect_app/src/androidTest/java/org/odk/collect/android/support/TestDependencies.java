@@ -12,6 +12,7 @@ import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.gdrive.SheetsApi;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -26,7 +27,8 @@ public class TestDependencies extends AppDependencyModule {
 
     public final StubOpenRosaServer server = new StubOpenRosaServer();
     public final TestScheduler scheduler = new TestScheduler();
-    public final StubGoogleApi googleApi = new StubGoogleApi();
+    public final FakeGoogleApi googleApi = new FakeGoogleApi();
+    public final FakeGoogleAccountPicker googleAccountPicker = new FakeGoogleAccountPicker();
 
     public final List<IdlingResource> idlingResources = asList(
             new SchedulerIdlingResource(scheduler),
@@ -45,23 +47,23 @@ public class TestDependencies extends AppDependencyModule {
     }
 
     @Override
-    public GoogleApiProvider providesGoogleApiProvider() {
-        return new GoogleApiProvider() {
+    public GoogleApiProvider providesGoogleApiProvider(PreferencesProvider preferencesProvider) {
+        return new GoogleApiProvider(preferencesProvider) {
 
             @Override
-            public GoogleAccountPicker getAccountPicker(Context context) {
+            public SheetsApi getSheetsApi(Context context) {
                 return googleApi;
             }
 
             @Override
-            public SheetsApi getSheetsApi(GoogleAccountPicker googleAccountPicker) {
-                return googleApi;
-            }
-
-            @Override
-            public DriveApi getDriveApi(GoogleAccountPicker googleAccountPicker) {
+            public DriveApi getDriveApi(Context context) {
                 return googleApi;
             }
         };
+    }
+
+    @Override
+    public GoogleAccountPicker providesGoogleAccountPicker(Context context) {
+        return googleAccountPicker;
     }
 }

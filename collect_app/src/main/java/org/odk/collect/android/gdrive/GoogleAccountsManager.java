@@ -35,32 +35,33 @@ import javax.inject.Inject;
 public class GoogleAccountsManager {
 
     private final GoogleApiProvider googleApiProvider;
+    private final GoogleAccountPicker accountPicker;
 
     private Intent intentChooseAccount;
     private Context context;
-    private GoogleAccountPicker accountPicker;
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
 
     @Inject
-    public GoogleAccountsManager(@NonNull Context context, GoogleApiProvider googleApiProvider) {
+    public GoogleAccountsManager(@NonNull Context context, GoogleApiProvider googleApiProvider, GoogleAccountPicker googleAccountPicker) {
         this.googleApiProvider = googleApiProvider;
+        this.accountPicker = googleAccountPicker;
         initCredential(context);
     }
 
     /**
      * This constructor should be used only for testing purposes
      */
-    public GoogleAccountsManager(@NonNull GoogleAccountCredential accountPicker,
+    public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
                                  @NonNull ThemeUtils themeUtils
     ) {
-        this.accountPicker = new GoogleAccountCredentialGoogleAccountPicker(accountPicker);
+        this.accountPicker = new GoogleAccountCredentialGoogleAccountPicker(credential);
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
-        this.googleApiProvider = new GoogleApiProvider();
+        this.googleApiProvider = new GoogleApiProvider(null);
     }
 
     public boolean isAccountSelected() {
@@ -109,11 +110,11 @@ public class GoogleAccountsManager {
     }
 
     public SheetsApi getSheetsApi() {
-        return googleApiProvider.getSheetsApi(accountPicker);
+        return googleApiProvider.getSheetsApi(context);
     }
 
     public DriveApi getDriveApi() {
-        return googleApiProvider.getDriveApi(accountPicker);
+        return googleApiProvider.getDriveApi(context);
     }
 
     private Account getAccountPickerCurrentAccount() {
@@ -133,8 +134,6 @@ public class GoogleAccountsManager {
         this.context = context;
 
         preferences = GeneralSharedPreferences.getInstance();
-
-        accountPicker = googleApiProvider.getAccountPicker(context);
 
         intentChooseAccount = accountPicker.newChooseAccountIntent();
         themeUtils = new ThemeUtils(context);

@@ -10,6 +10,10 @@ import android.webkit.MimeTypeMap;
 
 import androidx.work.WorkManager;
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.DriveScopes;
+
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -46,6 +50,8 @@ import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseMediaFileRepository;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
+import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
@@ -91,6 +97,7 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -442,7 +449,14 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public GoogleApiProvider providesGoogleApiProvider() {
-        return new GoogleApiProvider();
+    public GoogleApiProvider providesGoogleApiProvider(PreferencesProvider preferencesProvider) {
+        return new GoogleApiProvider(preferencesProvider);
+    }
+
+    @Provides
+    public GoogleAccountPicker providesGoogleAccountPicker(Context context) {
+        return new GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential
+                .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
+                .setBackOff(new ExponentialBackOff()));
     }
 }

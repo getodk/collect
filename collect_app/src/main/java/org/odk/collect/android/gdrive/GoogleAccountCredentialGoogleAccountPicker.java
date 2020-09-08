@@ -8,11 +8,11 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 
 import java.io.IOException;
 
-class GoogleAccountCredentialGoogleAccountPicker implements GoogleAccountPicker {
+public class GoogleAccountCredentialGoogleAccountPicker implements GoogleAccountPicker {
 
     private final GoogleAccountCredential googleAccountCredential;
 
-    GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential googleAccountCredential) {
+    public GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential googleAccountCredential) {
         this.googleAccountCredential = googleAccountCredential;
     }
 

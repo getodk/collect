@@ -36,7 +36,7 @@ public class SendFinalizedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .setGoogleAccount("dani@davey.com", testDependencies.googleApi)
+                .setGoogleAccount("dani@davey.com", testDependencies.googleAccountPicker)
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question Google")
                 .clickSendSelected()
