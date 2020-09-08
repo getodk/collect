@@ -16,14 +16,14 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -33,6 +33,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
@@ -44,14 +45,12 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     private TextView gregorianDateText;
 
-    private DatePickerDialog.OnDateSetListener listener;
+    private DateTimeViewModel dateTimeViewModel;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof DatePickerDialog.OnDateSetListener) {
-            listener = (DatePickerDialog.OnDateSetListener) context;
-        }
+        dateTimeViewModel = new ViewModelProvider(requireActivity()).get(DateTimeViewModel.class);
     }
 
     @Override
@@ -61,7 +60,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .setView(R.layout.custom_date_picker_dialog)
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
                     LocalDateTime date = getDateAsGregorian(getOriginalDate());
-                    listener.onDateSet((DatePicker) getView(), date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
+                    dateTimeViewModel.setSelectedDateTime(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                     dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dismiss())

@@ -42,16 +42,16 @@ import java.util.Date;
 public class DateWidget extends QuestionWidget {
     WidgetAnswerBinding binding;
 
+    private final DateTimeViewModel dateTimeViewModel;
+
     private LocalDateTime selectedDate;
     private DatePickerDetails datePickerDetails;
 
-    private final DateTimeViewModel dateTimeViewModel;
-
     public DateWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-
         dateTimeViewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
-        dateTimeViewModel.getSelectedDateTime().observe(((ScreenContext) context).getViewLifecycle(), localDateTime -> {
+
+        dateTimeViewModel.getSelectedDate().observe(((ScreenContext) context).getViewLifecycle(), localDateTime -> {
             if (localDateTime != null && dateTimeViewModel.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
                 selectedDate = localDateTime;
                 binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
@@ -71,6 +71,7 @@ public class DateWidget extends QuestionWidget {
         } else {
             binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.widgetButton.setText(getContext().getString(R.string.select_date));
+
             binding.widgetButton.setOnClickListener(v -> {
                 dateTimeViewModel.setWidgetWaitingForData(prompt.getIndex());
                 DateTimeWidgetUtils.showDatePickerDialog((FormEntryActivity) getContext(),

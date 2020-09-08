@@ -20,6 +20,8 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -29,27 +31,46 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.DateTimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
  * exist.
  */
 @SuppressLint("ViewConstructor")
-public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver {
+public class DateTimeWidget extends QuestionWidget {
     DateTimeWidgetAnswerBinding binding;
+
+    private final DateTimeViewModel dateTimeViewModel;
 
     private LocalDateTime selectedDateTime;
     private DatePickerDetails datePickerDetails;
 
-    private Boolean isDateWidgetWaitingForData = false;
-    private Boolean isTimeWidgetWaitingForData = false;
-
     public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        dateTimeViewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
+
+        dateTimeViewModel.getSelectedDate().observe(((ScreenContext) context).getViewLifecycle(), localDateTime -> {
+            if (localDateTime != null && dateTimeViewModel.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
+                selectedDateTime = getSelectedDate(localDateTime);
+                binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
+                        localDateTime.toDate(), datePickerDetails, false, getContext()));
+                widgetValueChanged();
+            }
+        });
+
+        dateTimeViewModel.getSelectedTime().observe(((ScreenContext) context).getViewLifecycle(), localDateTime -> {
+            if (localDateTime != null && dateTimeViewModel.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
+                DateTime selectedTime = localDateTime.toDateTime();
+                selectedDateTime = getSelectedTime(selectedTime);
+                binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
+                widgetValueChanged();
+            }
+        });
     }
 
     @Override
@@ -68,13 +89,12 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             binding.timeWidget.widgetButton.setText(getContext().getString(R.string.select_time));
 
             binding.dateWidget.widgetButton.setOnClickListener(v -> {
-                isDateWidgetWaitingForData = true;
-                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                dateTimeViewModel.setWidgetWaitingForData(prompt.getIndex());
                 DateTimeWidgetUtils.showDatePickerDialog((FormEntryActivity) context, prompt.getIndex(), datePickerDetails, selectedDateTime);
             });
+
             binding.timeWidget.widgetButton.setOnClickListener(v -> {
-                isTimeWidgetWaitingForData = true;
-                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                dateTimeViewModel.setWidgetWaitingForData(prompt.getIndex());
                 DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), selectedDateTime);
             });
         }
@@ -141,25 +161,6 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.timeWidget.widgetButton.cancelLongPress();
         binding.timeWidget.widgetAnswerText.cancelLongPress();
-    }
-
-    @Override
-    public void setData(Object answer) {
-        if (answer instanceof LocalDateTime) {
-            if (isDateWidgetWaitingForData) {
-                LocalDateTime selectedDate = (LocalDateTime) answer;
-                selectedDateTime = getSelectedDate(selectedDate);
-                binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                        selectedDate.toDate(), datePickerDetails, false, getContext()));
-                isDateWidgetWaitingForData = false;
-            }
-            if (isTimeWidgetWaitingForData) {
-                DateTime selectedTime = ((LocalDateTime) answer).toDateTime();
-                selectedDateTime = getSelectedTime(selectedTime);
-                binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
-                isTimeWidgetWaitingForData = false;
-            }
-        }
     }
 
     private void resetAnswerFields() {

@@ -16,10 +16,11 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -30,15 +31,12 @@ public class CustomTimePickerDialog extends DialogFragment {
     public static final String CURRENT_TIME = "CURRENT_TIME";
     public static final String TIME_PICKER_THEME = "TIME_PICKER_THEME";
 
-    private TimePickerDialog.OnTimeSetListener listener;
+    private DateTimeViewModel dateTimeViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
-        if (context instanceof TimePickerDialog.OnTimeSetListener) {
-            listener = (TimePickerDialog.OnTimeSetListener) context;
-        }
+        dateTimeViewModel = new ViewModelProvider(requireActivity()).get(DateTimeViewModel.class);
     }
 
     @NonNull
@@ -47,7 +45,7 @@ public class CustomTimePickerDialog extends DialogFragment {
         LocalDateTime date = (LocalDateTime) getArguments().getSerializable(CURRENT_TIME);
 
         TimePickerDialog dialog = new TimePickerDialog(requireContext(), getArguments().getInt(TIME_PICKER_THEME),
-                listener, date.getHourOfDay(), date.getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
+                dateTimeViewModel.getOnTimeSetListener(), date.getHourOfDay(), date.getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
         dialog.setTitle(requireContext().getString(R.string.select_time));
         fixSpinner(requireContext(), date.getHourOfDay(), date.getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
