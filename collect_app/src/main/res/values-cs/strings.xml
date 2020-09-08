@@ -704,7 +704,7 @@
   <string name="scoped_storage_learn_more">Další informace a migrace</string>
   <string name="storage_migration_completed">Migrace úložiště byla dokončena!</string>
   <string name="scoped_storage_dismiss">Zavrhnout</string>
-  <string name="storage_migration_dialog_message1">Požadavky na Android se změnily a soubory používané společností Collect musí být migrovány do srpna 2020.</string>
+  <string name="storage_migration_dialog_message1">Požadavky na Android se změnily a soubory používané společností Collect musí být migrovány.</string>
   <string name="storage_migration_dialog_message2">Máte %d neodeslané příspěvky. Před migrací se doporučuje odeslat všechna data.</string>
   <string name="storage_migration_dialog_message3">Používáte-li integraci externí aplikace, jako je OpenMapKit, zatím prosím nemigrujte.</string>
   <string name="storage_migration_more_details">Více informací</string>

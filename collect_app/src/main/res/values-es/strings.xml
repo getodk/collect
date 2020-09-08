@@ -706,7 +706,7 @@
   <string name="scoped_storage_learn_more">Conocer más y migrar</string>
   <string name="storage_migration_completed">¡Migración de almacenamiento completada!</string>
   <string name="scoped_storage_dismiss">Descartar</string>
-  <string name="storage_migration_dialog_message1">Los requisitos de Android han cambiado y los archivos utilizados en la aplicación móvil deben migrarse antes de agosto de 2020.</string>
+  <string name="storage_migration_dialog_message1">Los requisitos de Android han cambiado y los archivos utilizados en la aplicación móvil deben migrarse.</string>
   <string name="storage_migration_dialog_message2">Usted tiene %d formularios sin enviar. Se recomienda enviar todos los datos guardados antes de la migración.</string>
   <string name="storage_migration_dialog_message3">Si utiliza una aplicación de integración externa como OpenMapKit, no migre todavía.</string>
   <string name="storage_migration_more_details">Más detalles</string>
@@ -719,6 +719,6 @@
   <string name="storage_migration_failed">La migración de datos falló. Inténtalo de nuevo.</string>
   <string name="storage_migration_dialog_title">Migración de almacenamiento</string>
   <string name="storage_migration_progress_msg">Migración en progreso.\nEsto puede tomar algunos segundos.</string>
-  <string name="install_id">ID Instalación - reemplazará al IMEI en Agosto 2020</string>
+  <string name="install_id">"ID Instalación - reemplazará al IMEI en Collect v1.29 "</string>
   <string name="preference_not_available">No disponible</string>
 </resources>
