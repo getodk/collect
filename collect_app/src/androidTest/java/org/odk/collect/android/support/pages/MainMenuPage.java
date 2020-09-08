@@ -11,7 +11,6 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.support.FakeGoogleAccountPicker;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -217,13 +216,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage(rule));
     }
 
-    public MainMenuPage setGoogleAccount(String account, FakeGoogleAccountPicker googleAccountPicker) {
+    public MainMenuPage setGoogleAccount(String account) {
         Intent data = new Intent();
         data.putExtra(AccountManager.KEY_ACCOUNT_NAME, account);
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
         intending(hasAction("PICK_GOOGLE_ACCOUNT")).respondWith(activityResult);
-
-        googleAccountPicker.setDeviceAccount(account);
 
         return clickOnMenu()
                 .clickGeneralSettings()

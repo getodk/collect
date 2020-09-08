@@ -29,14 +29,17 @@ public class SendFinalizedFormTest {
 
     @Test
     public void whenGoogleUsedAsServer_sendsSubmissionToSheet() {
-        new MainMenuPage(rule).assertOnPage()
+        MainMenuPage page = new MainMenuPage(rule).assertOnPage()
                 .copyForm("one-question-google.xml")
                 .startBlankForm("One Question Google")
                 .answerQuestion("what is your age", "47")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickSaveAndExit();
 
-                .setGoogleAccount("dani@davey.com", testDependencies.googleAccountPicker)
+        testDependencies.googleAccountPicker.setDeviceAccount("dani@davey.com");
+        testDependencies.googleApi.setAccount("dani@davey.com");
+
+        page.setGoogleAccount("dani@davey.com")
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question Google")
                 .clickSendSelected()

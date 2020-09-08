@@ -26,6 +26,17 @@ public class FakeGoogleApi implements DriveApi, SheetsApi {
 
     private final Map<String, List<List<Object>>> spreadsheets = new HashMap<>();
 
+    private String account;
+    private String attemptAccount;
+
+    public void setAccount(String deviceAccount) {
+        this.account = deviceAccount;
+    }
+
+    public void setAttemptAccount(String attemptAccount) {
+        this.attemptAccount = attemptAccount;
+    }
+
     @Override
     public String getFileId(String fileId, String fields) throws IOException {
         return null;
@@ -73,6 +84,10 @@ public class FakeGoogleApi implements DriveApi, SheetsApi {
 
     @Override
     public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+        if (!attemptAccount.equals(account)) {
+            throw new IOException();
+        }
+
         List<List<Object>> rows = spreadsheets.getOrDefault(spreadsheetId, new ArrayList<>());
         rows.add(row.getValues().get(0));
 
@@ -86,6 +101,10 @@ public class FakeGoogleApi implements DriveApi, SheetsApi {
 
     @Override
     public ValueRange getSpreadsheet(String spreadsheetId, String sheetName) throws IOException {
+        if (!attemptAccount.equals(account)) {
+            throw new IOException();
+        }
+
         if (spreadsheets.containsKey(spreadsheetId)) {
             List<List<Object>> rows = spreadsheets.get(spreadsheetId);
             ValueRange valueRange = new ValueRange();
@@ -98,6 +117,10 @@ public class FakeGoogleApi implements DriveApi, SheetsApi {
 
     @Override
     public Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
+        if (!attemptAccount.equals(account)) {
+            throw new IOException();
+        }
+
         Spreadsheet spreadsheet = new Spreadsheet();
         spreadsheet.setSpreadsheetId(spreadsheetId);
 

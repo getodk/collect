@@ -52,11 +52,13 @@ public class TestDependencies extends AppDependencyModule {
 
             @Override
             public SheetsApi getSheetsApi(String account) {
+                googleApi.setAttemptAccount(account);
                 return googleApi;
             }
 
             @Override
             public DriveApi getDriveApi(String account) {
+                googleApi.setAttemptAccount(account);
                 return googleApi;
             }
         };
