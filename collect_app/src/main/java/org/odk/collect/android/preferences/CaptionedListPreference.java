@@ -80,7 +80,7 @@ public class CaptionedListPreference extends ListPreference {
     }
 
     /** Creates the view for one item in the list. */
-    protected RadioButton inflateItem(ViewGroup parent, final int i, Object value, Object label, Object caption) {
+    protected void inflateItem(ViewGroup parent, final int i, Object value, Object label, Object caption) {
         View item = LayoutInflater.from(getContext()).inflate(R.layout.captioned_item, null);
         RadioButton button = item.findViewById(R.id.button);
         TextView labelView = item.findViewById(R.id.label);
@@ -94,7 +94,6 @@ public class CaptionedListPreference extends ListPreference {
             button.setChecked(true);
             item.post(() -> item.requestRectangleOnScreen(new Rect(0, 0, item.getWidth(), item.getHeight())));
         }
-        return button;
     }
 
     /** Saves the selected value to the preferences when the dialog is closed. */

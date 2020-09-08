@@ -131,7 +131,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Updates the rest of the preference UI when the Basemap Source is changed. */
     private void onBasemapSourceChanged(MapConfigurator cftor) {
         // Set up the preferences in the "Basemap" section.
-        PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
+        PreferenceCategory baseCategory = findPreference(CATEGORY_BASEMAP);
         baseCategory.removeAll();
         baseCategory.addPreference(basemapSourcePref);
 
@@ -152,7 +152,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up listeners for the Reference Layer preference widget. */
     private void initReferenceLayerPref() {
-        referenceLayerPref = (CaptionedListPreference) findPreference("reference_layer");
+        referenceLayerPref = findPreference("reference_layer");
         referenceLayerPref.setOnPreferenceClickListener(preference -> {
             populateReferenceLayerPref();
             return false;
