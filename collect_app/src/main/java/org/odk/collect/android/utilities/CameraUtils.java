@@ -34,10 +34,6 @@ import timber.log.Timber;
 
 public class CameraUtils {
 
-    private CameraUtils() {
-
-    }
-
     public static Camera getCameraInstance(Activity activity, int cameraId) {
         Camera camera = Camera.open(cameraId);
         camera.setDisplayOrientation(90);
@@ -107,7 +103,7 @@ public class CameraUtils {
         }
     }
 
-    public static boolean isFrontCameraAvailable() {
+    public boolean isFrontCameraAvailable() {
         try {
             //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
             CameraManager cameraManager = (CameraManager) Collect.getInstance()

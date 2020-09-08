@@ -7,8 +7,7 @@
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/url_button"
         style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/open_url">
-    </org.odk.collect.android.views.MultiClickSafeButton>
+        android:text="@string/open_url" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/url_answer_text"
@@ -19,7 +18,6 @@
         android:paddingStart="@dimen/margin_standard"
         android:paddingEnd="@dimen/margin_standard"
         android:textColor="?colorOnSurface"
-        android:textAppearance="@style/TextAppearance.Collect.Body1"
-        />
+        android:textAppearance="@style/TextAppearance.Collect.Body1" />
 
 </LinearLayout>

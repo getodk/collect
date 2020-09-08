@@ -43,17 +43,18 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
- *
- * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
     final Button getBarcodeButton;
     final TextView stringAnswer;
-    private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public BarcodeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    private final WaitingForDataRegistry waitingForDataRegistry;
+    private final CameraUtils cameraUtils;
+
+    public BarcodeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, CameraUtils cameraUtils) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.cameraUtils = cameraUtils;
 
         getBarcodeButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.get_barcode), getAnswerFontSize(), this);
 
@@ -140,7 +141,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver,
     private void setCameraIdIfNeeded(IntentIntegrator intent) {
         String appearance = getFormEntryPrompt().getAppearanceHint();
         if (appearance != null && appearance.equalsIgnoreCase(WidgetAppearanceUtils.FRONT)) {
-            if (CameraUtils.isFrontCameraAvailable()) {
+            if (cameraUtils.isFrontCameraAvailable()) {
                 intent.addExtra(WidgetAppearanceUtils.FRONT, true);
             } else {
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);

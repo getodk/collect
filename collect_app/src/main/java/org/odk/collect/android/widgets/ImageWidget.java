@@ -86,7 +86,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         errorTextView.setVisibility(View.GONE);
 
         if (selfie) {
-            if (!CameraUtils.isFrontCameraAvailable()) {
+            if (!new CameraUtils().isFrontCameraAvailable()) {
                 captureButton.setEnabled(false);
                 errorTextView.setText(R.string.error_front_camera_unavailable);
                 errorTextView.setVisibility(View.VISIBLE);
