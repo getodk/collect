@@ -701,6 +701,7 @@
     <string name="form_update_frequency_title">Automatic update frequency</string>
     <string name="form_update_error">Form update failed</string>
     <string name="report_to_project_lead">If you keep having this problem, report it to the person who asked you to collect data.</string>
-    <string name="unknown_host_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
+    <string name="unreachable_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
+    <string name="security_error">Collect can\'t connect securely to the server at %s. Did you enter the URL correctly?</string>
     <string name="form_update_succeeded">Form update succeeded</string>
 </resources>
