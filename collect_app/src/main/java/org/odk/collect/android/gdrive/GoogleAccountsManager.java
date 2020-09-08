@@ -23,15 +23,12 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -41,7 +38,7 @@ public class GoogleAccountsManager {
 
     private Intent intentChooseAccount;
     private Context context;
-    private GoogleAccountCredential credential;
+    private GoogleAccountPicker accountPicker;
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
 
@@ -54,12 +51,12 @@ public class GoogleAccountsManager {
     /**
      * This constructor should be used only for testing purposes
      */
-    public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
+    public GoogleAccountsManager(@NonNull GoogleAccountCredential accountPicker,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
                                  @NonNull ThemeUtils themeUtils
     ) {
-        this.credential = credential;
+        this.accountPicker = new GoogleAccountCredentialGoogleAccountPicker(accountPicker);
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
@@ -67,12 +64,12 @@ public class GoogleAccountsManager {
     }
 
     public boolean isAccountSelected() {
-        return credential.getSelectedAccountName() != null;
+        return accountPicker.getSelectedAccountName() != null;
     }
 
     @NonNull
     public String getLastSelectedAccountIfValid() {
-        Account[] googleAccounts = credential.getAllAccounts();
+        Account[] googleAccounts = accountPicker.getAllAccounts();
         String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         if (googleAccounts != null && googleAccounts.length > 0) {
@@ -91,12 +88,12 @@ public class GoogleAccountsManager {
     public void selectAccount(String accountName) {
         if (accountName != null) {
             preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-            credential.setSelectedAccountName(accountName);
+            accountPicker.setSelectedAccountName(accountName);
         }
     }
 
     public String getToken() throws IOException, GoogleAuthException {
-        String token = credential.getToken();
+        String token = accountPicker.getToken();
 
         // Immediately invalidate so we get a different one if we have to try again
         GoogleAuthUtil.invalidateToken(context, token);
@@ -112,17 +109,17 @@ public class GoogleAccountsManager {
     }
 
     public SheetsApi getSheetsApi() {
-        return googleApiProvider.getSheetsApi(credential);
+        return googleApiProvider.getSheetsApi(accountPicker);
     }
 
     public DriveApi getDriveApi() {
-        return googleApiProvider.getDriveApi(credential);
+        return googleApiProvider.getDriveApi(accountPicker);
     }
 
     private Account getAccountPickerCurrentAccount() {
         String selectedAccountName = getLastSelectedAccountIfValid();
         if (selectedAccountName.isEmpty()) {
-            Account[] googleAccounts = credential.getAllAccounts();
+            Account[] googleAccounts = accountPicker.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
                 selectedAccountName = googleAccounts[0].name;
             } else {
@@ -137,11 +134,9 @@ public class GoogleAccountsManager {
 
         preferences = GeneralSharedPreferences.getInstance();
 
-        credential = GoogleAccountCredential
-                .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
-                .setBackOff(new ExponentialBackOff());
+        accountPicker = googleApiProvider.getAccountPicker(context);
 
-        intentChooseAccount = credential.newChooseAccountIntent();
+        intentChooseAccount = accountPicker.newChooseAccountIntent();
         themeUtils = new ThemeUtils(context);
     }
 }

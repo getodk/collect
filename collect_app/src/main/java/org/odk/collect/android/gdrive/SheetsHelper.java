@@ -141,7 +141,6 @@ public class SheetsHelper {
 
         // fetching the google spreadsheet
         Spreadsheet spreadsheet = sheetsAPI.getSpreadsheet(spreadsheetId);
-
         String spreadsheetFileName = spreadsheet.getProperties().getTitle();
 
         /*

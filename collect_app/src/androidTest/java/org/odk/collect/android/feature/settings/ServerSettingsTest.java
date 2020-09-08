@@ -82,7 +82,7 @@ public class ServerSettingsTest {
                 .enablePreviouslyDownloadedOnlyUpdates();
         assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(1));
 
-        mainMenu.setGoogleDriveAccount("steph@curry.basket");
+        mainMenu.setGoogleAccount("steph@curry.basket", testDependencies.googleApi);
         assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(0));
     }
 }
