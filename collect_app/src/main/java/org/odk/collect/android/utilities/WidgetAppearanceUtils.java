@@ -25,6 +25,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+
 import timber.log.Timber;
 
 public class WidgetAppearanceUtils {

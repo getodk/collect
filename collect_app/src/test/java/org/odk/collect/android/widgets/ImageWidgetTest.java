@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;

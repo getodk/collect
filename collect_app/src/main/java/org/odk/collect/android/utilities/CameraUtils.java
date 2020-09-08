@@ -24,6 +24,10 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.view.Surface;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
@@ -33,6 +37,38 @@ import java.io.IOException;
 import timber.log.Timber;
 
 public class CameraUtils {
+
+    public void setCameraIdIfNeeded(FormEntryPrompt prompt, IntentIntegrator intent) {
+        String appearance = prompt.getAppearanceHint();
+        if (appearance != null && appearance.equalsIgnoreCase(WidgetAppearanceUtils.FRONT)) {
+            if (isFrontCameraAvailable()) {
+                intent.addExtra(WidgetAppearanceUtils.FRONT, true);
+            } else {
+                ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
+            }
+        }
+    }
+
+    public boolean isFrontCameraAvailable() {
+        try {
+            //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
+            CameraManager cameraManager = (CameraManager) Collect.getInstance()
+                    .getSystemService(Context.CAMERA_SERVICE);
+            if (cameraManager != null) {
+                String[] cameraId = cameraManager.getCameraIdList();
+                for (String id : cameraId) {
+                    CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
+                    Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                    if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                        return true;
+                    }
+                }
+            }
+        } catch (CameraAccessException | NullPointerException e) {
+            Timber.e(e);
+        }
+        return false; // No front-facing camera found
+    }
 
     public static Camera getCameraInstance(Activity activity, int cameraId) {
         Camera camera = Camera.open(cameraId);
@@ -101,27 +137,6 @@ public class CameraUtils {
         } catch (IOException e) {
             Timber.e(e);
         }
-    }
-
-    public boolean isFrontCameraAvailable() {
-        try {
-            //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
-            CameraManager cameraManager = (CameraManager) Collect.getInstance()
-                    .getSystemService(Context.CAMERA_SERVICE);
-            if (cameraManager != null) {
-                String[] cameraId = cameraManager.getCameraIdList();
-                for (String id : cameraId) {
-                    CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                    Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                    if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
-                        return true;
-                    }
-                }
-            }
-        } catch (CameraAccessException | NullPointerException e) {
-            Timber.e(e);
-        }
-        return false; // No front-facing camera found
     }
   
     public static String getVideoFilePath(Context context) {

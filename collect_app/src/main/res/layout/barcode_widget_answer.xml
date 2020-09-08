@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/get_barcode_button"
+        android:id="@+id/barcode_button"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/get_barcode" />
 
