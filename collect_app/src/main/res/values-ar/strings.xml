@@ -635,8 +635,7 @@
   <string name="number_picker_title">منتقي الأرقام</string>
   <string name="too_complex_form">هذه الاستمارة معقدة جدًا لهذا الجهاز. حاول تبسيط التعبيرات أو طلب المساعدة في المنتدى.</string>
   <string name="reading_files">قراءة الملفات</string>
-  <string name="copying_media_files_failed">فشل نسخ ملفات الوسائط</string>
-  <string name="qr_code_not_found">كود QR غير موجود في الصورة المحددة</string>
+    <string name="qr_code_not_found">كود QR غير موجود في الصورة المحددة</string>
   <string name="not_granted_permission">النشاط الذي تحاول بدء القيام به يحتاج إلى إذن لم تحصل عليه بعد.</string>
   <string name="basemap_source_unavailable">عذرا، %s خرائط الأساس غير متاحة. الرجاء اختر خريطة أساس أخرى في الإعدادات العامة &lt; الخرائط.</string>
   <string name="enter_identity">أدخل الهوية</string>

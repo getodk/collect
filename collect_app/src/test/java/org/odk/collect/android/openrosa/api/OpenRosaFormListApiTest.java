@@ -21,10 +21,24 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.openrosa.api.FormApiException.Type.FETCH_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.SECURITY_ERROR;
 import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNREACHABLE;
 
 public class OpenRosaFormListApiTest {
+
+    @Test
+    public void fetchFormList_removesTrailingSlashesFromUrl() throws Exception {
+        OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
+        WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
+
+        OpenRosaFormListApi formListApi = new OpenRosaFormListApi("http://blah.com///", "/formList", httpInterface, webCredentialsUtils);
+
+        when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(new ByteArrayInputStream(RESPONSE.getBytes()), Collections.emptyMap(), "", 200));
+        formListApi.fetchFormList();
+        verify(httpInterface).executeGetRequest(eq(new URI("http://blah.com/formList")), any(), any());
+
+    }
 
     @Test
     public void fetchFormList_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() throws Exception {
@@ -95,16 +109,19 @@ public class OpenRosaFormListApiTest {
     }
 
     @Test
-    public void fetchFormList_removesTrailingSlashesFromUrl() throws Exception {
+    public void fetchForm_whenThereIsAServerError_throwsFetchErrorFormApiException() throws Exception {
         OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
         WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
 
-        OpenRosaFormListApi formListApi = new OpenRosaFormListApi("http://blah.com///", "/formList", httpInterface, webCredentialsUtils);
+        OpenRosaFormListApi formListApi = new OpenRosaFormListApi("http://blah.com", "/formList", httpInterface, webCredentialsUtils);
 
-        when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(new ByteArrayInputStream(RESPONSE.getBytes()), Collections.emptyMap(), "", 200));
-        formListApi.fetchFormList();
-        verify(httpInterface).executeGetRequest(eq(new URI("http://blah.com/formList")), any(), any());
-
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
+            formListApi.fetchForm("http://blah.com/form");
+            fail("No exception thrown!");
+        } catch (FormApiException e) {
+            assertThat(e.getType(), is(FETCH_ERROR));
+        }
     }
 
     private static String join(String... strings) {

@@ -48,4 +48,17 @@ public class GetBlankFormsTest {
                 .assertText(R.string.report_to_project_lead)
                 .clickOK(new GetBlankFormPage(rule));
     }
+
+    @Test
+    public void whenThereIsAnErrorFetchingForms_showsError() {
+        testDependencies.server.addForm("One Question", "one-question", "one-question.xml");
+        testDependencies.server.errorOnFetchingForms();
+
+        rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+                .clickGetBlankForm()
+                .clickGetSelected()
+                .assertText("One Question (Version:: 1 ID: one-question) - Failure")
+                .clickOK(new GetBlankFormPage(rule));
+    }
 }

@@ -634,8 +634,7 @@
   <string name="number_picker_title">Zahlenwähler</string>
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="reading_files">Lese Dateien</string>
-  <string name="copying_media_files_failed">Kopieren von Mediendateien fehlgeschlagen</string>
-  <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
+    <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
   <string name="not_granted_permission">Die Aktivität, die Sie versuchen zu starten, benötigt eine Berechtigung, die nicht gewährt wurde. </string>
   <string name="basemap_source_unavailable">Entschuldigung, %s Basiskarten sind auf diesem Gerät nicht verfügbar. Bitte wählen Sie eine andere Basiskarten unter Allgemeine Einstellungen &gt; Karten. </string>
   <string name="enter_identity">Identität eingeben</string>

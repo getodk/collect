@@ -631,8 +631,7 @@
   <string name="number_picker_title">Pemilihan nomor</string>
   <string name="too_complex_form">Formulir ini terlalu rumit untuk perangkat ini. Coba sederhanakan ekspresi atau minta bantuan di forum.</string>
   <string name="reading_files">Membaca berkas</string>
-  <string name="copying_media_files_failed">Menyalin berkas media tidak berhasil</string>
-  <string name="qr_code_not_found">Kode QR tidak ditemukan pada gambar terpilih</string>
+    <string name="qr_code_not_found">Kode QR tidak ditemukan pada gambar terpilih</string>
   <string name="not_granted_permission">Aktivitas yang sedang Anda coba memerlukan izin yang belum Anda diberikan.</string>
   <string name="basemap_source_unavailable">Maaf, peta dasar %s tidak tersedia pada perangkat ini. Mohon pilih peta dasar lain di Pengaturan Umum &gt; Peta.</string>
   <string name="enter_identity">Masukan identitas</string>

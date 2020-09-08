@@ -41,6 +41,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private String username;
     private String password;
     private boolean alwaysReturnError;
+    private boolean fetchingFormsError;
 
     @NonNull
     @Override
@@ -56,6 +57,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         } else if (uri.getPath().equals(formListPath)) {
             return new HttpGetResult(getFormListResponse(), getStandardHeaders(), "", 200);
         } else if (uri.getPath().equals("/form")) {
+            if (fetchingFormsError) {
+                return new HttpGetResult(null, new HashMap<>(), "", 500);
+            }
+
             return new HttpGetResult(getFormResponse(uri), getStandardHeaders(), "", 200);
         } else {
             return new HttpGetResult(null, new HashMap<>(), "", 404);
@@ -122,6 +127,14 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         forms.removeIf(formManifestEntry -> formManifestEntry.getFormLabel().equals(formLabel));
     }
 
+    public void alwaysReturnError() {
+        alwaysReturnError = true;
+    }
+
+    public void errorOnFetchingForms() {
+        fetchingFormsError = true;
+    }
+
     public String getURL() {
         return "https://" + HOST;
     }
@@ -184,10 +197,6 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
         return assetManager.open("forms/" + xmlPath);
-    }
-
-    public void alwaysReturnError() {
-        alwaysReturnError = true;
     }
 
     private static class FormManifestEntry {

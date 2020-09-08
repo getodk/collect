@@ -594,7 +594,6 @@
   <string name="number_picker_title">Birač brojeva</string>
   <string name="too_complex_form">Formular je previše kompleksan za vaoj uređaj. Pokušaj da uprostiš izraze ili zatraži pomoć na forumu.</string>
   <string name="reading_files">Učitavanje fajlova</string>
-  <string name="copying_media_files_failed">Kopiranje medija fajlova nije uspjelo</string>
-  <string name="qr_code_not_found">QR kod nije pronađen na odabranoj slici</string>
+    <string name="qr_code_not_found">QR kod nije pronađen na odabranoj slici</string>
   <string name="not_granted_permission">Aktivnost koju pokušavate da pokrenete zahtijeva dozvolu koja nije odobrena.</string>
 </resources>

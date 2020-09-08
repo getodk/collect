@@ -78,6 +78,7 @@ public class OpenRosaXmlFetcher {
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
+    @Nullable
     public InputStream getFile(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
         return fetch(downloadUrl, contentType).getInputStream();
     }
@@ -109,10 +110,6 @@ public class OpenRosaXmlFetcher {
         }
 
         return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
-    }
-
-    public OpenRosaHttpInterface getHttpInterface() {
-        return httpInterface;
     }
 
     public WebCredentialsUtils getWebCredentialsUtils() {

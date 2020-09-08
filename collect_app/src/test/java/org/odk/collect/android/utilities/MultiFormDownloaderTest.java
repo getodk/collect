@@ -367,7 +367,7 @@ public class MultiFormDownloaderTest {
         forms.add(serverFormDetails);
 
         HashMap<ServerFormDetails, String> messages = downloader.downloadForms(forms, null);
-        assertThat(messages.get(serverFormDetails), containsString("<label> node for itemset doesn't exist!"));
+        assertThat(messages.get(serverFormDetails), containsString("Failure"));
     }
 
     public static DocumentFetchResult buildManifestFetchResult(String filename) throws Exception {

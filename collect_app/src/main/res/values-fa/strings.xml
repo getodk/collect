@@ -294,6 +294,5 @@
   <string name="rank_items">رده بندی اقلام</string>
   <string name="go_to_settings">رفتن به تنظیمات </string>
   <string name="reading_files">خواندن فایل ها</string>
-  <string name="copying_media_files_failed">کاپی فایل های رسانه ای ناکام شد</string>
-  <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
+    <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
 </resources>

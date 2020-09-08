@@ -657,7 +657,6 @@
     <string name="number_picker_title">Number Picker</string>
     <string name="too_complex_form">This form is too complex for this device. Try simplifying expressions or ask for help on the forum.</string>
     <string name="reading_files">Reading files</string>
-    <string name="copying_media_files_failed">Copying media files failed</string>
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="basemap_source_unavailable">Sorry, %s basemaps are not available on this device.  Please choose another basemap in General Settings &gt; Maps.</string>
@@ -703,5 +702,6 @@
     <string name="report_to_project_lead">If you keep having this problem, report it to the person who asked you to collect data.</string>
     <string name="unreachable_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
     <string name="security_error">Collect can\'t connect securely to the server at %s. Did you enter the URL correctly?</string>
+    <string name="failure">Failure</string>
     <string name="form_update_succeeded">Form update succeeded</string>
 </resources>

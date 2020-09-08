@@ -23,8 +23,8 @@ import org.javarosa.core.reference.RootTranslator;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.database.DatabaseFormsRepository;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.listeners.FormDownloaderListener;
@@ -99,8 +99,12 @@ public class MultiFormDownloader {
 
         for (ServerFormDetails fd : toDownload) {
             try {
-                String message = processOneForm(total, count++, fd, stateListener);
-                result.put(fd, message.isEmpty() ? Collect.getInstance().getString(R.string.success) : message);
+                boolean success = processOneForm(total, count++, fd, stateListener);
+                if (success) {
+                    result.put(fd, Collect.getInstance().getString(R.string.success));
+                } else {
+                    result.put(fd, Collect.getInstance().getString(R.string.failure));
+                }
             } catch (TaskCancelledException cd) {
                 break;
             }
@@ -118,11 +122,11 @@ public class MultiFormDownloader {
      * @return an empty string for success, or a nonblank string with one or more error messages
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
-    private String processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
+    private boolean processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
         if (stateListener != null) {
             stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         }
-        String message = "";
+        boolean success = true;
         if (stateListener != null && stateListener.isTaskCanceled()) {
             throw new TaskCancelledException();
         }
@@ -142,8 +146,8 @@ public class MultiFormDownloader {
                         fileResult.getFile().getAbsolutePath());
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
                         count, total, stateListener);
-                if (error != null) {
-                    message += error;
+                if (error != null && !error.isEmpty()) {
+                    success = false;
                 }
             } else {
                 Timber.i("No Manifest for: %s", fd.getFormName());
@@ -155,7 +159,7 @@ public class MultiFormDownloader {
             // do not download additional forms.
             throw e;
         } catch (Exception e) {
-            return message + getExceptionMessage(e);
+            return false;
         }
 
         if (stateListener != null && stateListener.isTaskCanceled()) {
@@ -164,7 +168,7 @@ public class MultiFormDownloader {
         }
 
         if (fileResult == null) {
-            return message + "Downloading Xform failed.";
+            return false;
         }
 
         Map<String, String> parsedFields = null;
@@ -188,25 +192,25 @@ public class MultiFormDownloader {
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
-                return message + e.getMessage();
+                return false;
             }
         }
 
         boolean installed = false;
 
-        if ((stateListener == null || !stateListener.isTaskCanceled()) && message.isEmpty()) {
+        if ((stateListener == null || !stateListener.isTaskCanceled()) && success) {
             if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
                 installed = installEverything(tempMediaPath, fileResult, parsedFields);
             } else {
-                message += Collect.getInstance().getString(R.string.xform_parse_error,
-                        fileResult.file.getName(), "submission url");
+                success = false;
             }
         }
         if (!installed) {
-            message += Collect.getInstance().getString(R.string.copying_media_files_failed);
+            success = false;
             cleanUp(fileResult, null, tempMediaPath);
         }
-        return message;
+
+        return success;
     }
 
     private boolean isSubmissionOk(Map<String, String> parsedFields) {
@@ -262,22 +266,6 @@ public class MultiFormDownloader {
         if (tempMediaPath != null) {
             FileUtils.purgeMediaPath(tempMediaPath);
         }
-    }
-
-    private String getExceptionMessage(Exception e) {
-        String msg = e.getMessage();
-        if (msg == null) {
-            msg = e.toString();
-        }
-        Timber.e(msg);
-
-        if (e.getCause() != null) {
-            msg = e.getCause().getMessage();
-            if (msg == null) {
-                msg = e.getCause().toString();
-            }
-        }
-        return msg;
     }
 
     /**
