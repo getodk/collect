@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.net.Uri;
-import android.view.View;
 import android.view.View.OnLongClickListener;
 
 import androidx.browser.customtabs.CustomTabsServiceConnection;
@@ -26,7 +25,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 /**
@@ -55,12 +53,6 @@ public class UrlWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertThat(widget.getAnswer().getDisplayText(), equalTo("blah"));
-    }
-
-    @Test
-    public void usingReadOnlyOption_doesNotShowUrlButton() {
-        UrlWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.binding.urlButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
