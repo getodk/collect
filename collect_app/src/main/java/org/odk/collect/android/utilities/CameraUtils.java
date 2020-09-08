@@ -38,38 +38,6 @@ import timber.log.Timber;
 
 public class CameraUtils {
 
-    public void setCameraIdIfNeeded(FormEntryPrompt prompt, IntentIntegrator intent) {
-        String appearance = prompt.getAppearanceHint();
-        if (appearance != null && appearance.equalsIgnoreCase(WidgetAppearanceUtils.FRONT)) {
-            if (isFrontCameraAvailable()) {
-                intent.addExtra(WidgetAppearanceUtils.FRONT, true);
-            } else {
-                ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
-            }
-        }
-    }
-
-    public boolean isFrontCameraAvailable() {
-        try {
-            //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
-            CameraManager cameraManager = (CameraManager) Collect.getInstance()
-                    .getSystemService(Context.CAMERA_SERVICE);
-            if (cameraManager != null) {
-                String[] cameraId = cameraManager.getCameraIdList();
-                for (String id : cameraId) {
-                    CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                    Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                    if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
-                        return true;
-                    }
-                }
-            }
-        } catch (CameraAccessException | NullPointerException e) {
-            Timber.e(e);
-        }
-        return false; // No front-facing camera found
-    }
-
     public static Camera getCameraInstance(Activity activity, int cameraId) {
         Camera camera = Camera.open(cameraId);
         camera.setDisplayOrientation(90);
@@ -110,6 +78,27 @@ public class CameraUtils {
         }
         Timber.w("No Available front camera");
         return -1;
+    }
+
+    public boolean isFrontCameraAvailable() {
+        try {
+            //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
+            CameraManager cameraManager = (CameraManager) Collect.getInstance()
+                    .getSystemService(Context.CAMERA_SERVICE);
+            if (cameraManager != null) {
+                String[] cameraId = cameraManager.getCameraIdList();
+                for (String id : cameraId) {
+                    CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
+                    Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                    if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                        return true;
+                    }
+                }
+            }
+        } catch (CameraAccessException | NullPointerException e) {
+            Timber.e(e);
+        }
+        return false; // No front-facing camera found
     }
 
     /**

@@ -1,10 +1,6 @@
 package org.odk.collect.android.widgets;
 
-import android.content.ComponentName;
-import android.content.Intent;
 import android.view.View;
-
-import com.google.zxing.client.android.Intents;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
@@ -12,17 +8,18 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowToast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -32,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearance;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 import static org.robolectric.Shadows.shadowOf;
@@ -166,15 +164,23 @@ public class BarcodeWidgetTest {
     }
 
     @Test
-    public void clickingBarcodeButton_whenPermissionIsGranted_launchesCorrectIntent() {
-        BarcodeWidget widget = createWidget(promptWithAnswer(null));
+    public void clickingBarcodeButton_whenFrontCameraIsNotAvailable_showsFrontCameraNotAvailableToast() {
+        when(cameraUtils.isFrontCameraAvailable()).thenReturn(false);
+        BarcodeWidget widget = createWidget(promptWithAppearance(WidgetAppearanceUtils.FRONT));
         widget.setPermissionUtils(permissionUtils);
         widget.binding.barcodeButton.performClick();
-        Intent startedIntent = shadowActivity.getNextStartedActivity();
 
-        assertThat(startedIntent.getComponent(), is(new ComponentName(widgetTestActivity, ScannerWithFlashlightActivity.class)));
-        assertThat(startedIntent.getAction(), is(Intents.Scan.ACTION));
-        verify(cameraUtils).setCameraIdIfNeeded(ArgumentMatchers.any(), ArgumentMatchers.any());
+        assertThat(ShadowToast.getTextOfLatestToast(), is(widgetTestActivity.getString(R.string.error_front_camera_unavailable)));
+    }
+
+    @Test
+    public void clickingBarcodeButton_whenFrontCameraIsAvailable_launchesCorrectIntent() {
+        when(cameraUtils.isFrontCameraAvailable()).thenReturn(true);
+        BarcodeWidget widget = createWidget(promptWithAppearance(WidgetAppearanceUtils.FRONT));
+        widget.setPermissionUtils(permissionUtils);
+        widget.binding.barcodeButton.performClick();
+
+        assertThat(shadowActivity.getNextStartedActivity().getBooleanExtra(WidgetAppearanceUtils.FRONT, false), is(true));
     }
 
     public BarcodeWidget createWidget(FormEntryPrompt prompt) {

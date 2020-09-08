@@ -32,8 +32,12 @@ import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.FRONT;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
@@ -124,7 +128,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver 
                 IntentIntegrator intent = new IntentIntegrator((Activity) getContext())
                         .setCaptureActivity(ScannerWithFlashlightActivity.class);
 
-                cameraUtils.setCameraIdIfNeeded(getFormEntryPrompt(), intent);
+                setCameraIdIfNeeded(getFormEntryPrompt(), intent);
                 intent.initiateScan();
             }
 
@@ -132,5 +136,15 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver 
             public void denied() {
             }
         });
+    }
+
+    private void setCameraIdIfNeeded(FormEntryPrompt prompt, IntentIntegrator intent) {
+        if (WidgetAppearanceUtils.isFrontCameraAppearance(prompt)) {
+            if (cameraUtils.isFrontCameraAvailable()) {
+                intent.addExtra(FRONT, true);
+            } else {
+                ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
+            }
+        }
     }
 }
