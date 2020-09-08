@@ -35,7 +35,11 @@ public class FileWidgetUtils implements MediaWidgetDataRequester {
         if (newFile.exists()) {
             questionMediaManager.replaceRecentFileForQuestion(questionIndex, newFile.getAbsolutePath());
 
-            updateContentValues(context, newFile, uri, isImageType);
+            Uri newFileUri = context.getContentResolver().insert(uri, getContentValues(newFile, isImageType));
+            if (newFileUri != null) {
+                Timber.i("Inserting media returned uri = %s", newFileUri.toString());
+            }
+
             if (binaryName != null && !binaryName.equals(newFile.getName())) {
                 questionMediaManager.markOriginalFileOrDelete(questionIndex,
                         getInstanceFolder() + File.separator + binaryName);
@@ -88,7 +92,7 @@ public class FileWidgetUtils implements MediaWidgetDataRequester {
         return getInstanceFolder() + File.separator + FileUtil.getRandomFilename() + extension;
     }
 
-    private static void updateContentValues(Context context, File file, Uri uri, boolean isImageType) {
+    private static ContentValues getContentValues(File file, boolean isImageType) {
         // Add the copy to the content provider
         ContentValues values = new ContentValues(6);
         values.put(MediaStore.MediaColumns.TITLE, file.getName());
@@ -98,10 +102,6 @@ public class FileWidgetUtils implements MediaWidgetDataRequester {
         if (isImageType) {
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         }
-
-        Uri newFileUri = context.getContentResolver().insert(uri, values);
-        if (newFileUri != null) {
-            Timber.i("Inserting media returned uri = %s", newFileUri.toString());
-        }
+        return values;
     }
 }
