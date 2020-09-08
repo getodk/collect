@@ -24,10 +24,6 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.view.Surface;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
-import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
