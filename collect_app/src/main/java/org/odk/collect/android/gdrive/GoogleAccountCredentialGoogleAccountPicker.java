@@ -40,8 +40,4 @@ public class GoogleAccountCredentialGoogleAccountPicker implements GoogleAccount
     public Intent newChooseAccountIntent() {
         return googleAccountCredential.newChooseAccountIntent();
     }
-
-    public GoogleAccountCredential getGoogleAccountCredential() {
-        return googleAccountCredential;
-    }
 }

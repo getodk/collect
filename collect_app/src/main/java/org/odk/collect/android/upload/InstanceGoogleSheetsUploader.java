@@ -35,19 +35,20 @@ import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.gdrive.DriveApi;
+import org.odk.collect.android.gdrive.DriveHelper;
+import org.odk.collect.android.gdrive.SheetsApi;
+import org.odk.collect.android.gdrive.SheetsHelper;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.gdrive.DriveHelper;
-import org.odk.collect.android.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.gdrive.SheetsHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,9 +79,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private Spreadsheet spreadsheet;
 
-    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
-        driveHelper = new DriveHelper(accountsManager.getDriveApi());
-        sheetsHelper = new SheetsHelper(accountsManager.getSheetsApi());
+    public InstanceGoogleSheetsUploader(DriveApi driveApi, SheetsApi sheetsApi) {
+        driveHelper = new DriveHelper(driveApi);
+        sheetsHelper = new SheetsHelper(sheetsApi);
     }
 
     @Override

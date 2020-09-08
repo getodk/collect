@@ -47,16 +47,16 @@ public class TestDependencies extends AppDependencyModule {
     }
 
     @Override
-    public GoogleApiProvider providesGoogleApiProvider(PreferencesProvider preferencesProvider) {
-        return new GoogleApiProvider(preferencesProvider) {
+    public GoogleApiProvider providesGoogleApiProvider(Context context, PreferencesProvider preferencesProvider) {
+        return new GoogleApiProvider(context) {
 
             @Override
-            public SheetsApi getSheetsApi(Context context) {
+            public SheetsApi getSheetsApi(String account) {
                 return googleApi;
             }
 
             @Override
-            public DriveApi getDriveApi(Context context) {
+            public DriveApi getDriveApi(String account) {
                 return googleApi;
             }
         };

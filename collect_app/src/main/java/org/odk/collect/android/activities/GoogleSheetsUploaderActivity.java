@@ -40,12 +40,14 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
 import org.odk.collect.android.gdrive.GoogleAccountNotSetDialog;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -78,6 +80,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     GoogleAccountsManager accountsManager;
 
     @Inject
+    GoogleApiProvider googleApiProvider;
+
+    @Inject
     NetworkStateProvider connectivityProvider;
 
     @Inject
@@ -88,6 +93,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     FormsRepository formsRepository;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +143,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void runTask() {
-        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager, analytics);
+        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics, preferencesProvider);
         instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository);
 
         // ensure we have a google account selected

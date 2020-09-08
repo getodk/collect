@@ -449,8 +449,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public GoogleApiProvider providesGoogleApiProvider(PreferencesProvider preferencesProvider) {
-        return new GoogleApiProvider(preferencesProvider);
+    public GoogleApiProvider providesGoogleApiProvider(Context context, PreferencesProvider preferencesProvider) {
+        return new GoogleApiProvider(context
+        );
     }
 
     @Provides

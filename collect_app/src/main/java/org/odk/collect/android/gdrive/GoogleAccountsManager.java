@@ -34,7 +34,6 @@ import javax.inject.Inject;
 
 public class GoogleAccountsManager {
 
-    private final GoogleApiProvider googleApiProvider;
     private final GoogleAccountPicker accountPicker;
 
     private Intent intentChooseAccount;
@@ -43,8 +42,7 @@ public class GoogleAccountsManager {
     private ThemeUtils themeUtils;
 
     @Inject
-    public GoogleAccountsManager(@NonNull Context context, GoogleApiProvider googleApiProvider, GoogleAccountPicker googleAccountPicker) {
-        this.googleApiProvider = googleApiProvider;
+    public GoogleAccountsManager(@NonNull Context context, GoogleAccountPicker googleAccountPicker) {
         this.accountPicker = googleAccountPicker;
         initCredential(context);
     }
@@ -61,7 +59,6 @@ public class GoogleAccountsManager {
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
-        this.googleApiProvider = new GoogleApiProvider(null);
     }
 
     public boolean isAccountSelected() {
@@ -107,14 +104,6 @@ public class GoogleAccountsManager {
         intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
         return intentChooseAccount;
-    }
-
-    public SheetsApi getSheetsApi() {
-        return googleApiProvider.getSheetsApi(context);
-    }
-
-    public DriveApi getDriveApi() {
-        return googleApiProvider.getDriveApi(context);
     }
 
     private Account getAccountPickerCurrentAccount() {

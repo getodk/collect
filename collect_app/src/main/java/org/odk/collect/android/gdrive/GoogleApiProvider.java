@@ -11,26 +11,19 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.sheets.v4.Sheets;
 
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesProvider;
-
 import java.util.Collections;
 
 public class GoogleApiProvider {
 
-    private final PreferencesProvider preferencesProvider;
+    private final Context context;
 
-    public GoogleApiProvider(PreferencesProvider preferencesProvider) {
-        this.preferencesProvider = preferencesProvider;
+    public GoogleApiProvider(Context context) {
+        this.context = context;
     }
 
-    public SheetsApi getSheetsApi(Context context) {
+    public SheetsApi getSheetsApi(String account) {
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-
-        String account = preferencesProvider
-                .getGeneralSharedPreferences()
-                .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
 
         GoogleAccountCredential googleAccountCredential = GoogleAccountCredential
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
@@ -42,13 +35,9 @@ public class GoogleApiProvider {
                 .build());
     }
 
-    public DriveApi getDriveApi(Context context) {
+    public DriveApi getDriveApi(String account) {
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-
-        String account = preferencesProvider
-                .getGeneralSharedPreferences()
-                .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
 
         GoogleAccountCredential googleAccountCredential = GoogleAccountCredential
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))

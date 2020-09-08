@@ -10,6 +10,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -26,7 +28,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.gdrive.GoogleAccountsManager;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -46,12 +47,14 @@ public class InstanceSubmitter {
     private final FormsRepository formsRepository;
     private final InstancesRepository instancesRepository;
     private final GoogleAccountsManager googleAccountsManager;
+    private final GoogleApiProvider googleApiProvider;
 
-    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository, GoogleAccountsManager googleAccountsManager) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
         this.googleAccountsManager = googleAccountsManager;
+        this.googleApiProvider = googleApiProvider;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -79,7 +82,7 @@ public class InstanceSubmitter {
                     throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_SET);
                 }
                 googleAccountsManager.selectAccount(googleUsername);
-                uploader = new InstanceGoogleSheetsUploader(googleAccountsManager);
+                uploader = new InstanceGoogleSheetsUploader(googleApiProvider.getDriveApi(googleUsername), googleApiProvider.getSheetsApi(googleUsername));
             } else {
                 throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_PERMITTED);
             }
