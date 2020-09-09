@@ -7,6 +7,10 @@ import android.content.res.Resources;
 import java.util.Locale;
 
 public class TranslationHandler {
+    private TranslationHandler() {
+
+    }
+
     public static String getString(Context context, int stringId, Object... formatArgs) {
         return getLocalizedResources(context).getString(stringId, formatArgs);
     }
