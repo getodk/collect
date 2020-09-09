@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.gdrive;
 
 import android.database.Cursor;
 
@@ -21,11 +21,10 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 

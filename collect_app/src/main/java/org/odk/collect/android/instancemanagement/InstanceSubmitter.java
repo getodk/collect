@@ -20,7 +20,7 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;

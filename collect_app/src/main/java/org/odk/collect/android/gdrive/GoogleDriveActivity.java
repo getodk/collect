@@ -16,7 +16,7 @@
  * @author Carl Hartung (chartung@nafundi.com)
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.gdrive;
 
 import android.app.Activity;
 
@@ -44,14 +44,12 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.services.drive.Drive;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.gdrive.GoogleAccountNotSetDialog;
-import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
@@ -63,8 +61,6 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.gdrive.DriveHelper;
-import org.odk.collect.android.gdrive.GoogleAccountsManager;
 
 import java.io.File;
 import java.io.IOException;

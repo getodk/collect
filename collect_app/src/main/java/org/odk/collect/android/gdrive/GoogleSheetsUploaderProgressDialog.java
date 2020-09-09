@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.gdrive;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;

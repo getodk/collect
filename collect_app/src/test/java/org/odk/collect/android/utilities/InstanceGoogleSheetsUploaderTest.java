@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.junit.Test;
-import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader;
 
 public class InstanceGoogleSheetsUploaderTest {
     @Test

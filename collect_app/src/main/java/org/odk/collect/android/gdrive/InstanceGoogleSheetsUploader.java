@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.upload;
+package org.odk.collect.android.gdrive;
 
 import android.database.Cursor;
 
@@ -38,14 +38,12 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.gdrive.DriveApi;
-import org.odk.collect.android.gdrive.DriveHelper;
-import org.odk.collect.android.gdrive.SheetsApi;
-import org.odk.collect.android.gdrive.SheetsHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.upload.InstanceUploader;
+import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.UrlUtils;

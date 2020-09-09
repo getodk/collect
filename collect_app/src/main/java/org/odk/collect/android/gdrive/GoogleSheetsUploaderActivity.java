@@ -18,7 +18,7 @@
  * @author Carl Hartung (chartung@nafundi.com)
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.gdrive;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -35,12 +35,10 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
-import org.odk.collect.android.gdrive.GoogleAccountNotSetDialog;
-import org.odk.collect.android.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -48,7 +46,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -62,7 +59,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
+import static org.odk.collect.android.gdrive.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener, GoogleSheetsUploaderProgressDialog.OnSendingFormsCanceledListener {
 
