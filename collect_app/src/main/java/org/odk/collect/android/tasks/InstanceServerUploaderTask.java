@@ -23,6 +23,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.UploadAuthRequestedException;
 import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
@@ -79,7 +80,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getId().toString(),
-                        customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
+                        customMessage != null ? customMessage : TranslationHandler.getString(Collect.getInstance(), R.string.success));
 
                 analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
             } catch (UploadAuthRequestedException e) {

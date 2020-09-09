@@ -278,7 +278,7 @@ public class EncryptionUtils {
                 try {
                     instanceCursor = cr.query(uri, null, null, null, null);
                     if (instanceCursor.getCount() != 1) {
-                        String msg = Collect.getInstance().getString(R.string.not_exactly_one_record_for_this_instance);
+                        String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
                         Timber.e(msg);
                         throw new EncryptionException(msg, null);
                     }
@@ -305,7 +305,7 @@ public class EncryptionUtils {
                 formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
 
                 if (formCursor.getCount() != 1) {
-                    String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
+                    String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
                     Timber.d(msg);
                     throw new EncryptionException(msg, null);
                 }
@@ -313,7 +313,7 @@ public class EncryptionUtils {
             } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
                 formCursor = cr.query(uri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
-                    String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
+                    String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
                     Timber.d(msg);
                     throw new EncryptionException(msg, null);
                 }
@@ -322,7 +322,7 @@ public class EncryptionUtils {
 
             formId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
             if (formId == null || formId.length() == 0) {
-                String msg = Collect.getInstance().getString(R.string.no_form_id_specified);
+                String msg = TranslationHandler.getString(Collect.getInstance(), R.string.no_form_id_specified);
                 Timber.d(msg);
                 throw new EncryptionException(msg, null);
             }
@@ -343,14 +343,14 @@ public class EncryptionUtils {
             try {
                 kf = KeyFactory.getInstance(RSA_ALGORITHM);
             } catch (NoSuchAlgorithmException e) {
-                String msg = Collect.getInstance().getString(R.string.phone_does_not_support_rsa);
+                String msg = TranslationHandler.getString(Collect.getInstance(), R.string.phone_does_not_support_rsa);
                 Timber.d(e, "%s due to %s ", msg, e.getMessage());
                 throw new EncryptionException(msg, e);
             }
             try {
                 pk = kf.generatePublic(publicKeySpec);
             } catch (InvalidKeySpecException e) {
-                String msg = Collect.getInstance().getString(R.string.invalid_rsa_public_key);
+                String msg = TranslationHandler.getString(Collect.getInstance(), R.string.invalid_rsa_public_key);
                 Timber.d(e, "%s due to %s ", msg, e.getMessage());
                 throw new EncryptionException(msg, e);
             }

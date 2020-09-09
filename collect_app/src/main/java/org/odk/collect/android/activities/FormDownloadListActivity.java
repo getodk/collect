@@ -58,6 +58,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.net.URI;
@@ -717,7 +718,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         for (ServerFormDetails k : keys) {
             b.append(k.getFormName() + " ("
                     + ((k.getFormVersion() != null)
-                    ? (Collect.getInstance().getString(R.string.version) + ": " + k.getFormVersion() + " ")
+                    ? (TranslationHandler.getString(Collect.getInstance(), R.string.version) + ": " + k.getFormVersion() + " ")
                     : "") + "ID: " + k.getFormId() + ") - " + result.get(k));
             b.append("\n\n");
         }
