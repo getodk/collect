@@ -32,6 +32,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,15 +51,17 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
-        DialogFragment dialogFragment = null;
-        if (preference instanceof CaptionedListPreference) {
-            dialogFragment = ReferenceLayerPreferenceDialog.newInstance(preference.getKey());
-        } else {
-            super.onDisplayPreferenceDialog(preference);
-        }
-        if (dialogFragment != null) {
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), null);
+        if (MultiClickGuard.allowClick(getClass().getName())) {
+            DialogFragment dialogFragment = null;
+            if (preference instanceof CaptionedListPreference) {
+                dialogFragment = ReferenceLayerPreferenceDialog.newInstance(preference.getKey());
+            } else {
+                super.onDisplayPreferenceDialog(preference);
+            }
+            if (dialogFragment != null) {
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(getParentFragmentManager(), ReferenceLayerPreferenceDialog.class.getName());
+            }
         }
     }
 
@@ -131,7 +134,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Updates the rest of the preference UI when the Basemap Source is changed. */
     private void onBasemapSourceChanged(MapConfigurator cftor) {
         // Set up the preferences in the "Basemap" section.
-        PreferenceCategory baseCategory = (PreferenceCategory) findPreference(CATEGORY_BASEMAP);
+        PreferenceCategory baseCategory = findPreference(CATEGORY_BASEMAP);
         baseCategory.removeAll();
         baseCategory.addPreference(basemapSourcePref);
 
@@ -152,7 +155,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
     /** Sets up listeners for the Reference Layer preference widget. */
     private void initReferenceLayerPref() {
-        referenceLayerPref = (CaptionedListPreference) findPreference("reference_layer");
+        referenceLayerPref = findPreference("reference_layer");
         referenceLayerPref.setOnPreferenceClickListener(preference -> {
             populateReferenceLayerPref();
             return false;
@@ -166,6 +169,10 @@ public class MapsPreferences extends BasePreferenceFragment {
         }
         referenceLayerPref.setOnPreferenceChangeListener((preference, newValue) -> {
             updateReferenceLayerSummary(newValue);
+            DialogFragment dialogFragment = (DialogFragment) getParentFragmentManager().findFragmentByTag(ReferenceLayerPreferenceDialog.class.getName());
+            if (dialogFragment != null) {
+                dialogFragment.dismiss();
+            }
             return true;
         });
     }
