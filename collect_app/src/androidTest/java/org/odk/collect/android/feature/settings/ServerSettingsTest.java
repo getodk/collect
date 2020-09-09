@@ -9,6 +9,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -61,7 +62,7 @@ public class ServerSettingsTest {
     /**
      * This test could definitely be extended to cover form download/submit with the creation
      * of a stub
-     * {@link org.odk.collect.android.gdrive.DriveHelper} and
+     * {@link DriveHelper} and
      * {@link org.odk.collect.android.gdrive.GoogleAccountsManager}
      */
     @Test

@@ -6,10 +6,10 @@ import android.webkit.MimeTypeMap;
 import androidx.test.espresso.IdlingResource;
 import androidx.work.WorkManager;
 
-import org.odk.collect.android.gdrive.DriveApi;
+import org.odk.collect.android.gdrive.sheets.DriveApi;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
-import org.odk.collect.android.gdrive.SheetsApi;
+import org.odk.collect.android.gdrive.sheets.SheetsApi;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.PreferencesProvider;

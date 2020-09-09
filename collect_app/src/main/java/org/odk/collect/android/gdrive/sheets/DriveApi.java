@@ -1,4 +1,4 @@
-package org.odk.collect.android.gdrive;
+package org.odk.collect.android.gdrive.sheets;
 
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;

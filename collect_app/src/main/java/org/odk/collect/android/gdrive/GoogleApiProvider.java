@@ -11,6 +11,9 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.sheets.v4.Sheets;
 
+import org.odk.collect.android.gdrive.sheets.DriveApi;
+import org.odk.collect.android.gdrive.sheets.SheetsApi;
+
 import java.util.Collections;
 
 public class GoogleApiProvider {

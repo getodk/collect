@@ -6,6 +6,8 @@ import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
+import org.odk.collect.android.gdrive.sheets.SheetsApi;
+
 import java.io.IOException;
 import java.util.List;
 

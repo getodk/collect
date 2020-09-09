@@ -1,4 +1,4 @@
-package org.odk.collect.android.gdrive;
+package org.odk.collect.android.gdrive.sheets;
 
 import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.Spreadsheet;

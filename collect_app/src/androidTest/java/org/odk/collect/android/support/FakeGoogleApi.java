@@ -10,8 +10,8 @@ import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
-import org.odk.collect.android.gdrive.DriveApi;
-import org.odk.collect.android.gdrive.SheetsApi;
+import org.odk.collect.android.gdrive.sheets.DriveApi;
+import org.odk.collect.android.gdrive.sheets.SheetsApi;
 
 import java.io.File;
 import java.io.IOException;

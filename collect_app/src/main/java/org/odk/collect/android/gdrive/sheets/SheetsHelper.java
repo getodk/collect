@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.gdrive;
+package org.odk.collect.android.gdrive.sheets;
 
 import androidx.annotation.NonNull;
 
