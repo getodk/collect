@@ -26,7 +26,7 @@ public class FormApiExceptionMapperTest {
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-        mapper = new FormApiExceptionMapper(context.getResources());
+        mapper = new FormApiExceptionMapper(context);
     }
 
     @Test

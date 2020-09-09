@@ -575,7 +575,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             switch (exception.getType()) {
                 case FETCH_ERROR:
                 case UNREACHABLE:
-                    String dialogMessage = new FormApiExceptionMapper(getResources()).getMessage(exception);
+                    String dialogMessage = new FormApiExceptionMapper(this).getMessage(exception);
                     String dialogTitle = getString(R.string.load_remote_form_error);
 
                     if (viewModel.isDownloadOnlyMode()) {
