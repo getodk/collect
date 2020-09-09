@@ -700,7 +700,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         if (viewModel.isDownloadOnlyMode()) {
             for (ServerFormDetails serverFormDetails : result.keySet()) {
                 String successKey = result.get(serverFormDetails);
-                if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
+                if (getString(R.string.success).equals(successKey)) {
                     if (viewModel.getFormResults().containsKey(serverFormDetails.getFormId())) {
                         viewModel.putFormResult(serverFormDetails.getFormId(), true);
                     }
