@@ -58,9 +58,7 @@
   <string name="jump_to_beginning">Yana ekuqaleni</string>
   <string name="jump_to_end">Yana ekugcineni</string>
   <string name="jump_to_previous">Iya phezulu</string>
-    <string name="loading_form">Kufakwa ifomu</string>
-  <string name="load_remote_form_error">Iphutha ekutholeni uhlu lwamafomu</string>
-    <string name="location_accuracy">Ukucophelela %1s% m</string>
+  <string name="loading_form">Kufakwa ifomu</string>
   <string name="manage_files">Susa ifomu elongiwe</string>
   <string name="mark_finished">Bonisa ukuthi ifomu liphothuliwe</string>
   <string name="noselect_error">Uxolo, alikho ifomu olikhethile</string>
@@ -104,7 +102,7 @@
   <string name="change_splash_path">Shintsha umfanekiso</string>
   <string name="keep_changes">Gcina ushintsho</string>
   <string name="change_formlist_url">Uhla lendlela yefomu (appended to URL)</string>
-    <string name="change_submission_url">Indlela yokuhambisa  (appended to URL)</string>
+  <string name="change_submission_url">Indlela yokuhambisa  (appended to URL)</string>
   <string name="formlist_url">Uhla lendlela yefomu</string>
   <string name="submission_url">Indlela yokuthumela</string>
   <string name="font_size">Usayizi wombhalo (Font)</string>
@@ -123,7 +121,7 @@
   <string name="save_as_error">Igama eligciniwe akumele lingabi nalutho</string>
   <string name="edit_prompt">Hlela ngokushesha</string>
   <string name="selected_google_account_text">akhawunti Google</string>
-    <string name="font_size_extra_large">Okukhulu kakhulu</string>
+  <string name="font_size_extra_large">Okukhulu kakhulu</string>
   <string name="font_size_large">Okukhulu </string>
   <string name="font_size_medium">Okuphakathi</string>
   <string name="font_size_small">Okuncane</string>

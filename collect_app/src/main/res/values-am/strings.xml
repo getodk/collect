@@ -57,8 +57,7 @@
   <string name="jump_to_beginning">ወደ መጀመሪያ ይሂዱ</string>
   <string name="jump_to_end">ወደ መጨረሻ ይሂዱ</string>
   <string name="jump_to_previous">ወደ ላይ ውጣ</string>
-    <string name="loading_form">ቅጽ በመጫን ላይ</string>
-  <string name="load_remote_form_error">የቅጽ ዝርዝር ማግኘት ላይ ስህተት ተከስቷል</string>
+  <string name="loading_form">ቅጽ በመጫን ላይ</string>
   <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
   <string name="mark_finished">ቅጹን እንደተጠናቀቀ ምልክት አድርግ</string>
   <string name="noselect_error">ይቅርታ፣ ምንም ቅጽ አልመረጡም!</string>
@@ -69,7 +68,7 @@
   <string name="no_items_display_instances">ምንም የሚታይ ነገር የለም:: \n\n ከመላኩ በፊት የተቀመጡ ቅጾች ማጠናቀቅ ይሞክሩ</string>
   <string name="ok">እሺ</string>
   <string name="parse_error">ይቅርታ፣ ቅፁን ለመተንተን አልተቻለም</string>
-    <string name="password">የይለፍ ቃል</string>
+  <string name="password">የይለፍ ቃል</string>
   <string name="play_video">ቪድዮ አጫውት</string>
   <string name="please_wait">እባክዎ ጥቂት ጊዜ ይጠብቁ</string>
   <string name="please_wait_long">እባክዎ ትንሽ ይጠብቁ፡፡ ይሄ ጥቂት ደቂቃዎችን ሊወስድ ይችላል፡፡</string>
@@ -116,7 +115,7 @@
   <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
   <string name="selected_google_account_text">የ Google መለያ</string>
-    <string name="font_size_extra_large">በጣም ትልቅ</string>
+  <string name="font_size_extra_large">በጣም ትልቅ</string>
   <string name="font_size_large">ትልቅ</string>
   <string name="font_size_medium">መካከለኛ</string>
   <string name="font_size_small">ትንሽ</string>
@@ -180,7 +179,7 @@
   <string name="google_drive">ጉግል Drive</string>
   <string name="go_drive">የእኔ Drive</string>
   <string name="go_shared">ከእኔ ጋር የተጋሩ</string>
-    <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
+  <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
   <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
   <string name="delete_after_send">ከላክ በኋላ ይሰርዙ</string>

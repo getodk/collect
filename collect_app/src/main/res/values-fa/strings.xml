@@ -106,7 +106,7 @@
   <string name="formlist_url">شیوه لیست فورم</string>
   <string name="font_size">اندازه فونت متن</string>
   <string name="change_font_size">اندازه فونت متن</string>
-    <string name="success">موفقیت </string>
+  <string name="success">موفقیت </string>
   <string name="failures">ناکامی</string>
   <string name="no_forms_uploaded">ببخشید، هیچ فورمی آپلود نشده است</string>
   <string name="upload_results">نتایج آپلود</string>
@@ -120,7 +120,7 @@
   <string name="save_as_error">نام ذخیره شده نباید خالی باشد!</string>
   <string name="edit_prompt">ویرایش عاجل</string>
   <string name="selected_google_account_text">حساب کاربری گوگل</string>
-    <string name="font_size_extra_large">بسیار بزرگ</string>
+  <string name="font_size_extra_large">بسیار بزرگ</string>
   <string name="font_size_large">بزرگ</string>
   <string name="font_size_medium">متوسط</string>
   <string name="font_size_small">کوچک</string>
@@ -294,5 +294,5 @@
   <string name="rank_items">رده بندی اقلام</string>
   <string name="go_to_settings">رفتن به تنظیمات </string>
   <string name="reading_files">خواندن فایل ها</string>
-    <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
+  <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
 </resources>
