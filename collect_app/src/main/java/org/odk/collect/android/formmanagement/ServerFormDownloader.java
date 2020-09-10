@@ -61,13 +61,9 @@ public class ServerFormDownloader implements FormDownloader {
 
         FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
 
-        try {
-            boolean result = multiFormDownloader.processOneForm(form, stateListener);
-            if (!result) {
-                throw new FormDownloadException();
-            }
-        } catch (MultiFormDownloader.TaskCancelledException e) {
-            throw new InterruptedException();
+        boolean result = multiFormDownloader.processOneForm(form, stateListener);
+        if (!result) {
+            throw new FormDownloadException();
         }
     }
 
@@ -113,17 +109,8 @@ public class ServerFormDownloader implements FormDownloader {
             this.storagePathProvider = storagePathProvider;
         }
 
-        public static class TaskCancelledException extends Exception {
-            private final File file;
-
-            TaskCancelledException(File file) {
-                super("Task was cancelled during processing of " + file);
-                this.file = file;
-            }
-        }
-
         @Deprecated
-        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
+        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener) throws InterruptedException {
             boolean success = true;
 
             // use a temporary media path until everything is ok.
@@ -147,9 +134,9 @@ public class ServerFormDownloader implements FormDownloader {
                 } else {
                     Timber.i("No Manifest for: %s", fd.getFormName());
                 }
-            } catch (TaskCancelledException e) {
+            } catch (InterruptedException e) {
                 Timber.i(e);
-                cleanUp(fileResult, e.file, tempMediaPath);
+                cleanUp(fileResult, tempMediaPath);
 
                 // do not download additional forms.
                 throw e;
@@ -158,7 +145,7 @@ public class ServerFormDownloader implements FormDownloader {
             }
 
             if (stateListener != null && stateListener.isTaskCanceled()) {
-                cleanUp(fileResult, null, tempMediaPath);
+                cleanUp(fileResult, tempMediaPath);
                 fileResult = null;
             }
 
@@ -202,7 +189,7 @@ public class ServerFormDownloader implements FormDownloader {
             }
             if (!installed) {
                 success = false;
-                cleanUp(fileResult, null, tempMediaPath);
+                cleanUp(fileResult, tempMediaPath);
             }
 
             return success;
@@ -242,7 +229,7 @@ public class ServerFormDownloader implements FormDownloader {
             return false;
         }
 
-        private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath) {
+        private void cleanUp(FileResult fileResult, String tempMediaPath) {
             if (fileResult == null) {
                 Timber.w("The user cancelled (or an exception happened) the download of a form at the very beginning.");
             } else {
@@ -252,8 +239,6 @@ public class ServerFormDownloader implements FormDownloader {
                 }
                 FileUtils.deleteAndReport(fileResult.getFile());
             }
-
-            FileUtils.deleteAndReport(fileOnCancel);
 
             if (tempMediaPath != null) {
                 FileUtils.purgeMediaPath(tempMediaPath);
@@ -323,7 +308,7 @@ public class ServerFormDownloader implements FormDownloader {
          * Takes the formName and the URL and attempts to download the specified file. Returns a file
          * object representing the downloaded file.
          */
-        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener) throws FormApiException, IOException, TaskCancelledException {
+        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener) throws FormApiException, IOException, InterruptedException {
             // clean up friendly form name...
             String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
@@ -367,13 +352,15 @@ public class ServerFormDownloader implements FormDownloader {
          * <p>
          * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
          * is okay, so that garbage is not left over on cancel.
-         *
          */
         private void writeFile(File file, FormDownloaderListener stateListener, InputStream inputStream)
-                throws IOException, TaskCancelledException {
+                throws IOException, InterruptedException {
 
-            File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
-                    new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)));
+            File tempFile = File.createTempFile(
+                    file.getName(),
+                    TEMP_DOWNLOAD_EXTENSION,
+                    new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE))
+            );
 
             // WiFi network connections can be renegotiated during a large form download sequence.
             // This will cause intermittent download failures.  Silently retry once after each
@@ -382,10 +369,6 @@ public class ServerFormDownloader implements FormDownloader {
             int attemptCount = 0;
             final int MAX_ATTEMPT_COUNT = 2;
             while (!success && ++attemptCount <= MAX_ATTEMPT_COUNT) {
-                if (stateListener != null && stateListener.isTaskCanceled()) {
-                    throw new TaskCancelledException(tempFile);
-                }
-
                 // write connection to file
                 InputStream is = null;
                 OutputStream os = null;
@@ -440,7 +423,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                 if (stateListener != null && stateListener.isTaskCanceled()) {
                     FileUtils.deleteAndReport(tempFile);
-                    throw new TaskCancelledException(tempFile);
+                    throw new InterruptedException();
                 }
             }
 
@@ -508,7 +491,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                              ServerFormDetails fd,
-                                             FormDownloaderListener stateListener, List<MediaFile> files) throws FormApiException, IOException, TaskCancelledException {
+                                             FormDownloaderListener stateListener, List<MediaFile> files) throws FormApiException, IOException, InterruptedException {
             if (fd.getManifestUrl() == null) {
                 return null;
             }

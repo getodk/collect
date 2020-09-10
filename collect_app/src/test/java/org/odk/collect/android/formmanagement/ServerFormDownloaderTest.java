@@ -148,6 +148,7 @@ public class ServerFormDownloaderTest {
             fail("Excepted exception");
         } catch (InterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
+            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
         }
     }
@@ -177,6 +178,7 @@ public class ServerFormDownloaderTest {
             fail("Excepted exception");
         } catch (InterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
+            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
 
             // The media directory is created early for some reason
             assertThat(asList(new File(getFormFilesPath()).listFiles()), contains(new File(getFormFilesPath() + "/Form-media")));
@@ -241,6 +243,10 @@ public class ServerFormDownloaderTest {
 
     private String getFormFilesPath() {
         return storagePathProvider.getDirPath(StorageSubdirectory.FORMS);
+    }
+
+    private String getCacheFilesPath() {
+        return storagePathProvider.getDirPath(StorageSubdirectory.CACHE);
     }
 
     public static class RecordingProgressReporter implements FormDownloader.ProgressReporter {
