@@ -2602,7 +2602,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } catch (Exception e) {
 
                 }
+                // Goto the next screen as part of the initilise step
+                formController.getFormDef().getMainInstance().isInitialize = true;
                 next();
+                formController.getFormDef().getMainInstance().isInitialize = false;
             }
             // end smap
         } else {
