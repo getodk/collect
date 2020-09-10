@@ -14,6 +14,7 @@
     <issue id="GradleOverrides" severity="error" />
     <issue id="FragmentTagUsage" severity="error" />
     <issue id="UseCompatLoadingForDrawables" severity="error" />
+    <issue id="UselessParent" severity="error" />
     <issue id="SetTextI18n" severity="error" />
     <issue id="HardcodedText" severity="error" />
     <issue id="TypographyEllipsis" severity="error" />
