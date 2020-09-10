@@ -267,8 +267,7 @@ public class FormsProvider extends ContentProvider {
                 int video = MediaUtils
                         .deleteVideoInFolderFromMediaProvider(file);
 
-                Timber.i("removed from content providers: %d image files, %d audio files, and %d"
-                        + " video files.", images, audio, video);
+                Timber.i("removed from content providers: %d image files, %d audio files, and %d video files.", images, audio, video);
 
                 // delete all the containing files
                 File[] files = file.listFiles();

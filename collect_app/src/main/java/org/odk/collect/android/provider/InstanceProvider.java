@@ -226,8 +226,7 @@ public class InstanceProvider extends ContentProvider {
                 int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
                 int video = MediaUtils.deleteVideoInFolderFromMediaProvider(directory);
 
-                Timber.i("removed from content providers: %d image files, %d audio files,"
-                        + " and %d video files.", images, audio, video);
+                Timber.i("removed from content providers: %d image files, %d audio files, and %d video files.", images, audio, video);
 
                 // delete all the files in the directory
                 File[] files = directory.listFiles();

@@ -767,7 +767,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
         if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
                 && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE) {
-            Timber.w("The intent has a null value for requestCode: " + requestCode);
+            Timber.w("The intent has a null value for requestCode: %s", requestCode);
             showLongToast(getString(R.string.null_intent_value));
             return;
         }

@@ -251,8 +251,7 @@ public class MultiFormDownloader {
 
     private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath) {
         if (fileResult == null) {
-            Timber.w("The user cancelled (or an exception happened) the download of a form at the "
-                    + "very beginning.");
+            Timber.w("The user cancelled (or an exception happened) the download of a form at the very beginning.");
         } else {
             String md5Hash = FileUtils.getMd5Hash(fileResult.file);
             if (md5Hash != null) {
@@ -349,8 +348,7 @@ public class MultiFormDownloader {
             isNew = false;
 
             // delete the file we just downloaded, because it's a duplicate
-            Timber.w("A duplicate file has been found, we need to remove the downloaded file "
-                    + "and return the other one.");
+            Timber.w("A duplicate file has been found, we need to remove the downloaded file and return the other one.");
             FileUtils.deleteAndReport(f);
 
             // set the file returned to the file we already had

@@ -431,8 +431,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         } else {
             sendDataButton.setText(getString(R.string.send_data));
-            Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
-                    + "Perhaps the app is running in the background?");
+            Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. Perhaps the app is running in the background?");
         }
 
         if (savedCursor != null && !savedCursor.isClosed()) {
@@ -446,8 +445,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         } else {
             reviewDataButton.setText(getString(R.string.review_data));
-            Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
-                    + "Perhaps the app is running in the background?");
+            Timber.w("Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
         }
 
         if (viewSentCursor != null && !viewSentCursor.isClosed()) {
@@ -461,8 +459,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
-                    + "Perhaps the app is running in the background?");
+            Timber.w("Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
         }
     }
 

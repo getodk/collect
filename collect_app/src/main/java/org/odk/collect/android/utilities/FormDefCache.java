@@ -53,7 +53,7 @@ public class FormDefCache {
             Timber.i("Deleting no-longer-wanted temp cache file %s for form %s",
                     tempCacheFile.getName(), formDef.getTitle());
             if (!tempCacheFile.delete()) {
-                Timber.e("Unable to delete " + tempCacheFile.getName());
+                Timber.e("Unable to delete %s", tempCacheFile.getName());
             }
         } else {
             if (tempCacheFile.renameTo(cachedFormDefFile)) {
