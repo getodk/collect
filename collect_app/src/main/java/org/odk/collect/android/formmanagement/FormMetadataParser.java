@@ -17,7 +17,7 @@ import static org.odk.collect.android.utilities.FileUtils.write;
 public class FormMetadataParser {
 
     private final File tempDir;
-    private ReferenceManager referenceManager;
+    private final ReferenceManager referenceManager;
 
     public FormMetadataParser(File tempDir, ReferenceManager referenceManager) {
         this.tempDir = tempDir;

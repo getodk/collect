@@ -37,7 +37,7 @@ jobs:
           path: collect_app/build/reports
           destination: reports
 
-  test_unit:
+  test_modules:
     <<: *android_config
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
@@ -63,6 +63,29 @@ jobs:
       - run:
           name: Run material unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 material:testDebug
+      - store_artifacts:
+          path: collect_app/build/reports
+          destination: reports
+      - store_test_results:
+          path: collect_app/build/test-results
+
+  test_app:
+    <<: *android_config
+    environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+      - run:
+          name: Download dependencies
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+
       - run:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
@@ -121,10 +144,13 @@ workflows:
   workflow:
     jobs:
       - check_quality
-      - test_unit
+      - test_modules
+      - test_app
       - test_instrumented:
           requires:
-            - test_unit
+            - check_quality
+            - test_modules
+            - test_app
           filters:
             branches:
               only: master
