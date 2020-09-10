@@ -53,4 +53,5 @@
 
     <!-- This check crashes if request interval is passed as a param :S -->
     <issue id="InvalidPeriodicWorkRequestInterval" severity="ignore" />
+    <issue id="AlwaysShowAction" severity="ignore" />
 </lint>
