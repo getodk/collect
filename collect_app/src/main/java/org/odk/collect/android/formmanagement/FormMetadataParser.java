@@ -35,7 +35,7 @@ public class FormMetadataParser {
 
         HashMap<String, String> metadata = FileUtils.getMetadataFromFormDefinition(file);
         ReferenceManager.instance().reset();
-        FileUtils.deleteAndReport(tmpLastSaved);
+        tmpLastSaved.delete();
 
         return metadata;
     }

@@ -1,5 +1,7 @@
 package org.odk.collect.android.formmanagement;
 
+import com.google.common.io.Files;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,12 +47,15 @@ public class ServerFormDownloaderTest {
     private final FormsRepository formsRepository = new InMemFormsRepository();
 
     private StoragePathProvider storagePathProvider;
+    private File cacheDir;
 
     @Before
     public void setup() {
         RobolectricHelpers.mountExternalStorage();
         storagePathProvider = new StoragePathProvider();
         new StorageInitializer().createOdkDirsOnStorage();
+
+        cacheDir = Files.createTempDir();
     }
 
     @Test
@@ -70,7 +75,7 @@ public class ServerFormDownloaderTest {
         FormListApi formListApi = mock(FormListApi.class);
         when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider, cacheDir);
         downloader.downloadForm(serverFormDetails, null, null);
 
         List<Form> allForms = formsRepository.getAll();
@@ -105,7 +110,7 @@ public class ServerFormDownloaderTest {
         when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
         when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider, cacheDir);
         downloader.downloadForm(serverFormDetails, null, null);
 
         List<Form> allForms = formsRepository.getAll();
@@ -141,7 +146,7 @@ public class ServerFormDownloaderTest {
                 null);
 
         CancelAfterFormDownloadFormListApi formListApi = new CancelAfterFormDownloadFormListApi(xform);
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider, cacheDir);
 
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
@@ -171,7 +176,7 @@ public class ServerFormDownloaderTest {
                 )));
 
         CancelAfterMediaFileDownloadFormListApi formListApi = new CancelAfterMediaFileDownloadFormListApi(xform);
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider, cacheDir);
 
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
@@ -207,7 +212,7 @@ public class ServerFormDownloaderTest {
         when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
         when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider, cacheDir);
         RecordingProgressReporter progressReporter = new RecordingProgressReporter();
         downloader.downloadForm(serverFormDetails, progressReporter, null);
 
@@ -236,7 +241,7 @@ public class ServerFormDownloaderTest {
         FormListApi formListApi = mock(FormListApi.class);
         when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, storagePathProvider, cacheDir);
         downloader.downloadForm(serverFormDetails, null, null);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
     }
@@ -246,7 +251,7 @@ public class ServerFormDownloaderTest {
     }
 
     private String getCacheFilesPath() {
-        return storagePathProvider.getDirPath(StorageSubdirectory.CACHE);
+        return cacheDir.getAbsolutePath();
     }
 
     public static class RecordingProgressReporter implements FormDownloader.ProgressReporter {

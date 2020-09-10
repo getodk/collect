@@ -25,11 +25,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
 import timber.log.Timber;
+
+import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 /**
  * Provides a sarcophagus for {@link MultiFormDownloader} so it
@@ -39,8 +42,10 @@ public class ServerFormDownloader implements FormDownloader {
 
     private final MultiFormDownloader multiFormDownloader;
     private final FormsRepository formsRepository;
+    private final File cacheDir;
 
-    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
+    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, StoragePathProvider storagePathProvider, File cacheDir) {
+        this.cacheDir = cacheDir;
         this.multiFormDownloader = new MultiFormDownloader(formsRepository, formListApi, storagePathProvider);
         this.formsRepository = formsRepository;
     }
@@ -52,11 +57,22 @@ public class ServerFormDownloader implements FormDownloader {
             formsRepository.restore(formOnDevice.getId());
         }
 
-        FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
+        File tempDir = new File(cacheDir, "download-" + UUID.randomUUID().toString());
+        tempDir.mkdirs();
 
-        boolean result = multiFormDownloader.processOneForm(form, stateListener);
-        if (!result) {
-            throw new FormDownloadException();
+        try {
+            FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
+            boolean result = multiFormDownloader.processOneForm(form, stateListener, tempDir);
+
+            if (!result) {
+                throw new FormDownloadException();
+            }
+        } finally {
+            try {
+                deleteDirectory(tempDir);
+            } catch (IOException ignored) {
+                // ignored
+            }
         }
     }
 
@@ -103,24 +119,23 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         @Deprecated
-        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener) throws InterruptedException {
+        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir) throws InterruptedException {
             boolean success = true;
 
             // use a temporary media path until everything is ok.
-            String tempMediaPath = new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE),
-                    String.valueOf(System.currentTimeMillis())).getAbsolutePath();
+            String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
             final String finalMediaPath;
             FileResult fileResult = null;
             try {
                 // get the xml file
                 // if we've downloaded a duplicate, this gives us the file
-                fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener);
+                fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener, tempDir);
 
                 if (fd.getManifest() != null) {
                     finalMediaPath = FileUtils.constructMediaPath(
                             fileResult.getFile().getAbsolutePath());
                     String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                            stateListener, fd.getManifest().getMediaFiles());
+                            stateListener, fd.getManifest().getMediaFiles(), tempDir);
                     if (error != null && !error.isEmpty()) {
                         success = false;
                     }
@@ -152,7 +167,7 @@ public class ServerFormDownloader implements FormDownloader {
                     final long start = System.currentTimeMillis();
                     Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
 
-                    parsedFields = new FormMetadataParser(new File(tempMediaPath), ReferenceManager.instance())
+                    parsedFields = new FormMetadataParser(tempDir, ReferenceManager.instance())
                             .parse(fileResult.file);
 
                     Timber.i("Parse finished in %.3f seconds.",
@@ -292,42 +307,42 @@ public class ServerFormDownloader implements FormDownloader {
          * Takes the formName and the URL and attempts to download the specified file. Returns a file
          * object representing the downloaded file.
          */
-        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener) throws FormApiException, IOException, InterruptedException {
+        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir) throws FormApiException, IOException, InterruptedException {
             // clean up friendly form name...
             String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
             // proposed name of xml file...
             String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
             int i = 2;
-            File f = new File(path);
-            while (f.exists()) {
+            File tempFormFile = new File(path);
+            while (tempFormFile.exists()) {
                 path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + "_" + i + ".xml";
-                f = new File(path);
+                tempFormFile = new File(path);
                 i++;
             }
 
             InputStream file = formListApi.fetchForm(url);
-            writeFile(f, stateListener, file);
+            writeFile(tempFormFile, stateListener, file, tempDir);
 
             boolean isNew = true;
 
             // we've downloaded the file, and we may have renamed it
             // make sure it's not the same as a file we already have
-            Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(f));
+            Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(tempFormFile));
             if (form != null) {
                 isNew = false;
 
                 // delete the file we just downloaded, because it's a duplicate
                 Timber.w("A duplicate file has been found, we need to remove the downloaded file and return the other one.");
-                FileUtils.deleteAndReport(f);
+                FileUtils.deleteAndReport(tempFormFile);
 
                 // set the file returned to the file we already had
                 String existingPath = storagePathProvider.getAbsoluteFormFilePath(form.getFormFilePath());
-                f = new File(existingPath);
+                tempFormFile = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }
 
-            return new FileResult(f, isNew);
+            return new FileResult(tempFormFile, isNew);
         }
 
         /**
@@ -337,13 +352,13 @@ public class ServerFormDownloader implements FormDownloader {
          * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
          * is okay, so that garbage is not left over on cancel.
          */
-        private void writeFile(File file, FormDownloaderListener stateListener, InputStream inputStream)
+        private void writeFile(File file, FormDownloaderListener stateListener, InputStream inputStream, File tempDir)
                 throws IOException, InterruptedException {
 
             File tempFile = File.createTempFile(
                     file.getName(),
                     TEMP_DOWNLOAD_EXTENSION,
-                    new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE))
+                    tempDir
             );
 
             // WiFi network connections can be renegotiated during a large form download sequence.
@@ -475,7 +490,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                              ServerFormDetails fd,
-                                             FormDownloaderListener stateListener, List<MediaFile> files) throws FormApiException, IOException, InterruptedException {
+                                             FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormApiException, IOException, InterruptedException {
             if (fd.getManifestUrl() == null) {
                 return null;
             }
@@ -505,7 +520,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                     if (!finalMediaFile.exists()) {
                         InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
-                        writeFile(tempMediaFile, stateListener, mediaFile);
+                        writeFile(tempMediaFile, stateListener, mediaFile, tempDir);
                     } else {
                         String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
                         String downloadFileHash = getMd5HashWithoutPrefix(toDownload.getHash());
@@ -515,7 +530,7 @@ public class ServerFormDownloader implements FormDownloader {
                             // otherwise delete our current one and replace it with the new one
                             FileUtils.deleteAndReport(finalMediaFile);
                             InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
-                            writeFile(tempMediaFile, stateListener, mediaFile);
+                            writeFile(tempMediaFile, stateListener, mediaFile, tempDir);
                         } else {
                             // exists, and the hash is the same
                             // no need to download it again
