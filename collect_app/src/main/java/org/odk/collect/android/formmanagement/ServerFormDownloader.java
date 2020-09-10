@@ -3,11 +3,9 @@ package org.odk.collect.android.formmanagement;
 import android.net.Uri;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -25,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -33,10 +30,6 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
-import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
-import static org.odk.collect.android.utilities.FileUtils.write;
 
 /**
  * Provides a sarcophagus for {@link MultiFormDownloader} so it
@@ -159,17 +152,8 @@ public class ServerFormDownloader implements FormDownloader {
                     final long start = System.currentTimeMillis();
                     Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
 
-                    // Add a stub last-saved instance to the tmp media directory so it will be resolved
-                    // when parsing a form definition with last-saved reference
-                    File tmpLastSaved = new File(tempMediaPath, LAST_SAVED_FILENAME);
-                    write(tmpLastSaved, STUB_XML.getBytes(Charset.forName("UTF-8")));
-                    ReferenceManager.instance().reset();
-                    ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(tempMediaPath));
-                    ReferenceManager.instance().addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
-
-                    parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
-                    ReferenceManager.instance().reset();
-                    FileUtils.deleteAndReport(tmpLastSaved);
+                    parsedFields = new FormMetadataParser(new File(tempMediaPath), ReferenceManager.instance())
+                            .parse(fileResult.file);
 
                     Timber.i("Parse finished in %.3f seconds.",
                             (System.currentTimeMillis() - start) / 1000F);
