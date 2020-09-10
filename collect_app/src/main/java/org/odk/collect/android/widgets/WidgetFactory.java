@@ -40,7 +40,7 @@ import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.URL_WIDGET;
+import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
@@ -128,7 +128,7 @@ public class WidgetFactory {
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
 
-                            analytics.logEvent(URL_WIDGET, "UrlWidget", questionDetails.getFormAnalyticsID());
+                            analytics.logEvent(PROMPT, "Url", questionDetails.getFormAnalyticsID());
                         } else {
                             questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
                         }
