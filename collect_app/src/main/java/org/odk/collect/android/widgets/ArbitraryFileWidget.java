@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -56,6 +57,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
+@SuppressLint("ViewConstructor")
 public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, ButtonClickListener, BinaryDataReceiver {
 
     @NonNull

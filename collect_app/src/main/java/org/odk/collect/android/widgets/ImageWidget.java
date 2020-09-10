@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +51,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+
+@SuppressLint("ViewConstructor")
 public class ImageWidget extends BaseImageWidget implements ButtonClickListener {
 
     Button captureButton;

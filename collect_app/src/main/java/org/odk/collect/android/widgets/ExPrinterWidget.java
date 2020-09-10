@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -117,6 +118,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
  *
  * @author mitchellsundt@gmail.com
  */
+@SuppressLint("ViewConstructor")
 public class ExPrinterWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
 
     final Button launchIntentButton;

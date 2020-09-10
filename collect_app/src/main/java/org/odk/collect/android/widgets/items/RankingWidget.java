@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.widgets.items;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -42,6 +43,7 @@ import java.util.List;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
+@SuppressLint("ViewConstructor")
 public class RankingWidget extends ItemsWidget implements BinaryDataReceiver, ButtonClickListener {
 
     private List<SelectChoice> savedItems;

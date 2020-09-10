@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Button;
@@ -46,6 +47,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
     final Button getBarcodeButton;
     final TextView stringAnswer;

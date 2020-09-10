@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -35,6 +36,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  *
  * @author BehrAtherton@gmail.com
  */
+@SuppressLint("ViewConstructor")
 public class SignatureWidget extends BaseImageWidget implements ButtonClickListener {
 
     Button signButton;

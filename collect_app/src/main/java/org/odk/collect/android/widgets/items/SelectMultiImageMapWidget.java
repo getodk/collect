@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.widgets.items;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.webkit.WebView;
 
@@ -31,6 +32,7 @@ import java.util.List;
  * A widget which is responsible for single select questions represented by
  * an svg map. You can use maps of the world, countries, human body etc.
  */
+@SuppressLint("ViewConstructor")
 public class SelectMultiImageMapWidget extends SelectImageMapWidget {
     public SelectMultiImageMapWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
