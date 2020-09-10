@@ -74,9 +74,7 @@
   <string name="jump_to_beginning">Idź Do Początku</string>
   <string name="jump_to_end">Idź Na Koniec</string>
   <string name="jump_to_previous">Idź Do Góry</string>
-    <string name="loading_form">Wczytywanie Formularza</string>
-  <string name="load_remote_form_error">Błąd Pobierania Listy Formularzy</string>
-    <string name="location_accuracy">Dokładność rzędu %1$s m</string>
+  <string name="loading_form">Wczytywanie Formularza</string>
   <string name="manage_files">Skasuj Zapisany Formularz</string>
   <string name="mark_finished">Zaznacz formularz jako zakończony</string>
   <string name="noselect_error">Przykro mi, nie zaznaczyłeś żadnego formularza!</string>
@@ -128,7 +126,7 @@
   <string name="change_splash_path">Zmień obraz</string>
   <string name="keep_changes">Zapisz Zmiany</string>
   <string name="change_formlist_url">Ścieżka do listy formularzy (dołączana do URL)</string>
-    <string name="change_submission_url">Ścieżka zgłoszeń (dołączana do URL)</string>
+  <string name="change_submission_url">Ścieżka zgłoszeń (dołączana do URL)</string>
   <string name="formlist_url">Ścieżka do listy formularzy</string>
   <string name="submission_url">Ścieżka zgłoszeń</string>
   <string name="font_size">Wielkość czcionki</string>
@@ -150,7 +148,7 @@
   <string name="save_as_error">Zapisana nazwa nie może być pusta!</string>
   <string name="edit_prompt">Edytuj Pytanie</string>
   <string name="selected_google_account_text">Konto Google</string>
-    <string name="font_size_extra_large">Extra Duży</string>
+  <string name="font_size_extra_large">Extra Duży</string>
   <string name="font_size_large">Duży</string>
   <string name="font_size_medium">Średni</string>
   <string name="font_size_small">Mały</string>
@@ -248,7 +246,7 @@
   <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
   <string name="modified_on_date_at_time">\'Zmieniony\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-    <string name="google_sheets_url_hint">Formularze muszą ustawić URL przesyłania. Jeśli nie, ten adres URL zostanie użyty.</string>
+  <string name="google_sheets_url_hint">Formularze muszą ustawić URL przesyłania. Jeśli nie, ten adres URL zostanie użyty.</string>
   <string name="drive_get_file">Pobieram %1$s i pliki medialne.</string>
   <string name="no_google_account">Nie wybrałeś konta Google!</string>
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
@@ -343,10 +341,6 @@
     <item quantity="many">%d metrów</item>
     <item quantity="other">%d metry</item>
   </plurals>
-  <string name="location_status_searching">Wyszukiwanie lokalizacji GPS, proszę czekać…</string>
-  <string name="location_status_accuracy">Dokładność lokalizacji GPS: %.2f m</string>
-  <string name="location_status_acceptable">Dokładność lokalizacji GPS: %.2f m (dopuszczalna)</string>
-  <string name="location_status_unacceptable">Dokładność lokalizacji GPS: %.2f m (niedopuszczalna)</string>
   <string name="collection_status_paused">Wprowadzone punkty: %d</string>
   <string name="collection_status_placement">Wprowadzone punkty: %d (dotknij, by dodać)</string>
   <string name="collection_status_manual">Wprowadzone punkty: %d (wprowadzanie manualne)</string>
@@ -382,7 +376,6 @@
   <string name="version_number">Wersja: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Odwiedź stronę ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) służy do zbierania danych w trudnych warunkach dla społeczego dobra.</string>
   <string name="odk_forum">Dołącz do forum ODK</string>
   <string name="odk_forum_summary">Dołącz do forum by uzyskać wsparcie, zgłaszać potrzeby nowych opcji, wnieść swój wkład w tłumaczenie i kodowanie.</string>
   <string name="all_open_source_licenses">Biblioteki/licencje open source</string>
@@ -466,7 +459,7 @@
   <string name="include_password_dialog">Hasło Zawarte w Kodzie</string>
   <string name="generate">Wygeneruj</string>
   <string name="invalid_qrcode">Kod QR nie zawiera poprawnych ustawień</string>
-    <string name="take_picture_instruction">Dotknij ekran, by zrobić zdjęcie</string>
+  <string name="take_picture_instruction">Dotknij ekran, by zrobić zdjęcie</string>
   <string name="error_front_camera_unavailable">Przednia kamera nie jest dostępna w tym urządzeniu</string>
   <string name="camera_error">To urządzenie nie wspiera Camera2 API.</string>
   <string name="invalid_range_widget">Ten widget ma nieprawidłowe parametry!</string>
@@ -612,7 +605,7 @@
   <string name="instance_upload_cancelled">Przesyłanie zostało anulowane</string>
   <string name="hide_old_form_versions_setting_title">Ukryj stare wersje formularzy</string>
   <string name="hide_old_form_versions_setting_summary">Tylko najnowsza wersja pojawi się w Wypełnij Pusty Formularz</string>
-    <string name="rank_items">Uszereguj pozycje</string>
+  <string name="rank_items">Uszereguj pozycje</string>
   <string name="loading_form_failed">Wystąpił błąd w trakcie ładowania formularza. Spróbuj ponownie,</string>
   <string name="missing_google_account_dialog_title">Nie wybrano konta Google</string>
   <string name="missing_google_account_dialog_desc">By przesłać formularz poprzez Arkusze Google, zapisz swoje konto Google w ustawieniach serwera.</string>
@@ -629,7 +622,7 @@
   <string name="number_picker_title">Wybór Wartości</string>
   <string name="too_complex_form">Formularz jest zbyt skomplikowany dla tego urządzenia. Spróbuj uprościć wyrażenia, lub poproś o pomoc na forum.</string>
   <string name="reading_files">Odczyt plików</string>
-    <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
+  <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
   <string name="not_granted_permission">Aktywność, którą próbujesz wykonać, wymaga autoryzacji, której nie posiadasz.</string>
   <string name="basemap_source_unavailable">Przepraszamy, mapy bazowe %s nie są dostępne na tym urządzeniu.  Wybierz inną mapę bazową z Ustawień Ogólnych &gt; Mapy.</string>
   <string name="enter_identity">Wprowadź swoje dane</string>
@@ -640,6 +633,5 @@
   <string name="reason">Powód</string>
   <string name="save">Zapisz</string>
   <string name="reason_for_changes_description">Musisz uzasadnić powód zmian w tym formularzu</string>
-  <string name="scoped_storage_banner_text">By spełnić wymagania systemu Android, przenieś swoje formularze do pamięci prywatnej przed sierpniem 2020.</string>
   <string name="scoped_storage_learn_more">Dowiedz się więcej i przenieś</string>
 </resources>

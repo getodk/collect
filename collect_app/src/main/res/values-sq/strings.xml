@@ -66,9 +66,7 @@
   <string name="jump_to_beginning">Shko në fillim</string>
   <string name="jump_to_end">Shko në fund</string>
   <string name="jump_to_previous">Shko sipër</string>
-    <string name="loading_form">Duke ngarkuar formularin</string>
-  <string name="load_remote_form_error">Gabim në ngarkimin e listës së formularëve</string>
-    <string name="location_accuracy">Saktësia është %1$s m</string>
+  <string name="loading_form">Duke ngarkuar formularin</string>
   <string name="manage_files">Fshi formularin e ruajtur</string>
   <string name="mark_finished">Shëno formularin si të përfunduar</string>
   <string name="noselect_error">Ndjesë, ju nuk keni përzgjedhur asnjë formular</string>
@@ -119,7 +117,7 @@
   <string name="change_splash_path">Ndrysho imazhin</string>
   <string name="keep_changes">Ruaj ndryshimet</string>
   <string name="change_formlist_url">Adresa për listën e formularëve (në fund të URL)</string>
-    <string name="change_submission_url">Adresa për dërgimin (në fund të URL)</string>
+  <string name="change_submission_url">Adresa për dërgimin (në fund të URL)</string>
   <string name="formlist_url">Adresa për listën e formave</string>
   <string name="submission_url">Adresa për dërgimin</string>
   <string name="font_size">Madhësia tekstit</string>
@@ -139,7 +137,7 @@
   <string name="save_form_as">Emërto formularin</string>
   <string name="save_as_error">Emri i ruajtur nuk mund të jetë bosh!</string>
   <string name="selected_google_account_text">Llogaria në Google</string>
-    <string name="font_size_extra_large">Shumë e madhe</string>
+  <string name="font_size_extra_large">Shumë e madhe</string>
   <string name="font_size_large">E madhe</string>
   <string name="font_size_medium">Mesatare</string>
   <string name="font_size_small">E vogël</string>
@@ -226,7 +224,7 @@
   <string name="high_resolution_summary">Mundëso regjistrimin video me rezolucion të lartë</string>
   <string name="go_shared">Ndarë me mua</string>
   <string name="modified_on_date_at_time">\'Modifikuar më\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
+  <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
@@ -288,7 +286,6 @@
   <string name="parser_exception">Përjashtim XPathParser \"%s\"</string>
   <string name="version_number">Versioni: %s</string>
   <string name="odk_website">Vizitoni faqen e ODK në internet</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) përdoret për mbledhur të dhëna për të mirën shoqërore në mjedise sfiduese.</string>
   <string name="odk_forum">Bëhu pjesë e forumit ODK</string>
   <string name="odk_forum_summary">Regjistrohu në forum për suport, kërkuar elementë të rinj apo kontribuar me kodim apo përkthim.</string>
   <string name="all_open_source_licenses_msg">Ne qëndrojmë mbi shpatullat e gjigantëve!</string>
@@ -370,7 +367,7 @@
   <string name="include_password_dialog">Fjalëkalimët të përfshirë në kod</string>
   <string name="generate">Gjenero</string>
   <string name="invalid_qrcode">Kodi QR nuk ka parametra të vlefshëm</string>
-    <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
+  <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
   <string name="error_front_camera_unavailable">Ky aparat nuk ka maera të përparme</string>
   <string name="camera_error">Ky aparat nuk suporton Camera2 API.</string>
   <string name="invalid_range_widget">Ky widget ka parametra të paplotë!</string>
@@ -444,7 +441,7 @@
   <string name="guidance_hint_title">Trego udhëzuesin për pyetjet</string>
   <string name="app_theme">Tema</string>
   <string name="hide_old_form_versions_setting_title">Fshih variantet e vjetra të formularit</string>
-    <string name="rank_items">Rendit pohimet</string>
+  <string name="rank_items">Rendit pohimet</string>
   <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
   <string name="go_to_settings">Shko tek parametrat</string>
   <string name="track_location">Gjurmo vendndodhjen</string>
