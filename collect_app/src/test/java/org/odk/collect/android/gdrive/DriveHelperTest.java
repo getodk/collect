@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities.gdrive;
+package org.odk.collect.android.gdrive;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.verify;
 public class DriveHelperTest {
 
     @Mock
-    private DriveHelper.DriveService mockedDriveService;
+    private GoogleDriveApi mockedGoogleDriveApi;
     @Mock
     private Drive.Files.List mockedRequest;
 
@@ -42,20 +43,20 @@ public class DriveHelperTest {
 
     @Before
     public void setup() {
-        driveHelper = spy(new DriveHelper(mockedDriveService));
+        driveHelper = spy(new DriveHelper(mockedGoogleDriveApi));
     }
 
     @Test
     public void getRootIdShouldReturnTheProperRootFolderId() throws IOException {
         String rootId = "root_id";
 
-        doReturn(rootId).when(mockedDriveService).getFileId("root", "id");
+        doReturn(rootId).when(mockedGoogleDriveApi).getFileId("root", "id");
         assertEquals(rootId, driveHelper.getRootFolderId());
     }
 
     @Test
     public void buildRequestTest() throws IOException {
-        doReturn(mockedRequest).when(mockedDriveService).generateRequest(anyString(), anyString());
+        doReturn(mockedRequest).when(mockedGoogleDriveApi).generateRequest(anyString(), anyString());
 
         assertNull(driveHelper.buildRequest(null, null));
         assertNull(driveHelper.buildRequest("some query", null));
@@ -69,7 +70,7 @@ public class DriveHelperTest {
         java.io.File file = new java.io.File(fileId);
 
         driveHelper.downloadFile(fileId, file);
-        verify(mockedDriveService, times(1)).downloadFile(fileId, file);
+        verify(mockedGoogleDriveApi, times(1)).downloadFile(fileId, file);
     }
 
     @Test
@@ -95,15 +96,15 @@ public class DriveHelperTest {
 
     @Test
     public void getFilesFromDriveTest() throws IOException {
-        doReturn(mockedRequest).when(mockedDriveService).generateRequest(anyString(), anyString());
+        doReturn(mockedRequest).when(mockedGoogleDriveApi).generateRequest(anyString(), anyString());
 
         driveHelper.getFilesFromDrive(anyString(), anyString());
-        verify(mockedDriveService, times(1)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
+        verify(mockedGoogleDriveApi, times(1)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
 
-        clearInvocations(mockedDriveService);
+        clearInvocations(mockedGoogleDriveApi);
 
         driveHelper.getFilesFromDrive(null, null);
-        verify(mockedDriveService, times(0)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
+        verify(mockedGoogleDriveApi, times(0)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
     }
 
     @Test
@@ -115,7 +116,7 @@ public class DriveHelperTest {
     @Test
     public void createFolderInDriveTest() throws IOException {
         File file = driveHelper.createNewFile("filename", DriveHelper.FOLDER_MIME_TYPE, "parentId");
-        doReturn("new_folder_id").when(mockedDriveService).createFile(file, "id");
+        doReturn("new_folder_id").when(mockedGoogleDriveApi).createFile(file, "id");
 
         String folderId = driveHelper.createFolderInDrive("filename", "parentId");
         assertEquals("new_folder_id", folderId);
@@ -124,6 +125,6 @@ public class DriveHelperTest {
                 .setType("anyone")
                 .setRole("reader");
 
-        verify(mockedDriveService, times(1)).setPermission("new_folder_id", "id", permission);
+        verify(mockedGoogleDriveApi, times(1)).setPermission("new_folder_id", "id", permission);
     }
 }

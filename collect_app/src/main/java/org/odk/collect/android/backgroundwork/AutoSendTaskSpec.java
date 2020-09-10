@@ -30,6 +30,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instancemanagement.InstanceSubmitter;
 import org.odk.collect.android.instancemanagement.SubmitException;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -71,6 +73,12 @@ public class AutoSendTaskSpec implements TaskSpec {
     @Inject
     InstancesRepository instancesRepository;
 
+    @Inject
+    GoogleAccountsManager googleAccountsManager;
+
+    @Inject
+    GoogleApiProvider googleApiProvider;
+
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
      * to auto-send at the form level. If the app-level auto-send setting is disabled, send all
@@ -105,7 +113,7 @@ public class AutoSendTaskSpec implements TaskSpec {
             return changeLock.withLock(acquiredLock -> {
                 if (acquiredLock) {
                     try {
-                        Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepository, instancesRepository).submitUnsubmittedInstances();
+                        Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepository, instancesRepository, googleAccountsManager, googleApiProvider).submitUnsubmittedInstances();
                         notifier.onSubmission(results.first, results.second);
                     } catch (SubmitException e) {
                         switch (e.getType()) {

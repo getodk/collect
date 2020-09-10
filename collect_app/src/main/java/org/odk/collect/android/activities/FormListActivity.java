@@ -7,7 +7,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
 
-abstract class FormListActivity extends AppListActivity {
+public abstract class FormListActivity extends AppListActivity {
 
     protected static final String SORT_BY_NAME_ASC
             = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";

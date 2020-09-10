@@ -16,10 +16,12 @@
  * @author Carl Hartung (chartung@nafundi.com)
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.gdrive;
 
 import android.app.Activity;
+
 import androidx.appcompat.app.AlertDialog;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -27,8 +29,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -40,23 +44,24 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.services.drive.Drive;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.gdrive.DriveHelper;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,8 +75,6 @@ import java.util.Stack;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
 
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener {
@@ -116,6 +119,12 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Inject
     NetworkStateProvider connectivityProvider;
+
+    @Inject
+    GoogleApiProvider googleApiProvider;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -208,11 +217,13 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
 
-        sortingOptions = new int[] {
+        sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc
         };
 
-        driveHelper = accountsManager.getDriveHelper();
+        driveHelper = new DriveHelper(googleApiProvider.getDriveApi(preferencesProvider
+                .getGeneralSharedPreferences()
+                .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "")));
         getResultsFromApi();
     }
 
@@ -259,7 +270,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     // re-attempt to list google drive files
                     getResultsFromApi();
                 } else {
-                    showSettingsDialog(GoogleDriveActivity.this);
+                    GoogleAccountNotSetDialog.show(GoogleDriveActivity.this);
                 }
             }
 
@@ -782,7 +793,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     private void checkFormUpdates() {
         FormsDao formsDao = new FormsDao();
-        for (DriveListItem item: driveList) {
+        for (DriveListItem item : driveList) {
             if (item.getType() == DriveListItem.FILE) {
                 try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
                     if (cursor != null && cursor.moveToFirst() && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {

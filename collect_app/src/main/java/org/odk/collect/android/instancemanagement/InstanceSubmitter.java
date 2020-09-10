@@ -10,6 +10,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -18,7 +20,7 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
@@ -26,7 +28,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -45,11 +46,15 @@ public class InstanceSubmitter {
     private final Analytics analytics;
     private final FormsRepository formsRepository;
     private final InstancesRepository instancesRepository;
+    private final GoogleAccountsManager googleAccountsManager;
+    private final GoogleApiProvider googleApiProvider;
 
-    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
+        this.googleAccountsManager = googleAccountsManager;
+        this.googleApiProvider = googleApiProvider;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -72,13 +77,12 @@ public class InstanceSubmitter {
 
         if (protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets))) {
             if (PermissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
-                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                String googleUsername = accountsManager.getLastSelectedAccountIfValid();
+                String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_SET);
                 }
-                accountsManager.selectAccount(googleUsername);
-                uploader = new InstanceGoogleSheetsUploader(accountsManager);
+                googleAccountsManager.selectAccount(googleUsername);
+                uploader = new InstanceGoogleSheetsUploader(googleApiProvider.getDriveApi(googleUsername), googleApiProvider.getSheetsApi(googleUsername));
             } else {
                 throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_PERMITTED);
             }
