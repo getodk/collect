@@ -14,4 +14,11 @@ public class TestCollect extends Collect {
     protected void setupOSMDroid() {
         // no op for Robolectric
     }
+
+    public void onCreate() {
+        super.onCreate();
+
+        // Prevents OKHttp from exploding on initialization https://github.com/robolectric/robolectric/issues/5115
+        System.setProperty("javax.net.ssl.trustStore", "NONE");
+    }
 }
