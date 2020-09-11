@@ -696,7 +696,7 @@
   <string name="save_legacy_settings">Simpan barkas .settings lawas ke disk</string>
   <string name="save_legacy_settings_warning">Akan dihapus pada versi mendatang. Mohon gunakan kode QR di atas.</string>
   <string name="reason_for_changes_description">Anda perlu menjelaskan alasan atas perubahan yang terjadi pada formulir ini</string>
-  <string name="scoped_storage_banner_text">Anda harus melakukan migrasi formulir Collect ke penyimpanan pribadi sebelum Agustus 2020 untuk mematuhi persyaratan Android.</string>
+  <string name="scoped_storage_banner_text">Kamu harus melakukan migrasi formulir aplikasi Collect ke penyimpanan pribadi untuk memenuhi persyaratan Android. Di dalam aplikasi Collect v1.29, <b>migrasi akan dipaksa saat diinstal</b>.</string>
   <string name="scoped_storage_learn_more">Pelajari lebih lanjut dan lakukan migrasi</string>
   <string name="storage_migration_completed">Migrasi penyimpanan berhasil!</string>
   <string name="scoped_storage_dismiss">Singkirkan</string>

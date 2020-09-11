@@ -700,7 +700,7 @@
   <string name="save_legacy_settings">Sauvegarder fichier .settings (ancienne fonctionnalité)</string>
   <string name="save_legacy_settings_warning">Sera enlevé dans une version à venir. Veuillez utiliser le code QR ci-dessus.</string>
   <string name="reason_for_changes_description">Vous devez expliquer les raisons du changement de ce formulaire</string>
-  <string name="scoped_storage_banner_text">Vous devez transférer les formulaires de Collect à un répertoire privé avant août 2020 pour satisfaire les exigences de Android.</string>
+  <string name="scoped_storage_banner_text">Vous devez migrer les formulaires Collect vers le stockage privé pour vous conformer aux exigences d\'Android. Dans Collect v1.29, <b>la migration sera forcée à l\'installation</b>.</string>
   <string name="scoped_storage_learn_more">En apprendre plus et transférer</string>
   <string name="storage_migration_completed">Migration des données terminée !</string>
   <string name="scoped_storage_dismiss">Fermer</string>

@@ -700,7 +700,7 @@
   <string name="save_legacy_settings">Speichere alte .settings-Datei auf Laufwerk</string>
   <string name="save_legacy_settings_warning">Wird in einer zukünfigen Version entfernt. Bitte nutzen Sie den QR-Code oben.</string>
   <string name="reason_for_changes_description">Sie müssen den Grund für die Änderungen am Formular erklären</string>
-  <string name="scoped_storage_banner_text">Sie müssen Collect Formulare bis August 2020 in den privaten Speicher migrieren um den Android-Anforderungen zu entsprechen.</string>
+  <string name="scoped_storage_banner_text">Sie müssen Collect Formulare in den privaten Speicher migrieren um den Android-Anforderungen zu entsprechen. Ab Collect v1.29 <b>wird die Migration bei der Installation erzwungen</b>.</string>
   <string name="scoped_storage_learn_more">Mehr erfahren und migrieren</string>
   <string name="storage_migration_completed">Speichermigration abgeschlossen! </string>
   <string name="scoped_storage_dismiss">Verwerfen</string>

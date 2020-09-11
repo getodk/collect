@@ -700,7 +700,7 @@
   <string name="save_legacy_settings">Uložit starší soubor .settings na disk</string>
   <string name="save_legacy_settings_warning">Bude odebráno v budoucí verzi. Použijte výše uvedený kód QR.</string>
   <string name="reason_for_changes_description">Musíte vysvětlit důvod změn tohoto formuláře</string>
-  <string name="scoped_storage_banner_text">Do srpna 2020 musíte migrovat formuláře Collect do soukromého úložiště, abyste splnili požadavky systému Android.</string>
+  <string name="scoped_storage_banner_text">Aby bylo možné vyhovět požadavkům systému Android, musíte migrovat formuláře Collect do soukromého úložiště. V Collect v1.29 <b>bude migrace vynucena při instalaci</b>.</string>
   <string name="scoped_storage_learn_more">Další informace a migrace</string>
   <string name="storage_migration_completed">Migrace úložiště byla dokončena!</string>
   <string name="scoped_storage_dismiss">Zavrhnout</string>
