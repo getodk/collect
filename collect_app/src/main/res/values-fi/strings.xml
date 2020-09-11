@@ -704,7 +704,7 @@
   <string name="scoped_storage_learn_more">Lisätiedot ja siirtyminen</string>
   <string name="storage_migration_completed">Tietojen tallennuksen siirto valmis!</string>
   <string name="scoped_storage_dismiss">Hylkää</string>
-  <string name="storage_migration_dialog_message1">Androidin vaatimukset ovat muuttuneet, ja Collect-sovelluksen tiedostot piutää siirtää vuoden 2020 elokuuhun mennessä.</string>
+  <string name="storage_migration_dialog_message1">Android-vaatimukset ovat muuttuneet ja Collectin käyttämät tiedostot on siirrettävä.</string>
   <string name="storage_migration_dialog_message2">Sinulla on %d lähetys tekemättä. Kehoitamme lähettämään kaikki täytetyt lomakkeet ennen siirtoa..</string>
   <string name="storage_migration_dialog_message3">Jos käytät ulkoista sovellusintegraatiota kuten OpenMapKit, ole hyvä ja odota siirron kanssa.</string>
   <string name="storage_migration_more_details">Lisätietoja</string>
@@ -717,6 +717,6 @@
   <string name="storage_migration_failed">Tietojen siirto epäonnistui. Ole hyvä ja yritä uudelleen.</string>
   <string name="storage_migration_dialog_title">Tallennuksen siirto</string>
   <string name="storage_migration_progress_msg">Siirto käynnissä.\Tässä voi kulua muutama sekunti…</string>
-  <string name="install_id">Install ID - korvaa Device ID -laitetunnisteen elokuussa 2020</string>
-  <string name="preference_not_available">Ei käytettävissä</string>
+  <string name="install_id">Install ID (asennuksen tunnus) - korvaa Device ID:n (laitetunnuksen) versiossa Collect v1.29</string>
+  <string name="preference_not_available">Ei käytettävissä</string>˜
 </resources>
