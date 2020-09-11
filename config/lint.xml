@@ -17,6 +17,7 @@
     <issue id="UselessParent" severity="error" />
     <issue id="BinaryOperationInTimber" severity="error" />
     <issue id="RelativeOverlap" severity="error" />
+    <issue id="Typos" severity="error" />
     <issue id="SetTextI18n" severity="error" />
     <issue id="HardcodedText" severity="error" />
     <issue id="TypographyEllipsis" severity="error" />
