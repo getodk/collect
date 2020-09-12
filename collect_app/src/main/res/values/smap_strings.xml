@@ -124,6 +124,7 @@
     <string name="smap_csv_column_nf">The column %1$s was not found in csv file %2$s</string>
     <string name="smap_self_select">This is a self assigned task.  You need to accept it by doing a long press on the task before it can be completed</string>
     <string name="smap_android_version">Android Version %1s</string>
+    <string name="smap_eval_required">%1$s is not valid as the type of a lookup_choices function that has 3 parameters.  Only eval can be used.</string>
     <string-array name="smap_kontrolid_servers">
         <item>Kontrolid Org Server</item>
         <item>Kontrolid Com Server</item>

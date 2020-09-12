@@ -142,8 +142,8 @@ public final class ExternalDataUtil {
                             xpathFuncExpr.id.name.equalsIgnoreCase(                 // smap
                                     SmapRemoteDataHandlerSearch.HANDLER_NAME)) {
                         // also check that the args are either 1, 4 or 6.
-                        if (xpathFuncExpr.args.length == 1 || xpathFuncExpr.args.length == 4
-                                || xpathFuncExpr.args.length == 6) {
+                        if (xpathFuncExpr.args.length == 1 || xpathFuncExpr.args.length == 3    // smap add 3 params as an option
+                                || xpathFuncExpr.args.length == 4 || xpathFuncExpr.args.length == 6) {
                             return xpathFuncExpr;
                         } else {
                             Toast.makeText(Collect.getInstance(),
@@ -181,7 +181,7 @@ public final class ExternalDataUtil {
     }
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
-            XPathFuncExpr xpathfuncexpr) throws FileNotFoundException, InvalidSyntaxException {     // Smap add InvalidSynax Exception
+            XPathFuncExpr xpathfuncexpr) throws FileNotFoundException, InvalidSyntaxException {     // Smap add InvalidSyntax Exception
         ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();        // smap
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();

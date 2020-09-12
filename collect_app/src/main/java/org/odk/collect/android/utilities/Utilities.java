@@ -26,13 +26,10 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
-import org.odk.collect.android.amazonaws.models.nosql.DevicesDO;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
@@ -48,7 +45,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.InstanceXML;
 import org.odk.collect.android.tasks.SmapRegisterForMessagingTask;
-import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1065,6 +1061,45 @@ public class Utilities {
         } else {
             return false;
         }
+    }
+
+    /*
+     * Replace single quotes inside a functions paramater with ##
+     * The objecetive is to prevent an error when the xpath of a function is evaluated
+     * Currenly his is only required for search in appearances of type 'eva;':
+     *   the parameter to be escaped contains pseudo SQL
+     *   all occurences of a single quote within that parameter should be escaped
+     */
+    public static String escapeSingleQuotesInFn(String in) {
+        StringBuilder paramsOut = new StringBuilder("");
+        String out = "";
+        if(in != null) {
+
+            int idx1 = in.indexOf('(');
+            int idx2 = in.lastIndexOf(')');
+            if(idx1 >= 0 && idx2 > idx1) {
+                String fn = in.substring(0, idx1);
+                String params = in.substring(idx1, idx2);
+                String end = in.substring(idx2);
+
+                String[] eList = params.split(",");
+                for (String s : eList) {
+                    s = s.trim();
+                    if (s.length() > 2 && s.charAt(0) == '\'' && s.charAt(s.length() - 1) == '\'') {
+                        s = s.substring(1, s.length() - 1);
+                        s = s.replace("'", "##");
+                        s = "'" + s + "'";
+                    }
+
+                    if (paramsOut.length() > 0) {
+                        paramsOut.append(",");
+                    }
+                    paramsOut.append(s);
+                }
+                out = fn + paramsOut.toString() + end;
+            }
+        }
+        return out;
     }
 
     private static String getTaskSortOrderExpr(String sortOrder) {

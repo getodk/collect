@@ -24,23 +24,29 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.condition.IFunctionHandler;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.model.xform.XPathReference;
+import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Date;
 import java.util.List;
 import java.net.URLEncoder;
+import java.util.TimeZone;
 
 import timber.log.Timber;
 
@@ -120,7 +126,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
 
-        if (args == null || (args.length != 1 && args.length != 4 && args.length != 6)) {
+        if (args == null || (args.length != 1 && args.length != 3 && args.length != 4 && args.length != 6)) {
             // we should never get here since it is already handled in ExternalDataUtil
             // .getSearchXPathExpression(String appearance)
             throw new ExternalDataException(
@@ -128,9 +134,17 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         }
 
         String searchType = null;
-
         String queriedColumnsParam = null;
         String queriedValue = null;
+        String expression = null;
+        if (args.length == 3) {
+            searchType = XPathFuncExpr.toString(args[1]);
+            if(!searchType.equals("eval")) {
+                throw new ExternalDataException(
+                        Collect.getInstance().getString(R.string.smap_eval_required, searchType));
+            }
+            expression = evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
+        }
         if (args.length >= 4) {
             searchType = XPathFuncExpr.toString(args[1]);
             queriedColumnsParam = XPathFuncExpr.toString(args[2]);
@@ -157,31 +171,37 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                     .append(URLEncoder.encode(displayColumns, "UTF-8"));
 
             // Add the parameters
-            boolean hasParam = false;
-            if (searchType != null && searchType.trim().length() > 0) {
-                url.append(hasParam ? "&" : "?");
-                url.append("search_type=").append(searchType);
-                hasParam = true;
-            }
-            if (queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
-                url.append(hasParam ? "&" : "?");
-                url.append("q_column=").append(URLEncoder.encode(queriedColumnsParam, "UTF-8"));
-                hasParam = true;
-            }
-            if (queriedValue != null && queriedValue.trim().length() > 0) {
-                url.append(hasParam ? "&" : "?");
-                url.append("q_value=").append(URLEncoder.encode(queriedValue, "UTF-8"));
-                hasParam = true;
-            }
-            if (filterColumn != null && filterColumn.trim().length() > 0) {
-                url.append(hasParam ? "&" : "?");
-                url.append("f_column=").append(URLEncoder.encode(filterColumn, "UTF-8"));
-                hasParam = true;
-            }
-            if (filterValue != null && filterValue.trim().length() > 0) {
-                url.append(hasParam ? "&" : "?");
-                url.append("f_value=").append(URLEncoder.encode(filterValue, "UTF-8"));
-                hasParam = true;
+
+            if (expression != null && expression.trim().length() > 0) {
+                expression = expression.replace("##", "'");
+                url.append("?expression=").append(URLEncoder.encode(expression, "UTF-8"));
+            } else {
+                boolean hasParam = false;
+                if (searchType != null && searchType.trim().length() > 0) {
+                    url.append(hasParam ? "&" : "?");
+                    url.append("search_type=").append(searchType);
+                    hasParam = true;
+                }
+                if (queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
+                    url.append(hasParam ? "&" : "?");
+                    url.append("q_column=").append(URLEncoder.encode(queriedColumnsParam, "UTF-8"));
+                    hasParam = true;
+                }
+                if (queriedValue != null && queriedValue.trim().length() > 0) {
+                    url.append(hasParam ? "&" : "?");
+                    url.append("q_value=").append(URLEncoder.encode(queriedValue, "UTF-8"));
+                    hasParam = true;
+                }
+                if (filterColumn != null && filterColumn.trim().length() > 0) {
+                    url.append(hasParam ? "&" : "?");
+                    url.append("f_column=").append(URLEncoder.encode(filterColumn, "UTF-8"));
+                    hasParam = true;
+                }
+                if (filterValue != null && filterValue.trim().length() > 0) {
+                    url.append(hasParam ? "&" : "?");
+                    url.append("f_value=").append(URLEncoder.encode(filterValue, "UTF-8"));
+                    hasParam = true;
+                }
             }
 
             Timber.i("++++ Remote Search: " + url.toString());
@@ -212,7 +232,6 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(urlString, timeoutValue, "true", null, null);
-                //return new ArrayList<SelectChoice>();
             }
         } catch (Exception e) {
             Timber.e(e);
@@ -222,7 +241,42 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
 
     }
 
+    /*
+     * Convert placeholdes for quesions into the answers o hose questions
+     */
+    String evaluateExpressionNodes(String in, EvaluationContext ec) {
+        StringBuilder expression = new StringBuilder("");
+        if(in != null) {
+            FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+            FormInstance formInstance = formDef.getInstance();
 
+            String [] eList = in.split("\\s+");
+            for(String s : eList) {
+                if(s.startsWith("/main")) {
+                    XPathPathExpr pathExpr = XPathReference.getPathExpr(s);
+                    XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
+                    Object o = XPathFuncExpr.unpack(xpathNodeset);
 
+                    if (o.getClass() == String.class) {
+                        s = XPathFuncExpr.toString(o);
+                        s = "'" + s + "'";
+                    } else if (o.getClass() == Date.class) {
+                        Date d = (Date) o;
+                        SimpleDateFormat sdf;
+                        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+                        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));   // Dates on server will be in UTC
+                        s = "'" + sdf.format(d) + "'::timestamptz";
+                    } else {
+                        s = XPathFuncExpr.toString(o);
+                    }
+                }
+                if(expression.length() > 0) {
+                    expression.append(" ");
+                }
+                expression.append(s);
+            }
+        }
+        return expression.toString();
+    }
 
 }

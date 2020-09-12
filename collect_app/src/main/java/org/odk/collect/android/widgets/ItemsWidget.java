@@ -23,6 +23,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public abstract class ItemsWidget extends QuestionWidget {
 
     protected void readItems() {
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(Utilities.escapeSingleQuotesInFn(getFormEntryPrompt().getAppearanceHint()));  // smap escape single quotes
         if (xpathFuncExpr != null) {
             try {
                 items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
