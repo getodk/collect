@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.test.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
@@ -278,7 +277,7 @@ public class FormsDaoTest {
                 ApplicationResetter.ResetAction.RESET_CACHE, ApplicationResetter.ResetAction.RESET_OSM_DROID
         );
 
-        List<Integer> failedResetActions = new ApplicationResetter().reset(InstrumentationRegistry.getTargetContext(), resetActions);
+        List<Integer> failedResetActions = new ApplicationResetter().reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 }

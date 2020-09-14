@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -51,14 +49,14 @@ public class ApplicationResetter {
         DaggerUtils.getComponent(Collect.getInstance()).inject(this);
     }
 
-    public List<Integer> reset(Context context, List<Integer> resetActions) {
+    public List<Integer> reset(List<Integer> resetActions) {
         failedResetActions = new ArrayList<>();
         failedResetActions.addAll(resetActions);
 
         for (int action : resetActions) {
             switch (action) {
                 case ResetAction.RESET_PREFERENCES:
-                    resetPreferences(context);
+                    resetPreferences();
                     break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();
@@ -87,7 +85,7 @@ public class ApplicationResetter {
         return failedResetActions;
     }
 
-    private void resetPreferences(Context context) {
+    private void resetPreferences() {
         WebCredentialsUtils.clearAllCredentials();
 
         GeneralSharedPreferences.getInstance().loadDefaultPreferences();
@@ -98,8 +96,6 @@ public class ApplicationResetter {
 
         boolean deletedSettingsFile = !new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings").exists()
                 || (new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings").delete());
-        
-        new LocaleHelper().updateLocale(context);
 
         if (deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));

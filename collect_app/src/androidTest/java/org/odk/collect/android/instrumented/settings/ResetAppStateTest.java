@@ -45,7 +45,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.test.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -141,7 +140,7 @@ public class ResetAppStateTest {
     }
 
     private void resetAppState(List<Integer> resetActions) {
-        List<Integer> failedResetActions = new ApplicationResetter().reset(InstrumentationRegistry.getTargetContext(), resetActions);
+        List<Integer> failedResetActions = new ApplicationResetter().reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 

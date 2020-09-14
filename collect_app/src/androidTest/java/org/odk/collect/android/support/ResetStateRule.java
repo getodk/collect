@@ -62,7 +62,7 @@ public class ResetStateRule implements TestRule {
 
             resetDagger();
             clearSharedPrefs(context);
-            clearDisk(context);
+            clearDisk();
             setTestState();
 
             // Reinitialize any application state with new deps/state
@@ -76,7 +76,7 @@ public class ResetStateRule implements TestRule {
         MultiClickGuard.test = true;
     }
 
-    private void clearDisk(Context context) {
+    private void clearDisk() {
         // Reset the app in both the old and new storage locations (just nuke dirs)
         List<Integer> resetActions = Arrays.asList(
                 ApplicationResetter.ResetAction.RESET_PREFERENCES,
@@ -88,9 +88,9 @@ public class ResetStateRule implements TestRule {
         );
 
         new StorageStateProvider().disableUsingScopedStorage();
-        new ApplicationResetter().reset(context, resetActions);
+        new ApplicationResetter().reset(resetActions);
         new StorageStateProvider().enableUsingScopedStorage();
-        new ApplicationResetter().reset(context, resetActions);
+        new ApplicationResetter().reset(resetActions);
 
         // Setup storage location for tests
         if (useScopedStorage) {

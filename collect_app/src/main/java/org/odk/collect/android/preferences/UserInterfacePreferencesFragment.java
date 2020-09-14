@@ -159,7 +159,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
                 edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                 edit.apply();
 
-                localeHelper.updateLocale(getActivity());
                 startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 return true;
             });
