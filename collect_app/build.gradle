@@ -68,7 +68,7 @@ def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion(29)
 
     viewBinding {
         enabled = true
@@ -77,7 +77,7 @@ android {
     defaultConfig {
         applicationId('org.odk.collect.android')
         minSdkVersion(21)
-        targetSdkVersion(28)
+        targetSdkVersion(29)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
@@ -94,6 +94,13 @@ android {
                 keyAlias secrets.getProperty('RELEASE_KEY_ALIAS')
                 keyPassword secrets.getProperty('RELEASE_KEY_PASSWORD')
             }
+        }
+
+        selfSignedRelease {
+            storeFile new File(System.getProperty("user.home") + '/.android/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
     }
 
@@ -116,6 +123,18 @@ android {
             if (secrets.getProperty('RELEASE_STORE_FILE')) {
                 signingConfig signingConfigs.release
             }
+            minifyEnabled(true)
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            resValue("bool", "CRASHLYTICS_ENABLED", "true")
+            resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
+            buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+
+            matchingFallbacks = ['release'] // So other modules use release build type for this
+        }
+
+        selfSignedRelease {
+            signingConfig signingConfigs.selfSignedRelease
+
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "CRASHLYTICS_ENABLED", "true")
