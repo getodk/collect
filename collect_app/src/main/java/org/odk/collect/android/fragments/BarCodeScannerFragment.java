@@ -85,10 +85,6 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
-        if (frontCameraUsed()) {
-            switchToFrontCamera();
-        }
-
         startScanning(savedInstanceState);
         return rootView;
     }
@@ -97,6 +93,11 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
         capture = new CaptureManager(getActivity(), barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
+
+        // Must be called after setting up CaptureManager
+        if (frontCameraUsed()) {
+            switchToFrontCamera();
+        }
 
         barcodeViewDecoder.waitForBarcode(barcodeScannerView).observe(getViewLifecycleOwner(), barcodeResult -> {
             beepManager.playBeepSoundAndVibrate();
