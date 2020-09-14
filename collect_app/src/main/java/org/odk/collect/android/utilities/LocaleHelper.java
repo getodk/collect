@@ -85,6 +85,10 @@ public class LocaleHelper {
         return languageList;
     }
 
+    public Locale getLocale(Context context) {
+        return getLocale(getLocaleCode(context));
+    }
+
     private Locale getLocale(String splitLocaleCode) {
         if (splitLocaleCode.contains("_")) {
             String[] arg = splitLocaleCode.split("_");
