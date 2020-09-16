@@ -42,6 +42,7 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -233,6 +234,10 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
 
                 buttonLayout.addView(answer, answerParams);
             }
+
+            SpacesInUnderlyingValuesWarning
+                    .forQuestionWidget(this)
+                    .renderWarningIfNecessary(items);
         }
     }
 

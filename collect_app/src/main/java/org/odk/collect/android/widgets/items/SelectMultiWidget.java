@@ -24,6 +24,7 @@ import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,9 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
 public class SelectMultiWidget extends BaseSelectListWidget {
     public SelectMultiWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        SpacesInUnderlyingValuesWarning
+                .forQuestionWidget(this)
+                .renderWarningIfNecessary(items);
     }
 
     @Override
