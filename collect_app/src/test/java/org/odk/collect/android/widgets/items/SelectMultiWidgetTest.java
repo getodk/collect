@@ -4,6 +4,7 @@ import android.app.Application;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -21,6 +22,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
@@ -204,6 +206,20 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
 
         FrameLayout view = (FrameLayout) getSpyWidget().binding.choicesRecyclerView.getLayoutManager().getChildAt(0);
         assertThat(view.isEnabled(), is(Boolean.FALSE));
+    }
+
+    @Test
+    public void whenSpacesInUnderlyingValuesExist_shouldAppropriateWarningBeDisplayed() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withSelectChoices(asList(
+                        new SelectChoice("a", "a a"),
+                        new SelectChoice("a", "b b")
+                ))
+                .build();
+
+        TextView warningTv = getWidget().findViewById(R.id.warning_text);
+        assertThat(warningTv.getVisibility(), is(View.VISIBLE));
+        assertThat(warningTv.getText(), is("Warning: underlying values a a, b b have spaces"));
     }
 
     private ViewGroup getChoiceView(SelectMultiWidget widget, int index) {
