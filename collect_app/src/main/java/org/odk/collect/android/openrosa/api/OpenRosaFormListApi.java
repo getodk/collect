@@ -184,7 +184,7 @@ public class OpenRosaFormListApi implements FormListApi {
                         break;
                     case "version":
                         version = XFormParser.getXMLText(child, true);
-                        if (version != null && version.length() == 0) {
+                        if (version != null && version.trim().isEmpty()) {
                             version = null;
                         }
                         break;

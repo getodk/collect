@@ -279,7 +279,11 @@ public class FileUtils {
 
         fields.put(TITLE, formDef.getTitle());
         fields.put(FORMID, formDef.getMainInstance().getRoot().getAttributeValue(null, "id"));
-        fields.put(VERSION, formDef.getMainInstance().getRoot().getAttributeValue(null, "version"));
+        String version = formDef.getMainInstance().getRoot().getAttributeValue(null, "version");
+        if (version != null && version.trim().isEmpty()) {
+            version = null;
+        }
+        fields.put(VERSION, version);
 
         if (formDef.getSubmissionProfile() != null) {
             fields.put(SUBMISSIONURI, formDef.getSubmissionProfile().getAction());
