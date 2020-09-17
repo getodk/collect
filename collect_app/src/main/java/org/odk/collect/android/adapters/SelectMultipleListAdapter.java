@@ -175,7 +175,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                 }
             }
             if (!foundEqualElement) {
-                return false;
+                return true;
             }
         }
 

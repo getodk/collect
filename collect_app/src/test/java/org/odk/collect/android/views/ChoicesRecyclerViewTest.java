@@ -405,11 +405,14 @@ public class ChoicesRecyclerViewTest {
         clickChoice(1); // Select BBB
         assertThat(adapter.hasAnswerChanged(), is(true));
 
-        clickChoice(1); // Unselect BBB
-        assertThat(adapter.hasAnswerChanged(), is(false));
-
         clickChoice(0); // Unselect AAA
         assertThat(adapter.hasAnswerChanged(), is(true));
+
+        clickChoice(1); // Unselect BBB
+        assertThat(adapter.hasAnswerChanged(), is(true));
+
+        clickChoice(0); // Select AAA
+        assertThat(adapter.hasAnswerChanged(), is(false));
     }
 
     private List<SelectChoice> getTestChoices() {
