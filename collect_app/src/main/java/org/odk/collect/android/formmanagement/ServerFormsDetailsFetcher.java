@@ -25,6 +25,7 @@ import org.odk.collect.android.openrosa.api.ManifestFile;
 import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiFormDownloader;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,5 +149,10 @@ public class ServerFormsDetailsFetcher {
             }
         }
         return false;
+    }
+
+    public void updateFormListApi(String url, WebCredentialsUtils webCredentialsUtils) {
+        formListAPI.updateUrl(url);
+        formListAPI.updateWebCredentialsUtils(webCredentialsUtils);
     }
 }

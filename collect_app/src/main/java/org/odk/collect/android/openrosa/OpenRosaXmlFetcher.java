@@ -27,7 +27,7 @@ public class OpenRosaXmlFetcher {
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
     private final OpenRosaHttpInterface httpInterface;
-    private final WebCredentialsUtils webCredentialsUtils;
+    private WebCredentialsUtils webCredentialsUtils;
 
     public OpenRosaXmlFetcher(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         this.httpInterface = httpInterface;
@@ -114,5 +114,9 @@ public class OpenRosaXmlFetcher {
 
     public WebCredentialsUtils getWebCredentialsUtils() {
         return webCredentialsUtils;
+    }
+
+    public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
+        this.webCredentialsUtils = webCredentialsUtils;
     }
 }

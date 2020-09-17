@@ -101,6 +101,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
         this.url = url;
         this.username = username;
         this.password = password;
+        serverFormsDetailsFetcher.updateFormListApi(url, webCredentialsUtils);
     }
 
     private void setTemporaryCredentials() {
