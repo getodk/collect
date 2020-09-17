@@ -5,19 +5,18 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils.KNOWN_URL_LIST;
 
 public class ChangingServerUrlUtilsTest {
 
     @Before
     public void setUp() {
-        GeneralSharedPreferences.getInstance().reset(KNOWN_URL_LIST);
+        Collect.getInstance().getComponent().preferencesProvider().getMetaSharedPreferences().edit().clear().apply();
     }
 
     @Test

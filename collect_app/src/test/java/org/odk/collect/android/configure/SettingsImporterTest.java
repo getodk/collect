@@ -3,6 +3,7 @@ package org.odk.collect.android.configure;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.core.util.Pair;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.json.JSONObject;
@@ -54,7 +55,7 @@ public class SettingsImporterTest {
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, key -> {});
+        importer = new SettingsImporter(generalPrefs, adminPrefs, (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
     }
 
     @Test
@@ -115,7 +116,7 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, key -> {});
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
@@ -131,7 +132,7 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, key -> {});
+        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
         assertThat(importer.fromJSON(json.toString()), is(true));
     }
 
@@ -141,7 +142,10 @@ public class SettingsImporterTest {
 
         importer = new SettingsImporter(generalPrefs, adminPrefs, (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, handler);
         assertThat(importer.fromJSON(emptySettings()), is(true));
-        assertThat(handler.keys, containsInAnyOrder("key1", "key2", "key1"));
+        assertThat(handler.changes, containsInAnyOrder(
+                new Pair<>("key1", "default"),
+                new Pair<>("key2", true),
+                new Pair<>("key1", 5)));
     }
 
     private String emptySettings() throws Exception {
@@ -157,11 +161,11 @@ public class SettingsImporterTest {
 
     private static class RecordingSettingsChangeHandler implements SettingsChangeHandler {
 
-        public List<String> keys = new ArrayList<>();
+        public List<Pair<String, Object>> changes = new ArrayList<>();
 
         @Override
-        public void onSettingChanged(String changedKey) {
-            keys.add(changedKey);
+        public void onSettingChanged(String changedKey, Object newValue) {
+            changes.add(new Pair<>(changedKey, newValue));
         }
     }
 }

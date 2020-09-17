@@ -28,6 +28,7 @@ import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.backgroundwork.ReentrantLockChangeLock;
 import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
+import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
@@ -75,6 +76,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
@@ -99,6 +101,7 @@ import org.odk.collect.utilities.UserAgentProvider;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Named;
@@ -355,8 +358,23 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager);
+    public ServerRepository providesServerRepository() {
+        return new ServerRepository() {
+            @Override
+            public void save(String url) {
+                ChangingServerUrlUtils.addUrlToList(url);
+            }
+
+            @Override
+            public List<String> getServers() {
+                return ChangingServerUrlUtils.getUrlList();
+            }
+        };
+    }
+
+    @Provides
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository);
     }
 
     @Provides
