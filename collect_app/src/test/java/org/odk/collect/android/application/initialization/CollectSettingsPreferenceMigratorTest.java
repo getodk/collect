@@ -253,6 +253,19 @@ public class CollectSettingsPreferenceMigratorTest {
         );
     }
 
+    @Test
+    public void migratesServerList() {
+        initPrefs(generalPrefs,
+                "knownUrlList", "[\"http://blah.com\"]"
+        );
+
+        runMigrations();
+        assertPrefsEmpty(generalPrefs);
+        assertPrefs(metaPrefs,
+                "server_list", "[\"http://blah.com\"]"
+        );
+    }
+
     private void runMigrations() {
         new CollectSettingsPreferenceMigrator(metaPrefs).migrate(generalPrefs, adminPrefs);
     }

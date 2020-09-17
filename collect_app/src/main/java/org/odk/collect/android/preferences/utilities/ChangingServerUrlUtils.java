@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.MetaKeys;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,8 +19,6 @@ import java.util.List;
  */
 @Deprecated
 public class ChangingServerUrlUtils {
-    
-    public static final String KNOWN_URL_LIST = "knownUrlList";
 
     private ChangingServerUrlUtils() {
     }
@@ -36,11 +35,11 @@ public class ChangingServerUrlUtils {
         }
 
         urlList.add(0, url);
-        getSharedPreferences().edit().putString(KNOWN_URL_LIST, new Gson().toJson(urlList)).apply();
+        getSharedPreferences().edit().putString(MetaKeys.SERVER_LIST, new Gson().toJson(urlList)).apply();
     }
 
     public static List<String> getUrlList() {
-        String urlListString = getSharedPreferences().getString(KNOWN_URL_LIST, null);
+        String urlListString = getSharedPreferences().getString(MetaKeys.SERVER_LIST, null);
 
         return urlListString == null || urlListString.isEmpty()
                 ? new ArrayList<>(Collections.singletonList(Collect.getInstance().getString(R.string.default_server_url)))
