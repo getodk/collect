@@ -277,6 +277,35 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
     }
 
+    @Test public void whenFormVersionIsEmpty_shouldBeTreatedAsNull() throws IOException {
+        String simpleForm = "<?xml version=\"1.0\"?>\n" +
+                "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
+                "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
+                "        xmlns:orx=\"http://openrosa.org/xforms\">\n" +
+                "    <h:head>\n" +
+                "        <h:title>My Survey</h:title>\n" +
+                "        <model>\n" +
+                "            <instance>\n" +
+                "                <data id=\"mysurvey\" orx:version=\"   \">\n" +
+                "                </data>\n" +
+                "            </instance>\n" +
+                "        </model>\n" +
+                "    </h:head>\n" +
+                "    <h:body>\n" +
+                "\n" +
+                "    </h:body>\n" +
+                "</h:html>";
+        File temp = File.createTempFile("simple_form", ".xml");
+        temp.deleteOnExit();
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+        out.write(simpleForm);
+        out.close();
+
+        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+        assertThat(metadataFromFormDefinition.get(FileUtils.VERSION), is(nullValue()));
+    }
+
     @Test
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public void simplifyScopedStoragePathTest() {
