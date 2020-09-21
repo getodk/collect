@@ -17,6 +17,7 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
@@ -44,6 +45,9 @@ public class ApplicationResetter {
     @Inject
     PropertyManager propertyManager;
 
+    @Inject
+    ServerRepository serverRepository;
+
     public ApplicationResetter() {
         // This should probably just take arguments in the constructor rather than use Dagger
         DaggerUtils.getComponent(Collect.getInstance()).inject(this);
@@ -57,6 +61,7 @@ public class ApplicationResetter {
             switch (action) {
                 case ResetAction.RESET_PREFERENCES:
                     resetPreferences();
+                    serverRepository.clear();
                     break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();

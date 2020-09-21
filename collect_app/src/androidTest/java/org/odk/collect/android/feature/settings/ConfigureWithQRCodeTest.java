@@ -114,23 +114,6 @@ public class ConfigureWithQRCodeTest {
     }
 
     @Test
-    public void clickConfigureQRCode_opensScanner_andThenScanning_whenUsingOldQR_importsSettingsAndMigrates() {
-        rule.mainMenu()
-                .clickOnMenu()
-                .clickConfigureQR();
-
-        // Use QR code with maps settings from 1.22.0
-        stubBarcodeViewDecoder.scan("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_streets\"},\"admin\":{}}");
-
-        new MainMenuPage(rule)
-                .assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickMaps()
-                .assertText("OpenStreetMap");
-    }
-
-    @Test
     public void clickConfigureQRCode_andClickingOnView_showsQRCode() {
         rule.mainMenu()
                 .clickOnMenu()
