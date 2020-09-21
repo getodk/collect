@@ -3,12 +3,11 @@ package org.odk.collect.android.configure;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesServerRepositoryTest {
@@ -18,8 +17,8 @@ public class SharedPreferencesServerRepositoryTest {
 
     @Before
     public void setup() {
-        defaultServer = Collect.getInstance().getString(R.string.default_server_url);
-        repository = new SharedPreferencesServerRepository();
+        defaultServer = "http://default.example";
+        repository = new SharedPreferencesServerRepository(defaultServer, initPrefs());
     }
 
     @Test
@@ -60,8 +59,6 @@ public class SharedPreferencesServerRepositoryTest {
 
     @Test
     public void clear_clearsAddedServers() {
-        SharedPreferencesServerRepository repository = new SharedPreferencesServerRepository();
-
         repository.save("http://hello.com");
         repository.save("http://test.com");
 

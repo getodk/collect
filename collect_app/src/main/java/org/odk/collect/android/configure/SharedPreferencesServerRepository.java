@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.MetaKeys;
 
 import java.util.ArrayList;
@@ -14,6 +12,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class SharedPreferencesServerRepository implements ServerRepository {
+
+    private final String defaultServer;
+    private final SharedPreferences sharedPreferences;
+
+    public SharedPreferencesServerRepository(String defaultServer, SharedPreferences sharedPreferences) {
+        this.defaultServer = defaultServer;
+        this.sharedPreferences = sharedPreferences;
+    }
 
     @Override
     public void save(String url) {
@@ -32,9 +38,8 @@ public class SharedPreferencesServerRepository implements ServerRepository {
     @Override
     public List<String> getServers() {
         String urlListString = getSharedPreferences().getString(MetaKeys.SERVER_LIST, null);
-
         return urlListString == null || urlListString.isEmpty()
-                ? new ArrayList<>(Collections.singletonList(Collect.getInstance().getString(R.string.default_server_url)))
+                ? new ArrayList<>(Collections.singletonList(defaultServer))
                 : new Gson().fromJson(urlListString, new TypeToken<List<String>>() {}.getType());
     }
 
@@ -44,6 +49,6 @@ public class SharedPreferencesServerRepository implements ServerRepository {
     }
 
     private SharedPreferences getSharedPreferences() {
-        return Collect.getInstance().getComponent().preferencesProvider().getMetaSharedPreferences();
+        return sharedPreferences;
     }
 }
