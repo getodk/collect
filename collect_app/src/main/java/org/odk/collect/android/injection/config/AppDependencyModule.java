@@ -31,6 +31,7 @@ import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManage
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
@@ -76,7 +77,6 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
@@ -101,7 +101,6 @@ import org.odk.collect.utilities.UserAgentProvider;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Named;
@@ -359,17 +358,7 @@ public class AppDependencyModule {
 
     @Provides
     public ServerRepository providesServerRepository() {
-        return new ServerRepository() {
-            @Override
-            public void save(String url) {
-                ChangingServerUrlUtils.addUrlToList(url);
-            }
-
-            @Override
-            public List<String> getServers() {
-                return ChangingServerUrlUtils.getUrlList();
-            }
-        };
+        return new SharedPreferencesServerRepository();
     }
 
     @Provides
@@ -478,4 +467,5 @@ public class AppDependencyModule {
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff()));
     }
+
 }

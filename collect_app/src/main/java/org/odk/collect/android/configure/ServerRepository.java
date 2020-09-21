@@ -7,4 +7,6 @@ public interface ServerRepository {
     void save(String url);
 
     List<String> getServers();
+
+    void clear();
 }
