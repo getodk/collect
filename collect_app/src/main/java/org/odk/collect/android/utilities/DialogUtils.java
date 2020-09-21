@@ -150,6 +150,12 @@ public final class DialogUtils {
         DialogFragment existingDialog = (DialogFragment) fragmentManager.findFragmentByTag(dialogClazz.getName());
         if (existingDialog != null) {
             existingDialog.dismissAllowingStateLoss();
+
+            // We need to execute this transaction. Otherwise a next attempt to display a dialog
+            // could happen before the Fragment is dismissed in Fragment Manager and so the
+            // call to findFragmentByTag would return something (not null) and as a result the
+            // next dialog won't be displayed.
+            fragmentManager.executePendingTransactions();
         }
     }
 
