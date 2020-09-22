@@ -7,7 +7,6 @@ import android.net.Uri;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
@@ -17,15 +16,23 @@ import javax.annotation.Nullable;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.dao.FormsDao.getFormsFromCursor;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED_DATE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 
 public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public List<Form> getByJrFormIdNotDeleted(String jrFormId) {
-        return queryForForms(JR_FORM_ID + "=? AND " + DELETED + "=0", new String[]{jrFormId});
+        return queryForForms(JR_FORM_ID + "=? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId});
     }
 
     @Override
@@ -70,17 +77,23 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Uri save(Form form) {
         final ContentValues v = new ContentValues();
-        v.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(form.getFormFilePath()));
-        v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH, new StoragePathProvider().getFormDbPath(form.getFormMediaPath()));
-        v.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, form.getDisplayName());
-        v.put(FormsProviderAPI.FormsColumns.JR_VERSION, form.getJrVersion());
-        v.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, form.getJrFormId());
-        v.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI, form.getSubmissionUri());
-        v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
-        v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE, form.getAutoDelete());
-        v.put(FormsProviderAPI.FormsColumns.AUTO_SEND, form.getAutoSend());
-        v.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
-        v.put(FormsProviderAPI.FormsColumns.DELETED, form.isDeleted());
+        v.put(FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(form.getFormFilePath()));
+        v.put(FORM_MEDIA_PATH, new StoragePathProvider().getFormDbPath(form.getFormMediaPath()));
+        v.put(DISPLAY_NAME, form.getDisplayName());
+        v.put(JR_VERSION, form.getJrVersion());
+        v.put(JR_FORM_ID, form.getJrFormId());
+        v.put(SUBMISSION_URI, form.getSubmissionUri());
+        v.put(BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
+        v.put(AUTO_DELETE, form.getAutoDelete());
+        v.put(AUTO_SEND, form.getAutoSend());
+        v.put(GEOMETRY_XPATH, form.getGeometryXpath());
+
+        if (form.isDeleted()) {
+            v.put(DELETED_DATE, 0L);
+        } else {
+            v.putNull(DELETED_DATE);
+        }
+
         return new FormsDao().saveForm(v);
     }
 
@@ -92,14 +105,14 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public void softDelete(Long id) {
         ContentValues values = new ContentValues();
-        values.put(DELETED, 1);
+        values.put(DELETED_DATE, 0L);
         new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
     }
 
     @Override
     public void restore(Long id) {
         ContentValues values = new ContentValues();
-        values.put(DELETED, 0);
+        values.putNull(DELETED_DATE);
         new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
     }
 
@@ -112,7 +125,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             for (String hash : new String[]{md5Hash}) {
                 c = formsDao.getFormsCursorForMd5Hash(hash);
                 if (c != null && c.moveToFirst()) {
-                    String id = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
+                    String id = c.getString(c.getColumnIndex(_ID));
                     idsToDelete.add(id);
                     c.close();
                     c = null;

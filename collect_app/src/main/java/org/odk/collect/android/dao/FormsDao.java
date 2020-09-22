@@ -83,9 +83,9 @@ public class FormsDao {
         CursorLoader cursorLoader;
 
         if (charSequence.length() == 0) {
-            cursorLoader = getFormsCursorLoader(FormsColumns.DELETED + " = 0", new String[]{}, sortOrder, newestByFormId);
+            cursorLoader = getFormsCursorLoader(FormsColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder, newestByFormId);
         } else {
-            String selection = FormsColumns.DISPLAY_NAME + " LIKE ? AND " + FormsColumns.DELETED + " = 0";
+            String selection = FormsColumns.DISPLAY_NAME + " LIKE ? AND " + FormsColumns.DELETED_DATE + " IS NULL";
             String[] selectionArgs = {"%" + charSequence + "%"};
 
             cursorLoader = getFormsCursorLoader(selection, selectionArgs, sortOrder, newestByFormId);
@@ -243,7 +243,7 @@ public class FormsDao {
                     int autoSendColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SEND);
                     int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
                     int geometryXpathColumnIndex = cursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH);
-                    int deletedColumnIndex = cursor.getColumnIndex(FormsColumns.DELETED);
+                    int deletedDateColumnIndex = cursor.getColumnIndex(FormsColumns.DELETED_DATE);
 
                     Form form = new Form.Builder()
                             .id(cursor.getLong(idColumnIndex))
@@ -262,7 +262,7 @@ public class FormsDao {
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))
                             .geometryXpath(cursor.getString(geometryXpathColumnIndex))
-                            .deleted(cursor.getInt(deletedColumnIndex) != 0)
+                            .deleted(!cursor.isNull(deletedDateColumnIndex))
                             .build();
 
                     forms.add(form);
