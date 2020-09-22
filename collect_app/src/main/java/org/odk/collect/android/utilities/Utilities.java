@@ -1064,11 +1064,11 @@ public class Utilities {
     }
 
     /*
-     * Replace single quotes inside a functions paramater with ##
-     * The objecetive is to prevent an error when the xpath of a function is evaluated
-     * Currenly his is only required for search in appearances of type 'eva;':
+     * Replace single quotes inside a functions parameter with ##
+     * The objective is to prevent an error when the xpath of a function is evaluated
+     * Currently this is only required for lookup_choices in appearances of type 'eval':
      *   the parameter to be escaped contains pseudo SQL
-     *   all occurences of a single quote within that parameter should be escaped
+     *   all occurrences of a single quote within that parameter should be escaped
      */
     public static String escapeSingleQuotesInFn(String in) {
         StringBuilder paramsOut = new StringBuilder("");

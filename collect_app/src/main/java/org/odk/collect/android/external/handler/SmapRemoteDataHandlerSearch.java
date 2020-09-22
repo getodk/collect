@@ -242,7 +242,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
     }
 
     /*
-     * Convert placeholdes for quesions into the answers o hose questions
+     * Convert placeholders for quesions into the answers of those questions
      */
     String evaluateExpressionNodes(String in, EvaluationContext ec) {
         StringBuilder expression = new StringBuilder("");
