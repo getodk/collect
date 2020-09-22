@@ -36,7 +36,7 @@ public class DeleteBlankFormTest {
     }
 
     @Test
-    public void deletingAForm_whenThereFilledForms_allowsEditing() {
+    public void deletingAForm_whenThereFilledForms_removesFormFromBlankFormList_butAllowsEditingFilledForms() {
         rule.mainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
@@ -49,6 +49,9 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
+                .assertTextDoesNotExist("One Question")
+                .pressBack(new MainMenuPage(rule))
+                .clickFillBlankForm()
                 .assertTextDoesNotExist("One Question")
                 .pressBack(new MainMenuPage(rule))
 
@@ -87,6 +90,27 @@ public class DeleteBlankFormTest {
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one_question) - Success")
                 .clickOK(new MainMenuPage(rule))
+                .startBlankForm("One Question");
+    }
+
+    @Test
+    public void afterFillingAForm_andDeletingIt_allowsFormToBeReloadedDirectly() {
+        rule.mainMenu()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "22")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickDeleteSavedForm()
+                .clickBlankForms()
+                .clickForm("One Question")
+                .clickDeleteSelected(1)
+                .clickDeleteForms()
+                .assertTextDoesNotExist("One Question")
+                .pressBack(new MainMenuPage(rule))
+
+                .copyForm("one-question.xml")
                 .startBlankForm("One Question");
     }
 }

@@ -11,7 +11,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT;
@@ -37,7 +37,7 @@ public class FormDatabaseMigrator {
     private static final String MODEL_VERSION = "modelVersion";
 
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV9(db);
+        createFormsTableV10(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -58,12 +58,14 @@ public class FormDatabaseMigrator {
                 upgradeToVersion8(db);
             case 8:
                 upgradeToVersion9(db);
+            case 9:
+                upgradeToVersion10(db);
         }
     }
 
     public void onDowngrade(SQLiteDatabase db) throws SQLException {
         SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-        createFormsTableV9(db);
+        createFormsTableV10(db);
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
@@ -223,6 +225,17 @@ public class FormDatabaseMigrator {
         SQLiteUtils.dropTable(db, temporaryTable);
     }
 
+    private void upgradeToVersion10(SQLiteDatabase db) {
+        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
+        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
+        createFormsTableV10(db);
+        SQLiteUtils.copyRows(db, temporaryTable, new String[]{_ID, DISPLAY_NAME, DESCRIPTION,
+                JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+                SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+                GEOMETRY_XPATH}, FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, temporaryTable);
+    }
+
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
@@ -282,6 +295,27 @@ public class FormDatabaseMigrator {
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
                 + GEOMETRY_XPATH + " text, "
-                + DELETED + " boolean default(0));");
+                + "deleted" + " boolean default(0));");
+    }
+
+    private void createFormsTableV10(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null, "
+                + DATE + " integer not null, " // milliseconds
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + GEOMETRY_XPATH + " text, "
+                + DELETED_DATE + " integer);");
     }
 }
