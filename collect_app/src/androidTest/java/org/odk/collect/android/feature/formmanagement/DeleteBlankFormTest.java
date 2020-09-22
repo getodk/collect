@@ -89,4 +89,25 @@ public class DeleteBlankFormTest {
                 .clickOK(new MainMenuPage(rule))
                 .startBlankForm("One Question");
     }
+
+    @Test
+    public void afterFillingAForm_andDeletingIt_allowsFormToBeReloadedDirectly() {
+        rule.mainMenu()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "22")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickDeleteSavedForm()
+                .clickBlankForms()
+                .clickForm("One Question")
+                .clickDeleteSelected(1)
+                .clickDeleteForms()
+                .assertTextDoesNotExist("One Question")
+                .pressBack(new MainMenuPage(rule))
+
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question");
+    }
 }
