@@ -36,7 +36,7 @@ public class DeleteBlankFormTest {
     }
 
     @Test
-    public void deletingAForm_whenThereFilledForms_allowsEditing() {
+    public void deletingAForm_whenThereFilledForms_removesFormFromBlankFormList_butAllowsEditingFilledForms() {
         rule.mainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
@@ -49,6 +49,9 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
+                .assertTextDoesNotExist("One Question")
+                .pressBack(new MainMenuPage(rule))
+                .clickFillBlankForm()
                 .assertTextDoesNotExist("One Question")
                 .pressBack(new MainMenuPage(rule))
 

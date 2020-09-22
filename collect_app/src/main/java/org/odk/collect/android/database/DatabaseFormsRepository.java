@@ -105,7 +105,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public void softDelete(Long id) {
         ContentValues values = new ContentValues();
-        values.put(DELETED_DATE, 0L);
+        values.put(DELETED_DATE, System.currentTimeMillis());
         new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
     }
 
