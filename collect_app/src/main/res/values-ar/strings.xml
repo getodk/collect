@@ -448,9 +448,6 @@
   <string name="email">البريد الالكتروني</string>
   <string name="user_defined">معرف المستخدم</string>
   <string name="device_defined">معرف الجهاز</string>
-  <string name="device_id">رقم معرف الجهاز</string>
-  <string name="subscriber_id">رقم معرف المشترك</string>
-  <string name="sim_serial_id">رقم شريحة الاتصال</string>
   <string name="select_date">اختر التاريخ</string>
   <string name="select_time">اختر الوقت</string>
   <string name="no_date_selected">لم يتم اختيار تاريخ</string>

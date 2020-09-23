@@ -295,7 +295,6 @@
   <string name="language">Jezik</string>
   <string name="form_metadata_summary">Vrednosti bodo dodane obrazcem, ki imajo uporabnisko ime, email ali telefonsko stevilko …</string>
   <string name="phone_number">Telefonska številka</string>
-  <string name="sim_serial_id">Serijska številka SIM kartice</string>
   <string name="successfully_imported_settings">Nastavitve uspešno uvožene</string>
   <string name="turn_on_flashlight">Vklopi svetilko</string>
   <string name="turn_off_flashlight">Izklopi svetilko</string>

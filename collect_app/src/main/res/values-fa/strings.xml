@@ -240,9 +240,6 @@
   <string name="email">ایمیل آدرس</string>
   <string name="user_defined">تعریف شده توسط کاربر</string>
   <string name="device_defined">تعریف شده توسط دستگاه</string>
-  <string name="device_id">نمبر شناسایی دستگاه</string>
-  <string name="subscriber_id">نمبر شناسایی مشترک</string>
-  <string name="sim_serial_id">نمبر سریال سیم کارت</string>
   <string name="select_date">انتخاب تاریخ</string>
   <string name="select_time">انتخاب زمان</string>
   <string name="no_date_selected">هیچ تاریخی انتخاب نشده است</string>

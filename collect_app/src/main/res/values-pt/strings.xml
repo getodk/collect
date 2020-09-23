@@ -445,9 +445,6 @@ Escolher Imagem</string>
   <string name="email">Endereço de e-mail</string>
   <string name="user_defined">Definidos pelo usuário</string>
   <string name="device_defined">Definidos pelo dispositivo</string>
-  <string name="device_id">ID do dispositivo</string>
-  <string name="subscriber_id">ID do inscrito</string>
-  <string name="sim_serial_id">Número do cartão SIM</string>
   <string name="select_date">Selecionar data</string>
   <string name="select_time">Selecionar hora</string>
   <string name="no_date_selected">Nenhuma data selecionada</string>

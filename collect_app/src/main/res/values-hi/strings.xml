@@ -359,9 +359,6 @@
   <string name="email">इमेल एड्रेस </string>
   <string name="user_defined">उपयोगकर्ता-परिभाषित</string>
   <string name="device_defined">डिवाइस-से-परिभाषित</string>
-  <string name="device_id">डिवाइस आईडी</string>
-  <string name="subscriber_id">सब्सक्राइबर आईडी</string>
-  <string name="sim_serial_id">सिम सीरियल नंबर</string>
   <string name="select_date">तारीख़ चुनें</string>
   <string name="select_time">समय चुनें</string>
   <string name="no_date_selected">कोई दिनांक चयनित नहीं</string>

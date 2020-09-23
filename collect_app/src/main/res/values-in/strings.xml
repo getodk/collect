@@ -442,9 +442,9 @@
   <string name="email">Alamat Email</string>
   <string name="user_defined">Ditentukan-pengguna</string>
   <string name="device_defined">Ditentukan-perangkat</string>
-  <string name="device_id">ID Perangkat</string>
-  <string name="subscriber_id">ID Pelanggan</string>
-  <string name="sim_serial_id">Nomor serial SIM</string>
+  <string name="device_id">ID perangkat - akan diganti oleh ID instalasi di Collect v1.29</string>
+  <string name="subscriber_id">ID Pengikut - akan di hapus di Collect v1.29</string>
+  <string name="sim_serial_id">ID Pengikut - akan di hapus di Collect v1.29</string>
   <string name="select_date">Pilih tanggal</string>
   <string name="select_time">Pilih waktu</string>
   <string name="no_date_selected">Tanggal tidak dipilih</string>
@@ -650,6 +650,7 @@
   <string name="scoped_storage_learn_more">Pelajari lebih lanjut dan lakukan migrasi</string>
   <string name="storage_migration_completed">Migrasi penyimpanan berhasil!</string>
   <string name="scoped_storage_dismiss">Singkirkan</string>
+  <string name="storage_migration_dialog_message1">Persyaratan Android telah berubah dan file yang digunakan oleh Collect harus dimigrasikan.</string>
   <string name="storage_migration_dialog_message2">Anda memiliki %d pengiriman yang belum terkirim. Anda disarankan untuk mengirim seluruh data sebelum melakukan migrasi.</string>
   <string name="storage_migration_dialog_message3">Jika Anda menggunakan aplikasi eksternal yang terintegrasi seperti OpenMapKit, mohon tidak melakukan migrasi terlebih dahulu.</string>
   <string name="storage_migration_more_details">Rincian tambahan</string>
@@ -661,6 +662,7 @@
   <string name="storage_migration_failed">Migrasi data tidak berhasil. Mohon coba lagi.</string>
   <string name="storage_migration_dialog_title">Migrasi penyimpanan</string>
   <string name="storage_migration_progress_msg">Migrasi sedang berlangsung.\nProses ini mungkin perlu beberapa detik…</string>
+  <string name="install_id">Install ID - akan menggantikan ID perangkat di Collect v1.29</string>
   <string name="preference_not_available">Tidak tersedia</string>
   <string name="custom_server_paths">Jalur server khusus</string>
   <string name="legacy_custom_server_paths_summary">Akan dihapus di versi mendatang. Silakan gunakan /formList dan /submission di server anda.</string>
@@ -673,5 +675,7 @@
   <string name="form_update_error">Pembaruan formulir tidak berhasil</string>
   <string name="report_to_project_lead">Jika anda terus mengalami masalah ini, laporkan ke orang yang meminta anda untuk mengumpulkan data.</string>
   <string name="unreachable_error">ODK Collect tidak dapat menghubung server di %s. Apakah anda sudah memasukkan URL dengan benar?</string>
+  <string name="security_error">ODK Collect tidak dapat menghubung server di %s. Apakah anda sudah memasukkan URL dengan benar?</string>
+  <string name="failure">Tidak Berhasil</string>
   <string name="form_update_succeeded">Pembaruan formulir berhasil</string>
 </resources>

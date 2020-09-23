@@ -352,6 +352,7 @@
   <string name="version_number">Toleo: %s</string>
   <string name="id_number">Utambulisho: %s</string>
   <string name="odk_website">Tembelea tovuti ya ODK</string>
+  <string name="odk_website_summary">ODK inatumika kwenye ukusanyaji wa taarifa za kijamii katika mazingira yenye changamoto.</string>
   <string name="odk_forum">Jiunge na jukwaa la ODK</string>
   <string name="odk_forum_summary">Jiunge na jukwaa kupata msaada, kuomba makala,  kuchangia kanuni au kutafsiri!</string>
   <string name="all_open_source_licenses">Maktaba/leseni ya chanzo wazi</string>
@@ -418,9 +419,6 @@
   <string name="email">Anuwani ya barua pepe</string>
   <string name="user_defined">Mtumiaji ametambulika</string>
   <string name="device_defined">Kifaa kimetambulika</string>
-  <string name="device_id">Utambulisho wa kifaa</string>
-  <string name="subscriber_id">Utambulisho wa Msajili</string>
-  <string name="sim_serial_id">Namba za utambulisho wa SIM</string>
   <string name="select_date">Chagua tarehe</string>
   <string name="select_time">Chagua muda</string>
   <string name="no_date_selected">Hakuna tarehe iliyochaguliwa</string>
