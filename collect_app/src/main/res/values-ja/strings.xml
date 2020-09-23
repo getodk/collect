@@ -442,9 +442,6 @@
   <string name="email">メールアドレス</string>
   <string name="user_defined">ユーザー定義</string>
   <string name="device_defined">デバイス定義</string>
-  <string name="device_id">デバイス ID</string>
-  <string name="subscriber_id">サブスクライバー ID</string>
-  <string name="sim_serial_id">SIM シリアル番号</string>
   <string name="select_date">日付を選択</string>
   <string name="select_time">時間を選択</string>
   <string name="no_date_selected">日付が選択されていません</string>

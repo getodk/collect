@@ -358,6 +358,7 @@
   <string name="version_number">Версія: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Перейти на сайт ODK</string>
+  <string name="odk_website_summary">ODK використовується для збору даних для суспільних потреб.</string>
   <string name="odk_forum">Долучитись до форуму ODK</string>
   <string name="odk_forum_summary">Долучайтесь до форуму аби отримати допомогу, запросити нові функції, допомогти в створенні коду чи перекладу!</string>
   <string name="all_open_source_licenses">Відкриті бібліотеки/ліцензії</string>
@@ -424,9 +425,6 @@
   <string name="email">Електронна адреса</string>
   <string name="user_defined">Визначено користувачем</string>
   <string name="device_defined">Визначено пристроєм</string>
-  <string name="device_id">ID пристрою</string>
-  <string name="subscriber_id">ID підписника</string>
-  <string name="sim_serial_id">Серійний номер SIM</string>
   <string name="select_date">Обрати дату</string>
   <string name="select_time">Обрати час</string>
   <string name="no_date_selected">Дата не обрана</string>

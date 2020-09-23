@@ -366,6 +366,7 @@
   <string name="version_number">వెర్షన్: %s</string>
   <string name="id_number">ID:%s</string>
   <string name="odk_website">ODK వెబ్‌సైట్‌ను సందర్శించండి</string>
+  <string name="odk_website_summary">సవాలు చేసే వాతావరణాలలో సామాజిక మంచి కోసం డేటాను సేకరించడానికి ODK ఉపయోగించబడుతుంది.</string>
   <string name="odk_forum">ODK ఫోరమ్‌లో చేరండి</string>
   <string name="odk_forum_summary">మద్దతు పొందడానికి ఫోరమ్‌లో చేరండి, లక్షణాలను అభ్యర్థించండి, కోడ్ / అనువాదాలను అందించండి!</string>
   <string name="all_open_source_licenses">ఓపెన్ సోర్స్ లైబ్రరీలు/లైసెన్సులు</string>
@@ -432,9 +433,6 @@
   <string name="email">ఈ-మెయిల్ అడ్రెస్</string>
   <string name="user_defined">వినియోగదారుడు నిర్వచించింది </string>
   <string name="device_defined">పరికరం నిర్వచించింది </string>
-  <string name="device_id">పరికరం యొక్క ID</string>
-  <string name="subscriber_id">చందాదారుల ఐడి</string>
-  <string name="sim_serial_id">సిమ్ సీరియల్ నెంబర్</string>
   <string name="select_date">తేదిని ఎంపిక చేసుకొండి</string>
   <string name="select_time">సమయాన్ని ఎంపిక చేసుకొండి</string>
   <string name="no_date_selected">తేదిని ఎంపిక చేసుకొలేదు</string>

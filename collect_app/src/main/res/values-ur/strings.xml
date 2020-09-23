@@ -265,6 +265,7 @@
   <string name="leave_a_review">پلے اسٹور پر رائے دیجیے</string>
   <string name="leave_a_review_msg">آپ ( امید ہے مثبت) کی رائے سے پلے اسٹورمیں اپپ کی نمائش میں اضافہ ہوتا ہے </string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">نقشہ جات</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -385,9 +386,6 @@
   <string name="email">ای میل ایڈریس </string>
   <string name="user_defined">یوزر-ڈیفائینڈ </string>
   <string name="device_defined">ڈیوائس-ڈیفائینڈ </string>
-  <string name="device_id">ڈیوائس آئی ڈی </string>
-  <string name="subscriber_id">سبسکرائبر آئی ڈی </string>
-  <string name="sim_serial_id">سم سیریل نمبر </string>
   <string name="select_date">تاریخ منتخب کریں</string>
   <string name="select_time">وقت منتخب کریں</string>
   <string name="no_date_selected">کوئی تاریخ منتخب نہیں کی گئی </string>
@@ -541,4 +539,19 @@
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>
+  <string name="open_file">فائل کھولیں</string>
+  <string name="qr_code_not_found">منتخب تصویر میں QR کوڈ موجود نھیں ہے</string>
+  <string name="enter_identity">اپنی شناخت درج کریں</string>
+  <string name="identity">شناخت</string>
+  <string name="enter_identity_description">اس فارم کے لیئے آپ کی شناخت ہونا ضروری ہے</string>
+  <string name="close">بند کریں</string>
+  <string name="reason_for_changes">تبدیلیوں کی وجہ</string>
+  <string name="reason">وجہ</string>
+  <string name="save">محفوظ کریں</string>
+  <string name="reason_for_changes_description">براہ مہربانی اس فارم میں تبدیلیوں کی وجہ بیان کریں</string>
+  <string name="scoped_storage_dismiss">ختم کریں</string>
+  <string name="storage_migration_more_details">مزید تفصیلات</string>
+  <string name="try_again">دوبارہ کوشش کریں</string>
+  <string name="preference_not_available">موجود نھیں ہے</string>
+  <string name="failure">ناکامی </string>
 </resources>

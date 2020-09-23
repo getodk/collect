@@ -350,9 +350,6 @@
   <string name="email">Adresa email</string>
   <string name="user_defined">Përdoruesi u përcaktua.</string>
   <string name="device_defined">Aparati u përckatua</string>
-  <string name="device_id">Identifikimi i aparatit</string>
-  <string name="subscriber_id">Identifikimi i përdoruesit</string>
-  <string name="sim_serial_id">Numri serial i kartës SIM</string>
   <string name="select_date">Zgjidh datën</string>
   <string name="select_time">Zgjidh orën</string>
   <string name="no_date_selected">Data nuk është përzgjedhur</string>

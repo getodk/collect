@@ -303,8 +303,6 @@
   <string name="email">emailadres</string>
   <string name="user_defined">gebruiker gedefineerd</string>
   <string name="device_defined">Apparaat gedefinieerd</string>
-  <string name="device_id">Apparaat ID</string>
-  <string name="sim_serial_id">SIM serienummer</string>
   <string name="select_date">Selecteer datum</string>
   <string name="select_time">Selecteer tijd</string>
   <string name="no_date_selected">Geen datum geselecteerd</string>

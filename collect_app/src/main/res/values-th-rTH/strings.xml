@@ -317,9 +317,6 @@
   <string name="email">ที่อยู่อีเมล์</string>
   <string name="user_defined">กำหนดโดยผู้ใช้งาน</string>
   <string name="device_defined">กำหนดโดยโทรศัพท์</string>
-  <string name="device_id">รหัสประจำเครื่อง</string>
-  <string name="subscriber_id">รหัสลงทะเบียน</string>
-  <string name="sim_serial_id">หมายเลข SIM serial</string>
   <string name="select_date">เลือกวันที่</string>
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>

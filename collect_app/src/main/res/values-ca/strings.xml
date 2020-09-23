@@ -304,9 +304,6 @@
   <string name="email">Direcció email</string>
   <string name="user_defined">definit per l\'usuari</string>
   <string name="device_defined">definit pel dispositiu</string>
-  <string name="device_id">ID dispositiu</string>
-  <string name="subscriber_id">ID subscriptor</string>
-  <string name="sim_serial_id">num. serie SIM</string>
   <string name="select_date">Selecciona data</string>
   <string name="select_time">Selecciona hora</string>
   <string name="no_date_selected">Data no seleccionada</string>

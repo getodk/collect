@@ -328,6 +328,7 @@
   <string name="version_number">ជំនាន់: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">ចូលទៅកាន់គេហទំព័រ ODK</string>
+  <string name="odk_website_summary">ODK បាន​ប្រើ​ប្រាស់​ដើម្បី​ប្រមូល​ទិន្នន័យសម្រាប់ភាពប្រសើរ​របស់​សង្គមនៅក្នុងបរិយាកាស​ប្រកួត​ប្រជែង​។</string>
   <string name="odk_forum">ចូល​រួម​ជា​មួយ​វេទិកា ODK</string>
   <string name="odk_forum_summary">ចូលរួមវេទិកាដើម្បីទទួលបានការគាំទ្រ, លក្ខណៈពិសេសស្នើសុំ, រួមចំណែកកូដ / ការបកប្រែ!</string>
   <string name="all_open_source_licenses">ប្រភពបណ្ណាល័យបើកចំហ/អាជ្ញាបណ្ណ</string>
@@ -394,9 +395,6 @@
   <string name="email">អាសយដ្ឋានអ៊ីម៉ែល</string>
   <string name="user_defined">អ្នកប្រើប្រាស់កំណត់</string>
   <string name="device_defined">ឧបករណ៍កំណត់</string>
-  <string name="device_id">ID របស់ឧបករណ៍</string>
-  <string name="subscriber_id">ID របស់អតិថិជន</string>
-  <string name="sim_serial_id">លេខ​សម្គាល់ស៊ីម</string>
   <string name="select_date">ជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="select_time">ជ្រើសរើសម៉ោង</string>
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>

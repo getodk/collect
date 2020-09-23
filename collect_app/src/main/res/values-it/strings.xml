@@ -432,9 +432,6 @@
   <string name="email">Indirizzo email</string>
   <string name="user_defined">Definito dall\'utente</string>
   <string name="device_defined">Definito dal dispositivo</string>
-  <string name="device_id">ID Dispositivo</string>
-  <string name="subscriber_id">ID dell\'iscritto</string>
-  <string name="sim_serial_id">Numero seriale della SIM</string>
   <string name="select_date">Seleziona una data</string>
   <string name="select_time">Seleziona un orario</string>
   <string name="no_date_selected">Nessuna data selezionata</string>

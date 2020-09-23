@@ -340,6 +340,7 @@ Dela ODK Collect med dem.</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: 1%s</string>
   <string name="odk_website">Besök ODKs hemsida</string>
+  <string name="odk_website_summary">ODK används för att samla in data för socialt arbete i utmanande miljöer</string>
   <string name="odk_forum">Gå med i ODK forumet</string>
   <string name="odk_forum_summary">Gå med i forumet för få hjälp, föreslå nya funktioner eller bidra med kod och översättningar!</string>
   <string name="all_open_source_licenses">Bibliotek/licenser för öppen källkod</string>
@@ -406,9 +407,6 @@ Dela ODK Collect med dem.</string>
   <string name="email">E-postadress</string>
   <string name="user_defined">Användardefinierad</string>
   <string name="device_defined">Enhetsdefinierad</string>
-  <string name="device_id">ID enhet</string>
-  <string name="subscriber_id">ID abonnemang</string>
-  <string name="sim_serial_id">SIM-nummer</string>
   <string name="select_date">Välj datum</string>
   <string name="select_time">Välj tid</string>
   <string name="no_date_selected">Inget datum valt</string>

@@ -355,6 +355,7 @@
   <string name="version_number">Verzija: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Posjeti ODK vebsajt</string>
+  <string name="odk_website_summary">ODK se koristi za prikupljanje podataka o društvenim stvarima u izazovnim situacijama.</string>
   <string name="odk_forum">Pridruži se ODK forumu</string>
   <string name="odk_forum_summary">Pridruži se forumu za podršku, traži opcije, ili doprinesi kodu/prevodu!</string>
   <string name="all_open_source_licenses">Otvori biblioteke/ licence koda</string>
@@ -421,9 +422,6 @@
   <string name="email">Email adresa</string>
   <string name="user_defined">Definiše korisnik</string>
   <string name="device_defined">Definiše uređaj</string>
-  <string name="device_id">ID uređaja</string>
-  <string name="subscriber_id">ID pretplatnika</string>
-  <string name="sim_serial_id">Serijski broj SIM kartice</string>
   <string name="select_date">Odaberi datum</string>
   <string name="select_time">Odaberi vrijeme</string>
   <string name="no_date_selected">Datum nije odabran</string>
