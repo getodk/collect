@@ -18,14 +18,15 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
-import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.formentry.audit.AuditUtils;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
@@ -34,12 +35,11 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
-
-import timber.log.Timber;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
@@ -128,8 +128,15 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     // Cleanup when user exits a form without saving
-    public void removeTempInstance() {
+    public void ignoreChanges() {
+        ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+        if (manager != null) {
+            manager.close();
+        }
+
         if (formController != null && formController.getInstanceFile() != null) {
+            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
+
             SaveFormToDisk.removeSavepointFiles(formController.getInstanceFile().getName());
 
             // if it's not already saved, erase everything
@@ -274,10 +281,6 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return null;
         }
         return formController.getFormTitle();
-    }
-
-    public AuditEventLogger getAuditEventLogger() {
-        return formController.getAuditEventLogger();
     }
 
     @Override
