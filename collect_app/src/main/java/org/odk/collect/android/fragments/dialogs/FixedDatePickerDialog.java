@@ -66,7 +66,7 @@ public class FixedDatePickerDialog extends DialogFragment {
 
         if (themeUtils.isHoloDialogTheme(viewModel.getDialogTheme())) {
             dialog.setTitle(requireContext().getString(R.string.select_date));
-            fixSpinner(requireContext(), viewModel.getLocalDateTime().getYear(), viewModel.getLocalDateTime().getMonthOfYear() - 1,
+            fixSpinner(requireContext(), dialog, viewModel.getLocalDateTime().getYear(), viewModel.getLocalDateTime().getMonthOfYear() - 1,
                     viewModel.getLocalDateTime().getDayOfMonth());
             hidePickersIfNeeded(dialog, viewModel.getLocalDateTime());
 
@@ -104,7 +104,7 @@ public class FixedDatePickerDialog extends DialogFragment {
      * <p>
      * Source: https://gist.github.com/jeffdgr8/6bc5f990bf0c13a7334ce385d482af9f
      */
-    private void fixSpinner(Context context, int year, int month, int dayOfMonth) {
+    private void fixSpinner(Context context, DatePickerDialog dialog, int year, int month, int dayOfMonth) {
         // The spinner vs not distinction probably started in lollipop but applying this
         // for versions < nougat leads to a crash trying to get DatePickerSpinnerDelegate
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
@@ -130,7 +130,7 @@ public class FixedDatePickerDialog extends DialogFragment {
                         return;
                     }
 
-                    DatePicker datePicker = (DatePicker) datePickerField.get(this);
+                    DatePicker datePicker = (DatePicker) datePickerField.get(dialog);
                     Class<?> delegateClass = Class.forName("android.widget.DatePicker$DatePickerDelegate");
 
                     Field delegateField = findField(DatePicker.class, delegateClass, "mDelegate");

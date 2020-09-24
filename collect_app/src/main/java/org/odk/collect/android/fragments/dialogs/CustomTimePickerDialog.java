@@ -61,8 +61,8 @@ public class CustomTimePickerDialog extends DialogFragment {
                 viewModel.getLocalDateTime().getHourOfDay(), viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
         dialog.setTitle(requireContext().getString(R.string.select_time));
-        fixSpinner(requireContext(), viewModel.getLocalDateTime().getHourOfDay(), viewModel.getLocalDateTime().getMinuteOfHour(),
-                DateFormat.is24HourFormat(requireContext()));
+        fixSpinner(requireContext(), dialog, viewModel.getLocalDateTime().getHourOfDay(),
+                viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
         Window window = dialog.getWindow();
         if (window != null) {
@@ -79,7 +79,7 @@ public class CustomTimePickerDialog extends DialogFragment {
      * Source: https://gist.github.com/jeffdgr8/6bc5f990bf0c13a7334ce385d482af9f
      */
     @SuppressWarnings("deprecation")
-    private void fixSpinner(Context context, int hourOfDay, int minute, boolean is24HourView) {
+    private void fixSpinner(Context context, TimePickerDialog dialog, int hourOfDay, int minute, boolean is24HourView) {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
             try {
                 // Get the theme's android:timePickerMode
@@ -101,7 +101,7 @@ public class CustomTimePickerDialog extends DialogFragment {
                         return;
                     }
 
-                    TimePicker timePicker = (TimePicker) field.get(this);
+                    TimePicker timePicker = (TimePicker) field.get(dialog);
                     Class<?> delegateClass = Class.forName("android.widget.TimePicker$TimePickerDelegate");
                     Field delegateField = findField(TimePicker.class, delegateClass, "mDelegate");
 
