@@ -411,6 +411,12 @@ public class FormSaveViewModelTest {
         verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
     }
 
+    @Test
+    public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        viewModel.ignoreChanges(); // Checks nothing explodes
+    }
+
     private void whenReasonRequiredToSave() {
         when(logger.isChangeReasonRequired()).thenReturn(true);
         when(logger.isChangesMade()).thenReturn(true);

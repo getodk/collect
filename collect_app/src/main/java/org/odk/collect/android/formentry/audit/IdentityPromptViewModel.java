@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry.audit;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -26,7 +27,7 @@ public class IdentityPromptViewModel extends ViewModel implements RequiresFormCo
     }
 
     @Override
-    public void formLoaded(FormController formController) {
+    public void formLoaded(@NonNull FormController formController) {
         this.formName = formController.getFormTitle();
         this.auditEventLogger = formController.getAuditEventLogger();
         updateRequiresIdentity();

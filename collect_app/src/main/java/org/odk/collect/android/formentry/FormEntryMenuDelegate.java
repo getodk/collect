@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
@@ -40,7 +41,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     }
 
     @Override
-    public void formLoaded(FormController formController) {
+    public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
     }
 
