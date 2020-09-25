@@ -6,19 +6,20 @@ import android.view.View;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.SelectMinimalWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryDataReceiver, MultiChoiceWidget {
     SelectMinimalWidgetAnswerBinding binding;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public SelectMinimalWidget(Context context, QuestionDetails prompt) {
+    public SelectMinimalWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
+        this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
     @Override
@@ -29,10 +30,7 @@ public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryD
             binding.answer.setEnabled(false);
         } else {
             binding.answer.setOnClickListener(v -> {
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController != null) {
-                    formController.setIndexWaitingForData(prompt.getIndex());
-                }
+                waitingForDataRegistry.waitForData(prompt.getIndex());
                 showDialog();
             });
         }
