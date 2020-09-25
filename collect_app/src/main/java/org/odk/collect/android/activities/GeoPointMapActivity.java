@@ -390,15 +390,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         setClear = false;
     }
 
-    public void setCaptureLocation(boolean captureLocation) {
-        this.captureLocation = captureLocation;
-    }
-
     @VisibleForTesting public String getLocationStatus() {
         return locationStatus.getText().toString();
-    }
-
-    @VisibleForTesting public MapFragment getMapFragment() {
-        return map;
     }
 }
