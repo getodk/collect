@@ -148,6 +148,10 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
         if (super.onOptionsItemSelected(item)) {
             return true;
         } else {
