@@ -32,7 +32,7 @@ public class DeleteBlankFormTest {
                 .clickDeleteForms()
                 .pressBack(new MainMenuPage(rule))
                 .clickFillBlankForm()
-                .assertTextDoesNotExist("One Question");
+                .assertNoForms();
     }
 
     @Test
@@ -49,10 +49,9 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
-                .assertTextDoesNotExist("One Question")
                 .pressBack(new MainMenuPage(rule))
                 .clickFillBlankForm()
-                .assertTextDoesNotExist("One Question")
+                .assertNoForms()
                 .pressBack(new MainMenuPage(rule))
 
                 .clickEditSavedForm()
@@ -83,14 +82,14 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
-                .assertTextDoesNotExist("One Question")
                 .pressBack(new MainMenuPage(rule))
 
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one_question) - Success")
                 .clickOK(new MainMenuPage(rule))
-                .startBlankForm("One Question");
+                .clickFillBlankForm()
+                .assertFormExists("One Question");
     }
 
     @Test
@@ -111,6 +110,7 @@ public class DeleteBlankFormTest {
                 .pressBack(new MainMenuPage(rule))
 
                 .copyForm("one-question.xml")
-                .startBlankForm("One Question");
+                .clickFillBlankForm()
+                .assertFormExists("One Question");
     }
 }

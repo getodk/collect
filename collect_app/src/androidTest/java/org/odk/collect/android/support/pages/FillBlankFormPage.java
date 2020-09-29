@@ -12,6 +12,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -86,6 +87,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     private void clickOnFormButton(String formName) {
+        assertFormExists(formName);
         onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).perform(click());
     }
 
@@ -107,5 +109,23 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public ServerAuthDialog clickRefreshWithAuthError() {
         onView(withId(R.id.menu_refresh)).perform(click());
         return new ServerAuthDialog(rule).assertOnPage();
+    }
+
+    public FillBlankFormPage assertFormExists(String formName) {
+        // Seen problems with disk syncing not being waited for even though it's an AsyncTask
+        return waitFor(() -> {
+            onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).check(matches(isDisplayed()));
+            return this;
+        });
+    }
+
+    public FillBlankFormPage assertFormDoesNotExist(String formName) {
+        onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).check(doesNotExist());
+        return this;
+    }
+
+    public FillBlankFormPage assertNoForms() {
+        assertText(R.string.no_items_display_forms);
+        return this;
     }
 }
