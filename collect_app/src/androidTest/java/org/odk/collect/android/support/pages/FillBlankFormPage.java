@@ -114,6 +114,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage assertFormExists(String formName) {
         // Seen problems with disk syncing not being waited for even though it's an AsyncTask
         return waitFor(() -> {
+            assertTextNotDisplayed(R.string.no_items_display_forms);
             onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).check(matches(isDisplayed()));
             return this;
         });
