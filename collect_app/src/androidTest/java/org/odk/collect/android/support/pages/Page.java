@@ -13,6 +13,8 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 
+import junit.framework.AssertionFailedError;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.actions.RotateAction;
@@ -339,12 +341,7 @@ abstract class Page<T extends Page<T>> {
                 return;
             } catch (Exception e) {
                 failure = e;
-
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException ignored) {
-                    // ignored
-                }
+                wait250ms();
             }
         }
 
@@ -357,26 +354,32 @@ abstract class Page<T extends Page<T>> {
 
     protected <T> T waitFor(Callable<T> callable) {
         int counter = 0;
-        Exception failure = null;
+        Throwable failure = null;
 
         // Try 20 times/for 5 seconds
         while (counter < 20) {
             try {
                 return callable.call();
-            } catch (Exception throwable) {
+            } catch (Exception | AssertionFailedError throwable) {
                 failure = throwable;
             }
 
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException ignored) {
-                // ignored
-            }
+            wait250ms();
 
             counter++;
         }
 
         throw new RuntimeException("waitFor failed", failure);
+    }
+
+    public T wait250ms() {
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException ignored) {
+            // ignored
+        }
+
+        return (T) this;
     }
 
     public T assertTextNotDisplayed(int string) {

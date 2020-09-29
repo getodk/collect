@@ -110,6 +110,7 @@ public class DeleteBlankFormTest {
                 .pressBack(new MainMenuPage(rule))
 
                 .copyForm("one-question.xml")
+                .wait250ms() // We need to account for inaccuracy in calls to system time
                 .clickFillBlankForm()
                 .assertFormExists("One Question");
     }
