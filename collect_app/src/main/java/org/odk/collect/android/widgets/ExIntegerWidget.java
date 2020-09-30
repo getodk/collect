@@ -22,7 +22,6 @@ import android.content.Intent;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
@@ -62,9 +61,6 @@ public class ExIntegerWidget extends ExStringWidget {
         return StringWidgetUtils.getIntegerData(answerText.getText().toString(), getFormEntryPrompt());
     }
 
-    /**
-     * Allows answer to be set externally in {@link FormEntryActivity}.
-     */
     @Override
     public void setBinaryData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);

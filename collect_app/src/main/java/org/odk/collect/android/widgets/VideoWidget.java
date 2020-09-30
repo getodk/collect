@@ -81,7 +81,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private MediaUtil mediaUtil;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private QuestionMediaManager questionMediaManager;
+    private final QuestionMediaManager questionMediaManager;
 
     @NonNull
     private FileUtil fileUtil;
@@ -93,21 +93,20 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private boolean selfie;
 
-    public VideoWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry);
+    public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry, questionMediaManager, new CameraUtils());
     }
 
     public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
-                       QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+                       WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
-        this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.questionMediaManager = questionMediaManager;
 
-        String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
+        selfie = WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt());
 
         captureButton = createSimpleButton(getContext(), R.id.capture_video, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_video), getAnswerFontSize(), this);
 
@@ -131,7 +130,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         hideButtonsIfNeeded();
 
         if (selfie) {
-            if (!CameraUtils.isFrontCameraAvailable()) {
+            if (!cameraUtils.isFrontCameraAvailable()) {
                 captureButton.setEnabled(false);
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }
