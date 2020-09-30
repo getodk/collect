@@ -41,22 +41,18 @@ import static org.odk.collect.android.support.FormUtils.createXForm;
 import static org.odk.collect.android.utilities.FileUtils.read;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
-@RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormDownloaderTest {
 
     private final FormsRepository formsRepository = new InMemFormsRepository();
 
-    private StoragePathProvider storagePathProvider;
     private File cacheDir;
+    private File formsDir;
 
     @Before
     public void setup() {
-        RobolectricHelpers.mountExternalStorage();
-        storagePathProvider = new StoragePathProvider();
-        new StorageInitializer().createOdkDirsOnStorage();
-
         cacheDir = Files.createTempDir();
+        formsDir = Files.createTempDir();
     }
 
     @Test
@@ -76,7 +72,7 @@ public class ServerFormDownloaderTest {
         FormListApi formListApi = mock(FormListApi.class);
         when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath());
         downloader.downloadForm(serverFormDetails, null, null);
 
         List<Form> allForms = formsRepository.getAll();
@@ -84,7 +80,7 @@ public class ServerFormDownloaderTest {
         Form form = allForms.get(0);
         assertThat(form.getJrFormId(), is("id"));
 
-        File formFile = new File(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath()));
+        File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
         assertThat(formFile.exists(), is(true));
         assertThat(new String(read(formFile)), is(xform));
     }
@@ -111,7 +107,7 @@ public class ServerFormDownloaderTest {
         when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
         when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath());
         downloader.downloadForm(serverFormDetails, null, null);
 
         List<Form> allForms = formsRepository.getAll();
@@ -119,7 +115,7 @@ public class ServerFormDownloaderTest {
         Form form = allForms.get(0);
         assertThat(form.getJrFormId(), is("id"));
 
-        File formFile = new File(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath()));
+        File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
         assertThat(formFile.exists(), is(true));
         assertThat(new String(read(formFile)), is(xform));
 
@@ -147,7 +143,7 @@ public class ServerFormDownloaderTest {
                 null);
 
         CancelAfterFormDownloadFormListApi formListApi = new CancelAfterFormDownloadFormListApi(xform);
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath());
 
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
@@ -177,7 +173,7 @@ public class ServerFormDownloaderTest {
                 )));
 
         CancelAfterMediaFileDownloadFormListApi formListApi = new CancelAfterMediaFileDownloadFormListApi(xform);
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath());
 
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
@@ -213,7 +209,7 @@ public class ServerFormDownloaderTest {
         when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
         when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath());
         RecordingProgressReporter progressReporter = new RecordingProgressReporter();
         downloader.downloadForm(serverFormDetails, progressReporter, null);
 
@@ -242,13 +238,13 @@ public class ServerFormDownloaderTest {
         FormListApi formListApi = mock(FormListApi.class);
         when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath());
         downloader.downloadForm(serverFormDetails, null, null);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
     }
 
     private String getFormFilesPath() {
-        return storagePathProvider.getDirPath(StorageSubdirectory.FORMS);
+        return formsDir.getAbsolutePath();
     }
 
     private String getCacheFilesPath() {
