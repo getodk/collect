@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 /**
  * Provides a sarcophagus for {@link MultiFormDownloader} so it
@@ -281,7 +282,7 @@ public class ServerFormDownloader implements FormDownloader {
                 return new UriResult(uri, mediaPath, true);
             } else {
                 uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, form.getId().toString());
-                mediaPath = storagePathProvider.getAbsoluteFormFilePath(form.getFormMediaPath());
+                mediaPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormMediaPath());
                 return new UriResult(uri, mediaPath, false);
             }
         }
@@ -337,7 +338,7 @@ public class ServerFormDownloader implements FormDownloader {
                 FileUtils.deleteAndReport(tempFormFile);
 
                 // set the file returned to the file we already had
-                String existingPath = storagePathProvider.getAbsoluteFormFilePath(form.getFormFilePath());
+                String existingPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
                 tempFormFile = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }

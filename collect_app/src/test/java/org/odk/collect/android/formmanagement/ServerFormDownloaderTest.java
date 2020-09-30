@@ -39,6 +39,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 import static org.odk.collect.android.support.FormUtils.createXForm;
 import static org.odk.collect.android.utilities.FileUtils.read;
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 @RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
@@ -83,7 +84,7 @@ public class ServerFormDownloaderTest {
         Form form = allForms.get(0);
         assertThat(form.getJrFormId(), is("id"));
 
-        File formFile = new File(storagePathProvider.getAbsoluteFormFilePath(form.getFormFilePath()));
+        File formFile = new File(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath()));
         assertThat(formFile.exists(), is(true));
         assertThat(new String(read(formFile)), is(xform));
     }
@@ -118,7 +119,7 @@ public class ServerFormDownloaderTest {
         Form form = allForms.get(0);
         assertThat(form.getJrFormId(), is("id"));
 
-        File formFile = new File(storagePathProvider.getAbsoluteFormFilePath(form.getFormFilePath()));
+        File formFile = new File(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath()));
         assertThat(formFile.exists(), is(true));
         assertThat(new String(read(formFile)), is(xform));
 

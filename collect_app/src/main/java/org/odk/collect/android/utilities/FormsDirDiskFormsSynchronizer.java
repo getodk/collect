@@ -24,6 +24,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
@@ -75,7 +76,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                     while (cursor.moveToNext()) {
                         // For each element in the provider, see if the file already exists
                         String sqlFilename =
-                                storagePathProvider.getAbsoluteFormFilePath(cursor.getString(
+                                getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), cursor.getString(
                                         cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH)));
                         String md5 = cursor.getString(
                                 cursor.getColumnIndex(FormsProviderAPI.FormsColumns.MD5_HASH));
