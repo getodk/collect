@@ -30,11 +30,11 @@ public class FormMetadataParser {
         File tmpLastSaved = new File(tempDir, LAST_SAVED_FILENAME);
         write(tmpLastSaved, STUB_XML.getBytes(Charset.forName("UTF-8")));
         referenceManager.reset();
-        ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(tempDir.getAbsolutePath()));
-        ReferenceManager.instance().addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
+        referenceManager.addReferenceFactory(new FileReferenceFactory(tempDir.getAbsolutePath()));
+        referenceManager.addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
 
         HashMap<String, String> metadata = FileUtils.getMetadataFromFormDefinition(file);
-        ReferenceManager.instance().reset();
+        referenceManager.reset();
         tmpLastSaved.delete();
 
         return metadata;
