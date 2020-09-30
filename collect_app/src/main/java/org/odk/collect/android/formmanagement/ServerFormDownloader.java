@@ -33,10 +33,6 @@ import timber.log.Timber;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
-/**
- * Provides a sarcophagus for {@link MultiFormDownloader} so it
- * can eventually be disposed of.
- */
 public class ServerFormDownloader implements FormDownloader {
 
     private final MultiFormDownloader multiFormDownloader;
