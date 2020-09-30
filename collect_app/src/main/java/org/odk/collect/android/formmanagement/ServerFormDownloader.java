@@ -7,8 +7,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -44,10 +42,12 @@ public class ServerFormDownloader implements FormDownloader {
     private final MultiFormDownloader multiFormDownloader;
     private final FormsRepository formsRepository;
     private final File cacheDir;
+    private final String formsDirPath;
 
-    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, StoragePathProvider storagePathProvider, File cacheDir) {
+    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, File cacheDir, String formsDirPath) {
         this.cacheDir = cacheDir;
-        this.multiFormDownloader = new MultiFormDownloader(formsRepository, formListApi, storagePathProvider);
+        this.formsDirPath = formsDirPath;
+        this.multiFormDownloader = new MultiFormDownloader(formsRepository, formListApi);
         this.formsRepository = formsRepository;
     }
 
@@ -63,7 +63,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         try {
             FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
-            boolean result = multiFormDownloader.processOneForm(form, stateListener, tempDir);
+            boolean result = multiFormDownloader.processOneForm(form, stateListener, tempDir, formsDirPath);
 
             if (!result) {
                 throw new FormDownloadException();
@@ -109,18 +109,16 @@ public class ServerFormDownloader implements FormDownloader {
         private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
         private final FormListApi formListApi;
-        private final StoragePathProvider storagePathProvider;
         private final FormsRepository formsRepository;
 
         @Deprecated
-        MultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi, StoragePathProvider storagePathProvider) {
+        MultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
             this.formsRepository = formsRepository;
             this.formListApi = formListApi;
-            this.storagePathProvider = storagePathProvider;
         }
 
         @Deprecated
-        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir) throws InterruptedException {
+        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws InterruptedException {
             boolean success = true;
 
             // use a temporary media path until everything is ok.
@@ -130,7 +128,7 @@ public class ServerFormDownloader implements FormDownloader {
             try {
                 // get the xml file
                 // if we've downloaded a duplicate, this gives us the file
-                fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener, tempDir);
+                fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener, tempDir, formsDirPath);
 
                 if (fd.getManifest() != null) {
                     finalMediaPath = FileUtils.constructMediaPath(
@@ -182,7 +180,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             if ((stateListener == null || !stateListener.isTaskCanceled()) && success) {
                 if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
-                    installed = installEverything(tempMediaPath, fileResult, parsedFields);
+                    installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
                 } else {
                     success = false;
                 }
@@ -200,10 +198,10 @@ public class ServerFormDownloader implements FormDownloader {
             return submission == null || Validator.isUrlValid(submission);
         }
 
-        boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
+        boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) {
             UriResult uriResult = null;
             try {
-                uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
+                uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, formsDirPath);
                 if (uriResult != null) {
                     // move the media files in the media folder
                     if (tempMediaPath != null) {
@@ -245,22 +243,6 @@ public class ServerFormDownloader implements FormDownloader {
             }
         }
 
-        private String getExceptionMessage(Exception e) {
-            String msg = e.getMessage();
-            if (msg == null) {
-                msg = e.toString();
-            }
-            Timber.e(msg);
-
-            if (e.getCause() != null) {
-                msg = e.getCause().getMessage();
-                if (msg == null) {
-                    msg = e.getCause().toString();
-                }
-            }
-            return msg;
-        }
-
         /**
          * Creates a new form in the database, if none exists with the same absolute path. Returns
          * information with the URI, media path, and whether the form is new.
@@ -269,7 +251,7 @@ public class ServerFormDownloader implements FormDownloader {
          * @param formInfo certain fields extracted from the parsed XML form, such as title and form ID
          * @return a {@link UriResult} object
          */
-        private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo) {
+        private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo, String formsDirPath) {
             final Uri uri;
             final String formFilePath = formFile.getAbsolutePath();
             String mediaPath = FileUtils.constructMediaPath(formFilePath);
@@ -282,15 +264,15 @@ public class ServerFormDownloader implements FormDownloader {
                 return new UriResult(uri, mediaPath, true);
             } else {
                 uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, form.getId().toString());
-                mediaPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormMediaPath());
+                mediaPath = getAbsoluteFilePath(formsDirPath, form.getFormMediaPath());
                 return new UriResult(uri, mediaPath, false);
             }
         }
 
         private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
             Form form = new Form.Builder()
-                    .formFilePath(storagePathProvider.getFormDbPath(formFile.getAbsolutePath()))
-                    .formMediaPath(storagePathProvider.getFormDbPath(mediaPath))
+                    .formFilePath(formFile.getAbsolutePath())
+                    .formMediaPath(mediaPath)
                     .displayName(formInfo.get(FileUtils.TITLE))
                     .jrVersion(formInfo.get(FileUtils.VERSION))
                     .jrFormId(formInfo.get(FileUtils.FORMID))
@@ -308,16 +290,16 @@ public class ServerFormDownloader implements FormDownloader {
          * Takes the formName and the URL and attempts to download the specified file. Returns a file
          * object representing the downloaded file.
          */
-        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir) throws FormApiException, IOException, InterruptedException {
+        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormApiException, IOException, InterruptedException {
             // clean up friendly form name...
             String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
             // proposed name of xml file...
-            String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
+            String path = formsDirPath + File.separator + rootName + ".xml";
             int i = 2;
             File tempFormFile = new File(path);
             while (tempFormFile.exists()) {
-                path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + "_" + i + ".xml";
+                path = formsDirPath + File.separator + rootName + "_" + i + ".xml";
                 tempFormFile = new File(path);
                 i++;
             }
@@ -338,7 +320,7 @@ public class ServerFormDownloader implements FormDownloader {
                 FileUtils.deleteAndReport(tempFormFile);
 
                 // set the file returned to the file we already had
-                String existingPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
+                String existingPath = getAbsoluteFilePath(formsDirPath, form.getFormFilePath());
                 tempFormFile = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }

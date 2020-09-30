@@ -5,7 +5,7 @@ import java.io.File;
 public class PathUtils {
 
     private PathUtils() {
-        
+
     }
 
     public static String getRelativeFilePath(String dirPath, String filePath) {

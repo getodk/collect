@@ -30,6 +30,12 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
 
 public class DatabaseFormsRepository implements FormsRepository {
 
+    private final StoragePathProvider storagePathProvider;
+
+    public DatabaseFormsRepository() {
+        storagePathProvider = new StoragePathProvider();
+    }
+
     @Override
     public List<Form> getByJrFormIdNotDeleted(String jrFormId) {
         return queryForForms(JR_FORM_ID + "=? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId});
@@ -77,8 +83,8 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Uri save(Form form) {
         final ContentValues v = new ContentValues();
-        v.put(FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(form.getFormFilePath()));
-        v.put(FORM_MEDIA_PATH, new StoragePathProvider().getFormDbPath(form.getFormMediaPath()));
+        v.put(FORM_FILE_PATH, storagePathProvider.getFormDbPath(form.getFormFilePath()));
+        v.put(FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(form.getFormMediaPath()));
         v.put(DISPLAY_NAME, form.getDisplayName());
         v.put(JR_VERSION, form.getJrVersion());
         v.put(JR_FORM_ID, form.getJrFormId());
