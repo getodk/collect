@@ -4,12 +4,7 @@ import com.google.common.io.Files;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.InMemFormsRepository;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.Form;
@@ -19,7 +14,6 @@ import org.odk.collect.server.FormListApi;
 import org.odk.collect.server.FormListItem;
 import org.odk.collect.server.ManifestFile;
 import org.odk.collect.server.MediaFile;
-import org.robolectric.RobolectricTestRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
