@@ -59,7 +59,7 @@ public class UrlWidgetTest {
     @Test
     public void usingReadOnlyOption_makeAllClickableElementsDisabled() {
         UrlWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.getBinding().urlButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.urlButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
@@ -72,19 +72,19 @@ public class UrlWidgetTest {
     @Test
     public void whenPromptHasAnswer_displaysAnswer() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.getBinding().urlAnswerText.getText().toString(), equalTo("blah"));
+        assertThat(widget.binding.urlAnswerText.getText().toString(), equalTo("blah"));
     }
 
     @Test
     public void whenPromptAnswerDoesNotHaveAnswer_displayEmptyString() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.getBinding().urlAnswerText.getText().toString(), equalTo(""));
+        assertThat(widget.binding.urlAnswerText.getText().toString(), equalTo(""));
     }
 
     @Test
     public void clickingButtonWhenUrlIsEmpty_doesNotCallOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        widget.getBinding().urlButton.performClick();
+        widget.binding.urlButton.performClick();
 
         verify(customTabHelper, never()).bindCustomTabsService(null, null);
         verify(customTabHelper, never()).openUri(null, null);
@@ -93,7 +93,7 @@ public class UrlWidgetTest {
     @Test
     public void clickingButtonWhenUrlIsNotEmpty_callsOpenUri() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        widget.getBinding().urlButton.performClick();
+        widget.binding.urlButton.performClick();
 
         verify(customTabHelper).bindCustomTabsService(widget.getContext(), null);
         verify(customTabHelper).openUri(widget.getContext(), Uri.parse("blah"));
@@ -103,9 +103,9 @@ public class UrlWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
-        widget.getBinding().urlButton.performLongClick();
+        widget.binding.urlButton.performLongClick();
 
-        verify(listener).onLongClick(widget.getBinding().urlButton);
+        verify(listener).onLongClick(widget.binding.urlButton);
     }
 
     @Test
