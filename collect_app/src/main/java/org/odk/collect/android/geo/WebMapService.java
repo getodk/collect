@@ -1,6 +1,7 @@
 package org.odk.collect.android.geo;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.util.MapTileIndex;
 
@@ -32,7 +33,7 @@ class WebMapService implements Serializable {
 
     @Deprecated WebMapService(int cacheNameStringId, int minZoomLevel,
         int maxZoomLevel, int tileSize, String copyright, String... urlTemplates) {
-        this(Collect.getInstance().getString(cacheNameStringId),
+        this(TranslationHandler.getString(Collect.getInstance(), cacheNameStringId),
             minZoomLevel, maxZoomLevel, tileSize, copyright, urlTemplates);
     }
 

@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MultiFormDownloader;
+import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class ServerFormDownloader implements FormDownloader {
     @Override
     public void downloadForm(ServerFormDetails form) throws FormDownloadException {
         HashMap<ServerFormDetails, String> results = multiFormDownloader.downloadForms(Collections.singletonList(form), null);
-        boolean failure = results.values().stream().anyMatch(s -> !s.equals(Collect.getInstance().getString(R.string.success)));
+        boolean failure = results.values().stream().anyMatch(s -> !s.equals(TranslationHandler.getString(Collect.getInstance(), R.string.success)));
         if (failure) {
             throw new FormDownloadException();
         }

@@ -58,6 +58,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.net.URI;
@@ -574,7 +575,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             switch (exception.getType()) {
                 case FETCH_ERROR:
                 case UNREACHABLE:
-                    String dialogMessage = new FormApiExceptionMapper(getResources()).getMessage(exception);
+                    String dialogMessage = new FormApiExceptionMapper(this).getMessage(exception);
                     String dialogTitle = getString(R.string.load_remote_form_error);
 
                     if (viewModel.isDownloadOnlyMode()) {
@@ -700,7 +701,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         if (viewModel.isDownloadOnlyMode()) {
             for (ServerFormDetails serverFormDetails : result.keySet()) {
                 String successKey = result.get(serverFormDetails);
-                if (Collect.getInstance().getString(R.string.success).equals(successKey)) {
+                if (getString(R.string.success).equals(successKey)) {
                     if (viewModel.getFormResults().containsKey(serverFormDetails.getFormId())) {
                         viewModel.putFormResult(serverFormDetails.getFormId(), true);
                     }
@@ -717,7 +718,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         for (ServerFormDetails k : keys) {
             b.append(k.getFormName() + " ("
                     + ((k.getFormVersion() != null)
-                    ? (Collect.getInstance().getString(R.string.version) + ": " + k.getFormVersion() + " ")
+                    ? (TranslationHandler.getString(Collect.getInstance(), R.string.version) + ": " + k.getFormVersion() + " ")
                     : "") + "ID: " + k.getFormId() + ") - " + result.get(k));
             b.append("\n\n");
         }

@@ -46,7 +46,6 @@ import com.google.api.services.drive.Drive;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
@@ -873,7 +872,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
                 try {
                     downloadFile(fileItem.getDriveId(), fileItem.getName());
-                    results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
+                    results.put(fileItem.getName(), getString(R.string.success));
 
                     String mediaDirName = FileUtils.constructMediaPath(fileItem.getName());
 
@@ -891,7 +890,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                             String filePath = mediaDirName + File.separator + mediaFile.getName();
                             downloadFile(mediaFile.getId(), filePath);
-                            results.put(filePath, Collect.getInstance().getString(R.string.success));
+                            results.put(filePath, getString(R.string.success));
                         }
                     }
                 } catch (Exception e) {
