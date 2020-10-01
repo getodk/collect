@@ -367,9 +367,6 @@ public class Collect extends Application {
     public void endRemoteCall(String key) {
         remoteCalls.remove(key);
     }
-    public String getRemoteCall(String key) {
-        return remoteCalls.get(key);
-    }
     public boolean inRemoteCall() {
         return remoteCalls.size() > 0;
     }

@@ -184,6 +184,7 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
+import static java.lang.Thread.sleep;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.LAUNCH_FORM_WITH_BG_LOCATION;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
@@ -2901,12 +2902,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Collect app = Collect.getInstance();
         app.setRemoteItem(item);
         app.endRemoteCall(item.key);
-        if (!app.inRemoteCall() && progressBar != null) {
-            progressBar.dismiss();
-            progressBar = null;
-        }
 
         if (!app.inRemoteCall()) {
+            if (progressBar != null) {
+                progressBar.dismiss();
+                progressBar = null;
+            }
+
             if(item.choices) {
                 refreshCurrentView();
             } else {

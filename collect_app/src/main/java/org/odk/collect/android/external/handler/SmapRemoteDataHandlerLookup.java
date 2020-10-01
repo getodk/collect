@@ -83,8 +83,8 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
 
-        if (args.length != 5 && args.length != 4) {
-            Timber.e("4 or 5 arguments are needed to evaluate the %s function", HANDLER_NAME);
+        if (args.length != 6 && args.length != 4) {
+            Timber.e("4 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";
         }
 
@@ -94,16 +94,25 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         String queriedColumn = XPathFuncExpr.toString(args[1]);
         String referenceColumn = XPathFuncExpr.toString(args[2]);
         String referenceValue = XPathFuncExpr.toString(args[3]);
+        String searchType = "matches";
+        int index = 0;
 
-        String timeoutValue = "0";
-        if(args.length == 5) {
-            timeoutValue = XPathFuncExpr.toString(args[4]);
+        if(args.length == 6) {
+            String sIndex = XPathFuncExpr.toString(args[4]);
+            try {
+                index = Integer.parseInt(sIndex);
+            } catch (Exception e) { }
+            searchType = XPathFuncExpr.toString(args[5]);
         }
 
         if(referenceValue.length() > 0) {
 
             // Get the url which doubles as the cache key - url encode it by converting to a URI
             String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
+            if(args.length == 6) {
+                url += "?index=" + index;
+                url += "&searchType=" + searchType;
+            }
             try {
                 URL u = new URL(url);
                 URI uri = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getRef());
@@ -121,15 +130,20 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
             } catch (Exception e) {
                 return data;            // Assume the data contains the error message
             }
+            Timber.i("@@@@@@@@@@@@@@@@: " + url + " : " + data);
             if (record == null) {
                 // Call a webservice to get the remote record
                 app.startRemoteCall(url);
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(url, timeoutValue, "false", null, null);
+                task.execute(url, "0", "false", null, null);
                 return "";
             } else {
-                return ExternalDataUtil.nullSafe(record.get(queriedColumn));
+                if(index == -1) {
+                    return ExternalDataUtil.nullSafe(record.get("_count"));
+                } else {
+                    return ExternalDataUtil.nullSafe(record.get(queriedColumn));
+                }
             }
         } else {
             // No data to lookup
