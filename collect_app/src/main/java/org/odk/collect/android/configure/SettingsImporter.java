@@ -62,12 +62,12 @@ public class SettingsImporter {
         loadDefaults(generalSharedPrefs, generalDefaults);
         loadDefaults(adminSharedPrefs, adminDefaults);
 
-        for (String key: generalSharedPrefs.getAll().keySet()) {
-            settingsChangedHandler.onSettingChanged(key);
+        for (Map.Entry<String, ?> entry: generalSharedPrefs.getAll().entrySet()) {
+            settingsChangedHandler.onSettingChanged(entry.getKey(), entry.getValue());
         }
 
-        for (String key: adminSharedPrefs.getAll().keySet()) {
-            settingsChangedHandler.onSettingChanged(key);
+        for (Map.Entry<String, ?> entry: adminSharedPrefs.getAll().entrySet()) {
+            settingsChangedHandler.onSettingChanged(entry.getKey(), entry.getValue());
         }
 
         return true;

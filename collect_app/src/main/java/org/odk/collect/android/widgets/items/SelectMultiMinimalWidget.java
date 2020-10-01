@@ -13,6 +13,7 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMultiMinimalDialog;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,9 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
                 ? new ArrayList<>() :
                 (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
         updateAnswerLabel();
+        SpacesInUnderlyingValuesWarning
+                .forQuestionWidget(this)
+                .renderWarningIfNecessary(items);
     }
 
     @Override

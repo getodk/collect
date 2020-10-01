@@ -45,6 +45,7 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.ZipUtils;
 
 import java.io.File;
@@ -137,7 +138,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             formDef = createFormDefFromCacheOrXml(formPath, formXml);
         } catch (StackOverflowError e) {
             Timber.e(e);
-            errorMsg = Collect.getInstance().getString(R.string.too_complex_form);
+            errorMsg = TranslationHandler.getString(Collect.getInstance(), R.string.too_complex_form);
         } catch (Exception | Error e) {
             Timber.w(e);
             errorMsg = e.getMessage();
@@ -214,7 +215,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
         publishProgress(
-                Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
+                TranslationHandler.getString(Collect.getInstance(), R.string.survey_loading_reading_form_message));
 
         final FormDef formDefFromCache = FormDefCache.readCache(formXml);
         if (formDefFromCache != null) {
@@ -305,7 +306,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 // This order is important. Import data, then initialize.
                 try {
                     Timber.i("Importing data");
-                    publishProgress(Collect.getInstance().getString(R.string.survey_loading_reading_data_message));
+                    publishProgress(TranslationHandler.getString(Collect.getInstance(), R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
                 } catch (IOException | RuntimeException e) {

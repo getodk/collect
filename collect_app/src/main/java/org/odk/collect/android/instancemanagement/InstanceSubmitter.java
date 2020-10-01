@@ -10,6 +10,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -18,15 +20,15 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -45,11 +47,15 @@ public class InstanceSubmitter {
     private final Analytics analytics;
     private final FormsRepository formsRepository;
     private final InstancesRepository instancesRepository;
+    private final GoogleAccountsManager googleAccountsManager;
+    private final GoogleApiProvider googleApiProvider;
 
-    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
+        this.googleAccountsManager = googleAccountsManager;
+        this.googleApiProvider = googleApiProvider;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -70,15 +76,14 @@ public class InstanceSubmitter {
         String deviceId = null;
         boolean anyFailure = false;
 
-        if (protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets))) {
+        if (protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets))) {
             if (PermissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
-                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                String googleUsername = accountsManager.getLastSelectedAccountIfValid();
+                String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_SET);
                 }
-                accountsManager.selectAccount(googleUsername);
-                uploader = new InstanceGoogleSheetsUploader(accountsManager);
+                googleAccountsManager.selectAccount(googleUsername);
+                uploader = new InstanceGoogleSheetsUploader(googleApiProvider.getDriveApi(googleUsername), googleApiProvider.getSheetsApi(googleUsername));
             } else {
                 throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_PERMITTED);
             }
@@ -93,14 +98,14 @@ public class InstanceSubmitter {
         for (Instance instance : toUpload) {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null);
-                if (protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets))
+                if (protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets))
                         && !InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                     anyFailure = true;
                     resultMessagesByInstanceId.put(instance.getId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
                     continue;
                 }
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                resultMessagesByInstanceId.put(instance.getId().toString(), customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
+                resultMessagesByInstanceId.put(instance.getId().toString(), customMessage != null ? customMessage : TranslationHandler.getString(Collect.getInstance(), R.string.success));
 
                 // If the submission was successful, delete the instance if either the app-level
                 // delete preference is set or the form definition requests auto-deletion.
@@ -113,13 +118,13 @@ public class InstanceSubmitter {
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
 
-                String action = protocol.equals(Collect.getInstance().getString(R.string.protocol_google_sheets)) ?
+                String action = protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets)) ?
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
                 analytics.logEvent(SUBMISSION, action, label);
 
                 String submissionEndpoint = (String) settings.get(GeneralKeys.KEY_SUBMISSION_URL);
-                if (!submissionEndpoint.equals(Collect.getInstance().getString(R.string.default_odk_submission))) {
+                if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getInstance(), R.string.default_odk_submission))) {
                     String submissionEndpointHash = FileUtils.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
                     analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);
                 }

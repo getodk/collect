@@ -1,26 +1,27 @@
 package org.odk.collect.android.formmanagement;
 
-import android.content.res.Resources;
+import android.content.Context;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.utilities.TranslationHandler;
 
 public class FormApiExceptionMapper {
 
-    private final Resources resources;
+    private final Context context;
 
-    public FormApiExceptionMapper(Resources resources) {
-        this.resources = resources;
+    public FormApiExceptionMapper(Context context) {
+        this.context = context;
     }
 
     public String getMessage(FormApiException exception) {
         switch (exception.getType()) {
             case UNREACHABLE:
-                return resources.getString(R.string.unreachable_error, exception.getServerUrl()) + " " + resources.getString(R.string.report_to_project_lead);
+                return TranslationHandler.getString(context, R.string.unreachable_error, exception.getServerUrl()) + " " + TranslationHandler.getString(context, R.string.report_to_project_lead);
             case SECURITY_ERROR:
-                return resources.getString(R.string.security_error, exception.getServerUrl()) + " " + resources.getString(R.string.report_to_project_lead);
+                return TranslationHandler.getString(context, R.string.security_error, exception.getServerUrl()) + " " + TranslationHandler.getString(context, R.string.report_to_project_lead);
             default:
-                return resources.getString(R.string.report_to_project_lead);
+                return TranslationHandler.getString(context, R.string.report_to_project_lead);
         }
     }
 }

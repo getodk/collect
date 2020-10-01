@@ -74,16 +74,18 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
-        ResetDialogPreference resetDialogPreference = null;
-        if (preference instanceof ResetDialogPreference) {
-            resetDialogPreference = (ResetDialogPreference) preference;
-        }
-        if (resetDialogPreference != null) {
-            ResetDialogPreferenceFragmentCompat dialogFragment = ResetDialogPreferenceFragmentCompat.newInstance(preference.getKey());
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), null);
-        } else {
-            super.onDisplayPreferenceDialog(preference);
+        if (MultiClickGuard.allowClick(getClass().getName())) {
+            ResetDialogPreference resetDialogPreference = null;
+            if (preference instanceof ResetDialogPreference) {
+                resetDialogPreference = (ResetDialogPreference) preference;
+            }
+            if (resetDialogPreference != null) {
+                ResetDialogPreferenceFragmentCompat dialogFragment = ResetDialogPreferenceFragmentCompat.newInstance(preference.getKey());
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(getParentFragmentManager(), null);
+            } else {
+                super.onDisplayPreferenceDialog(preference);
+            }
         }
     }
 

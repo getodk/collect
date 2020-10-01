@@ -43,6 +43,7 @@ import org.odk.collect.android.configure.LegacySettingsFileReader;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;

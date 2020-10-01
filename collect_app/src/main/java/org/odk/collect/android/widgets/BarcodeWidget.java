@@ -17,117 +17,105 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.TypedValue;
+import android.view.View;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.jetbrains.annotations.Contract;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
+import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.FRONT;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
- *
- * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
-    final Button getBarcodeButton;
-    final TextView stringAnswer;
-    private final WaitingForDataRegistry waitingForDataRegistry;
+public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver {
+    BarcodeWidgetAnswerBinding binding;
 
-    public BarcodeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    private final WaitingForDataRegistry waitingForDataRegistry;
+    private final CameraUtils cameraUtils;
+
+    public BarcodeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+                         CameraUtils cameraUtils) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.cameraUtils = cameraUtils;
+    }
 
-        getBarcodeButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.get_barcode), getAnswerFontSize(), this);
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = BarcodeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        stringAnswer = getCenteredAnswerTextView(getContext(), getAnswerFontSize());
-
-        String s = questionDetails.getPrompt().getAnswerText();
-        if (s != null) {
-            getBarcodeButton.setText(getContext().getString(
-                    R.string.replace_barcode));
-            stringAnswer.setText(s);
+        if (prompt.isReadOnly()) {
+            binding.barcodeButton.setVisibility(GONE);
+        } else {
+            binding.barcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.barcodeButton.setOnClickListener(v -> onButtonClick());
         }
-        // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(getBarcodeButton);
-        answerLayout.addView(stringAnswer);
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
+        binding.barcodeAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        String answer = prompt.getAnswerText();
+        if (answer != null && !answer.isEmpty()) {
+            binding.barcodeButton.setText(getContext().getString(R.string.replace_barcode));
+            binding.barcodeAnswerText.setText(answer);
+        }
+
+        return binding.getRoot();
     }
 
     @Override
     public void clearAnswer() {
-        stringAnswer.setText(null);
-        getBarcodeButton.setText(getContext().getString(R.string.get_barcode));
-
+        binding.barcodeAnswerText.setText(null);
+        binding.barcodeButton.setText(getContext().getString(R.string.get_barcode));
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = stringAnswer.getText().toString();
-        if (s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        String answer = binding.barcodeAnswerText.getText().toString();
+        return answer.isEmpty() ? null : new StringData(answer);
     }
 
-    /**
-     * Allows answer to be set externally in {@link FormEntryActivity}.
-     */
     @Override
     public void setBinaryData(Object answer) {
         String response = (String) answer;
-        stringAnswer.setText(stripInvalidCharacters(response));
-
+        binding.barcodeAnswerText.setText(stripInvalidCharacters(response));
+        binding.barcodeButton.setText(getContext().getString(R.string.replace_barcode));
         widgetValueChanged();
     }
 
     // Remove control characters, invisible characters and unused code points.
-    @Contract("null -> null; !null -> !null")
-    protected static String stripInvalidCharacters(String data) {
-        if (data == null) {
-            return null;
-        }
-        return data.replaceAll("\\p{C}", "");
+    private String stripInvalidCharacters(String data) {
+        return data == null ? null : data.replaceAll("\\p{C}", "");
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        stringAnswer.setOnLongClickListener(l);
-        getBarcodeButton.setOnLongClickListener(l);
+        binding.barcodeAnswerText.setOnLongClickListener(l);
+        binding.barcodeButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        getBarcodeButton.cancelLongPress();
-        stringAnswer.cancelLongPress();
+        binding.barcodeButton.cancelLongPress();
+        binding.barcodeAnswerText.cancelLongPress();
     }
 
-    @Override
-    public void onButtonClick(int buttonId) {
+    private void onButtonClick() {
         getPermissionUtils().requestCameraPermission((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
@@ -136,7 +124,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver,
                 IntentIntegrator intent = new IntentIntegrator((Activity) getContext())
                         .setCaptureActivity(ScannerWithFlashlightActivity.class);
 
-                setCameraIdIfNeeded(intent);
+                setCameraIdIfNeeded(getFormEntryPrompt(), intent);
                 intent.initiateScan();
             }
 
@@ -146,11 +134,10 @@ public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver,
         });
     }
 
-    private void setCameraIdIfNeeded(IntentIntegrator intent) {
-        String appearance = getFormEntryPrompt().getAppearanceHint();
-        if (appearance != null && appearance.equalsIgnoreCase(WidgetAppearanceUtils.FRONT)) {
-            if (CameraUtils.isFrontCameraAvailable()) {
-                intent.addExtra(WidgetAppearanceUtils.FRONT, true);
+    private void setCameraIdIfNeeded(FormEntryPrompt prompt, IntentIntegrator intent) {
+        if (WidgetAppearanceUtils.isFrontCameraAppearance(prompt)) {
+            if (cameraUtils.isFrontCameraAvailable()) {
+                intent.addExtra(FRONT, true);
             } else {
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }

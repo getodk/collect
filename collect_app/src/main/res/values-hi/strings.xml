@@ -66,9 +66,7 @@
   <string name="jump_to_beginning">शुरु पर जाएं</string>
   <string name="jump_to_end">अंत पर जाएं</string>
   <string name="jump_to_previous">ऊपर जाएं</string>
-    <string name="loading_form">फॉर्म लोड हो रहा है </string>
-  <string name="load_remote_form_error">सूची से फॉर्म प्राप्ति में गलती </string>
-    <string name="location_accuracy">शुद्धता %1$s मीटर है</string>
+  <string name="loading_form">फॉर्म लोड हो रहा है </string>
   <string name="manage_files">संरक्षित फॉर्म मिटायें</string>
   <string name="mark_finished">फॉर्म पूरा करें</string>
   <string name="noselect_error">क्षमा करें, आपने कोई फॉर्म नही चुना है!</string>
@@ -118,7 +116,7 @@
   <string name="change_splash_path">इमेज बदले</string>
   <string name="keep_changes">बदलाव संरक्षित करें</string>
   <string name="change_formlist_url">फॉर्म सूची पथ (URL पर जोड़ा गया)</string>
-    <string name="change_submission_url">सबमिशन पथ (URL पर जोड़ा गया)</string>
+  <string name="change_submission_url">सबमिशन पथ (URL पर जोड़ा गया)</string>
   <string name="formlist_url">फॉर्म सूची पथ</string>
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">अक्षर फॉन्ट आकार</string>
@@ -138,7 +136,7 @@
   <string name="save_as_error">संरक्षित नाम रिक्त नहीं होना चाहिए!</string>
   <string name="edit_prompt">Prompt को संशोधित करें</string>
   <string name="selected_google_account_text">गूगल अकाउंट</string>
-    <string name="font_size_extra_large">ज्यादा बड़ा</string>
+  <string name="font_size_extra_large">ज्यादा बड़ा</string>
   <string name="font_size_large">बड़ा</string>
   <string name="font_size_medium">मझला</string>
   <string name="font_size_small">छोटा</string>
@@ -232,7 +230,7 @@
   <string name="go_drive">माई ड्राइव</string>
   <string name="go_shared">मेरे साथ साझा किया हुआ </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'पर संशोधित\' HH:mm \'पर\' </string>
-    <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>
+  <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>
   <string name="drive_get_file"> %1$sऔर मीडिया फाइलों को प्राप्त कर रहा है.</string>
   <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
   <string name="google_set_account">आपने गूगल शीत को अपने सर्वर के रूप में चुना है, कृपया जारी रखने से पहले सामान्य सेटिंग में संबंधित  गूगल अकाउंट का चयन करें</string>
@@ -301,7 +299,6 @@
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
   <string name="version_number">संस्करण: %s</string>
   <string name="odk_website">ODK वेबसाइट विजिट करें</string>
-  <string name="odk_website_summary">ओपन डाटा किट (ODK ) विषम परिस्थितियों में सामाजिक डाटा इकठ्ठा करने में कार्य आता है.</string>
   <string name="odk_forum">ODK फोरम ज्वाइन करें</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">प. %1$s%2$s%3$s</string>
@@ -362,9 +359,6 @@
   <string name="email">इमेल एड्रेस </string>
   <string name="user_defined">उपयोगकर्ता-परिभाषित</string>
   <string name="device_defined">डिवाइस-से-परिभाषित</string>
-  <string name="device_id">डिवाइस आईडी</string>
-  <string name="subscriber_id">सब्सक्राइबर आईडी</string>
-  <string name="sim_serial_id">सिम सीरियल नंबर</string>
   <string name="select_date">तारीख़ चुनें</string>
   <string name="select_time">समय चुनें</string>
   <string name="no_date_selected">कोई दिनांक चयनित नहीं</string>
@@ -378,7 +372,7 @@
   <string name="include_password_dialog">पासवर्ड कोड में शामिल </string>
   <string name="generate">उत्पन्न</string>
   <string name="invalid_qrcode">QR कोड में मान्य सेटिंग्स शामिल नहीं हैं I</string>
-    <string name="take_picture_instruction">तस्वीर लेने के लिए स्क्रीन को टैप करें</string>
+  <string name="take_picture_instruction">तस्वीर लेने के लिए स्क्रीन को टैप करें</string>
   <string name="camera_error">यह डिवाइस Camera2 API का समर्थन नहीं करता है</string>
   <string name="invalid_range_widget">इस विजेट में अमान्य मापदंड हैं!</string>
   <string name="form_entry_setting">फॉर्म एंट्री सेटिंग</string>

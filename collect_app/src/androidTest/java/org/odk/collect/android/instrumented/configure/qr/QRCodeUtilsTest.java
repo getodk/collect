@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure.qr;
+package org.odk.collect.android.instrumented.configure.qr;
 
 import android.graphics.Bitmap;
 
@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.configure.qr.QRCodeUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

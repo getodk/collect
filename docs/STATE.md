@@ -31,6 +31,7 @@ and update this document as the code evolves.
 * Geo activities use three engines (Mapbox, osmdroid, Google Maps) depending on the selected basemap even though Mapbox could do everything osmdroid does
 * Code goes through static analysis using CheckStyle, PMD, SpotBugs and Android Lint
 * Code is mostly organized into packages based around what kind of object they are which has become unwieldy
+* Forms get into the app from three different sources (Open Rosa servers, Google Drive and disk) but the logic for this is disparate and they don't sit behind a common interface
 
 ## Where we're going
 

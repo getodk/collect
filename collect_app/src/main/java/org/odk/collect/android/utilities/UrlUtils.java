@@ -32,10 +32,10 @@ public class UrlUtils {
         final String googleHeader = "docs.google.com/spreadsheets/d/";
         if (urlString == null || urlString.isEmpty()) {
             throw new BadUrlException(
-                    Collect.getInstance().getString(R.string.missing_submission_url));
+                    TranslationHandler.getString(Collect.getInstance(), R.string.missing_submission_url));
         } else if (urlString.length() < googleHeader.length()) {
             throw new BadUrlException(
-                    Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
+                    TranslationHandler.getString(Collect.getInstance(), R.string.invalid_sheet_id, urlString));
         } else {
             int start = urlString.indexOf(googleHeader) + googleHeader.length();
             int end = urlString.indexOf('/', start);
@@ -45,7 +45,7 @@ public class UrlUtils {
             }
             if (start == -1) {
                 throw new BadUrlException(
-                        Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
+                        TranslationHandler.getString(Collect.getInstance(), R.string.invalid_sheet_id, urlString));
             }
             return urlString.substring(start, end);
         }

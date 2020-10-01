@@ -8,14 +8,17 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.odk.collect.android.location.LocationTestUtils;
+import org.robolectric.RobolectricTestRunner;
 
+import java.util.Collections;
 import java.util.List;
 
 import static android.location.LocationManager.GPS_PROVIDER;
 import static android.location.LocationManager.NETWORK_PROVIDER;
 import static android.location.LocationManager.PASSIVE_PROVIDER;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -27,14 +30,15 @@ import static org.odk.collect.android.location.client.LocationClient.Priority.PR
 import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_LOW_POWER;
 import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_NO_POWER;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class AndroidLocationClientTest {
 
-    @Mock LocationManager locationManager;
+    private LocationManager locationManager;
     private AndroidLocationClient androidLocationClient;
 
     @Before
     public void setUp() {
+        locationManager = mock(LocationManager.class);
         androidLocationClient = new AndroidLocationClient(locationManager);
     }
 
@@ -361,6 +365,21 @@ public class AndroidLocationClientTest {
     @Test
     public void canSetUpdateIntervalsShouldReturnFalse() {
         assertFalse(androidLocationClient.canSetUpdateIntervals());
+    }
+
+    @Test
+    public void whenAccuracyIsNegative_shouldBeSanitized() {
+        when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
+
+        androidLocationClient.start();
+
+        TestLocationListener firstListener = new TestLocationListener();
+        androidLocationClient.requestLocationUpdates(firstListener);
+
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7d, 2d, 3d, -1.0f);
+        androidLocationClient.onLocationChanged(location);
+
+        assertThat(firstListener.getLastLocation().getAccuracy(), is(0.0f));
     }
 
     private static Location newMockLocation() {

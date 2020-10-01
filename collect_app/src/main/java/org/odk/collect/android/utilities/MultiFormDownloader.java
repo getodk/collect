@@ -101,9 +101,9 @@ public class MultiFormDownloader {
             try {
                 boolean success = processOneForm(total, count++, fd, stateListener);
                 if (success) {
-                    result.put(fd, Collect.getInstance().getString(R.string.success));
+                    result.put(fd, TranslationHandler.getString(Collect.getInstance(), R.string.success));
                 } else {
-                    result.put(fd, Collect.getInstance().getString(R.string.failure));
+                    result.put(fd, TranslationHandler.getString(Collect.getInstance(), R.string.failure));
                 }
             } catch (TaskCancelledException cd) {
                 break;
@@ -454,7 +454,7 @@ public class MultiFormDownloader {
             Timber.w("Copied %s over %s", tempFile.getAbsolutePath(), file.getAbsolutePath());
             FileUtils.deleteAndReport(tempFile);
         } else {
-            String msg = Collect.getInstance().getString(R.string.fs_file_copy_error,
+            String msg = TranslationHandler.getString(Collect.getInstance(), R.string.fs_file_copy_error,
                     tempFile.getAbsolutePath(), file.getAbsolutePath(), errorMessage);
             Timber.w(msg);
             throw new RuntimeException(msg);
@@ -513,7 +513,7 @@ public class MultiFormDownloader {
         }
 
         if (stateListener != null) {
-            stateListener.progressUpdate(Collect.getInstance().getString(R.string.fetching_manifest, fd.getFormName()),
+            stateListener.progressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.fetching_manifest, fd.getFormName()),
                     String.valueOf(count), String.valueOf(total));
         }
 
@@ -533,7 +533,7 @@ public class MultiFormDownloader {
                 ++mediaCount;
                 if (stateListener != null) {
                     stateListener.progressUpdate(
-                            Collect.getInstance().getString(R.string.form_download_progress,
+                            TranslationHandler.getString(Collect.getInstance(), R.string.form_download_progress,
                                     fd.getFormName(),
                                     String.valueOf(mediaCount), String.valueOf(files.size())),
                             String.valueOf(count), String.valueOf(total));

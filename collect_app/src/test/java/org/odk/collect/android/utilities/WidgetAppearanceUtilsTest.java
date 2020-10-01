@@ -18,17 +18,49 @@ package org.odk.collect.android.utilities;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(RobolectricTestRunner.class)
 public class WidgetAppearanceUtilsTest {
+    private final FormEntryPrompt formEntryPrompt = mock(FormEntryPrompt.class);
+
+    @Test
+    public void whenPromptDoesNotHaveAppearance_getSanitizedAppearanceHint_returnsNoAppearance() {
+        assertEquals(WidgetAppearanceUtils.getSanitizedAppearanceHint(formEntryPrompt), WidgetAppearanceUtils.NO_APPEARANCE);
+    }
+
+    @Test
+    public void whenPromptHasAppearance_getSanitizedAppearanceHint_returnsFormattedAppearance() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("BLAH");
+        assertEquals(WidgetAppearanceUtils.getSanitizedAppearanceHint(formEntryPrompt), "blah");
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah");
+        assertEquals(WidgetAppearanceUtils.getSanitizedAppearanceHint(formEntryPrompt), "blah");
+    }
+
+    @Test
+    public void hasAppearance_returnsFalse_whenSanitizedAppearanceIsNotFound() {
+        assertFalse(WidgetAppearanceUtils.hasAppearance(formEntryPrompt, "blah"));
+    }
+
+    @Test
+    public void hasAppearance_returnsTrue_whenSanitizedAppearanceIsFound() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("BLAH");
+        assertTrue(WidgetAppearanceUtils.hasAppearance(formEntryPrompt, "blah"));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah");
+        assertTrue(WidgetAppearanceUtils.hasAppearance(formEntryPrompt, "blah"));
+    }
 
     @Test
     public void getNumberOfColumnsTest() {
-        FormEntryPrompt formEntryPrompt = mock(FormEntryPrompt.class);
-
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
         assertEquals(1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
 
@@ -76,5 +108,138 @@ public class WidgetAppearanceUtilsTest {
 
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns--10");
         assertEquals(1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
+    }
+
+    @Test
+    public void isNoButtonsAppearance_returnsFalse_whenNoButtonsAppearanceIsNotFound() {
+        assertFalse(WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isNoButtonsAppearance_returnsTrue_whenNoButtonsAppearanceIsFound() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("NO-BUTTONS");
+        assertTrue(WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("no-buttons");
+        assertTrue(WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("No-buttonsCompact");
+        assertTrue(WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isCompactAppearance_returnsFalse_whenCompactAppearanceIsNotFound() {
+        assertFalse(WidgetAppearanceUtils.isCompactAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isCompactAppearance_returnsTrue_whenCompactAppearanceIsFound() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("COMPACT");
+        assertTrue(WidgetAppearanceUtils.isCompactAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact");
+        assertTrue(WidgetAppearanceUtils.isCompactAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("CompactCompact");
+        assertTrue(WidgetAppearanceUtils.isCompactAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void useThousandSeparator_returnsFalse_whenThousandSepAppearanceIsNotFound() {
+        assertFalse(WidgetAppearanceUtils.useThousandSeparator(formEntryPrompt));
+    }
+
+    @Test
+    public void useThousandSeparator_returnsTrue_whenThousandSepAppearanceIsFound() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("THOUSANDS-SEP");
+        assertTrue(WidgetAppearanceUtils.useThousandSeparator(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("thousands-sep");
+        assertTrue(WidgetAppearanceUtils.useThousandSeparator(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("Thousands-sepCompact");
+        assertTrue(WidgetAppearanceUtils.useThousandSeparator(formEntryPrompt));
+    }
+
+    @Test
+    public void isFrontCameraAppearance_returnsFalse_whenFrontCameraAppearanceIsNotFound() {
+        assertFalse(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFrontCameraAppearance_returnsTrue_whenFrontAppearanceIsFound() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("FRONT");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("front");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("FrontCompact");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFrontCameraAppearance_returnsTrue_whenNewFrontAppearanceIsFound() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("NEW-FRONT");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("new-front");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("New-frontCompact");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFrontCameraAppearance_returnsTrue_whenSelfieAppearanceIsFound() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("SELFIE");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("selfie");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("SelfieCompact");
+        assertTrue(WidgetAppearanceUtils.isFrontCameraAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFlexAppearance_returnsFalse_whenFlexAppearanceIsNotFound() {
+        assertFalse(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFlexAppearance_returnsFalse_whenAppearanceStartsWithCompactN() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("COMPACT-N_BLAH");
+        assertFalse(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact-n_blah");
+        assertFalse(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFlexAppearance_returnsTrue_whenAppearanceStartsWithCompact() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("COMPACT_BLAH");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact_blah");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFlexAppearance_returnsTrue_whenAppearanceStartsWithQuickCompact() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("QUICKCOMPACT_BLAH");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("quickcompact_blah");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFlexAppearance_returnsTrue_whenAppearanceStartsWithColumnsPack() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("COLUMNS-PACK_BLAH");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-pack_blah");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
     }
 }

@@ -19,10 +19,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
-import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -84,16 +81,7 @@ public class QuitFormDialogFragment extends DialogFragment {
                     listener.onSaveChangesClicked();
                 }
             } else {
-                ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
-                if (manager != null) {
-                    manager.close();
-                }
-
-                if (viewModel.getAuditEventLogger() != null) {
-                    viewModel.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, System.currentTimeMillis());
-                }
-
-                viewModel.removeTempInstance();
+                viewModel.ignoreChanges();
 
                 String action = getActivity().getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {

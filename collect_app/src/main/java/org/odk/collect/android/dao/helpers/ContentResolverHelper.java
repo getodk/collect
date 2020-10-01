@@ -18,7 +18,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
@@ -26,6 +25,7 @@ import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.MediaUtils;
 
 public final class ContentResolverHelper {
 
@@ -77,26 +77,16 @@ public final class ContentResolverHelper {
      * Using contentResolver to get a file's extension by the uri
      *
      * @param fileUri Whose name we want to get
-     * @return The file's extension
+     * @return The file's extension without a dot eg. "mp3" not ".mp3"
      */
     public static String getFileExtensionFromUri(Context context, Uri fileUri) {
-        try (Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null)) {
-            if (returnCursor != null && returnCursor.getCount() > 0) {
-                String filename = null;
-                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                if (nameIndex != -1) {
-                    returnCursor.moveToFirst();
-                    filename = returnCursor.getString(nameIndex);
-                }
-                if (filename != null && filename.lastIndexOf('.') != -1) {
-                    return filename.substring(filename.lastIndexOf('.'));
-                } else {
-                    return fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
-                            ? MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(fileUri))
-                            : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
-                }
-            }
+        String fileName = MediaUtils.getFileNameFromUri(context, fileUri);
+        if (fileName != null && fileName.contains(".")) {
+            return fileName.substring(fileName.lastIndexOf('.') + 1);
+        } else {
+            return fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
+                    ? MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(fileUri))
+                    : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
         }
-        return "";
     }
 }

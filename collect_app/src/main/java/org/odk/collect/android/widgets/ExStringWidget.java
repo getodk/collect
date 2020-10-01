@@ -31,7 +31,6 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -139,9 +138,6 @@ public class ExStringWidget extends StringWidget implements BinaryDataReceiver, 
         }
     }
 
-    /**
-     * Allows answer to be set externally in {@link FormEntryActivity}.
-     */
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);

@@ -45,6 +45,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -459,7 +460,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
     }
 
-    private void formControllerAvailable(FormController formController) {
+    private void formControllerAvailable(@NonNull FormController formController) {
         menuDelegate.formLoaded(formController);
         identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
@@ -519,8 +520,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formLoaderTask = (FormLoaderTask) data;
         } else if (data == null) {
             if (!newForm) {
-                if (getFormController() != null) {
-                    FormController formController = getFormController();
+                FormController formController = getFormController();
+
+                if (formController != null) {
                     formControllerAvailable(formController);
                     refreshCurrentView();
                 } else {
@@ -529,6 +531,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
                 }
+
                 return;
             }
 
@@ -2291,6 +2294,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         final FormController formController = task.getFormController();
+
         if (formController != null) {
             if (readPhoneStatePermissionRequestNeeded) {
                 new PermissionUtils().requestReadPhoneStatePermission(this, true, new PermissionListener() {

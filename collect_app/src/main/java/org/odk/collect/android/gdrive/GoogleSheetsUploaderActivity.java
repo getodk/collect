@@ -18,9 +18,8 @@
  * @author Carl Hartung (chartung@nafundi.com)
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.gdrive;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,25 +29,28 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -57,8 +59,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.fragments.dialogs.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.showSettingsDialog;
+import static org.odk.collect.android.gdrive.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener, GoogleSheetsUploaderProgressDialog.OnSendingFormsCanceledListener {
 
@@ -76,6 +77,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     GoogleAccountsManager accountsManager;
 
     @Inject
+    GoogleApiProvider googleApiProvider;
+
+    @Inject
     NetworkStateProvider connectivityProvider;
 
     @Inject
@@ -83,6 +87,12 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +140,8 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void runTask() {
-        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager, analytics);
+        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics, preferencesProvider);
+        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository);
 
         // ensure we have a google account selected
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -171,7 +182,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                     // re-attempt to list google drive files
                     getResultsFromApi();
                 } else {
-                    showSettingsDialog(GoogleSheetsUploaderActivity.this);
+                    GoogleAccountNotSetDialog.show(GoogleSheetsUploaderActivity.this);
                 }
             }
 

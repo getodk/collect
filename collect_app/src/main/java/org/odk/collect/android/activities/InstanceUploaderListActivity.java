@@ -39,6 +39,7 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;

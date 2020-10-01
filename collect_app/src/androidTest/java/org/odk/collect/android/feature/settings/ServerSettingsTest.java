@@ -9,6 +9,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -61,8 +62,8 @@ public class ServerSettingsTest {
     /**
      * This test could definitely be extended to cover form download/submit with the creation
      * of a stub
-     * {@link org.odk.collect.android.utilities.gdrive.DriveHelper} and
-     * {@link org.odk.collect.android.utilities.gdrive.GoogleAccountsManager}
+     * {@link DriveHelper} and
+     * {@link org.odk.collect.android.gdrive.GoogleAccountsManager}
      */
     @Test
     public void selectingGoogleAccount_showsGoogleAccountSettings() {
@@ -82,7 +83,8 @@ public class ServerSettingsTest {
                 .enablePreviouslyDownloadedOnlyUpdates();
         assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(1));
 
-        mainMenu.setGoogleDriveAccount("steph@curry.basket");
+        testDependencies.googleAccountPicker.setDeviceAccount("steph@curry.basket");
+        mainMenu.setGoogleAccount("steph@curry.basket");
         assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(0));
     }
 }

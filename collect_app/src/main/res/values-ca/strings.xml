@@ -61,9 +61,7 @@
   <string name="jump_to_beginning">Anar a l\'inici</string>
   <string name="jump_to_end">Anar al final</string>
   <string name="jump_to_previous">Ves enrera</string>
-    <string name="loading_form">Carregant formulari</string>
-  <string name="load_remote_form_error">Error al demanar la llista de formularis</string>
-  <string name="location_accuracy">Precisió de %1$s m</string>
+  <string name="loading_form">Carregant formulari</string>
   <string name="manage_files">Eliminar formulari desat</string>
   <string name="mark_finished">Marcar formulari com completat</string>
   <string name="noselect_error">Atenció, no hi ha cap formulari seleccionat!</string>
@@ -111,7 +109,7 @@
   <string name="change_splash_path">Canviar imatge</string>
   <string name="keep_changes">Desar els canvis</string>
   <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
-    <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
+  <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
   <string name="formlist_url">Carpeta de formularis</string>
   <string name="submission_url">Carpeta de presentacions</string>
   <string name="font_size">Mida del text</string>
@@ -130,7 +128,7 @@
   <string name="save_as_error">El nom no pot deixar-se en blanc</string>
   <string name="edit_prompt">Editar entrada:</string>
   <string name="selected_google_account_text">Compte Google</string>
-    <string name="font_size_extra_large">Extra gran</string>
+  <string name="font_size_extra_large">Extra gran</string>
   <string name="font_size_large">Gran</string>
   <string name="font_size_medium">Mitjana</string>
   <string name="font_size_small">Petita</string>
@@ -223,7 +221,7 @@
   <string name="go_drive">El meu disc</string>
   <string name="go_shared">Comparteix amb mi</string>
   <string name="modified_on_date_at_time">\'Modificat el\' EEE, dd-MMM-yyyy \'a les\' HH:mm</string>
-    <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
+  <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
   <string name="no_google_account">Compte Google no seleccionada!</string>
   <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="notification_error">Error mostrant notificació</string>
@@ -306,9 +304,6 @@
   <string name="email">Direcció email</string>
   <string name="user_defined">definit per l\'usuari</string>
   <string name="device_defined">definit pel dispositiu</string>
-  <string name="device_id">ID dispositiu</string>
-  <string name="subscriber_id">ID subscriptor</string>
-  <string name="sim_serial_id">num. serie SIM</string>
   <string name="select_date">Selecciona data</string>
   <string name="select_time">Selecciona hora</string>
   <string name="no_date_selected">Data no seleccionada</string>

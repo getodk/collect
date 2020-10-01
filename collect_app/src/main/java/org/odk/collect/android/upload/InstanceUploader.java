@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class InstanceUploader {
-    static final String FAIL = "Error: ";
+    public static final String FAIL = "Error: ";
 
     /**
      * Uploads the specified instance to the specified destination URL. It may return a custom
@@ -83,7 +83,7 @@ public abstract class InstanceUploader {
         return instancesToUpload;
     }
 
-    void saveSuccessStatusToDatabase(Instance instance) {
+    public void saveSuccessStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
                 instance.getId().toString());
 
@@ -92,7 +92,7 @@ public abstract class InstanceUploader {
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
-    void saveFailedStatusToDatabase(Instance instance) {
+    public void saveFailedStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
                 instance.getId().toString());
 

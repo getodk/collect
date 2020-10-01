@@ -30,18 +30,15 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.LocaleHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 public class Collect extends Application {
@@ -158,10 +155,6 @@ public class Collect extends Application {
 
         //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
-        boolean isUsingSysLanguage = GeneralSharedPreferences.getInstance().get(KEY_APP_LANGUAGE).equals("");
-        if (!isUsingSysLanguage) {
-            new LocaleHelper().updateLocale(this);
-        }
     }
 
     public AppDependencyComponent getComponent() {

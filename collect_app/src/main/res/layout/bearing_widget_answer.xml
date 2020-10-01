@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_standard">
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/bearing_button"
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/get_bearing" />
+
+    <EditText
+        android:id="@+id/answer_text"
+        style="@style/Widget.Collect.TextView.WidgetAnswer"
+        android:gravity="start"
+        android:inputType="numberDecimal"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+</LinearLayout>

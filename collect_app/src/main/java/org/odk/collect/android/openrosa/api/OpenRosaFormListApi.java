@@ -32,7 +32,7 @@ public class OpenRosaFormListApi implements FormListApi {
             "http://openrosa.org/xforms/xformsManifest";
 
     private final OpenRosaXmlFetcher openRosaXMLFetcher;
-    private final String serverURL;
+    private String serverURL;
     private final String formListPath;
 
     public OpenRosaFormListApi(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
@@ -105,6 +105,16 @@ public class OpenRosaFormListApi implements FormListApi {
     @Override
     public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
         return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
+    }
+
+    @Override
+    public void updateUrl(String url) {
+        this.serverURL = url;
+    }
+
+    @Override
+    public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
+        this.openRosaXMLFetcher.updateWebCredentialsUtils(webCredentialsUtils);
     }
 
     @NotNull
@@ -184,7 +194,7 @@ public class OpenRosaFormListApi implements FormListApi {
                         break;
                     case "version":
                         version = XFormParser.getXMLText(child, true);
-                        if (version != null && version.length() == 0) {
+                        if (version != null && version.trim().isEmpty()) {
                             version = null;
                         }
                         break;

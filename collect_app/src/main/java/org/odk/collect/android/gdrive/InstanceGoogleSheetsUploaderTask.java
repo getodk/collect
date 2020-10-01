@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.gdrive;
 
 import android.database.Cursor;
 
@@ -22,10 +22,12 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.util.List;
 
@@ -36,17 +38,24 @@ import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SU
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
-    private final GoogleAccountsManager accountsManager;
-    private final Analytics analytics;
 
-    public InstanceGoogleSheetsUploaderTask(GoogleAccountsManager accountsManager, Analytics analytics) {
-        this.accountsManager = accountsManager;
+    private final GoogleApiProvider googleApiProvider;
+    private final Analytics analytics;
+    private final PreferencesProvider preferencesProvider;
+
+    public InstanceGoogleSheetsUploaderTask(GoogleApiProvider googleApiProvider, Analytics analytics, PreferencesProvider preferencesProvider) {
+        this.googleApiProvider = googleApiProvider;
         this.analytics = analytics;
+        this.preferencesProvider = preferencesProvider;
     }
 
     @Override
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
-        InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(accountsManager);
+        String account = preferencesProvider
+                .getGeneralSharedPreferences()
+                .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
+
+        InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(googleApiProvider.getDriveApi(account), googleApiProvider.getSheetsApi(account));
         final Outcome outcome = new Outcome();
 
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
@@ -56,7 +65,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
             if (isCancelled()) {
                 outcome.messagesByInstanceId.put(instance.getId().toString(),
-                        Collect.getInstance().getString(R.string.instance_upload_cancelled));
+                        TranslationHandler.getString(Collect.getInstance(), R.string.instance_upload_cancelled));
                 return outcome;
             }
 
@@ -69,7 +78,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
             if (forms.size() != 1) {
                 outcome.messagesByInstanceId.put(instance.getId().toString(),
-                        Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
+                        TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             } else {
                 try {
                     String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);

@@ -38,12 +38,13 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.configure.ServerRepository;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -51,7 +52,6 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.ByteArrayInputStream;
 import java.util.Locale;
@@ -84,6 +84,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     @Inject
     FormUpdateManager formUpdateManager;
+
+    @Inject
+    ServerRepository serverRepository;
 
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
@@ -193,13 +196,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         listPopupWindow.setAnchorView(editText);
         listPopupWindow.setModal(true);
         listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            editText.setText(ChangingServerUrlUtils.getUrlList().get(position));
+            editText.setText(serverRepository.getServers().get(position));
             listPopupWindow.dismiss();
         });
     }
 
     public void setupUrlDropdownAdapter(ListPopupWindow listPopupWindow) {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, serverRepository.getServers());
         listPopupWindow.setAdapter(adapter);
     }
 
@@ -280,7 +283,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
-                        ChangingServerUrlUtils.addUrlToList(url);
                         setupUrlDropdownAdapter(listPopupWindow);
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);

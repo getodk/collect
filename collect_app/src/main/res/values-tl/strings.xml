@@ -57,9 +57,7 @@
   <string name="jump_to_beginning">Punta sa Simula</string>
   <string name="jump_to_end">Punta sa Dulo</string>
   <string name="jump_to_previous">Punta Pataas</string>
-    <string name="loading_form">Kina-karga ang Form</string>
-  <string name="load_remote_form_error">May Mali sa pag-karga ng Listahan ng Form</string>
-    <string name="location_accuracy">Ang kawastuhan ay %1$s m</string>
+  <string name="loading_form">Kina-karga ang Form</string>
   <string name="manage_files">Burahin ang Inimpok na Form</string>
   <string name="mark_finished">Markahan Yari ang Form</string>
   <string name="noselect_error">Paumanhin, walang form na pinili!</string>
@@ -100,7 +98,7 @@
   <string name="change_splash_path">Palitan ang Imahe</string>
   <string name="keep_changes">Impukin ang mga binago</string>
   <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
-    <string name="change_submission_url">Submission Path (appended to Server URL)</string>
+  <string name="change_submission_url">Submission Path (appended to Server URL)</string>
   <string name="formlist_url">Form List Path</string>
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Laki ng Teklado</string>
@@ -119,7 +117,7 @@
   <string name="save_as_error">Hindi maaaring blangko ang pangalan ng form!</string>
   <string name="edit_prompt">Pamatnugutan ang Udyok</string>
   <string name="selected_google_account_text">Google Account</string>
-    <string name="font_size_extra_large">Labis na Malaki</string>
+  <string name="font_size_extra_large">Labis na Malaki</string>
   <string name="font_size_large">Malaki</string>
   <string name="font_size_medium">Katamtaman</string>
   <string name="font_size_small">Maliit</string>

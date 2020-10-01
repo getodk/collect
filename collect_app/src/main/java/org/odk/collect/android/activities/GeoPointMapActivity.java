@@ -23,6 +23,7 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.android.R;
@@ -189,8 +190,11 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         placeMarkerButton.setEnabled(false);
         placeMarkerButton.setOnClickListener(v -> {
-            placeMarker(map.getGpsLocation());
-            zoomToMarker(true);
+            MapPoint mapPoint = map.getGpsLocation();
+            if (mapPoint != null) {
+                placeMarker(mapPoint);
+                zoomToMarker(true);
+            }
         });
 
         // Focuses on marked location
@@ -376,7 +380,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     }
 
     /** Places the marker and enables the button to remove it. */
-    private void placeMarker(MapPoint point) {
+    private void placeMarker(@NonNull MapPoint point) {
         map.clearFeatures();
         featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER);
         if (!intentReadOnly) {
@@ -386,15 +390,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         setClear = false;
     }
 
-    public void setCaptureLocation(boolean captureLocation) {
-        this.captureLocation = captureLocation;
-    }
-
     @VisibleForTesting public String getLocationStatus() {
         return locationStatus.getText().toString();
-    }
-
-    @VisibleForTesting public MapFragment getMapFragment() {
-        return map;
     }
 }

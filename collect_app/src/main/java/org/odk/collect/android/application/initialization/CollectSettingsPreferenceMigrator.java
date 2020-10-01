@@ -125,14 +125,18 @@ public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigr
                         .fromValue("every_six_hours").toValue("previously_downloaded")
                         .fromValue("every_24_hours").toValue("previously_downloaded"),
 
-                translateValue("never").toValue("every_fifteen_minutes").forKey("periodic_form_updates_check")
+                translateValue("never").toValue("every_fifteen_minutes").forKey("periodic_form_updates_check"),
+
+                moveKey("knownUrlList").toPreferences(metaSharedPrefs)
         );
     }
 
     public List<KeyRenamer> getMetaMigrations() {
         return asList(
                 renameKey("firstRun").toKey("first_run"),
-                renameKey("lastVersion").toKey("last_version")
+                renameKey("lastVersion").toKey("last_version"),
+
+                renameKey("knownUrlList").toKey("server_list")
         );
     }
 

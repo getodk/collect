@@ -33,7 +33,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.version.VersionInformation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
@@ -76,10 +75,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
         final ListPreference pref = findPreference(KEY_APP_THEME);
 
         if (pref != null) {
-            if (versionInformation.isRelease()) {
-                hideExperimentalThemes(pref);
-            }
-
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
@@ -91,14 +86,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
                 return true;
             });
         }
-    }
-
-    private void hideExperimentalThemes(ListPreference pref) {
-        CharSequence[] entries = pref.getEntries();
-        pref.setEntries(Arrays.copyOfRange(entries, 0, entries.length - 1));
-
-        CharSequence[] entryValues = pref.getEntryValues();
-        pref.setEntryValues(Arrays.copyOfRange(entryValues, 0, entryValues.length - 1));
     }
 
     private void initNavigationPrefs() {
@@ -159,7 +146,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
                 edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                 edit.apply();
 
-                localeHelper.updateLocale(getActivity());
                 startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 return true;
             });

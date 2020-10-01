@@ -74,8 +74,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         super.setUpLayout();
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE)
-                || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
+        selfie = WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt());
 
         captureButton = createSimpleButton(getContext(), R.id.capture_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
 
@@ -89,7 +88,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         errorTextView.setVisibility(View.GONE);
 
         if (selfie) {
-            if (!CameraUtils.isFrontCameraAvailable()) {
+            if (!new CameraUtils().isFrontCameraAvailable()) {
                 captureButton.setEnabled(false);
                 errorTextView.setText(R.string.error_front_camera_unavailable);
                 errorTextView.setVisibility(View.VISIBLE);

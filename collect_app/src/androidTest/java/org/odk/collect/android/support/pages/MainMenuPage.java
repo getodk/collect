@@ -18,7 +18,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -216,11 +216,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage(rule));
     }
 
-    public MainMenuPage setGoogleDriveAccount(String account) {
+    public MainMenuPage setGoogleAccount(String account) {
         Intent data = new Intent();
         data.putExtra(AccountManager.KEY_ACCOUNT_NAME, account);
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
-        intending(toPackage("com.google.android.gms")).respondWith(activityResult);
+        intending(hasAction("PICK_GOOGLE_ACCOUNT")).respondWith(activityResult);
 
         return clickOnMenu()
                 .clickGeneralSettings()

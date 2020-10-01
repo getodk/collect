@@ -2,6 +2,7 @@ package org.odk.collect.android.feature.formmanagement;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -32,11 +33,11 @@ public class DeleteBlankFormTest {
                 .clickDeleteForms()
                 .pressBack(new MainMenuPage(rule))
                 .clickFillBlankForm()
-                .assertTextDoesNotExist("One Question");
+                .assertNoForms();
     }
 
     @Test
-    public void deletingAForm_whenThereFilledForms_allowsEditing() {
+    public void deletingAForm_whenThereFilledForms_removesFormFromBlankFormList_butAllowsEditingFilledForms() {
         rule.mainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
@@ -49,7 +50,9 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
-                .assertTextDoesNotExist("One Question")
+                .pressBack(new MainMenuPage(rule))
+                .clickFillBlankForm()
+                .assertNoForms()
                 .pressBack(new MainMenuPage(rule))
 
                 .clickEditSavedForm()
@@ -80,13 +83,37 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
-                .assertTextDoesNotExist("One Question")
                 .pressBack(new MainMenuPage(rule))
 
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one_question) - Success")
                 .clickOK(new MainMenuPage(rule))
-                .startBlankForm("One Question");
+                .clickFillBlankForm()
+                .assertFormExists("One Question");
+    }
+
+    @Test
+    @Ignore("https://github.com/getodk/collect/issues/4124")
+    public void afterFillingAForm_andDeletingIt_allowsFormToBeReloadedDirectly() {
+        rule.mainMenu()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "22")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickDeleteSavedForm()
+                .clickBlankForms()
+                .clickForm("One Question")
+                .clickDeleteSelected(1)
+                .clickDeleteForms()
+                .assertTextDoesNotExist("One Question")
+                .pressBack(new MainMenuPage(rule))
+
+                .copyForm("one-question.xml")
+                .wait250ms() // We need to account for inaccuracy in calls to system time
+                .clickFillBlankForm()
+                .assertFormExists("One Question");
     }
 }

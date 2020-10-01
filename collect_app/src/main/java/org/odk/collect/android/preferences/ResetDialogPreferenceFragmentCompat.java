@@ -128,7 +128,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
 
                 @Override
                 protected List<Integer> doInBackground(Void... voids) {
-                    return new ApplicationResetter().reset(getContext(), resetActions);
+                    return new ApplicationResetter().reset(resetActions);
                 }
 
                 @Override

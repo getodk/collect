@@ -24,7 +24,6 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -81,7 +80,6 @@ public class ApplicationInitializer {
 
     private void initializeLocale() {
         Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
-        new LocaleHelper().updateLocale(context);
     }
 
     private void initializeJavaRosa() {

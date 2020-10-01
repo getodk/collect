@@ -25,6 +25,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+
 import timber.log.Timber;
 
 public class WidgetAppearanceUtils {
@@ -169,15 +170,19 @@ public class WidgetAppearanceUtils {
     }
 
     public static boolean useThousandSeparator(FormEntryPrompt prompt) {
-        return getSanitizedAppearanceHint(prompt).contains(WidgetAppearanceUtils.THOUSANDS_SEP);
+        return getSanitizedAppearanceHint(prompt).contains(THOUSANDS_SEP);
+    }
+
+    public static boolean isFrontCameraAppearance(FormEntryPrompt prompt) {
+        String appearance = getSanitizedAppearanceHint(prompt);
+        return appearance.contains(FRONT) || appearance.contains(NEW_FRONT) || appearance.contains(SELFIE);
     }
 
     public static boolean isFlexAppearance(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
 
-        return !appearance.startsWith(WidgetAppearanceUtils.COMPACT_N) && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
-                || appearance.startsWith(WidgetAppearanceUtils.QUICKCOMPACT)
-                || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK));
+        return !appearance.startsWith(COMPACT_N) && (appearance.startsWith(COMPACT)
+                || appearance.startsWith(QUICKCOMPACT) || appearance.startsWith(COLUMNS_PACK));
     }
 
     public static boolean isAutocomplete(FormEntryPrompt prompt) {

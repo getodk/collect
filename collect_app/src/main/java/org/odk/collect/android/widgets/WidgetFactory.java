@@ -15,11 +15,13 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -82,7 +84,8 @@ public class WidgetFactory {
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExDecimalWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.equals(WidgetAppearanceUtils.BEARING)) {
-                            questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry);
+                            questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
+                                    (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
                         } else {
                              questionWidget = new DecimalWidget(context, questionDetails, readOnlyOverride);
                         }
@@ -108,7 +111,7 @@ public class WidgetFactory {
                         questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(context, questionDetails, waitingForDataRegistry);
+                        questionWidget = new BarcodeWidget(context, questionDetails, waitingForDataRegistry, new CameraUtils());
                         break;
                     case Constants.DATATYPE_TEXT:
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");

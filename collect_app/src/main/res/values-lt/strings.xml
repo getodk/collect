@@ -54,9 +54,7 @@
   <string name="jump_to_beginning">Eiti į pradžią</string>
   <string name="jump_to_end">Eiti į pabaigą</string>
   <string name="jump_to_previous">Eiti į viršų</string>
-    <string name="loading_form">Įkeliama forma</string>
-  <string name="load_remote_form_error">Klaida nuskaitant formų sąrašą</string>
-    <string name="location_accuracy">Tikslumas yra %1$s m</string>
+  <string name="loading_form">Įkeliama forma</string>
   <string name="manage_files">Ištrinti užpildytą formą</string>
   <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
   <string name="noselect_error">Deja, Jūs nepažymėjote jokių formų!</string>
@@ -99,7 +97,7 @@
   <string name="change_splash_path">Pakeisti paveikslėlį</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-    <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
+  <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
   <string name="formlist_url">Formų sąrašo kelias</string>
   <string name="submission_url">Pateikimo kelias</string>
   <string name="font_size">Teksto šrifto dydis</string>
@@ -118,7 +116,7 @@
   <string name="save_as_error">Pavadinimas negali būti tuščias!</string>
   <string name="edit_prompt">Keisti atsakymą</string>
   <string name="selected_google_account_text">Google sąskaita</string>
-    <string name="font_size_extra_large">Labai didelis</string>
+  <string name="font_size_extra_large">Labai didelis</string>
   <string name="font_size_large">Didelis</string>
   <string name="font_size_medium">Vidutinis</string>
   <string name="font_size_small">Mažas</string>

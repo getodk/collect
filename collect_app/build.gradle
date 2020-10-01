@@ -199,7 +199,7 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0-rc02'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.work:work-runtime:2.3.4"
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
@@ -232,7 +232,7 @@ dependencies {
     implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.opencsv:opencsv:2.4"
-    implementation("org.getodk:javarosa:3.0.0") {
+    implementation("org.getodk:javarosa:3.0.2") {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }

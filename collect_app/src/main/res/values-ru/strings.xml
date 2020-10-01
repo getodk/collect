@@ -73,9 +73,7 @@
   <string name="jump_to_beginning">В начало</string>
   <string name="jump_to_end">В конец</string>
   <string name="jump_to_previous">Назад</string>
-    <string name="loading_form">Загрузка бланка опросника…</string>
-  <string name="load_remote_form_error">Не удалось получить список бланков</string>
-    <string name="location_accuracy">Точность %1$s м.</string>
+  <string name="loading_form">Загрузка бланка опросника…</string>
   <string name="manage_files">Удаление опросов / бланков</string>
   <string name="mark_finished">Пометить опрос как финализированный </string>
   <string name="noselect_error">Не было выбрано ни одного бланка</string>
@@ -125,7 +123,7 @@
   <string name="change_splash_path">Изменить изображение</string>
   <string name="keep_changes">Сохранить ответы</string>
   <string name="change_formlist_url">Папка с бланками (добавляется к URL)</string>
-    <string name="change_submission_url">Папка выгрузки опросов (добавляется к URL)</string>
+  <string name="change_submission_url">Папка выгрузки опросов (добавляется к URL)</string>
   <string name="formlist_url">Папка с бланками</string>
   <string name="submission_url">Папка выгрузки</string>
   <string name="font_size">Размер шрифта</string>
@@ -147,7 +145,7 @@
   <string name="save_as_error">Название не может быть пустым!</string>
   <string name="edit_prompt">Изменить вопрос</string>
   <string name="selected_google_account_text">Учётная запись Google</string>
-    <string name="font_size_extra_large">Очень большой</string>
+  <string name="font_size_extra_large">Очень большой</string>
   <string name="font_size_large">Большой</string>
   <string name="font_size_medium">Средний</string>
   <string name="font_size_small">Маленький</string>
@@ -245,7 +243,7 @@
   <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
-    <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
+  <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_set_account">Вы выбрали Google таблицы в качестве сервера. Перед тем, как продолжить, пожалуйста, укажите соответствующую учётную запись Google в общих настройках.</string>
@@ -329,7 +327,7 @@
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Вебсайт ODK</string>
-  <string name="odk_website_summary">Open Data Kit — приложение для сбора данных работающее без интернета</string>
+  <string name="odk_website_summary">ODK — приложение для сбора данных работающее без интернета</string>
   <string name="odk_forum">Форум</string>
   <string name="odk_forum_summary">Вопросы и предложения</string>
   <string name="all_open_source_licenses">Используемые компоненты</string>
@@ -392,9 +390,6 @@
   <string name="email">Адрес эл. почты</string>
   <string name="user_defined">Пользовательские данные</string>
   <string name="device_defined">Автоматически определено</string>
-  <string name="device_id">Идентификатор устройства</string>
-  <string name="subscriber_id">Идентификатор пользователя</string>
-  <string name="sim_serial_id">Серийный номер SIM</string>
   <string name="select_date">Выберете дату</string>
   <string name="select_time">Выберете время</string>
   <string name="no_date_selected">Дата не выбрана</string>
@@ -409,7 +404,7 @@
   <string name="include_password_dialog">Пароли включены в код</string>
   <string name="generate">Сгенерировать</string>
   <string name="invalid_qrcode">В QR-коде не содержатся правильные настройки</string>
-    <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
+  <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
   <string name="error_front_camera_unavailable">Передняя камера недоступна на данном устройстве</string>
   <string name="camera_error">Это устройство не поддерживает API Camera2.</string>
   <string name="invalid_range_widget">У этого виджета неправильные параметры!</string>
@@ -541,7 +536,7 @@
   <string name="instance_upload_cancelled">Загрузка отменена</string>
   <string name="hide_old_form_versions_setting_title">Скрывать прошлые версии бланков</string>
   <string name="hide_old_form_versions_setting_summary">Только новые версии будут показаны в списке заполнения бланков</string>
-    <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
+  <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
 </resources>

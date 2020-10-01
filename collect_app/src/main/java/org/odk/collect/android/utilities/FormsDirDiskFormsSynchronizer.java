@@ -92,6 +92,17 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                                         cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
                                 Uri updateUri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, id);
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
+                            } else {
+                                if (!cursor.isNull(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DELETED_DATE))) {
+                                    long deletedDate = cursor.getLong(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DELETED_DATE));
+
+                                    if (sqlFile.lastModified() > deletedDate) {
+                                        String id = cursor.getString(
+                                                cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
+                                        Uri updateUri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, id);
+                                        uriToUpdate.add(new UriFile(updateUri, sqlFile));
+                                    }
+                                }
                             }
                         } else {
                             //File not found in sdcard but file path found in database
@@ -188,7 +199,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             if (errors.length() != 0) {
                 statusMessage = errors.toString();
             } else {
-                Timber.d(Collect.getInstance().getString(R.string.finished_disk_scan));
+                Timber.d(TranslationHandler.getString(Collect.getInstance(), R.string.finished_disk_scan));
             }
             return statusMessage;
         } finally {
@@ -268,7 +279,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             updateValues.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, title);
         } else {
             throw new IllegalArgumentException(
-                    Collect.getInstance().getString(R.string.xform_parse_error,
+                    TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
                             formDefFile.getName(), "title"));
         }
         String formid = fields.get(FileUtils.FORMID);
@@ -276,7 +287,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             updateValues.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, formid);
         } else {
             throw new IllegalArgumentException(
-                    Collect.getInstance().getString(R.string.xform_parse_error,
+                    TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
                             formDefFile.getName(), "id"));
         }
         String version = fields.get(FileUtils.VERSION);
@@ -289,7 +300,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                 updateValues.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI, submission);
             } else {
                 throw new IllegalArgumentException(
-                        Collect.getInstance().getString(R.string.xform_parse_error,
+                        TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
                                 formDefFile.getName(), "submission url"));
             }
         }
@@ -304,6 +315,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
         updateValues.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(formDefFile.getAbsolutePath()));
+        updateValues.putNull(FormsProviderAPI.FormsColumns.DELETED_DATE);
 
         return updateValues;
     }
