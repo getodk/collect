@@ -474,7 +474,7 @@ public class MediaUtils {
 
                 // path could not be retrieved using ContentResolver, therefore copy file to accessible cache using streams
                 // https://github.com/coltoscosmin/FileUtils/blob/master/FileUtils.java
-                String fileName = getFileName(context, uri);
+                String fileName = getFileNameFromUri(context, uri);
                 File cacheDir = getDocumentCacheDir(context);
                 File file = generateFileName(fileName, cacheDir);
                 String destinationPath = null;
@@ -649,29 +649,30 @@ public class MediaUtils {
         return null;
     }
 
-    private static String getFileName(@NonNull Context context, Uri uri) {
+    public static String getFileNameFromUri(@NonNull Context context, Uri uri) {
         String mimeType = context.getContentResolver().getType(uri);
-        String filename = null;
+        String fileName = null;
 
         if (mimeType == null) {
             String path = getPath(context, uri);
             if (path == null) {
-                filename = getName(uri.toString());
+                fileName = getName(uri.toString());
             } else {
                 File file = new File(path);
-                filename = file.getName();
+                fileName = file.getName();
             }
         } else {
-            Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null);
-            if (returnCursor != null) {
-                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                returnCursor.moveToFirst();
-                filename = returnCursor.getString(nameIndex);
-                returnCursor.close();
+            try (Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null)) {
+                if (returnCursor != null && returnCursor.moveToFirst()) {
+                    int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {
+                        fileName = returnCursor.getString(nameIndex);
+                    }
+                }
             }
         }
 
-        return filename;
+        return fileName;
     }
 
     private static String getName(String filename) {
