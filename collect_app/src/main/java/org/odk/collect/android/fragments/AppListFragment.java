@@ -43,6 +43,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.ListFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -105,7 +106,7 @@ abstract class AppListFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
 
         ListView listView = getListView();
-        listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
+        listView.setDivider(ContextCompat.getDrawable(getContext(), R.drawable.list_item_divider));
         listView.setDividerHeight(1);
     }
 

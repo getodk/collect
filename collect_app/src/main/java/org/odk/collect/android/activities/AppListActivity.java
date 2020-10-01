@@ -46,6 +46,7 @@ import java.util.List;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -131,7 +132,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
         llParent = findViewById(R.id.llParent);
 
         // Use the nicer-looking drawable with Material Design insets.
-        listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getTheme()));
+        listView.setDivider(ContextCompat.getDrawable(this, R.drawable.list_item_divider));
         listView.setDividerHeight(1);
 
         setSupportActionBar(findViewById(R.id.toolbar));

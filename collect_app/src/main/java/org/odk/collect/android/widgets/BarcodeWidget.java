@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
@@ -40,6 +41,7 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.FRONT;
 /**
  * Widget that allows user to scan barcodes and add them to the form.
  */
+@SuppressLint("ViewConstructor")
 public class BarcodeWidget extends QuestionWidget implements BinaryDataReceiver {
     BarcodeWidgetAnswerBinding binding;
 

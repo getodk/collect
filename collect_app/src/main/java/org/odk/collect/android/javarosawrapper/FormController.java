@@ -626,8 +626,7 @@ public class FormController {
                             // skip repeat junctures until we implement them
                             break;
                         default:
-                            Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame "
-                                    + "on them.");
+                            Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
                             break;
                     }
                 } while (event != FormEntryController.EVENT_END_OF_FORM);

@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.widgets.items;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import android.webkit.WebView;
@@ -31,6 +32,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
  * A widget which is responsible for multi select questions represented by
  * an svg map. You can use maps of the world, countries, human body etc.
  */
+@SuppressLint("ViewConstructor")
 public class SelectOneImageMapWidget extends SelectImageMapWidget {
 
     @Nullable

@@ -37,7 +37,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
         File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
         if (!writeDir.exists()) {
             if (!writeDir.mkdirs()) {
-                Timber.e("Error creating directory " + writeDir.getAbsolutePath());
+                Timber.e("Error creating directory %s", writeDir.getAbsolutePath());
             }
         }
 
@@ -62,7 +62,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
             Bitmap bmp = new QRCodeUtils().encode(preferencesString);
             Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
 
-            Timber.i("Saving QR Code to disk... : " + getQRCodeFilepath());
+            Timber.i("Saving QR Code to disk... : %s", getQRCodeFilepath());
             FileUtils.saveBitmapToFile(bmp, getQRCodeFilepath());
 
             FileUtils.write(mdCacheFile, messageDigest);

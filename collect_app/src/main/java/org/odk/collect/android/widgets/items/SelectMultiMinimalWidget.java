@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.items;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 
+@SuppressLint("ViewConstructor")
 public class SelectMultiMinimalWidget extends SelectMinimalWidget {
     private List<Selection> selectedItems;
 

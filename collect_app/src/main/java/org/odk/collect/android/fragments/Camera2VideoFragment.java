@@ -594,7 +594,7 @@ public class Camera2VideoFragment extends Fragment
 
         Activity activity = getActivity();
         if (null != activity) {
-            Timber.d("Video saved: " + nextVideoAbsolutePath);
+            Timber.d("Video saved: %s", nextVideoAbsolutePath);
         }
         Intent i = new Intent();
         i.setData(Uri.fromFile(new File(nextVideoAbsolutePath)));

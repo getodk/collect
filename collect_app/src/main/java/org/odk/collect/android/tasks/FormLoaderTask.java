@@ -188,8 +188,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 // the data are imported, the survey will be unusable
                 // but we should give the option to the user to edit the form
                 // otherwise the survey will be TOTALLY inaccessible.
-                Timber.w("We have a syntactically correct instance, but the data threw an "
-                                + "exception inside JR. We should allow editing.");
+                Timber.w("We have a syntactically correct instance, but the data threw an exception inside JR. We should allow editing.");
             } else {
                 errorMsg = e.getMessage();
                 return null;
