@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -83,7 +84,8 @@ public class WidgetFactory {
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExDecimalWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.equals(WidgetAppearanceUtils.BEARING)) {
-                            questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry);
+                            questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
+                                    (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
                         } else {
                              questionWidget = new DecimalWidget(context, questionDetails, readOnlyOverride);
                         }

@@ -32,9 +32,9 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 @SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {
+    UrlWidgetAnswerBinding binding;
 
     private final CustomTabHelper customTabHelper;
-    private UrlWidgetAnswerBinding binding;
 
     public UrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper) {
         super(context, questionDetails);
@@ -97,10 +97,6 @@ public class UrlWidget extends QuestionWidget {
         } else {
             ToastUtils.showShortToast("No URL set");
         }
-    }
-
-    protected UrlWidgetAnswerBinding getBinding() {
-        return binding;
     }
 
     private boolean isUrlEmpty(TextView stringAnswer) {
